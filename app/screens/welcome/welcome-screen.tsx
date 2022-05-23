@@ -1,5 +1,12 @@
 import React, { FC } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import {
+  View,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+  SafeAreaView,
+  Text as ReactNativeText,
+} from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -9,9 +16,13 @@ import {
   Text,
   GradientBackground,
   AutoImage as Image,
+  FormRow,
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
+
+import { PRE_14, POP_14 } from "../../../assets/fonts"
+import { DivisionLine } from "../../components/lines/division-line"
 
 const bowserLogo = require("./bowser.png")
 
@@ -95,6 +106,32 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
         <GradientBackground colors={["#422443", "#281b34"]} />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
+
+          <ReactNativeText style={{ fontSize: 14, color: "white" }}>
+            [기본, DEFAULT 폰트] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내
+            몸을 모두 I'm levitating The Milky Way, we're renegading Yeah, yeah, yeah, yeah, yeah I
+            got you, moonlight
+            {"\n"}
+          </ReactNativeText>
+
+          <DivisionLine />
+
+          <Text style={PRE_14}>
+            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
+            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
+            {"\n"}
+          </Text>
+
+          <DivisionLine />
+
+          <Text style={POP_14}>
+            [POP_14] You want me, I want you, baby My sugarboo, I'm levitating The Milky Way, we're
+            renegading Yeah, yeah, yeah, yeah, yeah I got you, moonlight, you're my starlight I need
+            you all night, come on, dance with me I'm levitating You, moonlight, you're my starlight
+            (you're the moonlight) I need you all night, come on, dance with me I'm levitating (woo)
+            {"\n"}
+          </Text>
+
           <Text style={TITLE_WRAPPER}>
             <Text style={TITLE} text="Your new app, " />
             <Text style={ALMOST} text="almost" />
