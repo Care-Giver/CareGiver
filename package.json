@@ -47,6 +47,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-43.0.0.tar.gz",
     "react-native-gesture-handler": "1.10.3",
     "react-native-keychain": "6.2.0",
+    "react-native-maps": "^0.31.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "3.8.0",
     "reactotron-mst": "3.1.4",
