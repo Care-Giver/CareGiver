@@ -24,6 +24,44 @@ import { NavigatorParamList } from "../../navigators"
 import { PRE_14, POP_14 } from "../../../assets/fonts"
 import { DivisionLine } from "../../components/lines/division-line"
 
+//* export convention of Our Project
+//! 절대 package 를 혼자 설치하지 않는다, 
+//! 절대 node, npm, expo, ignite-cli를 혼자 업데이트하지 않는다.
+// -> 무조건 날 잡고, 같이한다.
+
+
+//- 1. 절대 export default 사용하지 않는다 (99%)
+//~     export const 함수명 ......
+//~       (예외는 나중에 설명함)
+
+//-2. index 파일 생성 규약
+// export * from "./bullet-item/bullet-item"
+// export * from "./button/button"
+// export * from "./checkbox/checkbox"
+// export * from "./form-row/form-row"
+// export * from "./header/header"
+// export * from "./gradient-background/gradient-background"
+// export * from "./icon/icon"
+// export * from "./screen/screen"
+// export * from "./switch/switch"
+// export * from "./text/text"
+// export * from "./text-field/text-field"
+// export * from "./wallpaper/wallpaper"
+// export * from "./auto-image/auto-image"
+// // export * from "./lines/division-line"
+//- 이렇게 만든다.
+
+//- 3. 무조건 styles.ts 따로 만든다!!!!!!!!!!!
+
+//- 4. width 와 heihgt 는 무조건 WIDTH * 값, HEIGTH * 값 으로 사용해야한다. (값: xd 값))
+//~   WIDTH, HEIGTH 는 상수이며, import 해서 쓸꺼임.
+// ~  웬만하면 이짓거리 안하게, component 화 하겠으나,
+//~   혼자 작업할때 필요하다면, styles 작성시 위에처럼 곱해서 사용할것!
+
+
+
+
+
 const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
@@ -136,6 +174,8 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <Text style={TITLE} text="Your new app, " />
             <Text style={ALMOST} text="almost" />
             <Text style={TITLE} text="!" />
+            <PRE_B_14 color+{} text="안녕 민선아... 살려죠,," />
+
           </Text>
           <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
           <Image source={bowserLogo} style={BOWSER} />

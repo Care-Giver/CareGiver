@@ -9,7 +9,7 @@ import { translate } from "../../i18n"
  *
  * This component is a HOC over the built-in React Native one.
  */
-export function Text(props: TextProps) {
+export  function Text(props: TextProps) {
   // grab the props
   const { preset = "default", tx, txOptions, text, children, style: styleOverride, ...rest } = props
 
