@@ -17,12 +17,23 @@ import {
   GradientBackground,
   AutoImage as Image,
   FormRow,
+  PopSem14,
+  PopSem20,
+  PreReg14,
+  PreBol32,
 } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 
-import { PRE_14, POP_14, POP_SB_14, PRE_M_14, PRE_B_14 } from "../../../assets/fonts"
+import {
+  PRETENDARD_REGULAR,
+  POPPINS_REGULAR,
+  POPPINS_SEMIBOLD,
+  PRETENDARD_MEDIUM,
+  PRETENDARD_BOLD,
+} from "../../../assets/fonts"
 import { DivisionLine } from "../../components/lines/division-line"
+// import {} from "../../components/text/custom-texts"
 
 //* export convention of Our Project
 //! 절대 package 를 혼자 설치하지 않는다,
@@ -140,66 +151,19 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
 
-          <ReactNativeText style={{ fontSize: 14, color: "white" }}>
-            [기본, DEFAULT 폰트] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내
-            몸을 모두 I'm levitating The Milky Way, we're renegading Yeah, yeah, yeah, yeah, yeah I
-            got you, moonlight
-            {"\n"}
-          </ReactNativeText>
-
           <DivisionLine />
 
-          <Text style={PRE_14}>
-            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
-            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
+          <PreReg14 color="red">
+            {" "}
+            하하하하
+            <PreBol32>이건 큰 하하하하</PreBol32>
+            하하하하
             {"\n"}
-          </Text>
+          </PreReg14>
 
-          <Text style={PRE_M_14}>
-            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
-            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
-            {"\n"}
-          </Text>
-
-          <Text style={PRE_B_14}>
-            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
-            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
-            {"\n"}
-          </Text>
+          <PopSem14 text="LETS GET PSYCICAL" color="#21ffff" />
 
           <DivisionLine />
-
-          <Text style={POP_14}>
-            [POP_14] You want me, I want you, baby My sugarboo, I'm levitating The Milky Way, we're
-            renegading Yeah, yeah, yeah, yeah, yeah I got you, moonlight, you're my starlight I need
-            you all night, come on, dance with me I'm levitating You, moonlight, you're my starlight
-            (you're the moonlight) I need you all night, come on, dance with me I'm levitating (woo)
-            {"\n"}
-          </Text>
-
-          <Text style={POP_SB_14}>
-            [POP_14] You want me, I want you, baby My sugarboo, I'm levitating The Milky Way, we're
-            renegading Yeah, yeah, yeah, yeah, yeah I got you, moonlight, you're my starlight I need
-            you all night, come on, dance with me I'm levitating You, moonlight, you're my starlight
-            (you're the moonlight) I need you all night, come on, dance with me I'm levitating (woo)
-            {"\n"}
-          </Text>
-
-          <Text style={TITLE_WRAPPER}>
-            <Text style={TITLE} text="Your new app, " />
-            <Text style={ALMOST} text="almost" />
-            <Text style={TITLE} text="!" />
-          </Text>
-          <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
-          <Image source={bowserLogo} style={BOWSER} />
-          <Text style={CONTENT}>
-            This probably isn't what your app is going to look like. Unless your designer handed you
-            this screen and, in that case, congrats! You're ready to ship.
-          </Text>
-          <Text style={CONTENT}>
-            For everyone else, this is where you'll see a live preview of your fully functioning app
-            using Ignite.
-          </Text>
         </Screen>
         <SafeAreaView style={FOOTER}>
           <View style={FOOTER_CONTENT}>
