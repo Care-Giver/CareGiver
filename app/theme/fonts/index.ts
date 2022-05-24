@@ -8,7 +8,11 @@ export const initFonts = async () => {
   await Font.loadAsync({
     Poppins: require("./Poppins-Regular.ttf"), //? iOS 일 때 사용
     "Poppins-Regular": require("./Poppins-Regular.ttf"), //? Android 일 때 사용
+    "Poppins-SemiBold": require("./Poppins-SemiBold.ttf"),
+
     Pretendard: require("./Pretendard-Regular.ttf"),
+    "Pretendard-Bold": require("./Pretendard-Bold.ttf"),
+    "Pretendard-Medium": require("./Pretendard-Medium.ttf"),
     "Pretendard-Regular": require("./Pretendard-Regular.ttf"),
   })
 }

@@ -5,8 +5,26 @@ import { Platform, TextStyle } from "react-native"
 
 export const PRE_14: TextStyle = {
   fontFamily: Platform.select({
-    ios: "Pretendard",
+    ios: "Pretendard-Regular",
     android: "Pretendard-Regular",
+  }),
+  fontSize: 14,
+  includeFontPadding: false,
+}
+
+export const PRE_B_14: TextStyle = {
+  fontFamily: Platform.select({
+    ios: "Pretendard-Bold",
+    android: "Pretendard-Bold",
+  }),
+  fontSize: 14,
+  includeFontPadding: false,
+}
+
+export const PRE_M_14: TextStyle = {
+  fontFamily: Platform.select({
+    ios: "Pretendard-Medium",
+    android: "Pretendard-Medium",
   }),
   fontSize: 14,
   includeFontPadding: false,
@@ -14,8 +32,17 @@ export const PRE_14: TextStyle = {
 
 export const POP_14: TextStyle = {
   fontFamily: Platform.select({
-    ios: "Poppins",
+    ios: "Poppins-Regular",
     android: "Poppins-Regular",
+  }),
+  fontSize: 14,
+  includeFontPadding: false,
+}
+
+export const POP_SB_14: TextStyle = {
+  fontFamily: Platform.select({
+    ios: "Poppins-SemiBold",
+    android: "Poppins-SemiBold",
   }),
   fontSize: 14,
   includeFontPadding: false,

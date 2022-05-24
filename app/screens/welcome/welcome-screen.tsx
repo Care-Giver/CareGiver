@@ -21,14 +21,13 @@ import {
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 
-import { PRE_14, POP_14 } from "../../../assets/fonts"
+import { PRE_14, POP_14, POP_SB_14, PRE_M_14, PRE_B_14 } from "../../../assets/fonts"
 import { DivisionLine } from "../../components/lines/division-line"
 
 //* export convention of Our Project
-//! 절대 package 를 혼자 설치하지 않는다, 
+//! 절대 package 를 혼자 설치하지 않는다,
 //! 절대 node, npm, expo, ignite-cli를 혼자 업데이트하지 않는다.
 // -> 무조건 날 잡고, 같이한다.
-
 
 //- 1. 절대 export default 사용하지 않는다 (99%)
 //~     export const 함수명 ......
@@ -57,10 +56,6 @@ import { DivisionLine } from "../../components/lines/division-line"
 //~   WIDTH, HEIGTH 는 상수이며, import 해서 쓸꺼임.
 // ~  웬만하면 이짓거리 안하게, component 화 하겠으나,
 //~   혼자 작업할때 필요하다면, styles 작성시 위에처럼 곱해서 사용할것!
-
-
-
-
 
 const bowserLogo = require("./bowser.png")
 
@@ -160,9 +155,29 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             {"\n"}
           </Text>
 
+          <Text style={PRE_M_14}>
+            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
+            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
+            {"\n"}
+          </Text>
+
+          <Text style={PRE_B_14}>
+            [PRE_14] 내 모든 걸 다주었네 내 술도마셔 난 선명하게 이 밤을 다 기억할래 내 몸을 모두
+            담궈도 fig 난 눈물론 안젖어 날 가지고 노는 걸알아 그래서 난 니가 좋아
+            {"\n"}
+          </Text>
+
           <DivisionLine />
 
           <Text style={POP_14}>
+            [POP_14] You want me, I want you, baby My sugarboo, I'm levitating The Milky Way, we're
+            renegading Yeah, yeah, yeah, yeah, yeah I got you, moonlight, you're my starlight I need
+            you all night, come on, dance with me I'm levitating You, moonlight, you're my starlight
+            (you're the moonlight) I need you all night, come on, dance with me I'm levitating (woo)
+            {"\n"}
+          </Text>
+
+          <Text style={POP_SB_14}>
             [POP_14] You want me, I want you, baby My sugarboo, I'm levitating The Milky Way, we're
             renegading Yeah, yeah, yeah, yeah, yeah I got you, moonlight, you're my starlight I need
             you all night, come on, dance with me I'm levitating You, moonlight, you're my starlight
@@ -174,8 +189,6 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <Text style={TITLE} text="Your new app, " />
             <Text style={ALMOST} text="almost" />
             <Text style={TITLE} text="!" />
-            <PRE_B_14 color+{} text="안녕 민선아... 살려죠,," />
-
           </Text>
           <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
           <Image source={bowserLogo} style={BOWSER} />
