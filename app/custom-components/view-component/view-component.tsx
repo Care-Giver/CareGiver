@@ -1,7 +1,7 @@
 import { View, Text, ViewStyle, FlexStyle, StyleProp, ViewProps } from "react-native"
 import React from "react"
 import { palette, WIDTH } from "../../theme"
-import { Screen } from "../screen/screen"
+import { Screen } from "../../components/screen/screen"
 
 const FULL: ViewStyle = { flex: 1 }
 

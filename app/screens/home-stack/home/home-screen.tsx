@@ -16,20 +16,13 @@ import {
   Text,
   GradientBackground,
   AutoImage as Image,
-  FormRow,
-  PopSem14,
-  PopSem20,
-  PreReg14,
-  PreBol32,
-  PopReg20,
-  PreBol20,
-  PreBol18,
-  PreBol12,
+  Switch,
 } from "../../../components"
+import { BackgroundRootView, Row, PreBol12, PreBol18, PreBol20 } from "../../../custom-components"
+
 import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
 import { NavigatorParamList } from "../../../navigators"
 
-import { BackgroundRootView, Row } from "../../../components/view-component/view-component"
 import { DISABLED, SUB_HEAD_LINE } from "../../../theme/palette"
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
@@ -71,6 +64,12 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           </PreBol12>
           <PreBol12 color={DISABLED}>위탁</PreBol12>
         </Row>
+
+        <Switch
+          onToggle={() => {
+            alert("dd")
+          }}
+        />
 
         {/*//? 훈련사 선택 박스 리스트 Horzontal FaltList*/}
       </BackgroundRootView>

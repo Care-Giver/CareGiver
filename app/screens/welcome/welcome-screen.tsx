@@ -17,16 +17,11 @@ import {
   GradientBackground,
   AutoImage as Image,
   FormRow,
-  PopSem14,
-  PopSem20,
-  PreReg14,
-  PreBol32,
-  PopReg20,
 } from "../../components"
+import { BackgroundRootView, PreBol32, PopReg20 } from "../../custom-components"
 import { color, spacing, typography, SHADOW_4, WIDTH } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
-import { DivisionLine } from "../../components/lines/division-line"
-import { BackgroundRootView } from "../../components/view-component/view-component"
+
 // import {} from "../../components/text/custom-texts"
 
 //* export convention of Our Project

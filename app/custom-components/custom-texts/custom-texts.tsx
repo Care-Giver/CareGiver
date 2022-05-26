@@ -1,8 +1,8 @@
 /* eslint-disable spaced-comment */
 import * as React from "react"
 import { Image, Text as ReactNativeText } from "react-native"
-import { presets } from "./text.presets"
-import { TextProps } from "./text.props"
+import { presets } from "../../components/text/text.presets"
+import { TextProps } from "../../components/text/text.props"
 import { translate } from "../../i18n"
 import {
   PRETENDARD_REGULAR,
