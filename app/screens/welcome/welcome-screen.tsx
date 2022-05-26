@@ -22,7 +22,7 @@ import {
   PreReg14,
   PreBol32,
 } from "../../components"
-import { color, spacing, typography, SHADOW_4 } from "../../theme"
+import { color, spacing, typography, SHADOW_4, WIDTH } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { DivisionLine } from "../../components/lines/division-line"
 // import {} from "../../components/text/custom-texts"
@@ -165,7 +165,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <View
               style={[
                 {
-                  width: 100,
+                  width: 100 * WIDTH,
                   height: 100,
                   backgroundColor: "yellow",
                 },

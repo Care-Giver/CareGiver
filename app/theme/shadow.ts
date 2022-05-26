@@ -1,7 +1,5 @@
 import { Platform, ShadowPropTypesIOSStatic, ShadowStyleIOS } from "react-native"
-
-const WIDTH = 1
-const HEIGHT = 1
+import { WIDTH, HEIGHT } from "./device-size-constant"
 
 export const palette = {
   black: "#1d1d1d",
