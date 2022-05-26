@@ -5,9 +5,17 @@ export const basicDimensions = Platform.select({
     width: 390,
     height: 844,
   },
+
+  //* 기존 Android Artboard 사이즈
+  // android: {
+  //   width: 360,
+  //   height: 780,
+  // },
+
+  //? 임시용 사이즈 (Android Artboard 디자인 GUI 미완)
   android: {
-    width: 360,
-    height: 780,
+    width: 390,
+    height: 844,
   },
 })
 

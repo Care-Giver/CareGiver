@@ -6,11 +6,20 @@ import {
   ImageStyle,
   SafeAreaView,
   Text as ReactNativeText,
+  FlatList,
 } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { Text } from "../../../components"
-import { BackgroundRootView, Row, PreBol12, PreBol18, PreBol20 } from "../../../custom-components"
+import {
+  BackgroundRootView,
+  Row,
+  PreBol12,
+  PreBol18,
+  PreBol20,
+  ServiceChoiceButton,
+  SitterProfileButton,
+} from "../../../custom-components"
 import { NavigatorParamList } from "../../../navigators"
 
 import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
@@ -33,6 +42,18 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         <PreBol20 text="선택해주세요!" style={{ marginTop: HEIGHT * 8 }} />
 
         {/*//? 펫시팅 | 훈련 선택 박스 */}
+        <Row style={{ marginTop: HEIGHT * 20 }}>
+          <ServiceChoiceButton
+            title="펫시팅"
+            subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
+          />
+
+          <ServiceChoiceButton
+            title="훈련"
+            subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
+            style={{ marginLeft: "auto" }}
+          />
+        </Row>
 
         <Text>{"\n\n\n\n"}</Text>
 
@@ -51,6 +72,22 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         </Row>
 
         {/*//? 펫시터 선택 박스 리스트 Horzontal FaltList*/}
+        {/* <FlatList /> */}
+        <Row style={{ marginTop: HEIGHT * 10 }}>
+          <SitterProfileButton name={"최수민"} ratings={3.5} intro={"떼껄룩"} />
+          <SitterProfileButton
+            name={"박민선"}
+            ratings={4.7}
+            intro={"ㅎㅇㄹ"}
+            style={{ marginLeft: WIDTH * 10 }}
+          />
+          <SitterProfileButton
+            name={"김지우"}
+            ratings={2.8}
+            intro={"출시까지 안죽습니다"}
+            style={{ marginLeft: WIDTH * 10 }}
+          />
+        </Row>
 
         <Text>{"\n\n\n\n"}</Text>
 
