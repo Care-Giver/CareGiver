@@ -21,10 +21,12 @@ import {
   PopSem20,
   PreReg14,
   PreBol32,
+  PopReg20,
 } from "../../components"
 import { color, spacing, typography, SHADOW_4, WIDTH } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { DivisionLine } from "../../components/lines/division-line"
+import { BackgroundRootView } from "../../components/view-component/view-component"
 // import {} from "../../components/text/custom-texts"
 
 //* export convention of Our Project
@@ -57,7 +59,7 @@ import { DivisionLine } from "../../components/lines/division-line"
 
 //- 4. width 와 heihgt 는 무조건 WIDTH * 값, HEIGTH * 값 으로 사용해야한다. (값: xd 값))
 //~   WIDTH, HEIGTH 는 상수이며, import 해서 쓸꺼임.
-// ~  웬만하면 이짓거리 안하게, component 화 하겠으나,
+//~  웬만하면 이짓거리 안하게, component 화 하겠으나,
 //~   혼자 작업할때 필요하다면, styles 작성시 위에처럼 곱해서 사용할것!
 
 const bowserLogo = require("./bowser.png")
@@ -140,7 +142,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
     return (
       <View testID="WelcomeScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
-        <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+        {/* <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
 
           <DivisionLine />
@@ -177,7 +179,26 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
           <PopSem14 text="LETS GET PSYCICAL" color="#21ffff" />
 
           <DivisionLine />
-        </Screen>
+        </Screen> */}
+
+        <BackgroundRootView preset={"scroll"}>
+          <PreBol32>ㅇㅇㅇㅇ</PreBol32>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <PopReg20>OOOOOOOO</PopReg20>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        </BackgroundRootView>
+
         <SafeAreaView style={FOOTER}>
           <View style={FOOTER_CONTENT}>
             <Button

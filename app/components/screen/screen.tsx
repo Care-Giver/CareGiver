@@ -40,6 +40,7 @@ function ScreenWithScrolling(props: ScreenProps) {
     >
       <StatusBar barStyle={props.statusBar || "light-content"} />
       <View style={[preset.outer, backgroundStyle, insetStyle]}>
+        {/* //! 주의: 안드로이드는, ScrollView 이더라도, children 이 scroll 이 필요하지 않는 사이즈이면 scroll 이 작동 하지 않는다 */}
         <ScrollView
           style={[preset.outer, backgroundStyle]}
           contentContainerStyle={[preset.inner, style]}
