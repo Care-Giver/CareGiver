@@ -1,7 +1,9 @@
-import { View, Text, ViewStyle, FlexStyle } from "react-native"
+import { View, Text, ViewStyle, FlexStyle, StyleProp, ViewProps } from "react-native"
 import React from "react"
 import { palette, WIDTH } from "../../theme"
 import { Screen } from "../screen/screen"
+
+const FULL: ViewStyle = { flex: 1 }
 
 const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: WIDTH * 16,
@@ -14,21 +16,21 @@ export const BackgroundRootView = (props) => {
     <Screen
       preset={preset}
       backgroundColor={palette.white}
-      style={[BASIC_BACKGROUND_PADDING]}
+      style={[FULL, BASIC_BACKGROUND_PADDING]}
       {...props}
     />
   )
 }
 
-// export const TEST_VIEW = (props) => {
-//   const preset = { props }
+//- TODO: RowProps 생성 (ScreenProps) 참고할 것
+// export const Row = (props: RowProps) => {
+export const Row = (props: ViewProps) => {
+  const PRESETS = {
+    width: "100%",
+    heiht: "auto",
+    backgroundColor: palette.white,
+    flexDirection: "row",
+  }
 
-//   return (
-//     <Screen
-//       preset={preset}
-//       backgroundColor={palette.white}
-//       style={[BASIC_BACKGROUND_PADDING]}
-//       {...props}
-//     />
-//   )
-// }
+  return <View style={[PRESETS, props.style]}>{props.children}</View>
+}
