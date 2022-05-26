@@ -9,3 +9,35 @@ export const palette = {
   angry: "#dd3333",
   deepPurple: "#5D2555",
 }
+
+// * System colors
+export const SUCCESS_BLUE = "#257FE8"
+
+export const ERROR_RED = "#E64444"
+
+export const LIGHT_LINE = "#F0F0F6"
+
+export const MIDDLE_LINE = "#E5E5EC"
+
+export const HEAD_LINE = "#111111"
+
+export const STRONG_LINE = "#111111"
+
+export const SUB_HEAD_LINE = "#454545"
+
+export const BODY = "#767676"
+
+export const DISABLED = "#999999"
+
+export const DBG = "#E5E5EC"
+
+export const LBG = "#F8F8FA"
+
+// * Brand colors
+export const GIVER_CASUAL_NAVY = "#00206C"
+
+export const GIVER_ROMANTIC_GRAY = "#E8E7E5"
+
+export const CARE_NATURAL_BLUE = "#B1C9DE"
+
+export const CARE_SOFT_YELLOW = "#FCF3DE"

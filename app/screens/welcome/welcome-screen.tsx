@@ -22,16 +22,8 @@ import {
   PreReg14,
   PreBol32,
 } from "../../components"
-import { color, spacing, typography } from "../../theme"
+import { color, spacing, typography, SHADOW_4 } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
-
-import {
-  PRETENDARD_REGULAR,
-  POPPINS_REGULAR,
-  POPPINS_SEMIBOLD,
-  PRETENDARD_MEDIUM,
-  PRETENDARD_BOLD,
-} from "../../../assets/fonts"
 import { DivisionLine } from "../../components/lines/division-line"
 // import {} from "../../components/text/custom-texts"
 
@@ -160,6 +152,27 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             하하하하
             {"\n"}
           </PreReg14>
+
+          <View
+            style={{
+              width: 300,
+              height: 300,
+              backgroundColor: "white",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={[
+                {
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "yellow",
+                },
+                SHADOW_4,
+              ]}
+            />
+          </View>
 
           <PopSem14 text="LETS GET PSYCICAL" color="#21ffff" />
 
