@@ -30,6 +30,7 @@ export const Row = (props: ViewProps) => {
     heiht: "auto",
     backgroundColor: palette.white,
     flexDirection: "row",
+    alignItems: "center",
   }
 
   return <View style={[PRESETS, props.style]}>{props.children}</View>

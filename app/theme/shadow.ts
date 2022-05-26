@@ -1,3 +1,4 @@
+import { GIVER_CASUAL_NAVY } from "./palette"
 import { Platform, ShadowPropTypesIOSStatic, ShadowStyleIOS } from "react-native"
 import { WIDTH, HEIGHT } from "./device-size-constant"
 
@@ -16,7 +17,7 @@ export const palette = {
 // * Shadows
 export const SHADOW_4: ShadowStyleIOS = Platform.select({
   ios: {
-    shadowColor: "#00206C",
+    shadowColor: GIVER_CASUAL_NAVY,
     shadowOpacity: 0.16,
     shadowOffset: {
       width: WIDTH * 0,

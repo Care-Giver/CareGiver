@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import {
   View,
   ViewStyle,
@@ -9,24 +9,23 @@ import {
 } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import {
-  Button,
-  Header,
-  Screen,
-  Text,
-  GradientBackground,
-  AutoImage as Image,
-  Switch,
-} from "../../../components"
+import { Text } from "../../../components"
 import { BackgroundRootView, Row, PreBol12, PreBol18, PreBol20 } from "../../../custom-components"
-
-import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
 import { NavigatorParamList } from "../../../navigators"
 
+import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
 import { DISABLED, SUB_HEAD_LINE } from "../../../theme/palette"
+import { ComeHomeGoToSwitchButton } from "../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
   ({ navigation }) => {
+    const [isOn, setIsOn] = useState(false)
+    const toggle = () => {
+      isOn ? setIsOn(false) : setIsOn(true)
+    }
+    const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
+    const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
+
     return (
       <BackgroundRootView testID="HomeScreen" preset="scroll">
         {/*//? Title */}
@@ -44,32 +43,33 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
 
           {/*//? 방문/위탁 토글 버튼 */}
-          <PreBol12 color={palette.white} style={{ marginLeft: "auto" }}>
-            방문
-          </PreBol12>
-          <PreBol12 color={DISABLED}>위탁</PreBol12>
+          <ComeHomeGoToSwitchButton
+            state={isComeHomePetSitter}
+            setState={setIsComeHomePetSitter}
+            style={{ marginLeft: "auto" }}
+          />
         </Row>
 
         {/*//? 펫시터 선택 박스 리스트 Horzontal FaltList*/}
 
         <Text>{"\n\n\n\n"}</Text>
 
-        <Row style={{ marginTop: HEIGHT * 8, backgroundColor: "yellow" }}>
+        <Row
+          style={{
+            marginTop: HEIGHT * 8,
+            backgroundColor: "yellow",
+          }}
+        >
           {/*//? 훈련사 */}
           <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
 
           {/*//? 방문/위탁 토글 버튼 */}
-          <PreBol12 color={palette.white} style={{ marginLeft: "auto" }}>
-            방문
-          </PreBol12>
-          <PreBol12 color={DISABLED}>위탁</PreBol12>
+          <ComeHomeGoToSwitchButton
+            state={isComeHomeTrainer}
+            setState={setIsComeHomeTrainer}
+            style={{ marginLeft: "auto" }}
+          />
         </Row>
-
-        <Switch
-          onToggle={() => {
-            alert("dd")
-          }}
-        />
 
         {/*//? 훈련사 선택 박스 리스트 Horzontal FaltList*/}
       </BackgroundRootView>
