@@ -2,36 +2,27 @@ import { View, Text, ViewStyle, FlexStyle, StyleProp, ViewProps } from "react-na
 import React from "react"
 import { palette, WIDTH } from "../../theme"
 import { Screen } from "../../components/screen/screen"
+import { isNonScrolling } from "../../components/screen/screen.presets"
 
 const FULL: ViewStyle = { flex: 1 }
+
+const FULL_WITH_SCROLLING: ViewStyle = { width: "100%", height: "auto" }
 
 const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: WIDTH * 16,
 }
 
-export const BackgroundRootView = (props) => {
-  const preset = { props }
-
+export const ScreenRootView = (props) => {
   return (
     <Screen
-      preset={preset}
+      preset={props.preset}
       backgroundColor={palette.white}
-      style={[FULL, BASIC_BACKGROUND_PADDING]}
+      style={
+        isNonScrolling(props.preset)
+          ? [FULL, BASIC_BACKGROUND_PADDING, props.style]
+          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING, props.style]
+      }
       {...props}
     />
   )
-}
-
-//- TODO: RowProps 생성 (ScreenProps) 참고할 것
-// export const Row = (props: RowProps) => {
-export const Row = (props: ViewProps) => {
-  const PRESETS = {
-    width: "100%",
-    heiht: "auto",
-    backgroundColor: palette.white,
-    flexDirection: "row",
-    alignItems: "center",
-  }
-
-  return <View style={[PRESETS, props.style]}>{props.children}</View>
 }

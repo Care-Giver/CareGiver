@@ -12,8 +12,9 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { Text } from "../../../components"
 import {
-  BackgroundRootView,
+  ScreenRootView,
   Row,
+  RowRoundedBox,
   PreBol12,
   PreBol18,
   PreBol20,
@@ -23,8 +24,9 @@ import {
 import { NavigatorParamList } from "../../../navigators"
 
 import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
-import { DISABLED, SUB_HEAD_LINE } from "../../../theme/palette"
+import { BODY, DISABLED, SUB_HEAD_LINE } from "../../../theme/palette"
 import { ComeHomeGoToSwitchButton } from "../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
+import { RowRoundedButton } from "../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
   ({ navigation }) => {
@@ -32,13 +34,24 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
     const toggle = () => {
       isOn ? setIsOn(false) : setIsOn(true)
     }
+
+    //? 기본값은 "방문" 으로 한다 (기획)
     const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
     const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
 
     return (
-      <BackgroundRootView testID="HomeScreen" preset="scroll">
+      <ScreenRootView testID="HomeScreen" preset="scroll">
+        <RowRoundedButton
+          text={"경기 안산시 상록구 한양대학로 55"}
+          textColor={BODY}
+          onPress={() => {
+            alert("dd")
+          }}
+          style={{ marginTop: HEIGHT * 18 }}
+        />
+
         {/*//? Title */}
-        <PreBol20 text="케어기버에게 요청할 서비스를" />
+        <PreBol20 text="케어기버에게 요청할 서비스를" style={{ marginTop: HEIGHT * 50 }} />
         <PreBol20 text="선택해주세요!" style={{ marginTop: HEIGHT * 8 }} />
 
         {/*//? 펫시팅 | 훈련 선택 박스 */}
@@ -109,7 +122,57 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         </Row>
 
         {/*//? 훈련사 선택 박스 리스트 Horzontal FaltList*/}
-      </BackgroundRootView>
+
+        <Row
+          style={{
+            marginTop: HEIGHT * 8,
+            backgroundColor: "yellow",
+          }}
+        >
+          {/*//? 훈련사 */}
+          <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
+
+          {/*//? 방문/위탁 토글 버튼 */}
+          <ComeHomeGoToSwitchButton
+            state={isComeHomeTrainer}
+            setState={setIsComeHomeTrainer}
+            style={{ marginLeft: "auto" }}
+          />
+        </Row>
+
+        <Row
+          style={{
+            marginTop: HEIGHT * 8,
+            backgroundColor: "yellow",
+          }}
+        >
+          {/*//? 훈련사 */}
+          <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
+
+          {/*//? 방문/위탁 토글 버튼 */}
+          <ComeHomeGoToSwitchButton
+            state={isComeHomeTrainer}
+            setState={setIsComeHomeTrainer}
+            style={{ marginLeft: "auto" }}
+          />
+        </Row>
+        <Row
+          style={{
+            marginTop: HEIGHT * 8,
+            backgroundColor: "yellow",
+          }}
+        >
+          {/*//? 훈련사 */}
+          <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
+
+          {/*//? 방문/위탁 토글 버튼 */}
+          <ComeHomeGoToSwitchButton
+            state={isComeHomeTrainer}
+            setState={setIsComeHomeTrainer}
+            style={{ marginLeft: "auto" }}
+          />
+        </Row>
+      </ScreenRootView>
     )
   },
 )

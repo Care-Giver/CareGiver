@@ -18,7 +18,7 @@ import {
   AutoImage as Image,
   FormRow,
 } from "../../components"
-import { BackgroundRootView, PreBol32, PopReg20 } from "../../custom-components"
+import { ScreenRootView, PreBol32, PopReg20 } from "../../custom-components"
 import { color, spacing, typography, SHADOW_4, WIDTH } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 
@@ -176,7 +176,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
           <DivisionLine />
         </Screen> */}
 
-        <BackgroundRootView preset={"scroll"}>
+        <ScreenRootView preset={"scroll"}>
           <PreBol32>ㅇㅇㅇㅇ</PreBol32>
           <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
           <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
@@ -192,7 +192,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
           <PopReg20>OOOOOOOO</PopReg20>
           <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
           <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-        </BackgroundRootView>
+        </ScreenRootView>
 
         <SafeAreaView style={FOOTER}>
           <View style={FOOTER_CONTENT}>
