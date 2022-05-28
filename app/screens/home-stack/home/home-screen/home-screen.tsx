@@ -45,7 +45,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
     }, [isComeHomePetSitter])
 
     useEffect(() => {
-      isComeHomePetSitter
+      isComeHomeTrainer
         ? settrainers(trainersDummy.filter((item) => item.isComeHome === true))
         : settrainers(trainersDummy.filter((item) => item.isGoTo === true))
     }, [isComeHomeTrainer])
