@@ -3,14 +3,14 @@ import React from "react"
 import { styles } from "./styles"
 import { ChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../custom-texts/custom-texts"
-import { SHADOW_4 } from "../../../theme"
+import { SHADOW_1 } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
   const { title, subtitle, style } = props
   return (
     <Pressable
-      style={[styles.container, SHADOW_4, style]}
+      style={[styles.container, SHADOW_1, style]}
       onPress={() => {
         alert("ㅇㅇ")
       }}

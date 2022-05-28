@@ -18,7 +18,7 @@ export const RowRoundedButton = (props: ViewProps) => {
     <Pressable style={style}>
       <RowRoundedBox preset={"Pressable"} onPress={onPress}>
         <Image source={image} style={styles.image} />
-        <PreReg16 text={text} color={textColor} style={textStyle} />
+        <PreReg16 text={text} color={textColor} style={[styles.text, textStyle]} />
       </RowRoundedBox>
     </Pressable>
   )

@@ -3,7 +3,7 @@ import { WIDTH, HEIGHT } from "../../../theme"
 
 export const styles = StyleSheet.create({
   container: {
-    width: WIDTH * 174,
+    width: WIDTH * 175,
     height: HEIGHT * 205,
 
     paddingHorizontal: WIDTH * 16,

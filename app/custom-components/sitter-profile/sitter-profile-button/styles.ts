@@ -14,21 +14,23 @@ export const styles = StyleSheet.create({
 
     backgroundColor: "white",
   },
-  ratingsContainer: {
+  ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: HEIGHT * 8.2,
   },
   star: {
-    width: WIDTH * 13.65,
+    width: WIDTH * 13,
     height: HEIGHT * 12,
   },
   starMargin: {
     marginLeft: WIDTH * 2.9,
   },
   image: {
+    width: WIDTH * 142,
+    height: HEIGHT * 108,
     marginTop: HEIGHT * 24,
-
-    resizeMode: "contain",
+    borderRadius: 9,
+    resizeMode: "cover",
   },
 })
