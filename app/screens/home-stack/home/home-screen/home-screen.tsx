@@ -11,8 +11,8 @@ import {
   SitterProfileButton,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
-import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
-import { BODY, DISABLED, SUB_HEAD_LINE } from "../../../../theme/palette"
+import { HEIGHT, WIDTH } from "../../../../theme"
+import { BODY, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { ComeHomeGoToSwitchButton } from "../../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
@@ -105,7 +105,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         </Row>
 
         {/*//? Title */}
-        <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: HEIGHT * 61 }} />
+        <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: HEIGHT * 60 }} />
         {/*//? 펫시터 */}
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
