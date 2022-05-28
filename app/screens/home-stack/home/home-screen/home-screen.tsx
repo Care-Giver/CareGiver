@@ -1,21 +1,10 @@
-import React, { FC, useState, useCallback } from "react"
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
-  SafeAreaView,
-  Text as ReactNativeText,
-  FlatList,
-} from "react-native"
+import React, { FC, useState, useCallback, useEffect } from "react"
+import { FlatList } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Text } from "../../../../components"
 import {
   ScreenRootView,
   Row,
-  RowRoundedBox,
-  PreBol12,
   PreBol18,
   PreBol20,
   ServiceChoiceButton,
@@ -26,7 +15,7 @@ import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
 import { BODY, DISABLED, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { ComeHomeGoToSwitchButton } from "../../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
-import { petsitters, trainers } from "./dummy-data"
+import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { DotsIndicator } from "../../../../custom-components/dots-indicator/dots-indicator/dots-indicator"
 const gps = require("./images/gps.png")
 
@@ -41,10 +30,25 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
     }
 
     //? 기본값은 "방문" 으로 한다 (기획) _
+    const [petsitters, setPetsitters] = useState(petsittersDummy)
+    const [trainers, settrainers] = useState(trainersDummy)
+
     const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
     const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
     const [selectedPetsitter, setSelectedPetsitter] = useState(0)
     const [selectedTrainer, setSelectedTrainer] = useState(0)
+
+    useEffect(() => {
+      isComeHomePetSitter
+        ? setPetsitters(petsittersDummy.filter((item) => item.isComeHome === true))
+        : setPetsitters(petsittersDummy.filter((item) => item.isGoTo === true))
+    }, [isComeHomePetSitter])
+
+    useEffect(() => {
+      isComeHomePetSitter
+        ? settrainers(trainersDummy.filter((item) => item.isComeHome === true))
+        : settrainers(trainersDummy.filter((item) => item.isGoTo === true))
+    }, [isComeHomeTrainer])
 
     const onPetsitterFlatlistUpdate = useCallback(({ viewableItems }) => {
       // ? 선택된 이미지, 즉 viewableItems 의 index 값을 activeIndex 로 설정.
@@ -111,10 +115,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           }}
         >
           <FlatList
-            contentContainerStyle={{
-              paddingVertical: FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
             data={petsitters}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
@@ -127,6 +127,10 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 10 }}
               />
             )}
+            contentContainerStyle={{
+              paddingVertical: FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
@@ -171,10 +175,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           }}
         >
           <FlatList
-            contentContainerStyle={{
-              paddingVertical: FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
             data={trainers}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
@@ -187,6 +187,10 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 1 }}
               />
             )}
+            contentContainerStyle={{
+              paddingVertical: FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
