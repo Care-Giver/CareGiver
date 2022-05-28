@@ -1,6 +1,6 @@
 export interface ProfileButtonProps {
-    name: string,
-    ratings: number,
-    intro: string,
-    uri: string,
-};
+  name: string
+  rating: number
+  intro: string
+  uri: string
+}
