@@ -15,8 +15,8 @@ export const SelectedPetCard = (props) => {
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <View style={{ flexDirection: "row" }}>
         <View style={styles.infoContainer}>
-          <PreBol16 text={"초코"} color={SUB_HEAD_LINE} />
-          <PreReg14 text={"중형견 | 푸들 | 3세 | 여"} color={BODY} />
+          <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />
+          <PreReg14 text={`${size} | ${species} | ${age}세 | ${sex}`} color={BODY} />
         </View>
 
         {/*//? 삭제 버튼 */}
