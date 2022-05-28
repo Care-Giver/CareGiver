@@ -35,7 +35,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
       isOn ? setIsOn(false) : setIsOn(true)
     }
 
-    //? 기본값은 "방문" 으로 한다 (기획)
+    //? 기본값은 "방문" 으로 한다 (기획) _
     const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
     const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
 
