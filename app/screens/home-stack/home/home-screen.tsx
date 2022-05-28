@@ -23,7 +23,7 @@ import {
 } from "../../../custom-components"
 import { NavigatorParamList } from "../../../navigators"
 
-import { HEIGHT, palette, SHADOW_4, WIDTH } from "../../../theme"
+import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../theme"
 import { BODY, DISABLED, SUB_HEAD_LINE } from "../../../theme/palette"
 import { ComeHomeGoToSwitchButton } from "../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 import { RowRoundedButton } from "../../../custom-components/buttons/row-rounded-button/row-rounded-button"

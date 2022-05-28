@@ -19,7 +19,7 @@ import {
   FormRow,
 } from "../../components"
 import { ScreenRootView, PreBol32, PopReg20 } from "../../custom-components"
-import { color, spacing, typography, SHADOW_4, WIDTH } from "../../theme"
+import { color, spacing, typography, SHADOW_1, WIDTH } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 
 // import {} from "../../components/text/custom-texts"
