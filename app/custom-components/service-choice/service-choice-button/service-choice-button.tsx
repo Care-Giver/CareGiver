@@ -7,14 +7,9 @@ import { SHADOW_1 } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
-  const { title, subtitle, style } = props
+  const { title, subtitle, style, onPress } = props
   return (
-    <Pressable
-      style={[styles.container, SHADOW_1, style]}
-      onPress={() => {
-        alert("ㅇㅇ")
-      }}
-    >
+    <Pressable style={[styles.container, SHADOW_1, style]} onPress={onPress}>
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />

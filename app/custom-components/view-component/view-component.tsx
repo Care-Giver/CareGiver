@@ -2,7 +2,7 @@ import { View, Text, ViewStyle, FlexStyle, StyleProp, ViewProps } from "react-na
 import React from "react"
 import { palette, WIDTH } from "../../theme"
 import { Screen } from "../../components/screen/screen"
-import { isNonScrolling } from "../../components/screen/screen.presets"
+import { isNonScrolling, ScreenPresets } from "../../components/screen/screen.presets"
 
 const FULL: ViewStyle = { flex: 1 }
 

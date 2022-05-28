@@ -17,7 +17,7 @@ import { ComeHomeGoToSwitchButton } from "../../../../custom-components/buttons/
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { DotsIndicator } from "../../../../custom-components/dots-indicator/dots-indicator/dots-indicator"
-import images from "../../../../../assets/common-images"
+import IMAGES from "../../../../../assets/common-images"
 
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
@@ -65,15 +65,19 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
       }
     }, [])
 
+    const goToSearchScreen = (params) => {
+      navigation.navigate("search", params)
+    }
+
     return (
       <ScreenRootView testID="HomeScreen" preset="scroll">
         <RowRoundedButton
-          image={images.gps}
+          onPress={() => {
+            goToSearchScreen()
+          }}
+          image={IMAGES.gps}
           text={"경기 안산시 상록구 한양대학로 55"}
           textColor={BODY}
-          onPress={() => {
-            alert("dd")
-          }}
           style={{ marginTop: HEIGHT * 18 }}
         />
 
@@ -84,10 +88,16 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         {/*//? 펫시팅 | 훈련 선택 박스 */}
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <ServiceChoiceButton
+            onPress={() => {
+              goToSearchScreen({ serviceType: "팻시팅" })
+            }}
             title="펫시팅"
             subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
           />
           <ServiceChoiceButton
+            onPress={() => {
+              goToSearchScreen({ serviceType: "훈련" })
+            }}
             title="훈련"
             subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
             style={{ marginLeft: "auto" }}
