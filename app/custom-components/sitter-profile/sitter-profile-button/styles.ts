@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
   starMargin: {
     marginLeft: WIDTH * 2.9,
   },
+  //TODO: desc 가 2줄이면 marginTop 조정해야 함...
   image: {
     width: WIDTH * 142,
     height: HEIGHT * 108,

@@ -83,6 +83,7 @@ const PretendardRegular = (props: TextProps) => {
           color: color,
         },
       ]}
+      numberOfLines={props.numberOfLines}
     >
       {content}
     </ReactNativeText>

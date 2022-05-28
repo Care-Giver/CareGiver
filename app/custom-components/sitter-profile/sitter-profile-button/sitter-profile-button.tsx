@@ -38,7 +38,7 @@ export const SitterProfileButton = (props: ProfileButtonProps) => {
       </View>
 
       {/* description */}
-      <PreReg12 style={{ marginTop: HEIGHT * 8 }} color={SUB_HEAD_LINE}>
+      <PreReg12 style={{ marginTop: HEIGHT * 8 }} color={SUB_HEAD_LINE} numberOfLines={2}>
         {desc}
       </PreReg12>
 

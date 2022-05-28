@@ -65,7 +65,8 @@ export const trainersDummy = [
     name: "김익제",
     rating: 4.9,
     desc: "저는 방문, 위탁 둘 다 됩니다! 즐겁다 즐거워!",
-    profileImg: "https://images.unsplash.com/file-1635809674741-1d3a90cc064aimage",
+    profileImg:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBNc8lNvfDimpWjp_-g7be0-VTtgMdrvb9bg&usqp=CAU",
     isComeHome: true,
     isGoTo: true,
   },
