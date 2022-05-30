@@ -16,8 +16,8 @@ export const ConditionalButton = (props) => {
     ...rest
   } = props
 
-  const activatedViewStyle = [styles.root, styles.activatedViewStyle]
-  const disabledViewStyle = [styles.root, styles.disabledViewStyle]
+  const activatedViewStyle = [styles.root, styles.activatedViewStyle, props.style]
+  const disabledViewStyle = [styles.root, styles.disabledViewStyle, props.style]
 
   const viewStyle = isActivate ? activatedViewStyle : disabledViewStyle
   // const textStyle = isActivate ? pressedTextStyle : defaultTextStyle
@@ -30,7 +30,6 @@ export const ConditionalButton = (props) => {
       onPress={() => {
         alert("dd")
       }}
-      {...props}
     >
       <PreBol16 text={label} color={palette.white} />
     </PressableButton>

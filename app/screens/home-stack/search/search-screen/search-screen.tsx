@@ -118,16 +118,18 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         {/* //* 드롭박스 추가해야 함 */}
 
         {/*//? 선택된 반려동물 리스트 */}
-        <SelectedPetCard name={"d"} size={"d"} species={"d"} age={"d"} sex={"d"} />
+        {/* {/* <SelectedPetCard name={"d"} size={"d"} species={"d"} age={"d"} sex={"d"} /> */}
+        {/* <SelectedPetCard />
         <SelectedPetCard />
-        <SelectedPetCard />
-        <SelectedPetCard />
-
-        {/* <PressableButton label={"gd"} defaultViewStyle={} /> */}
+        <SelectedPetCard /> */}
 
         <BlueCheckbox onToggle={toggle} value={isOn} />
 
-        <ConditionalButton label={"이 조건으로 검색하기"} isActivate={!true} />
+        <ConditionalButton
+          label={"이 조건으로 검색하기"}
+          isActivate={!true}
+          style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
+        />
       </ScreenRootView>
     )
   },
