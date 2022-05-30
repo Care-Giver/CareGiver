@@ -12,15 +12,17 @@ export const PressableButton = (props: PressableProps) => {
     pressedTextStyle,
     label,
     children,
+    isDisabled,
     ...rest
   } = props
 
   const viewStyle = isPressed ? pressedViewStyle : defaultViewStyle
   const textStyle = isPressed ? pressedTextStyle : defaultTextStyle
-  const content = children || <Text style={textStyle}>{label} </Text>
+  // const content = children || <Text style={textStyle}>{label} </Text>
+  const content = children
 
   return (
-    <Pressable style={viewStyle} {...rest}>
+    <Pressable style={viewStyle} {...rest} disabled={isDisabled}>
       {content}
     </Pressable>
   )
