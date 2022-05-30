@@ -62,9 +62,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
-        <Row
-        // style={{ alignSelf: "center" }}
-        >
+        <Row style={{ marginTop: HEIGHT * 12 }}>
           <ServiceTypeIndicatorHeader
             label={"방문"}
             state={serviceType}
@@ -162,7 +160,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           label={"이 조건으로 검색하기"}
           isActivated={isActivated}
           style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
-          onPress={navigation.navigate("search-result")}
+          onPress={() => {
+            navigation.navigate("search-result")
+          }}
         />
       </ScreenRootView>
     )
