@@ -8,7 +8,7 @@ import { styles } from "./styles"
 //TODO: ConditionalButtonProps 만들기
 export const ConditionalButton = (props) => {
   const {
-    isActivate = false,
+    isActivated = false,
     // activatedViewStyle,
     // defaultTextStyle,
     label,
@@ -19,14 +19,14 @@ export const ConditionalButton = (props) => {
   const activatedViewStyle = [styles.root, styles.activatedViewStyle, props.style]
   const disabledViewStyle = [styles.root, styles.disabledViewStyle, props.style]
 
-  const viewStyle = isActivate ? activatedViewStyle : disabledViewStyle
-  // const textStyle = isActivate ? pressedTextStyle : defaultTextStyle
+  const viewStyle = isActivated ? activatedViewStyle : disabledViewStyle
+  // const textStyle = isActivated ? pressedTextStyle : defaultTextStyle
   // const content = children || <Text style={textStyle}>{label} </Text>
 
   return (
     <PressableButton
       style={viewStyle}
-      isDisabled={!isActivate}
+      isDisabled={!isActivated}
       onPress={() => {
         alert("dd")
       }}

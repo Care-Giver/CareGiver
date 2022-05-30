@@ -14,6 +14,7 @@ import {
   SelectedPetCard,
   PressableButton,
   BlueCheckbox,
+  ServiceTypeIndicatorHeader,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
@@ -75,6 +76,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
+        <Row>
+          <ServiceTypeIndicatorHeader label={"방문"} state={"방문"} />
+          <ServiceTypeIndicatorHeader label={"위탁"} />
+        </Row>
+
         <Row style={{ marginTop: HEIGHT * 16 }}>
           <Image source={IMAGES.right_arrow_grey} style={styles.image} />
           <PreReg14 text="케어기버가 직접 집을 방문합니다." color={DISABLED} style={styles.text} />
@@ -127,7 +133,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
         <ConditionalButton
           label={"이 조건으로 검색하기"}
-          isActivate={!true}
+          isActivated={!true}
           style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
         />
       </ScreenRootView>

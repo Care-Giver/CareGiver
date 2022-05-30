@@ -8,5 +8,6 @@ export const DivisionLine = ({ color = "red", height = HEIGHT * 2, style }) => {
     backgroundColor: color,
     height: height,
   }
+
   return <View style={[styles.root, COLOR_AND_HEIGHT, style]} />
 }
