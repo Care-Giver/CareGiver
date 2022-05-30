@@ -140,7 +140,6 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
         {/* <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
 
-          <DivisionLine />
 
           <PreReg14 color="red">
             {" "}
@@ -173,7 +172,6 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
 
           <PopSem14 text="LETS GET PSYCICAL" color="#21ffff" />
 
-          <DivisionLine />
         </Screen> */}
 
         <ScreenRootView preset={"scroll"}>
