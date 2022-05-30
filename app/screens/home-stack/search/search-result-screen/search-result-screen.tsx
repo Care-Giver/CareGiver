@@ -1,86 +1,75 @@
-import React, { FC, useState, useCallback, useEffect } from "react"
-import { FlatList, Image } from "react-native"
-import { StackScreenProps } from "@react-navigation/stack"
-import { observer } from "mobx-react-lite"
-import {
-  ScreenRootView,
-  Row,
-  PreBol18,
-  PreBol20,
-  ServiceChoiceButton,
-  SitterProfileButton,
-  PreReg14,
-  DivisionLine,
-  SelectedPetCard,
-  PressableButton,
-  BlueCheckbox,
-  ServiceTypeIndicatorHeader,
-  PreMed14,
-} from "../../../../custom-components"
-import { NavigatorParamList } from "../../../../navigators"
-import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
-import {
-  BODY,
-  DISABLED,
-  HEAD_LINE,
-  LBG,
-  LIGHT_LINE,
-  SUB_HEAD_LINE,
-} from "../../../../theme/palette"
+import { View, SafeAreaView } from "react-native"
+import React from "react"
+import { SitterProfileCard } from "../../../../custom-components/sitter-profile-card/sitter-profile-card"
+import { FlatList } from "react-native-gesture-handler"
+import { petsitters } from "./dummy-data"
+import { HEIGHT, WIDTH } from "../../../../theme"
+import { PreBol18, ScreenRootView } from "../../../../custom-components"
+import { HEAD_LINE, LBG } from "../../../../theme/palette"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
-import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
-import { styles } from "./styles"
-import { ConditionalButton } from "../../../../custom-components/buttons/conditional-button/conditional-button"
-import DropDownPicker from "react-native-dropdown-picker"
 
-export const SearchResultScreen: FC<
-  StackScreenProps<NavigatorParamList, "search-result">
-> = observer(({ navigation }) => {
-  const [isOn, setIsOn] = useState(false)
-  const toggle = () => {
-    isOn ? setIsOn(false) : setIsOn(true)
-  }
-
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(null)
-  const [items, setItems] = useState([
-    { label: "초코 중형견 푸들 3세 여", value: 1 },
-    { label: "우유 소형견 비숑 3세 여", value: 2 },
-  ])
-  const [isActivated, setIsActivated] = useState(false)
-  const [serviceType, setServiceType] = useState("방문")
-
-  const triggerActivate = () => {
-    if (!value) return
-
-    setIsActivated(true)
-  }
-
-  useEffect(() => {
-    triggerActivate()
-  }, [value])
-
+export const SearchResultScreen = () => {
   return (
-    <ScreenRootView testID="SearchResultScreen" preset="fixed">
-      <Row
-      // style={{ alignSelf: "center" }}
-      >
-        <ServiceTypeIndicatorHeader
-          label={"방문"}
-          state={serviceType}
-          onPress={() => {
-            setServiceType("방문")
-          }}
+    <ScreenRootView>
+      {/*//? 날짜 선택 */}
+      <RowRoundedButton
+        onPress={() => {
+          alert("dd")
+        }}
+        image={IMAGES.calendar}
+        text={"날짜를 선택해보세요."}
+        textColor={HEAD_LINE}
+        style={{ marginTop: HEIGHT * 36 }}
+      />
+
+      {/*//? 위치 선택 */}
+      <RowRoundedButton
+        onPress={() => {
+          alert("dd")
+        }}
+        image={IMAGES.location}
+        text={"경기도 안산시 상록구 한양대학로 55"}
+        textColor={HEAD_LINE}
+        style={{ marginTop: HEIGHT * 12 }}
+      />
+
+      {/* title */}
+      <PreBol18 text="검색결과" style={{ marginTop: HEIGHT * 36 }} />
+
+      <View
+        style={{
+          width: "100%",
+          height: HEIGHT * 2,
+          backgroundColor: LBG,
+          marginTop: HEIGHT * 12,
+        }}
+      />
+
+      {/* list container */}
+      <View>
+        <FlatList
+          data={petsitters}
+          renderItem={({ item, index }) => (
+            <SitterProfileCard
+              key={item.id}
+              name={item.name}
+              image={item.image}
+              rating={item.rating}
+              review={item.review}
+              title={item.title}
+              desc={item.desc}
+              onPress={() => console.warn("Hello")}
+              style={
+                index < petsitters.length - 1
+                  ? { marginTop: HEIGHT * 20 }
+                  : { marginVertical: HEIGHT * 20 }
+              }
+            />
+          )}
+          showsVerticalScrollIndicator={false}
         />
-        <ServiceTypeIndicatorHeader
-          label={"위탁"}
-          state={serviceType}
-          onPress={() => {
-            setServiceType("위탁")
-          }}
-        />
-      </Row>
+      </View>
     </ScreenRootView>
   )
-})
+}
