@@ -19,7 +19,6 @@ export function BlueCheckbox(props: BlueCheckboxProps) {
   const rootStyle = [ROOT, props.style]
 
   const onPress = props.onToggle ? () => props.onToggle && props.onToggle(!props.value) : null
-  console.log(props)
 
   return (
     <Pressable

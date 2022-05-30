@@ -26,6 +26,7 @@ import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
 import { Checkbox } from "../../../../components"
 import { ConditionalButton } from "../../../../custom-components/buttons/conditional-button/conditional-button"
+import DropDownPicker from "react-native-dropdown-picker"
 
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
@@ -37,6 +38,13 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     const toggle = () => {
       isOn ? setIsOn(false) : setIsOn(true)
     }
+
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState(null)
+    const [items, setItems] = useState([
+      { label: "Apple", value: "apple" },
+      { label: "Banana", value: "banana" },
+    ])
 
     // //? 기본값은 "방문" 으로 한다 (기획) _
     // const [petsitters, setPetsitters] = useState(petsittersDummy)
@@ -122,6 +130,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
         {/*//? 반려동물 선택 */}
         {/* //* 드롭박스 추가해야 함 */}
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+        />
 
         {/*//? 선택된 반려동물 리스트 */}
         {/* {/* <SelectedPetCard name={"d"} size={"d"} species={"d"} age={"d"} sex={"d"} /> */}
