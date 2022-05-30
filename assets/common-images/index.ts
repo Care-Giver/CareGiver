@@ -7,9 +7,11 @@
   gps: require('../common-images/gps.png'),
   list_bars: require('../common-images/list_bars.png'),
   location: require('../common-images/location.png'),
+  rating_star: require('../common-images/rating_star.png'),
+  right_arrow_grey: require('../common-images/right_arrow_grey.png'),
+  timer: require('../common-images/timer.png')
   right_arrow_grey: require('../common-images/right_arrow_grey.png'),
   select_checkbox: require('../common-images/select_checkbox.png'),
-  timer: require('../common-images/timer.png'),
   x_grey: require('../common-images/x_grey.png')
 }
 
