@@ -12,6 +12,7 @@ import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
+import { SearchResultScreen } from "../screens/search-result-screen/search-result-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -32,6 +33,7 @@ export type NavigatorParamList = {
   // 🔥 Your screens go here
   home: undefined
   search: undefined
+  searchResult: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -43,7 +45,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="home"
+      initialRouteName="searchResult"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -51,6 +53,7 @@ const AppStack = () => {
       {/** 🔥 Your screens go here */}
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="search" component={SearchScreen} />
+      <Stack.Screen name="searchResult" component={SearchResultScreen} />
     </Stack.Navigator>
   )
 }
