@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   infoContainer: {
     width: "auto",
     height: HEIGHT * 72,
-    backgroundColor: "yellow",
+    // backgroundColor: "yellow",
     justifyContent: "center",
   },
   image: {

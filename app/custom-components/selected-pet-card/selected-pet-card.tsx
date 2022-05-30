@@ -5,10 +5,11 @@ import { PreBol16, PreReg12, PreReg14 } from "../custom-texts/custom-texts"
 import { BODY, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../theme/palette"
 import IMAGES from "../../../assets/common-images"
 import { DivisionLine } from "../division-line"
-import { WIDTH } from "../../theme"
+import { HEIGHT, WIDTH } from "../../theme"
 
 export const SelectedPetCard = (props) => {
-  const { name, size, species, age, sex, style, onPress, index } = props
+  const { petData, style, onPress, index } = props
+  const { name, size, species, age, sex } = petData
 
   return (
     <View style={[styles.root, style]}>
@@ -16,7 +17,11 @@ export const SelectedPetCard = (props) => {
       <View style={{ flexDirection: "row" }}>
         <View style={styles.infoContainer}>
           <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />
-          <PreReg14 text={`${size} | ${species} | ${age}세 | ${sex}`} color={BODY} />
+          <PreReg14
+            text={`${size} | ${species} | ${age}세 | ${sex}`}
+            color={BODY}
+            style={{ marginTop: HEIGHT * 8 }}
+          />
         </View>
 
         {/*//? 삭제 버튼 */}

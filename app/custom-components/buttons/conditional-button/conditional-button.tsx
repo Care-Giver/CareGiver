@@ -11,6 +11,7 @@ export const ConditionalButton = (props) => {
     isActivated = false,
     // activatedViewStyle,
     // defaultTextStyle,
+    onPress,
     label,
     children,
     ...rest
@@ -24,13 +25,7 @@ export const ConditionalButton = (props) => {
   // const content = children || <Text style={textStyle}>{label} </Text>
 
   return (
-    <PressableButton
-      style={viewStyle}
-      isDisabled={!isActivated}
-      onPress={() => {
-        alert("dd")
-      }}
-    >
+    <PressableButton style={viewStyle} isDisabled={!isActivated} onPress={onPress}>
       <PreBol16 text={label} color={palette.white} />
     </PressableButton>
   )

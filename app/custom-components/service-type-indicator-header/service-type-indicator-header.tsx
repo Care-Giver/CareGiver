@@ -1,4 +1,4 @@
-import { View, Text } from "react-native"
+import { View, Text, Pressable } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { DivisionLine } from "../division-line"
@@ -6,11 +6,11 @@ import { color, HEIGHT, palette } from "../../theme"
 import { PreBol18, PreReg18 } from "../custom-texts/custom-texts"
 import { DISABLED, GIVER_CASUAL_NAVY } from "../../theme/palette"
 
-export const ServiceTypeIndicatorHeader = ({ label, state }) => {
+export const ServiceTypeIndicatorHeader = ({ label, state, onPress }) => {
   const isActivated = label === state
 
   return (
-    <View style={styles.root}>
+    <Pressable style={styles.root} onPress={onPress}>
       {isActivated ? (
         <PreBol18 text={label} color={GIVER_CASUAL_NAVY} style={{ alignSelf: "center" }} />
       ) : (
@@ -39,6 +39,6 @@ export const ServiceTypeIndicatorHeader = ({ label, state }) => {
           }}
         />
       )}
-    </View>
+    </Pressable>
   )
 }
