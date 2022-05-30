@@ -6,11 +6,11 @@ import { color, HEIGHT, palette } from "../../theme"
 import { PreBol18, PreReg18 } from "../custom-texts/custom-texts"
 import { DISABLED, GIVER_CASUAL_NAVY } from "../../theme/palette"
 
-export const ServiceTypeIndicatorHeader = ({ label, state, onPress }) => {
+export const ServiceTypeIndicatorHeader = ({ label, state, onPress, style }) => {
   const isActivated = label === state
 
   return (
-    <Pressable style={styles.root} onPress={onPress}>
+    <Pressable style={[styles.root, style]} onPress={onPress}>
       {isActivated ? (
         <PreBol18 text={label} color={GIVER_CASUAL_NAVY} style={{ alignSelf: "center" }} />
       ) : (

@@ -64,18 +64,19 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       <ScreenRootView testID="SearchScreen" preset="fixed">
         <Row style={{ marginTop: HEIGHT * 12 }}>
           <ServiceTypeIndicatorHeader
-            label={"방문"}
-            state={serviceType}
             onPress={() => {
               setServiceType("방문")
             }}
+            label={"방문"}
+            state={serviceType}
           />
           <ServiceTypeIndicatorHeader
-            label={"위탁"}
-            state={serviceType}
             onPress={() => {
               setServiceType("위탁")
             }}
+            style={{ marginLeft: WIDTH * 10 }}
+            label={"위탁"}
+            state={serviceType}
           />
         </Row>
 
