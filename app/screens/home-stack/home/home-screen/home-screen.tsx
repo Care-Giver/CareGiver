@@ -69,11 +69,15 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
       navigation.navigate("search", params)
     }
 
+    const goToTestMapScreen = (params) => {
+      navigation.navigate("test-map-screen", params)
+    }
+
     return (
       <ScreenRootView testID="HomeScreen" preset="scroll">
         <RowRoundedButton
           onPress={() => {
-            goToSearchScreen()
+            goToTestMapScreen()
           }}
           image={IMAGES.gps}
           text={"경기 안산시 상록구 한양대학로 55"}
