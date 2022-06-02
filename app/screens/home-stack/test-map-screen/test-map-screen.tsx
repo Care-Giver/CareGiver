@@ -16,11 +16,12 @@ import { styles } from "./styles"
 import CustomMarkers from "./CustomMarkers"
 import MyLocationMapMarker from "./MyLocationMapMarker"
 import * as Location from "expo-location"
+import { PopReg28 } from "../../../custom-components"
 
 export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation }) => {
     const [location, setLocation] = useState(null)
-    // location = {"coords":{"altitude":0,"altitudeAccuracy":-1,"latitude":37.785834,"accuracy":5,"longitude":-122.406417,"heading":-1,"speed":-1},"timestamp":1654099889917.002}
+    const [trigger, setTrigger] = useState(false)
     const [errorMsg, setErrorMsg] = useState(null)
 
     useEffect(() => {
@@ -32,7 +33,10 @@ export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> =
         }
 
         let location = await Location.getCurrentPositionAsync({})
-        setLocation(location)
+        //? location = {"coords":{"altitude":0,"altitudeAccuracy":-1,"latitude":37.785834,"accuracy":5,"longitude":-122.406417,"heading":-1,"speed":-1},"timestamp":1654099889917.002}
+
+        setLocation(location.coords)
+        console.log("하하하")
       })()
     }, [])
 
@@ -48,6 +52,14 @@ export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> =
       return <ActivityIndicator />
     }
 
+    // useEffect(() => {
+    //   first;
+
+    //   return () => {
+    //     second;
+    //   };
+    // }, [third]);
+
     return (
       <ScreenRootView>
         <MapView
@@ -57,12 +69,23 @@ export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> =
           showsMyLocationButton={true} //! iOS 는 이거 없으면 MyLocationButton 안 보임
           followsUserLocation={true}
           region={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          onRegionChangeComplete={(Region) => {
+            console.log(Region)
+            setLocation(Region)
+          }}
+          showsCompass={true} //TODO: 이래도 iOS 에서는 나침반이 안 보이는 이슈 발견...
         ></MapView>
+
+        {/*//TODO: useMemo 와 useRef 를 사용하여, 줌인이 끝나기 전에 리렌더링 되어버리는 이슈 해결하기*/}
+        <PopReg28>
+          latitude: {location.latitude} {"\n"}
+          longitude: {location.longitude}
+        </PopReg28>
       </ScreenRootView>
     )
   },
