@@ -32,7 +32,11 @@ export const SelectedPetCard = (props) => {
           <Row style={{ marginTop: HEIGHT * 8 }}>
             <PreReg14 text={size} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: WIDTH * 8 }} />
-            <PreReg14 text={species} color={BODY} style={{ marginLeft: WIDTH * 8 }} />
+            <PreReg14
+              text={species.length <= 6 ? `${species}` : `${species.substring(0, 6)}..`}
+              color={BODY}
+              style={{ marginLeft: WIDTH * 8 }}
+            />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: WIDTH * 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: WIDTH * 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: WIDTH * 8 }} />

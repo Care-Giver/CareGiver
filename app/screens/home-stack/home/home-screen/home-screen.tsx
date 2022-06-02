@@ -93,14 +93,14 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <ServiceChoiceButton
             onPress={() => {
-              goToSearchScreen({ serviceType: "팻시팅" })
+              goToSearchScreen({ service: "펫시팅" })
             }}
             title="펫시팅"
             subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
           />
           <ServiceChoiceButton
             onPress={() => {
-              goToSearchScreen({ serviceType: "훈련" })
+              goToSearchScreen({ service: "훈련" })
             }}
             title="훈련"
             subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
