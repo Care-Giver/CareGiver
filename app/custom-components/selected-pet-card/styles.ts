@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 import { WIDTH, HEIGHT } from "../../theme"
+import { CARE_NATURAL_BLUE } from "../../theme/palette"
 
 export const styles = StyleSheet.create({
   root: {
@@ -12,15 +13,23 @@ export const styles = StyleSheet.create({
   infoContainer: {
     width: "auto",
     height: HEIGHT * 72,
+    marginLeft: WIDTH * 17,
     // backgroundColor: "yellow",
     justifyContent: "center",
   },
-  image: {
+  deleteButton: {
     width: WIDTH * 16,
     height: HEIGHT * 16,
   },
-  imageContainer: {
+  deleteButtonContainer: {
     alignSelf: "center",
     marginLeft: "auto",
+  },
+  image: {
+    width: WIDTH * 60,
+    height: HEIGHT * 60,
+    borderRadius: 8,
+    // backgroundColor: CARE_NATURAL_BLUE,
+    alignSelf: "center",
   },
 })
