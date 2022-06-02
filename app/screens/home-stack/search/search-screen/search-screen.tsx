@@ -34,20 +34,13 @@ import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
 import DropDownPicker from "react-native-dropdown-picker"
-
+// import * as Calendar from 'expo-calendar';
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
-    const [isOn, setIsOn] = useState(false)
-    const toggle = () => {
-      isOn ? setIsOn(false) : setIsOn(true)
-    }
-    const [isActivated, setIsActivated] = useState(false)
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState(null)
-    const [selectedPet, setSelectedPet] = useState(null)
     const [selectedPets, setSelectedPets] = useState([])
     const [items, setItems] = useState(
       petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
@@ -86,8 +79,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       }
       route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
     }, [])
-
-    console.log(value)
 
     const addPet = (petData) => {
       //! forEach 는 retrun 값을 못 내보낸다. 항상 undefined 임 주의할 것! (map 과의 가장 큰 차이!) https://dream-frontend.tistory.com/341
@@ -201,17 +192,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
               petData={item}
               onPress={() => {
                 setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-                // .then((after)=>{
-                //   setValue
-                // })
-                // setValue(selec)
               }}
             />
           )}
         />
-        {/* <SelectedPetCard petData={petsDummy[0]} />
-        <SelectedPetCard petData={petsDummy[1]} />
-        <SelectedPetCard petData={petsDummy[2]} /> */}
 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
