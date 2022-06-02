@@ -31,7 +31,8 @@ import { RowRoundedButton } from "../../../../custom-components/buttons/row-roun
 import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
-import { ConditionalButton } from "../../../../custom-components/buttons/conditional-button/conditional-button"
+// import { ConditionalButton } from "../../../../custom-components/buttons/conditional-button/conditional-button"
+import { ConditionalButton } from "caregiver/app/custom-components/buttons/conditional-button/conditional-button" //! 절대경로 사용 연습
 import DropDownPicker from "react-native-dropdown-picker"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
