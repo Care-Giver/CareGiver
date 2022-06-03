@@ -18,6 +18,8 @@ import {
   PreMed14,
   PreBol14,
   ConditionalButton,
+  SelectPetItem,
+  RowRoundedBox,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
@@ -196,6 +198,18 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
             />
           )}
         />
+
+        <SelectPetItem petData={petsDummy[0]} />
+
+        <RowRoundedBox
+          style={styles.addNewPetBox}
+          preset="pressable"
+          onPress={() => {
+            alert("gg")
+          }}
+        >
+          <PreMed14 text="+ 추가 등록하기" color={BODY} />
+        </RowRoundedBox>
 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}

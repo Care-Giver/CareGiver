@@ -5,7 +5,7 @@ export const petsDummy = [
     size: "중형견",
     species: "푸들",
     age: 3,
-    sex: "female",
+    sex: "여",
   },
   {
     id: "2",
@@ -13,7 +13,7 @@ export const petsDummy = [
     size: "중형견",
     species: "비숑",
     age: 3,
-    sex: "female",
+    sex: "여",
   },
   {
     id: "3",
@@ -21,7 +21,7 @@ export const petsDummy = [
     size: "소형",
     species: "여섯글자가넘어가",
     age: 3,
-    sex: "male",
+    sex: "남",
   },
   {
     id: "4",
@@ -29,7 +29,7 @@ export const petsDummy = [
     size: "소형",
     species: "터키쉬앙고라",
     age: 14,
-    sex: "male",
+    sex: "남",
   },
   {
     id: "5",
@@ -37,7 +37,7 @@ export const petsDummy = [
     size: "중형견",
     species: "시츄",
     age: 3,
-    sex: "male",
+    sex: "남",
   },
   {
     id: "6",
@@ -45,6 +45,6 @@ export const petsDummy = [
     size: "중형견",
     species: "시츄",
     age: 10,
-    sex: "male",
+    sex: "남",
   },
 ]
