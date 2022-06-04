@@ -190,9 +190,13 @@
       "no-use-before-define": "off",
       "quotes": 0,
       "react-native/no-raw-text": 0,
+      "react-native/sort-styles": 0,
+      "react-native/no-inline-styles": 0,
+      "react-native/no-color-literals": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
-      "space-before-function-paren": 0
+      "space-before-function-paren": 0,
+      "spaced-comment": 0
     }
   },
   "main": "node_modules/expo/AppEntry.js"
