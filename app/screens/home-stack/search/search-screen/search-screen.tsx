@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect } from "react"
+import React, { FC, useState, useMemo, useEffect } from "react"
 import { FlatList, Image, Pressable } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -36,14 +36,18 @@ import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
 import DropDownPicker from "react-native-dropdown-picker"
+import { Calendar } from "react-native-calendars"
 // import * as Calendar from 'expo-calendar';
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+
     const [open, setOpen] = useState(false)
     const [selectedPets, setSelectedPets] = useState([])
+
     const [items, setItems] = useState(
       petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
     )
@@ -126,16 +130,32 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           <PreReg14 text="케어기버가 직접 집을 방문합니다." color={DISABLED} style={styles.text} />
         </Row>
 
-        {/*//? 날짜 선택 */}
-        <RowRoundedButton
-          onPress={() => {
-            alert("dd")
-          }}
-          image={IMAGES.calendar}
-          text={"날짜를 선택해보세요."}
-          textColor={HEAD_LINE}
-          style={{ marginTop: HEIGHT * 36 }}
-        />
+        {!isCalendarOpen ? (
+          //? 날짜 선택
+          <RowRoundedButton
+            onPress={() => {
+              setIsCalendarOpen(true)
+            }}
+            image={IMAGES.calendar}
+            text={"날짜를 선택해보세요."}
+            textColor={HEAD_LINE}
+            style={{ marginTop: HEIGHT * 36 }}
+          />
+        ) : (
+          //? 캘린더 표출
+          <Calendar
+            onDayPress={() => {
+              setIsCalendarOpen(false)
+            }}
+            // Collection of dates that have to be marked. Default = {}
+            markedDates={{
+              "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
+              "2012-05-17": { marked: true },
+              "2012-05-18": { marked: true, dotColor: "red", activeOpacity: 0 },
+              "2012-05-19": { disabled: true, disableTouchEvent: true },
+            }}
+          />
+        )}
 
         {/*//? 시간 선택 */}
         <RowRoundedButton
