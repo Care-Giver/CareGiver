@@ -200,7 +200,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         />
 
         <SelectPetItem petData={petsDummy[0]} />
-
         <RowRoundedBox
           style={styles.addNewPetBox}
           preset="pressable"

@@ -7,8 +7,8 @@ export const styles = StyleSheet.create({
   root: {
     width: "100%",
     height: ROOT_HEIGHT,
-    // backgroundColor: "#FFFFFF",
-    backgroundColor: "red",
+    backgroundColor: "#FFFFFF",
+    // backgroundColor: "red",
     paddingHorizontal: WIDTH * 10,
   },
   nameContainer: {
@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
     height: ROOT_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "orange",
+    // backgroundColor: "orange",
   },
   sizeContainer: {
     width: WIDTH * 56.32,
     height: ROOT_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
   },
   speciesContainer: {
     width: WIDTH * 62.32,
@@ -48,6 +48,6 @@ export const styles = StyleSheet.create({
     height: ROOT_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "cyan",
+    // backgroundColor: "cyan",
   },
 })
