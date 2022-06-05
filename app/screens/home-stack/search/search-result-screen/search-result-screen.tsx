@@ -1,20 +1,17 @@
-import React, { FC, useRef, useLayoutEffect, useEffect } from "react"
+import React, { FC, useRef, useLayoutEffect } from "react"
 import { View, Pressable, Image, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
-import { FlatList, ScrollView } from "react-native-gesture-handler"
+import { FlatList } from "react-native-gesture-handler"
 import { petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH } from "caregiver/app/theme"
 import { PreBol18, PreReg12, Row, ScreenRootView } from "caregiver/app/custom-components"
-import { HEAD_LINE, LBG } from "caregiver/app/theme/palette"
+import { LBG } from "caregiver/app/theme/palette"
 import { palette } from "caregiver/app/theme"
-import { RowRoundedButton } from "caregiver/app/custom-components/buttons/row-rounded-button/row-rounded-button"
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header"
-import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../../navigators"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
