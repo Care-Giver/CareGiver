@@ -7,6 +7,10 @@ import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from '../../theme/pal
 import IMAGES from '../../../assets/common-images';
 import { HEIGHT, WIDTH } from '../../theme';
 
+const ONPRESS_LIKED_BTN = () => {
+  console.warn("clicked like btn");
+};
+
 export const SitterProfileCard = (props: SitterProfileCardProps) => {
   const {style, image, name, rating, review, title, desc, onPress} = props;
 
@@ -38,7 +42,9 @@ export const SitterProfileCard = (props: SitterProfileCardProps) => {
           <PreReg12 text={desc} color={DISABLED} style={{marginTop: HEIGHT * 6}} numberOfLines={2} ellipsizeMode="tail" />
         </View>
         {/* like button */}
-        <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+        <Pressable onPress={ONPRESS_LIKED_BTN}>
+          <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+        </Pressable>
       </View>
     </Pressable>
   );

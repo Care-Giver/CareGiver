@@ -4,7 +4,7 @@ import { palette, WIDTH } from "../../theme"
 import { Screen } from "../../components/screen/screen"
 import { isNonScrolling, ScreenPresets } from "../../components/screen/screen.presets"
 
-const FULL: ViewStyle = { flex: 1 }
+const FULL: ViewStyle = { flex: 1}
 
 const FULL_WITH_SCROLLING: ViewStyle = { width: "100%", height: "auto" }
 

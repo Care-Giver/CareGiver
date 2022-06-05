@@ -28,4 +28,64 @@ export const petsitters = [
     title: "ENFP의 친화력",
     desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
   },
+  {
+    id: "4",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
+  {
+    id: "5",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
+  {
+    id: "6",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
+  {
+    id: "7",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
+  {
+    id: "8",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
+  {
+    id: "9",
+    image:
+      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    name: "최수민",
+    rating: 4.7,
+    review: 30,
+    title: "ENFP의 친화력",
+    desc: "친화력으로 모든 강아지들과 친하게 지내는 저의 모습을 보여드리겠습니다!",
+  },
 ]
