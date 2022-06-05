@@ -14,6 +14,7 @@ import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
+import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,18 +45,37 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 const AppStack = () => {
   return (
     <Stack.Navigator
+      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
-        headerShown: !false,
+        headerShown: true,
       }}
-      initialRouteName="search"
+      initialRouteName="home"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
       {/** 🔥 Your screens go here */}
-      <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="search" component={SearchScreen} />
-      <Stack.Screen name="search-result" component={SearchResultScreen} />
+      <Stack.Screen
+        name="home"
+        component={HomeScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="search"
+        component={SearchScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="search-result"
+        component={SearchResultScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
     </Stack.Navigator>
   )

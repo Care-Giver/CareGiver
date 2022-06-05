@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect } from "react"
+import React, { FC, useState, useCallback, useEffect, useLayoutEffect } from "react"
 import { FlatList } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -23,7 +23,7 @@ const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요�
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
-  ({ navigation }) => {
+  ({ navigation, route }) => {
     const [isOn, setIsOn] = useState(false)
     const toggle = () => {
       isOn ? setIsOn(false) : setIsOn(true)

@@ -196,6 +196,7 @@
       "react-native/no-color-literals": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
+      "react/display-name": "off",
       "space-before-function-paren": 0,
       "spaced-comment": 0
     }
