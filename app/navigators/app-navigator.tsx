@@ -14,7 +14,7 @@ import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
-import { GobackAndTitleHeader } from "../custom-components"
+import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -48,10 +48,6 @@ const AppStack = () => {
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
         headerShown: true,
-        // headerTitleAlign: "center",
-        // headerTitle: (props) => <TestHeaderTitle {...props} />,
-        header: (props) => <GobackAndTitleHeader {...props} />,
-        // statusBarStyle: "dark",
       }}
       initialRouteName="home"
     >
@@ -62,16 +58,9 @@ const AppStack = () => {
       <Stack.Screen
         name="home"
         component={HomeScreen}
-        options={
-          {
-            // headerStyle: HEADER_ROOT,
-            // headerTitleStyle: {
-            //   alignSelf: "center",
-            //   textAlign: "center",
-            //   color: "red",
-            // },
-          }
-        }
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
       />
       <Stack.Screen
         name="search"

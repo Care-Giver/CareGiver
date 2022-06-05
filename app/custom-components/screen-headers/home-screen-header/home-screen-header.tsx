@@ -20,24 +20,26 @@ const HEADER_ROOT = {
     }),
 }
 
-export const GobackAndTitleHeader = (props) => {
-  console.log("TestHeaderTitle props:", props)
-
-  const Title = props.options.title ? props.options.title : props.route.name
+export const HomeScreenHeader = (props) => {
+  console.log("HomeScreenHeader props:", props)
 
   return (
     <View {...props} style={HEADER_ROOT}>
-      {/* //? 뒤로가기 버튼 */}
+      {/* //? 케어기버 로고 */}
+      <Image style={styles.careGiverLogo} source={IMAGES.care_giver_logo_162x20} />
+
+      {/* //? 알람 버튼 */}
       <Pressable
         onPress={() => {
-          props.navigation.goBack()
+          alert("알림 기능은 준비중입니다.")
+        }}
+        style={{
+          marginLeft: "auto",
+          marginRight: WIDTH * 16,
         }}
       >
-        <Image style={styles.goBackButton} source={IMAGES.go_back} />
+        <Image style={styles.bell} source={IMAGES.bell} />
       </Pressable>
-
-      {/* //? 타이틀 */}
-      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {Title}</PreMed20>
     </View>
   )
 }
