@@ -37,6 +37,7 @@
     "expo": "43.0.0",
     "expo-linear-gradient": "^11.0.3",
     "expo-localization": "12.0.1",
+    "expo-location": "~13.0.4",
     "expo-modules-core": "^0.6.5",
     "expo-status-bar": "~1.1.0",
     "i18n-js": "3.8.0",
@@ -45,6 +46,7 @@
     "mobx-state-tree": "5.0.1",
     "react": "17.0.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-43.0.0.tar.gz",
+    "react-native-calendars": "^1.1284.0",
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-gesture-handler": "1.10.3",
     "react-native-keychain": "6.2.0",
@@ -189,9 +191,13 @@
       "no-use-before-define": "off",
       "quotes": 0,
       "react-native/no-raw-text": 0,
+      "react-native/sort-styles": 0,
+      "react-native/no-inline-styles": 0,
+      "react-native/no-color-literals": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
-      "space-before-function-paren": 0
+      "space-before-function-paren": 0,
+      "spaced-comment": 0
     }
   },
   "main": "node_modules/expo/AppEntry.js"

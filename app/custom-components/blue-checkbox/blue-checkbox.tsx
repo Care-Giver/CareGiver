@@ -6,7 +6,6 @@ import { BlueCheckboxProps } from "./blue-checkbox.props"
 
 const ROOT: ViewStyle = {
   flexDirection: "row",
-  alignSelf: "flex-start",
   // backgroundColor: "red",
 }
 

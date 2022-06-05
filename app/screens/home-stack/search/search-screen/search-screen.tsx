@@ -1,5 +1,5 @@
-import React, { FC, useState, useCallback, useEffect } from "react"
-import { FlatList, Image } from "react-native"
+import React, { FC, useState, useMemo, useEffect } from "react"
+import { FlatList, Image, Pressable } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -16,6 +16,10 @@ import {
   BlueCheckbox,
   ServiceTypeIndicatorHeader,
   PreMed14,
+  PreBol14,
+  ConditionalButton,
+  SelectPetItem,
+  RowRoundedBox,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
@@ -31,35 +35,76 @@ import { RowRoundedButton } from "../../../../custom-components/buttons/row-roun
 import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
-import { ConditionalButton } from "../../../../custom-components/buttons/conditional-button/conditional-button"
 import DropDownPicker from "react-native-dropdown-picker"
-
+import { Calendar } from "react-native-calendars"
+// import * as Calendar from 'expo-calendar';
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
-  ({ navigation }) => {
-    const [isOn, setIsOn] = useState(false)
-    const toggle = () => {
-      isOn ? setIsOn(false) : setIsOn(true)
-    }
+  ({ navigation, route }) => {
+    const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
+    const [service, setService] = useState(null) //? 팻시팅 or 훈련
+
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState(null)
-    const [items, setItems] = useState([
-      { label: "초코 중형견 푸들 3세 여", value: 1 },
-      { label: "우유 소형견 비숑 3세 여", value: 2 },
-    ])
-    const [isActivated, setIsActivated] = useState(false)
-    const [serviceType, setServiceType] = useState("방문")
+    const [selectedPets, setSelectedPets] = useState([])
 
-    const triggerActivate = () => {
-      if (!value) return
+    const [items, setItems] = useState(
+      petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
+    )
 
-      setIsActivated(true)
-    }
+    // items = [
+    //   Object {
+    //     "age": 3,
+    //     "id": "1",
+    //     "name": "초코",
+    //     "sex": "female",
+    //     "size": "중형견",
+    //     "species": "푸들",
+    //   },
+    //   Object {
+    //     "age": 3,
+    //     "id": "3",
+    //     "name": "자두",
+    //     "sex": "male",
+    //     "size": "소형",
+    //     "species": "산냥이",
+    //   },
+    //   Object {
+    //     "age": 3,
+    //     "id": "2",
+    //     "name": "우유",
+    //     "sex": "female",
+    //     "size": "중형견",
+    //     "species": "비숑",
+    //   },
+    // ]
 
     useEffect(() => {
-      triggerActivate()
-    }, [value])
+      if (!route.params.service) {
+        console.error("service 안 주어짐!")
+      }
+      route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
+    }, [])
 
+    const addPet = (petData) => {
+      //! forEach 는 retrun 값을 못 내보낸다. 항상 undefined 임 주의할 것! (map 과의 가장 큰 차이!) https://dream-frontend.tistory.com/341
+      //! 이때문에, map 을 사용하였다
+      //? 이전 값들(pet 객체) 중에서, id 값이 이미 존재하면, true 를 리턴한다.
+      const didAlreadyHave = selectedPets.map((ele) => ele.id === petData.id).includes(true)
+
+      //? 이미 있으면 아무것도 안하고(null), 없으면 state 를 추가한다(setSelectedPets)
+      didAlreadyHave ? null : setSelectedPets((prevState) => [...prevState, petData])
+    }
+
+    // const triggerActivate = () => {
+    //   if (!selectedPet) return
+    //   setIsActivated(true)
+    // }
+    // useEffect(() => {
+    //   triggerActivate()
+    // }, [selectedPet])
+
+    console.log(selectedPets)
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         <Row style={{ marginTop: HEIGHT * 12 }}>
@@ -85,16 +130,32 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           <PreReg14 text="케어기버가 직접 집을 방문합니다." color={DISABLED} style={styles.text} />
         </Row>
 
-        {/*//? 날짜 선택 */}
-        <RowRoundedButton
-          onPress={() => {
-            alert("dd")
-          }}
-          image={IMAGES.calendar}
-          text={"날짜를 선택해보세요."}
-          textColor={HEAD_LINE}
-          style={{ marginTop: HEIGHT * 36 }}
-        />
+        {!isCalendarOpen ? (
+          //? 날짜 선택
+          <RowRoundedButton
+            onPress={() => {
+              setIsCalendarOpen(true)
+            }}
+            image={IMAGES.calendar}
+            text={"날짜를 선택해보세요."}
+            textColor={HEAD_LINE}
+            style={{ marginTop: HEIGHT * 36 }}
+          />
+        ) : (
+          //? 캘린더 표출
+          <Calendar
+            onDayPress={() => {
+              setIsCalendarOpen(false)
+            }}
+            // Collection of dates that have to be marked. Default = {}
+            markedDates={{
+              "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
+              "2012-05-17": { marked: true },
+              "2012-05-18": { marked: true, dotColor: "red", activeOpacity: 0 },
+              "2012-05-19": { disabled: true, disableTouchEvent: true },
+            }}
+          />
+        )}
 
         {/*//? 시간 선택 */}
         <RowRoundedButton
@@ -119,20 +180,24 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           style={{ marginTop: HEIGHT * 12 }}
         />
 
-        {/*//? 반려동물 선택 */}
-        {/* //* 드롭박스 추가해야 함 */}
+        {/*//* 반려동물 선택 */}
         <DropDownPicker
+          //! 기본설정
           open={open}
-          value={value}
-          items={items}
           setOpen={setOpen}
-          setValue={setValue}
+          items={items}
           setItems={setItems}
+          // value={value}
+          // setValue={setValue}
+          //? 기능구현
+          onSelectItem={(selected) => {
+            addPet(selected.petData)
+          }}
           placeholder={"반려동물 선택"}
           style={{ marginTop: HEIGHT * 12, borderWidth: 2, borderColor: LIGHT_LINE }}
         />
 
-        <PreMed14
+        <PreBol14
           text="선택된 반려동물"
           color={SUB_HEAD_LINE}
           style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
@@ -141,25 +206,33 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
         {/*//? 선택된 반려동물 리스트 */}
         <FlatList
-          data={petsDummy.filter((element) => parseInt(element.id) === value)}
+          data={selectedPets}
           renderItem={(
             { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
           ) => (
             <SelectedPetCard
               petData={item}
               onPress={() => {
-                setValue(null)
+                setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
               }}
             />
           )}
         />
-        {/* <SelectedPetCard petData={petsDummy[0]} />
-        <SelectedPetCard petData={petsDummy[1]} />
-        <SelectedPetCard petData={petsDummy[2]} /> */}
+
+        <SelectPetItem petData={petsDummy[0]} />
+        <RowRoundedBox
+          style={styles.addNewPetBox}
+          preset="pressable"
+          onPress={() => {
+            alert("gg")
+          }}
+        >
+          <PreMed14 text="+ 추가 등록하기" color={BODY} />
+        </RowRoundedBox>
 
         <ConditionalButton
-          label={"이 조건으로 검색하기"}
-          isActivated={isActivated}
+          label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
+          isActivated={selectedPets.length !== 0}
           style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
           onPress={() => {
             navigation.navigate("search-result")
