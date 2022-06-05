@@ -2,51 +2,68 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
     "better-comments.tags": [
-    
         {
             "tag": "!",
-            "color": "#FF2D00",
+            "color": "#FF8C00",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
-            "bold": false,
+            "bold": true,
             "italic": false
-        },
-        {
+          },
+          {
             "tag": "?",
-            "color": "#3498DB",
+            "color": "#adb0a9",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
             "bold": false,
             "italic": false
-        },
-        {
+          },
+          {
             "tag": "//",
-            "color": "#474747",
+            "color": "#000000",
             "strikethrough": true,
             "underline": false,
             "backgroundColor": "transparent",
             "bold": false,
             "italic": false
-        },
-        {
+          },
+          {
             "tag": "todo",
-            "color": "#FF8C00",
+            "color": "#000000",
             "strikethrough": false,
             "underline": false,
-            "backgroundColor": "transparent",
+            "backgroundColor": "#FFFFFF",
             "bold": false,
             "italic": false
-        },
-        {
+          },
+          {
+            "tag": "~",
+            "color": "#FFFFFF",
+            "strikethrough": false,
+            "underline": false,
+            // "backgroundColor": "#FFFFFF",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "tag": "-",
+            "color": "#FFFFFF",
+            "strikethrough": false,
+            "underline": true,
+            // "backgroundColor": "#FFFFFF",
+            "bold": false,
+            "italic": false
+          },
+          {
             "tag": "*",
-            "color": "#98C379",
+            "color": "#00f227",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
             "bold": false,
             "italic": false
-        }
+          }
     ]
 }
