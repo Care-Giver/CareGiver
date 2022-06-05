@@ -1,5 +1,6 @@
 import { View, Pressable, Image, Animated } from "react-native"
-import React, { useRef } from "react"
+import React, { FC, useRef } from "react"
+import { observer } from "mobx-react-lite"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
 import { FlatList, ScrollView } from "react-native-gesture-handler"
 import { petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
@@ -10,28 +11,31 @@ import { palette } from "caregiver/app/theme"
 import { RowRoundedButton } from "caregiver/app/custom-components/buttons/row-rounded-button/row-rounded-button"
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header"
+import { StackScreenProps } from "@react-navigation/stack"
+import { NavigatorParamList } from "../../../../navigators"
 
-export const SearchResultScreen = () => {
+export const SearchResultScreen: FC<
+  StackScreenProps<NavigatorParamList, "search-result">
+> = observer((props) => {
   //? FlatList에서 스크롤 이벤트가 발생할 때마다
+
   const offset = useRef(new Animated.Value(0)).current
 
   return (
     <ScreenRootView>
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
       <AnimatedHeader animatedValue={offset} />
-
-      {/*//? title container */}
+      {/* //? title container */}
       <Row
         style={{
           justifyContent: "space-between",
           alignItems: "center",
           backgroundColor: palette.white,
-          marginTop: HEIGHT * 36,
+          marginTop: HEIGHT * 14,
         }}
       >
         {/* //? title */}
         <PreBol18 text="검색결과" />
-
         {/* //? sort button */}
         <Pressable
           style={{
@@ -51,8 +55,7 @@ export const SearchResultScreen = () => {
           />
         </Pressable>
       </Row>
-
-      {/*//? divider */}
+      {/* //? divider */}
       <View
         style={{
           width: "100%",
@@ -61,7 +64,6 @@ export const SearchResultScreen = () => {
           marginTop: HEIGHT * 12,
         }}
       />
-
       {/* //? sitter profile card list */}
       <FlatList
         data={petsitters}
@@ -93,4 +95,4 @@ export const SearchResultScreen = () => {
       />
     </ScreenRootView>
   )
-}
+})
