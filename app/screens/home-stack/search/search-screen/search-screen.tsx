@@ -1,19 +1,13 @@
-import React, { FC, useState, useMemo, useEffect } from "react"
+import React, { FC, useState, useLayoutEffect, useEffect } from "react"
 import { FlatList, Image, Pressable } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
   ScreenRootView,
   Row,
-  PreBol18,
-  PreBol20,
-  ServiceChoiceButton,
-  SitterProfileButton,
   PreReg14,
   DivisionLine,
   SelectedPetCard,
-  PressableButton,
-  BlueCheckbox,
   ServiceTypeIndicatorHeader,
   PreMed14,
   PreBol14,
@@ -22,7 +16,7 @@ import {
   RowRoundedBox,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
-import { HEIGHT, palette, SHADOW_1, WIDTH } from "../../../../theme"
+import { HEIGHT, WIDTH } from "../../../../theme"
 import {
   BODY,
   DISABLED,
@@ -51,7 +45,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     const [items, setItems] = useState(
       petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
     )
-
     // items = [
     //   Object {
     //     "age": 3,
@@ -79,11 +72,18 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     //   },
     // ]
 
-    useEffect(() => {
-      if (!route.params.service) {
-        console.error("service 안 주어짐!")
+    //* useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
+    useLayoutEffect(() => {
+      if (!route.params) {
+        console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+        if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
       }
+      //? service 할당
       route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
+      //? Header, 이름 설정
+      navigation.setOptions({
+        title: route.params.service === "펫시팅" ? "펫시팅" : "훈련",
+      })
     }, [])
 
     const addPet = (petData) => {
@@ -105,6 +105,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     // }, [selectedPet])
 
     console.log(selectedPets)
+
+    const goToSearchResultScreen = (params?) => {
+      navigation.navigate("search-result", params)
+    }
+
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         <Row style={{ marginTop: HEIGHT * 12 }}>
@@ -235,7 +240,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           isActivated={selectedPets.length !== 0}
           style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
           onPress={() => {
-            navigation.navigate("search-result")
+            goToSearchResultScreen({ service: service, serviceType: serviceType })
           }}
         />
       </ScreenRootView>

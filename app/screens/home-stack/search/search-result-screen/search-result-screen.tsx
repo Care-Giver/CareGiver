@@ -1,5 +1,8 @@
+import React, { FC, useRef, useLayoutEffect, useEffect } from "react"
 import { View, Pressable, Image, Animated } from "react-native"
-import React, { useRef } from "react"
+import { observer } from "mobx-react-lite"
+import { StackScreenProps } from "@react-navigation/stack"
+import { NavigatorParamList } from "../../../../navigators"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
 import { FlatList, ScrollView } from "react-native-gesture-handler"
 import { petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
@@ -11,11 +14,31 @@ import { RowRoundedButton } from "caregiver/app/custom-components/buttons/row-ro
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header"
 
-export const SearchResultScreen = () => {
+export const SearchResultScreen: FC<
+  StackScreenProps<NavigatorParamList, "search-result">
+> = observer(({ navigation, route }) => {
   //? FlatList에서 스크롤 이벤트가 발생할 때마다
   const offset = useRef(new Animated.Value(0)).current
 
+  useLayoutEffect(() => {
+    if (!route.params) {
+      console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+      if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
+      if (!route.params.serviceType)
+        console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
+    }
+    //? service 할당
+    let _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
+    let _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+
+    //? Header, 이름 설정
+    navigation.setOptions({
+      title: _service + " - " + _serviceType,
+    })
+  }, [])
+
   return (
+    // <ScreenRootView statusBar="dark-content">
     <ScreenRootView>
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
       <AnimatedHeader animatedValue={offset} />
@@ -93,4 +116,4 @@ export const SearchResultScreen = () => {
       />
     </ScreenRootView>
   )
-}
+})
