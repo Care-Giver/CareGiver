@@ -67,7 +67,7 @@ buck-out/
 # .vscode
 .vscode/*
 #! better-commnet 설정 공유를 위해, settings.json 파일은 gitignore 에서 제외 함
-!.vscode/settings.json 
+!.vscode/settings.json
 
 # Expo
 .expo/*
