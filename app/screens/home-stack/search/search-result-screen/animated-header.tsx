@@ -27,9 +27,9 @@ export const AnimatedHeader = ({ animatedValue }) => {
     extrapolate: "clamp",
   })
 
-  const headerMarginTop = animatedValue.interpolate({
-    inputRange: [HEADER_MARGIN_TOP, HEADER_AREA],
-    outputRange: [HEADER_MARGIN_TOP, -1 * HEADER_AREA],
+  const headerTranslateY = animatedValue.interpolate({
+    inputRange: [0, HEADER_AREA],
+    outputRange: [0, -1 * HEADER_AREA],
     extrapolate: "clamp",
   })
 
@@ -37,10 +37,9 @@ export const AnimatedHeader = ({ animatedValue }) => {
     // ? Animated.View: 애니메이션 효과를 넣을 범위 -> 검색 필터 영역
     <Animated.View
       style={{
-        marginTop: headerMarginTop,
-        marginBottom: HEADER_MARGIN_BOTTOM,
         height: HEADER_HEIGHT,
         opacity: headerOpacity,
+        transform: [{ translateY: headerTranslateY }],
       }}
     >
       <View>
