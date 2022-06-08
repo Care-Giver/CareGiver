@@ -16,6 +16,14 @@ import { AnimatedHeader } from "./animated-header"
 // ? 검색 필터(날짜, 시간, 장소 선택 필터) "컨테이너" 높이
 const HEADER_HEIGHT = HEIGHT * 105
 
+const HEADER_MARGIN_TOP = HEIGHT * 20
+const HEADER_MARGIN_BOTTOM = HEIGHT * 22
+
+// ? 검색 필터 "영역" 높이
+// ? -> 영역에 해당 영역 높이 만큼의 음수 top 마진 값을 주면, 영역 높이만큼 위쪽으로 이동하게 됨
+// ?    이를 이용하여, 스크롤을 어느정도 올리다보면 검색필터 영역이 위로 올라가면서 사라지는 효과를 줄 수 있다
+const HEADER_AREA = HEADER_HEIGHT + HEADER_MARGIN_TOP + HEADER_MARGIN_BOTTOM
+
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(({ navigation, route }) => {
@@ -24,8 +32,14 @@ export const SearchResultScreen: FC<
   const offset = useRef(new Animated.Value(0)).current
 
   const listContainerTranslateY = offset.interpolate({
+    inputRange: [0, HEADER_AREA],
+    outputRange: [0, -1 * HEADER_AREA],
+    extrapolate: "clamp",
+  })
+
+  const listContainerMarginScale = offset.interpolate({
     inputRange: [0, HEADER_HEIGHT],
-    outputRange: [0, -1 * HEADER_HEIGHT],
+    outputRange: [1.0, 0],
     extrapolate: "clamp",
   })
 
@@ -49,8 +63,20 @@ export const SearchResultScreen: FC<
   return (
     // <ScreenRootView statusBar="dark-content">
     <ScreenRootView>
+      <Animated.View
+        style={{
+          height: HEADER_MARGIN_TOP,
+          transform: [{ scaleY: listContainerMarginScale }],
+        }}
+      />
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
       <AnimatedHeader animatedValue={offset} />
+      <Animated.View
+        style={{
+          height: HEADER_MARGIN_BOTTOM,
+          transform: [{ scaleY: listContainerMarginScale }],
+        }}
+      />
 
       <Animated.View
         style={{

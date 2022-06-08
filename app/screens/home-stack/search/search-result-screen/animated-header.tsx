@@ -18,7 +18,7 @@ const HEADER_MARGIN_BOTTOM = HEIGHT * 22
 const HEADER_AREA = HEADER_HEIGHT + HEADER_MARGIN_TOP + HEADER_MARGIN_BOTTOM
 
 // ? 검색필터 영역의 최소 선명도 (%)
-const OPACITY_MIN = 10
+const OPACITY_MIN = 0
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({
