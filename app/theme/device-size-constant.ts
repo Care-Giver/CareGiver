@@ -31,3 +31,6 @@ export const HEIGHT = parseFloat(
 
 // ? toFixed(): number -> string
 // ~ JS, TS 에서는 string * "number" 결과값은 number 이다.
+
+// * header 높이
+export const HEADER_HEIGHT = HEIGHT * 56
