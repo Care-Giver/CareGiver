@@ -1,5 +1,5 @@
 import React, { FC, useState, useLayoutEffect, useEffect } from "react"
-import { FlatList, Image, Pressable } from "react-native"
+import { FlatList, Image, Pressable, View } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -31,6 +31,7 @@ import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
 import DropDownPicker from "react-native-dropdown-picker"
 import { Calendar } from "react-native-calendars"
+import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 // import * as Calendar from 'expo-calendar';
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
@@ -71,6 +72,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     //     "species": "비숑",
     //   },
     // ]
+
+    const [isOpen, setIsOpen] = useState(false)
 
     //* useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
     useLayoutEffect(() => {
@@ -185,8 +188,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           style={{ marginTop: HEIGHT * 12 }}
         />
 
-        {/*//* 반려동물 선택 */}
-        <DropDownPicker
+        {/* <DropDownPicker
           //! 기본설정
           open={open}
           setOpen={setOpen}
@@ -200,40 +202,42 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           }}
           placeholder={"반려동물 선택"}
           style={{ marginTop: HEIGHT * 12, borderWidth: 2, borderColor: LIGHT_LINE }}
-        />
+        /> */}
 
-        <PreBol14
-          text="선택된 반려동물"
-          color={SUB_HEAD_LINE}
-          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-        />
-        <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
-        {/*//? 선택된 반려동물 리스트 */}
-        <FlatList
-          data={selectedPets}
-          renderItem={(
-            { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-          ) => (
-            <SelectedPetCard
-              petData={item}
-              onPress={() => {
-                setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-              }}
-            />
-          )}
-        />
-
-        <SelectPetItem petData={petsDummy[0]} />
-        <RowRoundedBox
-          style={styles.addNewPetBox}
-          preset="pressable"
+        {/*//* 반려동물 선택 */}
+        <SelectPetDropdownBox
+          style={{ marginTop: HEIGHT * 12 }}
+          isOpen={isOpen}
           onPress={() => {
-            alert("gg")
+            isOpen ? setIsOpen(false) : setIsOpen(true)
           }}
-        >
-          <PreMed14 text="+ 추가 등록하기" color={BODY} />
-        </RowRoundedBox>
+        />
+
+        {!isOpen && (
+          <View>
+            <PreBol14
+              text="선택된 반려동물"
+              color={SUB_HEAD_LINE}
+              style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+            />
+            <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+
+            {/*//? 선택된 반려동물 리스트 */}
+            <FlatList
+              data={selectedPets}
+              renderItem={(
+                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+              ) => (
+                <SelectedPetCard
+                  petData={item}
+                  onPress={() => {
+                    setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                  }}
+                />
+              )}
+            />
+          </View>
+        )}
 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
