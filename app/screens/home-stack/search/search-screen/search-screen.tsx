@@ -73,7 +73,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     //   },
     // ]
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     //* useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
     useLayoutEffect(() => {
@@ -99,15 +99,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       didAlreadyHave ? null : setSelectedPets((prevState) => [...prevState, petData])
     }
 
-    // const triggerActivate = () => {
-    //   if (!selectedPet) return
-    //   setIsActivated(true)
-    // }
-    // useEffect(() => {
-    //   triggerActivate()
-    // }, [selectedPet])
-
-    console.log(selectedPets)
+    // console.log(selectedPets)
 
     const goToSearchResultScreen = (params?) => {
       navigation.navigate("search-result", params)
@@ -188,32 +180,19 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           style={{ marginTop: HEIGHT * 12 }}
         />
 
-        {/* <DropDownPicker
-          //! 기본설정
-          open={open}
-          setOpen={setOpen}
-          items={items}
-          setItems={setItems}
-          // value={value}
-          // setValue={setValue}
-          //? 기능구현
-          onSelectItem={(selected) => {
-            addPet(selected.petData)
-          }}
-          placeholder={"반려동물 선택"}
-          style={{ marginTop: HEIGHT * 12, borderWidth: 2, borderColor: LIGHT_LINE }}
-        /> */}
-
         {/*//* 반려동물 선택 */}
         <SelectPetDropdownBox
           style={{ marginTop: HEIGHT * 12 }}
-          isOpen={isOpen}
+          isOpen={isDropdownOpen}
           onPress={() => {
-            isOpen ? setIsOpen(false) : setIsOpen(true)
+            isDropdownOpen ? setIsDropdownOpen(false) : setIsDropdownOpen(true)
           }}
+          selectedPets={selectedPets}
+          setSelectedPets={setSelectedPets}
         />
 
-        {!isOpen && (
+        {/*//* 선택된 반려동물 */}
+        {!isDropdownOpen && (
           <View>
             <PreBol14
               text="선택된 반려동물"

@@ -39,12 +39,12 @@ export const petsDummy = [
     age: 3,
     sex: "남",
   },
-  {
-    id: "6",
-    name: "현동이",
-    size: "중형견",
-    species: "시츄",
-    age: 10,
-    sex: "남",
-  },
+  // {
+  //   id: "6",
+  //   name: "현동이",
+  //   size: "중형견",
+  //   species: "시츄",
+  //   age: 10,
+  //   sex: "남",
+  // },
 ]
