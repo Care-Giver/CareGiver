@@ -1,4 +1,4 @@
-import React, { FC, useRef, useLayoutEffect } from "react"
+import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
 import { View, Pressable, Image, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -12,12 +12,49 @@ import { LBG } from "caregiver/app/theme/palette"
 import { palette } from "caregiver/app/theme"
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header"
+import DropDownPicker from "react-native-dropdown-picker"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(({ navigation, route }) => {
-  //? FlatList에서 스크롤 이벤트가 발생할 때마다
+  //! drop down picker 기본 props 설정 -> state 값으로 관리
+  const [open, setOpen] = useState(false)
+  const [optionValue, setOptionValue] = useState(null)
+  const [sortOptions, setSortOptions] = useState([
+    { label: "가까운 거리순", value: "near" },
+    { label: "최근 등록순", value: "recent" },
+    { label: "별점 높은순", value: "high-rating" },
+    { label: "리뷰 많은순", value: "most-reviews" },
+  ])
 
+  //! drop down에서 정렬 옵션 선택시 실행되는 함수
+  //? -> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort)
+  const onSortPick = useCallback((optionValue: string) => {
+    //? 최근 등록순
+    if (optionValue === "recent") {
+      petsitters.sort((a, b) => {
+        //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
+        console.log(Date.parse(a.createdAt))
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt)
+      })
+    }
+    //? 별점 높은 순
+    else if (optionValue === "high-rating") {
+      petsitters.sort((a, b) => {
+        //? 내림차순 정렬 -> 높은 별점을 상위 노출
+        return Number(b.rating * 10) - Number(a.rating * 10)
+      })
+    }
+    //? 리뷰 많은 순
+    else if (optionValue === "most-reviews") {
+      petsitters.sort((a, b) => {
+        //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
+        return b.review - a.review
+      })
+    }
+  }, [])
+
+  //? FlatList에서 스크롤 이벤트가 발생할 때마다
   const offset = useRef(new Animated.Value(0)).current
 
   useLayoutEffect(() => {
@@ -54,6 +91,20 @@ export const SearchResultScreen: FC<
         {/* //? title */}
         <PreBol18 text="검색결과" />
         {/* //? sort button */}
+        <DropDownPicker
+          open={open}
+          value={optionValue}
+          items={sortOptions}
+          setOpen={setOpen}
+          setValue={setOptionValue}
+          setItems={setSortOptions}
+          onSelectItem={(item) => onSortPick(item.value)}
+          style={{
+            borderWidth: 0,
+            width: 68,
+          }}
+          showArrowIcon={false}
+        />
         <Pressable
           style={{
             flexDirection: "row",
@@ -104,6 +155,8 @@ export const SearchResultScreen: FC<
         showsVerticalScrollIndicator={false}
         style={{
           backgroundColor: palette.white,
+          //TODO: 없애기
+          marginTop: 200,
         }}
         //? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
