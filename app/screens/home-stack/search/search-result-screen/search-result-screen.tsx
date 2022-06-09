@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
-import { FlatList } from "react-native-gesture-handler"
 import { petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH } from "caregiver/app/theme"
 import { PreBol18, PreReg12, Row, ScreenRootView } from "caregiver/app/custom-components"
@@ -13,11 +12,9 @@ import { palette } from "caregiver/app/theme"
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
-  HEADER_HEIGHT,
   HEADER_MARGIN_TOP,
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
-  OPACITY_MIN,
 } from "./animated-header/header-property"
 
 export const SearchResultScreen: FC<
@@ -26,12 +23,6 @@ export const SearchResultScreen: FC<
   //? FlatList에서 스크롤 이벤트가 발생할 때마다
 
   const offset = useRef(new Animated.Value(0)).current
-
-  const headerOpacity = offset.interpolate({
-    inputRange: [OPACITY_MIN, 100],
-    outputRange: [1, OPACITY_MIN * 0.01],
-    extrapolate: "clamp",
-  })
 
   const animateTranslateY = offset.interpolate({
     inputRange: [0, HEADER_AREA],
