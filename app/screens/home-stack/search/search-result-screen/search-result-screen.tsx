@@ -30,31 +30,34 @@ export const SearchResultScreen: FC<
   //! drop down에서 정렬 옵션 선택시 실행되는 함수
   //? -> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort)
   const onSortPick = useCallback((optionValue: string) => {
-    //? 최근 등록순
-    if (optionValue === "recent") {
-      petsitters.sort((a, b) => {
-        //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
-        console.log(Date.parse(a.createdAt))
-        return Date.parse(b.createdAt) - Date.parse(a.createdAt)
-      })
-    }
-    //? 별점 높은 순
-    else if (optionValue === "high-rating") {
-      petsitters.sort((a, b) => {
-        //? 내림차순 정렬 -> 높은 별점을 상위 노출
-        return Number(b.rating * 10) - Number(a.rating * 10)
-      })
-    }
-    //? 리뷰 많은 순
-    else if (optionValue === "most-reviews") {
-      petsitters.sort((a, b) => {
-        //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
-        return b.review - a.review
-      })
+    switch (optionValue) {
+      //? 최근 등록순
+      case "recent":
+        petsitters.sort((a, b) => {
+          //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
+          return Date.parse(b.createdAt) - Date.parse(a.createdAt)
+        })
+        break
+
+      //? 별점 높은 순
+      case "high-rating":
+        petsitters.sort((a, b) => {
+          //? 내림차순 정렬 -> 높은 별점을 상위 노출
+          return Number(b.rating * 10) - Number(a.rating * 10)
+        })
+        break
+
+      //? 리뷰 많은 순
+      case "most-reviews":
+        petsitters.sort((a, b) => {
+          //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
+          return b.review - a.review
+        })
+        break
     }
   }, [])
 
-  //? FlatList에서 스크롤 이벤트가 발생할 때마다
+  //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
   const offset = useRef(new Animated.Value(0)).current
 
   useLayoutEffect(() => {
@@ -79,6 +82,7 @@ export const SearchResultScreen: FC<
     <ScreenRootView>
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
       <AnimatedHeader animatedValue={offset} />
+
       {/* //? title container */}
       <Row
         style={{
@@ -90,29 +94,34 @@ export const SearchResultScreen: FC<
       >
         {/* //? title */}
         <PreBol18 text="검색결과" />
+
         {/* //? sort button */}
-        <DropDownPicker
-          open={open}
-          value={optionValue}
-          items={sortOptions}
-          setOpen={setOpen}
-          setValue={setOptionValue}
-          setItems={setSortOptions}
-          onSelectItem={(item) => onSortPick(item.value)}
+        <Row
           style={{
-            borderWidth: 0,
-            width: 68,
+            width: "auto",
+            height: HEIGHT * 16,
           }}
-          showArrowIcon={false}
-        />
-        <Pressable
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-          onPress={() => console.warn("clicked sort btn")}
         >
-          <PreReg12 text="가까운 거리 순" />
+          <DropDownPicker
+            open={open}
+            value={optionValue}
+            items={sortOptions}
+            setOpen={setOpen}
+            setValue={setOptionValue}
+            setItems={setSortOptions}
+            onSelectItem={(item) => onSortPick(item.value)}
+            style={{
+              borderWidth: 0,
+            }}
+            containerStyle={{
+              width: WIDTH * 100,
+            }}
+            labelProps={{
+              numberOfLines: 1,
+            }}
+            placeholder="가까운 거리순"
+            showArrowIcon={false}
+          />
           <Image
             source={IMAGES.list_bars}
             style={{
@@ -121,8 +130,9 @@ export const SearchResultScreen: FC<
               marginLeft: WIDTH * 5,
             }}
           />
-        </Pressable>
+        </Row>
       </Row>
+
       {/* //? divider */}
       <View
         style={{
@@ -132,6 +142,7 @@ export const SearchResultScreen: FC<
           marginTop: HEIGHT * 12,
         }}
       />
+
       {/* //? sitter profile card list */}
       <FlatList
         data={petsitters}
