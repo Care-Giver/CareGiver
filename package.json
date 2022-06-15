@@ -30,6 +30,7 @@
   "dependencies": {
     "@expo/webpack-config": "^0.12.71",
     "@react-native-async-storage/async-storage": "^1.14.1",
+    "@react-native-community/datetimepicker": "3.5.2",
     "@react-navigation/native": "~6.0.1",
     "@react-navigation/native-stack": "^6.0.2",
     "@react-navigation/stack": "~6.0.1",
