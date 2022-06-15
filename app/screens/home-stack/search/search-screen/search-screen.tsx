@@ -41,6 +41,9 @@ import DropDownPicker from "react-native-dropdown-picker"
 import { Calendar } from "react-native-calendars"
 import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 // import * as Calendar from 'expo-calendar';
+// import DateTimePicker from "@react-native-community/datetimepicker"
+import RNDateTimePicker from "@react-native-community/datetimepicker"
+
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
@@ -145,7 +148,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         </Row>
 
         {!isCalendarOpen ? (
-          //? 날짜 선택
+          //* 날짜 선택
           <RowRoundedButton
             onPress={() => {
               setIsCalendarOpen(true)
@@ -171,7 +174,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           />
         )}
 
-        {/*//? 시간 선택 */}
+        {/*//* 시간 선택 */}
+        <RNDateTimePicker mode="time" value={new Date()} />
         <RowRoundedButton
           onPress={() => {
             alert("dd")
@@ -183,7 +187,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           style={{ marginTop: HEIGHT * 12 }}
         />
 
-        {/*//? 위치 선택 */}
+        {/*//* 위치 선택 */}
         <RowRoundedButton
           onPress={() => {
             alert("dd")
@@ -217,7 +221,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           />
           <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
 
-          {/*//? 선택된 반려동물 리스트 */}
+          {/*//* 선택된 반려동물 리스트 */}
           <FlatList
             data={selectedPets}
             renderItem={(
