@@ -1,5 +1,13 @@
 import React, { FC, useState, useLayoutEffect, useEffect } from "react"
-import { FlatList, Image, Pressable, View } from "react-native"
+import {
+  FlatList,
+  Image,
+  Pressable,
+  View,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -105,6 +113,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       navigation.navigate("search-result", params)
     }
 
+    if (Platform.OS === "android") {
+      if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+      }
+    }
+
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         <Row style={{ marginTop: HEIGHT * 12 }}>
@@ -185,38 +199,39 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           style={{ marginTop: HEIGHT * 12 }}
           isOpen={isDropdownOpen}
           onPress={() => {
-            isDropdownOpen ? setIsDropdownOpen(false) : setIsDropdownOpen(true)
+            setIsDropdownOpen(!isDropdownOpen)
+            // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
+            //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
+            LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
           }}
           selectedPets={selectedPets}
           setSelectedPets={setSelectedPets}
         />
 
         {/*//* 선택된 반려동물 */}
-        {!isDropdownOpen && (
-          <View>
-            <PreBol14
-              text="선택된 반려동물"
-              color={SUB_HEAD_LINE}
-              style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-            />
-            <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+        <View style={isDropdownOpen ? styles.hidden : styles.shown}>
+          <PreBol14
+            text="선택된 반려동물"
+            color={SUB_HEAD_LINE}
+            style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+          />
+          <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
 
-            {/*//? 선택된 반려동물 리스트 */}
-            <FlatList
-              data={selectedPets}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SelectedPetCard
-                  petData={item}
-                  onPress={() => {
-                    setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-                  }}
-                />
-              )}
-            />
-          </View>
-        )}
+          {/*//? 선택된 반려동물 리스트 */}
+          <FlatList
+            data={selectedPets}
+            renderItem={(
+              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+            ) => (
+              <SelectedPetCard
+                petData={item}
+                onPress={() => {
+                  setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                }}
+              />
+            )}
+          />
+        </View>
 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}

@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  Pressable,
-  Image,
-  FlatList,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-} from "react-native"
+import { View, Image, FlatList } from "react-native"
 import React, { useState } from "react"
 import { RowRoundedBox } from "../../boxes/basics/row-rounded-box"
 import { PreMed14, PreReg16 } from "../../custom-texts/custom-texts"
@@ -19,26 +10,11 @@ import { petsDummy } from "../../../screens/home-stack/search/search-screen/dumm
 
 export const SelectPetDropdownBox = (props) => {
   const style = props.style
-
   const isOpen = props.isOpen
   const onPress = props.onPress
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
-
-  //TODO: 드롭박스 열고 닫을 때 애니메이션 효과 넣기: https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
-  // if (Platform.OS === "android") {
-  //   if (UIManager.setLayoutAnimationEnabledExperimental) {
-  //     UIManager.setLayoutAnimationEnabledExperimental(true)
-  //   }
-  // }
-
-  // const [firstBoxPosition, setFirstBoxPosition] = useState("left")
-
-  // const toggleFirstBox = () => {
-  //   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-  //   setFirstBoxPosition(firstBoxPosition === "left" ? "right" : "left")
-  // }
 
   return (
     <View style={style}>
