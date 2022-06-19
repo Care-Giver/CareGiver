@@ -13,6 +13,7 @@ import { palette } from "caregiver/app/theme"
 import IMAGES from "caregiver/assets/common-images"
 import { AnimatedHeader } from "./animated-header"
 import DropDownPicker from "react-native-dropdown-picker"
+import { PRETENDARD_REGULAR } from "../../../../../assets/fonts"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
@@ -99,29 +100,10 @@ export const SearchResultScreen: FC<
         <Row
           style={{
             width: "auto",
-            height: HEIGHT * 16,
+            height: "auto",
           }}
         >
-          <DropDownPicker
-            open={open}
-            value={optionValue}
-            items={sortOptions}
-            setOpen={setOpen}
-            setValue={setOptionValue}
-            setItems={setSortOptions}
-            onSelectItem={(item) => onSortPick(item.value)}
-            style={{
-              borderWidth: 0,
-            }}
-            containerStyle={{
-              width: WIDTH * 100,
-            }}
-            labelProps={{
-              numberOfLines: 1,
-            }}
-            placeholder="가까운 거리순"
-            showArrowIcon={false}
-          />
+          {/* //! 드롭다운 버튼 위치 */}
           <Image
             source={IMAGES.list_bars}
             style={{
@@ -133,6 +115,40 @@ export const SearchResultScreen: FC<
         </Row>
       </Row>
 
+      {/* //! 빌어먹을 안드로이드에서는,  DropDownPicker 의 parent 컴포넌트가 충분히 커야 한다! */}
+      <DropDownPicker
+        open={open}
+        value={optionValue}
+        items={sortOptions}
+        setOpen={setOpen}
+        setValue={setOptionValue}
+        setItems={setSortOptions}
+        onSelectItem={(item) => onSortPick(item.value)}
+        style={{
+          width: WIDTH * 100,
+          borderColor: 0,
+        }}
+        containerStyle={{
+          width: WIDTH * 100,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        listItemContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        textStyle={{
+          fontSize: 12,
+          fontFamily: PRETENDARD_REGULAR,
+          textAlign: "center",
+        }}
+        placeholder="가까운 거리 순"
+        placeholderStyle={{
+          backgroundColor: "pink",
+        }}
+        showArrowIcon={false}
+        showTickIcon={false}
+      />
       {/* //? divider */}
       <View
         style={{
