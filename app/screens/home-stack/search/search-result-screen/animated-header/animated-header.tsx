@@ -5,20 +5,7 @@ import { RowRoundedButton } from "caregiver/app/custom-components/buttons/row-ro
 import { HEAD_LINE } from "caregiver/app/theme/palette"
 import { HEIGHT, WIDTH } from "caregiver/app/theme"
 import IMAGES from "caregiver/assets/common-images"
-
-// ? 검색 필터(날짜, 시간, 장소 선택 필터) "컨테이너" 높이
-const HEADER_HEIGHT = HEIGHT * 105
-
-const HEADER_MARGIN_TOP = HEIGHT * 20
-const HEADER_MARGIN_BOTTOM = HEIGHT * 22
-
-// ? 검색 필터 "영역" 높이
-// ? -> 영역에 해당 영역 높이 만큼의 음수 top 마진 값을 주면, 영역 높이만큼 위쪽으로 이동하게 됨
-// ?    이를 이용하여, 스크롤을 어느정도 올리다보면 검색필터 영역이 위로 올라가면서 사라지는 효과를 줄 수 있다
-const HEADER_AREA = HEADER_HEIGHT + HEADER_MARGIN_TOP + HEADER_MARGIN_BOTTOM
-
-// ? 검색필터 영역의 최소 선명도 (%)
-const OPACITY_MIN = 10
+import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({
@@ -27,9 +14,9 @@ export const AnimatedHeader = ({ animatedValue }) => {
     extrapolate: "clamp",
   })
 
-  const headerMarginTop = animatedValue.interpolate({
-    inputRange: [HEADER_MARGIN_TOP, HEADER_AREA],
-    outputRange: [HEADER_MARGIN_TOP, -1 * HEADER_AREA],
+  const headerTranslateY = animatedValue.interpolate({
+    inputRange: [0, HEADER_AREA],
+    outputRange: [0, -1 * HEADER_AREA],
     extrapolate: "clamp",
   })
 
@@ -37,10 +24,9 @@ export const AnimatedHeader = ({ animatedValue }) => {
     // ? Animated.View: 애니메이션 효과를 넣을 범위 -> 검색 필터 영역
     <Animated.View
       style={{
-        marginTop: headerMarginTop,
-        marginBottom: HEADER_MARGIN_BOTTOM,
         height: HEADER_HEIGHT,
         opacity: headerOpacity,
+        transform: [{ translateY: headerTranslateY }],
       }}
     >
       <View>
