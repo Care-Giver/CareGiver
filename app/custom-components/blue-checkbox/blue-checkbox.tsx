@@ -17,12 +17,13 @@ const IMAGE: ViewStyle = {
 export function BlueCheckbox(props: BlueCheckboxProps) {
   const rootStyle = [ROOT, props.style]
 
-  const onPress = props.onToggle ? () => props.onToggle && props.onToggle(!props.value) : null
+  // const onPress = props.onToggle ? () => props.onToggle && props.onToggle(!props.value) : null
+  const onPress = props.onPress
 
   return (
     <Pressable
       // activeOpacity={1}
-      disabled={!props.onToggle}
+      // disabled={!props.onToggle}
       onPress={onPress}
       style={rootStyle}
     >

@@ -1,5 +1,13 @@
 import React, { FC, useState, useLayoutEffect, useEffect } from "react"
-import { FlatList, Image, Pressable } from "react-native"
+import {
+  FlatList,
+  Image,
+  Pressable,
+  View,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -31,13 +39,19 @@ import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
 import DropDownPicker from "react-native-dropdown-picker"
 import { Calendar } from "react-native-calendars"
+import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 // import * as Calendar from 'expo-calendar';
+// import DateTimePicker from "@react-native-community/datetimepicker"
+import RNDateTimePicker from "@react-native-community/datetimepicker"
+import { RowRoundedTimeIntervalPicker } from "../../../../custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
+
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false)
 
     const [open, setOpen] = useState(false)
     const [selectedPets, setSelectedPets] = useState([])
@@ -72,6 +86,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     //   },
     // ]
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
     //* useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
     useLayoutEffect(() => {
       if (!route.params) {
@@ -96,18 +112,16 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       didAlreadyHave ? null : setSelectedPets((prevState) => [...prevState, petData])
     }
 
-    // const triggerActivate = () => {
-    //   if (!selectedPet) return
-    //   setIsActivated(true)
-    // }
-    // useEffect(() => {
-    //   triggerActivate()
-    // }, [selectedPet])
-
-    console.log(selectedPets)
+    // console.log(selectedPets)
 
     const goToSearchResultScreen = (params?) => {
       navigation.navigate("search-result", params)
+    }
+
+    if (Platform.OS === "android") {
+      if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+      }
     }
 
     return (
@@ -136,7 +150,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         </Row>
 
         {!isCalendarOpen ? (
-          //? 날짜 선택
+          //* 날짜 선택
           <RowRoundedButton
             onPress={() => {
               setIsCalendarOpen(true)
@@ -150,7 +164,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           //? 캘린더 표출
           <Calendar
             onDayPress={() => {
-              setIsCalendarOpen(false)
+              setIsCalendarOpen(!isCalendarOpen)
             }}
             // Collection of dates that have to be marked. Default = {}
             markedDates={{
@@ -162,19 +176,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           />
         )}
 
-        {/*//? 시간 선택 */}
-        <RowRoundedButton
-          onPress={() => {
-            alert("dd")
-          }}
-          image={IMAGES.timer}
-          text={"00:00 - 24:00"}
-          textColor={"#BFBFBF"}
-          fontType="Poppins"
+        {/*//* 시간 선택 */}
+        <RowRoundedTimeIntervalPicker
           style={{ marginTop: HEIGHT * 12 }}
+          isTimePickerOpen={isTimePickerOpen}
+          setIsTimePickerOpen={setIsTimePickerOpen}
         />
 
-        {/*//? 위치 선택 */}
+        {/*//* 위치 선택 */}
         <RowRoundedButton
           onPress={() => {
             alert("dd")
@@ -186,54 +195,43 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         />
 
         {/*//* 반려동물 선택 */}
-        <DropDownPicker
-          //! 기본설정
-          open={open}
-          setOpen={setOpen}
-          items={items}
-          setItems={setItems}
-          // value={value}
-          // setValue={setValue}
-          //? 기능구현
-          onSelectItem={(selected) => {
-            addPet(selected.petData)
-          }}
-          placeholder={"반려동물 선택"}
-          style={{ marginTop: HEIGHT * 12, borderWidth: 2, borderColor: LIGHT_LINE }}
-        />
-
-        <PreBol14
-          text="선택된 반려동물"
-          color={SUB_HEAD_LINE}
-          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-        />
-        <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
-        {/*//? 선택된 반려동물 리스트 */}
-        <FlatList
-          data={selectedPets}
-          renderItem={(
-            { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-          ) => (
-            <SelectedPetCard
-              petData={item}
-              onPress={() => {
-                setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-              }}
-            />
-          )}
-        />
-
-        <SelectPetItem petData={petsDummy[0]} />
-        <RowRoundedBox
-          style={styles.addNewPetBox}
-          preset="pressable"
+        <SelectPetDropdownBox
+          style={{ marginTop: HEIGHT * 12 }}
+          isOpen={isDropdownOpen}
           onPress={() => {
-            alert("gg")
+            setIsDropdownOpen(!isDropdownOpen)
+            // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
+            //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
+            LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
           }}
-        >
-          <PreMed14 text="+ 추가 등록하기" color={BODY} />
-        </RowRoundedBox>
+          selectedPets={selectedPets}
+          setSelectedPets={setSelectedPets}
+        />
+
+        {/*//* 선택된 반려동물 */}
+        <View style={isDropdownOpen ? styles.hidden : styles.shown}>
+          <PreBol14
+            text="선택된 반려동물"
+            color={SUB_HEAD_LINE}
+            style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+          />
+          <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+
+          {/*//* 선택된 반려동물 리스트 */}
+          <FlatList
+            data={selectedPets}
+            renderItem={(
+              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+            ) => (
+              <SelectedPetCard
+                petData={item}
+                onPress={() => {
+                  setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                }}
+              />
+            )}
+          />
+        </View>
 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}

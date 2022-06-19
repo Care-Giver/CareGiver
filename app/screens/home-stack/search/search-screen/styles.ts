@@ -13,4 +13,13 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  shown: {
+    width: "auto",
+    height: "auto",
+    // backgroundColor: "red",
+  },
+  hidden: {
+    width: 0,
+    height: 0,
+  },
 })
