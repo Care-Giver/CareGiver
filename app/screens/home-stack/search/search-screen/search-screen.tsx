@@ -43,6 +43,7 @@ import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-box
 // import * as Calendar from 'expo-calendar';
 // import DateTimePicker from "@react-native-community/datetimepicker"
 import RNDateTimePicker from "@react-native-community/datetimepicker"
+import { RowRoundedTimeIntervalPicker } from "../../../../custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
@@ -50,6 +51,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false)
 
     const [open, setOpen] = useState(false)
     const [selectedPets, setSelectedPets] = useState([])
@@ -162,7 +164,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           //? 캘린더 표출
           <Calendar
             onDayPress={() => {
-              setIsCalendarOpen(false)
+              setIsCalendarOpen(!isCalendarOpen)
             }}
             // Collection of dates that have to be marked. Default = {}
             markedDates={{
@@ -175,16 +177,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         )}
 
         {/*//* 시간 선택 */}
-        <RNDateTimePicker mode="time" value={new Date()} />
-        <RowRoundedButton
-          onPress={() => {
-            alert("dd")
-          }}
-          image={IMAGES.timer}
-          text={"00:00 - 24:00"}
-          textColor={"#BFBFBF"}
-          fontType="Poppins"
+        <RowRoundedTimeIntervalPicker
           style={{ marginTop: HEIGHT * 12 }}
+          isTimePickerOpen={isTimePickerOpen}
+          setIsTimePickerOpen={setIsTimePickerOpen}
         />
 
         {/*//* 위치 선택 */}
