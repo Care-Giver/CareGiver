@@ -1,13 +1,5 @@
 import React, { FC, useState, useLayoutEffect, useEffect } from "react"
-import {
-  FlatList,
-  Image,
-  Pressable,
-  View,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-} from "react-native"
+import { FlatList, Image, View, LayoutAnimation, Platform, UIManager } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -17,78 +9,29 @@ import {
   DivisionLine,
   SelectedPetCard,
   ServiceTypeIndicatorHeader,
-  PreMed14,
   PreBol14,
   ConditionalButton,
-  SelectPetItem,
-  RowRoundedBox,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, WIDTH } from "../../../../theme"
-import {
-  BODY,
-  DISABLED,
-  HEAD_LINE,
-  LBG,
-  LIGHT_LINE,
-  SUB_HEAD_LINE,
-} from "../../../../theme/palette"
+import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
-import { petsDummy } from "./dummy-data"
 import IMAGES from "../../../../../assets/common-images"
 import { styles } from "./styles"
-import DropDownPicker from "react-native-dropdown-picker"
 import { Calendar } from "react-native-calendars"
 import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
-// import * as Calendar from 'expo-calendar';
-// import DateTimePicker from "@react-native-community/datetimepicker"
-import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { RowRoundedTimeIntervalPicker } from "../../../../custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
-
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false)
-
-    const [open, setOpen] = useState(false)
+    const [date, setDate] = useState() //? 선택된 날짜
     const [selectedPets, setSelectedPets] = useState([])
-
-    const [items, setItems] = useState(
-      petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
-    )
-    // items = [
-    //   Object {
-    //     "age": 3,
-    //     "id": "1",
-    //     "name": "초코",
-    //     "sex": "female",
-    //     "size": "중형견",
-    //     "species": "푸들",
-    //   },
-    //   Object {
-    //     "age": 3,
-    //     "id": "3",
-    //     "name": "자두",
-    //     "sex": "male",
-    //     "size": "소형",
-    //     "species": "산냥이",
-    //   },
-    //   Object {
-    //     "age": 3,
-    //     "id": "2",
-    //     "name": "우유",
-    //     "sex": "female",
-    //     "size": "중형견",
-    //     "species": "비숑",
-    //   },
-    // ]
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-    //* useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
+    //! useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
     useLayoutEffect(() => {
       if (!route.params) {
         console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
@@ -102,18 +45,16 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       })
     }, [])
 
-    const addPet = (petData) => {
-      //! forEach 는 retrun 값을 못 내보낸다. 항상 undefined 임 주의할 것! (map 과의 가장 큰 차이!) https://dream-frontend.tistory.com/341
-      //! 이때문에, map 을 사용하였다
-      //? 이전 값들(pet 객체) 중에서, id 값이 이미 존재하면, true 를 리턴한다.
-      const didAlreadyHave = selectedPets.map((ele) => ele.id === petData.id).includes(true)
+    //? 펫시터 찾기 버튼 활성화 여부 결정
+    const hadle = () => {
+      if (!date) return false
 
-      //? 이미 있으면 아무것도 안하고(null), 없으면 state 를 추가한다(setSelectedPets)
-      didAlreadyHave ? null : setSelectedPets((prevState) => [...prevState, petData])
+      if (selectedPets.length === 0) return false
+
+      return true
     }
 
-    // console.log(selectedPets)
-
+    //? 펫싴터 검색결과 스크린으로 이동
     const goToSearchResultScreen = (params?) => {
       navigation.navigate("search-result", params)
     }
@@ -124,8 +65,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       }
     }
 
+    const time = new Date(2022, 5, 30)
+    // console.log(time)
+    const _time = time.toISOString().split("T")[0]
+    // console.log(_time)
+
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
+        {/* //* 방문 | 위탁 */}
         <Row style={{ marginTop: HEIGHT * 12 }}>
           <ServiceTypeIndicatorHeader
             onPress={() => {
@@ -143,45 +90,57 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
             state={serviceType}
           />
         </Row>
-
         <Row style={{ marginTop: HEIGHT * 16 }}>
           <Image source={IMAGES.right_arrow_grey} style={styles.image} />
           <PreReg14 text="케어기버가 직접 집을 방문합니다." color={DISABLED} style={styles.text} />
         </Row>
 
+        {/* //* 날짜 선택 */}
         {!isCalendarOpen ? (
-          //* 날짜 선택
           <RowRoundedButton
             onPress={() => {
               setIsCalendarOpen(true)
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
             }}
             image={IMAGES.calendar}
-            text={"날짜를 선택해보세요."}
+            text={
+              date
+                ? `${date.dateString.replace("-", ".").replace("-", ".")}`
+                : "날짜를 선택해보세요."
+            }
             textColor={HEAD_LINE}
             style={{ marginTop: HEIGHT * 36 }}
           />
         ) : (
           //? 캘린더 표출
           <Calendar
-            onDayPress={() => {
+            onDayPress={(date) => {
               setIsCalendarOpen(!isCalendarOpen)
+              setDate(date)
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
             }}
+            style={{
+              marginTop: HEIGHT * 36,
+              backgroundColor: "#F0F0F6",
+              padding: 4,
+              borderRadius: 8,
+            }}
+            headerStyle
             // Collection of dates that have to be marked. Default = {}
-            markedDates={{
-              "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
-              "2012-05-17": { marked: true },
-              "2012-05-18": { marked: true, dotColor: "red", activeOpacity: 0 },
-              "2012-05-19": { disabled: true, disableTouchEvent: true },
-            }}
+            markedDates={
+              {
+                // _time: { selected: true, marked: true, selectedColor: "red" },
+                // "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
+                // "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
+              }
+            }
           />
         )}
 
         {/*//* 시간 선택 */}
-        <RowRoundedTimeIntervalPicker
-          style={{ marginTop: HEIGHT * 12 }}
-          isTimePickerOpen={isTimePickerOpen}
-          setIsTimePickerOpen={setIsTimePickerOpen}
-        />
+        {serviceType === "방문" && (
+          <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+        )}
 
         {/*//* 위치 선택 */}
         <RowRoundedButton
@@ -233,9 +192,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           />
         </View>
 
+        {/*//* 펫시터 찾기 */}
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
-          isActivated={selectedPets.length !== 0}
+          isActivated={hadle()}
           style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
           onPress={() => {
             goToSearchResultScreen({ service: service, serviceType: serviceType })
