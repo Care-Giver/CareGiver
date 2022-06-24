@@ -179,8 +179,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         {/*//* 시간 선택 */}
         <RowRoundedTimeIntervalPicker
           style={{ marginTop: HEIGHT * 12 }}
-          isTimePickerOpen={isTimePickerOpen}
+          isTimePickerOpen={true}
           setIsTimePickerOpen={setIsTimePickerOpen}
+          platform={Platform.OS}
         />
 
         {/*//* 위치 선택 */}
