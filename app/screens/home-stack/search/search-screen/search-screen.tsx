@@ -51,11 +51,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false)
-
+    const [date, setDate] = useState()
     const [open, setOpen] = useState(false)
     const [selectedPets, setSelectedPets] = useState([])
-
     const [items, setItems] = useState(
       petsDummy.map((ele) => ({ label: ele.name, value: ele.id, petData: ele })),
     )
@@ -124,6 +122,15 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       }
     }
 
+    const now = new Date()
+    const now_year_month_date = now.toISOString().split("T")[0]
+    console.log(now_year_month_date === "2022-06-24")
+
+    const time = new Date(2022, 5, 30)
+    console.log(time)
+    const _time = time.toISOString().split("T")[0]
+    console.log(_time)
+
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         <Row style={{ marginTop: HEIGHT * 12 }}>
@@ -156,33 +163,30 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
               setIsCalendarOpen(true)
             }}
             image={IMAGES.calendar}
-            text={"날짜를 선택해보세요."}
+            text={date ? `${date.month}월 ${date.day}일` : "날짜를 선택해보세요."}
             textColor={HEAD_LINE}
             style={{ marginTop: HEIGHT * 36 }}
           />
         ) : (
           //? 캘린더 표출
           <Calendar
-            onDayPress={() => {
+            onDayPress={(date) => {
               setIsCalendarOpen(!isCalendarOpen)
+              setDate(date)
             }}
+            style={{ backgroundColor: "#F0F0F6", padding: 4 }}
+            headerStyle
             // Collection of dates that have to be marked. Default = {}
             markedDates={{
+              _time: { selected: true, marked: true, selectedColor: "red" },
               "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
-              "2012-05-17": { marked: true },
-              "2012-05-18": { marked: true, dotColor: "red", activeOpacity: 0 },
-              "2012-05-19": { disabled: true, disableTouchEvent: true },
+              "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
             }}
           />
         )}
 
         {/*//* 시간 선택 */}
-        <RowRoundedTimeIntervalPicker
-          style={{ marginTop: HEIGHT * 12 }}
-          isTimePickerOpen={true}
-          setIsTimePickerOpen={setIsTimePickerOpen}
-          platform={Platform.OS}
-        />
+        <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
 
         {/*//* 위치 선택 */}
         <RowRoundedButton
