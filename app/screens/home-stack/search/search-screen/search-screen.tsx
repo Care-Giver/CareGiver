@@ -47,13 +47,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
 
     //? 펫시터 찾기 버튼 활성화 여부 결정
     const hadle = () => {
-      if (!date) {
-        return false
-      }
+      if (!date) return false
 
-      if (selectedPets.length === 0) {
-        return false
-      }
+      if (selectedPets.length === 0) return false
 
       return true
     }
