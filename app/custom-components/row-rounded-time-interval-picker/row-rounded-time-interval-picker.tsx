@@ -18,17 +18,15 @@ export const RowRoundedTimeIntervalPicker = (props) => {
   const NOW_TIME = now
   const TO_TIME = new Date(year, _month, date, 23, 50, 0)
 
-  const [fromTime, setFromTime] = useState()
-  const [toTime, setToTime] = useState()
+  const [fromTime, setFromTime] = useState(false)
+  const [toTime, setToTime] = useState(false)
   const [selectedTimes, setSelectedTimes] = useState({ fromTime: fromTime, toTime: toTime })
 
   useEffect(() => {
     fromTime < toTime
       ? setSelectedTimes({ fromTime: fromTime, toTime: toTime })
-      : alert("종료시간이 시작시간보다 나중이어야 합니다")
+      : fromTime && toTime && alert("종료시간이 시작시간보다 나중이어야 합니다")
   }, [fromTime, toTime])
-
-  // console.log(selectedTimes)
 
   return (
     <RowRoundedBox style={style}>
@@ -47,14 +45,27 @@ export const RowRoundedTimeIntervalPicker = (props) => {
 
           <PopSem16 text="﹣" />
 
-          <RNDateTimePicker
-            mode="time"
-            //? 선택한 종료시간(toTime)이 시작시간(fromTime) 보다 이전이면, 시작시간을 종료시간으로 강제한다
-            value={toTime ? (fromTime < toTime ? toTime : fromTime) : TO_TIME}
-            // value={toTime || TO_TIME}
-            style={{ width: WIDTH * 90, height: HEIGHT * 40 }}
-            onChange={(event, date) => setToTime(date)}
-          />
+          {fromTime === false ? (
+            <View
+              style={{
+                width: WIDTH * 90,
+                height: HEIGHT * 40,
+              }}
+            />
+          ) : (
+            <RNDateTimePicker
+              mode="time"
+              //? 선택한 종료시간(toTime)이 시작시간(fromTime) 보다 이전이면, 시작시간을 종료시간으로 강제한다
+              value={toTime ? (fromTime < toTime ? toTime : fromTime || NOW_TIME) : TO_TIME}
+              // value={toTime || TO_TIME}
+              style={{
+                width: WIDTH * 90,
+                height: HEIGHT * 40,
+              }}
+              onChange={(event, date) => setToTime(date)}
+              disabled={fromTime === false}
+            />
+          )}
         </Row>
       )}
 

@@ -122,14 +122,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       }
     }
 
-    const now = new Date()
-    const now_year_month_date = now.toISOString().split("T")[0]
-    console.log(now_year_month_date === "2022-06-24")
-
     const time = new Date(2022, 5, 30)
-    console.log(time)
+    // console.log(time)
     const _time = time.toISOString().split("T")[0]
-    console.log(_time)
+    // console.log(_time)
+
+    console.log(date)
 
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
@@ -161,9 +159,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
           <RowRoundedButton
             onPress={() => {
               setIsCalendarOpen(true)
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
             }}
             image={IMAGES.calendar}
-            text={date ? `${date.month}월 ${date.day}일` : "날짜를 선택해보세요."}
+            text={
+              date
+                ? `${date.dateString.replace("-", ".").replace("-", ".")}`
+                : "날짜를 선택해보세요."
+            }
             textColor={HEAD_LINE}
             style={{ marginTop: HEIGHT * 36 }}
           />
@@ -173,20 +176,30 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
             onDayPress={(date) => {
               setIsCalendarOpen(!isCalendarOpen)
               setDate(date)
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
             }}
-            style={{ backgroundColor: "#F0F0F6", padding: 4 }}
+            style={{
+              marginTop: HEIGHT * 36,
+              backgroundColor: "#F0F0F6",
+              padding: 4,
+              borderRadius: 8,
+            }}
             headerStyle
             // Collection of dates that have to be marked. Default = {}
-            markedDates={{
-              _time: { selected: true, marked: true, selectedColor: "red" },
-              "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
-              "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
-            }}
+            markedDates={
+              {
+                // _time: { selected: true, marked: true, selectedColor: "red" },
+                // "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
+                // "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
+              }
+            }
           />
         )}
 
         {/*//* 시간 선택 */}
-        <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+        {serviceType === "방문" && (
+          <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+        )}
 
         {/*//* 위치 선택 */}
         <RowRoundedButton
