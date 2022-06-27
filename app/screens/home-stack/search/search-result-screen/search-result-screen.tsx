@@ -1,65 +1,94 @@
 import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
-import { View, Pressable, Image, Animated } from "react-native"
+import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
-import { petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
+import { petsitters as _petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH } from "caregiver/app/theme"
-import { PreBol18, PreReg12, Row, ScreenRootView } from "caregiver/app/custom-components"
+import { PreBol18, Row, ScreenRootView } from "caregiver/app/custom-components"
 import { LBG } from "caregiver/app/theme/palette"
 import { palette } from "caregiver/app/theme"
 import IMAGES from "caregiver/assets/common-images"
-import DropDownPicker from "react-native-dropdown-picker"
-import { PRETENDARD_REGULAR } from "../../../../../assets/fonts"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
+import { SelectOptionDropdownBox } from "../../../../custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(({ navigation, route }) => {
-  //! drop down picker 기본 props 설정 -> state 값으로 관리
-  const [open, setOpen] = useState(false)
-  const [optionValue, setOptionValue] = useState(null)
-  const [sortOptions, setSortOptions] = useState([
-    { label: "가까운 거리순", value: "near" },
-    { label: "최근 등록순", value: "recent" },
-    { label: "별점 높은순", value: "high-rating" },
-    { label: "리뷰 많은순", value: "most-reviews" },
-  ])
+  //? drop down 클릭 여부
+  // const [isOpen, setIsOpen] = useState(false)
 
-  //! drop down에서 정렬 옵션 선택시 실행되는 함수
-  //? -> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort)
-  const onSortPick = useCallback((optionValue: string) => {
+  // const [petsitters, setPetsitters] = useState([])
+
+  // - isOpen, petsitters를 따로 관리 -> handlePress에서 둘의 state값 변화를 동시에 줄 수 없음(?)
+  // - 하나의 객체로 묶어서 관리 (둘의 state 값 변화를 동시에 관리)
+  //TODO 만약 이 방식을 채택하게 된다면, state 이름 변경할 것.
+  const [temp, setTemp] = useState({
+    isOpen: false, //? dropdown 클릭 여부
+    petsitters: [],
+  })
+
+  useLayoutEffect(() => {
+    // setPetsitters(_petsitters)
+    setTemp({ isOpen: false, petsitters: _petsitters })
+  }, [])
+
+  //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
+  //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
+  const optionLabels = {
+    distance: "가까운 거리순",
+    recent: "최근 등록순",
+    ratings: "별점 높은순",
+    reviews: "리뷰 많은순",
+  }
+
+  //? 현재 선택된 필터 옵션
+  const [currentOption, setCurrentOption] = useState(optionLabels.distance)
+
+  //? dropdown에서 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort))
+  const handlePress = useCallback((optionValue: string) => {
     switch (optionValue) {
       //? 최근 등록순
-      case "recent":
-        petsitters.sort((a, b) => {
+      case optionLabels.recent:
+        _petsitters.sort((a, b) => {
           //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
           return Date.parse(b.createdAt) - Date.parse(a.createdAt)
         })
         break
 
       //? 별점 높은 순
-      case "high-rating":
-        petsitters.sort((a, b) => {
+      case optionLabels.ratings:
+        _petsitters.sort((a, b) => {
           //? 내림차순 정렬 -> 높은 별점을 상위 노출
           return Number(b.rating * 10) - Number(a.rating * 10)
         })
         break
 
       //? 리뷰 많은 순
-      case "most-reviews":
-        petsitters.sort((a, b) => {
+      case optionLabels.reviews:
+        _petsitters.sort((a, b) => {
           //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
           return b.review - a.review
         })
         break
     }
+
+    //? 두 state 변경을 동시에 할 수 없음 (?)
+    // setIsOpen(!isOpen)
+    // setPetsitters(_petsitters)
+
+    setTemp((prev) => ({
+      isOpen: !prev.isOpen,
+      petsitters: _petsitters,
+    }))
+
+    setCurrentOption(optionValue)
   }, [])
 
   //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
@@ -104,9 +133,12 @@ export const SearchResultScreen: FC<
         }}
       />
 
+      {/* //? 검색 필터 박스 */}
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
       <AnimatedHeader animatedValue={offset} />
 
+      {/* //? margin */}
+      {/* //? nativeDriver를 사용할 때는 레이아웃 css(ex 마진) 사용 불가능 :: 마진만큼의 높이를 가진 뷰로 대체 */}
       <Animated.View
         style={{
           height: HEADER_MARGIN_BOTTOM,
@@ -114,79 +146,104 @@ export const SearchResultScreen: FC<
         }}
       />
 
+      {/* //? 검색 결과 리스트를 담는 뷰 */}
       <Animated.View
         style={{
           transform: [{ translateY: animateTranslateY }],
         }}
       >
-        {/* //? title container */}
+        {/* //? title container - 검색 결과 텍스트 + 정렬옵션 드롭다운 */}
         <Row
           style={{
+            paddingVertical: HEIGHT * 12,
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: palette.white,
-            marginTop: HEIGHT * 14,
+            position: "absolute",
+            zIndex: 1,
+            backgroundColor: null,
           }}
         >
           {/* //? title */}
-          <PreBol18 text="검색결과" />
+          <PreBol18 text="검색결과" style={{ alignSelf: "flex-start" }} />
           {/* //? sort button */}
-          <Pressable
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
+          <SelectOptionDropdownBox
+            onPress={() => {
+              // setIsOpen(!isOpen)
+              setTemp((prev) => ({
+                ...prev,
+                isOpen: !prev.isOpen,
+              }))
             }}
-            onPress={() => console.warn("clicked sort btn")}
-          >
-            <PreReg12 text="가까운 거리 순" />
-            <Image
-              source={IMAGES.list_bars}
-              style={{
-                width: WIDTH * 16,
-                height: HEIGHT * 16,
-                marginLeft: WIDTH * 5,
-              }}
-            />
-          </Pressable>
+            // isOpen={isOpen}
+            isOpen={temp.isOpen}
+            logoSrc={IMAGES.list_bars}
+            logoStyle={{
+              width: WIDTH * 16,
+              height: HEIGHT * 16,
+              marginLeft: WIDTH * 5,
+            }}
+            labels={Object.values(optionLabels)}
+            handlePress={handlePress}
+            currentOption={currentOption}
+            style={{
+              backgroundColor: palette.white,
+            }}
+          />
         </Row>
+
         {/* //? divider */}
         <View
           style={{
             width: "100%",
             height: HEIGHT * 2,
             backgroundColor: LBG,
-            marginTop: HEIGHT * 12,
+            position: "absolute",
+            top: HEIGHT * 47,
           }}
         />
+
         {/* //? sitter profile card list */}
-        <Animated.FlatList
-          data={petsitters}
-          renderItem={({ item, index }) => (
-            <SitterProfileCard
-              key={item.id}
-              name={item.name}
-              image={item.image}
-              rating={item.rating}
-              review={item.review}
-              title={item.title}
-              desc={item.desc}
-              onPress={() => console.warn("Hello")}
-              style={
-                index < petsitters.length - 1
-                  ? { marginTop: HEIGHT * 20 }
-                  : { marginVertical: HEIGHT * 20 }
-              }
-            />
-          )}
-          showsVerticalScrollIndicator={false}
+        <View
           style={{
             backgroundColor: palette.white,
+            height: "auto",
+            marginTop: HEIGHT * (47 + 2),
+            // marginBottom: HEIGHT * 34,
           }}
-          // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
-            useNativeDriver: true,
-          })}
-        />
+        >
+          <Animated.FlatList
+            // data={petsitters}
+            data={temp.petsitters}
+            renderItem={({ item, index }) => (
+              <SitterProfileCard
+                key={item.id}
+                name={item.name}
+                image={item.image}
+                rating={item.rating}
+                review={item.review}
+                title={item.title}
+                desc={item.desc}
+                onPress={() => console.warn("Hello")}
+                style={
+                  index < temp.petsitters.length - 1
+                    ? { marginTop: HEIGHT * 20 }
+                    : { marginVertical: HEIGHT * 20 }
+                }
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+            style={{
+              backgroundColor: palette.white,
+              // height: 500,
+              height: "auto",
+              marginBottom: HEIGHT * 34,
+            }}
+            // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
+              useNativeDriver: true,
+            })}
+          />
+        </View>
       </Animated.View>
     </ScreenRootView>
   )

@@ -1,9 +1,10 @@
 export interface SitterProfileCardProps {
-    image: string;
-    name: string;
-    rating: number;
-    review: number;
-    title: string;
-    desc: string;
-    onPress: () => void;
+  style: object
+  image: string
+  name: string
+  rating: number
+  review: number
+  title: string
+  desc: string
+  onPress: () => void
 }
