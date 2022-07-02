@@ -20,18 +20,9 @@ import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
 import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 import { RowRoundedTimeIntervalPicker } from "../../../../custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
-import { Dimensions } from "react-native"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
-    const windowWidth = Dimensions.get("window").width
-    const windowHeight = Dimensions.get("window").height
-
-    const screenWidth = Dimensions.get("screen").width
-    const screenHeight = Dimensions.get("screen").height
-
-    console.log(Platform.OS, windowHeight, screenHeight)
-
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -195,6 +186,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
                 }}
               />
             )}
+            // indicatorStyle={"black"} //! scroll indicator 의 디자인 props 는 black 과 white 두 종류 밖에 없다. custom scroll indicator 는 따로 직접 만들어야 한다.
           />
         </View>
 
