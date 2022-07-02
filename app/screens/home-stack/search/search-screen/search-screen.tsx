@@ -6,14 +6,13 @@ import {
   ScreenRootView,
   Row,
   PreReg14,
-  DivisionLine,
   SelectedPetCard,
   ServiceTypeIndicatorHeader,
   PreBol14,
   ConditionalButton,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
-import { HEIGHT, WIDTH } from "../../../../theme"
+import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../../theme"
 import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 import IMAGES from "../../../../../assets/common-images"
@@ -168,14 +167,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         />
 
         {/*//* 선택된 반려동물 */}
+        <PreBol14
+          text="선택된 반려동물"
+          color={SUB_HEAD_LINE}
+          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+        />
         <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-          <PreBol14
-            text="선택된 반려동물"
-            color={SUB_HEAD_LINE}
-            style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-          />
-          <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
           {/*//* 선택된 반려동물 리스트 */}
           <FlatList
             data={selectedPets}
@@ -189,6 +186,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
                 }}
               />
             )}
+            // indicatorStyle={"black"} //! scroll indicator 의 디자인 props 는 black 과 white 두 종류 밖에 없다. custom scroll indicator 는 따로 직접 만들어야 한다.
           />
         </View>
 
@@ -196,7 +194,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
           isActivated={hadle()}
-          style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
+          style={{
+            marginTop: "auto",
+            // margin: HEIGHT * 24,
+            marginBottom: Platform.select({
+              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+              android: 0,
+            }),
+          }}
           onPress={() => {
             goToSearchResultScreen({ service: service, serviceType: serviceType })
           }}

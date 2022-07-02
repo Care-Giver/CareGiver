@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "../../../../theme"
-import { LBG } from "../../../../theme/palette"
+import { WIDTH, HEIGHT } from "../../../../theme"
+import { LBG, LIGHT_LINE } from "../../../../theme/palette"
 
 export const styles = StyleSheet.create({
   image: { width: WIDTH * 16, height: HEIGHT * 16 },
@@ -15,7 +15,11 @@ export const styles = StyleSheet.create({
   },
   shown: {
     width: "auto",
-    height: "auto",
+    height: HEIGHT * 236,
+    marginTop: HEIGHT * 8,
+    borderRadius: 8,
+    borderColor: LIGHT_LINE,
+    borderWidth: 2,
     // backgroundColor: "red",
   },
   hidden: {

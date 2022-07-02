@@ -33,7 +33,7 @@ export const SelectedPetCard = (props) => {
             <PreReg14 text={size} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: WIDTH * 8 }} />
             <PreReg14
-              text={species.length <= 6 ? `${species}` : `${species.substring(0, 6)}..`}
+              text={species.length <= 6 ? `${species}` : `${species.substring(0, 5)}..`} //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
               color={BODY}
               style={{ marginLeft: WIDTH * 8 }}
             />

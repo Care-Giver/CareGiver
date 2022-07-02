@@ -35,11 +35,6 @@ export const SelectPetItem = (props) => {
   }
 
   useLayoutEffect(() => {
-    // if (selectedPetsIds.includes(id)) {
-    //   setIsOn(true)
-    // } else {
-    //   setIsOn(false)
-    // }
     isSelected ? setIsOn(true) : setIsOn(false)
   }, [])
 
@@ -64,37 +59,40 @@ export const SelectPetItem = (props) => {
   }
 
   return (
-    <View style={[styles.root, style]}>
-      {/*//? 이름, 사이즈, 종, 나이, 성별 */}
-      <Row>
-        <View style={styles.nameContainer}>
-          <PreBol16 text={name} style={{ textAlign: "center" }} />
-        </View>
+    <Row style={[styles.root, style]}>
+      {/* //? 이름 */}
+      <View style={styles.nameContainer}>
+        <PreBol16 text={name} style={{ textAlign: "center" }} />
+      </View>
 
-        <View style={styles.sizeContainer}>
-          <PreReg14 text={size} color={BODY} style={{ textAlign: "center" }} />
-        </View>
+      {/* //? 사이즈 */}
+      <View style={styles.sizeContainer}>
+        <PreReg14 text={size} color={BODY} style={{ textAlign: "center" }} />
+      </View>
 
-        <View style={styles.speciesContainer}>
-          <PreReg14 text={species} color={BODY} style={{ textAlign: "center" }} />
-        </View>
+      {/* //? 종 */}
+      <View style={styles.speciesContainer}>
+        <PreReg14
+          text={species.length <= 3 ? `${species}` : `${species.substring(0, 2)}..`} //? 4글자 부터는 2글자까지만 표기하고 점 두개. ex) 사모예드 -> 사모..
+          color={BODY}
+          style={{ textAlign: "center" }}
+        />
+      </View>
 
-        <View style={styles.ageContainer}>
-          <PreReg14 text={`${age}세`} color={BODY} style={{ textAlign: "center" }} />
-        </View>
+      {/* //? 나이 */}
+      <View style={styles.ageContainer}>
+        <PreReg14 text={`${age}세`} color={BODY} style={{ textAlign: "center" }} />
+      </View>
 
-        <View style={styles.sexContainer}>
-          <PreReg14 text={sex} color={BODY} style={{ textAlign: "center" }} />
-        </View>
+      {/* //? 성별 */}
+      <View style={styles.sexContainer}>
+        <PreReg14 text={sex} color={BODY} style={{ textAlign: "center" }} />
+      </View>
 
-        <View style={styles.checkboxContainer}>
-          <BlueCheckbox onPress={handle} value={isOn} />
-        </View>
-        {/*//? 삭제 버튼 */}
-      </Row>
-
-      {/*//?  카드 하단, 구분선 */}
-      {/* <DivisionLine color={LBG} /> */}
-    </View>
+      {/* //? 추가/삭제 체크박스 버튼 */}
+      <View style={styles.checkboxContainer}>
+        <BlueCheckbox onPress={handle} value={isOn} />
+      </View>
+    </Row>
   )
 }
