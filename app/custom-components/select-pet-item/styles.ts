@@ -3,16 +3,17 @@ import { WIDTH, HEIGHT } from "../../theme"
 import { LBG } from "../../theme/palette"
 
 const ROOT_HEIGHT = HEIGHT * 52
+const BORDER_BOTTOM_WIDTH = 2
+
+export const PET_ITEM_HEIGHT = ROOT_HEIGHT
+
 export const styles = StyleSheet.create({
   root: {
     width: "100%",
     height: ROOT_HEIGHT,
     backgroundColor: "#FFFFFF",
-    // backgroundColor: "red",
     paddingHorizontal: WIDTH * 10,
-    borderTopWidth: 2,
-    borderLeftWidth: 2,
-    borderRightWidth: 2,
+    borderBottomWidth: BORDER_BOTTOM_WIDTH,
     borderColor: LBG,
   },
   nameContainer: {
