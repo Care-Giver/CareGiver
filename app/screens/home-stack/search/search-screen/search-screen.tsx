@@ -6,14 +6,13 @@ import {
   ScreenRootView,
   Row,
   PreReg14,
-  DivisionLine,
   SelectedPetCard,
   ServiceTypeIndicatorHeader,
   PreBol14,
   ConditionalButton,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
-import { HEIGHT, WIDTH } from "../../../../theme"
+import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../../theme"
 import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 import IMAGES from "../../../../../assets/common-images"
@@ -21,9 +20,18 @@ import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
 import { SelectPetDropdownBox } from "../../../../custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 import { RowRoundedTimeIntervalPicker } from "../../../../custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
+import { Dimensions } from "react-native"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
+    const windowWidth = Dimensions.get("window").width
+    const windowHeight = Dimensions.get("window").height
+
+    const screenWidth = Dimensions.get("screen").width
+    const screenHeight = Dimensions.get("screen").height
+
+    console.log(Platform.OS, windowHeight, screenHeight)
+
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -168,14 +176,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         />
 
         {/*//* 선택된 반려동물 */}
+        <PreBol14
+          text="선택된 반려동물"
+          color={SUB_HEAD_LINE}
+          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+        />
         <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-          <PreBol14
-            text="선택된 반려동물"
-            color={SUB_HEAD_LINE}
-            style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-          />
-          <DivisionLine height={HEIGHT * 2} color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
           {/*//* 선택된 반려동물 리스트 */}
           <FlatList
             data={selectedPets}
@@ -196,7 +202,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
         <ConditionalButton
           label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
           isActivated={hadle()}
-          style={{ marginTop: "auto", marginBottom: HEIGHT * 34 }}
+          style={{
+            marginTop: "auto",
+            // margin: HEIGHT * 24,
+            marginBottom: Platform.select({
+              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+              android: 0,
+            }),
+          }}
           onPress={() => {
             goToSearchResultScreen({ service: service, serviceType: serviceType })
           }}
