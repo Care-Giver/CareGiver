@@ -35,11 +35,6 @@ export const SelectPetItem = (props) => {
   }
 
   useLayoutEffect(() => {
-    // if (selectedPetsIds.includes(id)) {
-    //   setIsOn(true)
-    // } else {
-    //   setIsOn(false)
-    // }
     isSelected ? setIsOn(true) : setIsOn(false)
   }, [])
 
@@ -77,7 +72,11 @@ export const SelectPetItem = (props) => {
 
       {/* //? 종 */}
       <View style={styles.speciesContainer}>
-        <PreReg14 text={species} color={BODY} style={{ textAlign: "center" }} />
+        <PreReg14
+          text={species.length <= 3 ? `${species}` : `${species.substring(0, 2)}..`} //? 4글자 부터는 2글자까지만 표기하고 점 두개. ex) 사모예드 -> 사모..
+          color={BODY}
+          style={{ textAlign: "center" }}
+        />
       </View>
 
       {/* //? 나이 */}
