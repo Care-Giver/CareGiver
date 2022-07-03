@@ -1,8 +1,8 @@
-import { View } from "react-native"
+import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 
-export const DotsIndicator = (props) => {
+export const FullWidthSizeImagesBoxWithIndicator = (props) => {
   const { items, activeIndex, style: viewStyle } = props
 
   return (
