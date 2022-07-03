@@ -23,7 +23,7 @@ const HEADER_ROOT = {
 export const GobackAndTitleHeader = (props) => {
   // console.log("TestHeaderTitle props:", props)
 
-  const Title = props.options.title ? props.options.title : props.route.name
+  const title = props.options.title ? props.options.title : props.route.name
 
   return (
     <View {...props} style={HEADER_ROOT}>
@@ -37,7 +37,7 @@ export const GobackAndTitleHeader = (props) => {
       </Pressable>
 
       {/* //? 타이틀 */}
-      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {Title}</PreMed20>
+      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed20>
     </View>
   )
 }

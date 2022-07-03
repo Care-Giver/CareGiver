@@ -31,6 +31,8 @@ function ScreenWithScrolling(props: ScreenProps) {
   const style = props.style || {}
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  // ? scrolling 관련 props
+  const { onScroll, scrollEventThrottle, contentInsetAdjustmentBehavior } = props
 
   return (
     <KeyboardAvoidingView
@@ -45,6 +47,10 @@ function ScreenWithScrolling(props: ScreenProps) {
           style={[preset.outer, backgroundStyle]}
           contentContainerStyle={[preset.inner, style]}
           keyboardShouldPersistTaps={props.keyboardShouldPersistTaps || "handled"}
+          // ? scrolling 관련 props
+          onScroll={onScroll}
+          scrollEventThrottle={scrollEventThrottle}
+          contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
         >
           {props.children}
         </ScrollView>
