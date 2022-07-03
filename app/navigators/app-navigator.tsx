@@ -15,6 +15,7 @@ import { SearchScreen } from "../screens/home-stack/search/search-screen/search-
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
 import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
+import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -37,6 +38,7 @@ export type NavigatorParamList = {
   search: undefined
   "search-result": undefined
   "test-map-screen": undefined
+  "petsitter-detail-information-screen": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -49,12 +51,14 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home"
+      initialRouteName="petsitter-detail-information-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
       {/** 🔥 Your screens go here */}
+
+      {/* //* 홈 */}
       <Stack.Screen
         name="home"
         component={HomeScreen}
@@ -62,6 +66,8 @@ const AppStack = () => {
           header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
+
+      {/* //* 검색 */}
       <Stack.Screen
         name="search"
         component={SearchScreen}
@@ -69,6 +75,8 @@ const AppStack = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+
+      {/* //* 검색결과 */}
       <Stack.Screen
         name="search-result"
         component={SearchResultScreen}
@@ -76,6 +84,14 @@ const AppStack = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+
+      {/* //* 펫시터 상세정보 */}
+      <Stack.Screen
+        name="petsitter-detail-information-screen"
+        component={PetsitterDetailInformationScreen}
+      />
+
+      {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
     </Stack.Navigator>
   )
