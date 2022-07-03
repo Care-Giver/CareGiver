@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect, useLayoutEffect } from "react"
+import React, { FC, useState, useCallback, useEffect } from "react"
 import { FlatList } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -52,7 +52,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
 
     const onPetsitterFlatlistUpdate = useCallback(({ viewableItems }) => {
       // ? 선택된 이미지, 즉 viewableItems 의 index 값을 activeIndex 로 설정.
-      // ? 왜 viewableItems[0] 인지는 console.log(viewableItems); 로 보면 이해갈 꺼임.
+      // ? 왜 viewableItems[0] 인지는 console.log(viewableItems); 로 보면 이해 갈꺼임
       if (viewableItems.length > 0) {
         setSelectedPetsitter(viewableItems[0].index || 0)
       }

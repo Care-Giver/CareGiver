@@ -5,8 +5,13 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme } from "react-native"
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
+import { useColorScheme, Image, Pressable } from "react-native"
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+  useNavigation,
+} from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
@@ -16,6 +21,8 @@ import { SearchResultScreen } from "../screens/home-stack/search/search-result-s
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
 import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
+import IMAGES from "../../assets/common-images"
+import { HEIGHT, WIDTH } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -45,6 +52,8 @@ export type NavigatorParamList = {
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
+  const navigation = useNavigation()
+
   return (
     <Stack.Navigator
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
@@ -89,6 +98,23 @@ const AppStack = () => {
       <Stack.Screen
         name="petsitter-detail-information-screen"
         component={PetsitterDetailInformationScreen}
+        options={{
+          // headerShown: false,
+          headerTransparent: true,
+          // headerTintColor: "red",
+          headerLeft: (props) => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack()
+              }}
+            >
+              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
+              {console.log("***")}
+              {console.log(props)}
+            </Pressable>
+          ),
+          // headerTitle: "",
+        }}
       />
 
       {/* //? 위치(지도) 테스트 화면 */}
