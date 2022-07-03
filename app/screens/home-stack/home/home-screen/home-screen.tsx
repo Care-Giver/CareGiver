@@ -9,14 +9,14 @@ import {
   PreBol20,
   ServiceChoiceButton,
   SitterProfileButton,
+  DotsIndicator,
+  RowRoundedButton,
+  ComeHomeGoToSwitchButton,
 } from "../../../../custom-components"
 import { NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, WIDTH } from "../../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../../theme/palette"
-import { ComeHomeGoToSwitchButton } from "../../../../custom-components/buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
-import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
-import { DotsIndicator } from "../../../../custom-components/dots-indicator/dots-indicator/dots-indicator"
 import IMAGES from "../../../../../assets/common-images"
 
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다

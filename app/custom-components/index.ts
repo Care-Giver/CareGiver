@@ -1,13 +1,19 @@
+//* texts
 export * from "./custom-texts/custom-texts"
-export * from "./view-component/view-component"
+
+//* buttons
 export * from "./buttons/pressable-button/pressable-button"
 export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 export * from "./buttons/conditional-button/conditional-button"
+export * from "./buttons/row-rounded-button/row-rounded-button"
+
+export * from "./view-component/view-component"
 export * from "./service-choice/service-choice-button/service-choice-button"
 export * from "./sitter-profile/sitter-profile-button/sitter-profile-button"
 export * from "./boxes/basics/row"
 export * from "./boxes/basics/row-rounded-box"
 export * from "./division-line/"
+export * from "./dots-indicator/dots-indicator"
 export * from "./selected-pet-card/selected-pet-card"
 export * from "./select-pet-item/select-pet-item"
 export * from "./select-pet-item/styles"
