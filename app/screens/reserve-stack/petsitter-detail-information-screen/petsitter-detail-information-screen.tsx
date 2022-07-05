@@ -1,9 +1,23 @@
 import React, { FC } from "react"
-import { FullWidthSizeImagesBoxWithIndicator, ScreenRootView } from "../../../custom-components"
+import {
+  Comment,
+  FullWidthSizeImagesBoxWithIndicator,
+  ScreenRootView,
+} from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT } from "../../../theme"
+
+const commentsDummy = [
+  {
+    userId: "유저닉네임",
+    desc: "안녕하세요 나는 내용입니다",
+    createAt: "2022-03-22T11:30",
+    updatedAt: "안녕하세요 나는 내용입니다",
+    reply: false,
+  },
+]
 
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
@@ -32,6 +46,14 @@ export const PetsitterDetailInformationScreen: FC<
           // marginTop: -HEADER_HEIGHT,
           marginTop: 0,
         }}
+      />
+
+      <Comment
+        userId={commentsDummy[0].userId}
+        desc={commentsDummy[0].desc}
+        createAt={commentsDummy[0].createAt}
+        updatedAt={commentsDummy[0].updatedAt}
+        reply={commentsDummy[0].reply}
       />
     </ScreenRootView>
   )
