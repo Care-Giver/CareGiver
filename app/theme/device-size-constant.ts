@@ -29,8 +29,11 @@ export const HEIGHT = parseFloat(
   (Dimensions.get("screen").height * (1 / basicDimensions.height)).toFixed(2),
 )
 
+export const DEVICE_SCREEN_WIDTH = Dimensions.get("screen").width
+export const DEVICE_SCREEN_HEIGHT = Dimensions.get("screen").height
+
 // ? toFixed(): number -> string
-// ~ JS, TS 에서는 string * "number" 결과값은 number 이다.
+// ! JS, TS 에서는 string * "number" 결과값은 number 이다.
 
 // * header 높이
 export const HEADER_HEIGHT = HEIGHT * 56

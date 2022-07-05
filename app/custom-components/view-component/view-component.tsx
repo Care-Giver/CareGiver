@@ -1,15 +1,17 @@
-import { View, Text, ViewStyle, FlexStyle, StyleProp, ViewProps, Platform } from "react-native"
+import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
 import { palette, WIDTH } from "../../theme"
 import { Screen } from "../../components/screen/screen"
-import { isNonScrolling, ScreenPresets } from "../../components/screen/screen.presets"
+import { isNonScrolling } from "../../components/screen/screen.presets"
+
+export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
 
 const FULL: ViewStyle = { flex: 1 }
 
 const FULL_WITH_SCROLLING: ViewStyle = { width: "100%", height: "auto" }
 
 const BASIC_BACKGROUND_PADDING: FlexStyle = {
-  paddingHorizontal: WIDTH * 16,
+  paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 
 export const ScreenRootView = (props) => {
