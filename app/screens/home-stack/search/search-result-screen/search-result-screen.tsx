@@ -22,21 +22,11 @@ export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(({ navigation, route }) => {
   //? drop down 클릭 여부
-  // const [isOpen, setIsOpen] = useState(false)
-
-  // const [petsitters, setPetsitters] = useState([])
-
-  // - isOpen, petsitters를 따로 관리 -> handlePress에서 둘의 state값 변화를 동시에 줄 수 없음(?)
-  // - 하나의 객체로 묶어서 관리 (둘의 state 값 변화를 동시에 관리)
-  //TODO 만약 이 방식을 채택하게 된다면, state 이름 변경할 것.
-  const [temp, setTemp] = useState({
-    isOpen: false, //? dropdown 클릭 여부
-    petsitters: [],
-  })
+  const [isOpen, setIsOpen] = useState(false)
+  const [petsitters, setPetsitters] = useState([])
 
   useLayoutEffect(() => {
-    // setPetsitters(_petsitters)
-    setTemp({ isOpen: false, petsitters: _petsitters })
+    setPetsitters(_petsitters)
   }, [])
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
@@ -79,15 +69,8 @@ export const SearchResultScreen: FC<
         break
     }
 
-    //? 두 state 변경을 동시에 할 수 없음 (?)
-    // setIsOpen(!isOpen)
-    // setPetsitters(_petsitters)
-
-    setTemp((prev) => ({
-      isOpen: !prev.isOpen,
-      petsitters: _petsitters,
-    }))
-
+    setIsOpen(false)
+    setPetsitters(_petsitters)
     setCurrentOption(optionValue)
   }, [])
 
@@ -165,17 +148,13 @@ export const SearchResultScreen: FC<
         >
           {/* //? title */}
           <PreBol18 text="검색결과" style={{ alignSelf: "flex-start" }} />
+
           {/* //? sort button */}
           <SelectOptionDropdownBox
             onPress={() => {
-              // setIsOpen(!isOpen)
-              setTemp((prev) => ({
-                ...prev,
-                isOpen: !prev.isOpen,
-              }))
+              setIsOpen(!isOpen)
             }}
-            // isOpen={isOpen}
-            isOpen={temp.isOpen}
+            isOpen={isOpen}
             logoSrc={IMAGES.list_bars}
             logoStyle={{
               width: WIDTH * 16,
@@ -186,7 +165,8 @@ export const SearchResultScreen: FC<
             handlePress={handlePress}
             currentOption={currentOption}
             style={{
-              backgroundColor: palette.white,
+              // backgroundColor: palette.white,
+              alignSelf: "flex-start",
             }}
           />
         </Row>
@@ -212,8 +192,7 @@ export const SearchResultScreen: FC<
           }}
         >
           <Animated.FlatList
-            // data={petsitters}
-            data={temp.petsitters}
+            data={petsitters}
             renderItem={({ item, index }) => (
               <SitterProfileCard
                 key={item.id}
@@ -225,7 +204,7 @@ export const SearchResultScreen: FC<
                 desc={item.desc}
                 onPress={() => console.warn("Hello")}
                 style={
-                  index < temp.petsitters.length - 1
+                  index < petsitters.length - 1
                     ? { marginTop: HEIGHT * 20 }
                     : { marginVertical: HEIGHT * 20 }
                 }

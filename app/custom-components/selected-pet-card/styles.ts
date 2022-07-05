@@ -4,11 +4,11 @@ import { CARE_NATURAL_BLUE } from "../../theme/palette"
 
 export const styles = StyleSheet.create({
   root: {
-    width: "100%",
+    width: WIDTH * 318,
     height: HEIGHT * 78,
+    alignSelf: "center",
     backgroundColor: "#FFFFFF",
     // backgroundColor: "red",
-    paddingHorizontal: WIDTH * 16,
   },
   infoContainer: {
     width: "auto",
