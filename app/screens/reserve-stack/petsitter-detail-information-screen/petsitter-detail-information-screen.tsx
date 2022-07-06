@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useState, useEffect } from "react"
 import {
   Comment,
   FullWidthSizeImagesBoxWithIndicator,
@@ -12,6 +12,7 @@ import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
+import axios from "axios"
 
 const commentsDummy = [
   {
@@ -46,9 +47,22 @@ const commentsDummy = [
   },
 ]
 
+const baseURL = "https://jsonplaceholder.typicode.com/posts/1"
+
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
+  const [post, setPost] = React.useState(null)
+
+  useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setPost(response.data)
+    })
+  }, [])
+
+  if (!post) return null
+  console.log(post)
+
   return (
     <ScreenRootView
       testID="testetst"
