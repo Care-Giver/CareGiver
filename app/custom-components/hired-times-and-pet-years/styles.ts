@@ -19,4 +19,10 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
+
+  VERTICAL_LINE: {
+    width: WIDTH * 2,
+    height: HEIGHT * 44,
+    backgroundColor: LIGHT_LINE,
+  },
 })
