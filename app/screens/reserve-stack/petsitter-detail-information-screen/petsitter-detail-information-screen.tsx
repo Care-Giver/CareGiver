@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react"
+import React, { FC } from "react"
 import {
   Comment,
   FullWidthSizeImagesBoxWithIndicator,
@@ -12,7 +12,8 @@ import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
-import axios from "axios"
+import { Button, Pressable } from "react-native"
+import { apiTest, callApi, searchPetSitter } from "../../../services/api/api-test"
 
 const commentsDummy = [
   {
@@ -47,21 +48,42 @@ const commentsDummy = [
   },
 ]
 
-const baseURL = "https://jsonplaceholder.typicode.com/posts/1"
+// const apiTest = () => {
+//   const baseURL = "https://jsonplaceholder.typicode.com/posts/1"
+//   const [post, setPost] = useState(null)
+
+//   useEffect(() => {
+//     axios.get(baseURL).then((response) => {
+//       setPost(response.data)
+//     })
+//   }, [])
+
+//   if (!post) return null
+//   console.log(post)
+
+//   return post
+// }
 
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
-  const [post, setPost] = React.useState(null)
+  // apiTest()
+  // searchPetSitter()
 
-  useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setPost(response.data)
-    })
-  }, [])
+  let body = {
+    lat: 37.48,
+    lng: 127.15,
+    startTime: "2022-07-04T20:13:40",
+    endTime: "2022-07-04T22:13:41",
+    petIds: [1, 3],
+    maxDistance: 10,
+    page: 0
+  }
 
-  if (!post) return null
-  console.log(post)
+  console.log(typeof body, JSON.stringify(body))
+
+
+  callApi("get", "/pet-sitters/search", JSON.stringify(body))
 
   return (
     <ScreenRootView
@@ -106,6 +128,15 @@ export const PetsitterDetailInformationScreen: FC<
           reply={item.reply}
         />
       ))}
+
+      {/* <Pressable
+        onPress={() => {
+          // searchPetSitter()
+          apiTest()
+          // alert("dd")
+        }}
+        style={{ width: 200, height: 100, backgroundColor: "red" }}
+      /> */}
     </ScreenRootView>
   )
 })
