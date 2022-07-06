@@ -23,6 +23,7 @@ import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
+import ViewAllReviewsScreen from "../screens/reserve-stack/view-all-reviews-screen/view-all-reviews-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -46,6 +47,7 @@ export type NavigatorParamList = {
   "search-result": undefined
   "test-map-screen": undefined
   "petsitter-detail-information-screen": undefined
+  "view-all-reviews-screen": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -116,6 +118,8 @@ const AppStack = () => {
           // headerTitle: "",
         }}
       />
+
+      <Stack.Screen name="view-all-reviews-screen" component={ViewAllReviewsScreen} />
 
       {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
