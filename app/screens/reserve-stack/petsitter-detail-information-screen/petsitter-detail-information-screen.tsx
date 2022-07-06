@@ -38,7 +38,7 @@ export const PetsitterDetailInformationScreen: FC<
         }}
       />
 
-      <HiredTimesAndPetYears />
+      <HiredTimesAndPetYears /*style={{ marginTop: HEIGHT * 20 }}*/ />
     </ScreenRootView>
   )
 })
