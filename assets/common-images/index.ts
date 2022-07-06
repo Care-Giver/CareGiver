@@ -6,6 +6,7 @@
   calendar: require('../common-images/calendar.png'),
   care_giver_logo_162x20: require('../common-images/care_giver_logo_162x20.png'),
   default_pet_image_60: require('../common-images/default_pet_image_60.png'),
+  default_profile_image_comment: require('../common-images/default_profile_image_comment.png'),
   deselect_checkbox: require('../common-images/deselect_checkbox.png'),
   empty_12: require('../common-images/empty_12.png'),
   empty_heart: require('../common-images/empty_heart.png'),
@@ -17,6 +18,7 @@
   right_arrow_grey: require('../common-images/right_arrow_grey.png'),
   select_checkbox: require('../common-images/select_checkbox.png'),
   timer: require('../common-images/timer.png'),
+  vertical_3_dots: require('../common-images/vertical_3_dots.png'),
   x_grey: require('../common-images/x_grey.png')
 }
 

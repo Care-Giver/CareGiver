@@ -1,8 +1,12 @@
-import { View, Text, FlatList } from "react-native"
+import { View, Image, FlatList, Pressable } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
 import { DEVICE_SCREEN_WIDTH, HEIGHT, WIDTH } from "../../theme"
-import { PreReg14 } from "../custom-texts/custom-texts"
+import { PreReg12, PreReg14 } from "../custom-texts/custom-texts"
+import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "../../theme/palette"
+import { Row } from "../boxes/basics/row"
+import IMAGES from "../../../assets/common-images"
+import { DivisionLine } from "../division-line"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -45,9 +49,33 @@ export const Comment = (props) => {
   const { style: viewStyle } = props
   const { userId, desc, createAt, updatedAt, reply } = props
 
+  const date = Date
+
   return (
     <View style={[styles.root, viewStyle]}>
-      <PreReg14 text={userId} />
+      <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} />
+
+      {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
+      <Row style={{ marginTop: HEIGHT * 13 }}>
+        <Image source={IMAGES.default_profile_image_comment} style={styles.profileImage} />
+        <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 8 }} />
+        <PreReg12
+          text={createAt}
+          color={BODY}
+          style={{ marginLeft: "auto", marginRight: WIDTH * 13 }}
+        />
+        <Pressable
+          onPress={() => {
+            alert("하위")
+          }}
+        >
+          <Image source={IMAGES.vertical_3_dots} style={styles.threeDots} />
+        </Pressable>
+      </Row>
+
+      {/* //* 댓글 본문 */}
+      <PreReg14 text={desc} color={HEAD_LINE} numberOfLines={2} style={styles.desc} />
+      <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} style={{ marginTop: "auto" }} />
     </View>
   )
 }

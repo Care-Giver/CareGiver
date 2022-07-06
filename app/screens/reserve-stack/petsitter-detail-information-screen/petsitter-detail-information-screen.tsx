@@ -12,9 +12,10 @@ import { HEADER_HEIGHT } from "../../../theme"
 const commentsDummy = [
   {
     userId: "유저닉네임",
-    desc: "안녕하세요 나는 내용입니다",
+    desc:
+      "안녕하세요, 펫시터님! 몇가지 궁금한 점이 있어서 여쭤보려고 하는데 어디로 연락을 드려야 편하실까요~?? 편하신 연락처 알려알려알려알려",
     createAt: "2022-03-22T11:30",
-    updatedAt: "안녕하세요 나는 내용입니다",
+    updatedAt: "2022-04-01T13:50",
     reply: false,
   },
 ]

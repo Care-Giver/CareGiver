@@ -9,4 +9,18 @@ export const styles = StyleSheet.create({
     height: HEIGHT * 121,
     backgroundColor: "pink",
   },
+  profileImage: {
+    width: WIDTH * 28,
+    height: HEIGHT * 28,
+  },
+  threeDots: {
+    width: WIDTH * 3,
+    height: HEIGHT * 14,
+  },
+  desc: {
+    marginTop: HEIGHT * 10,
+    backgroundColor: "yellow",
+    // maxWidth: WIDTH * 342,
+    marginRight: WIDTH * 13,
+  },
 })
