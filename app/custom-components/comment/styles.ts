@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   root: {
     width: WIDTH * 358,
     height: HEIGHT * 121,
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
   },
   profileImage: {
     width: WIDTH * 28,
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   },
   desc: {
     marginTop: HEIGHT * 10,
-    backgroundColor: "yellow",
+    // backgroundColor: "yellow",
     // maxWidth: WIDTH * 342,
     marginRight: WIDTH * 13,
   },
