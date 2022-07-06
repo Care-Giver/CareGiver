@@ -19,6 +19,7 @@ export * from "./select-pet-item/select-pet-item"
 export * from "./select-pet-item/styles"
 export * from "./blue-checkbox/blue-checkbox"
 export * from "./full-width-size-images-box-with-indicator/full-width-size-images-box-with-indicator"
+export * from "./hired-times-and-pet-years/hired-times-and-pet-years"
 
 //* headers
 export * from "./service-type-indicator-header/service-type-indicator-header"

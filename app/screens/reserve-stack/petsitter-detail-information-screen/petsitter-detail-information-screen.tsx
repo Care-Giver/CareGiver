@@ -1,5 +1,9 @@
 import React, { FC } from "react"
-import { FullWidthSizeImagesBoxWithIndicator, ScreenRootView } from "../../../custom-components"
+import {
+  FullWidthSizeImagesBoxWithIndicator,
+  HiredTimesAndPetYears,
+  ScreenRootView,
+} from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
@@ -33,6 +37,8 @@ export const PetsitterDetailInformationScreen: FC<
           marginTop: 0,
         }}
       />
+
+      <HiredTimesAndPetYears />
     </ScreenRootView>
   )
 })
