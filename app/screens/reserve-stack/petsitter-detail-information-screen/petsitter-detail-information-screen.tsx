@@ -13,7 +13,7 @@ import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
 import { Button, Pressable } from "react-native"
-import { apiTest, callApi, searchPetSitter } from "../../../services/api/api-test"
+import { apiTest, apiTestJustNoBody, apiTestWithBody, callApi, searchPetSitter } from "../../../services/api/api-test"
 
 const commentsDummy = [
   {
@@ -80,10 +80,19 @@ export const PetsitterDetailInformationScreen: FC<
     page: 0
   }
 
-  console.log(typeof body, JSON.stringify(body))
+  // console.log(typeof body, JSON.stringify(body))
 
 
-  callApi("get", "/pet-sitters/search", JSON.stringify(body))
+  // callApi("get", "/pet-sitters/search", JSON.stringify(body))
+  // callApi("get", "/user/me", JSON.stringify(body))
+  // callApi("get", "/pet-sitters/search", null, JSON.stringify(body))
+  // callApi("get", "/pet-sitters/search", null, body)
+
+  const res = callApi("get", "/pet-sitter/1", null, null)
+  // console.log(res)
+
+  // apiTestJustNoBody()
+  apiTestWithBody()
 
   return (
     <ScreenRootView
