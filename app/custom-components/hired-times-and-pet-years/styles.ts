@@ -8,9 +8,15 @@ export const styles = StyleSheet.create({
     height: HEIGHT * 80,
     backgroundColor: palette.white,
     flexDirection: "row",
-    //alignItems: "center",
+    alignItems: "center",
     borderWidth: 2,
     borderRadius: 15,
     borderColor: LIGHT_LINE,
+    justifyContent: "space-evenly",
+  },
+
+  TEXT_ALIGNMENT: {
+    flexDirection: "column",
+    alignItems: "center",
   },
 })
