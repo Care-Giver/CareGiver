@@ -4,7 +4,7 @@ import { WIDTH, HEIGHT, palette } from "../../theme"
 
 export const styles = StyleSheet.create({
   ROW_ROUNDED_LARGE_BOX: {
-    width: WIDTH * 358,
+    width: WIDTH * 358, //"100%",
     height: HEIGHT * 80,
     backgroundColor: palette.white,
     flexDirection: "row",
@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
   TEXT_ALIGNMENT: {
     flexDirection: "column",
     alignItems: "center",
+    flex: 1,
   },
 
   VERTICAL_LINE: {
