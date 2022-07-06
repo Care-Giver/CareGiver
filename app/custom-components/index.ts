@@ -20,6 +20,8 @@ export * from "./select-pet-item/styles"
 export * from "./blue-checkbox/blue-checkbox"
 export * from "./full-width-size-images-box-with-indicator/full-width-size-images-box-with-indicator"
 export * from "./comment/comment"
+export * from "./caregiver-certificate/caregiver-certificate"
+export * from "./caregiver-service/caregiver-service"
 
 //* headers
 export * from "./service-type-indicator-header/service-type-indicator-header"
