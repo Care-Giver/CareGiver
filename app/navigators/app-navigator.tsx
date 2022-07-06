@@ -20,10 +20,10 @@ import { SearchScreen } from "../screens/home-stack/search/search-screen/search-
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
 import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
-import { PetsitterDetailInformationScreen } from "../screens/petsitter-detail-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
+import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
-import ViewAllReviewsScreen from "../screens/reserve-stack/view-all-reviews-screen/view-all-reviews-screen"
+import ViewAllReviewsScreen from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
