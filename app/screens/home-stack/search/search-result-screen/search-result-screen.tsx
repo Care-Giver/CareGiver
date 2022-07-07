@@ -17,6 +17,7 @@ import {
   HEADER_AREA,
 } from "./animated-header/header-property"
 import { SelectOptionDropdownBox } from "../../../../custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
+import { Divider } from "../../../../custom-components/divider/divider"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
@@ -172,11 +173,17 @@ export const SearchResultScreen: FC<
         </Row>
 
         {/* //? divider */}
-        <View
+        {/* <View
           style={{
             width: "100%",
             height: HEIGHT * 2,
             backgroundColor: LBG,
+            position: "absolute",
+            top: HEIGHT * 47,
+          }}
+        /> */}
+        <Divider
+          style={{
             position: "absolute",
             top: HEIGHT * 47,
           }}

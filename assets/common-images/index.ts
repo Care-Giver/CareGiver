@@ -14,9 +14,13 @@
   gps: require('../common-images/gps.png'),
   list_bars: require('../common-images/list_bars.png'),
   location: require('../common-images/location.png'),
+  profile_default: require('../common-images/profile_default.png'),
   rating_star: require('../common-images/rating_star.png'),
+  rating_star_empty: require('../common-images/rating_star_empty.png'),
+  rating_star_half: require('../common-images/rating_star_half.png'),
   right_arrow_grey: require('../common-images/right_arrow_grey.png'),
   select_checkbox: require('../common-images/select_checkbox.png'),
+  three_dots: require('../common-images/three_dots.png'),
   timer: require('../common-images/timer.png'),
   vertical_3_dots: require('../common-images/vertical_3_dots.png'),
   x_grey: require('../common-images/x_grey.png')
