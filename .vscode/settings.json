@@ -75,5 +75,6 @@
             "italic": false
           }
     ],
-    "workbench.iconTheme": "vs-seti"
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Material Theme Darker High Contrast"
 }
