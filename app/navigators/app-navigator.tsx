@@ -23,7 +23,7 @@ import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
-import ViewAllReviewsScreen from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
+import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -47,7 +47,7 @@ export type NavigatorParamList = {
   "search-result": undefined
   "test-map-screen": undefined
   "petsitter-detail-information-screen": undefined
-  "view-all-reviews-screen": undefined
+  "view-all-reviews": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -62,7 +62,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="petsitter-detail-information-screen"
+      initialRouteName="view-all-reviews"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -118,8 +118,14 @@ const AppStack = () => {
           // headerTitle: "",
         }}
       />
-
-      <Stack.Screen name="view-all-reviews-screen" component={ViewAllReviewsScreen} />
+      {/* //* 리뷰 전체보기 */}
+      <Stack.Screen
+        name="view-all-reviews"
+        component={ViewAllReviewsScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
       {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
