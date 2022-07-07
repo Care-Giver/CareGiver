@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native"
 import { WIDTH, HEIGHT, palette } from "../../theme"
 
 export const styles = StyleSheet.create({
-  //*전체가 담기는 큰 컴포넌트 박스
+  //* 전체가 담기는 큰 컴포넌트 박스
+  //FEEDBACK: 가장 바닥 스타일링은 root 로 이름 짓습니다
   rowRoundedLargeBox: {
     width: WIDTH * 358, //"100%",
     height: HEIGHT * 80,
@@ -17,7 +18,6 @@ export const styles = StyleSheet.create({
   },
 
   //* 세로 두 줄의 텍스트를 묶는 스타일
-
   textAlignment: {
     flexDirection: "column",
     alignItems: "center",
@@ -25,7 +25,6 @@ export const styles = StyleSheet.create({
   },
 
   //* 중간 세로선 divider 스타일
-
   verticalDivider: {
     width: WIDTH * 2,
     height: HEIGHT * 44,
