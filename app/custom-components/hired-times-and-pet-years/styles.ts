@@ -4,8 +4,7 @@ import { WIDTH, HEIGHT, palette } from "../../theme"
 
 export const styles = StyleSheet.create({
   //* 전체가 담기는 큰 컴포넌트 박스
-  //FEEDBACK: 가장 바닥 스타일링은 root 로 이름 짓습니다
-  rowRoundedLargeBox: {
+  root: {
     width: WIDTH * 358, //"100%",
     height: HEIGHT * 80,
     backgroundColor: palette.white,

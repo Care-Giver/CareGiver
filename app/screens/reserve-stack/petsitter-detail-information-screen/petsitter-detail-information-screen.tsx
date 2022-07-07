@@ -11,7 +11,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
+import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
 
 const commentsDummy = [
@@ -47,6 +47,10 @@ const commentsDummy = [
   },
 ]
 
+const hiredTimes = 99
+const petYearsYears = 12
+const petYearsMonths = 4
+
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
@@ -76,7 +80,13 @@ export const PetsitterDetailInformationScreen: FC<
         }}
       />
 
-      <HiredTimesAndPetYears /*style={{ marginTop: HEIGHT * 20 }}*/ />
+      <HiredTimesAndPetYears
+        hiredTimes={hiredTimes}
+        petYearsYears={petYearsYears}
+        petYearsMonths={petYearsMonths}
+        style={{ marginTop: HEIGHT * 10 }}
+      />
+
       {/* //* 댓글 */}
       <Row>
         <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
