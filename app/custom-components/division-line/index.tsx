@@ -3,7 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { HEIGHT } from "../../theme"
 
-export const DivisionLine = ({ color = "red", height = HEIGHT * 2, style }) => {
+export const DivisionLine = ({ color = "red", height = HEIGHT * 2, style = null }) => {
   const COLOR_AND_HEIGHT = {
     backgroundColor: color,
     height: height,
