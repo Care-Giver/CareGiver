@@ -1,5 +1,6 @@
 import React, { FC } from "react"
 import {
+  HiredTimesAndPetYears,
   Comment,
   FullWidthSizeImagesBoxWithIndicator,
   PreBol14,
@@ -75,6 +76,7 @@ export const PetsitterDetailInformationScreen: FC<
         }}
       />
 
+      <HiredTimesAndPetYears /*style={{ marginTop: HEIGHT * 20 }}*/ />
       {/* //* 댓글 */}
       <Row>
         <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />

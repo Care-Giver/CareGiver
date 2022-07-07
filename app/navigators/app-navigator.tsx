@@ -60,7 +60,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="petsitter-detail-information-screen"
+      initialRouteName="home"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
