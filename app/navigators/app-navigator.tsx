@@ -24,6 +24,7 @@ import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsi
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
+import { WriteCommentScreen } from "../screens/petsitter-detail-stack/write-comment-screen/write-comment-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -62,7 +63,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="view-all-reviews"
+      initialRouteName="write-comment-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -129,6 +130,15 @@ const AppStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
+
+      {/* //* 댓글쓰기 */}
+      <Stack.Screen
+        name="write-comment-screen"
+        component={WriteCommentScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
