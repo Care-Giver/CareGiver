@@ -12,8 +12,8 @@ export const CaregiverCertificate = (props) => {
   const { label, detail } = props
 
   return (
-    <View style={[styles.root, viewStyle]}>
-      <Row style={{ marginTop: HEIGHT * 13 }}>
+    <View style={viewStyle}>
+      <Row style={styles.root}>
         {/* //* 뱃지 */}
         <Image source={IMAGES.certificate_badge} style={styles.badgeImage} />
 

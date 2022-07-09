@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   root: {
     width: "auto",
     height: "auto",
+    // height: HEIGHT * 28,
     // backgroundColor: "pink",
   },
   badgeImage: {

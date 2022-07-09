@@ -1,26 +1,16 @@
-import { GIVER_CASUAL_NAVY, CARE_NATURAL_BLUE } from "../../theme/palette"
 import { StyleSheet } from "react-native"
 import { WIDTH, HEIGHT } from "../../theme"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../view-component/view-component"
 
 export const styles = StyleSheet.create({
   root: {
-    width: WIDTH * 358,
-    height: HEIGHT * 121,
-    // backgroundColor: "pink",
-  },
-  profileImage: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
-  },
-  threeDots: {
-    width: WIDTH * 3,
-    height: HEIGHT * 14,
-  },
-  desc: {
-    marginTop: HEIGHT * 10,
+    width: "auto",
+    height: "auto",
+    // height: HEIGHT * 28,
     // backgroundColor: "yellow",
-    // maxWidth: WIDTH * 342,
-    marginRight: WIDTH * 13,
+  },
+  emoji: {
+    marginBottom: HEIGHT * 4, //! 이모지 정렬 고육지책
+    // paddingBottom: HEIGHT * 4,
+    // lineHeight: HEIGHT * 28,
   },
 })
