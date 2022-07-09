@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image, FlatList } from "react-native"
+import { View, Text, Pressable, Image, FlatList, LayoutAnimation } from "react-native"
 import React, { useLayoutEffect, useState } from "react"
 import { Row } from "../boxes/basics/row"
 import { HEIGHT, WIDTH } from "../../theme"
@@ -11,25 +11,27 @@ import { PetProfileCard } from "../pet-profile-card/pet-profile-card"
 import { PetInfoDropdownBox } from "../dropdown-boxes/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
 
-export const ReviewBox = (props: ReviewBoxProps) => {
-  // const profileImg = props.profileImg
-  // const userName = props.userName
-  // const ratings = props.ratings
-  // const createdAt = props.createdAt
-  // const images = props.images
-  // const review = props.review
-  // const pets = props.pets
+export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
+  // const profileImg = profileImg
+  // const userName = userName
+  // const ratings = ratings
+  // const createdAt = createdAt
+  // const images = images
+  // const review = review
+  // const pets = pets
   // ? 리뷰 정보
-  const { profileImg, userName, ratings, createdAt, images, review, pets } = props
-  // ? 스타일
-  const style = props.style
+  const { user, ratings, createdAt, review, pets } = reviewData
+  const userName = user.name
+  const profileImg = user.profileImg ? user.profileImg : IMAGES.profile_default
+  const images = reviewData.images ? reviewData.images : []
+
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
     let formatted =
       date.getFullYear().toString().slice(2) +
       "." +
-      (date.getMonth() < 10 ? "0" : "") +
-      date.getMonth().toString() +
+      (date.getMonth() + 1 < 10 ? "0" : "") +
+      (date.getMonth() + 1).toString() +
       "." +
       (date.getDate() < 10 ? "0" : "") +
       date.getDate().toString()
@@ -41,10 +43,11 @@ export const ReviewBox = (props: ReviewBoxProps) => {
 
   const handlePress = () => {
     setDropdownIsOpen(!dropdownIsOpen)
+    LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
   }
 
   return (
-    <View style={({}, style)}>
+    <View style={[styles.root, viewStyle]}>
       {/* //* 유저 프로필 + 더보기 버튼 */}
       <Row
         style={{
@@ -116,7 +119,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       {/* //* 펫 정보 */}
       <PetInfoDropdownBox
         isOpen={dropdownIsOpen}
-        handlePress={handlePress}
+        onPress={handlePress}
         pets={pets}
         style={{ marginTop: HEIGHT * 20 }}
       />
