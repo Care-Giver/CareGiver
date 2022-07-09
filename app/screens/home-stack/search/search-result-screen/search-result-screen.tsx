@@ -17,7 +17,7 @@ import {
   HEADER_AREA,
 } from "./animated-header/header-property"
 import { SelectOptionDropdownBox } from "../../../../custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
-import { Divider } from "../../../../custom-components/divider/divider"
+import { DivisionLine } from "../../../../custom-components"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
@@ -182,7 +182,8 @@ export const SearchResultScreen: FC<
             top: HEIGHT * 47,
           }}
         /> */}
-        <Divider
+        <DivisionLine
+          color={LBG}
           style={{
             position: "absolute",
             top: HEIGHT * 47,

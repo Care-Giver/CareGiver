@@ -62,7 +62,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="all-reviews-screnn"
+      initialRouteName="all-reviews-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -120,7 +120,7 @@ const AppStack = () => {
       />
       {/* //* 리뷰 전체보기 */}
       <Stack.Screen
-        name="all-reviews-screnn"
+        name="all-reviews-screen"
         component={AllReviewsScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
