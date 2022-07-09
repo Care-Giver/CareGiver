@@ -11,8 +11,8 @@ import IMAGES from "../../../../assets/common-images"
 import { HEIGHT } from "../../../theme"
 import { LBG } from "../../../theme/palette"
 
-export const ViewAllReviewsScreen: FC<
-  StackScreenProps<NavigatorParamList, "view-all-reviews">
+export const AllReviewsScreen: FC<
+  StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
   // ? 리뷰 리스트
   const [reviews, setReviews] = useState([])

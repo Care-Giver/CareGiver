@@ -7,7 +7,7 @@ import { Row } from "../../boxes/basics/row"
 import { PopSem14 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { PetInfoDropdownBoxProps } from "./pet-info-dropdown-box.props"
-import { DivisionLine } from "../../division-line"
+import { DivisionLine } from "../../division-line/division-line"
 import { LBG } from "../../../theme/palette"
 import { WIDTH } from "../../../theme"
 

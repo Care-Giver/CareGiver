@@ -5,7 +5,9 @@
   bell: require('../common-images/bell.png'),
   calendar: require('../common-images/calendar.png'),
   care_giver_logo_162x20: require('../common-images/care_giver_logo_162x20.png'),
+  certificate_badge: require("../common-images/certificate_badge.png"),
   default_pet_image_60: require('../common-images/default_pet_image_60.png'),
+  default_profile_image_comment: require('../common-images/default_profile_image_comment.png'),
   deselect_checkbox: require('../common-images/deselect_checkbox.png'),
   empty_12: require('../common-images/empty_12.png'),
   empty_heart: require('../common-images/empty_heart.png'),
@@ -13,6 +15,7 @@
   gps: require('../common-images/gps.png'),
   list_bars: require('../common-images/list_bars.png'),
   location: require('../common-images/location.png'),
+  more_info: require("../common-images/more_info.png"),
   profile_default: require('../common-images/profile_default.png'),
   rating_star: require('../common-images/rating_star.png'),
   rating_star_empty: require('../common-images/rating_star_empty.png'),
@@ -21,8 +24,9 @@
   select_checkbox: require('../common-images/select_checkbox.png'),
   three_dots: require('../common-images/three_dots.png'),
   timer: require('../common-images/timer.png'),
+  vertical_3_dots: require('../common-images/vertical_3_dots.png'),
   x_grey: require('../common-images/x_grey.png')
 }
 
-//! 예외적으로 export default 허용 
+//! 예외적으로 export default 허용
 export default IMAGES
