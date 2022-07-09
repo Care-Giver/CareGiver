@@ -1,5 +1,6 @@
 import React, { FC } from "react"
 import {
+  CaregiverCertificate,
   Comment,
   FullWidthSizeImagesBoxWithIndicator,
   PreBol14,
@@ -73,6 +74,11 @@ export const PetsitterDetailInformationScreen: FC<
           // marginTop: -HEADER_HEIGHT,
           marginTop: 0,
         }}
+      />
+
+      <CaregiverCertificate
+        label={"반려동물관리사"}
+        detail={"반려동물을 종합적으로 관리할 수 있는 사람에게 수여되는 자격증"}
       />
 
       {/* //* 댓글 */}
