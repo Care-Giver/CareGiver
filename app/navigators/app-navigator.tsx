@@ -19,7 +19,7 @@ import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
-import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
+import { GobackAndTitleHeader, HomeScreenHeader, WriteCommentScreenHeader } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
@@ -136,8 +136,8 @@ const AppStack = () => {
         name="write-comment-screen"
         component={WriteCommentScreen}
         options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
+        header: (props) => <WriteCommentScreenHeader {...props} />,
+         }}
       />
     </Stack.Navigator>
   )
