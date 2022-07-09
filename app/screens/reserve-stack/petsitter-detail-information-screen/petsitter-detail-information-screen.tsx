@@ -9,12 +9,16 @@ import {
   PreBol16,
   Row,
   ScreenRootView,
+  DivisionLine,
+  PreReg14,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
-import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
+import { BODY, LBG, SUB_HEAD_LINE } from "../../../theme/palette"
+import { Divider } from "../../../custom-components/divider/divider"
+import { Pressable, View } from "react-native"
 
 const commentsDummy = [
   {
@@ -53,6 +57,9 @@ const hiredTimes = 99
 const petYearsYears = 12
 const petYearsMonths = 4
 
+const desc =
+  "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
+
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
@@ -81,16 +88,22 @@ export const PetsitterDetailInformationScreen: FC<
           marginTop: 0,
         }}
       />
-      
+
+      {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
       <HiredTimesAndPetYears
+        style={{ marginTop: HEIGHT * 20 }}
         hiredTimes={hiredTimes}
         petYearsYears={petYearsYears}
         petYearsMonths={petYearsMonths}
-        style={{ marginTop: HEIGHT * 10 }}
       />
 
       {/* //* 자격증 */}
+      <Row>
+        <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
+      </Row>
+      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
       <CaregiverCertificate
+        style={{ marginTop: HEIGHT * 8 }}
         label={"반려동물관리사"}
         detail={"반려동물을 종합적으로 관리할 수 있는 사람에게 수여되는 자격증"}
       />
@@ -100,31 +113,63 @@ export const PetsitterDetailInformationScreen: FC<
       />
 
       {/* //* 서비스 */}
-      <Row>
+      <Row style={{ marginTop: HEIGHT * 60 }}>
+        <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
+      </Row>
+      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+      <Row style={{ marginTop: HEIGHT * 12 }}>
         <CaregiverService emoji={"🦮"} label={"산책"} />
         <CaregiverService emoji={"🦴"} label={"간식주기"} />
         <CaregiverService emoji={"🛁"} label={"목욕시키기"} />
       </Row>
 
-
+      {/* //* 자기소개 */}
+      <Row style={{ marginTop: HEIGHT * 28 }}>
+        <PreBol16 text={"자기소개"} color={SUB_HEAD_LINE} />
+        <PreBol14
+          text={"전체보기 >"}
+          color={BODY}
+          style={{ marginLeft: "auto" }}
+          onPress={() => {
+            alert("전체보기")
+          }}
+        />
+      </Row>
+      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+      <PreReg14
+        text={desc}
+        color={SUB_HEAD_LINE}
+        numberOfLines={8}
+        style={{ marginTop: HEIGHT * 10 }}
+      />
 
       {/* //* 댓글 */}
-      <Row>
+      <Row style={{ marginTop: HEIGHT * 60 }}>
         <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
-        <PreBol14 text={"전체보기 >"} color={BODY} style={{ marginLeft: "auto" }} />
-      </Row>
-
-      {commentsDummy.slice(0, 3).map((item, index) => (
-        <Comment
-          key={index}
-          style={{ marginTop: HEIGHT * -1 }}
-          userId={item.userId}
-          desc={item.desc}
-          createAt={item.createAt}
-          updatedAt={item.updatedAt}
-          reply={item.reply}
+        <PreBol14
+          text={"전체보기 >"}
+          color={BODY}
+          style={{ marginLeft: "auto" }}
+          onPress={() => {
+            alert("전체보기")
+          }}
         />
-      ))}
+      </Row>
+      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+
+      <View style={{ paddingVertical: HEIGHT * -1 }}>
+        {commentsDummy.slice(0, 3).map((item, index) => (
+          <Comment
+            key={index}
+            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
+            userId={item.userId}
+            desc={item.desc}
+            createAt={item.createAt}
+            updatedAt={item.updatedAt}
+            reply={item.reply}
+          />
+        ))}
+      </View>
     </ScreenRootView>
   )
 })
