@@ -18,8 +18,9 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
-import { BODY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
+import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
 import { Pressable, View } from "react-native"
+import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
   {
@@ -53,6 +54,44 @@ const commentsDummy = [
     reply: false,
   },
 ]
+
+const servicesDummy = [
+  {
+    emoji: "🦮",
+    label: "산책",
+  },
+  {
+    emoji: "🦴",
+    label: "간식주기",
+  },
+  {
+    emoji: "🛁",
+    label: "목욕시키기",
+  },
+]
+
+const services = (services) => {
+  let arr = []
+
+  for (let index = 0; index < services.length; index++) {
+    arr.push(services[index])
+    index === services.length - 1 ? null : arr.push("division-line-vertical")
+  }
+
+  return arr.map((item, index) =>
+    item === "division-line-vertical" ? (
+      <DivisionLineVertical
+        color={DBG}
+        height={HEIGHT * 16}
+        style={{ marginHorizontal: WIDTH * 10 }}
+        key={index}
+      />
+    ) : (
+      <CaregiverService emoji={item.emoji} label={item.label} key={index} />
+    ),
+  )
+  // console.log(arr)
+}
 
 const hiredTimes = 99
 const petYearsYears = 12
@@ -128,12 +167,7 @@ export const PetsitterDetailInformationScreen: FC<
         <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
       </Row>
       <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
-      <Row style={{ marginTop: HEIGHT * 12 }}>
-        <CaregiverService emoji={"🦮"} label={"산책"} />
-        <CaregiverService emoji={"🦴"} label={"간식주기"} />
-        <CaregiverService emoji={"🛁"} label={"목욕시키기"} />
-      </Row>
+      <Row style={{ marginTop: HEIGHT * 12 }} children={services(servicesDummy)} />
 
       {/* //* 자기소개 */}
       <Row style={{ marginTop: HEIGHT * 28 }}>
