@@ -7,6 +7,12 @@ export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-bu
 export * from "./buttons/conditional-button/conditional-button"
 export * from "./buttons/row-rounded-button/row-rounded-button"
 
+//* headers
+export * from "./service-type-indicator-header/service-type-indicator-header"
+export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
+export * from "./screen-headers/home-screen-header/home-screen-header"
+
+//* others
 export * from "./view-component/view-component"
 export * from "./service-choice/service-choice-button/service-choice-button"
 export * from "./sitter-profile/sitter-profile-button/sitter-profile-button"
@@ -23,8 +29,4 @@ export * from "./hired-times-and-pet-years/hired-times-and-pet-years"
 export * from "./comment/comment"
 export * from "./caregiver-certificate/caregiver-certificate"
 export * from "./caregiver-service/caregiver-service"
-
-//* headers
-export * from "./service-type-indicator-header/service-type-indicator-header"
-export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
-export * from "./screen-headers/home-screen-header/home-screen-header"
+export * from "./caregiver-name-star-review/caregiver-name-star-review"

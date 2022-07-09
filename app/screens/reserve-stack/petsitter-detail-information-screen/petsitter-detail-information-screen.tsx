@@ -11,6 +11,7 @@ import {
   ScreenRootView,
   DivisionLine,
   PreReg14,
+  CaregiverNameStarReview,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
@@ -18,7 +19,6 @@ import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
 import { BODY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
 import { Pressable, View } from "react-native"
-import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
   {
@@ -89,6 +89,16 @@ export const PetsitterDetailInformationScreen: FC<
         }}
       />
 
+      {/* //* 케어기버 이름/ 별점/ 리뷰  */}
+      <CaregiverNameStarReview
+        style={{ marginTop: HEIGHT * 36 }}
+        caregiverData={{
+          name: "이름 혹은 닉네임",
+          ratings: 4.7,
+          numberOfReviews: 12,
+        }}
+      />
+
       {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
       <HiredTimesAndPetYears
         style={{ marginTop: HEIGHT * 20 }}
@@ -98,7 +108,7 @@ export const PetsitterDetailInformationScreen: FC<
       />
 
       {/* //* 자격증 */}
-      <Row>
+      <Row style={{ marginTop: HEIGHT * 60 }}>
         <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
       </Row>
       <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
