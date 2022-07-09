@@ -11,8 +11,8 @@ import { FilterHeader } from "../../../custom-components/filter-header/filter-he
 import IMAGES from "../../../../assets/common-images"
 import { HEIGHT } from "../../../theme"
 
-export const ViewAllReviewsScreen: FC<
-  StackScreenProps<NavigatorParamList, "view-all-reviews">
+export const AllReviewsScreen: FC<
+  StackScreenProps<NavigatorParamList, "all-reviews-screnn">
 > = observer(({ navigation, route }) => {
   // ? 리뷰 리스트
   const [reviews, setReviews] = useState([])
