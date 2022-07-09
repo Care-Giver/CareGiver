@@ -1,9 +1,10 @@
 import { View, Text, StyleProp, FlexStyle } from "react-native"
 import React from "react"
 import { PreMed14, PreBol16 } from "../custom-texts/custom-texts"
-import { BODY, STRONG_LINE } from "../../theme/palette"
+import { BODY, LIGHT_LINE, STRONG_LINE } from "../../theme/palette"
 import { styles } from "./styles"
 import { HEIGHT } from "../../theme"
+import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 
 export const HiredTimesAndPetYears = (props) => {
   // const hiredTimes = 99
@@ -25,8 +26,10 @@ export const HiredTimesAndPetYears = (props) => {
         <PreMed14 color={BODY} text={"고용된 횟수"} />
         <PreBol16 color={STRONG_LINE} text={hiredTimes + "회"} style={{ marginTop: HEIGHT * 8 }} />
       </View>
+
       {/*//* 세로 중간 divider*/}
-      <View style={styles.verticalDivider}></View>
+      <DivisionLineVertical color={LIGHT_LINE} height={HEIGHT * 44} />
+
       {/*//*  divider 기준 오른쪽 텍스트*/}
       <View style={styles.textAlignment}>
         <PreMed14 color={BODY}>반려동물과 함께한 시간</PreMed14>

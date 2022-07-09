@@ -16,8 +16,9 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
-import { BODY, LBG, SUB_HEAD_LINE } from "../../../theme/palette"
+import { BODY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
 import { Pressable, View } from "react-native"
+import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
   {
@@ -116,6 +117,7 @@ export const PetsitterDetailInformationScreen: FC<
         <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
       </Row>
       <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+
       <Row style={{ marginTop: HEIGHT * 12 }}>
         <CaregiverService emoji={"🦮"} label={"산책"} />
         <CaregiverService emoji={"🦴"} label={"간식주기"} />
