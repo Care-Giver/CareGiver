@@ -6,7 +6,7 @@ import { PreBol12 } from "../../custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 
 const ROOT: ViewStyle = {
-  width: WIDTH * 72,
+  width: WIDTH * 82,
   height: HEIGHT * 21,
   borderRadius: 4,
   backgroundColor: "#F1F1F4",
@@ -33,24 +33,24 @@ const PRESSED_VIEW_STYLE: ViewStyle = {
 }
 
 export const PublicPrivateSwitchButton = ({
-  state: isComeHome,
-  setState: setIsComeHome,
+  state: isPrivate,
+  setState: setIsPrivate,
   style,
 }) => {
   return (
     <View style={[ROOT, style]}>
-      {/*//? 방문 버튼 */}
+      {/*//* 공개 버튼 */}
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
-        children={() => <PreBol12 color={isComeHome ? palette.white : DISABLED} text="공개" />}
-        isPressed={isComeHome}
+        children={() => <PreBol12 color={isPrivate ? palette.white : DISABLED} text="공개" />}
+        isPressed={isPrivate}
         onPress={() => {
           setIsComeHome(true)
         }}
       />
 
-      {/*//? 위탁 버튼 */}
+      {/*//* 비공개 버튼 */}
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
