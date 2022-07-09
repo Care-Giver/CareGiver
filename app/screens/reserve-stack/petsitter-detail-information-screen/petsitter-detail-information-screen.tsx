@@ -17,7 +17,6 @@ import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
 import { BODY, LBG, SUB_HEAD_LINE } from "../../../theme/palette"
-import { Divider } from "../../../custom-components/divider/divider"
 import { Pressable, View } from "react-native"
 
 const commentsDummy = [

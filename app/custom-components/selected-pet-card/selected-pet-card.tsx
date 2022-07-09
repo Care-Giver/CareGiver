@@ -4,7 +4,7 @@ import { styles } from "./styles"
 import { PreBol16, PreReg12, PreReg14 } from "../custom-texts/custom-texts"
 import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../theme/palette"
 import IMAGES from "../../../assets/common-images"
-import { DivisionLine } from "../division-line"
+import { DivisionLine } from "../division-line/division-line"
 import { HEIGHT, WIDTH } from "../../theme"
 import { Row } from "../boxes/basics/row"
 
