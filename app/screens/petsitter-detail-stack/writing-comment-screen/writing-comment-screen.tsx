@@ -9,8 +9,8 @@ import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton } from "../../../custom-components"
 //import { styles } from "../../../custom-components"
 
-export const WriteCommentScreen: FC<
-  StackScreenProps<NavigatorParamList, "write-comment-screen">
+export const WritingCommentScreen: FC<
+  StackScreenProps<NavigatorParamList, "writing-comment-screen">
 > = observer(({ navigation, route }) => {
   // * 헤더 타이틀 설정
   useLayoutEffect(() => {

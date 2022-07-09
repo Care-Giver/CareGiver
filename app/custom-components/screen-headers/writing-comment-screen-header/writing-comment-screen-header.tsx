@@ -21,7 +21,7 @@ const HEADER_ROOT = {
     }),
 }
 
-export const WriteCommentScreenHeader = (props) => {
+export const WritingCommentScreenHeader = (props) => {
   // console.log("TestHeaderTitle props:", props)
 
   const title = props.options.title ? props.options.title : props.route.name

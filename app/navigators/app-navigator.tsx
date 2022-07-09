@@ -22,13 +22,13 @@ import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-sc
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
-  WriteCommentScreenHeader,
+  WritingCommentScreenHeader,
 } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
-import { WriteCommentScreen } from "../screens/petsitter-detail-stack/write-comment-screen/write-comment-screen"
+import { WritingCommentScreen } from "../screens/petsitter-detail-stack/writing-comment-screen/writing-comment-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -137,10 +137,10 @@ const AppStack = () => {
 
       {/* //* 댓글쓰기 */}
       <Stack.Screen
-        name="write-comment-screen"
-        component={WriteCommentScreen}
+        name="writing-comment-screen"
+        component={WritingCommentScreen}
         options={{
-          header: (props) => <WriteCommentScreenHeader {...props} />,
+          header: (props) => <WritingCommentScreenHeader {...props} />,
         }}
       />
     </Stack.Navigator>
