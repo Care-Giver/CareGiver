@@ -12,11 +12,12 @@ import {
   DivisionLine,
   PreReg14,
   CaregiverNameStarReview,
+  ConditionalButton,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { HEADER_HEIGHT, HEIGHT } from "../../../theme"
+import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
 import { BODY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
 import { Pressable, View } from "react-native"
 
@@ -168,7 +169,7 @@ export const PetsitterDetailInformationScreen: FC<
       </Row>
       <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
 
-      <View style={{ paddingVertical: HEIGHT * -1 }}>
+      <View style={{ paddingVertical: HEIGHT * -1, marginBottom: HEIGHT * 120 }}>
         {commentsDummy.slice(0, 3).map((item, index) => (
           <Comment
             key={index}
@@ -181,6 +182,26 @@ export const PetsitterDetailInformationScreen: FC<
           />
         ))}
       </View>
+
+      {/* <ConditionalButton
+        label={"예약 신청하기"}
+        isActivated={true}
+        style={{
+          // marginTop: "auto",
+          // // margin: HEIGHT * 24,
+          // marginBottom: Platform.select({
+          //   ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+          //   android: 0,
+          // }),
+
+          position: "absolute",
+          marginTop: HEIGHT * 1000,
+          marginHorizontal: WIDTH * 16,
+        }}
+        onPress={() => {
+          alert("결제하기 화면으로 이동")
+        }}
+      /> */}
     </ScreenRootView>
   )
 })
