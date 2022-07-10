@@ -1,7 +1,7 @@
 import { View, Image, Platform, Pressable } from "react-native"
 import React from "react"
 import { WIDTH, HEIGHT, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "../../../theme"
-import { PreMed20 } from "../../custom-texts/custom-texts"
+import { PreMed18 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
 
@@ -39,7 +39,7 @@ export const GobackAndTitleHeader = (props) => {
       </Pressable>
 
       {/* //? 타이틀 */}
-      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed20>
+      <PreMed18 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed18>
     </View>
   )
 }
