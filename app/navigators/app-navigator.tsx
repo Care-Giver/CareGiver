@@ -19,7 +19,11 @@ import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
-import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
+import {
+  GobackAndTitleHeader,
+  HomeScreenHeader,
+  AllCommentsScreenHeader,
+} from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
@@ -146,7 +150,7 @@ const AppStack = () => {
         component={AllCommentsScreen}
         options={{
           title: "댓글 전체보기",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => <AllCommentsScreenHeader {...props} />,
         }}
       />
 

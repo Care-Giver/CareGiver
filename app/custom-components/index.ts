@@ -11,6 +11,7 @@ export * from "./buttons/row-rounded-button/row-rounded-button"
 export * from "./service-type-indicator-header/service-type-indicator-header"
 export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
 export * from "./screen-headers/home-screen-header/home-screen-header"
+export * from "./screen-headers/all-comments-screen-header/all-comments-screen-header"
 
 //* others
 export * from "./view-component/view-component"

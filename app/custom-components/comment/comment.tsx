@@ -45,7 +45,7 @@ export class PetSitterReview extends CoreEntity {
   user: User; // 작성자가 삭제되었을때 펫시터 화면에서 리뷰 정보에 누굴 띄워야할까?
 } */
 
-export const Comment = ({ style: viewStyle, key, commentData }) => {
+export const Comment = ({ key, style: viewStyle, commentData }) => {
   const { userId, desc, createdAt, updatedAt, reply } = commentData
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
