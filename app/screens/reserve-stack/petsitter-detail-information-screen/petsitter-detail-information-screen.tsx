@@ -103,6 +103,10 @@ const desc =
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
+  const goToScreen = (screen, params) => {
+    navigation.navigate(screen, params)
+  }
+
   return (
     <ScreenRootView
       testID="testetst"
@@ -177,7 +181,8 @@ export const PetsitterDetailInformationScreen: FC<
           color={BODY}
           style={{ marginLeft: "auto" }}
           onPress={() => {
-            alert("전체보기")
+            goToScreen("caregiver-self-introduction-screen", desc)
+            // goToScreen("caregiver-self-introduction-screen")
           }}
         />
       </Row>
