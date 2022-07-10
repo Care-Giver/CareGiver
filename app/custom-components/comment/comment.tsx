@@ -45,11 +45,24 @@ export class PetSitterReview extends CoreEntity {
   user: User; // 작성자가 삭제되었을때 펫시터 화면에서 리뷰 정보에 누굴 띄워야할까?
 } */
 
-export const Comment = (props) => {
-  const { style: viewStyle } = props
-  const { userId, desc, createAt, updatedAt, reply } = props
+export const Comment = ({ key, style: viewStyle, commentData }) => {
+  const { userId, desc, createdAt, updatedAt, reply } = commentData
 
-  const date = Date
+  // ? 날짜 표기를 YY.MM.DD 형태로 변환
+  const formatDate = (date: Date) => {
+    let formatted =
+      date.getFullYear().toString().slice(2) +
+      "." +
+      (date.getMonth() + 1 < 10 ? "0" : "") +
+      (date.getMonth() + 1).toString() +
+      "." +
+      (date.getDate() < 10 ? "0" : "") +
+      date.getDate().toString()
+    return formatted
+  }
+
+  const _createdAt = new Date(createdAt)
+  const date = formatDate(_createdAt)
 
   return (
     <View style={[styles.root, viewStyle]}>
@@ -60,7 +73,7 @@ export const Comment = (props) => {
         <Image source={IMAGES.default_profile_image_comment} style={styles.profileImage} />
         <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 8 }} />
         <PreReg12
-          text={createAt}
+          text={date}
           color={BODY}
           style={{ marginLeft: "auto", marginRight: WIDTH * 13 }}
         />
@@ -75,6 +88,7 @@ export const Comment = (props) => {
 
       {/* //* 댓글 본문 */}
       <PreReg14 text={desc} color={HEAD_LINE} numberOfLines={2} style={styles.desc} />
+      <PreReg14>key: {key}</PreReg14>
       <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} style={{ marginTop: "auto" }} />
     </View>
   )
