@@ -50,13 +50,6 @@ export const AllReviewsScreen: FC<
                 marginTop: HEIGHT * 12,
               }}
               key={index}
-              // profileImg={item.user.profileImg ? item.user.profileImg : IMAGES.profile_default}
-              // userName={item.user.name}
-              // ratings={item.ratings}
-              // createdAt={item.createdAt}
-              // images={item.images ? item.images : []}
-              // review={item.review}
-              // pets={item.pets}
               reviewData={item}
             />
             <DivisionLine
