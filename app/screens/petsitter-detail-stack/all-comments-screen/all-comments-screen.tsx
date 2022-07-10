@@ -3,9 +3,14 @@ import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { Comment, DivisionLine, ScreenRootView } from "../../../custom-components"
+import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  Comment,
+  DivisionLine,
+  ScreenRootView,
+} from "../../../custom-components"
 import { commentsDummy } from "./dummy-data"
-import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "../../../theme"
+import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "../../../theme"
 import { FilterHeader } from "../../../custom-components/filter-header/filter-header"
 import { LBG } from "../../../theme/palette"
 import { Platform } from "expo-modules-core"
@@ -21,7 +26,13 @@ export const AllCommentsScreen: FC<
         // seletedOption={seletedOption}
       />
 
-      <DivisionLine color={LBG} />
+      <DivisionLine
+        color={LBG}
+        style={{
+          alignSelf: "center",
+          width: DEVICE_SCREEN_WIDTH,
+        }}
+      />
 
       {/* //? 댓글 리스트 */}
       <FlatList
@@ -31,6 +42,7 @@ export const AllCommentsScreen: FC<
             key={item.userId}
             // style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
             commentData={item}
+            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
           />
         )}
         showsVerticalScrollIndicator={false}
