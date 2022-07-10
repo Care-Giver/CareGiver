@@ -25,6 +25,7 @@ import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
 import { CaregiverSelfIntroductionScreen } from "../screens/petsitter-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
+import { AllCommentsScreen } from "../screens/petsitter-detail-stack/all-comments-screen/all-comments-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -50,6 +51,7 @@ export type NavigatorParamList = {
   "petsitter-detail-information-screen": undefined
   "all-reviews-screnn": undefined
   "caregiver-self-introduction-screen": undefined
+  "all-comments-screen": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -134,8 +136,16 @@ const AppStack = () => {
         options={{
           title: "자기소개",
           header: (props) => <GobackAndTitleHeader {...props} />,
-          // headerBackground: (props) => <GobackAndTitleHeader {...props} />,
-          // headerShown: false,
+        }}
+      />
+
+      {/* //* 댓글 전체보기 */}
+      <Stack.Screen
+        name="all-comments-screen"
+        component={AllCommentsScreen}
+        options={{
+          title: "댓글 전체보기",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
