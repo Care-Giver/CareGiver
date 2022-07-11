@@ -67,7 +67,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="write-comment-screen"
+      initialRouteName="writing-comment-screen"
+      //initialRouteName="view-all-reviews"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
