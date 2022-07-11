@@ -16,6 +16,7 @@ import { FilterHeader } from "../../../custom-components/filter-header/filter-he
 import { LBG, white } from "../../../theme/palette"
 import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-components"
+import { PRETENDARD_MEDIUM } from "../../../../assets/fonts"
 //import { styles } from "../../../custom-components"
 
 export const WritingCommentScreen: FC<
@@ -29,6 +30,7 @@ export const WritingCommentScreen: FC<
   }, [])
 
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
+  const [isPublicComment, setIsPublicComment] = useState(true)
 
   if (Platform.OS === "android") {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -59,10 +61,16 @@ export const WritingCommentScreen: FC<
         style={[styles.basic, keyboardStatus === "Keyboard Shown" ? styles.small : styles.basic]}
         multiline
         maxLength={300}
-        placeholder="hi"
-        onSubmitEditing={Keyboard.dismiss}
+        placeholder={
+          "댓글 작성 시 주의사항\n1. 욕설, 비방, 음란성, 도배글 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다.\n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다.\n3. 댓글에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다."
+        }
+        //onSubmitEditing={Keyboard.dismiss}
       />
-      <Text>hihihihihihihihihihi</Text>
+      <PublicPrivateSwitchButton
+        state={isPublicComment}
+        setState={setIsPublicComment}
+        style={{ marginLeft: WIDTH * 16 }}
+      />
     </View>
 
     //</ScreenRootView>
@@ -79,8 +87,11 @@ const styles = StyleSheet.create({
     backgroundColor: LBG,
     borderRadius: 8,
     textAlignVertical: "top",
+    fontFamily: PRETENDARD_MEDIUM,
+    fontSize: 14,
+    lineHeight: 20,
   },
-  big: {
-    height: HEIGHT * 646,
+  small: {
+    height: HEIGHT * 377,
   },
 })

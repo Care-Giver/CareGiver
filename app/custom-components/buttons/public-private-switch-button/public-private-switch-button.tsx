@@ -32,21 +32,17 @@ const PRESSED_VIEW_STYLE: ViewStyle = {
   alignItems: "center",
 }
 
-export const PublicPrivateSwitchButton = ({
-  state: isPrivate,
-  setState: setIsPrivate,
-  style,
-}) => {
+export const PublicPrivateSwitchButton = ({ state: isPublic, setState: setIsPublic, style }) => {
   return (
     <View style={[ROOT, style]}>
       {/*//* 공개 버튼 */}
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
-        children={() => <PreBol12 color={isPrivate ? palette.white : DISABLED} text="공개" />}
-        isPressed={isPrivate}
+        children={() => <PreBol12 color={isPublic ? palette.white : DISABLED} text="공개" />}
+        isPressed={isPublic}
         onPress={() => {
-          setIsComeHome(true)
+          setIsPublic(true)
         }}
       />
 
@@ -54,10 +50,10 @@ export const PublicPrivateSwitchButton = ({
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
-        children={() => <PreBol12 color={!isComeHome ? palette.white : DISABLED} text="비공개" />}
-        isPressed={!isComeHome}
+        children={() => <PreBol12 color={!isPublic ? palette.white : DISABLED} text="비공개" />}
+        isPressed={!isPublic}
         onPress={() => {
-          setIsComeHome(false)
+          setIsPublic(false)
         }}
       />
     </View>
