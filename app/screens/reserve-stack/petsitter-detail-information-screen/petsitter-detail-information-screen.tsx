@@ -212,7 +212,7 @@ export const PetsitterDetailInformationScreen: FC<
             key={index}
             commentData={item}
             numberOfLines={2}
-            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
+            style={{ marginTop: HEIGHT * -1 }}
           />
         ))}
       </View>

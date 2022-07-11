@@ -70,7 +70,7 @@ export const Comment = ({ key, style: viewStyle, numberOfLines, commentData }) =
       <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} />
 
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
-      <Row style={{ marginTop: HEIGHT * 13 }}>
+      <Row style={{ marginTop: HEIGHT * 12 }}>
         <Image source={IMAGES.default_profile_image_comment} style={styles.profileImage} />
         <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 8 }} />
         <PreReg12
@@ -89,8 +89,8 @@ export const Comment = ({ key, style: viewStyle, numberOfLines, commentData }) =
 
       {/* //* 댓글 본문 */}
       <PreReg14 text={desc} color={HEAD_LINE} numberOfLines={_numberOfLines} style={styles.desc} />
-      <PreReg14>key: {key}</PreReg14>
-      <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} style={{ marginTop: "auto" }} />
+      {/* <PreReg14>key: {key}</PreReg14> */}
+      <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} style={{ marginTop: HEIGHT * 32 }} />
     </View>
   )
 }

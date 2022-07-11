@@ -38,11 +38,7 @@ export const AllCommentsScreen: FC<
       <FlatList
         data={commentsDummy}
         renderItem={({ item, index }) => (
-          <Comment
-            key={item.userId}
-            commentData={item}
-            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
-          />
+          <Comment key={item.userId} commentData={item} style={{ marginTop: HEIGHT * -1 }} />
         )}
         showsVerticalScrollIndicator={false}
         style={{
