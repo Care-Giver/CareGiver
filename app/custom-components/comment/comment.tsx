@@ -45,7 +45,7 @@ export class PetSitterReview extends CoreEntity {
   user: User; // 작성자가 삭제되었을때 펫시터 화면에서 리뷰 정보에 누굴 띄워야할까?
 } */
 
-export const Comment = ({ key, style: viewStyle, numberOfLines, commentData }) => {
+export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
   const { userId, desc, createdAt, updatedAt, reply } = commentData
   const _numberOfLines = numberOfLines || undefined
 
@@ -89,7 +89,6 @@ export const Comment = ({ key, style: viewStyle, numberOfLines, commentData }) =
 
       {/* //* 댓글 본문 */}
       <PreReg14 text={desc} color={HEAD_LINE} numberOfLines={_numberOfLines} style={styles.desc} />
-      {/* <PreReg14>key: {key}</PreReg14> */}
       <DivisionLine height={HEIGHT * 1} color={LIGHT_LINE} style={{ marginTop: HEIGHT * 32 }} />
     </View>
   )

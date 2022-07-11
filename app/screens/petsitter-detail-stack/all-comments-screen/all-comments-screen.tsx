@@ -3,12 +3,7 @@ import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import {
-  BASIC_BACKGROUND_PADDING_WIDTH,
-  Comment,
-  DivisionLine,
-  ScreenRootView,
-} from "../../../custom-components"
+import { Comment, DivisionLine, ScreenRootView } from "../../../custom-components"
 import { commentsDummy } from "./dummy-data"
 import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "../../../theme"
 import { FilterHeader } from "../../../custom-components/filter-header/filter-header"
@@ -38,8 +33,9 @@ export const AllCommentsScreen: FC<
       <FlatList
         data={commentsDummy}
         renderItem={({ item, index }) => (
-          <Comment key={item.userId} commentData={item} style={{ marginTop: HEIGHT * -1 }} />
+          <Comment commentData={item} style={{ marginTop: HEIGHT * -1 }} />
         )}
+        keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         style={{
           marginBottom: Platform.select({
