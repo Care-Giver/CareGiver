@@ -7,7 +7,7 @@ export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-bu
 export * from "./buttons/conditional-button/conditional-button"
 export * from "./buttons/row-rounded-button/row-rounded-button"
 export * from "./buttons/public-private-switch-button/public-private-switch-button"
-export * from "./buttons/register-button/register-button"
+export * from "./words-counter/words-counter"
 
 export * from "./view-component/view-component"
 export * from "./service-choice/service-choice-button/service-choice-button"

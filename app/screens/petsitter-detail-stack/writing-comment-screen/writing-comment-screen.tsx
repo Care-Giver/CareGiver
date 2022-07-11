@@ -17,7 +17,7 @@ import { LBG, white } from "../../../theme/palette"
 import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-components"
 import { PRETENDARD_MEDIUM } from "../../../../assets/fonts"
-import { RegisterButton } from "../../../custom-components"
+import { WordsCounter } from "../../../custom-components"
 //import { styles } from "../../../custom-components"
 
 export const WritingCommentScreen: FC<
@@ -48,7 +48,9 @@ export const WritingCommentScreen: FC<
     }
   }
 
-  useEffect(() => {
+  //? useLayoutEffect 가 useEffect 보다 부드러워 보여서 사용했는데 효율적인 운영 측면에서 useEffect 가 더 나은 선택인지 아니면 상관 없는지? 
+
+  useLayoutEffect(() => {
     const showSmallView = Keyboard.addListener("keyboardDidShow", () => {
       setKeyboardStatus("Keyboard Shown")
       LayoutAnimation.configureNext(LayoutAnimation.create(100, "easeInEaseOut", "opacity"))
@@ -63,6 +65,12 @@ export const WritingCommentScreen: FC<
       showBigView.remove()
     }
   }, [])
+
+  useEffect(()=>{
+    WordsCounter({
+      wordCount = 
+    })
+  })
 
   return (
     <ScreenRootView preset="fixed">
@@ -103,4 +111,5 @@ const styles = StyleSheet.create({
   small: {
     height: HEIGHT * 377,
   },
+
 })
