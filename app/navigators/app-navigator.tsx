@@ -122,6 +122,8 @@ const AppStack = () => {
               <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
             </Pressable>
           ),
+          // title: null,
+          headerTitle: "",
         }}
       />
 
