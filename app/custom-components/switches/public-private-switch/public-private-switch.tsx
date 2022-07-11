@@ -48,8 +48,8 @@ export const PublicPrivateSwitchButton = ({ state: isPublic, setState: setIsPubl
 
       {/*//* 비공개 버튼 */}
       <PressableButton
-        defaultViewStyle={DEFAULT_VIEW_STYLE}
-        pressedViewStyle={PRESSED_VIEW_STYLE}
+        defaultViewStyle={[DEFAULT_VIEW_STYLE, { width: WIDTH * 46 }]}
+        pressedViewStyle={[PRESSED_VIEW_STYLE, { width: WIDTH * 46 }]}
         children={() => <PreBol12 color={!isPublic ? palette.white : DISABLED} text="비공개" />}
         isPressed={!isPublic}
         onPress={() => {

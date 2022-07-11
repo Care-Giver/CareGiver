@@ -31,6 +31,13 @@ export const WritingCommentScreen: FC<
 
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   const [isPublicComment, setIsPublicComment] = useState(true)
+  const [wordLength, setWordLength] = useState(null)
+  //let  wordsLength: number
+
+  const wordCount = (words: string) => {
+    setWordLength(words.length)
+    //return wordsLength
+  }
 
   if (Platform.OS === "android") {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -55,8 +62,7 @@ export const WritingCommentScreen: FC<
   }, [])
 
   return (
-    //<ScreenRootView preset="fixed">
-    <View style={{ backgroundColor: "#FFFFFF" }}>
+    <ScreenRootView preset="fixed">
       <TextInput
         style={[styles.basic, keyboardStatus === "Keyboard Shown" ? styles.small : styles.basic]}
         multiline
@@ -64,16 +70,16 @@ export const WritingCommentScreen: FC<
         placeholder={
           "댓글 작성 시 주의사항\n1. 욕설, 비방, 음란성, 도배글 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다.\n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다.\n3. 댓글에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다."
         }
-        //onSubmitEditing={Keyboard.dismiss}
+        onSubmitEditing={Keyboard.dismiss}
+        onChangeText={(texts) => setWordLength(texts.length)}
       />
+      <Text> {wordLength}</Text>
       <PublicPrivateSwitchButton
         state={isPublicComment}
         setState={setIsPublicComment}
-        style={{ marginLeft: WIDTH * 16 }}
+        style={{ marginLeft: WIDTH * 16, marginTop: HEIGHT * 10 }}
       />
-    </View>
-
-    //</ScreenRootView>
+    </ScreenRootView>
   )
 })
 
