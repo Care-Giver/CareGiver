@@ -13,13 +13,14 @@ import {
   PreReg14,
   CaregiverNameStarReview,
   ConditionalButton,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
+import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../theme"
 import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
-import { Pressable, View } from "react-native"
+import { Platform, Pressable, ScrollView, View } from "react-native"
 import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
@@ -108,129 +109,137 @@ export const PetsitterDetailInformationScreen: FC<
   }
 
   return (
-    <ScreenRootView
-      testID="testetst"
-      preset="scroll"
-      //? 스크롤할 때 헤더 투명도 바꾸기. 출처: https://stackoverflow.com/questions/52469579/transparent-background-for-header-using-createstacknavigator-react-native
-      onScroll={(event) => {
-        const headerOpacity =
-          Math.min(Math.max(event.nativeEvent.contentOffset.y / 2, 0) / HEADER_HEIGHT, 1.0) ?? 0.0
-        navigation.setOptions({
-          headerStyle: {
-            elevation: headerOpacity,
-            backgroundColor: `rgba(255,255,255,${headerOpacity})`,
-          },
-        })
-      }}
-      scrollEventThrottle={16}
-      contentInsetAdjustmentBehavior="never"
-    >
-      <FullWidthSizeImagesBoxWithIndicator
+    //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
+    //! 따라서, ScreenRootView 는 fixed 로 한다
+    //! 이에따라, 스크린 엣지 기본 padding 도 컴포넌트마다 각각 적용해야 한다
+    <ScreenRootView preset="fixed" testID="testetst" style={{ paddingHorizontal: 0 }}>
+      {/* //? 예약 신청하기 버튼을 "제외한" 전부 */}
+      <ScrollView
+        // preset="scroll"
+        showsVerticalScrollIndicator={false}
+        //? 스크롤할 때 헤더 투명도 바꾸기. 출처: https://stackoverflow.com/questions/52469579/transparent-background-for-header-using-createstacknavigator-react-native
+        onScroll={(event) => {
+          const headerOpacity =
+            Math.min(Math.max(event.nativeEvent.contentOffset.y / 2, 0) / HEADER_HEIGHT, 1.0) ?? 0.0
+          navigation.setOptions({
+            headerStyle: {
+              elevation: headerOpacity,
+              backgroundColor: `rgba(255,255,255,${headerOpacity})`,
+            },
+          })
+        }}
+        scrollEventThrottle={16}
+        contentInsetAdjustmentBehavior="never"
+      >
+        {/* //* 케어기버 사진들 */}
+        <FullWidthSizeImagesBoxWithIndicator
+          style={{
+            marginTop: 0,
+          }}
+        />
+
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          {/* //* 케어기버 이름/ 별점/ 리뷰  */}
+          <CaregiverNameStarReview
+            style={{ marginTop: HEIGHT * 36 }}
+            caregiverData={{
+              name: "이름 혹은 닉네임",
+              ratings: 4.7,
+              numberOfReviews: 12,
+            }}
+          />
+
+          {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
+          <HiredTimesAndPetYears
+            style={{ marginTop: HEIGHT * 20 }}
+            hiredTimes={hiredTimes}
+            petYearsYears={petYearsYears}
+            petYearsMonths={petYearsMonths}
+          />
+
+          {/* //* 자격증 */}
+          <Row style={{ marginTop: HEIGHT * 60 }}>
+            <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
+          </Row>
+          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <CaregiverCertificate
+            style={{ marginTop: HEIGHT * 8 }}
+            label={"반려동물관리사"}
+            detail={"반려동물을 종합적으로 관리할 수 있는 사람에게 수여되는 자격증"}
+          />
+          <CaregiverCertificate
+            label={"반려동물행동교정사"}
+            detail={"반려동물을 행동교정 행동교정 행동교정 행동교정 행동교정 행동교정"}
+          />
+
+          {/* //* 서비스 */}
+          <Row style={{ marginTop: HEIGHT * 60 }}>
+            <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
+          </Row>
+          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <Row style={{ marginTop: HEIGHT * 12 }} children={services(servicesDummy)} />
+
+          {/* //* 자기소개 */}
+          <Row style={{ marginTop: HEIGHT * 28 }}>
+            <PreBol16 text={"자기소개"} color={SUB_HEAD_LINE} />
+            <PreBol14
+              text={"전체보기 >"}
+              color={BODY}
+              style={{ marginLeft: "auto" }}
+              onPress={() => {
+                goToScreen("caregiver-self-introduction-screen", desc)
+              }}
+            />
+          </Row>
+          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <PreReg14
+            text={desc}
+            color={SUB_HEAD_LINE}
+            numberOfLines={8}
+            style={{ marginTop: HEIGHT * 10 }}
+          />
+
+          {/* //* 댓글 */}
+          <Row style={{ marginTop: HEIGHT * 60 }}>
+            <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
+            <PreBol14
+              text={"전체보기 >"}
+              color={BODY}
+              style={{ marginLeft: "auto" }}
+              onPress={() => {
+                goToScreen("all-comments-screen", commentsDummy)
+              }}
+            />
+          </Row>
+          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+
+          <View style={{ paddingVertical: HEIGHT * -1, marginBottom: HEIGHT * 120 }}>
+            {commentsDummy.slice(0, 3).map((item, index) => (
+              <Comment commentData={item} numberOfLines={2} style={{ marginTop: HEIGHT * -1 }} />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* //? 예약 신청하기 버튼 */}
+      <View
         style={{
-          // marginTop: -HEADER_HEIGHT,
-          marginTop: 0,
+          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+          marginBottom: Platform.select({
+            ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+            android: 0,
+          }),
         }}
-      />
-
-      {/* //* 케어기버 이름/ 별점/ 리뷰  */}
-      <CaregiverNameStarReview
-        style={{ marginTop: HEIGHT * 36 }}
-        caregiverData={{
-          name: "이름 혹은 닉네임",
-          ratings: 4.7,
-          numberOfReviews: 12,
-        }}
-      />
-
-      {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
-      <HiredTimesAndPetYears
-        style={{ marginTop: HEIGHT * 20 }}
-        hiredTimes={hiredTimes}
-        petYearsYears={petYearsYears}
-        petYearsMonths={petYearsMonths}
-      />
-
-      {/* //* 자격증 */}
-      <Row style={{ marginTop: HEIGHT * 60 }}>
-        <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
-      </Row>
-      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-      <CaregiverCertificate
-        style={{ marginTop: HEIGHT * 8 }}
-        label={"반려동물관리사"}
-        detail={"반려동물을 종합적으로 관리할 수 있는 사람에게 수여되는 자격증"}
-      />
-      <CaregiverCertificate
-        label={"반려동물행동교정사"}
-        detail={"반려동물을 행동교정 행동교정 행동교정 행동교정 행동교정 행동교정"}
-      />
-
-      {/* //* 서비스 */}
-      <Row style={{ marginTop: HEIGHT * 60 }}>
-        <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
-      </Row>
-      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-      <Row style={{ marginTop: HEIGHT * 12 }} children={services(servicesDummy)} />
-
-      {/* //* 자기소개 */}
-      <Row style={{ marginTop: HEIGHT * 28 }}>
-        <PreBol16 text={"자기소개"} color={SUB_HEAD_LINE} />
-        <PreBol14
-          text={"전체보기 >"}
-          color={BODY}
-          style={{ marginLeft: "auto" }}
+      >
+        {/* //* 예약 신청하기 버튼*/}
+        {/* <MakeBookingButton
+          pricePerHour={50000}
+          isActivated={true}
           onPress={() => {
-            goToScreen("caregiver-self-introduction-screen", desc)
+            alert("결제하기 화면으로 이동")
           }}
-        />
-      </Row>
-      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-      <PreReg14
-        text={desc}
-        color={SUB_HEAD_LINE}
-        numberOfLines={8}
-        style={{ marginTop: HEIGHT * 10 }}
-      />
-
-      {/* //* 댓글 */}
-      <Row style={{ marginTop: HEIGHT * 60 }}>
-        <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
-        <PreBol14
-          text={"전체보기 >"}
-          color={BODY}
-          style={{ marginLeft: "auto" }}
-          onPress={() => {
-            goToScreen("all-comments-screen", commentsDummy)
-          }}
-        />
-      </Row>
-      <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-
-      <View style={{ paddingVertical: HEIGHT * -1, marginBottom: HEIGHT * 120 }}>
-        {commentsDummy.slice(0, 3).map((item, index) => (
-          <Comment commentData={item} numberOfLines={2} style={{ marginTop: HEIGHT * -1 }} />
-        ))}
+        /> */}
       </View>
-
-      {/* <ConditionalButton
-        label={"예약 신청하기"}
-        isActivated={true}
-        style={{
-          // marginTop: "auto",
-          // // margin: HEIGHT * 24,
-          // marginBottom: Platform.select({
-          //   ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-          //   android: 0,
-          // }),
-
-          position: "absolute",
-          marginTop: HEIGHT * 1000,
-          marginHorizontal: WIDTH * 16,
-        }}
-        onPress={() => {
-          alert("결제하기 화면으로 이동")
-        }}
-      /> */}
     </ScreenRootView>
   )
 })
