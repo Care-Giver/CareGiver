@@ -211,8 +211,9 @@ export const PetsitterDetailInformationScreen: FC<
         {commentsDummy.slice(0, 3).map((item, index) => (
           <Comment
             key={index}
-            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
             commentData={item}
+            numberOfLines={2}
+            style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
           />
         ))}
       </View>

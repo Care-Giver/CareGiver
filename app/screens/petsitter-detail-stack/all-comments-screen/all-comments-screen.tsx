@@ -40,7 +40,6 @@ export const AllCommentsScreen: FC<
         renderItem={({ item, index }) => (
           <Comment
             key={item.userId}
-            // style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
             commentData={item}
             style={{ marginTop: index === 0 ? HEIGHT * -1 : 0 }}
           />
