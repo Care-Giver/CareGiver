@@ -17,27 +17,30 @@ import { LBG, white } from "../../../theme/palette"
 import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-components"
 import { PRETENDARD_MEDIUM } from "../../../../assets/fonts"
+import { RegisterButton } from "../../../custom-components"
 //import { styles } from "../../../custom-components"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
 > = observer(({ navigation, route }) => {
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
+  const [isPublicComment, setIsPublicComment] = useState(true)
+  const [wordLength, setWordLength] = useState(null)
+
   // * 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "댓글 작성",
+      wordsCount: wordLength,
     })
-  }, [])
+  }, [wordLength])
 
-  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
-  const [isPublicComment, setIsPublicComment] = useState(true)
-  const [wordLength, setWordLength] = useState(null)
   //let  wordsLength: number
 
-  const wordCount = (words: string) => {
-    setWordLength(words.length)
-    //return wordsLength
-  }
+  //const wordCount = (words: string) => {
+  //setWordLength(words.length)
+  //return wordsLength
+  //}
 
   if (Platform.OS === "android") {
     if (UIManager.setLayoutAnimationEnabledExperimental) {

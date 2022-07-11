@@ -4,7 +4,7 @@ import { WIDTH, HEIGHT, HEADER_HEIGHT } from "../../../theme"
 import { PreMed20, PreBol32, PreBol16 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
-import { DISABLED } from "../../../theme/palette"
+import { DISABLED, GIVER_CASUAL_NAVY } from "../../../theme/palette"
 
 const HEADER_ROOT = {
   // backgroundColor: "orange",
@@ -25,6 +25,7 @@ export const WritingCommentScreenHeader = (props) => {
   // console.log("TestHeaderTitle props:", props)
 
   const title = props.options.title ? props.options.title : props.route.name
+  const ableToRegister = props.options.wordsCount ? props.options.wordsCount : 0
 
   return (
     <View {...props} style={HEADER_ROOT}>
@@ -49,7 +50,7 @@ export const WritingCommentScreenHeader = (props) => {
           marginRight: WIDTH * 16,
         }}
       >
-        <PreBol16 color={DISABLED} text={"등록"} />
+        <PreBol16 color={ableToRegister > 0 ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
       </Pressable>
     </View>
   )
