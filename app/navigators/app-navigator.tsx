@@ -11,6 +11,7 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
+  StackActions,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
@@ -28,6 +29,7 @@ import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsi
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
+import { MinseonTest } from "../screens/test/minseon-test"
 import { CaregiverSelfIntroductionScreen } from "../screens/petsitter-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
 import { AllCommentsScreen } from "../screens/petsitter-detail-stack/all-comments-screen/all-comments-screen"
 
@@ -53,9 +55,11 @@ export type NavigatorParamList = {
   "search-result": undefined
   "test-map-screen": undefined
   "petsitter-detail-information-screen": undefined
-  "all-reviews-screnn": undefined
+  "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
+  //? test
+  "minseon-test": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -70,6 +74,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
+      // initialRouteName="minseon-test"
       initialRouteName="petsitter-detail-information-screen"
       // initialRouteName="caregiver-self-introduction-screen"
       // initialRouteName="home"
@@ -153,6 +158,15 @@ const AppStack = () => {
         options={{
           title: "댓글 전체보기",
           header: (props) => <AllCommentsScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //? 민선 테스트 */}
+      <Stack.Screen
+        name="minseon-test"
+        component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 

@@ -6,6 +6,7 @@ import { PreMed16, PreReg12 } from "../custom-texts/custom-texts"
 import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme/palette"
 import IMAGES from "../../../assets/common-images"
 import { HEIGHT, WIDTH } from "../../theme"
+import RatingReviewBox from "../rating-review-box/rating-review-box"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
@@ -26,18 +27,7 @@ export const SitterProfileCard = (props: SitterProfileCardProps) => {
           <PreMed16 text={name} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <View style={styles.reviewContainer}>
-            {/* rating */}
-            <Image style={styles.star} source={IMAGES.rating_star} />
-            {/* reviews */}
-            <PreReg12
-              text={"(" + rating + ")"}
-              color={SUB_HEAD_LINE}
-              style={{ marginLeft: WIDTH * 4 }}
-            />
-            <PreReg12 text="|" color={MIDDLE_LINE} style={{ marginHorizontal: WIDTH * 8 }} />
-            <PreReg12 text={"후기 " + review + "개"} color={SUB_HEAD_LINE} />
-          </View>
+          <RatingReviewBox rating={rating} review={review} style={{ marginTop: HEIGHT * 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: HEIGHT * 12 }} />
