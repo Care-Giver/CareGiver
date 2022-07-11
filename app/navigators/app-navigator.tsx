@@ -11,6 +11,7 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
+  StackActions,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
@@ -24,6 +25,7 @@ import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsi
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
+import { MinseonTest } from "../screens/test/minseon-test"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -47,7 +49,9 @@ export type NavigatorParamList = {
   "search-result": undefined
   "test-map-screen": undefined
   "petsitter-detail-information-screen": undefined
-  "all-reviews-screnn": undefined
+  "all-reviews-screen": undefined
+  //? test
+  "minseon-test": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -62,7 +66,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="petsitter-detail-information-screen"
+      initialRouteName="minseon-test"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -122,6 +126,14 @@ const AppStack = () => {
       <Stack.Screen
         name="all-reviews-screen"
         component={AllReviewsScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      <Stack.Screen
+        name="minseon-test"
+        component={MinseonTest}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
