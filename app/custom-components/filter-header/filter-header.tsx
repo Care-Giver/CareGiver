@@ -33,22 +33,24 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
       </View>
 
       {/* //* 필터 버튼 */}
-      <Pressable
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <PreReg12 text={seletedOption} />
-        <Image
-          source={IMAGES.list_bars}
+      {seletedOption && (
+        <Pressable
           style={{
-            width: WIDTH * 16,
-            height: HEIGHT * 16,
-            marginLeft: WIDTH * 5,
+            flexDirection: "row",
+            alignItems: "center",
           }}
-        />
-      </Pressable>
+        >
+          <PreReg12 text={seletedOption} />
+          <Image
+            source={IMAGES.list_bars}
+            style={{
+              width: WIDTH * 16,
+              height: HEIGHT * 16,
+              marginLeft: WIDTH * 5,
+            }}
+          />
+        </Pressable>
+      )}
     </Row>
   )
 }

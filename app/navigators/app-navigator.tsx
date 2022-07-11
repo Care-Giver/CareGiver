@@ -20,12 +20,18 @@ import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
 import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
 import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
 import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
-import { GobackAndTitleHeader, HomeScreenHeader } from "../custom-components"
+import {
+  GobackAndTitleHeader,
+  HomeScreenHeader,
+  AllCommentsScreenHeader,
+} from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
 import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
 import { MinseonTest } from "../screens/test/minseon-test"
+import { CaregiverSelfIntroductionScreen } from "../screens/petsitter-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
+import { AllCommentsScreen } from "../screens/petsitter-detail-stack/all-comments-screen/all-comments-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -50,6 +56,8 @@ export type NavigatorParamList = {
   "test-map-screen": undefined
   "petsitter-detail-information-screen": undefined
   "all-reviews-screen": undefined
+  "caregiver-self-introduction-screen": undefined
+  "all-comments-screen": undefined
   //? test
   "minseon-test": undefined
 }
@@ -66,7 +74,11 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="minseon-test"
+      // initialRouteName="minseon-test"
+      initialRouteName="petsitter-detail-information-screen"
+      // initialRouteName="caregiver-self-introduction-screen"
+      // initialRouteName="home"
+      // initialRouteName="all-reviews-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -105,9 +117,7 @@ const AppStack = () => {
         name="petsitter-detail-information-screen"
         component={PetsitterDetailInformationScreen}
         options={{
-          // headerShown: false,
           headerTransparent: true,
-          // headerTintColor: "red",
           headerLeft: (props) => (
             <Pressable
               onPress={() => {
@@ -115,13 +125,13 @@ const AppStack = () => {
               }}
             >
               <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
-              {console.log("***")}
-              {console.log(props)}
             </Pressable>
           ),
-          // headerTitle: "",
+          // title: null,
+          headerTitle: "",
         }}
       />
+
       {/* //* 리뷰 전체보기 */}
       <Stack.Screen
         name="all-reviews-screen"
@@ -131,6 +141,27 @@ const AppStack = () => {
         }}
       />
 
+      {/* //* 자기소개 전체보기 */}
+      <Stack.Screen
+        name="caregiver-self-introduction-screen"
+        component={CaregiverSelfIntroductionScreen}
+        options={{
+          title: "자기소개",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 댓글 전체보기 */}
+      <Stack.Screen
+        name="all-comments-screen"
+        component={AllCommentsScreen}
+        options={{
+          title: "댓글 전체보기",
+          header: (props) => <AllCommentsScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //? 민선 테스트 */}
       <Stack.Screen
         name="minseon-test"
         component={MinseonTest}

@@ -22,10 +22,12 @@ const IMAGES = {
   rating_star_half: require("../common-images/rating_star_half.png"),
   right_arrow_grey: require("../common-images/right_arrow_grey.png"),
   right_arrow_navy: require("../common-images/right_arrow_navy.png"),
+  search: require("../common-images/search.png"),
   select_checkbox: require("../common-images/select_checkbox.png"),
   three_dots: require("../common-images/three_dots.png"),
   timer: require("../common-images/timer.png"),
   vertical_3_dots: require("../common-images/vertical_3_dots.png"),
+  write_comment: require("../common-images/write_comment.png"),
   x_grey: require("../common-images/x_grey.png"),
 }
 
