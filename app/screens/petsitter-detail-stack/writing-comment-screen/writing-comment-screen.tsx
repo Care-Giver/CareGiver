@@ -8,9 +8,8 @@ import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-components"
 import { PopSem14, PopReg14 } from "../../../custom-components"
 import { styles } from "./styles"
-import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-
-//import { styles } from "../../../custom-components"
+import { Row } from "../../../custom-components"
+//import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -71,8 +70,7 @@ export const WritingCommentScreen: FC<
   //*화면 빈 공간을 만질 때 키보드 없어지는것 구현 위한 TouchableWithoutFeedback
   //? 왜 ScreenRootView 를 사용하면 화면이 오른쪽으로 밀리는가..? View 대신 얘를 사용해야 하는데..
   return (
-    //<TouchableWithoutFeedback onPress={hideKeyboardOnTouch}><View style={{ backgroundColor: "#FFFFFF" }}>
-
+    //<TouchableWithoutFeedback onPress={hideKeyboardOnTouch}>
     <ScreenRootView preset="fixed">
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
@@ -98,26 +96,18 @@ export const WritingCommentScreen: FC<
         value={comment}
       />
       {/* //* 공개/비공개 컴포넌트 + 단어 수 세는 컴포넌트  */}
-      <View style={{ flexDirection: "row" /*paddingTop: HEIGHT * 10*/ }}>
+      <Row style={{ marginTop: HEIGHT * 10 }}>
         {/*//*공개/비공개 컴포넌트 */}
         <PublicPrivateSwitchButton
           state={isPublicComment}
           setState={setIsPublicComment}
-          style={{ marginLeft: WIDTH * 16, marginRight: WIDTH * 233, marginTop: HEIGHT * 10 }}
+          style={{ marginRight: WIDTH * 233 }}
         />
         {/*//*사용자가 입력한 단어 수 */}
-        <PopSem14
-          color={BODY}
-          text={`${wordLength}`}
-          style={{ marginRight: WIDTH * 2, marginTop: HEIGHT * 10 }}
-        />
+        <PopSem14 color={BODY} text={`${wordLength}`} style={{ marginRight: WIDTH * 2 }} />
         {/*//* max 단어수 (여기선 300) */}
-        <PopReg14
-          color={BODY}
-          text={`/300`}
-          style={{ marginRight: WIDTH * 16, marginTop: HEIGHT * 10 }}
-        />
-      </View>
+        <PopReg14 color={BODY} text={`/300`} />
+      </Row>
     </ScreenRootView>
     //</View>
     //</TouchableWithoutFeedback>
