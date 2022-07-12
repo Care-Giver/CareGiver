@@ -111,11 +111,15 @@ export const WritingCommentScreen: FC<
           lineHeight: 20,
           paddingTop: HEIGHT * 20,
           paddingHorizontal: WIDTH * 20,
+
+          //! 여기가 ios 에 따라 텍스트 인풋의 높이를 조절하려고 하는 부분입니답 ..! 
+          //!xd 상의 작은 textInput 세로 높이 377 에서 (유저 키보드 높이 - xd 상 키보드 높이인 303 ) 을 빼면 되지 않을까.. 라는 생각이었습니다. 
           height: if(isKeyboardShow){
             Platform.OS === 'ios' ? HEIGHT*377 - (keyboard.keyboardHeight - HEIGHT * 303 ) : HEIGHT * 377
           } else {
             HEIGHT * 646
           },
+          //!
           
               //keyboardStatus === "Keyboard Shown" ?  styles.smallTextBox : styles.root
 
