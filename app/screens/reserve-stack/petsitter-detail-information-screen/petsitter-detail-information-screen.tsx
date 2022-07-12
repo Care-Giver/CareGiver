@@ -17,7 +17,7 @@ import {
   MakeBookingButton,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../navigators"
+import { navigate, NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../theme"
 import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
@@ -105,10 +105,6 @@ const desc =
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
-  const goToScreen = (screen, params) => {
-    navigation.navigate(screen, params)
-  }
-
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
     //! 따라서, ScreenRootView 는 fixed 로 한다
@@ -188,7 +184,8 @@ export const PetsitterDetailInformationScreen: FC<
               color={BODY}
               style={{ marginLeft: "auto" }}
               onPress={() => {
-                goToScreen("caregiver-self-introduction-screen", desc)
+                //? 자기소개 전체보기 화면으로 이동
+                navigate("caregiver-self-introduction-screen", desc)
               }}
             />
           </Row>
@@ -208,7 +205,8 @@ export const PetsitterDetailInformationScreen: FC<
               color={BODY}
               style={{ marginLeft: "auto" }}
               onPress={() => {
-                goToScreen("all-comments-screen", commentsDummy)
+                //? 댓글 전체보기 화면으로 이동
+                navigate("all-comments-screen", commentsDummy)
               }}
             />
           </Row>

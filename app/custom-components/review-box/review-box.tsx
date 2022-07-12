@@ -105,7 +105,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
               }}
             />
           )}
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={{
             marginBottom: HEIGHT * 8,
