@@ -9,6 +9,8 @@ import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-compo
 import { PopSem14, PopReg14 } from "../../../custom-components"
 import { styles } from "./styles"
 import { Row } from "../../../custom-components"
+import { useKeyboard } from "@react-native-community/hooks"
+
 //import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 export const WritingCommentScreen: FC<
@@ -22,6 +24,11 @@ export const WritingCommentScreen: FC<
   const [comment, setComment] = useState("")
   //*입력된 댓글의 단어 수 세는 변수
   const [wordLength, setWordLength] = useState(0)
+  //*키보드
+  const keyboard = useKeyboard()
+
+  console.log("keyboard isKeyboardShow: ", keyboard.keyboardShown)
+  console.log("keyboard keyboardHeight: ", keyboard.keyboardHeight)
 
   // * 헤더 타이틀 설정 (사용자가 댓글을 입력할때마다 단어수에 따라 헤더의 등록 글자 색 달라짐.)
   useLayoutEffect(() => {
