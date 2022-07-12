@@ -11,8 +11,8 @@ import { styles } from "./styles"
 import { Row } from "../../../custom-components"
 import { useKeyboard } from "@react-native-community/hooks"
 
-//*style sheet imports 잠시 꺼내옴 
-import { LBG } from "../../../theme/palette"
+//*style sheet imports 잠시 꺼내옴
+// import { LBG } from "../../../theme/palette"
 import { PRETENDARD_REGULAR } from "../../../../assets/fonts"
 
 //import { TouchableWithoutFeedback } from "react-native-gesture-handler"
@@ -34,7 +34,7 @@ export const WritingCommentScreen: FC<
   console.log("keyboard isKeyboardShow: ", keyboard.keyboardShown)
   console.log("keyboard keyboardHeight: ", keyboard.keyboardHeight)
 
-  const keyboard = useKeyboard()
+  // const keyboard = useKeyboard()
 
   console.log("keyboard isKeyboardShow: ", keyboard.keyboardShown)
   console.log("keyboard keyboardHeight: ", keyboard.keyboardHeight)
@@ -54,11 +54,14 @@ export const WritingCommentScreen: FC<
       UIManager.setLayoutAnimationEnabledExperimental(true)
     }
   }
- 
-  ScreenRootView.
+
+  console.log(keyboard)
 
   //*키보드 나타날 때 사라질 때 감지 + 에니메이션 (키보드 나타나면 축소된 textInput 사용, 키보드 사라지면 확대된 textInput 사용)
   //? useLayoutEffect 가 useEffect 보다 부드러워 보여서 사용했는데 효율적인 운영 측면에서 useEffect 가 더 나은 선택인지 아니면 상관 없는지?
+  //FEEDBACK: 여기서는, useLayoutEffect 가 더 효율적입니다. useLayoutEffect 과 useEffect 의 차이는 DOM LifeCycle 을 공부하시면
+  //FEEDBACK: 이해에 큰 도움이 될 것 같습니다. 이 문서 꼭 정독해보시길 바랍니다 :) https://blog.logrocket.com/useeffect-vs-uselayouteffect-examples/
+
   //? 아래 코드를 keyboard = useKeyboard()를 사용해 더 간단하게 표기할 수 있나? 그리고 그 방법은..?
 
   useLayoutEffect(() => {
@@ -90,6 +93,18 @@ export const WritingCommentScreen: FC<
     setKeyboardStatus("Keyboard hidden")
     //console.log("touched")
   }
+
+  const handleHeight = () => {
+    let height
+    if (keyboard.keyboardShown) {
+      if (Platform.OS === "ios") height = HEIGHT * 377 - (keyboard.keyboardHeight - HEIGHT * 303)
+      else height = HEIGHT * 377
+    } else {
+      height = HEIGHT * 646
+    }
+    return height
+  }
+
   //*화면 빈 공간을 만질 때 키보드 없어지는것 구현 위한 TouchableWithoutFeedback
   //? 왜 ScreenRootView 를 사용하면 화면이 오른쪽으로 밀리는가..? View 대신 얘를 사용해야 하는데..
   return (
@@ -107,23 +122,34 @@ export const WritingCommentScreen: FC<
           borderRadius: 8,
           textAlignVertical: "top",
           fontFamily: PRETENDARD_REGULAR,
-          fontSize: 14,
-          lineHeight: 20,
+          fontSize: HEIGHT * 14, //FEEDBACK: fontSize, lineHeight 모두 HEIGHT 를 곱해줘야 합니다
+          lineHeight: HEIGHT * 20,
           paddingTop: HEIGHT * 20,
           paddingHorizontal: WIDTH * 20,
 
-          //! 여기가 ios 에 따라 텍스트 인풋의 높이를 조절하려고 하는 부분입니답 ..! 
-          //!xd 상의 작은 textInput 세로 높이 377 에서 (유저 키보드 높이 - xd 상 키보드 높이인 303 ) 을 빼면 되지 않을까.. 라는 생각이었습니다. 
-          height: if(isKeyboardShow){
-            Platform.OS === 'ios' ? HEIGHT*377 - (keyboard.keyboardHeight - HEIGHT * 303 ) : HEIGHT * 377
-          } else {
-            HEIGHT * 646
-          },
-          //!
-          
-              //keyboardStatus === "Keyboard Shown" ?  styles.smallTextBox : styles.root
+          //! 여기가 ios 에 따라 텍스트 인풋의 높이를 조절하려고 하는 부분입니답 ..!
+          //!xd 상의 작은 textInput 세로 높이 377 에서 (유저 키보드 높이 - xd 상 키보드 높이인 303 ) 을 빼면 되지 않을까.. 라는 생각이었습니다.
 
+          //FEEDBACK: 논리는 정확합니다. 다만 문법이 문제였습니다
+          //FEEDBACK: RN 컴포넌트 영역(JSX: https://ko.reactjs.org/docs/introducing-jsx.html)내에서는
+          //FEEDBACK: if-else 문을 쓸 수 없습니다!!
+          //height:  if(isKeyboardShow){
+          //   Platform.OS === 'ios' ? HEIGHT*377 - (keyboard.keyboardHeight - HEIGHT * 303 ) : HEIGHT * 377
+          // } else {
+          //   HEIGHT * 646
+          // },
 
+          //FEEDBACK: 아래처럼, ternary(삼항연산자)로 작성해야 합니다
+          //FEEDBACK: [조건] ? [참일때 실행] : [거짓일때 실행]
+          // height: keyboard.keyboardShown
+          //   ? Platform.OS === "ios"
+          //     ? HEIGHT * 377 - (keyboard.keyboardHeight - HEIGHT * 303)
+          //     : HEIGHT * 377
+          //   : HEIGHT * 646,
+
+          //FEEDBACK: if-else 를 쓰고 싶으면 아예 아래처럼, 따로 함수로 빼서 사용
+          height: handleHeight(),
+          //keyboardStatus === "Keyboard Shown" ?  styles.smallTextBox : styles.root
         }}
         multiline
         maxLength={300}
@@ -132,8 +158,8 @@ export const WritingCommentScreen: FC<
         }
         //? 아래의 코드 (onSubmitEditing) 를 사용해야 할지 말아야 할지를 모르겠음
         //? 아이폰에서 엔터를 눌렀을 때 저장되며 키보드 내려가는 효과 줌 . 하지만
-        //?사용자에게 줄바꿈을 위해 shift + enter 를 눌러야 하는 불편을 줌..
-        //? TouchableWithoutFeedback 과 이 onSubmitEditing 중에 하나를 선택하고 싶음
+        //? 사용자에게 줄바꿈을 위해 shift + enter 를 눌러야 하는 불편을 줌..
+        //? TouchableWithoutFeedback과 이 onSubmitEditing 중에 하나를 선택하고 싶음
         onSubmitEditing={Keyboard.dismiss}
         //*사용자가 댓글 입력시 입력 내용 저장, 입력 길이 계산
         onChangeText={(texts) => {
@@ -142,6 +168,7 @@ export const WritingCommentScreen: FC<
         }}
         value={comment}
       />
+
       {/* //* 공개/비공개 컴포넌트 + 단어 수 세는 컴포넌트  */}
       <Row style={{ marginTop: HEIGHT * 10 }}>
         {/*//*공개/비공개 컴포넌트 */}
@@ -159,13 +186,4 @@ export const WritingCommentScreen: FC<
     //</View>
     //</TouchableWithoutFeedback>
   )
-
-
-
-
-
-
 })
-
-
-
