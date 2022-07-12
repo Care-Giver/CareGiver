@@ -1,6 +1,6 @@
 import React from "react"
 import { ViewStyle, View } from "react-native"
-import { color, WIDTH, HEIGHT, palette } from "../../../theme"
+import { WIDTH, HEIGHT, palette } from "../../../theme"
 import { DISABLED, GIVER_CASUAL_NAVY } from "../../../theme/palette"
 import { PreBol12 } from "../../custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
@@ -46,7 +46,7 @@ export const PublicPrivateSwitchButton = ({ state: isPublic, setState: setIsPubl
         }}
       />
 
-      {/*//* 비공개 버튼 */}
+      {/*//* 비공개 버튼 (디자인에 따라 width 는 override ) */}
       <PressableButton
         defaultViewStyle={[DEFAULT_VIEW_STYLE, { width: WIDTH * 46 }]}
         pressedViewStyle={[PRESSED_VIEW_STYLE, { width: WIDTH * 46 }]}

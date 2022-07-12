@@ -6,6 +6,5 @@ export const styles = StyleSheet.create({
     width: WIDTH * 28,
     height: HEIGHT * 28,
     marginLeft: WIDTH * 16,
-    // backgroundColor: "orange",
   },
 })
