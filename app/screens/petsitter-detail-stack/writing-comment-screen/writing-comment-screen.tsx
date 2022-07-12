@@ -1,7 +1,7 @@
 import { Keyboard, View, TextInput, LayoutAnimation, Platform, UIManager } from "react-native"
 import React, { FC, useLayoutEffect, useState /*useEffect*/ } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../navigators"
+import { NavigatorParamList, RootNavigation } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { BODY } from "../../../theme/palette"
 import { HEIGHT, WIDTH } from "../../../theme"
@@ -9,6 +9,12 @@ import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-compo
 import { PopSem14, PopReg14 } from "../../../custom-components"
 import { styles } from "./styles"
 import { Row } from "../../../custom-components"
+import { useKeyboard } from "@react-native-community/hooks"
+
+//*style sheet imports 잠시 꺼내옴 
+import { LBG } from "../../../theme/palette"
+import { PRETENDARD_REGULAR } from "../../../../assets/fonts"
+
 //import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 
 export const WritingCommentScreen: FC<
@@ -22,6 +28,12 @@ export const WritingCommentScreen: FC<
   const [comment, setComment] = useState("")
   //*입력된 댓글의 단어 수 세는 변수
   const [wordLength, setWordLength] = useState(0)
+
+  const keyboard = useKeyboard()
+
+  console.log("keyboard isKeyboardShow: ", keyboard.keyboardShown)
+  console.log("keyboard keyboardHeight: ", keyboard.keyboardHeight)
+  //let textBoxHeight = 0
 
   // * 헤더 타이틀 설정 (사용자가 댓글을 입력할때마다 단어수에 따라 헤더의 등록 글자 색 달라짐.)
   useLayoutEffect(() => {
@@ -37,17 +49,23 @@ export const WritingCommentScreen: FC<
       UIManager.setLayoutAnimationEnabledExperimental(true)
     }
   }
+ 
+  ScreenRootView.
 
   //*키보드 나타날 때 사라질 때 감지 + 에니메이션 (키보드 나타나면 축소된 textInput 사용, 키보드 사라지면 확대된 textInput 사용)
   //? useLayoutEffect 가 useEffect 보다 부드러워 보여서 사용했는데 효율적인 운영 측면에서 useEffect 가 더 나은 선택인지 아니면 상관 없는지?
+  //? 아래 코드를 keyboard = useKeyboard()를 사용해 더 간단하게 표기할 수 있나? 그리고 그 방법은..?
 
   useLayoutEffect(() => {
     const showSmallView = Keyboard.addListener("keyboardDidShow", () => {
       setKeyboardStatus("Keyboard Shown")
+      //Platform.OS === "ios"? (textBoxHeight = flex:1 - keyboard.keyboardHeight - HEIGHT * 20)
+      //: (textBoxHeight = HEIGHT * 377)*
       LayoutAnimation.configureNext(LayoutAnimation.create(100, "easeInEaseOut", "opacity"))
     })
     const showBigView = Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardStatus("Keyboard hidden")
+      //textBoxHeight = HEIGHT * 646
       LayoutAnimation.configureNext(LayoutAnimation.create(100, "easeInEaseOut", "opacity"))
     })
 
@@ -74,10 +92,30 @@ export const WritingCommentScreen: FC<
     <ScreenRootView preset="fixed">
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
-        style={[
-          styles.root,
-          keyboardStatus === "Keyboard Shown" ? styles.smallTextBox : styles.root,
-        ]}
+        style={{
+          marginTop: HEIGHT * 10,
+          //marginLeft: WIDTH * 16,
+          //marginRight: WIDTH * 12,
+          width: WIDTH * 358,
+          //height: HEIGHT * 646,
+          backgroundColor: LBG,
+          borderRadius: 8,
+          textAlignVertical: "top",
+          fontFamily: PRETENDARD_REGULAR,
+          fontSize: 14,
+          lineHeight: 20,
+          paddingTop: HEIGHT * 20,
+          paddingHorizontal: WIDTH * 20,
+          height: if(isKeyboardShow){
+            Platform.OS === 'ios' ? HEIGHT*377 - (keyboard.keyboardHeight - HEIGHT * 303 ) : HEIGHT * 377
+          } else {
+            HEIGHT * 646
+          },
+          
+              //keyboardStatus === "Keyboard Shown" ?  styles.smallTextBox : styles.root
+
+
+        }}
         multiline
         maxLength={300}
         placeholder={
@@ -112,4 +150,13 @@ export const WritingCommentScreen: FC<
     //</View>
     //</TouchableWithoutFeedback>
   )
+
+
+
+
+
+
 })
+
+
+
