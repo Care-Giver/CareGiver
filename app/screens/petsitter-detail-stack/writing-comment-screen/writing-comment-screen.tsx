@@ -62,66 +62,64 @@ export const WritingCommentScreen: FC<
   //? 그러나 과연 이것이 필요한 기능일지 모르겠음. TouchableWithoutFeedback 을 통해 사용하는데
   //? 리엑트 공식 문서에는 꼭 필요한 경우 아니면 사용을 권장하지 않고 있음
   //? 게다가 헤더에는 이게 적용이 안되어 (방법 궁금) 애매하게 빈 좁은 공간들을 터치해야 먹힘
+  //? + screenRootView 사용시 아예 인식/사용이 안되는것을 발견. 못쓰는 기능일듯.
   const hideKeyboardOnTouch = () => {
     Keyboard.dismiss()
     setKeyboardStatus("Keyboard hidden")
     //console.log("touched")
   }
-
+  //*화면 빈 공간을 만질 때 키보드 없어지는것 구현 위한 TouchableWithoutFeedback
+  //? 왜 ScreenRootView 를 사용하면 화면이 오른쪽으로 밀리는가..? View 대신 얘를 사용해야 하는데..
   return (
-    //*화면 빈 공간을 만질 때 키보드 없어지는것 구현 위한 TouchableWithoutFeedback
-    <TouchableWithoutFeedback onPress={hideKeyboardOnTouch}>
-      <View style={{ backgroundColor: "#FFFFFF" }}>
-        {/* //? 왜 ScreenRootView 를 사용하면 화면이 오른쪽으로 밀리는가..? View 대신 얘를 사용해야 하는데..  */}
-        {/*<ScreenRootView preset="fixed">*/}
+    //<TouchableWithoutFeedback onPress={hideKeyboardOnTouch}><View style={{ backgroundColor: "#FFFFFF" }}>
 
-        {/*//*댓글 입력할 수 있는 textInput box */}
-        <TextInput
-          style={[
-            styles.root,
-            keyboardStatus === "Keyboard Shown" ? styles.smallTextBox : styles.root,
-          ]}
-          multiline
-          maxLength={300}
-          placeholder={
-            "댓글 작성 시 주의사항\n1. 욕설, 비방, 음란성, 도배글 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다.\n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다.\n3. 댓글에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다."
-          }
-          //? 아래의 코드 (onSubmitEditing) 를 사용해야 할지 말아야 할지를 모르겠음
-          //? 아이폰에서 엔터를 눌렀을 때 저장되며 키보드 내려가는 효과 줌 . 하지만
-          //?사용자에게 줄바꿈을 위해 shift + enter 를 눌러야 하는 불편을 줌..
-          //? TouchableWithoutFeedback 과 이 onSubmitEditing 중에 하나를 선택하고 싶음
-          //? onSubmitEditing={Keyboard.dismiss}
-
-          //*사용자가 댓글 입력시 입력 내용 저장, 입력 길이 계산
-          onChangeText={(texts) => {
-            setComment(texts)
-            setWordLength(texts.length)
-          }}
-          value={comment}
+    <ScreenRootView preset="fixed">
+      {/*//*댓글 입력할 수 있는 textInput box */}
+      <TextInput
+        style={[
+          styles.root,
+          keyboardStatus === "Keyboard Shown" ? styles.smallTextBox : styles.root,
+        ]}
+        multiline
+        maxLength={300}
+        placeholder={
+          "댓글 작성 시 주의사항\n1. 욕설, 비방, 음란성, 도배글 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다.\n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다.\n3. 댓글에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다."
+        }
+        //? 아래의 코드 (onSubmitEditing) 를 사용해야 할지 말아야 할지를 모르겠음
+        //? 아이폰에서 엔터를 눌렀을 때 저장되며 키보드 내려가는 효과 줌 . 하지만
+        //?사용자에게 줄바꿈을 위해 shift + enter 를 눌러야 하는 불편을 줌..
+        //? TouchableWithoutFeedback 과 이 onSubmitEditing 중에 하나를 선택하고 싶음
+        onSubmitEditing={Keyboard.dismiss}
+        //*사용자가 댓글 입력시 입력 내용 저장, 입력 길이 계산
+        onChangeText={(texts) => {
+          setComment(texts)
+          setWordLength(texts.length)
+        }}
+        value={comment}
+      />
+      {/* //* 공개/비공개 컴포넌트 + 단어 수 세는 컴포넌트  */}
+      <View style={{ flexDirection: "row" /*paddingTop: HEIGHT * 10*/ }}>
+        {/*//*공개/비공개 컴포넌트 */}
+        <PublicPrivateSwitchButton
+          state={isPublicComment}
+          setState={setIsPublicComment}
+          style={{ marginLeft: WIDTH * 16, marginRight: WIDTH * 233, marginTop: HEIGHT * 10 }}
         />
-        {/* //* 공개/비공개 컴포넌트 + 단어 수 세는 컴포넌트  */}
-        <View style={{ flexDirection: "row" /*paddingTop: HEIGHT * 10*/ }}>
-          {/*//*공개/비공개 컴포넌트 */}
-          <PublicPrivateSwitchButton
-            state={isPublicComment}
-            setState={setIsPublicComment}
-            style={{ marginLeft: WIDTH * 16, marginRight: WIDTH * 233, marginTop: HEIGHT * 10 }}
-          />
-          {/*//*사용자가 입력한 단어 수 */}
-          <PopSem14
-            color={BODY}
-            text={`${wordLength}`}
-            style={{ marginRight: WIDTH * 2, marginTop: HEIGHT * 10 }}
-          />
-          {/*//* max 단어수 (여기선 300) */}
-          <PopReg14
-            color={BODY}
-            text={`/300`}
-            style={{ marginRight: WIDTH * 16, marginTop: HEIGHT * 10 }}
-          />
-        </View>
-        {/*</ScreenRootView>*/}
+        {/*//*사용자가 입력한 단어 수 */}
+        <PopSem14
+          color={BODY}
+          text={`${wordLength}`}
+          style={{ marginRight: WIDTH * 2, marginTop: HEIGHT * 10 }}
+        />
+        {/*//* max 단어수 (여기선 300) */}
+        <PopReg14
+          color={BODY}
+          text={`/300`}
+          style={{ marginRight: WIDTH * 16, marginTop: HEIGHT * 10 }}
+        />
       </View>
-    </TouchableWithoutFeedback>
+    </ScreenRootView>
+    //</View>
+    //</TouchableWithoutFeedback>
   )
 })
