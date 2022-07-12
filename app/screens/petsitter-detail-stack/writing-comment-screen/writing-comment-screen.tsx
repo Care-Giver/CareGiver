@@ -3,7 +3,7 @@ import React, { FC, useLayoutEffect, useState /*useEffect*/ } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, RootNavigation } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { BODY } from "../../../theme/palette"
+import { BODY, LBG } from "../../../theme/palette"
 import { HEIGHT, WIDTH } from "../../../theme"
 import { PublicPrivateSwitchButton, ScreenRootView } from "../../../custom-components"
 import { PopSem14, PopReg14 } from "../../../custom-components"
@@ -28,6 +28,11 @@ export const WritingCommentScreen: FC<
   const [comment, setComment] = useState("")
   //*입력된 댓글의 단어 수 세는 변수
   const [wordLength, setWordLength] = useState(0)
+  //*키보드
+  const keyboard = useKeyboard()
+
+  console.log("keyboard isKeyboardShow: ", keyboard.keyboardShown)
+  console.log("keyboard keyboardHeight: ", keyboard.keyboardHeight)
 
   const keyboard = useKeyboard()
 
