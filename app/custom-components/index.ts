@@ -6,6 +6,7 @@ export * from "./buttons/pressable-button/pressable-button"
 export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 export * from "./buttons/conditional-button/conditional-button"
 export * from "./buttons/row-rounded-button/row-rounded-button"
+export * from "./buttons/make-booking-button/make-booking-button"
 
 //* headers
 export * from "./service-type-indicator-header/service-type-indicator-header"

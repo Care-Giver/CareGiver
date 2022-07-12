@@ -80,7 +80,7 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
       <DotsIndicator
         items={images}
         activeIndex={currentImage}
-        style={{ marginTop: HEIGHT * -16 }}
+        style={{ marginTop: HEIGHT * -28 }}
       />
     </View>
   )

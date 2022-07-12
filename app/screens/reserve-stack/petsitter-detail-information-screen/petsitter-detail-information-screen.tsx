@@ -14,6 +14,7 @@ import {
   CaregiverNameStarReview,
   ConditionalButton,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  MakeBookingButton,
 } from "../../../custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
@@ -196,7 +197,7 @@ export const PetsitterDetailInformationScreen: FC<
             text={desc}
             color={SUB_HEAD_LINE}
             numberOfLines={8}
-            style={{ marginTop: HEIGHT * 10 }}
+            style={{ marginTop: HEIGHT * 10, lineHeight: HEIGHT * 20 }}
           />
 
           {/* //* 댓글 */}
@@ -224,6 +225,7 @@ export const PetsitterDetailInformationScreen: FC<
       {/* //? 예약 신청하기 버튼 */}
       <View
         style={{
+          // paddingVertical: 100,
           paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           marginBottom: Platform.select({
             ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
@@ -232,13 +234,13 @@ export const PetsitterDetailInformationScreen: FC<
         }}
       >
         {/* //* 예약 신청하기 버튼*/}
-        {/* <MakeBookingButton
+        <MakeBookingButton
           pricePerHour={50000}
           isActivated={true}
           onPress={() => {
             alert("결제하기 화면으로 이동")
           }}
-        /> */}
+        />
       </View>
     </ScreenRootView>
   )
