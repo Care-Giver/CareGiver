@@ -13,7 +13,7 @@ import {
   RowRoundedButton,
   ComeHomeGoToSwitchButton,
 } from "../../../../custom-components"
-import { NavigatorParamList } from "../../../../navigators"
+import { navigate, NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, WIDTH } from "../../../../theme"
 import { BODY, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
@@ -134,6 +134,11 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
               <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("petsitter-detail-information-screen", null)
+                }}
                 name={item.name}
                 rating={item.rating}
                 desc={item.desc}
@@ -194,6 +199,11 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
               <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("petsitter-detail-information-screen", null)
+                }}
                 name={item.name}
                 rating={item.rating}
                 desc={item.desc}
