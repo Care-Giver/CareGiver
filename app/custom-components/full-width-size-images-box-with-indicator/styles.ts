@@ -6,6 +6,6 @@ export const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     // marginHorizontal: -BASIC_BACKGROUND_PADDING_WIDTH,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
 })

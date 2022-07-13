@@ -11,7 +11,7 @@ import {
   PreBol14,
   ConditionalButton,
 } from "../../../../custom-components"
-import { NavigatorParamList } from "../../../../navigators"
+import { navigate, NavigatorParamList } from "../../../../navigators"
 import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../../theme"
 import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../../../theme/palette"
 import { RowRoundedButton } from "../../../../custom-components/buttons/row-rounded-button/row-rounded-button"
@@ -51,11 +51,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
       if (selectedPets.length === 0) return false
 
       return true
-    }
-
-    //? 펫싴터 검색결과 스크린으로 이동
-    const goToSearchResultScreen = (params?) => {
-      navigation.navigate("search-result", params)
     }
 
     if (Platform.OS === "android") {
@@ -203,7 +198,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = 
             }),
           }}
           onPress={() => {
-            goToSearchResultScreen({ service: service, serviceType: serviceType })
+            //? 펫시터 검색결과 스크린으로 이동
+            navigate("search-result", { service: service, serviceType: serviceType })
           }}
         />
       </ScreenRootView>

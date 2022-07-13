@@ -7,6 +7,7 @@ import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "../../theme/pa
 import { Row } from "../boxes/basics/row"
 import IMAGES from "../../../assets/common-images"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
+import { navigate } from "../../navigators"
 
 export const CaregiverNameStarReview = (props) => {
   const { style: viewStyle, caregiverData } = props
@@ -42,7 +43,9 @@ export const CaregiverNameStarReview = (props) => {
 
             <Pressable
               onPress={() => {
-                alert("리뷰보기로 이동")
+                //? 리뷰 전체보기 화면으로 이동
+                //TODO: params 값 추가해줘야 함
+                navigate("all-reviews-screen", null)
               }}
             >
               <Row>

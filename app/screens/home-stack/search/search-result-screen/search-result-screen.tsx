@@ -2,7 +2,7 @@ import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react
 import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../../navigators"
+import { navigate, NavigatorParamList } from "../../../../navigators"
 import { SitterProfileCard } from "caregiver/app/custom-components/sitter-profile-card/sitter-profile-card"
 import { petsitters as _petsitters } from "caregiver/app/screens/home-stack/search/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH } from "caregiver/app/theme"
@@ -210,7 +210,11 @@ export const SearchResultScreen: FC<
                 review={item.review}
                 title={item.title}
                 desc={item.desc}
-                onPress={() => console.warn("Hello")}
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("petsitter-detail-information-screen", null)
+                }}
                 style={
                   index < petsitters.length - 1
                     ? { marginTop: HEIGHT * 20 }

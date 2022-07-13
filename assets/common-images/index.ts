@@ -32,5 +32,5 @@ const IMAGES = {
   x_grey: require("../common-images/x_grey.png"),
 }
 
-//! 예외적으로 export default 허용
+//! 예외적으로 export default 허용 
 export default IMAGES
