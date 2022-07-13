@@ -1,5 +1,5 @@
 import { View, Text, FlatList } from "react-native"
-import React, { FC } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../navigators"
@@ -9,38 +9,48 @@ import { petsitterReserves, crecheReserves } from "./dummy-data"
 
 export const MinseonTest: FC<StackScreenProps<NavigatorParamList, "minseon-test">> = observer(
   ({ navigation, route }) => {
-    const inprogressReserves = []
-    const completeReserves = []
+    const [inprogressReserves, setInprogressReserves] = useState([])
+    const [completeReserves, setCompleteReserves] = useState([])
 
-    petsitterReserves.forEach((value, index) => {
-      if (new Date(value.endTime).getTime() >= new Date().getTime()) {
-        // ? 예약 내역의 종료 시간이 현재 시간보다 나중일 때 -> 진행중인 예약
-        inprogressReserves.push(value)
-      } else {
-        // ? 예약 내역의 종료 시간이 현재 시간보다 앞설 때 -> 지난 예약
-        completeReserves.push(value)
-      }
-    })
+    useLayoutEffect(() => {
+      const inprogress = []
+      const completes = []
 
-    crecheReserves.forEach((value, index) => {
-      if (new Date(value.endDay).getTime() >= new Date().getTime()) {
-        // ? 예약 내역의 종료 시간이 현재 시간보다 나중일 때 -> 진행중인 예약
-        inprogressReserves.push(value)
-      } else {
-        // ? 예약 내역의 종료 시간이 현재 시간보다 앞설 때 -> 지난 예약
-        completeReserves.push(value)
-      }
-    })
+      petsitterReserves.forEach((value, index) => {
+        if (new Date(value.endDateTime).getTime() >= new Date().getTime()) {
+          // ? 예약 내역의 종료 시간이 현재 시간보다 나중일 때 -> 진행중인 예약
+          inprogress.push(value)
+        } else {
+          // ? 예약 내역의 종료 시간이 현재 시간보다 앞설 때 -> 지난 예약
+          completes.push(value)
+        }
+      })
 
-    console.log(petsitterReserves)
+      crecheReserves.forEach((value, index) => {
+        if (new Date(value.endDateTime).getTime() >= new Date().getTime()) {
+          // ? 예약 내역의 종료 시간이 현재 시간보다 나중일 때 -> 진행중인 예약
+          inprogress.push(value)
+        } else {
+          // ? 예약 내역의 종료 시간이 현재 시간보다 앞설 때 -> 지난 예약
+          completes.push(value)
+        }
+      })
+
+      setInprogressReserves(inprogress)
+      setCompleteReserves(completes)
+    }, [])
+
+    console.log("inprogressReserves=========")
+    console.log(inprogressReserves)
+    console.log("inprogressReserves=========")
     return (
       <ScreenRootView>
         {/* //? 진행중인 예약 */}
-        {/* <FlatList
+        <FlatList
           data={inprogressReserves}
-          renderItem={(item, index) => <InProgressBooking reserveData={item} />}
-        /> */}
-        <InProgressBooking reserveData={petsitterReserves[0]} />
+          renderItem={({ item, index }) => <InProgressBooking reserveData={item} />}
+        />
+        {/* <InProgressBooking reserveData={inprogressReserves[0]} /> */}
       </ScreenRootView>
     )
   },
