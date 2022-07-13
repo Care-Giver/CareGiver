@@ -23,17 +23,20 @@ export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
       </Pressable>
       {/* //* 펫 프로필 카드 리스트 */}
       {isOpen && (
-        <FlatList
-          data={pets}
-          renderItem={({ item, index }) => (
+        <View style={styles.cardContainer}>
+          {pets.map((item, index) => (
+            //! RN에서도 Fragment 를 써도 된다. https://blog.naver.com/mym0404/221806696015
             <>
-              <PetProfileCard petData={item} style={{ paddingHorizontal: WIDTH * 10 }} />
+              <PetProfileCard
+                key={index}
+                petData={item}
+                style={{ paddingHorizontal: WIDTH * 10, borderRadius: 8 }}
+              />
               {/* //? 마지막 요소 아닐 때, 뒤에 구분선 배치 */}
               {index < pets.length - 1 && <DivisionLine color={LBG} />}
             </>
-          )}
-          style={styles.cardContainer}
-        />
+          ))}
+        </View>
       )}
     </View>
   )
