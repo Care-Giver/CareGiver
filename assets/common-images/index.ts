@@ -13,6 +13,7 @@ const IMAGES = {
   empty_heart: require("../common-images/empty_heart.png"),
   go_back: require("../common-images/go_back.png"),
   gps: require("../common-images/gps.png"),
+  in_progress_booking_background: require("../common-images/in_progress_booking_background.png"),
   list_bars: require("../common-images/list_bars.png"),
   location: require("../common-images/location.png"),
   more_info: require("../common-images/more_info.png"),

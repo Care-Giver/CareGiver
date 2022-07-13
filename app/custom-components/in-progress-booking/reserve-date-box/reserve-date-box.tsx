@@ -6,22 +6,34 @@ import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
 import { HEIGHT } from "../../../theme"
 
-export const ReserveDateBox = ({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
-  const startMonth = startDate.getMonth() + 1
-  const startDay = startDate.getDate()
-  const startHours = startDate.getHours()
-  const startMinutes = startDate.getMinutes() === 0 ? "00" : startDate.getMinutes()
+export const ReserveDateBox = ({
+  startDateTime,
+  endDateTime,
+  style,
+}: {
+  startDateTime: Date
+  endDateTime: Date
+  style?: Object
+}) => {
+  const startMonth = startDateTime.getMonth() + 1
+  const startDay = startDateTime.getDate()
+  const startHours = startDateTime.getHours()
+  const startMinutes = startDateTime.getMinutes() === 0 ? "00" : startDateTime.getMinutes()
 
-  const endMonth = endDate.getMonth() + 1
-  const endDay = endDate.getDate()
-  const endHours = endDate.getHours()
-  const endMinutes = endDate.getMinutes() === 0 ? "00" : endDate.getMinutes()
+  const endMonth = endDateTime.getMonth() + 1
+  const endDay = endDateTime.getDate()
+  const endHours = endDateTime.getHours()
+  const endMinutes = endDateTime.getMinutes() === 0 ? "00" : endDateTime.getMinutes()
 
   return (
     <Row
-      style={{
-        alignItems: "flex-start",
-      }}
+      style={[
+        {
+          alignItems: "flex-start",
+          justifyContent: "center",
+        },
+        style,
+      ]}
     >
       {/* //* 시작 날짜 컨테이너 */}
       <View style={styles.dateBox}>

@@ -74,8 +74,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      // initialRouteName="minseon-test"
-      initialRouteName="petsitter-detail-information-screen"
+      initialRouteName="minseon-test"
+      // initialRouteName="petsitter-detail-information-screen"
       // initialRouteName="caregiver-self-introduction-screen"
       // initialRouteName="home"
       // initialRouteName="all-reviews-screen"
