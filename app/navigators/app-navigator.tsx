@@ -23,11 +23,14 @@ import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-sc
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
+  WritingCommentScreenHeader,
   AllCommentsScreenHeader,
 } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "../../assets/common-images"
 import { HEIGHT, WIDTH } from "../theme"
+import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
+import { WritingCommentScreen } from "../screens/petsitter-detail-stack/writing-comment-screen/writing-comment-screen"
 import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { CaregiverSelfIntroductionScreen } from "../screens/petsitter-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
@@ -74,11 +77,11 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
+      initialRouteName="home"
       // initialRouteName="minseon-test"
       // initialRouteName="petsitter-detail-information-screen"
       // initialRouteName="caregiver-self-introduction-screen"
-      // initialRouteName="home"
-      initialRouteName="all-reviews-screen"
+      // initialRouteName="all-reviews-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
@@ -172,6 +175,15 @@ const AppStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
+
+      {/* //* 댓글쓰기 */}
+      <Stack.Screen
+        name="writing-comment-screen"
+        component={WritingCommentScreen}
+        options={{
+          header: (props) => <WritingCommentScreenHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
