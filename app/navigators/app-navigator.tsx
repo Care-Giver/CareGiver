@@ -77,8 +77,8 @@ const AppStack = () => {
       // initialRouteName="minseon-test"
       // initialRouteName="petsitter-detail-information-screen"
       // initialRouteName="caregiver-self-introduction-screen"
-      initialRouteName="home"
-      // initialRouteName="all-reviews-screen"
+      // initialRouteName="home"
+      initialRouteName="all-reviews-screen"
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
