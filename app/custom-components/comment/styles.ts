@@ -22,5 +22,6 @@ export const styles = StyleSheet.create({
     // backgroundColor: "yellow",
     // maxWidth: WIDTH * 342,
     marginRight: WIDTH * 13,
+    lineHeight: HEIGHT * 20,
   },
 })

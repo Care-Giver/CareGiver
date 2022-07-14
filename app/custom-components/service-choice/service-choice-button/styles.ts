@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: HEIGHT * 8,
+    lineHeight: HEIGHT * 18,
   },
   image: {
     width: WIDTH * 142,
