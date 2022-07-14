@@ -1,22 +1,26 @@
 import { View, Image, Platform, Pressable } from "react-native"
 import React from "react"
-import { WIDTH, HEIGHT, HEADER_HEIGHT } from "../../../theme"
+import { WIDTH, HEIGHT, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "../../../theme"
 import { PreMed20, PreBol16 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
 import { DISABLED, GIVER_CASUAL_NAVY } from "../../../theme/palette"
 
 const HEADER_ROOT = {
-  width: WIDTH * 390,
-  height: HEADER_HEIGHT,
+  backgroundColor: "white",
   flexDirection: "row",
   alignItems: "center",
-  marginTop:
-    HEIGHT *
-    Platform.select({
-      ios: 47,
-      android: 0,
-    }),
+  width: "100%",
+  height: Platform.select({
+    ios: HEADER_HEIGHT + IOS_NOTCH_STATUS_BAR_HEIGHT,
+    android: HEADER_HEIGHT,
+  }),
+
+  //! iOS 헤더 스타일링 개선: Status Bar 영역까지 헤더 컴포넌트가 있어야 함!
+  paddingTop: Platform.select({
+    ios: IOS_NOTCH_STATUS_BAR_HEIGHT,
+    android: 0,
+  }),
 }
 
 export const WritingCommentScreenHeader = (props) => {

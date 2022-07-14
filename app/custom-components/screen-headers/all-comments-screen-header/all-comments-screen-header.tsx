@@ -4,6 +4,7 @@ import { WIDTH, HEIGHT, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "../..
 import { PreMed18 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
+import { navigate } from "../../../navigators"
 
 const HEADER_ROOT = {
   backgroundColor: "white",
@@ -54,7 +55,9 @@ export const AllCommentsScreenHeader = (props) => {
         style={{ marginLeft: WIDTH * 12, marginRight: WIDTH * 16 }}
         onPress={() => {
           // props.navigation.goBack()
-          alert("댓글 작성으로 이동")
+          // alert("댓글 작성으로 이동")
+          //TODO: params 값 추가해줘야 함
+          navigate("writing-comment-screen", null)
         }}
       >
         <Image style={styles.writeComment} source={IMAGES.write_comment} />
