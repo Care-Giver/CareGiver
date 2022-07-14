@@ -30,7 +30,7 @@ export const AllReviewsScreen: FC<
     })
   }, [])
   return (
-    <ScreenRootView preset={"scroll"} showsVerticalScrollIndicator={false}>
+    <ScreenRootView preset={"fixed"} showsVerticalScrollIndicator={false}>
       {/* //? 필터 헤더 박스 */}
       <FilterHeader
         title={"전체"}
@@ -42,6 +42,7 @@ export const AllReviewsScreen: FC<
 
       {/* //? 리뷰 리스트 */}
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={reviews}
         renderItem={({ item, index }) => (
           <>
