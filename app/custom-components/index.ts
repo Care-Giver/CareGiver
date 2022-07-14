@@ -6,6 +6,7 @@ export * from "./buttons/pressable-button/pressable-button"
 export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
 export * from "./buttons/conditional-button/conditional-button"
 export * from "./buttons/row-rounded-button/row-rounded-button"
+export * from "./buttons/public-private-switch-button/public-private-switch-button"
 export * from "./buttons/make-booking-button/make-booking-button"
 
 //* headers
@@ -29,6 +30,12 @@ export * from "./blue-checkbox/blue-checkbox"
 export * from "./full-width-size-images-box-with-indicator/full-width-size-images-box-with-indicator"
 export * from "./hired-times-and-pet-years/hired-times-and-pet-years"
 export * from "./comment/comment"
+
+//* headers
+export * from "./service-type-indicator-header/service-type-indicator-header"
+export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
+export * from "./screen-headers/home-screen-header/home-screen-header"
+export * from "./screen-headers/writing-comment-screen-header/writing-comment-screen-header"
 export * from "./caregiver-certificate/caregiver-certificate"
 export * from "./caregiver-service/caregiver-service"
 export * from "./caregiver-name-star-review/caregiver-name-star-review"
