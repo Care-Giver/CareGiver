@@ -3,6 +3,13 @@ import { StyleSheet } from "react-native"
 import { WIDTH, HEIGHT } from "../../theme"
 
 export const styles = StyleSheet.create({
+  root: {
+    width: WIDTH * 390,
+    height: HEIGHT * 28,
+    justifyContent: "center",
+    alignItems: "center",
+    opacity: 0.8,
+  },
   dotsContainer: {
     flexDirection: "row",
     justifyContent: "center",

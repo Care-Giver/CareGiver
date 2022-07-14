@@ -4,13 +4,9 @@ import { Row } from "../boxes/basics/row"
 import { PopSem16, PreBol16, PreReg12 } from "../custom-texts/custom-texts"
 import { HEIGHT, WIDTH } from "../../theme"
 import IMAGES from "../../../assets/common-images"
+import { FilterHeaderProps } from "./filter-header.props"
 
 // ? 필터 헤더 부분에 오는 숫자는 Poppins 폰트를 사용하기 때문에, 따로 전달 받음
-interface FilterHeaderProps {
-  title: string
-  number?: string
-  seletedOption: string
-}
 
 export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps) => {
   return (
@@ -37,22 +33,24 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
       </View>
 
       {/* //* 필터 버튼 */}
-      <Pressable
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <PreReg12 text={seletedOption} />
-        <Image
-          source={IMAGES.list_bars}
+      {seletedOption && (
+        <Pressable
           style={{
-            width: WIDTH * 16,
-            height: HEIGHT * 16,
-            marginLeft: WIDTH * 5,
+            flexDirection: "row",
+            alignItems: "center",
           }}
-        />
-      </Pressable>
+        >
+          <PreReg12 text={seletedOption} />
+          <Image
+            source={IMAGES.list_bars}
+            style={{
+              width: WIDTH * 16,
+              height: HEIGHT * 16,
+              marginLeft: WIDTH * 5,
+            }}
+          />
+        </Pressable>
+      )}
     </Row>
   )
 }

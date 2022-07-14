@@ -8,6 +8,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderColor: LBG,
+    // borderColor: "red",
+    // paddingHorizontal: WIDTH * 10,
   },
 
   dropdownTitle: {

@@ -199,6 +199,7 @@
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
       "react/display-name": "off",
+      "react/no-children-prop":"off",
       "space-before-function-paren": 0,
       "spaced-comment": 0
     }

@@ -3,16 +3,16 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { ScreenRootView } from "../../../custom-components"
-import { Divider } from "../../../custom-components/divider/divider"
+import { DivisionLine, ScreenRootView } from "../../../custom-components"
 import { reviews as _reviews } from "./dummy-data"
 import { ReviewBox } from "../../../custom-components/review-box/review-box"
 import { FilterHeader } from "../../../custom-components/filter-header/filter-header"
 import IMAGES from "../../../../assets/common-images"
 import { HEIGHT } from "../../../theme"
+import { LBG } from "../../../theme/palette"
 
-export const ViewAllReviewsScreen: FC<
-  StackScreenProps<NavigatorParamList, "view-all-reviews">
+export const AllReviewsScreen: FC<
+  StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
   // ? 리뷰 리스트
   const [reviews, setReviews] = useState([])
@@ -30,7 +30,7 @@ export const ViewAllReviewsScreen: FC<
     })
   }, [])
   return (
-    <ScreenRootView preset={"scroll"}>
+    <ScreenRootView preset={"scroll"} showsVerticalScrollIndicator={false}>
       {/* //? 필터 헤더 박스 */}
       <FilterHeader
         title={"전체"}
@@ -38,7 +38,7 @@ export const ViewAllReviewsScreen: FC<
         seletedOption={seletedOption}
       />
 
-      <Divider />
+      <DivisionLine color={LBG} />
 
       {/* //? 리뷰 리스트 */}
       <FlatList
@@ -50,15 +50,10 @@ export const ViewAllReviewsScreen: FC<
                 marginTop: HEIGHT * 12,
               }}
               key={index}
-              profileImg={item.user.profileImg ? item.user.profileImg : IMAGES.profile_default}
-              userName={item.user.name}
-              ratings={item.ratings}
-              createdAt={item.createdAt}
-              images={item.images ? item.images : []}
-              review={item.review}
-              pets={item.pets}
+              reviewData={item}
             />
-            <Divider
+            <DivisionLine
+              color={LBG}
               style={{
                 marginTop: HEIGHT * 32,
                 // ? 마지막 구분 선에는 marginBottom 값 존재

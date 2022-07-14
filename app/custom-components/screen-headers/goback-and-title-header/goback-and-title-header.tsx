@@ -1,23 +1,25 @@
 import { View, Image, Platform, Pressable } from "react-native"
 import React from "react"
-import { WIDTH, HEIGHT, HEADER_HEIGHT } from "../../../theme"
-import { PreMed20, PreBol32 } from "../../custom-texts/custom-texts"
+import { WIDTH, HEIGHT, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "../../../theme"
+import { PreMed18 } from "../../custom-texts/custom-texts"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
 
 const HEADER_ROOT = {
-  // backgroundColor: "orange",
-  width: WIDTH * 390,
-  height: HEADER_HEIGHT,
+  backgroundColor: "white",
   flexDirection: "row",
-  //   justifyContent: "center",
   alignItems: "center",
-  marginTop:
-    HEIGHT *
-    Platform.select({
-      ios: 47,
-      android: 0,
-    }),
+  width: "100%",
+  height: Platform.select({
+    ios: HEADER_HEIGHT + IOS_NOTCH_STATUS_BAR_HEIGHT,
+    android: HEADER_HEIGHT,
+  }),
+
+  //! iOS 헤더 스타일링 개선: Status Bar 영역까지 헤더 컴포넌트가 있어야 함!
+  paddingTop: Platform.select({
+    ios: IOS_NOTCH_STATUS_BAR_HEIGHT,
+    android: 0,
+  }),
 }
 
 export const GobackAndTitleHeader = (props) => {
@@ -37,7 +39,7 @@ export const GobackAndTitleHeader = (props) => {
       </Pressable>
 
       {/* //? 타이틀 */}
-      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed20>
+      <PreMed18 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed18>
     </View>
   )
 }

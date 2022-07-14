@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native"
 import { HEIGHT, WIDTH } from "../../theme"
 
 export const styles = StyleSheet.create({
+  root: {},
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",

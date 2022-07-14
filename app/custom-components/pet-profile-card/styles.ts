@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "../../theme"
-import { CARE_NATURAL_BLUE } from "../../theme/palette"
+import { WIDTH, HEIGHT, palette } from "../../theme"
 
 export const styles = StyleSheet.create({
   root: {
@@ -8,7 +7,7 @@ export const styles = StyleSheet.create({
     height: HEIGHT * 78,
     // alignSelf: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: palette.white,
     // backgroundColor: "red",
   },
   infoContainer: {
