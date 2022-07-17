@@ -4,7 +4,14 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
 import { BODY, LBG } from "../../../theme/palette"
-import { HEIGHT, WIDTH } from "../../../theme"
+import {
+  HEIGHT,
+  WIDTH,
+  DEVICE_SCREEN_HEIGHT,
+  HEADER_HEIGHT,
+  ADNROID_STATUS_BAR_HEIGHT,
+  ADNROID_BOTTOM_NAVIGATION_HEIGHT,
+} from "../../../theme"
 import {
   PublicPrivateSwitchButton,
   ScreenRootView,
@@ -14,12 +21,6 @@ import {
 } from "../../../custom-components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "../../../../assets/fonts"
-import {
-  DEVICE_SCREEN_HEIGHT,
-  HEADER_HEIGHT,
-  ADNROID_STATUS_BAR_HEIGHT,
-  ADNROID_BOTTOM_NAVIGATION_HEIGHT,
-} from "../../../theme"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -94,7 +95,8 @@ export const WritingCommentScreen: FC<
             ADNROID_STATUS_BAR_HEIGHT +
             HEIGHT * 95 + //*디자인 상에서 댓글창부터 화면 끝까지의 하단 여백(85)과 헤더 전 까지 상단 여백(10)의 합이 95
             HEIGHT * 646 -
-            DEVICE_SCREEN_HEIGHT * HEIGHT) //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
+            // DEVICE_SCREEN_HEIGHT * HEIGHT //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
+            DEVICE_SCREEN_HEIGHT) //FEEDBACK: DEVICE_SCREEN_ 상수에는 WIDTH, HEIGHT 상수를 곱해주면 안 됩니다
       }
     } else if (Platform.OS === "ios") {
       if (keyboardStatus === "Keyboard will Show") {
@@ -146,7 +148,9 @@ export const WritingCommentScreen: FC<
         <PublicPrivateSwitchButton
           state={isPublicComment}
           setState={setIsPublicComment}
-          style={{ marginRight: WIDTH * 233 }}
+          // style={{ marginRight: WIDTH * 233 }}
+          //FEEDBACK: "가능한 최대" margin, padding 값은 아래처럼 "auto" 를 사용하면 됩니다. (안드로이드 스튜디오에서 ConstraintLayout 과 유사한 개념입니다)
+          style={{ marginRight: "auto" }}
         />
         {/*//*사용자가 입력한 단어 수 */}
         <PopSem14 color={BODY} text={`${wordLength}`} style={{ marginRight: WIDTH * 2 }} />
