@@ -1,5 +1,6 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-const IMAGES = {
+  const IMAGES = {
+  //* common images
   arrow_down: require("../common-images/arrow_down.png"),
   arrow_up: require("../common-images/arrow_up.png"),
   bell: require("../common-images/bell.png"),
@@ -7,13 +8,11 @@ const IMAGES = {
   calender_disabled: require("../common-images/calender_disabled.png"),
   care_giver_logo_162x20: require("../common-images/care_giver_logo_162x20.png"),
   certificate_badge: require("../common-images/certificate_badge.png"),
-  chatting_grey: require("../common-images/chatting_grey.png"),
   default_pet_image_60: require("../common-images/default_pet_image_60.png"),
   default_profile_image_comment: require("../common-images/default_profile_image_comment.png"),
   deselect_checkbox: require("../common-images/deselect_checkbox.png"),
   empty_12: require("../common-images/empty_12.png"),
   empty_heart: require("../common-images/empty_heart.png"),
-  favorite_grey: require("../common-images/favorite_grey.png"),
   go_back: require("../common-images/go_back.png"),
   gps: require("../common-images/gps.png"),
   in_progress_booking_background: require("../common-images/in_progress_booking_background.png"),
@@ -21,14 +20,12 @@ const IMAGES = {
   location: require("../common-images/location.png"),
   location_disabled: require("../common-images/location_disabled.png"),
   more_info: require("../common-images/more_info.png"),
-  myinfo_grey: require("../common-images/myinfo_grey.png"),
   profile_default: require("../common-images/profile_default.png"),
   rating_star: require("../common-images/rating_star.png"),
   rating_star_empty: require("../common-images/rating_star_empty.png"),
   rating_star_half: require("../common-images/rating_star_half.png"),
   right_arrow_grey: require("../common-images/right_arrow_grey.png"),
   right_arrow_navy: require("../common-images/right_arrow_navy.png"),
-  schedule_grey: require("../common-images/schedule_grey.png"),
   search: require("../common-images/search.png"),
   select_checkbox: require("../common-images/select_checkbox.png"),
   three_dots: require("../common-images/three_dots.png"),
@@ -37,7 +34,19 @@ const IMAGES = {
   vertical_3_dots: require("../common-images/vertical_3_dots.png"),
   write_comment: require("../common-images/write_comment.png"),
   x_grey: require("../common-images/x_grey.png"),
+  
+  //* bottom-tab-navigator
+  chatting_grey: require("../common-images/bottom-tab-navigator/chatting_grey.png"),
+  chatting_navy: require("../common-images/bottom-tab-navigator/chatting_navy.png"),
+  favorite_grey: require("../common-images/bottom-tab-navigator/favorite_grey.png"),
+  favorite_navy: require("../common-images/bottom-tab-navigator/favorite_navy.png"),
+  myinfo_grey: require("../common-images/bottom-tab-navigator/myinfo_grey.png"),
+  myinfo_navy: require("../common-images/bottom-tab-navigator/myinfo_navy.png"),
+  schedule_grey: require("../common-images/bottom-tab-navigator/schedule_grey.png"),
+  schedule_navy: require("../common-images/bottom-tab-navigator/schedule_navy.png"),
+  search_grey: require("../common-images/bottom-tab-navigator/search_grey.png"),
+  search_navy: require("../common-images/bottom-tab-navigator/search_navy.png")
 }
 
-//! 예외적으로 export default 허용
+//! 예외적으로 export default 허용 
 export default IMAGES

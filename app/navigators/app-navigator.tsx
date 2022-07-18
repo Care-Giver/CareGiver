@@ -74,7 +74,7 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 const AppStack = () => {
   const navigation = useNavigation()
 
-  // return MyTabs() //! screen stack 계층 정리 이후, bottom-navigator 적용 완료할 것
+  // return BottomTabNavigator() //! screen stack 계층 정리 이후, bottom-navigator 적용 완료할 것
 
   return (
     <Stack.Navigator
@@ -223,16 +223,16 @@ AppNavigator.displayName = "AppNavigator"
 const exitRoutes = ["welcome"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)
 
-//* bottom-navigator 코드
+//* bottom-tab-navigator 코드
 const Tab = createBottomTabNavigator()
-function BottomNavigator() {
+function BottomTabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="home"
       screenOptions={{
         tabBarShowLabel: true,
         tabBarStyle: {
-          backgroundColor: "pink",
+          // backgroundColor: "pink",
           // justifyContent: "center",
           // alignItems: "center",
         },
@@ -243,9 +243,9 @@ function BottomNavigator() {
         name="favorite"
         component={AllCommentsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={IMAGES.favorite_grey}
+              source={focused ? IMAGES.favorite_navy : IMAGES.favorite_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -268,9 +268,9 @@ function BottomNavigator() {
         name="schedule"
         component={TestMapScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={IMAGES.schedule_grey}
+              source={focused ? IMAGES.schedule_navy : IMAGES.schedule_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -293,9 +293,9 @@ function BottomNavigator() {
         name="home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={IMAGES.gps}
+              source={focused ? IMAGES.search_navy : IMAGES.search_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -318,9 +318,9 @@ function BottomNavigator() {
         name="chatting"
         component={WritingCommentScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={IMAGES.chatting_grey}
+              source={focused ? IMAGES.chatting_navy : IMAGES.chatting_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -343,9 +343,9 @@ function BottomNavigator() {
         name="myinfo"
         component={AllReviewsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={IMAGES.myinfo_grey}
+              source={focused ? IMAGES.myinfo_navy : IMAGES.myinfo_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
