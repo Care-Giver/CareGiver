@@ -1,4 +1,6 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useState } from "react"
+import { Button, Pressable } from "react-native"
+import { observer } from "mobx-react-lite"
 import {
   Comment,
   FullWidthSizeImagesBoxWithIndicator,
@@ -6,18 +8,17 @@ import {
   PreBol16,
   Row,
   ScreenRootView,
-} from "../../../custom-components"
+} from "~/app/custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../navigators"
-import { observer } from "mobx-react-lite"
-import { HEADER_HEIGHT, HEIGHT, WIDTH } from "../../../theme"
-import { BODY, SUB_HEAD_LINE } from "../../../theme/palette"
-import { Button, Pressable } from "react-native"
-import { apiTest, apiTestJustNoBody, apiTestWithBody, callApi, searchPetSitter } from "../../../services/api/api-test"
+import { NavigatorParamList } from "~/app/navigators"
+import { HEADER_HEIGHT, HEIGHT, WIDTH } from "~/app/theme"
+import { BODY, SUB_HEAD_LINE } from "~/app/theme/palette"
+import { Api } from "~/app/services/api"
+import { DEFAULT_API_CONFIG } from "~/app/services/api/api-config"
 
 const commentsDummy = [
   {
-    userId: "유저닉네임1",
+    userId: "유저닉네임1r",
     desc:
       "안녕하세요, 펫시터님! 몇가지 궁금한 점이 있어서 여쭤보려고 하는데 어디로 연락을 드려야 편하실까요~?? 편하신 연락처 알려알려알려알려",
     createAt: "2022-03-22T11:30",
@@ -67,32 +68,41 @@ const commentsDummy = [
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
-  // apiTest()
-  // searchPetSitter()
+  const [post, setPost] = useState(null)
 
-  let body = {
-    lat: 37.48,
-    lng: 127.15,
-    startTime: "2022-07-04T20:13:40",
-    endTime: "2022-07-04T22:13:41",
-    petIds: [1, 3],
-    maxDistance: 10,
-    page: 0
-  }
+  // console.log("ADNROID_BOTTOM_NAVIGATION_HEIGHT", ADNROID_BOTTOM_NAVIGATION_HEIGHT)
 
-  // console.log(typeof body, JSON.stringify(body))
+  // const api = new Api()
+  // api.setup()
+  // useEffect(() => {
+  //   // const t2 = axios
+  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/1")
+  //   //   .then((response) => {
+  //   //     setPost(response)
+  //   //   })
+  //   // console.log("t2", t2)
 
+  //   // api.getCreche("1").then((response) => {
+  //   //   setPost(response)
+  //   // })
 
-  // callApi("get", "/pet-sitters/search", JSON.stringify(body))
-  // callApi("get", "/user/me", JSON.stringify(body))
-  // callApi("get", "/pet-sitters/search", null, JSON.stringify(body))
-  // callApi("get", "/pet-sitters/search", null, body)
+  //   // const t = api.getCreche("1")
+  //   // console.log("t", t)
 
-  const res = callApi("get", "/pet-sitter/1", null, null)
-  // console.log(res)
+  //   // const t2 = axios
+  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/", {
+  //   //     params: { id: "2" },
+  //   //   })
+  //   //   .then((response) => {
+  //   //     setPost(response)
+  //   //   })
 
-  // apiTestJustNoBody()
-  apiTestWithBody()
+  //   const t = api.getCreche("1").then((response) => {
+  //     setPost(response.data)
+  //   })
+  // }, [])
+
+  console.log("post", post)
 
   return (
     <ScreenRootView
@@ -137,15 +147,6 @@ export const PetsitterDetailInformationScreen: FC<
           reply={item.reply}
         />
       ))}
-
-      {/* <Pressable
-        onPress={() => {
-          // searchPetSitter()
-          apiTest()
-          // alert("dd")
-        }}
-        style={{ width: 200, height: 100, backgroundColor: "red" }}
-      /> */}
     </ScreenRootView>
   )
 })
