@@ -1,5 +1,5 @@
 import * as React from "react"
-import { PreBol16, PreReg14 } from "../../custom-texts/custom-texts"
+import { PreBol16, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 import { styles } from "./styles"
 

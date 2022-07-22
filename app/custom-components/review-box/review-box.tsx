@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image, FlatList, LayoutAnimation } from "react-n
 import React, { useLayoutEffect, useState } from "react"
 import { Row } from "../basics/row/row"
 import { HEIGHT, WIDTH } from "~/app/theme"
-import { PreReg12, PreReg14 } from "../custom-texts/custom-texts"
+import { PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
 import IMAGES from "~/assets/images"
 import RatingStars from "../rating-stars/rating-stars"
 import { MIDDLE_LINE, DISABLED } from "~/app/theme/palette"

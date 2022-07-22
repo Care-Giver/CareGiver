@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Image, Pressable, Text, View, ViewProps } from "react-native"
 import { styles } from "./styles"
-import { PopReg16, PopSem16, PreReg16 } from "../custom-texts/custom-texts"
+import { PopReg16, PopSem16, PreReg16 } from "../basics/custom-texts/custom-texts"
 import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { Row } from "../basics/row/row"
 import { WIDTH, HEIGHT } from "~/app/theme"

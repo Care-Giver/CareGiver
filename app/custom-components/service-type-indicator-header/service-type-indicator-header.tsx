@@ -3,7 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { DivisionLine } from "../division-line/division-line"
 import { color, HEIGHT, palette } from "~/app/theme"
-import { PreBol18, PreReg18 } from "../custom-texts/custom-texts"
+import { PreBol18, PreReg18 } from "../basics/custom-texts/custom-texts"
 import { DISABLED, GIVER_CASUAL_NAVY } from "~/app/theme/palette"
 
 export const ServiceTypeIndicatorHeader = ({ label, state, onPress, style }) => {

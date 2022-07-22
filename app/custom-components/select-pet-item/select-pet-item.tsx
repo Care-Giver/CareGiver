@@ -1,7 +1,7 @@
 import { View } from "react-native"
 import React, { useState, useLayoutEffect } from "react"
 import { styles } from "./styles"
-import { PreBol16, PreReg14 } from "../custom-texts/custom-texts"
+import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { BODY } from "~/app/theme/palette"
 import { Row } from "../basics/row/row"
 import { BlueCheckbox } from "../blue-checkbox/blue-checkbox"

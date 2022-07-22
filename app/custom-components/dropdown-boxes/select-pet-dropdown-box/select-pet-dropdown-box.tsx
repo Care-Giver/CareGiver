@@ -1,6 +1,6 @@
 import { View, Image, FlatList } from "react-native"
 import React, { useState } from "react"
-import { PreMed14, PreReg16 } from "../../custom-texts/custom-texts"
+import { PreMed14, PreReg16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
 import IMAGES from "~/assets/images"
 import { BODY, HEAD_LINE, LBG } from "~/app/theme/palette"

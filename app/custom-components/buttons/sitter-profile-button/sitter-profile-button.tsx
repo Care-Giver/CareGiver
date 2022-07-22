@@ -3,7 +3,7 @@ import React from "react"
 import { ProfileButtonProps } from "./sitter-profile-button.props"
 import { styles } from "./styles"
 import { SHADOW_1, WIDTH, HEIGHT } from "~/app/theme"
-import { PreReg12, PreReg14 } from "../../custom-texts/custom-texts"
+import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
 import IMAGES from "~/assets/images"
 

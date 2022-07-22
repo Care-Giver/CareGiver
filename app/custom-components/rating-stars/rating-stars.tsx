@@ -3,7 +3,7 @@ import React from "react"
 import IMAGES from "~/assets/images"
 import { Row } from "../basics/row/row"
 import { HEIGHT, WIDTH } from "~/app/theme"
-import { PreReg12 } from "../custom-texts/custom-texts"
+import { PreReg12 } from "../basics/custom-texts/custom-texts"
 
 const styles = {
   star: {
