@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "../../../theme"
-import { LBG } from "../../../theme/palette"
+import { HEIGHT, WIDTH } from "~/app/theme"
+import { LBG } from "~/app/theme/palette"
 
 export const styles = StyleSheet.create({
   cardContainer: {

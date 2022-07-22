@@ -5,7 +5,7 @@ import { RowRoundedBox } from "../boxes/basics/row-rounded-box"
 import { PopReg16, PopSem16, PreReg16 } from "../custom-texts/custom-texts"
 import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { Row } from "../boxes/basics/row"
-import { WIDTH, HEIGHT } from "../../theme"
+import { WIDTH, HEIGHT } from "~/app/theme"
 
 export const RowRoundedTimeIntervalPicker = (props) => {
   const { style, platform } = props

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "../../theme"
+import { WIDTH, HEIGHT, palette } from "~/app/theme"
 
 export const styles = StyleSheet.create({
   root: {

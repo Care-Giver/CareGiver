@@ -1,8 +1,8 @@
 import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
-import { palette, WIDTH } from "../../theme"
-import { Screen } from "../../components/screen/screen"
-import { isNonScrolling } from "../../components/screen/screen.presets"
+import { palette, WIDTH } from "~/app/theme"
+import { Screen } from "~/app/components/screen/screen"
+import { isNonScrolling } from "~/app/components/screen/screen.presets"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
 

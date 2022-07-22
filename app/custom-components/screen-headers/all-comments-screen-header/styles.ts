@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "../../../theme"
+import { WIDTH, HEIGHT } from "~/app/theme"
 
 export const styles = StyleSheet.create({
   goBackButton: {

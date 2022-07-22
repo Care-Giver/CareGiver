@@ -17,12 +17,12 @@ import {
   GradientBackground,
   AutoImage as Image,
   FormRow,
-} from "../../components"
-import { ScreenRootView, PreBol32, PopReg20 } from "../../custom-components"
-import { color, spacing, typography, SHADOW_1, WIDTH } from "../../theme"
-import { NavigatorParamList } from "../../navigators"
+} from "~/app/components"
+import { ScreenRootView, PreBol32, PopReg20 } from "~/app/custom-components"
+import { color, spacing, typography, SHADOW_1, WIDTH } from "~/app/theme"
+import { NavigatorParamList } from "~/app/navigators"
 
-// import {} from "../../components/text/custom-texts"
+// import {} from "~/app/components/text/custom-texts"
 
 //* export convention of Our Project
 //! 절대 package 를 혼자 설치하지 않는다,

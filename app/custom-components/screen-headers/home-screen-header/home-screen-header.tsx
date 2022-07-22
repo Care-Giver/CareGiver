@@ -1,7 +1,7 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "../../../theme"
-import IMAGES from "../../../../assets/common-images"
+import { WIDTH } from "~/app/theme"
+import IMAGES from "~/assets/common-images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
 

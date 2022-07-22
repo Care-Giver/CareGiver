@@ -3,9 +3,9 @@ import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme/palette"
-import IMAGES from "../../../assets/common-images"
-import { HEIGHT, WIDTH } from "../../theme"
+import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "~/app/theme/palette"
+import IMAGES from "~/assets/common-images"
+import { HEIGHT, WIDTH } from "~/app/theme"
 
 export const SitterProfileCard = (props: SitterProfileCardProps) => {
   const { style, image, name, rating, review, title, desc, onPress } = props

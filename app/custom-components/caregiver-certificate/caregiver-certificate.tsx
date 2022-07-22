@@ -1,11 +1,11 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "../../theme"
+import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreReg12, PreReg16 } from "../custom-texts/custom-texts"
-import { SUB_HEAD_LINE } from "../../theme/palette"
+import { SUB_HEAD_LINE } from "~/app/theme/palette"
 import { Row } from "../boxes/basics/row"
-import IMAGES from "../../../assets/common-images"
+import IMAGES from "~/assets/common-images"
 
 export const CaregiverCertificate = (props) => {
   const { style: viewStyle } = props

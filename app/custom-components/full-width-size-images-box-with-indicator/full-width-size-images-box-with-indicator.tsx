@@ -1,7 +1,7 @@
 import { View, ImageBackground, Text, FlatList } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { DEVICE_SCREEN_WIDTH, HEIGHT } from "../../theme"
+import { DEVICE_SCREEN_WIDTH, HEIGHT } from "~/app/theme"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
 
 const images = [

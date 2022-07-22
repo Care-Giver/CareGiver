@@ -16,7 +16,7 @@ import { styles } from "./styles"
 import CustomMarkers from "./CustomMarkers"
 import MyLocationMapMarker from "./MyLocationMapMarker"
 import * as Location from "expo-location"
-import { PopReg28 } from "../../../custom-components"
+import { PopReg28 } from "~/app/custom-components"
 
 export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation }) => {

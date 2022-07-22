@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "../../theme"
-import { LBG } from "../../theme/palette"
+import { WIDTH, HEIGHT } from "~/app/theme"
+import { LBG } from "~/app/theme/palette"
 
 const ROOT_HEIGHT = HEIGHT * 52
 const BORDER_BOTTOM_WIDTH = 2

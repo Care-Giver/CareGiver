@@ -2,7 +2,7 @@ import * as React from "react"
 import { View, ViewStyle, ImageStyle, TextStyle } from "react-native"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
-import { spacing, typography } from "../../theme"
+import { spacing, typography } from "~/app/theme"
 
 const BULLET_ITEM: ViewStyle = {
   flexDirection: "row",

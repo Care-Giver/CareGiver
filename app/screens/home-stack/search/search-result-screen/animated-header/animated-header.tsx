@@ -6,7 +6,7 @@ import { HEAD_LINE } from "~/app/theme/palette"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import IMAGES from "~/assets/common-images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
-import { DISABLED } from "../../../../../theme/palette"
+import { DISABLED } from "~/app/theme/palette"
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({

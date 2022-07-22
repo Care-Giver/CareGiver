@@ -1,7 +1,7 @@
 import { StyleProp, TextProps as TextProperties, TextStyle } from "react-native"
 import i18n from "i18n-js"
 import { TextPresets } from "./text.presets"
-import { TxKeyPath } from "../../i18n"
+import { TxKeyPath } from "~/app/i18n"
 import { number } from "mobx-state-tree/dist/internal"
 
 export interface TextProps extends TextProperties {

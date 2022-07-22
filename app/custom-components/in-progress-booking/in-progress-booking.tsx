@@ -1,12 +1,12 @@
 import { ImageBackground, Pressable, View } from "react-native"
 import React from "react"
-import { HEIGHT, WIDTH } from "../../theme"
+import { HEIGHT, WIDTH } from "~/app/theme"
 import { InProgressBookingProfile } from "./in-progress-booking-profile/in-progress-booking-profile"
 import { DivisionLine } from "../division-line/division-line"
-import { LBG } from "../../theme/palette"
+import { LBG } from "~/app/theme/palette"
 import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { styles } from "./styles"
-import IMAGES from "../../../assets/common-images"
+import IMAGES from "~/assets/common-images"
 
 export const InProgressBooking = (props) => {
   const { reserveData } = props

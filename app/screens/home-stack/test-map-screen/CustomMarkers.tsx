@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from "react-native"
 
 import MapView, { Marker, ProviderPropType } from "react-native-maps"
-import IMAGES from "../../../../assets/common-images"
+import IMAGES from "~/assets/common-images"
 
 const { width, height } = Dimensions.get("window")
 

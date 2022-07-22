@@ -3,7 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { Row } from "../../boxes/basics/row"
 import { PreReg12, PreReg14 } from "../../custom-texts/custom-texts"
-import { WIDTH, palette, HEIGHT } from "../../../theme"
+import { WIDTH, palette, HEIGHT } from "~/app/theme"
 import CaregiverTypeButton from "../../caregiver-type-button/caregiver-type-button"
 import RatingReviewBox from "../../rating-review-box/rating-review-box"
 

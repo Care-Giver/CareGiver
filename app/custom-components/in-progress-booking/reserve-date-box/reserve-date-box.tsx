@@ -2,9 +2,9 @@ import { View, Text, Image } from "react-native"
 import React from "react"
 import { Row } from "../../boxes/basics/row"
 import { PreBol14, PreReg12 } from "../../custom-texts/custom-texts"
-import IMAGES from "../../../../assets/common-images"
+import IMAGES from "~/assets/common-images"
 import { styles } from "./styles"
-import { HEIGHT } from "../../../theme"
+import { HEIGHT } from "~/app/theme"
 
 export const ReserveDateBox = ({
   startDateTime,

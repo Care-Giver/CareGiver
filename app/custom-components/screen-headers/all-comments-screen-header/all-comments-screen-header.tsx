@@ -1,10 +1,10 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "../../../theme"
+import { WIDTH } from "~/app/theme"
 import { PreMed18 } from "../../custom-texts/custom-texts"
-import IMAGES from "../../../../assets/common-images"
+import IMAGES from "~/assets/common-images"
 import { styles } from "./styles"
-import { navigate } from "../../../navigators"
+import { navigate } from "~/app/navigators"
 import { HEADER_ROOT } from "../common-styles"
 
 export const AllCommentsScreenHeader = (props) => {

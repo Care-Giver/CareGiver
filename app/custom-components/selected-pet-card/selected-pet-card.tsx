@@ -2,10 +2,10 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg12, PreReg14 } from "../custom-texts/custom-texts"
-import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "../../theme/palette"
-import IMAGES from "../../../assets/common-images"
+import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "~/app/theme/palette"
+import IMAGES from "~/assets/common-images"
 import { DivisionLine } from "../division-line/division-line"
-import { HEIGHT, WIDTH } from "../../theme"
+import { HEIGHT, WIDTH } from "~/app/theme"
 import { Row } from "../boxes/basics/row"
 
 export const SelectedPetCard = (props) => {

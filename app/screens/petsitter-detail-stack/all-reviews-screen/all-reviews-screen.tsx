@@ -1,15 +1,15 @@
 import { FlatList, View } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../navigators"
+import { NavigatorParamList } from "~/app/navigators"
 import { observer } from "mobx-react-lite"
-import { DivisionLine, ScreenRootView } from "../../../custom-components"
+import { DivisionLine, ScreenRootView } from "~/app/custom-components"
 import { reviews as _reviews } from "./dummy-data"
-import { ReviewBox } from "../../../custom-components/review-box/review-box"
-import { FilterHeader } from "../../../custom-components/filter-header/filter-header"
-import IMAGES from "../../../../assets/common-images"
-import { HEIGHT } from "../../../theme"
-import { LBG } from "../../../theme/palette"
+import { ReviewBox } from "~/app/custom-components/review-box/review-box"
+import { FilterHeader } from "~/app/custom-components/filter-header/filter-header"
+import IMAGES from "~/assets/common-images"
+import { HEIGHT } from "~/app/theme"
+import { LBG } from "~/app/theme/palette"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">

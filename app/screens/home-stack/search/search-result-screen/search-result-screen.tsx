@@ -2,11 +2,11 @@ import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react
 import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../../../navigators"
+import { navigate, NavigatorParamList } from "~/app/navigators"
 import { SitterProfileCard } from "~/app/custom-components/sitter-profile-card/sitter-profile-card"
 import { petsitters as _petsitters } from "~/app/screens/home-stack/search/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH, palette } from "~/app/theme"
-import { PreBol18, Row, ScreenRootView } from "~/app/custom-components"
+import { PreBol18, Row, ScreenRootView, DivisionLine } from "~/app/custom-components"
 import { LBG } from "~/app/theme/palette"
 import IMAGES from "~/assets/common-images"
 import { AnimatedHeader } from "./animated-header/animated-header"
@@ -15,8 +15,7 @@ import {
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
-import { SelectOptionDropdownBox } from "../../../../custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
-import { DivisionLine } from "../../../../custom-components"
+import { SelectOptionDropdownBox } from "~/app/custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
