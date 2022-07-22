@@ -5,7 +5,7 @@ import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreReg12, PreReg14 } from "../custom-texts/custom-texts"
 import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
 import { Row } from "../boxes/basics/row"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { DivisionLine } from "../division-line/division-line"
 
 /* @Entity()

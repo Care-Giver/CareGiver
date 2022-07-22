@@ -5,7 +5,7 @@ import { WIDTH, HEIGHT } from "~/app/theme"
 import { PreBol14, PreMed16 } from "../custom-texts/custom-texts"
 import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
 import { Row } from "../boxes/basics/row"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { navigate } from "~/app/navigators"
 

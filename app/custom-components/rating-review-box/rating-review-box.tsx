@@ -4,7 +4,7 @@ import { styles } from "./styles"
 import { PreReg12 } from "../custom-texts/custom-texts"
 import { MIDDLE_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
 import { WIDTH } from "~/app/theme"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 
 interface RatingReviewBoxProps {
   rating: number

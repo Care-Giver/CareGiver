@@ -6,7 +6,7 @@ import { DivisionLine } from "../division-line/division-line"
 import { LBG } from "~/app/theme/palette"
 import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { styles } from "./styles"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 
 export const InProgressBooking = (props) => {
   const { reserveData } = props

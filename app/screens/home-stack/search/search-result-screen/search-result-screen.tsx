@@ -8,7 +8,7 @@ import { petsitters as _petsitters } from "~/app/screens/home-stack/search/searc
 import { HEIGHT, WIDTH, palette } from "~/app/theme"
 import { PreBol18, Row, ScreenRootView, DivisionLine } from "~/app/custom-components"
 import { LBG } from "~/app/theme/palette"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,

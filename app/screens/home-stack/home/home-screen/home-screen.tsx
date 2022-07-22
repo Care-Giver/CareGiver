@@ -17,7 +17,7 @@ import { navigate, NavigatorParamList } from "~/app/navigators"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import { BODY, SUB_HEAD_LINE } from "~/app/theme/palette"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""

@@ -7,7 +7,7 @@ import { DivisionLine, ScreenRootView } from "~/app/custom-components"
 import { reviews as _reviews } from "./dummy-data"
 import { ReviewBox } from "~/app/custom-components/review-box/review-box"
 import { FilterHeader } from "~/app/custom-components/filter-header/filter-header"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { HEIGHT } from "~/app/theme"
 import { LBG } from "~/app/theme/palette"
 

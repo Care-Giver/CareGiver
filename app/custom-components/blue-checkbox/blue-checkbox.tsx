@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Pressable, Image, View, ViewStyle } from "react-native"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { color, HEIGHT, spacing, WIDTH } from "~/app/theme"
 import { BlueCheckboxProps } from "./blue-checkbox.props"
 

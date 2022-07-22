@@ -5,7 +5,7 @@ import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreReg12, PreReg16 } from "../custom-texts/custom-texts"
 import { SUB_HEAD_LINE } from "~/app/theme/palette"
 import { Row } from "../boxes/basics/row"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 
 export const CaregiverCertificate = (props) => {
   const { style: viewStyle } = props

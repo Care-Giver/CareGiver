@@ -7,7 +7,7 @@ const fs = require("fs")
 //* 공통 이미지들
 const imageFileNames = () => {
   const array = fs
-    .readdirSync("../common-images/")
+    .readdirSync("../images/")
     .filter((file) => {
       return file.endsWith(".png")
     })
@@ -21,7 +21,7 @@ const imageFileNames = () => {
 //* 바텀탭내비게이터에 들어가는 이미지들
 const imageFileNamesAtBottomTabNavigator = () => {
   const array = fs
-    .readdirSync("../common-images/bottom-tab-navigator/")
+    .readdirSync("../images/bottom-tab-navigator/")
     .filter((file) => {
       return file.endsWith(".png")
     })
@@ -35,19 +35,19 @@ const imageFileNamesAtBottomTabNavigator = () => {
 const generate = () => {
   let properties = imageFileNames()
     .map((name) => {
-      return `${name}: require("../common-images/${name}.png")`
+      return `${name}: require("../images/${name}.png")`
     })
     .join(",\n  ")
 
   let properties2 = imageFileNamesAtBottomTabNavigator()
     .map((name) => {
-      return `${name}: require("../common-images/bottom-tab-navigator/${name}.png")`
+      return `${name}: require("../images/bottom-tab-navigator/${name}.png")`
     })
     .join(",\n  ")
 
   const string = `//! 항상 이미지 파일명은 언더바 (_) 로 작성한다
   const IMAGES = {
-  //* common images
+  //* images
   ${properties},
   
   //* bottom-tab-navigator
@@ -58,7 +58,7 @@ const generate = () => {
 export default IMAGES
 `
 
-  fs.writeFileSync("../common-images/index.ts", string, "utf8")
+  fs.writeFileSync("../images/index.ts", string, "utf8")
 }
 
 generate()

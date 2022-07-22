@@ -28,7 +28,7 @@ import {
   PreMed12,
 } from "../custom-components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
-import IMAGES from "~/assets/common-images"
+import IMAGES from "~/assets/images"
 import { HEIGHT, WIDTH } from "../theme"
 import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
 import { WritingCommentScreen } from "../screens/petsitter-detail-stack/writing-comment-screen/writing-comment-screen"
