@@ -6,6 +6,7 @@ import { HEAD_LINE } from "~/app/theme/palette"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import IMAGES from "~/assets/common-images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
+import { DISABLED } from "../../../../../theme/palette"
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({
@@ -37,35 +38,26 @@ export const AnimatedHeader = ({ animatedValue }) => {
         >
           {/*//? 날짜 선택 */}
           <RowRoundedButton
-            onPress={() => {
-              alert("dd")
-            }}
-            image={IMAGES.calendar}
+            image={IMAGES.calender_disabled}
             text={"2022.03.20"}
-            textColor={HEAD_LINE}
+            textColor={DISABLED}
             style={{ width: WIDTH * 174 }}
           />
 
           {/* //? 시간 선택 */}
           <RowRoundedButton
-            onPress={() => {
-              alert("time clicked")
-            }}
-            image={IMAGES.timer}
+            image={IMAGES.timer_disabled}
             text={"08:00-12:00"}
-            textColor={HEAD_LINE}
+            textColor={DISABLED}
             style={{ width: WIDTH * 174 }}
           />
         </Row>
 
         {/*//? 주소 선택 */}
         <RowRoundedButton
-          onPress={() => {
-            alert("dd")
-          }}
-          image={IMAGES.location}
+          image={IMAGES.location_disabled}
           text={"경기도 안산시 상록구 한양대학로 55"}
-          textColor={HEAD_LINE}
+          textColor={DISABLED}
           style={{ marginTop: HEIGHT * 12 }}
         />
       </View>

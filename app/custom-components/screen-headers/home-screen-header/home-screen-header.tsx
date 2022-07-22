@@ -1,24 +1,9 @@
-import { View, Image, Platform, Pressable } from "react-native"
+import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH, HEIGHT, HEADER_HEIGHT } from "../../../theme"
-import { PreMed20, PreBol32 } from "../../custom-texts/custom-texts"
+import { WIDTH } from "../../../theme"
 import IMAGES from "../../../../assets/common-images"
 import { styles } from "./styles"
-
-const HEADER_ROOT = {
-  // backgroundColor: "orange",
-  width: WIDTH * 390,
-  height: HEADER_HEIGHT,
-  flexDirection: "row",
-  //   justifyContent: "center",
-  alignItems: "center",
-  marginTop:
-    HEIGHT *
-    Platform.select({
-      ios: 47,
-      android: 0,
-    }),
-}
+import { HEADER_ROOT } from "../common-styles"
 
 export const HomeScreenHeader = (props) => {
   // console.log("HomeScreenHeader props:", props)

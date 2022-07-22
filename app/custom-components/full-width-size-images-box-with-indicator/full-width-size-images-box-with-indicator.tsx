@@ -1,7 +1,7 @@
 import { View, ImageBackground, Text, FlatList } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { DEVICE_SCREEN_WIDTH, HEIGHT, WIDTH } from "../../theme"
+import { DEVICE_SCREEN_WIDTH, HEIGHT } from "../../theme"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
 
 const images = [
@@ -80,7 +80,7 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
       <DotsIndicator
         items={images}
         activeIndex={currentImage}
-        style={{ marginTop: HEIGHT * -16 }}
+        style={{ marginTop: HEIGHT * -28 }}
       />
     </View>
   )

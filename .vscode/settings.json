@@ -1,10 +1,19 @@
 {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "better-comments.tags": [
         {
             "tag": "!",
             "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": false,
+          },
+          {
+            "tag": "FEEDBACK:",
+            "color": "#BC3D1C",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
@@ -30,7 +39,7 @@
             "italic": false
           },
           {
-            "tag": "todo",
+            "tag": "TODO",
             "color": "#000000",
             "strikethrough": false,
             "underline": false,
@@ -65,5 +74,7 @@
             "bold": false,
             "italic": false
           }
-    ]
+    ],
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Material Theme Darker High Contrast"
 }

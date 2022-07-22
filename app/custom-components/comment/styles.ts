@@ -6,7 +6,7 @@ import { BASIC_BACKGROUND_PADDING_WIDTH } from "../view-component/view-component
 export const styles = StyleSheet.create({
   root: {
     width: WIDTH * 358,
-    height: HEIGHT * 121,
+    height: "auto",
     // backgroundColor: "pink",
   },
   profileImage: {
@@ -22,5 +22,6 @@ export const styles = StyleSheet.create({
     // backgroundColor: "yellow",
     // maxWidth: WIDTH * 342,
     marginRight: WIDTH * 13,
+    lineHeight: HEIGHT * 20,
   },
 })

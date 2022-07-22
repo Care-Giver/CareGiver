@@ -4,6 +4,7 @@
 
 const fs = require("fs")
 
+//* 공통 이미지들
 const imageFileNames = () => {
   const array = fs
     .readdirSync("../common-images/")
@@ -17,16 +18,40 @@ const imageFileNames = () => {
   return Array.from(new Set(array))
 }
 
+//* 바텀탭내비게이터에 들어가는 이미지들
+const imageFileNamesAtBottomTabNavigator = () => {
+  const array = fs
+    .readdirSync("../common-images/bottom-tab-navigator/")
+    .filter((file) => {
+      return file.endsWith(".png")
+    })
+    .map((file) => {
+      return file.replace(".png", "")
+    })
+
+  return Array.from(new Set(array))
+}
+
 const generate = () => {
   let properties = imageFileNames()
     .map((name) => {
-      return `${name}: require('../common-images/${name}.png')`
+      return `${name}: require("../common-images/${name}.png")`
+    })
+    .join(",\n  ")
+
+  let properties2 = imageFileNamesAtBottomTabNavigator()
+    .map((name) => {
+      return `${name}: require("../common-images/bottom-tab-navigator/${name}.png")`
     })
     .join(",\n  ")
 
   const string = `//! 항상 이미지 파일명은 언더바 (_) 로 작성한다
   const IMAGES = {
-  ${properties}
+  //* common images
+  ${properties},
+  
+  //* bottom-tab-navigator
+  ${properties2}
 }
 
 //! 예외적으로 export default 허용 

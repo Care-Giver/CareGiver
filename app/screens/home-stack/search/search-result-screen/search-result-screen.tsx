@@ -16,6 +16,7 @@ import {
   HEADER_AREA,
 } from "./animated-header/header-property"
 import { SelectOptionDropdownBox } from "../../../../custom-components/dropdown-boxes/select-option-button/select-option-dropdown-box"
+import { DivisionLine } from "../../../../custom-components"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
@@ -171,11 +172,18 @@ export const SearchResultScreen: FC<
         </Row>
 
         {/* //? divider */}
-        <View
+        {/* <View
           style={{
             width: "100%",
             height: HEIGHT * 2,
             backgroundColor: LBG,
+            position: "absolute",
+            top: HEIGHT * 47,
+          }}
+        /> */}
+        <DivisionLine
+          color={LBG}
+          style={{
             position: "absolute",
             top: HEIGHT * 47,
           }}
@@ -201,7 +209,11 @@ export const SearchResultScreen: FC<
                 review={item.review}
                 title={item.title}
                 desc={item.desc}
-                onPress={() => console.warn("Hello")}
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("petsitter-detail-information-screen", null)
+                }}
                 style={
                   index < petsitters.length - 1
                     ? { marginTop: HEIGHT * 20 }
