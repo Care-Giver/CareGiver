@@ -24,7 +24,6 @@ import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "~/app/
 import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
 import { Api } from "~/app/services/api"
 import { DEFAULT_API_CONFIG } from "~/app/services/api/api-config"
-import { StackScreenProps } from "@react-navigation/stack"
 import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
@@ -110,35 +109,14 @@ export const PetsitterDetailInformationScreen: FC<
 > = observer(({ navigation, route }) => {
   const [post, setPost] = useState(null)
 
-  // const api = new Api()
-  // api.setup()
-  // useEffect(() => {
-  //   // const t2 = axios
-  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/1")
-  //   //   .then((response) => {
-  //   //     setPost(response)
-  //   //   })
-  //   // console.log("t2", t2)
+  useEffect(() => {
+    const api = new Api()
+    api.setup()
 
-  //   // api.getCreche("1").then((response) => {
-  //   //   setPost(response)
-  //   // })
-
-  //   // const t = api.getCreche("1")
-  //   // console.log("t", t)
-
-  //   // const t2 = axios
-  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/", {
-  //   //     params: { id: "2" },
-  //   //   })
-  //   //   .then((response) => {
-  //   //     setPost(response)
-  //   //   })
-
-  //   const t = api.getCreche("1").then((response) => {
-  //     setPost(response.data)
-  //   })
-  // }, [])
+    api.getCreche("1").then((response) => {
+      setPost(response.data)
+    })
+  }, [])
 
   console.log("post", post)
 
