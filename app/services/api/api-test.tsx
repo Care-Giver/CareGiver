@@ -28,7 +28,7 @@ export const searchPetSitter = () => {
     endTime: "2022-07-04T22:13:41",
     petIds: [1, 3],
     maxDistance: 10,
-    page: 0
+    page: 0,
   }
 
   const [post, setPost] = useState(null)
@@ -53,7 +53,11 @@ export const searchPetSitter = () => {
 }
 
 export const callApi = async (method, path, data, params = {}) => {
-  const headers = { "Content-Type": "application/json", "x-jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDk1NzgzfQ.1ZrfR4kx3BgGtOP8j6y_0BPx171Xm3uRwB5hZ-LDrP0" }
+  const headers = {
+    "Content-Type": "application/json",
+    "x-jwt":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDk1NzgzfQ.1ZrfR4kx3BgGtOP8j6y_0BPx171Xm3uRwB5hZ-LDrP0",
+  }
   const baseUrl = "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1"
   const fullUrl = `${baseUrl}${path}`
 
@@ -68,7 +72,8 @@ export const callApi = async (method, path, data, params = {}) => {
 }
 
 export const apiTestJustNoBody = () => {
-  const baseURL = "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/pet-sitter/1"
+  const baseURL =
+    "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/pet-sitter/1"
   const [post, setPost] = useState(null)
 
   useEffect(() => {
@@ -83,14 +88,14 @@ export const apiTestJustNoBody = () => {
   return post
 }
 
-
 export const apiTestWithBody = () => {
-  const baseURL = "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/pet-sitters/search"
+  const baseURL =
+    "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/pet-sitters/search"
   const [post, setPost] = useState(null)
 
   useEffect(() => {
-    axios.get(baseURL, 
-      {
+    axios
+      .get(baseURL, {
         params: {
           lat: 37.48,
           lng: 127.15,
@@ -98,11 +103,12 @@ export const apiTestWithBody = () => {
           endTime: "2022-07-04T22:13:41",
           petIds: [1, 3],
           maxDistance: 10,
-          page: 0
-        }
-      }).then((response) => {
-      setPost(response.data)
-    })
+          page: 0,
+        },
+      })
+      .then((response) => {
+        setPost(response.data)
+      })
   }, [])
 
   if (!post) return null
