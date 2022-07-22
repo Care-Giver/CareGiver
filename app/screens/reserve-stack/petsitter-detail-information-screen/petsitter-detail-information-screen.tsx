@@ -1,4 +1,6 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useState } from "react"
+import { Platform, Pressable, ScrollView, View } from "react-native"
+import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
   CaregiverService,
@@ -15,18 +17,19 @@ import {
   ConditionalButton,
   BASIC_BACKGROUND_PADDING_WIDTH,
   MakeBookingButton,
-} from "../../../custom-components"
+} from "~/app/custom-components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigate, NavigatorParamList } from "../../../navigators"
-import { observer } from "mobx-react-lite"
-import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "../../../theme"
-import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "../../../theme/palette"
-import { Platform, Pressable, ScrollView, View } from "react-native"
+import { navigate, NavigatorParamList } from "~/app/navigators"
+import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "~/app/theme"
+import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
+import { Api } from "~/app/services/api"
+import { DEFAULT_API_CONFIG } from "~/app/services/api/api-config"
+import { StackScreenProps } from "@react-navigation/stack"
 import { DivisionLineVertical } from "../../../custom-components/division-line-vertical/division-line-vertical"
 
 const commentsDummy = [
   {
-    userId: "유저닉네임1",
+    userId: "유저닉네임1r",
     desc:
       "안녕하세요, 펫시터님! 몇가지 궁금한 점이 있어서 여쭤보려고 하는데 어디로 연락을 드려야 편하실까요~?? 편하신 연락처 알려알려알려알려",
     createdAt: "2022-03-22T11:30",
@@ -105,6 +108,40 @@ const desc =
 export const PetsitterDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
 > = observer(({ navigation, route }) => {
+  const [post, setPost] = useState(null)
+
+  // const api = new Api()
+  // api.setup()
+  // useEffect(() => {
+  //   // const t2 = axios
+  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/1")
+  //   //   .then((response) => {
+  //   //     setPost(response)
+  //   //   })
+  //   // console.log("t2", t2)
+
+  //   // api.getCreche("1").then((response) => {
+  //   //   setPost(response)
+  //   // })
+
+  //   // const t = api.getCreche("1")
+  //   // console.log("t", t)
+
+  //   // const t2 = axios
+  //   //   .get("http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1/creche/", {
+  //   //     params: { id: "2" },
+  //   //   })
+  //   //   .then((response) => {
+  //   //     setPost(response)
+  //   //   })
+
+  //   const t = api.getCreche("1").then((response) => {
+  //     setPost(response.data)
+  //   })
+  // }, [])
+
+  console.log("post", post)
+
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
     //! 따라서, ScreenRootView 는 fixed 로 한다
