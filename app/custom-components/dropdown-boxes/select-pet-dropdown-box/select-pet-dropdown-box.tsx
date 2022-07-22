@@ -1,6 +1,5 @@
 import { View, Image, FlatList } from "react-native"
 import React, { useState } from "react"
-import { RowRoundedBox } from "../../boxes/basics/row-rounded-box"
 import { PreMed14, PreReg16 } from "../../custom-texts/custom-texts"
 import { styles } from "./styles"
 import IMAGES from "~/assets/images"
@@ -9,6 +8,7 @@ import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { petsDummy } from "~/app/screens/home-stack/search/search-screen/dummy-data"
 import { HEIGHT } from "~/app/theme"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
+import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
 
 const INITIAL_NUMBER_OF_PET_ITEMS = 3
 

@@ -1,7 +1,7 @@
 import { View, Text, Image } from "react-native"
 import React from "react"
 import IMAGES from "~/assets/images"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreReg12 } from "../custom-texts/custom-texts"
 

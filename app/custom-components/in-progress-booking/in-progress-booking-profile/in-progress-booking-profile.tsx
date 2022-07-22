@@ -1,10 +1,10 @@
 import { View, Text, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { Row } from "../../boxes/basics/row"
+import { Row } from "../../basics/row/row"
 import { PreReg12, PreReg14 } from "../../custom-texts/custom-texts"
 import { WIDTH, palette, HEIGHT } from "~/app/theme"
-import CaregiverTypeButton from "../../caregiver-type-button/caregiver-type-button"
+import CaregiverTypeButton from "../../buttons/caregiver-type-button/caregiver-type-button"
 import RatingReviewBox from "../../rating-review-box/rating-review-box"
 
 export const InProgressBookingProfile = (props) => {

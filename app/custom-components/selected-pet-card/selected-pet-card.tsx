@@ -6,7 +6,7 @@ import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "~/app/theme/palette"
 import IMAGES from "~/assets/images"
 import { DivisionLine } from "../division-line/division-line"
 import { HEIGHT, WIDTH } from "~/app/theme"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 
 export const SelectedPetCard = (props) => {
   const { petData, style, onPress, index } = props

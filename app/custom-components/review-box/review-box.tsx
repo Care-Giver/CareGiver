@@ -1,6 +1,6 @@
 import { View, Text, Pressable, Image, FlatList, LayoutAnimation } from "react-native"
 import React, { useLayoutEffect, useState } from "react"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreReg12, PreReg14 } from "../custom-texts/custom-texts"
 import IMAGES from "~/assets/images"

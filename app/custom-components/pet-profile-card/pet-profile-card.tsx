@@ -5,7 +5,7 @@ import { PreBol16, PreReg12, PreReg14 } from "../custom-texts/custom-texts"
 import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "~/app/theme/palette"
 import IMAGES from "~/assets/images"
 import { HEIGHT, WIDTH } from "~/app/theme"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 
 export const PetProfileCard = (props) => {
   const { petData, style, index } = props

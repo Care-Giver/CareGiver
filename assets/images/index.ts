@@ -1,7 +1,8 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-const IMAGES = {
+  const IMAGES = {
   //* images
   arrow_down: require("../images/arrow_down.png"),
+  arrow_left: require("../images/arrow_left.png"),
   arrow_up: require("../images/arrow_up.png"),
   bell: require("../images/bell.png"),
   calendar: require("../images/calendar.png"),
@@ -28,13 +29,15 @@ const IMAGES = {
   right_arrow_navy: require("../images/right_arrow_navy.png"),
   search: require("../images/search.png"),
   select_checkbox: require("../images/select_checkbox.png"),
+  service_petsitting: require("../images/service_petsitting.png"),
+  service_training: require("../images/service_training.png"),
   three_dots: require("../images/three_dots.png"),
   timer: require("../images/timer.png"),
   timer_disabled: require("../images/timer_disabled.png"),
   vertical_3_dots: require("../images/vertical_3_dots.png"),
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
-
+  
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
@@ -45,8 +48,8 @@ const IMAGES = {
   schedule_grey: require("../images/bottom-tab-navigator/schedule_grey.png"),
   schedule_navy: require("../images/bottom-tab-navigator/schedule_navy.png"),
   search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
-  search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
+  search_navy: require("../images/bottom-tab-navigator/search_navy.png")
 }
 
-//! 예외적으로 export default 허용
+//! 예외적으로 export default 허용 
 export default IMAGES

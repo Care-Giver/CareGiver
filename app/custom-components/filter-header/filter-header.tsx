@@ -1,6 +1,6 @@
 import { View, Pressable, Image } from "react-native"
 import React from "react"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 import { PopSem16, PreBol16, PreReg12 } from "../custom-texts/custom-texts"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import IMAGES from "~/assets/images"

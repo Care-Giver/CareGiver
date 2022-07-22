@@ -5,6 +5,7 @@ import { ChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../custom-texts/custom-texts"
 import { SHADOW_1 } from "~/app/theme"
 import { BODY, SUB_HEAD_LINE } from "~/app/theme/palette"
+import IMAGES from "~/assets/images"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
   const { title, subtitle, style, onPress } = props
@@ -13,7 +14,7 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
-        <Image style={styles.titleImage} source={require("../images/left-arrow.png")} />
+        <Image style={styles.titleImage} source={IMAGES.arrow_left} />
       </View>
 
       {/* subtitle */}
@@ -26,9 +27,9 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
         style={styles.image}
         source={
           title === "펫시팅"
-            ? require("../images/service_petsitting.png")
+            ? IMAGES.service_petsitting
             : title === "훈련"
-            ? require("../images/service_training.png")
+            ? IMAGES.service_training
             : ""
         }
       />

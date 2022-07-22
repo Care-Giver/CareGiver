@@ -5,6 +5,7 @@ import { styles } from "./styles"
 import { SHADOW_1, WIDTH, HEIGHT } from "~/app/theme"
 import { PreReg12, PreReg14 } from "../../custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
+import IMAGES from "~/assets/images"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props
@@ -31,7 +32,7 @@ export const SitterProfileButton = (props: ProfileButtonProps) => {
               }
             />
           ))} */}
-        <Image style={styles.star} source={require("../images/rating-star.png")} />
+        <Image style={styles.star} source={IMAGES.rating_star} />
         <PreReg12 style={{ marginLeft: WIDTH * 4 }} color={SUB_HEAD_LINE}>
           ({rating})
         </PreReg12>

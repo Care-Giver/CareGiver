@@ -1,8 +1,8 @@
 import React from "react"
 import { Image, Pressable, Text, View, ViewProps } from "react-native"
 import { styles } from "./styles"
-import { RowRoundedBox } from "../../boxes/basics/row-rounded-box"
 import { PopReg16, PreReg16 } from "../../custom-texts/custom-texts"
+import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
 
 export const RowRoundedButton = (props: ViewProps) => {
   const image = props.image

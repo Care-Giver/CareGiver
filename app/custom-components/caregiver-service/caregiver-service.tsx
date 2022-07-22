@@ -4,7 +4,7 @@ import { styles } from "./styles"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import { PreMed16 } from "../custom-texts/custom-texts"
 import { BODY } from "~/app/theme/palette"
-import { Row } from "../boxes/basics/row"
+import { Row } from "../basics/row/row"
 import IMAGES from "~/assets/images"
 
 export const CaregiverService = (props) => {
