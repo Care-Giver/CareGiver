@@ -11,7 +11,6 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
-  StackActions,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import {
@@ -31,13 +30,10 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
-  PreMed12,
 } from "../components"
 import IMAGES from "~/assets/images"
 import { HEIGHT, WIDTH } from "../theme"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY } from "../theme/palette"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -56,7 +52,6 @@ export type NavigatorParamList = {
   "home-screen": undefined
   "search-screen": undefined
   "search-result": undefined
-
   "caregiver-detail-information-screen": undefined
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
@@ -74,8 +69,6 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 const AppStack = () => {
   const navigation = useNavigation()
 
-  // return BottomTabNavigator() //! screen stack 계층 정리 이후, bottom-navigator 적용 완료할 것
-
   return (
     <Stack.Navigator
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
@@ -83,10 +76,6 @@ const AppStack = () => {
         headerShown: true,
       }}
       initialRouteName="home-screen"
-      // initialRouteName="minseon-test"
-      // initialRouteName="caregiver-detail-information-screen"
-      // initialRouteName="caregiver-self-introduction-screen"
-      // initialRouteName="all-reviews-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -164,6 +153,17 @@ const AppStack = () => {
         }}
       />
 
+      {/* //* 댓글쓰기 */}
+      <Stack.Screen
+        name="writing-comment-screen"
+        component={WritingCommentScreen}
+        options={{
+          header: (props) => <WritingCommentScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
+
       {/* //? 민선 테스트 */}
       <Stack.Screen
         name="minseon-test"
@@ -175,15 +175,6 @@ const AppStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       <Stack.Screen name="test-map-screen" component={TestMapScreen} />
-
-      {/* //* 댓글쓰기 */}
-      <Stack.Screen
-        name="writing-comment-screen"
-        component={WritingCommentScreen}
-        options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
-        }}
-      />
     </Stack.Navigator>
   )
 }
@@ -217,147 +208,3 @@ AppNavigator.displayName = "AppNavigator"
  */
 const exitRoutes = ["welcome"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)
-
-//* bottom-tab-navigator 코드
-const Tab = createBottomTabNavigator()
-function BottomTabNavigator() {
-  return (
-    <Tab.Navigator
-      initialRouteName="home-screen"
-      screenOptions={{
-        tabBarShowLabel: true,
-        tabBarStyle: {
-          // backgroundColor: "pink",
-          // justifyContent: "center",
-          // alignItems: "center",
-        },
-        tabBarHideOnKeyboard: true,
-      }}
-    >
-      <Tab.Screen
-        name="favorite"
-        component={AllCommentsScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image
-              source={focused ? IMAGES.favorite_navy : IMAGES.favorite_grey}
-              style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
-                backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
-              }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <PreMed12
-              text={focused ? "즐겨찾기" : ""}
-              color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
-            />
-          ),
-          // tabBarBadge: 3,
-        }}
-      />
-      <Tab.Screen
-        name="schedule"
-        component={TestMapScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image
-              source={focused ? IMAGES.schedule_navy : IMAGES.schedule_grey}
-              style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
-                backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
-              }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <PreMed12
-              text={focused ? "일정" : ""}
-              color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
-            />
-          ),
-          // tabBarBadge: 3,
-        }}
-      />
-      <Tab.Screen
-        name="home-screen"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image
-              source={focused ? IMAGES.search_navy : IMAGES.search_grey}
-              style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
-                backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
-              }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <PreMed12
-              text={focused ? "검색" : ""}
-              color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="chatting"
-        component={WritingCommentScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image
-              source={focused ? IMAGES.chatting_navy : IMAGES.chatting_grey}
-              style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
-                backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
-              }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <PreMed12
-              text={focused ? "채팅" : ""}
-              color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="myinfo"
-        component={AllReviewsScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image
-              source={focused ? IMAGES.myinfo_navy : IMAGES.myinfo_grey}
-              style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
-                backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
-              }}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <PreMed12
-              text={focused ? "내정보" : ""}
-              color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  )
-}
