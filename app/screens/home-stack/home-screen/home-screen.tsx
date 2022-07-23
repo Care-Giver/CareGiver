@@ -66,7 +66,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
     }, [])
 
     const goToSearchScreen = (params?) => {
-      navigation.navigate("search", params)
+      navigation.navigate("search-screen", params)
     }
 
     const goToTestMapScreen = (params?) => {

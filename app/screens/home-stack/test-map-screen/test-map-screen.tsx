@@ -18,7 +18,7 @@ import MyLocationMapMarker from "./MyLocationMapMarker"
 import * as Location from "expo-location"
 import { PopReg28 } from "~/app/components"
 
-export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
+export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "test-map-screen">> = observer(
   ({ navigation }) => {
     const [location, setLocation] = useState(null)
     const [trigger, setTrigger] = useState(false)
