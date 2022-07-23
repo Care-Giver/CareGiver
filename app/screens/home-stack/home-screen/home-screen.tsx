@@ -65,19 +65,12 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
       }
     }, [])
 
-    const goToSearchScreen = (params?) => {
-      navigation.navigate("search-screen", params)
-    }
-
-    const goToTestMapScreen = (params?) => {
-      navigation.navigate("test-map-screen", params)
-    }
-
     return (
       <ScreenRootView testID="HomeScreen" preset="scroll">
         <RowRoundedButton
           onPress={() => {
-            goToTestMapScreen()
+            //TODO: params 값 추가해줘야 함
+            navigate("test-map-screen")
           }}
           image={IMAGES.gps}
           text={"경기 안산시 상록구 한양대학로 55"}
@@ -93,14 +86,14 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <ServiceChoiceButton
             onPress={() => {
-              goToSearchScreen({ service: "펫시팅" })
+              navigate("search-screen", { service: "펫시팅" })
             }}
             title="펫시팅"
             subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
           />
           <ServiceChoiceButton
             onPress={() => {
-              goToSearchScreen({ service: "훈련" })
+              navigate("search-screen", { service: "훈련" })
             }}
             title="훈련"
             subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
