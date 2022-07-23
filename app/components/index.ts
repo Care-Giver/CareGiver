@@ -7,7 +7,7 @@ export * from "./basics/view-component/view-component"
 //* buttons
 export * from "./buttons/caregiver-type-button/caregiver-type-button"
 export * from "./buttons/pressable-button/pressable-button"
-export * from "./buttons/come-home-go-to-switch-button/come-home-go-to-switch-button"
+export * from "./buttons/visiting-drop-off-switch-button/visiting-drop-off-switch-button"
 export * from "./buttons/conditional-button/conditional-button"
 export * from "./buttons/row-rounded-button/row-rounded-button"
 export * from "./buttons/public-private-switch-button/public-private-switch-button"

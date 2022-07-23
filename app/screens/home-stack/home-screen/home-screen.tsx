@@ -11,7 +11,7 @@ import {
   SitterProfileButton,
   DotsIndicator,
   RowRoundedButton,
-  ComeHomeGoToSwitchButton,
+  VisitingDropOffSwitchButton,
 } from "~/app/components"
 import { navigate, NavigatorParamList } from "~/app/navigators"
 import { HEIGHT, WIDTH } from "~/app/theme"
@@ -33,22 +33,22 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
     const [petsitters, setPetsitters] = useState(petsittersDummy)
     const [trainers, settrainers] = useState(trainersDummy)
 
-    const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
-    const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
+    const [isVisitingPetSitter, setIsVisitingPetSitter] = useState(true)
+    const [isVisitingTrainer, setIsVisitingTrainer] = useState(true)
     const [selectedPetsitter, setSelectedPetsitter] = useState(0)
     const [selectedTrainer, setSelectedTrainer] = useState(0)
 
     useEffect(() => {
-      isComeHomePetSitter
-        ? setPetsitters(petsittersDummy.filter((item) => item.isComeHome === true))
-        : setPetsitters(petsittersDummy.filter((item) => item.isGoTo === true))
-    }, [isComeHomePetSitter])
+      isVisitingPetSitter
+        ? setPetsitters(petsittersDummy.filter((item) => item.isVisiting === true))
+        : setPetsitters(petsittersDummy.filter((item) => item.isDropOff === true))
+    }, [isVisitingPetSitter])
 
     useEffect(() => {
-      isComeHomeTrainer
-        ? settrainers(trainersDummy.filter((item) => item.isComeHome === true))
-        : settrainers(trainersDummy.filter((item) => item.isGoTo === true))
-    }, [isComeHomeTrainer])
+      isVisitingTrainer
+        ? settrainers(trainersDummy.filter((item) => item.isVisiting === true))
+        : settrainers(trainersDummy.filter((item) => item.isDropOff === true))
+    }, [isVisitingTrainer])
 
     const onPetsitterFlatlistUpdate = useCallback(({ viewableItems }) => {
       // ? 선택된 이미지, 즉 viewableItems 의 index 값을 activeIndex 로 설정.
@@ -114,9 +114,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
-          <ComeHomeGoToSwitchButton
-            state={isComeHomePetSitter}
-            setState={setIsComeHomePetSitter}
+          <VisitingDropOffSwitchButton
+            state={isVisitingPetSitter}
+            setState={setIsVisitingPetSitter}
             style={{ marginLeft: "auto" }}
           />
         </Row>
@@ -179,9 +179,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           {/*//? 훈련사 */}
           <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
-          <ComeHomeGoToSwitchButton
-            state={isComeHomeTrainer}
-            setState={setIsComeHomeTrainer}
+          <VisitingDropOffSwitchButton
+            state={isVisitingTrainer}
+            setState={setIsVisitingTrainer}
             style={{ marginLeft: "auto" }}
           />
         </Row>

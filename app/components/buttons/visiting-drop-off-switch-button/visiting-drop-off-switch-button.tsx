@@ -32,17 +32,23 @@ const PRESSED_VIEW_STYLE: ViewStyle = {
   alignItems: "center",
 }
 
-export const ComeHomeGoToSwitchButton = ({ state: isComeHome, setState: setIsComeHome, style }) => {
+//! 방문 = Visiting
+//! 위탁 = DropOff
+export const VisitingDropOffSwitchButton = ({
+  state: isVisiting,
+  setState: setIsVisiting,
+  style,
+}) => {
   return (
     <View style={[ROOT, style]}>
       {/*//? 방문 버튼 */}
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
-        children={() => <PreBol12 color={isComeHome ? palette.white : DISABLED} text="방문" />}
-        isPressed={isComeHome}
+        children={() => <PreBol12 color={isVisiting ? palette.white : DISABLED} text="방문" />}
+        isPressed={isVisiting}
         onPress={() => {
-          setIsComeHome(true)
+          setIsVisiting(true)
         }}
       />
 
@@ -50,10 +56,10 @@ export const ComeHomeGoToSwitchButton = ({ state: isComeHome, setState: setIsCom
       <PressableButton
         defaultViewStyle={DEFAULT_VIEW_STYLE}
         pressedViewStyle={PRESSED_VIEW_STYLE}
-        children={() => <PreBol12 color={!isComeHome ? palette.white : DISABLED} text="위탁" />}
-        isPressed={!isComeHome}
+        children={() => <PreBol12 color={!isVisiting ? palette.white : DISABLED} text="위탁" />}
+        isPressed={!isVisiting}
         onPress={() => {
-          setIsComeHome(false)
+          setIsVisiting(false)
         }}
       />
     </View>
