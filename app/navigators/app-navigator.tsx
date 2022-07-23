@@ -14,12 +14,18 @@ import {
   StackActions,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import {
+  WritingCommentScreen,
+  HomeScreen,
+  SearchScreen,
+  SearchResultScreen,
+  TestMapScreen,
+  CaregiverDetailInformationScreen,
+  CaregiverSelfIntroductionScreen,
+  AllCommentsScreen,
+  AllReviewsScreen,
+} from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
-import { HomeScreen } from "../screens/home-stack/home/home-screen/home-screen"
-import { SearchScreen } from "../screens/home-stack/search/search-screen/search-screen"
-import { SearchResultScreen } from "../screens/home-stack/search/search-result-screen/search-result-screen"
-import { TestMapScreen } from "../screens/home-stack/test-map-screen/test-map-screen"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
@@ -27,15 +33,9 @@ import {
   AllCommentsScreenHeader,
   PreMed12,
 } from "../components"
-import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "~/assets/images"
 import { HEIGHT, WIDTH } from "../theme"
-import { ViewAllReviewsScreen } from "../screens/petsitter-detail-stack/view-all-reviews-screen/view-all-reviews-screen"
-import { WritingCommentScreen } from "../screens/petsitter-detail-stack/writing-comment-screen/writing-comment-screen"
-import { AllReviewsScreen } from "../screens/petsitter-detail-stack/all-reviews-screen/all-reviews-screen"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { CaregiverSelfIntroductionScreen } from "../screens/petsitter-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
-import { AllCommentsScreen } from "../screens/petsitter-detail-stack/all-comments-screen/all-comments-screen"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY } from "../theme/palette"
 
@@ -52,20 +52,20 @@ import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY } from "../theme/palette"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type NavigatorParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
-  // 🔥 Your screens go here
-  home: undefined
-  search: undefined
+  //* general screens
+  "home-screen": undefined
+  "search-screen": undefined
   "search-result": undefined
-  "test-map-screen": undefined
-  "petsitter-detail-information-screen": undefined
+
+  "caregiver-detail-information-screen": undefined
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
-  //? test
+  "writing-comment-screen": undefined
+
+  //* test screens
   "minseon-test": undefined
+  "test-map-screen": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -82,20 +82,15 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home"
+      initialRouteName="home-screen"
       // initialRouteName="minseon-test"
-      // initialRouteName="petsitter-detail-information-screen"
+      // initialRouteName="caregiver-detail-information-screen"
       // initialRouteName="caregiver-self-introduction-screen"
       // initialRouteName="all-reviews-screen"
     >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
-      {/** 🔥 Your screens go here */}
-
       {/* //* 홈 */}
       <Stack.Screen
-        name="home"
+        name="home-screen"
         component={HomeScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
@@ -104,7 +99,7 @@ const AppStack = () => {
 
       {/* //* 검색 */}
       <Stack.Screen
-        name="search"
+        name="search-screen"
         component={SearchScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
@@ -122,8 +117,8 @@ const AppStack = () => {
 
       {/* //* 펫시터 상세정보 */}
       <Stack.Screen
-        name="petsitter-detail-information-screen"
-        component={PetsitterDetailInformationScreen}
+        name="caregiver-detail-information-screen"
+        component={CaregiverDetailInformationScreen}
         options={{
           headerTransparent: true,
           headerLeft: (props) => (
@@ -228,7 +223,7 @@ const Tab = createBottomTabNavigator()
 function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="home"
+      initialRouteName="home-screen"
       screenOptions={{
         tabBarShowLabel: true,
         tabBarStyle: {
@@ -290,7 +285,7 @@ function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="home"
+        name="home-screen"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (

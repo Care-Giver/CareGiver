@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "~/app/navigators"
 import { SitterProfileCard } from "~/app/components/sitter-profile-card/sitter-profile-card"
-import { petsitters as _petsitters } from "~/app/screens/home-stack/search/search-result-screen/dummy-data"
+import { petsitters as _petsitters } from "~/app/screens/search-stack/search-result-screen/dummy-data"
 import { HEIGHT, WIDTH, palette } from "~/app/theme"
 import { PreBol18, Row, ScreenRootView, DivisionLine } from "~/app/components"
 import { LBG } from "~/app/theme/palette"
@@ -211,7 +211,7 @@ export const SearchResultScreen: FC<
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("petsitter-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", null)
                 }}
                 style={
                   index < petsitters.length - 1

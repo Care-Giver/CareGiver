@@ -10,7 +10,7 @@ import {
   GradientBackground,
 } from "~/app/components/basics/ignite-basics"
 import { color, spacing } from "~/app/theme"
-import { useStores } from "../../models"
+import { useStores } from "../../../models"
 import { NavigatorParamList } from "~/app/navigators"
 
 const FULL: ViewStyle = {

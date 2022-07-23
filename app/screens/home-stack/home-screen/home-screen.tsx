@@ -22,7 +22,7 @@ import IMAGES from "~/assets/images"
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
 
-export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
+export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = observer(
   ({ navigation, route }) => {
     const [isOn, setIsOn] = useState(false)
     const toggle = () => {
@@ -137,7 +137,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("petsitter-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", null)
                 }}
                 name={item.name}
                 rating={item.rating}
@@ -202,7 +202,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("petsitter-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", null)
                 }}
                 name={item.name}
                 rating={item.rating}

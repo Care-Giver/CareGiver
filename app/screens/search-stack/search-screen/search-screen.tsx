@@ -21,7 +21,7 @@ import { Calendar } from "react-native-calendars"
 import { SelectPetDropdownBox } from "~/app/components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
 import { RowRoundedTimeIntervalPicker } from "~/app/components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
 
-export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
+export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련

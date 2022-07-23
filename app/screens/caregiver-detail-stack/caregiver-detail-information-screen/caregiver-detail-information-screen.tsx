@@ -104,8 +104,8 @@ const petYearsMonths = 4
 const desc =
   "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
 
-export const PetsitterDetailInformationScreen: FC<
-  StackScreenProps<NavigatorParamList, "petsitter-detail-information-screen">
+export const CaregiverDetailInformationScreen: FC<
+  StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
 > = observer(({ navigation, route }) => {
   const [post, setPost] = useState(null)
 

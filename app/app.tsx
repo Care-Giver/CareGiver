@@ -18,7 +18,7 @@ import * as storage from "./utils/storage"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
-import { ErrorBoundary } from "./screens/error/error-boundary"
+import { ErrorBoundary } from "./screens/ignite-basics/error/error-boundary"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
