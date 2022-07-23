@@ -1,0 +1,55 @@
+//! 항상 이미지 파일명은 언더바 (_) 로 작성한다
+  const IMAGES = {
+  //* images
+  arrow_down: require("../images/arrow_down.png"),
+  arrow_left: require("../images/arrow_left.png"),
+  arrow_up: require("../images/arrow_up.png"),
+  bell: require("../images/bell.png"),
+  calendar: require("../images/calendar.png"),
+  calender_disabled: require("../images/calender_disabled.png"),
+  care_giver_logo_162x20: require("../images/care_giver_logo_162x20.png"),
+  certificate_badge: require("../images/certificate_badge.png"),
+  default_pet_image_60: require("../images/default_pet_image_60.png"),
+  default_profile_image_comment: require("../images/default_profile_image_comment.png"),
+  deselect_checkbox: require("../images/deselect_checkbox.png"),
+  empty_12: require("../images/empty_12.png"),
+  empty_heart: require("../images/empty_heart.png"),
+  go_back: require("../images/go_back.png"),
+  gps: require("../images/gps.png"),
+  in_progress_booking_background: require("../images/in_progress_booking_background.png"),
+  list_bars: require("../images/list_bars.png"),
+  location: require("../images/location.png"),
+  location_disabled: require("../images/location_disabled.png"),
+  more_info: require("../images/more_info.png"),
+  profile_default: require("../images/profile_default.png"),
+  rating_star: require("../images/rating_star.png"),
+  rating_star_empty: require("../images/rating_star_empty.png"),
+  rating_star_half: require("../images/rating_star_half.png"),
+  right_arrow_grey: require("../images/right_arrow_grey.png"),
+  right_arrow_navy: require("../images/right_arrow_navy.png"),
+  search: require("../images/search.png"),
+  select_checkbox: require("../images/select_checkbox.png"),
+  service_petsitting: require("../images/service_petsitting.png"),
+  service_training: require("../images/service_training.png"),
+  three_dots: require("../images/three_dots.png"),
+  timer: require("../images/timer.png"),
+  timer_disabled: require("../images/timer_disabled.png"),
+  vertical_3_dots: require("../images/vertical_3_dots.png"),
+  write_comment: require("../images/write_comment.png"),
+  x_grey: require("../images/x_grey.png"),
+  
+  //* bottom-tab-navigator
+  chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
+  chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
+  favorite_grey: require("../images/bottom-tab-navigator/favorite_grey.png"),
+  favorite_navy: require("../images/bottom-tab-navigator/favorite_navy.png"),
+  myinfo_grey: require("../images/bottom-tab-navigator/myinfo_grey.png"),
+  myinfo_navy: require("../images/bottom-tab-navigator/myinfo_navy.png"),
+  schedule_grey: require("../images/bottom-tab-navigator/schedule_grey.png"),
+  schedule_navy: require("../images/bottom-tab-navigator/schedule_navy.png"),
+  search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
+  search_navy: require("../images/bottom-tab-navigator/search_navy.png")
+}
+
+//! 예외적으로 export default 허용 
+export default IMAGES

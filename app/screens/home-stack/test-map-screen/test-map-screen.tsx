@@ -3,22 +3,22 @@ import { Platform, Text, View, StyleSheet, ActivityIndicator } from "react-nativ
 import { FlatList } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { SitterProfileCard } from "~/app/custom-components/sitter-profile-card/sitter-profile-card"
+import { SitterProfileCard } from "~/app/components/sitter-profile-card/sitter-profile-card"
 import { petsitters } from "./dummy-data"
 import { HEIGHT, WIDTH } from "~/app/theme"
-import { PreBol18, ScreenRootView } from "~/app/custom-components"
+import { PreBol18, ScreenRootView } from "~/app/components"
 import { HEAD_LINE, LBG } from "~/app/theme/palette"
-import { RowRoundedButton } from "~/app/custom-components/buttons/row-rounded-button/row-rounded-button"
-import IMAGES from "~/assets/common-images"
+import { RowRoundedButton } from "~/app/components/buttons/row-rounded-button/row-rounded-button"
+import IMAGES from "~/assets/images"
 import { NavigatorParamList } from "~/app/navigators"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import { styles } from "./styles"
 import CustomMarkers from "./CustomMarkers"
 import MyLocationMapMarker from "./MyLocationMapMarker"
 import * as Location from "expo-location"
-import { PopReg28 } from "../../../custom-components"
+import { PopReg28 } from "~/app/components"
 
-export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
+export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "test-map-screen">> = observer(
   ({ navigation }) => {
     const [location, setLocation] = useState(null)
     const [trigger, setTrigger] = useState(false)
