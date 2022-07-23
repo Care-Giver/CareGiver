@@ -2,7 +2,13 @@ import React, { useEffect, FC } from "react"
 import { FlatList, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Header, Screen, Text, AutoImage as Image, GradientBackground } from "~/app/components"
+import {
+  Header,
+  Screen,
+  Text,
+  AutoImage as Image,
+  GradientBackground,
+} from "~/app/components/basics/ignite-basics"
 import { color, spacing } from "~/app/theme"
 import { useStores } from "../../models"
 import { NavigatorParamList } from "~/app/navigators"

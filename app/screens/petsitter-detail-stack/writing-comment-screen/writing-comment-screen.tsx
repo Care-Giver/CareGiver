@@ -18,7 +18,7 @@ import {
   PopSem14,
   PopReg14,
   Row,
-} from "~/app/custom-components"
+} from "~/app/components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "~/assets/fonts"
 

@@ -17,8 +17,8 @@ import {
   GradientBackground,
   AutoImage as Image,
   FormRow,
-} from "~/app/components"
-import { ScreenRootView, PreBol32, PopReg20 } from "~/app/custom-components"
+} from "~/app/components/basics/ignite-basics"
+import { ScreenRootView, PreBol32, PopReg20 } from "~/app/components"
 import { color, spacing, typography, SHADOW_1, WIDTH } from "~/app/theme"
 import { NavigatorParamList } from "~/app/navigators"
 

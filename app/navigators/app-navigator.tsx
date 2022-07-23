@@ -26,7 +26,7 @@ import {
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
   PreMed12,
-} from "../custom-components"
+} from "../components"
 import { PetsitterDetailInformationScreen } from "../screens/reserve-stack/petsitter-detail-information-screen/petsitter-detail-information-screen"
 import IMAGES from "~/assets/images"
 import { HEIGHT, WIDTH } from "../theme"

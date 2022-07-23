@@ -10,7 +10,7 @@ import {
   Screen,
   AutoImage as Image,
   GradientBackground,
-} from "~/app/components"
+} from "~/app/components/basics/ignite-basics"
 import { NavigatorParamList } from "~/app/navigators"
 import { color, spacing } from "~/app/theme"
 import { Api } from "~/app/services/api"

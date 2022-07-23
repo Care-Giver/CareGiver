@@ -3,8 +3,8 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "~/app/navigators"
-import { InProgressBooking } from "~/app/custom-components/in-progress-booking/in-progress-booking"
-import { ScreenRootView } from "~/app/custom-components"
+import { InProgressBooking } from "~/app/components/in-progress-booking/in-progress-booking"
+import { ScreenRootView } from "~/app/components"
 import { petsitterReserves, crecheReserves } from "./dummy-data"
 
 export const MinseonTest: FC<StackScreenProps<NavigatorParamList, "minseon-test">> = observer(

@@ -12,7 +12,7 @@ import {
   DotsIndicator,
   RowRoundedButton,
   ComeHomeGoToSwitchButton,
-} from "~/app/custom-components"
+} from "~/app/components"
 import { navigate, NavigatorParamList } from "~/app/navigators"
 import { HEIGHT, WIDTH } from "~/app/theme"
 import { BODY, SUB_HEAD_LINE } from "~/app/theme/palette"

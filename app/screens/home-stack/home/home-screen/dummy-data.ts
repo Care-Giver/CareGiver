@@ -42,8 +42,9 @@ export const petsittersDummy = [
     id: "5",
     name: "정소연",
     rating: 4.5,
-    desc: "모든게 다 의도한 거지",
-    profileImg: "https://www.stockvault.net/data/2008/04/07/104880/preview16.jpg",
+    desc: "안녕하세요",
+    profileImg:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
     isComeHome: true,
     isGoTo: true,
   },

@@ -10,16 +10,16 @@ import {
   ServiceTypeIndicatorHeader,
   PreBol14,
   ConditionalButton,
-} from "~/app/custom-components"
+} from "~/app/components"
 import { navigate, NavigatorParamList } from "~/app/navigators"
 import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "~/app/theme"
 import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "~/app/theme/palette"
-import { RowRoundedButton } from "~/app/custom-components/buttons/row-rounded-button/row-rounded-button"
+import { RowRoundedButton } from "~/app/components/buttons/row-rounded-button/row-rounded-button"
 import IMAGES from "~/assets/images"
 import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
-import { SelectPetDropdownBox } from "~/app/custom-components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
-import { RowRoundedTimeIntervalPicker } from "~/app/custom-components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
+import { SelectPetDropdownBox } from "~/app/components/dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
+import { RowRoundedTimeIntervalPicker } from "~/app/components/row-rounded-time-interval-picker/row-rounded-time-interval-picker"
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search">> = observer(
   ({ navigation, route }) => {
