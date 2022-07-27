@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image } from "react-native"
+import { View, Text, Pressable, Image, FlexStyle } from "react-native"
 import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
@@ -12,11 +12,26 @@ const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
 }
 
-export const SitterProfileCard = (props: SitterProfileCardProps) => {
-  const { style, image, name, rating, review, title, desc, onPress } = props
+interface ExampleProps {
+  sitterData: {
+    id: string
+    image: string
+    name: string
+    rating: number
+    review: number
+    title: string
+    desc: string
+  }
+  style?: FlexStyle
+  onPress: () => void //! 함수 props 의 type 으로써 적절치 못하나, 임시로 이렇게 처리한다
+}
+
+export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
+  const { id, name, image, rating, review, title, desc } = sitterData
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
+      {/* <Pressable style={[styles.container, {}]}> */}
       {/* profile image */}
       <Image style={styles.profileImg} source={{ uri: image }} />
 

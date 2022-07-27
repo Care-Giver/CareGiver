@@ -201,13 +201,14 @@ export const SearchResultScreen: FC<
             data={petsitters}
             renderItem={({ item, index }) => (
               <SitterProfileCard
-                key={item.id}
-                name={item.name}
-                image={item.image}
-                rating={item.rating}
-                review={item.review}
-                title={item.title}
-                desc={item.desc}
+                // key={item.id}
+                // name={item.name}
+                // image={item.image}
+                // rating={item.rating}
+                // review={item.review}
+                // title={item.title}
+                // desc={item.desc}
+                sitterData={item}
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
