@@ -1,5 +1,15 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components": ["./app/components/index.ts"],
+      "@navigators": ["./app/navigators/index.ts"],
+      "@screens": ["./app/screens/index.ts"],
+      "@theme/*": ["./app/theme/*"],
+      "@images": ["./assets/images/index.ts"],
+      "@fonts": ["./assets/fonts/index.ts"]
+      // "~/*": ["./"]
+    },
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -14,11 +24,7 @@
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"],
   "include": ["App.js", "app", "test", "storybook"],
