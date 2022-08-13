@@ -1,12 +1,10 @@
 import { View, Animated } from "react-native"
 import React from "react"
-import { Row } from "~/app/components"
-import { RowRoundedButton } from "~/app/components/buttons/row-rounded-button/row-rounded-button"
-import { HEAD_LINE } from "~/app/theme/palette"
-import { HEIGHT, WIDTH } from "~/app/theme"
-import IMAGES from "~/assets/images"
+import { Row, RowRoundedButton } from "@components"
+import { HEIGHT, WIDTH } from "@theme/index"
+import IMAGES from "@images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
-import { DISABLED } from "~/app/theme/palette"
+import { DISABLED } from "@theme/palette"
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({

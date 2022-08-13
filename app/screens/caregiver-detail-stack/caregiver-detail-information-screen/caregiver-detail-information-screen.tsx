@@ -17,14 +17,14 @@ import {
   ConditionalButton,
   BASIC_BACKGROUND_PADDING_WIDTH,
   MakeBookingButton,
-} from "~/app/components"
+  DivisionLineVertical,
+} from "@components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigate, NavigatorParamList } from "~/app/navigators"
-import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "~/app/theme"
-import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
-import { Api } from "~/app/services/api"
-import { DEFAULT_API_CONFIG } from "~/app/services/api/api-config"
-import { DivisionLineVertical } from "~/app/components/division-line-vertical/division-line-vertical"
+import { navigate, NavigatorParamList } from "@navigators"
+import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "@theme/index"
+import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "@theme/palette"
+import { Api } from "@api/index"
+import { DEFAULT_API_CONFIG } from "@api/api-config"
 
 const commentsDummy = [
   {

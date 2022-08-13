@@ -3,9 +3,9 @@ import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "~/app/theme/palette"
-import IMAGES from "~/assets/images"
-import { HEIGHT, WIDTH } from "~/app/theme"
+import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "@theme/palette"
+import IMAGES from "@images"
+import { HEIGHT, WIDTH } from "@theme/index"
 import RatingReviewBox from "../rating-review-box/rating-review-box"
 
 const ONPRESS_LIKED_BTN = () => {

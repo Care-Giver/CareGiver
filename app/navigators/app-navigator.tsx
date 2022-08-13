@@ -30,7 +30,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
-} from "../components"
+} from "@components"
 import IMAGES from "@images"
 import { HEIGHT, WIDTH } from "@theme/index"
 import { MinseonTest } from "../screens/test/minseon-test"

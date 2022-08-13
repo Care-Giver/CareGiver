@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "~/app/theme"
-import { CARE_NATURAL_BLUE } from "~/app/theme/palette"
+import { WIDTH, HEIGHT } from "@theme/index"
+import { CARE_NATURAL_BLUE } from "@theme/palette"
 
 export const styles = StyleSheet.create({
   root: {

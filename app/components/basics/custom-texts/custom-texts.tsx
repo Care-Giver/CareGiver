@@ -1,17 +1,17 @@
 /* eslint-disable spaced-comment */
 import * as React from "react"
 import { Image, Text as ReactNativeText } from "react-native"
-import { presets } from "~/app/components/basics/ignite-basics/text/text.presets"
-import { TextProps } from "~/app/components/basics/ignite-basics/text/text.props"
-import { translate } from "~/app/i18n"
+import { presets } from "../ignite-basics/text/text.presets"
+import { TextProps } from "../ignite-basics/text/text.props"
+import { translate } from "../../../i18n"
 import {
   PRETENDARD_REGULAR,
   PRETENDARD_BOLD,
   PRETENDARD_MEDIUM,
   POPPINS_REGULAR,
   POPPINS_SEMIBOLD,
-} from "~/assets/fonts"
-import { HEIGHT } from "~/app/theme"
+} from "@fonts"
+import { HEIGHT } from "@theme/index"
 
 /**
  * For your text displaying needs.

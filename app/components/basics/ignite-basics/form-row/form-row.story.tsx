@@ -3,10 +3,10 @@
 
 import * as React from "react"
 import { storiesOf } from "@storybook/react-native"
-import { StoryScreen, Story, UseCase } from "~/storybook/views"
 import { Text, FormRow } from ".."
-import { color } from "~/app/theme/color"
+import { color } from "@theme/color"
 import { ViewStyle } from "react-native"
+import { StoryScreen, Story, UseCase } from "#storybook/views"
 
 declare let module
 

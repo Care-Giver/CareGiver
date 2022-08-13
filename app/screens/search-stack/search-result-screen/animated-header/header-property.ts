@@ -1,4 +1,4 @@
-import { HEIGHT } from "~/app/theme"
+import { HEIGHT } from "@theme/index"
 
 // ? 검색 필터(날짜, 시간, 장소 선택 필터) "컨테이너" 높이
 export const HEADER_HEIGHT = HEIGHT * 105

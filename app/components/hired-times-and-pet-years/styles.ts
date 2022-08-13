@@ -1,6 +1,6 @@
-import { LIGHT_LINE } from "~/app/theme/palette"
+import { LIGHT_LINE } from "@theme/palette"
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "~/app/theme"
+import { WIDTH, HEIGHT, palette } from "@theme/index"
 
 export const styles = StyleSheet.create({
   //* 전체가 담기는 큰 컴포넌트 박스

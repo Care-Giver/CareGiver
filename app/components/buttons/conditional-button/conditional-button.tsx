@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Pressable, Text, PressableProps } from "react-native"
-import { palette } from "~/app/theme"
+import { palette } from "@theme/index"
 import { PreBol16 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 import { styles } from "./styles"

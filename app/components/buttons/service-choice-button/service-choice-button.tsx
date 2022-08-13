@@ -3,9 +3,9 @@ import React from "react"
 import { styles } from "./styles"
 import { ChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../basics/custom-texts/custom-texts"
-import { SHADOW_1 } from "~/app/theme"
-import { BODY, SUB_HEAD_LINE } from "~/app/theme/palette"
-import IMAGES from "~/assets/images"
+import { SHADOW_1 } from "@theme/index"
+import { BODY, SUB_HEAD_LINE } from "@theme/palette"
+import IMAGES from "@images"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
   const { title, subtitle, style, onPress } = props

@@ -3,20 +3,23 @@ import { Platform, Text, View, StyleSheet, ActivityIndicator } from "react-nativ
 import { FlatList } from "react-native-gesture-handler"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { SitterProfileCard } from "~/app/components/sitter-profile-card/sitter-profile-card"
+import {
+  PopReg28,
+  PreBol18,
+  ScreenRootView,
+  SitterProfileCard,
+  RowRoundedButton,
+} from "@components"
 import { petsitters } from "./dummy-data"
-import { HEIGHT, WIDTH } from "~/app/theme"
-import { PreBol18, ScreenRootView } from "~/app/components"
-import { HEAD_LINE, LBG } from "~/app/theme/palette"
-import { RowRoundedButton } from "~/app/components/buttons/row-rounded-button/row-rounded-button"
-import IMAGES from "~/assets/images"
-import { NavigatorParamList } from "~/app/navigators"
+import { HEIGHT, WIDTH } from "@theme/index"
+import { HEAD_LINE, LBG } from "@theme/palette"
+import IMAGES from "@images"
+import { NavigatorParamList } from "@navigators"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import { styles } from "./styles"
 import CustomMarkers from "./CustomMarkers"
 import MyLocationMapMarker from "./MyLocationMapMarker"
 import * as Location from "expo-location"
-import { PopReg28 } from "~/app/components"
 
 export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "test-map-screen">> = observer(
   ({ navigation }) => {

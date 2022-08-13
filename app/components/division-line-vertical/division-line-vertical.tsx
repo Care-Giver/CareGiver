@@ -1,7 +1,7 @@
 import { View } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { WIDTH } from "~/app/theme"
+import { WIDTH } from "@theme/index"
 
 export const DivisionLineVertical = ({
   color = "red",

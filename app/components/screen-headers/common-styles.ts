@@ -1,5 +1,5 @@
 import { Platform } from "react-native"
-import { HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "~/app/theme"
+import { HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "@theme/index"
 
 export const HEADER_ROOT = {
   backgroundColor: "white",

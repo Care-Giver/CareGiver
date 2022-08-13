@@ -9,12 +9,15 @@ module.exports = {
       {
         root: ["."],
         alias: {
+          ".": ["./*"],
           "@components": "./app/components",
           "@navigators": "./app/navigators",
           "@screens": "./app/screens",
           "@theme": "./app/theme",
+          "@api": "./app/services/api",
           "@images": "./assets/images",
           "@fonts": "./assets/fonts",
+          "#storybook": "./storybook",
         },
       },
     ],

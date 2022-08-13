@@ -2,10 +2,10 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { ProfileButtonProps } from "./sitter-profile-button.props"
 import { styles } from "./styles"
-import { SHADOW_1, WIDTH, HEIGHT } from "~/app/theme"
+import { SHADOW_1, WIDTH, HEIGHT } from "@theme/index"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
-import { HEAD_LINE, SUB_HEAD_LINE } from "~/app/theme/palette"
-import IMAGES from "~/assets/images"
+import { HEAD_LINE, SUB_HEAD_LINE } from "@theme/palette"
+import IMAGES from "@images"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props

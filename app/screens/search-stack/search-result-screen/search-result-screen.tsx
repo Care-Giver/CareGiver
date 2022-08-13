@@ -2,20 +2,25 @@ import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react
 import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigate, NavigatorParamList } from "~/app/navigators"
-import { SitterProfileCard } from "~/app/components/sitter-profile-card/sitter-profile-card"
-import { petsitters as _petsitters } from "~/app/screens/search-stack/search-result-screen/dummy-data"
-import { HEIGHT, WIDTH, palette } from "~/app/theme"
-import { PreBol18, Row, ScreenRootView, DivisionLine } from "~/app/components"
-import { LBG } from "~/app/theme/palette"
-import IMAGES from "~/assets/images"
+import { navigate, NavigatorParamList } from "@navigators"
+import {
+  PreBol18,
+  Row,
+  ScreenRootView,
+  DivisionLine,
+  SitterProfileCard,
+  SelectOptionDropdownBox,
+} from "@components"
+import { HEIGHT, WIDTH, palette } from "@theme/index"
+import { LBG } from "@theme/palette"
+import IMAGES from "@images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
-import { SelectOptionDropdownBox } from "~/app/components/dropdown-boxes/select-option-button/select-option-dropdown-box"
+import { petsitters as _petsitters } from "./dummy-data"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">

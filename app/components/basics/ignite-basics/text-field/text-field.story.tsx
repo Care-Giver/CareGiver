@@ -3,7 +3,7 @@
 
 import React from "react"
 import { storiesOf } from "@storybook/react-native"
-import { StoryScreen, Story, UseCase } from "~/storybook/views"
+import { StoryScreen, Story, UseCase } from "#storybook/views"
 import { Text, TextField } from ".."
 import { ViewStyle, TextStyle, Alert } from "react-native"
 import { State } from "~/app/utils/react-powerplug"

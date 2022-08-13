@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Pressable, Image, View, ViewStyle } from "react-native"
-import IMAGES from "~/assets/images"
-import { color, HEIGHT, spacing, WIDTH } from "~/app/theme"
+import IMAGES from "@images"
+import { color, HEIGHT, spacing, WIDTH } from "@theme/index"
 import { BlueCheckboxProps } from "./blue-checkbox.props"
 
 const ROOT: ViewStyle = {

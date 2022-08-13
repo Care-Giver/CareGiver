@@ -1,14 +1,13 @@
 import { View, Image, FlatList } from "react-native"
-import React, { useState } from "react"
+import React from "react"
 import { PreMed14, PreReg16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
-import IMAGES from "~/assets/images"
-import { BODY, HEAD_LINE, LBG } from "~/app/theme/palette"
+import IMAGES from "@images"
+import { BODY, HEAD_LINE, LBG } from "@theme/palette"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
-import { petsDummy } from "~/app/screens/search-stack/search-screen/dummy-data"
-import { HEIGHT } from "~/app/theme"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
+import { petsDummy } from "../../../screens/search-stack/search-screen/dummy-data"
 
 const INITIAL_NUMBER_OF_PET_ITEMS = 3
 

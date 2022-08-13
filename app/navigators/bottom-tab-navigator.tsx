@@ -9,10 +9,10 @@ import {
   AllReviewsScreen,
 } from "../screens"
 import { PreMed12 } from "../components"
-import IMAGES from "~/assets/images"
-import { HEIGHT, WIDTH } from "../theme"
+import IMAGES from "@images"
+import { HEIGHT, WIDTH } from "@theme/index"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { GIVER_CASUAL_NAVY } from "../theme/palette"
+import { GIVER_CASUAL_NAVY } from "@theme/palette"
 
 //TODO: BottomTabNavigatorProps 작성
 type BottomTabNavigatorProps = {}

@@ -3,10 +3,10 @@ import { ActivityIndicator } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 
-import { NavigatorParamList } from "~/app/navigators"
-import { PreReg14, ScreenRootView } from "~/app/components"
-import { SUB_HEAD_LINE } from "~/app/theme/palette"
-import { HEIGHT } from "~/app/theme"
+import { NavigatorParamList } from "@navigators"
+import { PreReg14, ScreenRootView } from "@components"
+import { SUB_HEAD_LINE } from "@theme/palette"
+import { HEIGHT } from "@theme/index"
 
 export const CaregiverSelfIntroductionScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-self-introduction-screen">
