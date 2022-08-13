@@ -9,7 +9,6 @@ module.exports = {
       {
         root: ["."],
         alias: {
-          ".": ["./*"],
           "#components": "./app/components",
           "#navigators": "./app/navigators",
           "#screens": "./app/screens",
@@ -18,6 +17,7 @@ module.exports = {
           "#images": "./assets/images",
           "#fonts": "./assets/fonts",
           "#storybook": "./storybook",
+          ".": ["./*"],
         },
       },
     ],

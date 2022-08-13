@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "./*": ["./*"],
       "#components": ["./app/components/index.ts"],
       "#navigators": ["./app/navigators/index.ts"],
       "#screens": ["./app/screens/index.ts"],
@@ -10,7 +9,8 @@
       "#api/*": ["./app/services/api/*"],
       "#images": ["./assets/images/index.ts"],
       "#fonts": ["./assets/fonts/index.ts"],
-      "#storybook": ["./storybook/*"]
+      "#storybook": ["./storybook/*"],
+      "./*": ["./*"]
     },
     "allowJs": false,
     "allowSyntheticDefaultImports": true,

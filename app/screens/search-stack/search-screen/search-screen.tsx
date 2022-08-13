@@ -2,7 +2,6 @@ import React, { FC, useState, useLayoutEffect, useEffect } from "react"
 import { FlatList, Image, View, LayoutAnimation, Platform, UIManager } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-
 import {
   ScreenRootView,
   Row,
