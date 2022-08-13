@@ -2,9 +2,9 @@ import { View, Text, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
-import { MIDDLE_LINE, SUB_HEAD_LINE } from "@theme/palette"
-import { WIDTH } from "@theme/index"
-import IMAGES from "@images"
+import { MIDDLE_LINE, SUB_HEAD_LINE } from "#theme/palette"
+import { WIDTH } from "#theme/index"
+import IMAGES from "#images"
 
 interface RatingReviewBoxProps {
   rating: number

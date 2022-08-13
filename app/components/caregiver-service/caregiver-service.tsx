@@ -1,11 +1,11 @@
 import { View, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "@theme/index"
+import { HEIGHT, WIDTH } from "#theme/index"
 import { PreMed16 } from "../basics/custom-texts/custom-texts"
-import { BODY } from "@theme/palette"
+import { BODY } from "#theme/palette"
 import { Row } from "../basics/row/row"
-import IMAGES from "@images"
+import IMAGES from "#images"
 
 export const CaregiverService = (props) => {
   const { style: viewStyle } = props

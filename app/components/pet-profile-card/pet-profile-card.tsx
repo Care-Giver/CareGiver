@@ -2,9 +2,9 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "@theme/palette"
-import IMAGES from "@images"
-import { HEIGHT, WIDTH } from "@theme/index"
+import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme/palette"
+import IMAGES from "#images"
+import { HEIGHT, WIDTH } from "#theme/index"
 import { Row } from "../basics/row/row"
 
 export const PetProfileCard = (props) => {

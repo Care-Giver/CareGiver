@@ -2,8 +2,8 @@ import { View, Text, FlatList } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "@navigators"
-import { ScreenRootView, InProgressBooking } from "@components"
+import { NavigatorParamList } from "#navigators"
+import { ScreenRootView, InProgressBooking } from "#components"
 import { petsitterReserves, crecheReserves } from "./dummy-data"
 
 export const MinseonTest: FC<StackScreenProps<NavigatorParamList, "minseon-test">> = observer(

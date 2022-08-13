@@ -1,10 +1,10 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "@theme/index"
+import { WIDTH } from "#theme/index"
 import { PreMed20, PreBol16 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "@images"
+import IMAGES from "#images"
 import { styles } from "./styles"
-import { DISABLED, GIVER_CASUAL_NAVY } from "@theme/palette"
+import { DISABLED, GIVER_CASUAL_NAVY } from "#theme/palette"
 import { HEADER_ROOT } from "../common-styles"
 
 export const WritingCommentScreenHeader = (props) => {

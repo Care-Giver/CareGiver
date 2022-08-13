@@ -5,11 +5,11 @@ import { PetProfileCard } from "../../pet-profile-card/pet-profile-card"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
 import { PopSem14 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "@images"
+import IMAGES from "#images"
 import { PetInfoDropdownBoxProps } from "./pet-info-dropdown-box.props"
 import { DivisionLine } from "../../division-line/division-line"
-import { LBG } from "@theme/palette"
-import { WIDTH } from "@theme/index"
+import { LBG } from "#theme/palette"
+import { WIDTH } from "#theme/index"
 
 export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
   const { isOpen, onPress, pets, style } = props

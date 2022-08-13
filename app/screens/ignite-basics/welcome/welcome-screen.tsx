@@ -20,9 +20,9 @@ import {
   ScreenRootView,
   PreBol32,
   PopReg20,
-} from "@components"
-import { color, spacing, typography, SHADOW_1, WIDTH } from "@theme/index"
-import { NavigatorParamList } from "@navigators"
+} from "#components"
+import { color, spacing, typography, SHADOW_1, WIDTH } from "#theme/index"
+import { NavigatorParamList } from "#navigators"
 
 //* export convention of Our Project
 //! 절대 package 를 혼자 설치하지 않는다,

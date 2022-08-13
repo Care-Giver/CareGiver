@@ -1,12 +1,12 @@
 import { FlatList } from "react-native"
 import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "@navigators"
+import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { Comment, DivisionLine, ScreenRootView, FilterHeader } from "@components"
+import { Comment, DivisionLine, ScreenRootView, FilterHeader } from "#components"
 import { commentsDummy } from "./dummy-data"
-import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "@theme/index"
-import { LBG } from "@theme/palette"
+import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "#theme/index"
+import { LBG } from "#theme/palette"
 import { Platform } from "expo-modules-core"
 
 export const AllCommentsScreen: FC<

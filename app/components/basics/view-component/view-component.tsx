@@ -1,6 +1,6 @@
 import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
-import { palette, WIDTH } from "@theme/index"
+import { palette, WIDTH } from "#theme/index"
 import { Screen } from "../ignite-basics/screen/screen"
 import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 

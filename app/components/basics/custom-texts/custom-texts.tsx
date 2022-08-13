@@ -10,8 +10,8 @@ import {
   PRETENDARD_MEDIUM,
   POPPINS_REGULAR,
   POPPINS_SEMIBOLD,
-} from "@fonts"
-import { HEIGHT } from "@theme/index"
+} from "#fonts"
+import { HEIGHT } from "#theme/index"
 
 /**
  * For your text displaying needs.

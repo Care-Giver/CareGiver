@@ -10,10 +10,10 @@ import {
   Screen,
   AutoImage as Image,
   GradientBackground,
-} from "@components"
-import { NavigatorParamList } from "@navigators"
-import { color, spacing } from "@theme/index"
-import { Api } from "@api/index"
+} from "#components"
+import { NavigatorParamList } from "#navigators"
+import { color, spacing } from "#theme/index"
+import { Api } from "#api/index"
 
 export const logoIgnite = require("./logo-ignite.png")
 export const heart = require("./heart.png")

@@ -1,11 +1,11 @@
 import { View, Image, Pressable } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "@theme/index"
+import { HEIGHT, WIDTH } from "#theme/index"
 import { PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "@theme/palette"
+import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme/palette"
 import { Row } from "../basics/row/row"
-import IMAGES from "@images"
+import IMAGES from "#images"
 import { DivisionLine } from "../division-line/division-line"
 
 /* @Entity()

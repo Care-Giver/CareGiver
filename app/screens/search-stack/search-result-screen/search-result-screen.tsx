@@ -2,7 +2,7 @@ import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react
 import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigate, NavigatorParamList } from "@navigators"
+import { navigate, NavigatorParamList } from "#navigators"
 import {
   PreBol18,
   Row,
@@ -10,10 +10,10 @@ import {
   DivisionLine,
   SitterProfileCard,
   SelectOptionDropdownBox,
-} from "@components"
-import { HEIGHT, WIDTH, palette } from "@theme/index"
-import { LBG } from "@theme/palette"
-import IMAGES from "@images"
+} from "#components"
+import { HEIGHT, WIDTH, palette } from "#theme/index"
+import { LBG } from "#theme/palette"
+import IMAGES from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,

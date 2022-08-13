@@ -4,9 +4,9 @@
 import * as React from "react"
 import { storiesOf } from "@storybook/react-native"
 import { Text, FormRow } from ".."
-import { color } from "@theme/color"
+import { color } from "#theme/color"
 import { ViewStyle } from "react-native"
-import { StoryScreen, Story, UseCase } from "#storybook/views"
+import { StoryScreen, Story, UseCase } from "#storybook/views/index"
 
 declare let module
 

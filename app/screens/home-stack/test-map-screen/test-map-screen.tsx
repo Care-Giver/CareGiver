@@ -9,12 +9,12 @@ import {
   ScreenRootView,
   SitterProfileCard,
   RowRoundedButton,
-} from "@components"
+} from "#components"
 import { petsitters } from "./dummy-data"
-import { HEIGHT, WIDTH } from "@theme/index"
-import { HEAD_LINE, LBG } from "@theme/palette"
-import IMAGES from "@images"
-import { NavigatorParamList } from "@navigators"
+import { HEIGHT, WIDTH } from "#theme/index"
+import { HEAD_LINE, LBG } from "#theme/palette"
+import IMAGES from "#images"
+import { NavigatorParamList } from "#navigators"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import { styles } from "./styles"
 import CustomMarkers from "./CustomMarkers"

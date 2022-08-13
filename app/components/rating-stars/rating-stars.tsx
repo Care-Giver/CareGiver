@@ -1,8 +1,8 @@
 import { View, Text, Image } from "react-native"
 import React from "react"
-import IMAGES from "@images"
+import IMAGES from "#images"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "@theme/index"
+import { HEIGHT, WIDTH } from "#theme/index"
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
 
 const styles = {

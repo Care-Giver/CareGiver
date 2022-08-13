@@ -14,11 +14,11 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   RowRoundedTimeIntervalPicker,
-} from "@components"
-import { navigate, NavigatorParamList } from "@navigators"
-import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "@theme/index"
-import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "@theme/palette"
-import IMAGES from "@images"
+} from "#components"
+import { navigate, NavigatorParamList } from "#navigators"
+import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme/index"
+import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme/palette"
+import IMAGES from "#images"
 import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
 

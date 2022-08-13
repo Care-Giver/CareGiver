@@ -23,16 +23,16 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
-} from "@screens"
+} from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
-} from "@components"
-import IMAGES from "@images"
-import { HEIGHT, WIDTH } from "@theme/index"
+} from "#components"
+import IMAGES from "#images"
+import { HEIGHT, WIDTH } from "#theme/index"
 import { MinseonTest } from "../screens/test/minseon-test"
 
 /**
