@@ -234,7 +234,12 @@ export const CaregiverDetailInformationScreen: FC<
 
           <View style={{ paddingVertical: HEIGHT * -1, marginBottom: HEIGHT * 120 }}>
             {commentsDummy.slice(0, 3).map((item, index) => (
-              <Comment commentData={item} numberOfLines={2} style={{ marginTop: HEIGHT * -1 }} />
+              <Comment
+                commentData={item}
+                numberOfLines={2}
+                style={{ marginTop: HEIGHT * -1 }}
+                key={index}
+              />
             ))}
           </View>
         </View>

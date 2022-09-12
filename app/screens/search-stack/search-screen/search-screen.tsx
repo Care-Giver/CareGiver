@@ -86,7 +86,15 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
         </Row>
         <Row style={{ marginTop: HEIGHT * 16 }}>
           <Image source={IMAGES.right_arrow_grey} style={styles.image} />
-          <PreReg14 text="케어기버가 직접 집을 방문합니다." color={DISABLED} style={styles.text} />
+          <PreReg14
+            text={
+              serviceType === "방문"
+                ? "케어기버가 직접 집을 방문합니다."
+                : "케어기버가 있는 곳으로 아이를 맡기러 갑니다."
+            }
+            color={DISABLED}
+            style={styles.text}
+          />
         </Row>
 
         {/* //* 날짜 선택 */}
@@ -138,7 +146,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
         {/*//* 위치 선택 */}
         <RowRoundedButton
           onPress={() => {
-            alert("dd")
+            navigate("test-map-screen")
           }}
           image={IMAGES.location}
           text={"경기도 안산시 상록구 한양대학로 55"}

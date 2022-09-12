@@ -85,7 +85,7 @@ export const RowRoundedTimeIntervalPicker = (props) => {
             renderToHardwareTextureAndroid={true}
           /> */}
 
-          <PopSem16 text="나는 안드로이드얌 ^_^" />
+          <PopReg16 text="Time Picker for Android is not ready" />
 
           {/* <RNDateTimePicker
             mode="time"

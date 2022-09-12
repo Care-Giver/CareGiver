@@ -38,8 +38,7 @@ export const TestMapScreen: FC<StackScreenProps<NavigatorParamList, "test-map-sc
         let location = await Location.getCurrentPositionAsync({})
         //? location = {"coords":{"altitude":0,"altitudeAccuracy":-1,"latitude":37.785834,"accuracy":5,"longitude":-122.406417,"heading":-1,"speed":-1},"timestamp":1654099889917.002}
 
-        setLocation(location.coords)
-        console.log("하하하")
+        return setLocation(location.coords)
       })()
     }, [])
 
