@@ -217,7 +217,7 @@ export const SearchResultScreen: FC<
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
                 }}
                 style={
                   index < petsitters.length - 1

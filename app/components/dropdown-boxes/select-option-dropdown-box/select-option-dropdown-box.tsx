@@ -5,8 +5,6 @@ import { PreReg12 } from "../../basics/custom-texts/custom-texts"
 import { FlatList } from "react-native-gesture-handler"
 
 export const SelectOptionDropdownBox = (props) => {
-  console.warn("dropdown box rendered")
-
   const onPress = props.onPress
   const style = props.style
   const isOpen = props.isOpen

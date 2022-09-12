@@ -57,7 +57,7 @@ export const trainersDummy = [
     rating: 4.7,
     desc: "방문 전문입니다!",
     profileImg:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvqM-RPUggIXN9QFUgG3dhq0hfIhDQ4i6dwA&usqp=CAU",
+      "https://i2.wp.com/outwardhound.com/furtropolis/wp-content/uploads/2019/05/dog-trainer-1.jpg?fit=750%2C500&ssl=1",
     isVisiting: true,
     isDropOff: false,
   },

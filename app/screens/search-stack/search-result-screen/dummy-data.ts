@@ -1,7 +1,7 @@
 export const petsitters = [
   {
     id: "1",
-    image:
+    profileImg:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
     name: "정소연",
     rating: 4.7,
@@ -12,7 +12,7 @@ export const petsitters = [
   },
   {
     id: "2",
-    image:
+    profileImg:
       "https://st4.depositphotos.com/4678277/25199/i/600/depositphotos_251996030-stock-photo-close-up-portrait-of-her.jpg",
     name: "박민선",
     rating: 4.0,
@@ -23,7 +23,7 @@ export const petsitters = [
   },
   {
     id: "3",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "김지우",
     rating: 3.9,
@@ -34,7 +34,7 @@ export const petsitters = [
   },
   {
     id: "4",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "최수민",
     rating: 4.7,
@@ -45,7 +45,7 @@ export const petsitters = [
   },
   {
     id: "5",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "홍길동",
     rating: 4.3,
@@ -56,7 +56,7 @@ export const petsitters = [
   },
   {
     id: "6",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "걍형욱",
     rating: 2.3,
@@ -67,7 +67,7 @@ export const petsitters = [
   },
   {
     id: "7",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "나멍뭉",
     rating: 4.9,
@@ -78,7 +78,7 @@ export const petsitters = [
   },
   {
     id: "8",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "고얌이",
     rating: 3.5,
@@ -89,7 +89,7 @@ export const petsitters = [
   },
   {
     id: "9",
-    image:
+    profileImg:
       "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
     name: "냥냥",
     rating: 4.1,

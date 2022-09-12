@@ -109,16 +109,20 @@ export const CaregiverDetailInformationScreen: FC<
 > = observer(({ navigation, route }) => {
   const [post, setPost] = useState(null)
 
-  useEffect(() => {
-    const api = new Api()
-    api.setup()
+  // useEffect(() => {
+  //   const api = new Api()
+  //   api.setup()
 
-    api.getCreche("1").then((response) => {
-      setPost(response.data)
-    })
-  }, [])
+  //   api.getCreche("1").then((response) => {
+  //     setPost(response.data)
+  //   })
+  // }, [])
 
-  console.log("post", post)
+  // console.log("post", post)
+
+  const { sitterData } = route.params
+  const { profileImg, name, rating } = sitterData
+  console.log(sitterData)
 
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
@@ -148,6 +152,7 @@ export const CaregiverDetailInformationScreen: FC<
           style={{
             marginTop: 0,
           }}
+          firstImage={profileImg}
         />
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
@@ -155,8 +160,8 @@ export const CaregiverDetailInformationScreen: FC<
           <CaregiverNameStarReview
             style={{ marginTop: HEIGHT * 36 }}
             caregiverData={{
-              name: "이름 혹은 닉네임",
-              ratings: 4.7,
+              name: name,
+              ratings: rating,
               numberOfReviews: 12,
             }}
           />

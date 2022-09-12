@@ -119,7 +119,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               padding: 4,
               borderRadius: 8,
             }}
-            headerStyle
             // Collection of dates that have to be marked. Default = {}
             markedDates={
               {

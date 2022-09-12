@@ -4,34 +4,8 @@ import { styles } from "./styles"
 import { DEVICE_SCREEN_WIDTH, HEIGHT } from "#theme/index"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
 
-const images = [
-  {
-    id: "1",
-    profileImg:
-      "https://st4.depositphotos.com/4678277/25199/i/600/depositphotos_251996030-stock-photo-close-up-portrait-of-her.jpg",
-  },
-  {
-    id: "2",
-    profileImg:
-      "https://thumbs.dreamstime.com/b/omg-portrait-success-enthusiasm-confused-man-hand-cheek-smiling-isolated-yellow-background-188057404.jpg",
-  },
-  {
-    id: "3",
-    profileImg:
-      "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
-  },
-  {
-    id: "4",
-    profileImg: "https://i0.wp.com/ciklopea.com/wp-content/uploads/2018/05/graphic-designer.jpg",
-  },
-  {
-    id: "5",
-    profileImg: "https://www.stockvault.net/data/2008/04/07/104880/preview16.jpg",
-  },
-]
-
 export const FullWidthSizeImagesBoxWithIndicator = (props) => {
-  const { items, activeIndex, style: viewStyle } = props
+  const { items, activeIndex, style: viewStyle, firstImage } = props
 
   const [currentImage, setCurrentImage] = useState(0)
 
@@ -42,6 +16,31 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
       setCurrentImage(viewableItems[0].index || 0)
     }
   }, [])
+
+  const images = [
+    {
+      id: "1",
+      profileImg: firstImage,
+    },
+    {
+      id: "2",
+      profileImg:
+        "https://thumbs.dreamstime.com/b/omg-portrait-success-enthusiasm-confused-man-hand-cheek-smiling-isolated-yellow-background-188057404.jpg",
+    },
+    {
+      id: "3",
+      profileImg:
+        "https://thumbs.dreamstime.com/b/bearded-confident-man-expresses-amazement-bearded-confident-man-expresses-amazement-isolated-yellow-background-studio-portrait-138706562.jpg",
+    },
+    {
+      id: "4",
+      profileImg: "https://i0.wp.com/ciklopea.com/wp-content/uploads/2018/05/graphic-designer.jpg",
+    },
+    {
+      id: "5",
+      profileImg: "https://www.stockvault.net/data/2008/04/07/104880/preview16.jpg",
+    },
+  ]
 
   return (
     <View style={[styles.root, viewStyle]}>

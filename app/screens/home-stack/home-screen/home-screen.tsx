@@ -130,7 +130,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
                 }}
                 name={item.name}
                 rating={item.rating}
@@ -195,7 +195,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", null)
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
                 }}
                 name={item.name}
                 rating={item.rating}

@@ -27,13 +27,13 @@ interface ExampleProps {
 }
 
 export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
-  const { id, name, image, rating, review, title, desc } = sitterData
+  const { id, name, profileImg, rating, review, title, desc } = sitterData
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}
       {/* profile image */}
-      <Image style={styles.profileImg} source={{ uri: image }} />
+      <Image style={styles.profileImg} source={{ uri: profileImg }} />
 
       <View style={styles.infoContainer}>
         {/* info box - user name, ratings, descriptions */}
