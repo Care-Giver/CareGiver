@@ -6,9 +6,9 @@
     "slug": "CareGiver",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/default/icon.png",
+    "icon": "./assets/images/application/logo_icon.png",
     "splash": {
-      "image": "./assets/images/default/splash.png",
+      "image": "./assets/images/application/splash1.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,13 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.cgtestbuild.tomtimmy",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.cgtestbuild.tomtimmy",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/default/favicon.png"

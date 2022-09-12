@@ -43,6 +43,7 @@
     "expo-location": "~13.0.4",
     "expo-modules-core": "^0.6.5",
     "expo-status-bar": "~1.1.0",
+    "expo-updates": "~0.10.15",
     "i18n-js": "3.8.0",
     "mobx": "6.1.8",
     "mobx-react-lite": "3.2.0",
