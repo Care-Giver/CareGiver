@@ -46,49 +46,16 @@ export class Api {
   }
 
   /**
-   * Gets a list of users.
-   */
-  async getUsers(): Promise<Types.GetUsersResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    const convertUser = (raw) => {
-      return {
-        id: raw.id,
-        name: raw.name,
-      }
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const rawUsers = response.data
-      const resultUsers: Types.User[] = rawUsers.map(convertUser)
-      return { kind: "ok", users: resultUsers }
-    } catch {
-      return { kind: "bad-data" }
-    }
-  }
-
-  /**
-   * Gets a single user by ID
-   */
-
+   Gets a single user by ID 
+  */
   async getUser(id: string): Promise<Types.GetUserResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
-
     // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
-
     // transform the data into the format we are expecting
     try {
       const resultUser: Types.User = {
@@ -101,57 +68,77 @@ export class Api {
     }
   }
 
-  //! 테스트
-  async getCreche(id: number): Promise<Types.GetUserResult> {
-    // make the api call
-    const response = await this.apisauce.get(`/creche/${id}`)
-    console.log("response", response)
+  /**
+   *  입력받은 id의 예약 정보를 한개 읽어온다.
+   */
+  async getCreche(id: number): Promise<Types.GetCrecheResult> {
+    const response: ApiResponse<any> = await this.apisauce.get(`/creche/${id}`)
 
-    // the typical ways to die when calling an api
+    //? 예외 처리
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
 
-    // transform the data into the format we are expecting
+    //? response 데이터 가공
+    //TODO: 이 작업이 정말 필요할까...?
     try {
-      return { kind: "ok", response: response }
+      const resultCreche: Types.Creche = {
+        id: response.data.id,
+        createAt: response.data.createAt,
+        updatedAt: response.data.updatedAt,
+        title: response.data.title,
+        address: response.data.address,
+        location: response.data.location,
+        desc: response.data.desc,
+        maxUnit: response.data.maxUnit,
+        handleType: response.data.handleType,
+        roomType: response.data.roomType,
+        facilities: response.data.facilities,
+        services: response.data.services,
+        images: response.data.images,
+        hiredNumber: response.data.hiredNumber,
+        star: response.data.star,
+        CareGiverId: response.data.CareGiverId,
+        dist: response.data.dist,
+      }
+      return { kind: "ok", creche: resultCreche }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
+  /**
+   *  입력받은 위치 근처의 위탁장소들을 가져온다.
+   */
   async getCreches(lat: number, lng: number): Promise<Types.GetUserResult> {
-    // make the api call
-    const response = await this.apisauce.get(`/creches?lat=${lat}&lng=${lng}`)
-    console.log("response", response)
+    const response: ApiResponse<any> = await this.apisauce.get(`/creches?lat=${lat}&lng=${lng}`)
 
-    // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
-
-    // transform the data into the format we are expecting
     try {
-      return { kind: "ok", response: response }
+      const resultCreches: Types.Creche[] = {
+        // ? 작성예정
+      }
+      return { kind: "ok", creches: resultCreches }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
+  /**
+   *  카카오 로그인 서비스에 접근한다.
+   */
   async signInKakao(): Promise<Types.GetUserResult> {
-    // make the api call
     const response = await await this.apisauce.get(`/auth/kakao`)
-    console.log("response", response)
 
-    // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
 
-    // transform the data into the format we are expecting
     try {
       return { kind: "ok", response: response }
     } catch {
@@ -159,17 +146,17 @@ export class Api {
     }
   }
 
+  /**
+   * 현재 로그인한 유저의 정보를 가져온다.
+   */
   async getMe(): Promise<Types.GetUserResult> {
-    // make the api call
-    const response = await this.apisauce.get(`/user/me`)
+    const response: ApiResponse<any> = await this.apisauce.get(`/user/me`)
 
-    console.log("response", response)
-    // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
-    // transform the data into the format we are expecting
+
     try {
       return { kind: "ok", response: response }
     } catch {
