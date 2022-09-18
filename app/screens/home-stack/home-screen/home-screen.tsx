@@ -1,21 +1,10 @@
-import React, { FC, useState, useCallback } from "react"
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
-  SafeAreaView,
-  Text as ReactNativeText,
-  FlatList,
-} from "react-native"
+import React, { FC, useState, useCallback, useEffect } from "react"
+import { FlatList } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Text } from "../../../../components"
 import {
   ScreenRootView,
   Row,
-  RowRoundedBox,
-  PreBol12,
   PreBol18,
   PreBol20,
   ServiceChoiceButton,
@@ -34,22 +23,37 @@ import { Api } from "#api/api"
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
 
-export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = observer(
-  ({ navigation }) => {
+export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = observer(
+  ({ navigation, route }) => {
     const [isOn, setIsOn] = useState(false)
     const toggle = () => {
       isOn ? setIsOn(false) : setIsOn(true)
     }
 
     //? 기본값은 "방문" 으로 한다 (기획) _
-    const [isComeHomePetSitter, setIsComeHomePetSitter] = useState(true)
-    const [isComeHomeTrainer, setIsComeHomeTrainer] = useState(true)
+    const [petsitters, setPetsitters] = useState(petsittersDummy)
+    const [trainers, settrainers] = useState(trainersDummy)
+
+    const [isVisitingPetSitter, setIsVisitingPetSitter] = useState(true)
+    const [isVisitingTrainer, setIsVisitingTrainer] = useState(true)
     const [selectedPetsitter, setSelectedPetsitter] = useState(0)
     const [selectedTrainer, setSelectedTrainer] = useState(0)
 
+    useEffect(() => {
+      isVisitingPetSitter
+        ? setPetsitters(petsittersDummy.filter((item) => item.isVisiting === true))
+        : setPetsitters(petsittersDummy.filter((item) => item.isDropOff === true))
+    }, [isVisitingPetSitter])
+
+    useEffect(() => {
+      isVisitingTrainer
+        ? settrainers(trainersDummy.filter((item) => item.isVisiting === true))
+        : settrainers(trainersDummy.filter((item) => item.isDropOff === true))
+    }, [isVisitingTrainer])
+
     const onPetsitterFlatlistUpdate = useCallback(({ viewableItems }) => {
       // ? 선택된 이미지, 즉 viewableItems 의 index 값을 activeIndex 로 설정.
-      // ? 왜 viewableItems[0] 인지는 console.log(viewableItems); 로 보면 이해갈 꺼임.
+      // ? 왜 viewableItems[0] 인지는 console.log(viewableItems); 로 보면 이해 갈꺼임
       if (viewableItems.length > 0) {
         setSelectedPetsitter(viewableItems[0].index || 0)
       }
@@ -91,10 +95,16 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         {/*//? 펫시팅 | 훈련 선택 박스 */}
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <ServiceChoiceButton
+            onPress={() => {
+              navigate("search-screen", { service: "펫시팅" })
+            }}
             title="펫시팅"
             subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
           />
           <ServiceChoiceButton
+            onPress={() => {
+              navigate("search-screen", { service: "훈련" })
+            }}
             title="훈련"
             subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
             style={{ marginLeft: "auto" }}
@@ -102,14 +112,14 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         </Row>
 
         {/*//? Title */}
-        <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: HEIGHT * 61 }} />
+        <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: HEIGHT * 60 }} />
         {/*//? 펫시터 */}
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
           <VisitingDropOffSwitchButton
-            state={isComeHomePetSitter}
-            setState={setIsComeHomePetSitter}
+            state={isVisitingPetSitter}
+            setState={setIsVisitingPetSitter}
             style={{ marginLeft: "auto" }}
           />
         </Row>
@@ -122,15 +132,16 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           }}
         >
           <FlatList
-            contentContainerStyle={{
-              paddingVertical: FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
-            data={petsittersDummy}
+            data={petsitters}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
               <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
                 name={item.name}
                 rating={item.rating}
                 desc={item.desc}
@@ -138,6 +149,10 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 10 }}
               />
             )}
+            contentContainerStyle={{
+              paddingVertical: FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
@@ -153,7 +168,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           />
         </Row>
         <DotsIndicator
-          items={petsittersDummy}
+          items={petsitters}
           activeIndex={selectedPetsitter}
           style={{ marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2) }}
         />
@@ -168,8 +183,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
           <VisitingDropOffSwitchButton
-            state={isComeHomeTrainer}
-            setState={setIsComeHomeTrainer}
+            state={isVisitingTrainer}
+            setState={setIsVisitingTrainer}
             style={{ marginLeft: "auto" }}
           />
         </Row>
@@ -182,15 +197,16 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           }}
         >
           <FlatList
-            contentContainerStyle={{
-              paddingVertical: FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
-            data={trainersDummy}
+            data={trainers}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
               <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
                 name={item.name}
                 rating={item.rating}
                 desc={item.desc}
@@ -198,6 +214,10 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
                 style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 1 }}
               />
             )}
+            contentContainerStyle={{
+              paddingVertical: FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
@@ -211,7 +231,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           />
         </Row>
         <DotsIndicator
-          items={trainersDummy}
+          items={trainers}
           activeIndex={selectedTrainer}
           style={{
             marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2),
