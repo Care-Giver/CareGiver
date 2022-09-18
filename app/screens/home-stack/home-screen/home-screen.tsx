@@ -71,7 +71,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
       <ScreenRootView testID="HomeScreen" preset="scroll">
         <RowRoundedButton
           onPress={() => {
-            //TODO: params 값 추가해줘야 함
             // navigate("test-map-screen")
             console.warn("api 호출")
             // api.getCreche(1)
@@ -82,9 +81,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           image={IMAGES.gps}
           text={"경기 안산시 상록구 한양대학로 55"}
           textColor={BODY}
-          onPress={() => {
-            alert("dd")
-          }}
           style={{ marginTop: HEIGHT * 18 }}
         />
 
@@ -111,7 +107,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
         <Row style={{ marginTop: HEIGHT * 20 }}>
           <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
-          <ComeHomeGoToSwitchButton
+          <VisitingDropOffSwitchButton
             state={isComeHomePetSitter}
             setState={setIsComeHomePetSitter}
             style={{ marginLeft: "auto" }}
@@ -130,7 +126,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
               paddingVertical: FLATLIST_PADDING_VERTICAL,
               paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
-            data={petsitters}
+            data={petsittersDummy}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
@@ -157,7 +153,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           />
         </Row>
         <DotsIndicator
-          items={petsitters}
+          items={petsittersDummy}
           activeIndex={selectedPetsitter}
           style={{ marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2) }}
         />
@@ -171,7 +167,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           {/*//? 훈련사 */}
           <PreBol18 text="훈련사" color={SUB_HEAD_LINE} />
           {/*//? 방문/위탁 토글 버튼 */}
-          <ComeHomeGoToSwitchButton
+          <VisitingDropOffSwitchButton
             state={isComeHomeTrainer}
             setState={setIsComeHomeTrainer}
             style={{ marginLeft: "auto" }}
@@ -190,7 +186,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
               paddingVertical: FLATLIST_PADDING_VERTICAL,
               paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
-            data={trainers}
+            data={trainersDummy}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
             ) => (
@@ -215,7 +211,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home">> = obse
           />
         </Row>
         <DotsIndicator
-          items={trainers}
+          items={trainersDummy}
           activeIndex={selectedTrainer}
           style={{
             marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2),

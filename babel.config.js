@@ -17,7 +17,7 @@ module.exports = {
           "#images": "./assets/images",
           "#fonts": "./assets/fonts",
           "#storybook": "./storybook",
-          ".": ["./*"],
+          // ".": ["./*"],
         },
       },
     ],
