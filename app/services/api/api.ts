@@ -33,13 +33,14 @@ export class Api {
    *
    * Be as quick as possible in here.
    */
-  setup() {
+  setup(jwt: string) {
     // construct the apisauce instance
     this.apisauce = create({
       baseURL: this.config.url,
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
+        "x-jwt": jwt,
       },
     })
   }
@@ -101,7 +102,7 @@ export class Api {
   }
 
   //! 테스트
-  async getCreche(id: string): Promise<Types.GetUserResult> {
+  async getCreche(id: number): Promise<Types.GetUserResult> {
     // make the api call
     const response = await this.apisauce.get(`/creche/${id}`)
     console.log("response", response)
@@ -112,6 +113,62 @@ export class Api {
       if (problem) return problem
     }
 
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", response: response }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getCreches(lat: number, lng: number): Promise<Types.GetUserResult> {
+    // make the api call
+    const response = await this.apisauce.get(`/creches?lat=${lat}&lng=${lng}`)
+    console.log("response", response)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", response: response }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async signInKakao(): Promise<Types.GetUserResult> {
+    // make the api call
+    const response = await await this.apisauce.get(`/auth/kakao`)
+    console.log("response", response)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", response: response }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getMe(): Promise<Types.GetUserResult> {
+    // make the api call
+    const response = await this.apisauce.get(`/user/me`)
+
+    console.log("response", response)
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
     // transform the data into the format we are expecting
     try {
       return { kind: "ok", response: response }
