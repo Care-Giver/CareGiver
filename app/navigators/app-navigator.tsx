@@ -34,7 +34,7 @@ import {
 import IMAGES from "#images"
 import { HEIGHT, WIDTH } from "#theme/index"
 import { MinseonTest } from "../screens/test/minseon-test"
-
+import { PushNotificationScreen } from "../../push-notification-screen"
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
  * as well as what properties (if any) they might take when navigating to them.
@@ -61,6 +61,7 @@ export type NavigatorParamList = {
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
+  "push-screen": undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -75,8 +76,17 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home-screen"
+      initialRouteName="push-screen"
     >
+      {/* //! 푸시 */}
+      <Stack.Screen
+        name="push-screen"
+        component={PushNotificationScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
