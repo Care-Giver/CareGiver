@@ -23,6 +23,7 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
+  MyProfileManagementScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -58,6 +59,8 @@ export type NavigatorParamList = {
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
 
+  "my-profile-management-screen": undefined
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -75,7 +78,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home-screen"
+      //*initialRouteName="home-screen"
+      initialRouteName="my-profile-management-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -161,6 +165,9 @@ const AppStack = () => {
           header: (props) => <WritingCommentScreenHeader {...props} />,
         }}
       />
+
+      {/* //* 내 프로필 관리 */}
+      <Stack.Screen name="my-profile-management-screen" component={MyProfileManagementScreen} />
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
