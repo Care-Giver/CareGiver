@@ -119,4 +119,43 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
+  //? 위탁 - 펫시팅 예약 props 포맷팅
+  private crechePetsitterFormatter(
+    data: Types.ReserveCrecheResponse,
+  ): Types.FormattedCrechePetsitterReserve {
+    const formatData: Types.FormattedCrechePetsitterReserve = {
+      serviceType: "creche",
+      caregiverType: "petsitter",
+      reserveId: data.crecheId,
+      startDate: data.startDay,
+      endDate: data.endDay,
+    }
+    return formatData
+  }
+
+  //? 위탁 - 펫시팅 예약 내역 불러오기
+  async getCrechePetsitters(userId: number): Promise<Types.getCrechePetsittersResult> {
+    // TODO: header 설정 여기서 하는거 맞나..?? store 파일에서 해야하나?
+    this.apisauce.setHeaders({
+      ...this.apisauce.headers,
+      "x-jwt": ` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
+    })
+    const response: ApiResponse<any> = await this.apisauce.get(`reserve/creche?userId=${userId}`)
+    console.log(response)
+
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      const reserves: Array<Types.FormattedCrechePetsitterReserve> = response.data.crecheReserves.map(
+        (data: Types.ReserveCrecheResponse) => this.crechePetsitterFormatter(data),
+      )
+      return { kind: "ok", reserves }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
 }

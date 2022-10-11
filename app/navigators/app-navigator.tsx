@@ -23,6 +23,7 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
+  AllBookingsScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -57,6 +58,7 @@ export type NavigatorParamList = {
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
+  "all-bookings-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -75,7 +77,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home-screen"
+      // initialRouteName="home-screen"
+      initialRouteName="all-bookings-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -159,6 +162,15 @@ const AppStack = () => {
         component={WritingCommentScreen}
         options={{
           header: (props) => <WritingCommentScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //* 예약 확인 */}
+      <Stack.Screen
+        name="all-bookings-screen"
+        component={AllBookingsScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
