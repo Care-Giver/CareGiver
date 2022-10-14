@@ -16,7 +16,7 @@ export * from "./home-stack/home-screen/home-screen"
 export * from "./home-stack/test-map-screen/test-map-screen"
 
 //* booking-stack
-// export * from
+export * from "./booking-stack/all-bookings-screen/all-bookings-screen"
 
 //* search-stack
 export * from "./search-stack/search-result-screen/search-result-screen"
