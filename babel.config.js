@@ -28,5 +28,7 @@ module.exports = {
       },
     ],
     ["@babel/plugin-proposal-optional-catch-binding"],
+
+    "react-native-reanimated/plugin", //! Reanimated plugin has to be listed last.
   ],
 }
