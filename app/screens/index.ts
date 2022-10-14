@@ -21,3 +21,6 @@ export * from "./home-stack/test-map-screen/test-map-screen"
 //* search-stack
 export * from "./search-stack/search-result-screen/search-result-screen"
 export * from "./search-stack/search-screen/search-screen"
+
+//*mypage-stack
+export * from "./mypage-stack/my-profile-management-screen/my-profile-management-screen"

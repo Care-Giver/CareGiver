@@ -1,4 +1,4 @@
-import { Keyboard, TextInput, LayoutAnimation, Platform, UIManager } from "react-native"
+import { Keyboard, TextInput, LayoutAnimation, Platform, UIManager, Text } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -19,9 +19,5 @@ import { useKeyboard } from "@react-native-community/hooks"
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
-  return (
-    <ScreenRootView preset="fixed">
-      <text> hi </text>
-    </ScreenRootView>
-  )
+  return <ScreenRootView preset="fixed"></ScreenRootView>
 })

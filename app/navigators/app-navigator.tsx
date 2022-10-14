@@ -31,6 +31,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
+  MyProfileManangementScreenHeader,
 } from "#components"
 import IMAGES from "#images"
 import { HEIGHT, WIDTH } from "#theme/index"
@@ -167,7 +168,14 @@ const AppStack = () => {
       />
 
       {/* //* 내 프로필 관리 */}
-      <Stack.Screen name="my-profile-management-screen" component={MyProfileManagementScreen} />
+      <Stack.Screen
+        name="my-profile-management-screen"
+        component={MyProfileManagementScreen}
+        options={{
+          title: "내 프로필 관리",
+          header: (props) => <MyProfileManangementScreenHeader {...props} />,
+        }}
+      />
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
