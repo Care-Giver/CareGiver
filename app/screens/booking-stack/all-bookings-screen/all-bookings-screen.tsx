@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react"
+import React, { FC, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import {
   DotsIndicator,
   InProgressBooking,
@@ -7,16 +7,26 @@ import {
   PreReg16,
   Row,
   ScreenRootView,
+  TimeSelector,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { HEIGHT } from "#theme/device-size-constant"
 import { bookingsDummy } from "./dummy-data"
-import { FlatList, Pressable, useWindowDimensions, View } from "react-native"
+import {
+  FlatList,
+  Pressable,
+  TextStyle,
+  useWindowDimensions,
+  View,
+  ViewStyle,
+  Text,
+} from "react-native"
 import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
 import { BookingStoreModel } from "../../../models"
-import { styles } from "./styles"
+import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
+
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -54,8 +64,20 @@ export const AllBookingsScreen: FC<
   //     // TODO: BookingCaregiverStore(가제)에서 caregiverData(케어기버 정보) 반환해서 넘기기
   //     // -> 단, 필요한 props만 뽑아서(formatter) : in-progress-booking-profile.props.ts -> UserDataProps 참고
   //   }
+
+  const bottomSheetRef = useRef<BottomSheet>(null)
+
   return (
     <ScreenRootView preset={"scroll"}>
+      <Pressable
+        onPress={() => {
+          bottomSheetRef.current.expand()
+        }}
+        style={{ backgroundColor: "lime" }}
+      >
+        <Text>바텀시트 열기</Text>
+      </Pressable>
+
       {/* // * 진행중인 예약 */}
       <PreBol16
         text="진행 중인 예약"
@@ -95,6 +117,49 @@ export const AllBookingsScreen: FC<
           <PreMed16 text="더보기" color={BODY} />
         </Pressable>
       </Row>
+
+      <TimeSelector bottomSheetRef={bottomSheetRef} />
     </ScreenRootView>
   )
 })
+
+const $bottomSheetBackgroundStyle: ViewStyle = {
+  backgroundColor: "white",
+  borderRadius: 32,
+  elevation: 8,
+  shadowColor: "black",
+  shadowOffset: {
+    width: 10,
+    height: 2,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 12,
+}
+
+const $bottomSheetContentRoot: ViewStyle = {
+  backgroundColor: "white",
+  flex: 1,
+  paddingHorizontal: 30,
+  borderRadius: 32,
+}
+
+const $categoryBox: ViewStyle = {
+  backgroundColor: "white",
+  paddingVertical: 6,
+}
+
+const $categoryTitle: TextStyle = {
+  fontSize: 20,
+  paddingBottom: 20,
+  // alignSelf: "center",
+}
+
+const $categoryBody: TextStyle = {
+  fontSize: 18,
+  alignSelf: "center",
+}
+
+const $numberOfProducts: TextStyle = {
+  fontSize: 13,
+  alignSelf: "center",
+}
