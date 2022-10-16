@@ -26,7 +26,7 @@ import {
 import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
 import { BookingStoreModel } from "../../../models"
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
-
+import { styles } from "./styles"
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
