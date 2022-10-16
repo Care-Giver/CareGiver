@@ -1,5 +1,5 @@
 import { Api } from "#api/api"
-import { FormattedCrechePetsitterReserve } from "#api/api.types"
+import { FormattedPetsitterReserve } from "#api/api.types"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { BookingModel } from "../booking/booking"
 
@@ -14,7 +14,7 @@ export const BookingStoreModel = types
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    addBooking: (data: FormattedCrechePetsitterReserve) => {
+    addBooking: (data: FormattedPetsitterReserve) => {
       const id = self.bookings.reduce((maxId, booking) => Math.max(maxId, booking.id), 0) + 1
       const newBooking = {
         id,
@@ -24,21 +24,32 @@ export const BookingStoreModel = types
     },
   }))
   .actions((self) => ({
+    sortBookings: () => {},
+  }))
+  .actions((self) => ({
     setBookings: async (userId: number) => {
       const api = new Api()
       api.setup()
 
-      //? 위탁 - 펫시터 예약 불러오기
-      const response = await api.getCrechePetsitters(userId)
+      // * 위탁 - 펫시터 예약 불러오기
+      const crecheResponse = await api.getCrechePetsitters(userId)
 
-      if (response.kind === "ok") {
-        const crechePetsitterReserves = response.reserves
+      if (crecheResponse.kind === "ok") {
+        const crechePetsitterReserves = crecheResponse.reserves
         crechePetsitterReserves.forEach((value) => {
           self.addBooking(value)
         })
       }
 
-      // TODO: 방문 - 펫시터 예약 불러오기
+      // * 방문 - 펫시터 예약 불러오기
+      const visitResponse = await api.getVisitPetsitters(userId)
+
+      if (visitResponse.kind === "ok") {
+        const visitPetsitterReserves = visitResponse.reserves
+        visitPetsitterReserves.forEach((value) => {
+          self.addBooking(value)
+        })
+      }
     },
   }))
 // eslint-disable-line @typescript-eslint/no-unused-vars
