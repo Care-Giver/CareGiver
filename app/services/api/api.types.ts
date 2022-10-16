@@ -22,7 +22,7 @@ export interface User {
 //   "request": "잘 부탁드립니다."
 // }
 
-//? /reserve/creche/{user id} response props
+//? /reserve/creche?userId={user id} response props
 export interface ReserveCrecheResponse {
   id: number
   createAt: string
@@ -36,7 +36,21 @@ export interface ReserveCrecheResponse {
   request: string
 }
 
-export interface FormattedCrechePetsitterReserve {
+// ? /reserve/pet-sitter?userId={user id} response props
+export interface ReservePetSitterResponse {
+  id: number
+  createAt: string
+  updatedAt: string
+  status: string
+  services: Array<string>
+  petSitterId: number
+  startTime: string
+  endTime: string
+  reviewStatus: string
+  request: string
+}
+
+export interface FormattedPetsitterReserve {
   serviceType: "creche" | "visit"
   caregiverType: "petsitter" | "trainer"
   reserveId: number
@@ -44,8 +58,14 @@ export interface FormattedCrechePetsitterReserve {
   endDate: string
 }
 
-export type getCrechePetsittersResult =
-  | { kind: "ok"; reserves: FormattedCrechePetsitterReserve[] }
+// ? 위탁 - 펫시터 API (/reserve/creche) 요청 결과
+export type GetCrechePetsittersResult =
+  | { kind: "ok"; reserves: FormattedPetsitterReserve[] }
+  | GeneralApiProblem
+
+// ? 방문 - 펫시터 API (/reserve/pet-sitter) 요쳥 결과
+export type GetVisitPetsitterResult =
+  | { kind: "ok"; reserves: FormattedPetsitterReserve[] }
   | GeneralApiProblem
 
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem

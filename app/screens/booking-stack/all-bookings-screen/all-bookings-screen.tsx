@@ -27,6 +27,7 @@ import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
 import { BookingStoreModel } from "../../../models"
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 
+
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
 > = observer(({ navigation, route }) => {
@@ -36,6 +37,8 @@ export const AllBookingsScreen: FC<
   const [activeIndex, setActiveIndex] = useState(0)
   // ? flatlist에서 viewable item이 바뀌면 할 일 -> activeIndex 변경
   const onViewableChange = useCallback(({ viewableItems }) => {
+    console.log("== viewable items ==")
+    console.log(viewableItems)
     if (viewableItems.length > 0) {
       setActiveIndex(viewableItems[0].index || 0)
     }
@@ -101,7 +104,11 @@ export const AllBookingsScreen: FC<
         onViewableItemsChanged={onViewableChange}
         decelerationRate={"fast"}
       />
-      <DotsIndicator items={bookings} activeIndex={activeIndex} />
+      <Row style={[styles.dotsContainer, { marginTop: HEIGHT * 14 }]}>
+        {bookings.map((item, index) => (
+          <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+        ))}
+      </Row>
 
       {/* // * 지난 예약 */}
       <Row style={{ marginTop: HEIGHT * 60, justifyContent: "space-between" }}>

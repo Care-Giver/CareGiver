@@ -120,11 +120,12 @@ export class Api {
     }
   }
 
-  //? 위탁 - 펫시팅 예약 props 포맷팅
+  // * 위탁 - 펫시터 예약
+  //? 위탁 - 펫시터 예약 props 포맷팅
   private crechePetsitterFormatter(
     data: Types.ReserveCrecheResponse,
-  ): Types.FormattedCrechePetsitterReserve {
-    const formatData: Types.FormattedCrechePetsitterReserve = {
+  ): Types.FormattedPetsitterReserve {
+    const formatData: Types.FormattedPetsitterReserve = {
       serviceType: "creche",
       caregiverType: "petsitter",
       reserveId: data.crecheId,
@@ -134,12 +135,13 @@ export class Api {
     return formatData
   }
 
-  //? 위탁 - 펫시팅 예약 내역 불러오기
-  async getCrechePetsitters(userId: number): Promise<Types.getCrechePetsittersResult> {
-    // TODO: header 설정 여기서 하는거 맞나..?? store 파일에서 해야하나?
+  //? 위탁 - 펫시터 예약 내역 불러오기
+  async getCrechePetsitters(userId: number): Promise<Types.GetCrechePetsittersResult> {
+    // TODO1: header 설정 여기서 하는거 맞나..?? store 파일에서 해야하나?
+    // TODO2: 현재 로그인 중인 유저의 토큰 어떻게 발급 받는지?
     this.apisauce.setHeaders({
       ...this.apisauce.headers,
-      "x-jwt": ` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
+      "x-jwt": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
     })
     const response: ApiResponse<any> = await this.apisauce.get(`reserve/creche?userId=${userId}`)
     console.log(response)
@@ -150,7 +152,7 @@ export class Api {
     }
 
     try {
-      const reserves: Array<Types.FormattedCrechePetsitterReserve> = response.data.crecheReserves.map(
+      const reserves: Array<Types.FormattedPetsitterReserve> = response.data.crecheReserves.map(
         (data: Types.ReserveCrecheResponse) => this.crechePetsitterFormatter(data),
       )
       return { kind: "ok", reserves }
@@ -158,4 +160,48 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+  // * ---------------
+
+  // * 방문 - 펫시터 예약
+  //? 방문 - 펫시터 예약 props 포맷팅
+  private visitPetsitterFormatter(
+    data: Types.ReservePetSitterResponse,
+  ): Types.FormattedPetsitterReserve {
+    const formatData: Types.FormattedPetsitterReserve = {
+      serviceType: "visit",
+      caregiverType: "petsitter",
+      reserveId: data.petSitterId,
+      startDate: data.startTime,
+      endDate: data.endTime,
+    }
+    return formatData
+  }
+
+  //? 방문 - 펫시터 예약 내역 불러오기
+  async getVisitPetsitters(userId: number) {
+    this.apisauce.setHeaders({
+      ...this.apisauce.headers,
+      "x-jwt": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
+    })
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `reserve/pet-sitter?userId=${userId}`,
+    )
+    console.log("== getVisitPetsitters ==")
+    console.log(response)
+
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      const reserves: Array<Types.FormattedPetsitterReserve> = response.data.petSitterReserves.map(
+        (data: Types.ReservePetSitterResponse) => this.visitPetsitterFormatter(data),
+      )
+      return { kind: "ok", reserves }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  // * ---------------
 }
