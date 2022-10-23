@@ -287,6 +287,18 @@ export const PreMed32 = (props: TextProps) => {
 }
 
 //- Regular
+export const PreReg10 = (props: TextProps) => {
+  const { tx, txOptions, text, children, style: TextStyle, color, ...rest } = props
+  const i18nText = tx && translate(tx, txOptions)
+  const content = i18nText || text || children
+
+  return (
+    <PretendardRegular {...rest} color={color} style={TextStyle} size={10}>
+      {content}
+    </PretendardRegular>
+  )
+}
+
 export const PreReg12 = (props: TextProps) => {
   const { tx, txOptions, text, children, style: TextStyle, color, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)

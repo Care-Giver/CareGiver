@@ -10,6 +10,7 @@ export const BookingModel = types
     // ? 위탁 ("creche") | 방문 ("visit")
     serviceType: types.union(types.literal("creche"), types.literal("visit")),
     caregiverType: types.union(types.literal("petsitter"), types.literal("trainer")),
+    // ? 위탁 예약이면 crecheId | 방문 예약이면 petSitterId 값이 저장됨
     reserveId: types.number,
     startDate: types.string,
     endDate: types.string,

@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
   DotsIndicator,
   InProgressBooking,
   PreBol16,
@@ -8,6 +9,7 @@ import {
   Row,
   ScreenRootView,
   TimeSelector,
+  PastBooking,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -97,7 +99,7 @@ export const AllBookingsScreen: FC<
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        snapToInterval={windowWidth}
+        snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 50,
         }}
@@ -117,6 +119,8 @@ export const AllBookingsScreen: FC<
           <PreMed16 text="더보기" color={BODY} />
         </Pressable>
       </Row>
+
+      <PastBooking style={{ marginTop: HEIGHT * 13 }} />
 
       <TimeSelector bottomSheetRef={bottomSheetRef} />
     </ScreenRootView>
