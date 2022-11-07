@@ -24,10 +24,14 @@ export const WIDTH = parseFloat(
   (Dimensions.get("screen").width * (1 / basicDimensions.width)).toFixed(2),
 )
 
+// export const WIDTH = 1
+
 //* 반응형 디자인 대비용, height 보정 계수
 export const HEIGHT = parseFloat(
   (Dimensions.get("screen").height * (1 / basicDimensions.height)).toFixed(2),
 )
+
+// export const HEIGHT = 1
 
 //* 디바이스 스크린 사이즈 값
 //! 이상수에는 그대로 WIDTH, HEIGHT 상수 곱해주면 안 된다!
