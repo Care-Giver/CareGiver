@@ -3,6 +3,9 @@ import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 
+// * id = 7인 유저 토큰
+const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`
+
 /**
  * Manages all requests to the API.
  */
@@ -141,7 +144,7 @@ export class Api {
     // TODO2: 현재 로그인 중인 유저의 토큰 어떻게 발급 받는지?
     this.apisauce.setHeaders({
       ...this.apisauce.headers,
-      "x-jwt": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
+      "x-jwt": USER_TOKEN,
     })
     const response: ApiResponse<any> = await this.apisauce.get(`reserve/creche?userId=${userId}`)
     console.log(response)
@@ -181,7 +184,7 @@ export class Api {
   async getVisitPetsitters(userId: number) {
     this.apisauce.setHeaders({
       ...this.apisauce.headers,
-      "x-jwt": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`,
+      "x-jwt": USER_TOKEN,
     })
     const response: ApiResponse<any> = await this.apisauce.get(
       `reserve/pet-sitter?userId=${userId}`,
