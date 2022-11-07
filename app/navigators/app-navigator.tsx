@@ -24,6 +24,7 @@ import {
   AllCommentsScreen,
   AllReviewsScreen,
   AllBookingsScreen,
+  BookingDetailScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -60,6 +61,7 @@ export type NavigatorParamList = {
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
+  "booking-detail-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -82,7 +84,7 @@ const AppStack = () => {
           headerShown: true,
         }}
         // initialRouteName="home-screen"
-        initialRouteName="all-bookings-screen"
+        initialRouteName="booking-detail-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
@@ -173,6 +175,15 @@ const AppStack = () => {
         <Stack.Screen
           name="all-bookings-screen"
           component={AllBookingsScreen}
+          options={{
+            header: (props) => <HomeScreenHeader {...props} />,
+          }}
+        />
+
+        {/* //* 예약 확인 */}
+        <Stack.Screen
+          name="booking-detail-screen"
+          component={BookingDetailScreen}
           options={{
             header: (props) => <HomeScreenHeader {...props} />,
           }}
