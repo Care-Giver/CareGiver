@@ -9,7 +9,7 @@ import { HEIGHT, WIDTH } from "#theme/index"
 import { Row } from "../basics/row/row"
 
 export const SelectedPetCard = (props) => {
-  const { petData, style, onPress, index } = props
+  const { petData, style, onPress, index, deletable = true } = props
   const { name, size, species, age, sex } = petData
 
   let _sex = ""
@@ -45,9 +45,11 @@ export const SelectedPetCard = (props) => {
         </View>
 
         {/*//? 삭제 버튼 */}
-        <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
-          <Image style={styles.deleteButton} source={IMAGES.x_grey} />
-        </Pressable>
+        {deletable && (
+          <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
+            <Image style={styles.deleteButton} source={IMAGES.x_grey} />
+          </Pressable>
+        )}
       </Row>
 
       {/*//?  카드 하단, 구분선 */}

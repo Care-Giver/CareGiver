@@ -185,7 +185,8 @@ const AppStack = () => {
           name="booking-detail-screen"
           component={BookingDetailScreen}
           options={{
-            header: (props) => <HomeScreenHeader {...props} />,
+            title: "예약 내역",
+            header: (props) => <GobackAndTitleHeader {...props} />,
           }}
         />
 
