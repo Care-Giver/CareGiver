@@ -24,6 +24,7 @@ import {
   AllCommentsScreen,
   AllReviewsScreen,
   AllBookingsScreen,
+  PaymentRequestScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -31,6 +32,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
+  GobackAndTitleSpacebetweenHeader,
 } from "#components"
 import IMAGES from "#images"
 import { HEIGHT, WIDTH } from "#theme/index"
@@ -60,6 +62,7 @@ export type NavigatorParamList = {
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
+  "payment-request-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -82,7 +85,7 @@ const AppStack = () => {
           headerShown: true,
         }}
         // initialRouteName="home-screen"
-        initialRouteName="all-bookings-screen"
+        initialRouteName="payment-request-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
@@ -175,6 +178,16 @@ const AppStack = () => {
           component={AllBookingsScreen}
           options={{
             header: (props) => <HomeScreenHeader {...props} />,
+          }}
+        />
+
+        {/* //* 결제 - 요청사항 */}
+        <Stack.Screen
+          name="payment-request-screen"
+          component={PaymentRequestScreen}
+          options={{
+            title: "요청사항",
+            header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
           }}
         />
 
