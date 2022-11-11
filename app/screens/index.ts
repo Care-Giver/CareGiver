@@ -19,6 +19,9 @@ export * from "./home-stack/test-map-screen/test-map-screen"
 export * from "./booking-stack/all-bookings-screen/all-bookings-screen"
 export * from "./booking-detail-screen"
 
+//* pay-stack
+export * from "./pay-stack/payment-request-screen/payment-request-screen"
+
 //* search-stack
 export * from "./search-stack/search-result-screen/search-result-screen"
 export * from "./search-stack/search-screen/search-screen"

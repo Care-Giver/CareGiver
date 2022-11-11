@@ -24,6 +24,7 @@ import {
   AllCommentsScreen,
   AllReviewsScreen,
   AllBookingsScreen,
+  PaymentRequestScreen,
   BookingDetailScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
@@ -32,6 +33,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
+  GobackAndTitleSpacebetweenHeader,
 } from "#components"
 import IMAGES from "#images"
 import { HEIGHT, WIDTH } from "#theme/index"
@@ -61,6 +63,7 @@ export type NavigatorParamList = {
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
+  "payment-request-screen": undefined
   "booking-detail-screen": undefined
 
   //* test screens
@@ -83,8 +86,9 @@ const AppStack = () => {
         screenOptions={{
           headerShown: true,
         }}
-        // initialRouteName="home-screen"
-        initialRouteName="booking-detail-screen"
+        initialRouteName="home-screen"
+        // initialRouteName="payment-request-screen"
+        // initialRouteName="booking-detail-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
@@ -180,13 +184,13 @@ const AppStack = () => {
           }}
         />
 
-        {/* //* 예약 확인 */}
+        {/* //* 결제 - 요청사항 */}
         <Stack.Screen
-          name="booking-detail-screen"
-          component={BookingDetailScreen}
+          name="payment-request-screen"
+          component={PaymentRequestScreen}
           options={{
-            title: "예약 내역",
-            header: (props) => <GobackAndTitleHeader {...props} />,
+            title: "요청사항",
+            header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
           }}
         />
 

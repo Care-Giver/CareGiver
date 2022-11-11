@@ -94,7 +94,7 @@ export const PastBooking = (props) => {
               <PreMed14 text={"후기 작성하기"} color={GIVER_CASUAL_NAVY} />
             </Pressable>
           ) : (
-            <Pressable disabled onPress={handleReviewPress}>
+            <Pressable disabled>
               <PreMed14 text={"후기 작성하기"} color={DISABLED} />
             </Pressable>
           )}
