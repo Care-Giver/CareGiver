@@ -25,6 +25,7 @@ import {
   AllReviewsScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
+  BookingDetailScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -63,6 +64,7 @@ export type NavigatorParamList = {
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
   "payment-request-screen": undefined
+  "booking-detail-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -84,8 +86,9 @@ const AppStack = () => {
         screenOptions={{
           headerShown: true,
         }}
-        // initialRouteName="home-screen"
-        initialRouteName="payment-request-screen"
+        initialRouteName="home-screen"
+        // initialRouteName="payment-request-screen"
+        // initialRouteName="booking-detail-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
