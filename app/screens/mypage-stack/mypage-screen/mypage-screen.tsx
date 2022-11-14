@@ -18,8 +18,8 @@ import { HEIGHT, WIDTH } from "#theme/device-size-constant"
 import IMAGES from "#images"
 import { UserProps } from "./user.props"
 
-const IS_AUTH = true
-// const IS_AUTH = false
+// const IS_AUTH = true
+const IS_AUTH = false
 
 export const MypageScreen = () => {
   const [userInfo, setUserInfo] = useState<UserProps | null>({
