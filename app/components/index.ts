@@ -17,6 +17,7 @@ export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/service-choice-button/service-choice-button"
 export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/radio-buttons/border-radio-button/border-radio-button"
+export * from "./mypage-button/mypage-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"
@@ -52,3 +53,4 @@ export * from "./sitter-profile-card/sitter-profile-card"
 export * from "./in-progress-booking/in-progress-booking"
 export * from "./time-selector/time-selector"
 export * from "./past-booking/past-booking"
+export * from "./pet-image-card/pet-image-card"
