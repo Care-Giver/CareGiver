@@ -18,7 +18,7 @@ import { HEIGHT, WIDTH } from "#theme/device-size-constant"
 import IMAGES from "#images"
 import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 
 const IS_AUTH = true
@@ -46,17 +46,17 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
     const handleMyPetsPress = () => {
-      navigation.navigate("all-pets-screen")
+      navigate("all-pets-screen")
     }
 
     // * 환경설정 버튼 클릭시 실행되는 함수
     const handleSettingPress = () => {
-      navigation.navigate("setting-screen")
+      navigate("setting-screen")
     }
 
     // * 고객센터 버튼 클릭시 실행되는 함수
     const handleServiceCenterPress = () => {
-      navigation.navigate("service-center-screen")
+      navigate("service-center-screen")
     }
 
     return (

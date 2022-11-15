@@ -18,6 +18,10 @@ export const PetProfileCard = (props) => {
     _sex = "여"
   }
 
+  const onPress = () => {
+    alert("선택된 펫 삭제")
+  }
+
   return (
     <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
@@ -43,10 +47,10 @@ export const PetProfileCard = (props) => {
           </Row>
         </View>
 
-        {/* //? 삭제 버튼
+        {/* //? 삭제 버튼 */}
         <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
           <Image style={styles.deleteButton} source={IMAGES.x_grey} />
-        </Pressable> */}
+        </Pressable>
       </Row>
 
       {/* //?  카드 하단, 구분선
