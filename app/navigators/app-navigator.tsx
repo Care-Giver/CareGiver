@@ -26,6 +26,7 @@ import {
   AllBookingsScreen,
   PaymentRequestScreen,
   BookingDetailScreen,
+  MypageScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -65,6 +66,7 @@ export type NavigatorParamList = {
   "all-bookings-screen": undefined
   "payment-request-screen": undefined
   "booking-detail-screen": undefined
+  "mypage-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -86,9 +88,10 @@ const AppStack = () => {
         screenOptions={{
           headerShown: true,
         }}
-        initialRouteName="home-screen"
+        // initialRouteName="home-screen"
         // initialRouteName="payment-request-screen"
         // initialRouteName="booking-detail-screen"
+        initialRouteName="mypage-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
@@ -191,6 +194,15 @@ const AppStack = () => {
           options={{
             title: "요청사항",
             header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
+          }}
+        />
+
+        {/* //* 마이페이지 스택 - 마이페이지 */}
+        <Stack.Screen
+          name="mypage-screen"
+          component={MypageScreen}
+          options={{
+            header: (props) => <HomeScreenHeader {...props} />,
           }}
         />
 

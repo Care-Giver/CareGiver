@@ -25,3 +25,6 @@ export * from "./pay-stack/payment-request-screen/payment-request-screen"
 //* search-stack
 export * from "./search-stack/search-result-screen/search-result-screen"
 export * from "./search-stack/search-screen/search-screen"
+
+//* mypage-stack
+export * from "./mypage-stack/mypage-screen/mypage-screen"

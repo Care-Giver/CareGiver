@@ -1,6 +1,7 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
   const IMAGES = {
   //* images
+  arrow_change: require("../images/arrow_change.png"),
   arrow_down: require("../images/arrow_down.png"),
   arrow_left: require("../images/arrow_left.png"),
   arrow_up: require("../images/arrow_up.png"),
