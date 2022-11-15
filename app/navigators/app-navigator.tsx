@@ -27,6 +27,9 @@ import {
   PaymentRequestScreen,
   BookingDetailScreen,
   MypageScreen,
+  AllPetsScreen,
+  SettingScreen,
+  ServiceCenterScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -64,9 +67,16 @@ export type NavigatorParamList = {
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
-  "payment-request-screen": undefined
   "booking-detail-screen": undefined
+
+  // * pay stack
+  "payment-request-screen": undefined
+
+  // * mypage stack
   "mypage-screen": undefined
+  "all-pets-screen": undefined
+  "setting-screen": undefined
+  "service-center-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -88,10 +98,10 @@ const AppStack = () => {
         screenOptions={{
           headerShown: true,
         }}
-        // initialRouteName="home-screen"
+        initialRouteName="home-screen"
         // initialRouteName="payment-request-screen"
         // initialRouteName="booking-detail-screen"
-        initialRouteName="mypage-screen"
+        // initialRouteName="mypage-screen"
       >
         {/* //* 홈 */}
         <Stack.Screen
@@ -197,7 +207,8 @@ const AppStack = () => {
           }}
         />
 
-        {/* //* 마이페이지 스택 - 마이페이지 */}
+        {/* //! 마이페이지 스택 */}
+        {/* //* 마이페이지 메인 */}
         <Stack.Screen
           name="mypage-screen"
           component={MypageScreen}
@@ -205,6 +216,37 @@ const AppStack = () => {
             header: (props) => <HomeScreenHeader {...props} />,
           }}
         />
+
+        {/* //* 반려동물 전체보기 */}
+        <Stack.Screen
+          name="all-pets-screen"
+          component={AllPetsScreen}
+          options={{
+            title: "나의 반려동물",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+
+        {/* //* 환경설정 스크린 */}
+        <Stack.Screen
+          name="setting-screen"
+          component={SettingScreen}
+          options={{
+            title: "환경설정",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+
+        {/* //* 고객센터 스크린 */}
+        <Stack.Screen
+          name="service-center-screen"
+          component={ServiceCenterScreen}
+          options={{
+            title: "고객센터",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+        {/* //! -------- */}
 
         {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
