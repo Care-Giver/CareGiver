@@ -28,3 +28,6 @@ export * from "./search-stack/search-screen/search-screen"
 
 //* mypage-stack
 export * from "./mypage-stack/mypage-screen/mypage-screen"
+export * from "./mypage-stack/all-pets-screen/all-pets-screen"
+export * from "./mypage-stack/setting-screen/setting-screen"
+export * from "./mypage-stack/service-center-screen/service-center-screen"
