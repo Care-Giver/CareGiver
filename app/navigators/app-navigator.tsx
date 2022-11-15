@@ -18,7 +18,7 @@ import {
   HomeScreen,
   SearchScreen,
   SearchResultScreen,
-  TestMapScreen,
+  // TestMapScreen,
   CaregiverDetailInformationScreen,
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
@@ -92,177 +92,177 @@ const AppStack = () => {
   return (
     //! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android
     //? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack.Navigator
-        //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
-        screenOptions={{
-          headerShown: true,
+    // <GestureHandlerRootView style={{ flex: 1 }}>
+    <Stack.Navigator
+      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
+      screenOptions={{
+        headerShown: true,
+      }}
+      initialRouteName="minseon-test"
+      // initialRouteName="payment-request-screen"
+      // initialRouteName="booking-detail-screen"
+      // initialRouteName="mypage-screen"
+    >
+      {/* //* 홈 */}
+      <Stack.Screen
+        name="home-screen"
+        component={HomeScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
-        initialRouteName="home-screen"
-        // initialRouteName="payment-request-screen"
-        // initialRouteName="booking-detail-screen"
-        // initialRouteName="mypage-screen"
-      >
-        {/* //* 홈 */}
-        <Stack.Screen
-          name="home-screen"
-          component={HomeScreen}
-          options={{
-            header: (props) => <HomeScreenHeader {...props} />,
-          }}
-        />
+      />
 
-        {/* //* 검색 */}
-        <Stack.Screen
-          name="search-screen"
-          component={SearchScreen}
-          options={{
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 검색 */}
+      <Stack.Screen
+        name="search-screen"
+        component={SearchScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 검색결과 */}
-        <Stack.Screen
-          name="search-result"
-          component={SearchResultScreen}
-          options={{
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 검색결과 */}
+      <Stack.Screen
+        name="search-result"
+        component={SearchResultScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 펫시터 상세정보 */}
-        <Stack.Screen
-          name="caregiver-detail-information-screen"
-          component={CaregiverDetailInformationScreen}
-          options={{
-            headerTransparent: true,
-            headerLeft: (props) => (
-              <Pressable
-                onPress={() => {
-                  navigation.goBack()
-                }}
-              >
-                <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
-              </Pressable>
-            ),
-            // title: null,
-            headerTitle: "",
-          }}
-        />
+      {/* //* 펫시터 상세정보 */}
+      <Stack.Screen
+        name="caregiver-detail-information-screen"
+        component={CaregiverDetailInformationScreen}
+        options={{
+          headerTransparent: true,
+          headerLeft: (props) => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack()
+              }}
+            >
+              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
+            </Pressable>
+          ),
+          // title: null,
+          headerTitle: "",
+        }}
+      />
 
-        {/* //* 리뷰 전체보기 */}
-        <Stack.Screen
-          name="all-reviews-screen"
-          component={AllReviewsScreen}
-          options={{
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 리뷰 전체보기 */}
+      <Stack.Screen
+        name="all-reviews-screen"
+        component={AllReviewsScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 자기소개 전체보기 */}
-        <Stack.Screen
-          name="caregiver-self-introduction-screen"
-          component={CaregiverSelfIntroductionScreen}
-          options={{
-            title: "자기소개",
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 자기소개 전체보기 */}
+      <Stack.Screen
+        name="caregiver-self-introduction-screen"
+        component={CaregiverSelfIntroductionScreen}
+        options={{
+          title: "자기소개",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 댓글 전체보기 */}
-        <Stack.Screen
-          name="all-comments-screen"
-          component={AllCommentsScreen}
-          options={{
-            title: "댓글 전체보기",
-            header: (props) => <AllCommentsScreenHeader {...props} />,
-          }}
-        />
+      {/* //* 댓글 전체보기 */}
+      <Stack.Screen
+        name="all-comments-screen"
+        component={AllCommentsScreen}
+        options={{
+          title: "댓글 전체보기",
+          header: (props) => <AllCommentsScreenHeader {...props} />,
+        }}
+      />
 
-        {/* //* 댓글쓰기 */}
-        <Stack.Screen
-          name="writing-comment-screen"
-          component={WritingCommentScreen}
-          options={{
-            header: (props) => <WritingCommentScreenHeader {...props} />,
-          }}
-        />
+      {/* //* 댓글쓰기 */}
+      <Stack.Screen
+        name="writing-comment-screen"
+        component={WritingCommentScreen}
+        options={{
+          header: (props) => <WritingCommentScreenHeader {...props} />,
+        }}
+      />
 
-        {/* //* 예약 확인 */}
-        <Stack.Screen
-          name="all-bookings-screen"
-          component={AllBookingsScreen}
-          options={{
-            header: (props) => <HomeScreenHeader {...props} />,
-          }}
-        />
+      {/* //* 예약 확인 */}
+      <Stack.Screen
+        name="all-bookings-screen"
+        component={AllBookingsScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
 
-        {/* //* 결제 - 요청사항 */}
-        <Stack.Screen
-          name="payment-request-screen"
-          component={PaymentRequestScreen}
-          options={{
-            title: "요청사항",
-            header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
-          }}
-        />
+      {/* //* 결제 - 요청사항 */}
+      <Stack.Screen
+        name="payment-request-screen"
+        component={PaymentRequestScreen}
+        options={{
+          title: "요청사항",
+          header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
+        }}
+      />
 
-        {/* //! 마이페이지 스택 */}
-        {/* //* 마이페이지 메인 */}
-        <Stack.Screen
-          name="mypage-screen"
-          component={MypageScreen}
-          options={{
-            header: (props) => <HomeScreenHeader {...props} />,
-          }}
-        />
+      {/* //! 마이페이지 스택 */}
+      {/* //* 마이페이지 메인 */}
+      <Stack.Screen
+        name="mypage-screen"
+        component={MypageScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
 
-        {/* //* 반려동물 전체보기 */}
-        <Stack.Screen
-          name="all-pets-screen"
-          component={AllPetsScreen}
-          options={{
-            title: "나의 반려동물",
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 반려동물 전체보기 */}
+      <Stack.Screen
+        name="all-pets-screen"
+        component={AllPetsScreen}
+        options={{
+          title: "나의 반려동물",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 환경설정 스크린 */}
-        <Stack.Screen
-          name="setting-screen"
-          component={SettingScreen}
-          options={{
-            title: "환경설정",
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //* 환경설정 스크린 */}
+      <Stack.Screen
+        name="setting-screen"
+        component={SettingScreen}
+        options={{
+          title: "환경설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //* 고객센터 스크린 */}
-        <Stack.Screen
-          name="service-center-screen"
-          component={ServiceCenterScreen}
-          options={{
-            title: "고객센터",
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
-        {/* //! -------- */}
+      {/* //* 고객센터 스크린 */}
+      <Stack.Screen
+        name="service-center-screen"
+        component={ServiceCenterScreen}
+        options={{
+          title: "고객센터",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //! -------- */}
 
-        {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
+      {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
-        {/* //? 민선 테스트 */}
-        <Stack.Screen
-          name="minseon-test"
-          component={MinseonTest}
-          options={{
-            header: (props) => <GobackAndTitleHeader {...props} />,
-          }}
-        />
+      {/* //? 민선 테스트 */}
+      <Stack.Screen
+        name="minseon-test"
+        component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
 
-        {/* //? 위치(지도) 테스트 화면 */}
-        <Stack.Screen name="test-map-screen" component={TestMapScreen} />
-      </Stack.Navigator>
-    </GestureHandlerRootView>
+      {/* //? 위치(지도) 테스트 화면 */}
+      {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
+    </Stack.Navigator>
+    // {/* </GestureHandlerRootView> */}
   )
 }
 

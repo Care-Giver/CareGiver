@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleProp, TextInput, TextInputProps, TextStyle, View, ViewStyle } from "react-native"
 import { color, spacing, typography } from "#theme/index"
-import { translate, TxKeyPath } from "~/app/i18n"
+import { translate, TxKeyPath } from "../../../../i18n"
 import { Text } from "../text/text"
 
 // the base styling for the container

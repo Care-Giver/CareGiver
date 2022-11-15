@@ -14,7 +14,7 @@ import {
 } from "#theme/index"
 import { PublicPrivateSwitchButton, ScreenRootView, PopSem14, PopReg14, Row } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
-import { PRETENDARD_REGULAR } from "~/assets/fonts"
+import { PRETENDARD_REGULAR } from "#fonts"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">

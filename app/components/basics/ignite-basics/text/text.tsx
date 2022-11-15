@@ -2,7 +2,7 @@ import * as React from "react"
 import { Text as ReactNativeText } from "react-native"
 import { presets } from "./text.presets"
 import { TextProps } from "./text.props"
-import { translate } from "~/app/i18n"
+import { translate } from "../../../../i18n"
 
 /**
  * For your text displaying needs.
