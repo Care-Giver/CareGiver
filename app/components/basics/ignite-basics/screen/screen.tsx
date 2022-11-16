@@ -10,12 +10,11 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const insets = useSafeAreaInsets()
   const preset = presets.fixed
   const style = props.style || {}
-  const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
 
   return (
     <KeyboardAvoidingView
-      style={[preset.outer, backgroundStyle]}
+      style={preset.outer}
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
@@ -29,22 +28,21 @@ function ScreenWithScrolling(props: ScreenProps) {
   const insets = useSafeAreaInsets()
   const preset = presets.scroll
   const style = props.style || {}
-  const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
   // ? scrolling 관련 props
   const { onScroll, scrollEventThrottle, contentInsetAdjustmentBehavior } = props
 
   return (
     <KeyboardAvoidingView
-      style={[preset.outer, backgroundStyle]}
+      style={preset.outer}
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
       <StatusBar barStyle={props.statusBar || "light-content"} />
-      <View style={[preset.outer, backgroundStyle, insetStyle]}>
+      <View style={[insetStyle]}>
         {/* //! 주의: 안드로이드는, ScrollView 이더라도, children 이 scroll 이 필요하지 않는 사이즈이면 scroll 이 작동 하지 않는다 */}
         <ScrollView
-          style={[preset.outer, backgroundStyle]}
+          // style={preset.outer}
           contentContainerStyle={[preset.inner, style]}
           keyboardShouldPersistTaps={props.keyboardShouldPersistTaps || "handled"}
           // ? scrolling 관련 props

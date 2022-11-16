@@ -128,7 +128,7 @@ export const CaregiverDetailInformationScreen: FC<
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
     //! 따라서, ScreenRootView 는 fixed 로 한다
     //! 이에따라, 스크린 엣지 기본 padding 도 컴포넌트마다 각각 적용해야 한다
-    <ScreenRootView preset="fixed" testID="testetst" style={{ paddingHorizontal: 0 }}>
+    <ScreenRootView preset="fixed" testID="testetst">
       {/* //? 예약 신청하기 버튼을 "제외한" 전부 */}
       <ScrollView
         // preset="scroll"
@@ -155,7 +155,7 @@ export const CaregiverDetailInformationScreen: FC<
           firstImage={profileImg}
         />
 
-        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>
           {/* //* 케어기버 이름/ 별점/ 리뷰  */}
           <CaregiverNameStarReview
             style={{ marginTop: HEIGHT * 36 }}

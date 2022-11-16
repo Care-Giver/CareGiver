@@ -165,6 +165,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
         <Row
           style={{
             marginTop: HEIGHT * 60,
+            backgroundColor: "white",
           }}
         >
           {/*//? 훈련사 */}

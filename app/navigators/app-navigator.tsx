@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme, Image, Pressable } from "react-native"
+import { useColorScheme, Image, Pressable, View } from "react-native"
 import {
   NavigationContainer,
   DefaultTheme,
@@ -39,8 +39,9 @@ import {
   AllCommentsScreenHeader,
   GobackAndTitleSpacebetweenHeader,
 } from "#components"
+import { HEADER_ROOT } from "#components/screen-headers/common-styles"
 import IMAGES from "#images"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, STANDARD_WIDTH, WIDTH } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 
@@ -106,6 +107,19 @@ const AppStack = () => {
         component={HomeScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
+          // headerBackground: () => (
+          //   <View
+          //     style={{
+          //       alignSelf: "center",
+          //       flex: 1,
+          //       height: "100%",
+          //       width: STANDARD_WIDTH,
+          //       backgroundColor: "red",
+          //       flexDirection: "row",
+          //       alignItems: "center",
+          //     }}
+          //   />
+          // ),
         }}
       />
 
@@ -131,6 +145,7 @@ const AppStack = () => {
       <Stack.Screen
         name="caregiver-detail-information-screen"
         component={CaregiverDetailInformationScreen}
+        // TODO: web 에서 스타일링 고장남. 고쳐야 함
         options={{
           headerTransparent: true,
           headerLeft: (props) => (
