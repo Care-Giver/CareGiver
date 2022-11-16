@@ -283,11 +283,40 @@ interface NavigationProps extends Partial<React.ComponentProps<typeof Navigation
 export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
+
+  const linking = {
+    // prefixes: ["https://mychat.com", "mychat://"],
+    config: {
+      screens: {
+        "home-screen": "/home-screen",
+        "search-screen": "/search-screen",
+        "search-result": "/search-result",
+        "caregiver-detail-information-screen": "/caregiver-detail-information-screen",
+        "all-reviews-screen": "/all-reviews-screen",
+        "caregiver-self-introduction-screen": "/caregiver-self-introduction-screen",
+        "all-comments-screen": "/all-comments-screen",
+        "writing-comment-screen": "/writing-comment-screen",
+        "all-bookings-screen": "/all-bookings-screen",
+        "booking-detail-screen": "/booking-detail-screen",
+
+        // * pay stack
+        "payment-request-screen": "/payment-request-screen",
+
+        // * mypage stack
+        "mypage-screen": "/mypage-screen",
+        "all-pets-screen": "/all-pets-screen",
+        "setting-screen": "/setting-screen",
+        "service-center-screen": "/service-center-screen",
+      },
+    },
+  }
+
   return (
     <NavigationContainer
       ref={navigationRef}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
+      linking={linking}
     >
       <AppStack />
     </NavigationContainer>
