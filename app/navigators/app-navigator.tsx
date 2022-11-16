@@ -98,10 +98,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="minseon-test"
-      // initialRouteName="payment-request-screen"
-      // initialRouteName="booking-detail-screen"
-      // initialRouteName="mypage-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
