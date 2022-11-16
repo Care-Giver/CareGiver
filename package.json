@@ -38,6 +38,7 @@
     "@react-navigation/stack": "~6.0.1",
     "apisauce": "2.0.0",
     "expo": "^46.0.0",
+    "expo-constants": "~13.2.4",
     "expo-linear-gradient": "~11.4.0",
     "expo-localization": "~13.1.0",
     "expo-location": "~14.3.0",
