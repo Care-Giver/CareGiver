@@ -2,16 +2,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "#components": ["./app/components/"],
+      "#components/*": ["./app/components/*"],
       "#texts": ["./app/components/basics/custom-texts/custom-texts.tsx"],
-      "#navigators": ["./app/navigators/"],
-      "#screens": ["./app/screens/"],
-      "#theme": ["./app/theme/"],
-      "#api": ["./app/services/api/"],
-      "#images": ["./assets/images/"],
-      "#fonts": ["./assets/fonts/"],
-      "#storybook": ["./storybook/"],
-      "./*": ["./"]
+      "#navigators/*": ["./app/navigators/*"],
+      "#screens/*": ["./app/screens/*"],
+      "#theme/*": ["./app/theme/*"],
+      "#api/*": ["./app/services/api/*"],
+      "#images/*": ["./assets/images/*"],
+      "#fonts/*": ["./assets/fonts/*"],
+      "#storybook/*": ["./storybook/*"]
+      // "./*": ["./"]
     },
     "allowJs": false,
     "allowSyntheticDefaultImports": true,

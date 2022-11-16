@@ -32,6 +32,7 @@ const PretendardBold = (props: TextProps) => {
         style,
         {
           fontFamily: PRETENDARD_BOLD,
+          fontWeight: "bold",
           includeFontPadding: false,
           fontSize: HEIGHT * size,
           color: color,
@@ -56,6 +57,7 @@ const PretendardMedium = (props: TextProps) => {
         style,
         {
           fontFamily: PRETENDARD_MEDIUM,
+          fontWeight: "normal",
           includeFontPadding: false,
           fontSize: HEIGHT * size,
           color: color,
@@ -80,6 +82,7 @@ const PretendardRegular = (props: TextProps) => {
         style,
         {
           fontFamily: PRETENDARD_REGULAR,
+          fontWeight: "normal",
           includeFontPadding: false,
           fontSize: HEIGHT * size,
           color: color,
@@ -607,6 +610,7 @@ const PoppinsSemiBold = (props: TextProps) => {
         style,
         {
           fontFamily: POPPINS_SEMIBOLD,
+          fontWeight: "bold",
           includeFontPadding: false,
           fontSize: HEIGHT * size,
           color: color,
@@ -631,6 +635,7 @@ const PoppinsRegular = (props: TextProps) => {
         style,
         {
           fontFamily: POPPINS_REGULAR,
+          fontWeight: "normal",
           includeFontPadding: false,
           fontSize: HEIGHT * size,
           color: color,

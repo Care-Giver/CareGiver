@@ -10,7 +10,7 @@ import {
   DotsIndicator,
   RowRoundedButton,
   VisitingDropOffSwitchButton,
-} from "#components"
+} from "#components/index"
 import { navigate, NavigatorParamList } from "#navigators"
 import { HEIGHT, WIDTH, BODY, SUB_HEAD_LINE } from "#theme"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
@@ -165,6 +165,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
         <Row
           style={{
             marginTop: HEIGHT * 60,
+            backgroundColor: "white",
           }}
         >
           {/*//? 훈련사 */}

@@ -4,7 +4,7 @@ import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
-import { spacing } from "#theme/index"
+import { spacing } from "#theme"
 import { translate } from "../../../../i18n"
 
 // static styles

@@ -1,37 +1,48 @@
 import { Dimensions, Platform } from "react-native"
 
-export const basicDimensions = Platform.select({
-  ios: {
-    width: 390,
-    height: 844,
-  },
-
-  //* 기존 Android Artboard 사이즈
-  // android: {
-  //   width: 360,
-  //   height: 780,
-  // },
-
-  //? 임시용 사이즈 (Android Artboard 디자인 GUI 미완)
-  android: {
-    width: 390,
-    height: 844,
-  },
-})
-
-export const WIDTH = 1
-
-export const HEIGHT = 1
-
 export const isWeb = Platform.OS === "web"
+
+export const STANDARD_WIDTH = 390
+const STANDARD_HEIGHT = 763
 
 //* 디바이스 스크린 사이즈 값
 //! 이상수에는 그대로 WIDTH, HEIGHT 상수 곱해주면 안 된다!
 export const DEVICE_SCREEN_WIDTH = Dimensions.get("screen").width
 export const DEVICE_SCREEN_HEIGHT = Dimensions.get("screen").height
 
-// ? toFixed(): number -> string
-// ! JS, TS 에서는 string * "number" 결과값은 number 이다.
+const getWIDTH = () => {
+  if (isWeb) {
+    return 1
+  }
+
+  if (DEVICE_SCREEN_WIDTH < STANDARD_WIDTH) {
+    const widthRatio = parseFloat(
+      (Dimensions.get("screen").width * (1 / STANDARD_WIDTH)).toFixed(2),
+    )
+    return widthRatio
+  }
+
+  return 1
+}
+
+const getHEIGHT = () => {
+  if (isWeb) {
+    return 1
+  }
+
+  if (DEVICE_SCREEN_HEIGHT < STANDARD_HEIGHT) {
+    const heightRatio = parseFloat(
+      (Dimensions.get("screen").height * (1 / STANDARD_HEIGHT)).toFixed(2),
+    )
+    return heightRatio
+  }
+
+  return 1
+}
+
+export const WIDTH = getWIDTH()
+
+export const HEIGHT = getHEIGHT()
 
 // * header 높이
 export const HEADER_HEIGHT = HEIGHT * 56
