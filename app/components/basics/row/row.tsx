@@ -27,7 +27,7 @@ interface RowProps {
 
 export const Row = (props: RowProps) => {
   const { children, style, mv, mt, mb } = props
-  const $style = Object.assign({}, style, { marginVertical: mv, marginTop: mt, marginBottom: mb })
+  const $style = Object.assign({}, { marginVertical: mv, marginTop: mt, marginBottom: mb })
 
-  return <View style={[styles.ROW_PRESET, $style]}>{children}</View>
+  return <View style={[styles.ROW_PRESET, $style, style]}>{children}</View>
 }

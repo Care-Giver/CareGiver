@@ -2,18 +2,6 @@ import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY } from "./palette"
 import { Platform, ShadowStyleIOS } from "react-native"
 import { WIDTH, HEIGHT } from "./device-size-constant"
 
-export const palette = {
-  black: "#1d1d1d",
-  white: "#ffffff",
-  offWhite: "#e6e6e6",
-  orange: "#FBA928",
-  orangeDarker: "#EB9918",
-  lightGrey: "#939AA4",
-  lighterGrey: "#CDD4DA",
-  angry: "#dd3333",
-  deepPurple: "#5D2555",
-}
-
 // * Shadows
 //? shadowRadius 는 Blur 에 (그나마..) 대응된다 https://blog.logrocket.com/applying-box-shadows-in-react-native/
 export const SHADOW_1: ShadowStyleIOS = Platform.select({

@@ -28,7 +28,7 @@ import {
 } from "react-native"
 import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
 import { BookingStoreModel } from "../../../models"
-import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
+// import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { styles } from "./styles"
 import IMAGES from "#images"
 
@@ -69,13 +69,13 @@ export const AllBookingsScreen: FC<
   //     // -> 단, 필요한 props만 뽑아서(formatter) : in-progress-booking-profile.props.ts -> UserDataProps 참고
   //   }
 
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  // const bottomSheetRef = useRef<BottomSheet>(null)
 
   return (
     <ScreenRootView preset={"scroll"}>
       <Pressable
         onPress={() => {
-          bottomSheetRef.current.expand()
+          // bottomSheetRef.current.expand()
         }}
         style={{ backgroundColor: "lime" }}
       >
@@ -125,7 +125,7 @@ export const AllBookingsScreen: FC<
 
       <PastBooking style={{ marginTop: HEIGHT * 13 }} />
 
-      <TimeSelector bottomSheetRef={bottomSheetRef} />
+      {/* <TimeSelector bottomSheetRef={bottomSheetRef} /> */}
     </ScreenRootView>
   )
 })

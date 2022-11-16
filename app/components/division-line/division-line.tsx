@@ -32,11 +32,11 @@ export const DivisionLine = ({
   mb,
   mv,
 }: DivisionLineProps) => {
-  const $style = Object.assign({}, style, { marginVertical: mv, marginTop: mt, marginBottom: mb })
+  const $style = Object.assign({}, { marginVertical: mv, marginTop: mt, marginBottom: mb })
   const COLOR_AND_HEIGHT = {
     backgroundColor: color,
     height: height,
   }
 
-  return <View style={[styles.root, COLOR_AND_HEIGHT, $style]} />
+  return <View style={[styles.root, COLOR_AND_HEIGHT, $style, style]} />
 }
