@@ -39,16 +39,17 @@ function ScreenWithScrolling(props: ScreenProps) {
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
       <StatusBar barStyle={props.statusBar || "light-content"} />
-      <View style={[insetStyle]}>
+      <View style={[preset.inner, insetStyle]}>
         {/* //! 주의: 안드로이드는, ScrollView 이더라도, children 이 scroll 이 필요하지 않는 사이즈이면 scroll 이 작동 하지 않는다 */}
         <ScrollView
           // style={preset.outer}
-          contentContainerStyle={[preset.inner, style]}
+          contentContainerStyle={style}
           keyboardShouldPersistTaps={props.keyboardShouldPersistTaps || "handled"}
           // ? scrolling 관련 props
           onScroll={onScroll}
           scrollEventThrottle={scrollEventThrottle}
           contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+          showsVerticalScrollIndicator={false}
         >
           {props.children}
         </ScrollView>

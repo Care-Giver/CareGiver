@@ -67,6 +67,7 @@ export const presets = {
       justifyContent: "flex-start",
       alignItems: "stretch",
       backgroundColor: "white",
+      height: "100%",
     } as ViewStyle,
   },
 }

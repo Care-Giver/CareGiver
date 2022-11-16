@@ -288,7 +288,7 @@ export const AppNavigator = (props: NavigationProps) => {
     // prefixes: ["https://mychat.com", "mychat://"],
     config: {
       screens: {
-        "home-screen": "/home-screen",
+        "home-screen": "/",
         "search-screen": "/search-screen",
         "search-result": "/search-result",
         "caregiver-detail-information-screen": "/caregiver-detail-information-screen",

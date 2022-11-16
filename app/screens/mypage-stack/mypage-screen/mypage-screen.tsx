@@ -60,7 +60,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     }
 
     return (
-      <ScreenRootView preset="scroll">
+      <ScreenRootView preset="fixed">
         {/* //! 로그인 상태일 때 */}
         {userInfo ? (
           <>
