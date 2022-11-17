@@ -1,21 +1,42 @@
-import { View, Text } from "react-native"
+import { View, Text, Modal, Image, Pressable } from "react-native"
 import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { MypageButton, PreMed16, PreReg14, ScreenRootView } from "#components"
-import { HEAD_LINE, BODY } from "#theme/palette"
+import { MypageButton, PreMed16, PreReg14, PreBol14, ScreenRootView } from "#components"
+import { HEAD_LINE, BODY, GIVER_CASUAL_NAVY } from "#theme/palette"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { useState } from "react"
+import IMAGES from "#images"
+import { Row } from "#components/"
+import { useWindowDimensions } from "react-native"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components/"
+import { color } from "#theme/color"
+import { PreBol20 } from "#components/"
+import { CustomModal } from "#components/custom-modal/custom-modal"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
+    const windowWidth = useWindowDimensions().width
+
+    const [logoutModalVisible, setLogoutModalVisible] = useState(false)
+    const [withdrawModalVisible, setWithdrawModalVisible] = useState(false)
+
+    const handleLogoutMenuPress = () => {
+      setLogoutModalVisible(true)
+    }
+
     const handleLogoutPress = () => {
-      alert("로그아웃 화면으로 이동")
+      alert("로그아웃")
+    }
+
+    const handleWithdrawMenuPress = () => {
+      setWithdrawModalVisible(true)
     }
 
     const handleWithdrawPress = () => {
-      alert("회원 탈퇴 화면으로 이동")
+      alert("회원 탈퇴")
     }
 
     return (
@@ -29,14 +50,36 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
         <View style={styles.divisionLine} />
 
         {/* //* 로그아웃 */}
-        <MypageButton text="로그아웃" onPress={handleLogoutPress} />
+        <MypageButton text="로그아웃" onPress={handleLogoutMenuPress} />
         {/* //? division line */}
         <View style={styles.divisionLine} />
 
         {/* //* 회원 탈퇴 */}
-        <MypageButton text="회원 탈퇴" onPress={handleWithdrawPress} />
+        <MypageButton text="회원 탈퇴" onPress={handleWithdrawMenuPress} />
         {/* //? division line */}
         <View style={styles.divisionLine} />
+
+        {/* //! 모달 창 - 로그아웃, 회원탈퇴 */}
+        {/* //* 로그아웃 모달 창 */}
+        <CustomModal
+          visibleState={logoutModalVisible}
+          title="로그아웃 하시겠어요?"
+          yesBtnText="로그아웃 하기"
+          noBtnText="취소"
+          handleYesPress={handleLogoutPress}
+          handleNoPress={() => setLogoutModalVisible(false)}
+        />
+
+        {/* //* 회원 탈퇴 모달 창 */}
+        <CustomModal
+          visibleState={withdrawModalVisible}
+          title="정말 탈퇴 하시겠어요?"
+          subtitle="탈퇴하면 지금까지 등록된 모든 정보가 사라집니다."
+          yesBtnText="탈퇴할래요"
+          noBtnText="다시 생각해볼게요"
+          handleYesPress={handleWithdrawPress}
+          handleNoPress={() => setWithdrawModalVisible(false)}
+        />
       </ScreenRootView>
     )
   },
