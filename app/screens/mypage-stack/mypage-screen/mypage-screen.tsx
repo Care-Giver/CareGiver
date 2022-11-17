@@ -67,7 +67,11 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             {/* //* 유저 프로필 카드  */}
             <Row style={styles.profileCard}>
               {/* //? 프로필 사진 */}
-              <Image source={user.profileImg} style={styles.profileImg} resizeMode="contain" />
+              <Image
+                source={user.profileImg ? user.profileImg : IMAGES.default_pet_image_60}
+                style={styles.profileImg}
+                resizeMode="contain"
+              />
               {/* //* 프로필 */}
               <View style={styles.profileNameCard}>
                 {/* //? 사용자 이름 */}

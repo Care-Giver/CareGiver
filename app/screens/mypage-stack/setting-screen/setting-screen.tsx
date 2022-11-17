@@ -3,38 +3,35 @@ import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { MypageButton, PreMed16, PreReg14, PreBol14, ScreenRootView } from "#components"
-import { HEAD_LINE, BODY, GIVER_CASUAL_NAVY } from "#theme/palette"
+import { MypageButton, PreMed16, PreReg14, ScreenRootView } from "#components"
+import { HEAD_LINE, BODY } from "#theme/palette"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT } from "#theme/device-size-constant"
 import { useState } from "react"
-import IMAGES from "#images"
-import { Row } from "#components/"
-import { useWindowDimensions } from "react-native"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components/"
-import { color } from "#theme/color"
-import { PreBol20 } from "#components/"
 import { CustomModal } from "#components/custom-modal/custom-modal"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
-    const windowWidth = useWindowDimensions().width
-
+    // ? 로그아웃 | 회원탈퇴 모달창 visible
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const [withdrawModalVisible, setWithdrawModalVisible] = useState(false)
 
+    // ? 로그아웃 메뉴 클릭시 동작하는 함수 - 모달창 띄우기
     const handleLogoutMenuPress = () => {
       setLogoutModalVisible(true)
     }
 
+    // ? 모달창 - 로그아웃 버튼 클릭시 동작하는 함수
     const handleLogoutPress = () => {
       alert("로그아웃")
     }
 
+    // ? 회원탈퇴 메뉴 클릭시 동작하는 함수 - 모달창 띄우기
     const handleWithdrawMenuPress = () => {
       setWithdrawModalVisible(true)
     }
 
+    // ? 모달창 - 회원 탈퇴 버튼 클릭시 동작하는 함수
     const handleWithdrawPress = () => {
       alert("회원 탈퇴")
     }
