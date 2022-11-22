@@ -4,7 +4,7 @@ import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 
 // * id = 7인 유저 토큰
-const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3MDkzNDk1fQ.r_GkgcEjy-AD_uFVlgEjkmWVLUZzYcodhFNN-oz3rwY`
+const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjY4NDUzMTAzfQ.Px0I5t4fzhfyEHGHZxjEFyP8g4P6-kw08FMZ2Iqe0d0`
 
 /**
  * Manages all requests to the API.
@@ -207,4 +207,48 @@ export class Api {
     }
   }
   // * ---------------
+
+  // ! 마이페이지 - 펫 목록
+  private getSpeciesName() {}
+
+  private getFamilyName() {}
+
+  // * pet formatter
+  private petDataFormatter(data: Types.PetResultProps): Types.FormattedPetData {
+    return {
+      name: data.pet.name,
+      image: data.pet.image,
+      age: data.pet.age,
+      sex: data.pet.sex,
+      petType: data.pet.petType,
+      // TODO: speciesId로 name 추출
+      speciesName: "시츄",
+      // TODO: familyId로 name 추출
+      familyName: "Dog",
+    }
+  }
+
+  // * 나의 모든 펫 정보 가져오기
+  async getMyPets(): Promise<Types.GetMyPetResult> {
+    this.apisauce.setHeaders({
+      ...this.apisauce.headers,
+      "x-jwt": USER_TOKEN,
+    })
+
+    const response: ApiResponse<any> = await this.apisauce.get(`pets`)
+
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    try {
+      const pets: Array<Types.FormattedPetData> = response.data.petResults.map((data) =>
+        this.petDataFormatter(data),
+      )
+      return { kind: "ok", pets }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
 }

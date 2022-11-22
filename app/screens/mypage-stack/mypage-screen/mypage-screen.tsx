@@ -20,6 +20,8 @@ import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
+import { PetStoreModel } from "../../../models/pet-store/pet-store"
+import { FormattedPetData } from "#api/api.types"
 
 const IS_AUTH = true
 // const IS_AUTH = false
@@ -34,9 +36,23 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       // TODO: 나중에 api 코드 짤 때 최대 3개만 가져와서 저장하기
       pets: [],
     })
+
+    const petStore = PetStoreModel.create()
+    const [petsList, setPetsList] = useState<FormattedPetData[]>([])
+
     useLayoutEffect(() => {
       IS_AUTH ? setUserInfo(user) : setUserInfo(null)
+
+      async function fetchData() {
+        await petStore.setMyPets()
+        setPetsList(petStore.pets)
+      }
+
+      fetchData()
     }, [])
+
+    console.log("== petsList ==")
+    console.log(petsList)
 
     // TODO: 로그인 화면 연결시키기
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
@@ -112,10 +128,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
               {/* //? 반려동물 카드 리스트 */}
               <View style={styles.petListContainer}>
-                {userInfo.pets.map((item, index) => (
+                {petsList.map((item, index) => (
                   <PetImageCard
                     key={index}
-                    petImage={item.profileImg ? item.profileImg : IMAGES.default_pet_image_60}
+                    petImage={item.image ? item.image : IMAGES.default_pet_image_60}
                     name={item.name}
                   />
                 ))}
