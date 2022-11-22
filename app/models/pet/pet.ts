@@ -6,7 +6,10 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const PetModel = types
   .model("Pet")
   .props({
+    // * store 안에서 구분하기 위해 임시로 만든 id
     id: types.identifierNumber,
+    // * 유저의 펫들을 서로 구분하기 위한 실제 id (서버에 저장된 id와 동일)
+    petId: types.number,
     name: types.string,
     image: types.maybe(types.string),
     age: types.number,
@@ -15,7 +18,7 @@ export const PetModel = types
     // ? 펫 타입: "소형" | "중형" | "대형"
     petType: types.union(types.literal("소형"), types.literal("중형"), types.literal("대형")),
     // ? 반려동물의 종 이름 ("푸들", "시츄", ...)
-    speciesName: types.string,
+    species: types.string,
     // ? 반려동물의 유형 - "Dog", "Cat", ...
     familyName: types.union(types.literal("Dog"), types.literal("Cat")),
   })

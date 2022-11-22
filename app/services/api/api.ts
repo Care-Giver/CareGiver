@@ -216,13 +216,14 @@ export class Api {
   // * pet formatter
   private petDataFormatter(data: Types.PetResultProps): Types.FormattedPetData {
     return {
+      petId: data.pet.id,
       name: data.pet.name,
       image: data.pet.image,
       age: data.pet.age,
       sex: data.pet.sex,
       petType: data.pet.petType,
       // TODO: speciesId로 name 추출
-      speciesName: "시츄",
+      species: "시츄",
       // TODO: familyId로 name 추출
       familyName: "Dog",
     }

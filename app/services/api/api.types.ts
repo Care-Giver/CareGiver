@@ -97,12 +97,13 @@ export interface PetsResponse {
 
 export interface FormattedPetData {
   // id: number
+  petId: number
   name: string
   image: string
   age: number
   sex: "male" | "female"
   petType: "소형" | "중형" | "대형"
-  speciesName: string
+  species: string
   familyName: "Dog" | "Cat"
 }
 

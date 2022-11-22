@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, FlatList } from "react-native"
+import { View, Image, Pressable } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import {
   MypageButton,
@@ -13,46 +13,43 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
-import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY, LIGHT_LINE } from "#theme/palette"
+import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY } from "#theme/palette"
 import { HEIGHT, WIDTH } from "#theme/device-size-constant"
 import IMAGES from "#images"
 import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { PetStoreModel } from "../../../models/pet-store/pet-store"
-import { FormattedPetData } from "#api/api.types"
+import { PetStoreModel, Pet } from "../../../models/pet-store/pet-store"
 
 const IS_AUTH = true
 // const IS_AUTH = false
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   ({ navigation, route }) => {
-    const [userInfo, setUserInfo] = useState<UserProps | null>({
-      id: 0,
-      name: "",
-      profileImg: null,
-      role: "Client",
-      // TODO: 나중에 api 코드 짤 때 최대 3개만 가져와서 저장하기
-      pets: [],
-    })
+    // ? 유저 프로필 정보
+    const [userInfo, setUserInfo] = useState<UserProps | null>()
 
+    // ? 펫 store
     const petStore = PetStoreModel.create()
-    const [petsList, setPetsList] = useState<FormattedPetData[]>([])
+    // ? 유저의 펫 리스트
+    const [petsList, setPetsList] = useState<Pet[]>([])
 
     useLayoutEffect(() => {
-      IS_AUTH ? setUserInfo(user) : setUserInfo(null)
+      // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
+      if (IS_AUTH) {
+        setUserInfo(user)
 
-      async function fetchData() {
-        await petStore.setMyPets()
-        setPetsList(petStore.pets)
+        async function fetchData() {
+          await petStore.setMyPets()
+          setPetsList(petStore.pets)
+        }
+
+        fetchData()
+      } else {
+        setUserInfo(null)
       }
-
-      fetchData()
     }, [])
-
-    console.log("== petsList ==")
-    console.log(petsList)
 
     // TODO: 로그인 화면 연결시키기
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
@@ -128,13 +125,18 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
               {/* //? 반려동물 카드 리스트 */}
               <View style={styles.petListContainer}>
-                {petsList.map((item, index) => (
-                  <PetImageCard
-                    key={index}
-                    petImage={item.image ? item.image : IMAGES.default_pet_image_60}
-                    name={item.name}
-                  />
-                ))}
+                {petsList.map((item, index) => {
+                  // ! 마이페이지 메인에는 세 마리만 노출
+                  if (index < 3) {
+                    return (
+                      <PetImageCard
+                        key={index}
+                        petImage={item.image ? item.image : IMAGES.default_pet_image_60}
+                        name={item.name}
+                      />
+                    )
+                  }
+                })}
               </View>
             </View>
           </>

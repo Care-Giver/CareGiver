@@ -14,14 +14,12 @@ export const PetStoreModel = types
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     addPet: (data: FormattedPetData) => {
-      if (self.pets.length < 3) {
-        const id = self.pets.reduce((maxId, pet) => Math.max(maxId, pet.id), 0)
-        const newPet = {
-          id,
-          ...data,
-        }
-        self.pets.push(newPet)
+      const id = self.pets.reduce((maxId, pet) => Math.max(maxId, pet.id), 0)
+      const newPet = {
+        id,
+        ...data,
       }
+      self.pets.push(newPet)
     },
   }))
   .actions((self) => ({
