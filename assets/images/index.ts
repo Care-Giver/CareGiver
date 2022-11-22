@@ -13,6 +13,7 @@
   default_pet_image_60: require("../images/default_pet_image_60.png"),
   default_profile_image_comment: require("../images/default_profile_image_comment.png"),
   deselect_checkbox: require("../images/deselect_checkbox.png"),
+  dog_illustration: require("../images/dog_illustration.png"),
   empty_12: require("../images/empty_12.png"),
   empty_heart: require("../images/empty_heart.png"),
   go_back: require("../images/go_back.png"),

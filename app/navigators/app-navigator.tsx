@@ -99,7 +99,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="home-screen"
+      // initialRouteName="home-screen"
+      initialRouteName="mypage-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
