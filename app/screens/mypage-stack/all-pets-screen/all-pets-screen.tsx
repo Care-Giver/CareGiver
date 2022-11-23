@@ -13,11 +13,10 @@ import {
 } from "#components/index"
 // import { SUB_HEAD_LINE, HEAD_LINE, WIDTH } from "#theme"
 import { styles } from "./styles"
-import { petsDummy } from "./dummy-data"
 import { HEAD_LINE, SUB_HEAD_LINE } from "#theme/palette"
 import { WIDTH } from "#theme/device-size-constant"
-import { PetStoreModel, Pet } from "../../../models/pet-store/pet-store"
-import { FormattedPetData } from "#api/api.types"
+import { PetStoreModel } from "../../../models/pet-store/pet-store"
+import { Pet } from "../../../models/pet/pet"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {

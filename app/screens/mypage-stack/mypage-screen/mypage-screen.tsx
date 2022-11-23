@@ -20,7 +20,8 @@ import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { PetStoreModel, Pet } from "../../../models/pet-store/pet-store"
+import { PetStoreModel } from "../../../models/pet-store/pet-store"
+import { Pet } from "../../../models/pet/pet"
 
 const IS_AUTH = true
 // const IS_AUTH = false
