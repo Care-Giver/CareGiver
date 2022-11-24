@@ -1,5 +1,5 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-  const IMAGES = {
+export const images = {
   //* images
   arrow_change: require("../images/arrow_change.png"),
   arrow_down: require("../images/arrow_down.png"),
@@ -38,7 +38,7 @@
   vertical_3_dots: require("../images/vertical_3_dots.png"),
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
-  
+
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
@@ -49,8 +49,5 @@
   schedule_grey: require("../images/bottom-tab-navigator/schedule_grey.png"),
   schedule_navy: require("../images/bottom-tab-navigator/schedule_navy.png"),
   search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
-  search_navy: require("../images/bottom-tab-navigator/search_navy.png")
+  search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
 }
-
-//! 예외적으로 export default 허용 
-export default IMAGES

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
-import { LIGHT_LINE } from "#theme/palette"
+import { WIDTH, HEIGHT } from "#theme"
+import { LIGHT_LINE } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {

@@ -1,7 +1,7 @@
 import React from "react"
 import { ViewStyle, View } from "react-native"
-import { WIDTH, HEIGHT, palette } from "#theme/index"
-import { DISABLED, GIVER_CASUAL_NAVY } from "#theme/palette"
+import { WIDTH, HEIGHT, palette } from "#theme"
+import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol12 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 

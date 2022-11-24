@@ -1,6 +1,6 @@
 // import * as React from "react"
 // import { storiesOf } from "@storybook/react-native"
-// import { StoryScreen, Story, UseCase } from "#storybook/views/index"
+// import { StoryScreen, Story, UseCase } from "../../../../../storybook/views"
 // import { color } from "@theme/index"
 // import { TimeSelector } from "./time-selector"
 

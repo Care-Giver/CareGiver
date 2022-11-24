@@ -2,7 +2,7 @@ import { View, Text, FlatList } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators/app-navigator"
+import { NavigatorParamList } from "#navigators"
 import {
   PopSem16,
   PreBol16,
@@ -10,12 +10,12 @@ import {
   ScreenRootView,
   PetProfileCard,
   BASIC_BACKGROUND_PADDING_WIDTH,
-} from "#components/index"
+} from "#components"
 // import { SUB_HEAD_LINE, HEAD_LINE, WIDTH } from "#theme"
 import { styles } from "./styles"
 import { petsDummy } from "./dummy-data"
-import { HEAD_LINE, SUB_HEAD_LINE } from "#theme/palette"
-import { WIDTH } from "#theme/device-size-constant"
+import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import { WIDTH } from "#theme"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {

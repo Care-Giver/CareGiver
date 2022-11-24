@@ -21,10 +21,8 @@ import {
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
-import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme/index"
-import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme/palette"
-import { Api } from "#api/index"
-import { DEFAULT_API_CONFIG } from "#api/api-config"
+import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme"
+import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 
 const commentsDummy = [
   {

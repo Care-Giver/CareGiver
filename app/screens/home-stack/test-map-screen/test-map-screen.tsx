@@ -11,9 +11,9 @@
 //   RowRoundedButton,
 // } from "#components"
 // import { petsitters } from "./dummy-data"
-// import { HEIGHT, WIDTH } from "#theme/index"
-// import { HEAD_LINE, LBG } from "#theme/palette"
-// import IMAGES from "#images"
+// import { HEIGHT, WIDTH } from "#theme"
+// import { HEAD_LINE, LBG } from "#theme"
+// import { images } from "#images"
 // import { NavigatorParamList } from "#navigators"
 // import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 // import { styles } from "./styles"

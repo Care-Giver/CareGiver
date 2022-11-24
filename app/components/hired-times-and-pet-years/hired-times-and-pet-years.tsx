@@ -1,9 +1,9 @@
 import { View, Text, StyleProp, FlexStyle } from "react-native"
 import React from "react"
 import { PreMed14, PreBol16 } from "../basics/custom-texts/custom-texts"
-import { BODY, LIGHT_LINE, STRONG_LINE } from "#theme/palette"
+import { BODY, LIGHT_LINE, STRONG_LINE } from "#theme"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme/index"
+import { HEIGHT } from "#theme"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 
 export const HiredTimesAndPetYears = (props) => {

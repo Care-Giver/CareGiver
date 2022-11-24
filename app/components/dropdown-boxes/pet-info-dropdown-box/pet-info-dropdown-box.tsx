@@ -5,11 +5,11 @@ import { PetProfileCard } from "../../pet-profile-card/pet-profile-card"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
 import { PopSem14 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
+import { images } from "#images"
 import { PetInfoDropdownBoxProps } from "./pet-info-dropdown-box.props"
 import { DivisionLine } from "../../division-line/division-line"
-import { LBG } from "#theme/palette"
-import { WIDTH } from "#theme/index"
+import { LBG } from "#theme"
+import { WIDTH } from "#theme"
 
 export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
   const { isOpen, onPress, pets, style } = props
@@ -19,7 +19,7 @@ export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
       {/* //* 드롭다운 제목 + 버튼 */}
       <Pressable style={styles.dropdownTitle} onPress={onPress}>
         <PopSem14 text="펫 정보" />
-        <Image style={styles.dropdownLogo} source={isOpen ? IMAGES.arrow_up : IMAGES.arrow_down} />
+        <Image style={styles.dropdownLogo} source={isOpen ? images.arrow_up : images.arrow_down} />
       </Pressable>
       {/* //* 펫 프로필 카드 리스트 */}
       {isOpen && (

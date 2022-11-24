@@ -40,7 +40,7 @@ import {
   GobackAndTitleSpacebetweenHeader,
 } from "#components"
 import { HEADER_ROOT } from "#components/screen-headers/common-styles"
-import IMAGES from "#images"
+import { images } from "#images"
 import { HEIGHT, STANDARD_WIDTH, WIDTH } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
@@ -154,7 +154,7 @@ const AppStack = () => {
                 navigation.goBack()
               }}
             >
-              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
+              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={images.go_back} />
             </Pressable>
           ),
           // title: null,

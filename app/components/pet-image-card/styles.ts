@@ -1,5 +1,5 @@
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import { BODY, LIGHT_LINE } from "#theme/palette"
+import { HEIGHT, WIDTH } from "#theme"
+import { BODY, LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({

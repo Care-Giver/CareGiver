@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from "react-native"
 
 import MapView, { Marker, ProviderPropType } from "react-native-maps"
-import IMAGES from "#images"
+import { images } from "#images"
 
 const { width, height } = Dimensions.get("window")
 
@@ -54,7 +54,7 @@ class CustomMarkers extends React.Component {
           {this.state.markers.map((marker) => (
             <Marker
               title={marker.key}
-              image={IMAGES.gps}
+              image={images.gps}
               key={marker.key}
               coordinate={marker.coordinate}
             />

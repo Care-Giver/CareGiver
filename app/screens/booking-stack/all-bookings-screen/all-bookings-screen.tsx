@@ -14,7 +14,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH } from "#theme"
 import { bookingsDummy } from "./dummy-data"
 import {
   FlatList,
@@ -26,11 +26,11 @@ import {
   Text,
   Image,
 } from "react-native"
-import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
+import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
 import { BookingStoreModel } from "../../../models"
 // import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { styles } from "./styles"
-import IMAGES from "#images"
+import { images } from "#images"
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -119,7 +119,7 @@ export const AllBookingsScreen: FC<
         <PreReg16 text="지난 예약" color={DISABLED} />
         <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
           <PreMed16 text="더보기" color={BODY} />
-          <Image source={IMAGES.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
+          <Image source={images.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
         </Pressable>
       </Row>
 
