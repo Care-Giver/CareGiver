@@ -18,6 +18,7 @@ export * from "./buttons/service-choice-button/service-choice-button"
 export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/radio-buttons/border-radio-button/border-radio-button"
 export * from "./mypage-button/mypage-button"
+export * from "./buttons/registration-button/registration-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"

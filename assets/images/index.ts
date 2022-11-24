@@ -39,6 +39,7 @@
   vertical_3_dots: require("../images/vertical_3_dots.png"),
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
+  x_white: require("../images/x_white.png"),
   
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
