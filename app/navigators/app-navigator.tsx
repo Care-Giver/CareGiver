@@ -30,6 +30,7 @@ import {
   AllPetsScreen,
   SettingScreen,
   ServiceCenterScreen,
+  ServiceRegistrationScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -38,6 +39,7 @@ import {
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
   GobackAndTitleSpacebetweenHeader,
+  GobackAndTitleAndButtonHeader,
 } from "#components"
 import { HEADER_ROOT } from "#components/screen-headers/common-styles"
 import IMAGES from "#images"
@@ -79,6 +81,9 @@ export type NavigatorParamList = {
   "setting-screen": undefined
   "service-center-screen": undefined
 
+  // * registration
+  "service-registration-screen": undefined
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -100,7 +105,7 @@ const AppStack = () => {
         headerShown: true,
       }}
       // initialRouteName="home-screen"
-      initialRouteName="mypage-screen"
+      initialRouteName="service-registration-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -260,6 +265,23 @@ const AppStack = () => {
         }}
       />
       {/* //! -------- */}
+
+      {/* //* 서비스 등록 스크린 */}
+      <Stack.Screen
+        name="service-registration-screen"
+        component={ServiceRegistrationScreen}
+        options={{
+          title: "서비스 등록",
+          header: (props) => (
+            <GobackAndTitleAndButtonHeader
+              {...props}
+              buttonText={"건너뛰기"}
+              // TODO: Event Listener 어디에 작성..? app navigator.tsx 파일에 작성해야하나?
+              handlePress={() => alert("건너뛰기")}
+            />
+          ),
+        }}
+      />
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 

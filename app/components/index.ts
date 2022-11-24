@@ -28,6 +28,7 @@ export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
 export * from "./screen-headers/home-screen-header/home-screen-header"
 export * from "./screen-headers/writing-comment-screen-header/writing-comment-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
+export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 
 //* others
 export * from "./division-line/division-line"
