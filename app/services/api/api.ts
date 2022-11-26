@@ -2,6 +2,7 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
+import { Species, useStores } from "../../models"
 
 // * id = 7인 유저 토큰
 const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjY4NDUzMTAzfQ.Px0I5t4fzhfyEHGHZxjEFyP8g4P6-kw08FMZ2Iqe0d0`
@@ -208,13 +209,114 @@ export class Api {
   }
   // * ---------------
 
-  // ! 마이페이지 - 펫 목록
-  private getSpeciesName() {}
+  private speciesFormatter(data) {
+    return {
+      id: data.id,
+      familyId: data.familyId,
+      name: data.name,
+    }
+  }
 
-  private getFamilyName() {}
+  async getSpeciesNames(): Promise<Species[]> {
+    this.apisauce.setHeaders({
+      ...this.apisauce.headers,
+      "x-jwt": USER_TOKEN,
+    })
+    const response: any = await this.apisauce.get(`species`)
+
+    // response.ok
+    // response.data.ok
+    const { data } = response
+    if (!data.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // console.log("ok", data?.ok)
+    // console.log("species", data?.species)
+
+    // data?.species
+    /* Array [
+      Object {
+        "createAt": "2022-05-31T06:13:52.669Z",
+        "familyId": 1,
+        "id": 1,
+        "name": "시츄",
+        "updatedAt": "2022-05-31T06:13:52.669Z",
+      },
+      Object {
+        "createAt": "2022-05-31T06:14:14.131Z",
+        "familyId": 1,
+        "id": 2,
+        "name": "말티즈",
+        "updatedAt": "2022-05-31T06:14:14.131Z",
+      },
+      Object {
+        "createAt": "2022-07-06T08:04:17.628Z",
+        "familyId": 1,
+        "id": 3,
+        "name": "포메라니안",
+        "updatedAt": "2022-07-06T08:04:17.628Z",
+      },
+    ] */
+
+    // formattedData
+    /* Array [
+      Object {
+        "familyId": 1,
+        "id": 1,
+        "name": "시츄",
+      },
+      Object {
+        "familyId": 1,
+        "id": 2,
+        "name": "말티즈",
+      },
+      Object {
+        "familyId": 1,
+        "id": 3,
+        "name": "포메라니안",
+      },
+    ] */
+
+    const formattedData = data?.species.map((value) => this.speciesFormatter(value))
+    return formattedData
+  }
+
+  //* SpeciesStoreModel 안에 setSpecies() 함수로 가져오는것으로 바꾸었음 :)
+  // // ! 마이페이지 - 펫 목록
+  // private getSpeciesName(speciesId) {
+  //   // const speciesNamesAndIds = []
+  //   // const { 모델스토어이름} = useStores()
+  //   // const speciesNamesAndIds = 모델스토어이름.가져오는함수
+
+  //   return speciesNamesAndIds.find(value == speciesId)
+  // }
+
+  // private getFamilyName() {}
 
   // * pet formatter
   private petDataFormatter(data: Types.PetResultProps): Types.FormattedPetData {
+    let familyName: "Dog" | "Cat"
+    switch (data.familyId) {
+      case 1:
+        familyName = "Dog"
+        break
+      case 2:
+        familyName = "Cat"
+        break
+    }
+
+    const getSpeciesName = (speciesId) => {
+
+      const { speciesStoreModel } = useStores() //! 아.. MST
+      const species = speciesStoreModel.getSpecies //! 아.. MST
+      
+      const speciesObj = species.find(item, index) => (speciesId === item.id))
+      const { name } = speciesObj 
+      return name
+    }
+
     return {
       petId: data.pet.id,
       name: data.pet.name,
@@ -223,9 +325,9 @@ export class Api {
       sex: data.pet.sex,
       petType: data.pet.petType,
       // TODO: speciesId로 name 추출
-      species: "시츄",
-      // TODO: familyId로 name 추출
-      familyName: "Dog",
+      // species: "시츄",
+      species: getSpeciesName(speciesId),
+      familyName: familyName,
     }
   }
 

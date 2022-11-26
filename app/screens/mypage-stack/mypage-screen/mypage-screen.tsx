@@ -22,6 +22,8 @@ import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
+import { Api } from "#api/api"
+import { useStores } from "../../../models"
 
 const IS_AUTH = true
 // const IS_AUTH = false
@@ -35,6 +37,18 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     const petStore = PetStoreModel.create()
     // ? 유저의 펫 리스트
     const [petsList, setPetsList] = useState<Pet[]>([])
+
+    // const api = new Api()
+    // api.setup()
+    // const 슬프다 = async () => {
+    //   const target = await api.getSpeciesNames()
+    //   console.log("target", target)
+    // }
+    // 슬프다()
+
+    const { speciesStoreModel } = useStores()
+    // speciesStoreModel.setSpecies()
+    speciesStoreModel.getSpecies
 
     useLayoutEffect(() => {
       // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
