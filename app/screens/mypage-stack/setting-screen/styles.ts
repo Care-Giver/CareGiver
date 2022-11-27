@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
     paddingTop: HEIGHT * 20,
     paddingBottom: HEIGHT * 16,
   },
-
   centeredView: {
     flex: 1,
     justifyContent: "center",
