@@ -46,6 +46,8 @@ import {
 } from "#components"
 import { images } from "#images"
 import {
+  DEVICE_SCREEN_WIDTH,
+  DEVICE_WINDOW_WIDTH,
   GIVER_CASUAL_NAVY,
   GIVER_ROMANTIC_GRAY,
   HEIGHT,
@@ -272,19 +274,21 @@ const AllStacks = () => {
   )
 }
 
-const MyTabs = () => {
+const TabStacks = () => {
   const FavoritesStack = () => {
     return null
   }
   const ChatsStack = () => {
     return (
-      <ScreenRootView
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <PreReg18>채팅기능이 곧 추가될 예정입니다 😉</PreReg18>
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: "auto",
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
       </ScreenRootView>
     )
   }
@@ -299,7 +303,7 @@ const MyTabs = () => {
             alignSelf: "center",
             backgroundColor: "white",
           },
-          isWeb && { paddingBottom: 10 },
+          isWeb && { paddingTop: 8, paddingBottom: 8 },
         ],
         headerStyle: [
           {
@@ -307,10 +311,9 @@ const MyTabs = () => {
           },
           isWeb && { width: STANDARD_WIDTH },
         ],
-        headerTitleStyle: {
+        headerTitleStyle: isWeb && {
           color: "black",
-          // alignSelf: "center",
-          // textAlign: "center",
+          marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
         },
       }}
     >
@@ -318,7 +321,7 @@ const MyTabs = () => {
         name="Favorites"
         component={AllStacks}
         options={{
-          tabBarLabel: "즐겨찾기",
+          tabBarLabel: "홈",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
@@ -377,7 +380,7 @@ const MyTabs = () => {
             />
           ),
           headerShown: true,
-          headerTitle: "",
+          headerTitle: "채팅(개발중)",
         }}
       />
       <Tab.Screen
@@ -393,6 +396,7 @@ const MyTabs = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
+          header: (props) => <HomeScreenHeader {...props} />,
           headerShown: true,
           headerTitle: "",
         }}
@@ -407,7 +411,7 @@ const AppStack = () => {
     // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
     //?  <GestureHandlerRootView style={{ flex: 1 }}>
     <>
-      <MyTabs />
+      <TabStacks />
     </>
   )
 }

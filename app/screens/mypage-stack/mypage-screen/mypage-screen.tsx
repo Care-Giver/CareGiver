@@ -31,9 +31,12 @@ import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
 import { Api } from "#api"
 import { useStores } from "../../../models"
+import * as Linking from "expo-linking"
 
 const IS_AUTH = true
 // const IS_AUTH = false
+
+const CAREGIVER_INTRO_URL = "https://www.naver.com/"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   ({ navigation, route }) => {
@@ -92,6 +95,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     // * 고객센터 버튼 클릭시 실행되는 함수
     const handleServiceCenterPress = () => {
       navigate("service-center-screen")
+    }
+
+    const handleMode = () => {
+      Linking.openURL(CAREGIVER_INTRO_URL)
     }
 
     return (
@@ -182,7 +189,9 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         <View style={[styles.divisionLine]} />
         {/* //* Care Giver 모드 전환 버튼 */}
         <Pressable style={styles.modeChangeBtn}>
-          <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
+          <Pressable onPress={handleMode}>
+            <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
+          </Pressable>
           <Image
             source={images.arrow_change}
             style={{ marginLeft: WIDTH * 2, width: WIDTH * 28, height: HEIGHT * 28 }}
@@ -192,7 +201,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton text="결제 수단 및 쿠폰" />
+        <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
@@ -202,7 +211,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* 자주 묻는 질문 버튼 */}
-        <MypageButton text="자주 묻는 질문" />
+        <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
         <View style={[styles.divisionLine]} />

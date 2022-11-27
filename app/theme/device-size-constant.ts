@@ -10,6 +10,8 @@ export const STANDARD_HEIGHT = 763
 export const DEVICE_SCREEN_WIDTH = Dimensions.get("screen").width
 export const DEVICE_SCREEN_HEIGHT = Dimensions.get("screen").height
 
+export const DEVICE_WINDOW_WIDTH = Dimensions.get("window").width
+
 const getWIDTH = () => {
   if (isWeb) {
     return 1

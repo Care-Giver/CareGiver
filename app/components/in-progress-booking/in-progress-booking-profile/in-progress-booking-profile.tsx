@@ -19,8 +19,7 @@ export const InProgressBookingProfile = ({
       <Image
         // source={require(caregiverData.profileImg)}
         source={{
-          uri:
-            "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfNzYg/MDAxNTY2NDY1NzE3MDc0.EHhOw8ePIuBroKd9I63E5qwK_R6qQxFtc8fLZRTbRRQg.4EfInp9YmGDKDc1QqMbBKW331-3Djwtv2Xl4oAgbqn8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_4.png?type=w800",
+          uri: caregiverData.profileImg,
         }}
         style={styles.profileImg}
       />

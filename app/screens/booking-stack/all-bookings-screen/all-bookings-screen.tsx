@@ -59,8 +59,9 @@ export const AllBookingsScreen: FC<
       name: "오예성",
       ratings: 4.7,
       reviews: 12,
-      introduce: "안녕하세요",
-      profileImg: "",
+      introduce: "안녕하세요! 방문 펫시팅을 주로 하고 있는 오예성 펫시터 입니다!",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLE12J5yqz_9IDzhh7J3Efh2t7x_1eKBpz5A&usqp=CAU",
       serviceType: "visit",
       caregiverType: "petsitter",
       startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
@@ -69,26 +70,28 @@ export const AllBookingsScreen: FC<
     {
       id: 2,
       name: "유태서",
-      ratings: 4.7,
-      reviews: 12,
-      introduce: "잘 부탁드립니다!",
-      profileImg: "",
-      serviceType: "visit",
+      ratings: 3.9,
+      reviews: 2,
+      introduce: "반갑습니다! 배변훈련을 주로 맡고 있습니다 🙂",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8DSugC2cBHLBU6m92loBTs2sXpxPectTysg&usqp=CAU",
+      serviceType: "creche",
       caregiverType: "trainer",
       startDate: "2022-12-03T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
       endDate: "2022-12-04T13:00:00",
     },
     {
       id: 3,
-      name: "오예성",
-      ratings: 4.7,
-      reviews: 12,
-      introduce: "안녕하세요",
-      profileImg: "",
-      serviceType: "visit",
+      name: "이기원",
+      ratings: 4.9,
+      reviews: 19,
+      introduce: "필요하신 시간, 날짜 아무때나 펫시팅 가능합니다 ☺️",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV0nEtscWXxj9CrZY48XcAZas4EhDXWFaLJg&usqp=CAU",
+      serviceType: "creche",
       caregiverType: "petsitter",
-      startDate: "2022-10-12T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
-      endDate: "2022-10-13T13:00:00",
+      startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
+      endDate: "2022-12-19T13:00:00",
     },
   ])
 
