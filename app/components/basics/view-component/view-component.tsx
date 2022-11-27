@@ -6,7 +6,7 @@ import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
 
-const FULL: ViewStyle = isWeb
+export const FULL: ViewStyle = isWeb
   ? {
       alignSelf: "center",
       flex: 1,
@@ -16,7 +16,7 @@ const FULL: ViewStyle = isWeb
     }
   : { flex: 1 }
 
-const FULL_WITH_SCROLLING: ViewStyle = isWeb
+export const FULL_WITH_SCROLLING: ViewStyle = isWeb
   ? {
       alignSelf: "center",
       flex: 1,
@@ -26,7 +26,7 @@ const FULL_WITH_SCROLLING: ViewStyle = isWeb
     }
   : { width: "100%", height: "auto" }
 
-const BASIC_BACKGROUND_PADDING: FlexStyle = {
+export const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 

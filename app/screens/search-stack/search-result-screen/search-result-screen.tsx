@@ -93,15 +93,22 @@ export const SearchResultScreen: FC<
   })
 
   useLayoutEffect(() => {
+    //? case1. 바텀탭으로 넘어오는경우
     if (!route.params) {
-      console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      if (!route.params.serviceType)
-        console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
+      // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+      var _service = "펫시팅"
+      var _serviceType = "위탁"
+
+      // if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
+      // if (!route.params.serviceType)
+      //   console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
     }
-    //? service 할당
-    let _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
-    let _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    //? case2. 서치스크린 이후 넘어오는 경우
+    else {
+      //? service 할당
+      var _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
+      var _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    }
 
     //? Header, 이름 설정
     navigation.setOptions({

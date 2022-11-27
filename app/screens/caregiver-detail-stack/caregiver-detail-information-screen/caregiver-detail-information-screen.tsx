@@ -18,6 +18,8 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   MakeBookingButton,
   DivisionLineVertical,
+  FULL_WITH_SCROLLING,
+  BASIC_BACKGROUND_PADDING,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -31,6 +33,7 @@ import {
   LBG,
   LIGHT_LINE,
   SUB_HEAD_LINE,
+  STANDARD_WIDTH,
 } from "#theme"
 
 const commentsDummy = [
@@ -139,6 +142,8 @@ export const CaregiverDetailInformationScreen: FC<
       preset="fixed"
       testID="testetst"
       style={{
+        ...FULL_WITH_SCROLLING,
+        ...BASIC_BACKGROUND_PADDING,
         paddingHorizontal: 0,
       }}
     >

@@ -52,20 +52,22 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
     })
   }, [])
 
-  const handlePress = () => {}
+  const handlePress = () => {
+    alert("아직 개발중인 기능입니다 😉")
+  }
 
   return (
     // <Pressable style={styles.root}>
     //   </Pressable>
-    <Pressable style={style} onPress={handlePress}>
+    <Pressable style={[{ width: "100%" }, style]} onPress={handlePress}>
       <ImageBackground
         source={images.in_progress_booking_background}
-        resizeMode="stretch"
+        // resizeMode="stretch"
         style={styles.background}
       >
         <InProgressBookingProfile
           // userData={serviceType === "방문" ? reserveData.petsitter : reserveData.crecheId}
-          caregiverData={caregiverData}
+          caregiverData={reserveData}
         />
 
         <ReserveDateBox

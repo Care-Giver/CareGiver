@@ -46,7 +46,7 @@ export class PetSitterReview extends CoreEntity {
 } */
 
 export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
-  const { userId, desc, createdAt, updatedAt, reply } = commentData
+  const { userId, desc, createdAt, updatedAt, reply, profileImg } = commentData
   const _numberOfLines = numberOfLines || undefined
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
@@ -71,7 +71,7 @@ export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
 
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: HEIGHT * 12 }}>
-        <Image source={images.default_profile_image_comment} style={styles.profileImage} />
+        <Image source={{ uri: profileImg }} style={styles.profileImage} />
         <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 8 }} />
         <PreReg12
           text={date}

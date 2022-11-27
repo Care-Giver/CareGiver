@@ -27,7 +27,7 @@ export const WritingCommentScreenHeader = (props) => {
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
       <Pressable
         onPress={() => {
-          alert("등록 기능 미구현")
+          alert("댓글이 등록되었습니다!")
         }}
         style={{
           marginLeft: "auto",

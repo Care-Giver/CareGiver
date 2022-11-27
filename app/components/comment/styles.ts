@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   profileImage: {
     width: WIDTH * 28,
     height: HEIGHT * 28,
+    borderRadius: 28,
   },
   threeDots: {
     width: WIDTH * 3,

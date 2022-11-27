@@ -22,12 +22,22 @@ const handleReviewPress = () => {
   console.log("후기 작성하기 클릭")
 }
 
+const handlePress = () => {
+  alert("아직 개발중인 기능입니다 😉")
+}
+
 export const PastBooking = (props) => {
   const { style } = props
   return (
-    <Pressable style={[styles.root, style]}>
+    <Pressable style={[styles.root, style]} onPress={handlePress}>
       {/* //* 케어기버 프로필 사진 */}
-      <ImageBackground source={require("")} style={styles.profileImg}>
+      <ImageBackground
+        source={{
+          uri:
+            "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
+        }}
+        style={styles.profileImg}
+      >
         <Row style={{ backgroundColor: null }}>
           <CaregiverTypeButton text={pastBooking.serviceType} style={styles.typeBtn} />
           <CaregiverTypeButton
