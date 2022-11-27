@@ -14,6 +14,8 @@ import {
   SelectPetDropdownBox,
   RowRoundedTimeIntervalPicker,
   PreReg16,
+  BASIC_BACKGROUND_PADDING,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -30,6 +32,7 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
 import { Picker } from "@react-native-picker/picker"
+import { ScrollView } from "react-native-gesture-handler"
 
 const timeOptions = [
   "00:00",
@@ -209,130 +212,142 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
         </Row>
 
-        {/* //* 날짜 선택 */}
-        {!isCalendarOpen ? (
+        <ScrollView>
+          {/* //* 날짜 선택 */}
+          {!isCalendarOpen ? (
+            <RowRoundedButton
+              onPress={() => {
+                setIsCalendarOpen(true)
+                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+              }}
+              image={images.calendar}
+              text={
+                date
+                  ? `${date.dateString.replace("-", ".").replace("-", ".")}`
+                  : "날짜를 선택해주세요"
+              }
+              textColor={HEAD_LINE}
+              style={{ marginTop: HEIGHT * 36 }}
+            />
+          ) : (
+            //? 캘린더 표출
+            <Calendar
+              onDayPress={(date) => {
+                setIsCalendarOpen(!isCalendarOpen)
+                setDate(date)
+                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+              }}
+              style={{
+                marginTop: HEIGHT * 36,
+                backgroundColor: "#F0F0F6",
+                padding: 4,
+                borderRadius: 8,
+              }}
+              // Collection of dates that have to be marked. Default = {}
+              markedDates={
+                {
+                  // _time: { selected: true, marked: true, selectedColor: "red" },
+                  // "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
+                  // "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
+                }
+              }
+            />
+          )}
+
+          {/* //* 시간 선택 */}
+          {serviceType === "방문" && (
+            // <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+            //! (임시로 추가함) - Web 에서는 @gorhom/bottom-sheet 작동 안 함 🥲
+            <>
+              <PreReg16
+                text={"방문시간을 선택해주세요"}
+                textColor={HEAD_LINE}
+                style={{ marginVertical: HEIGHT * 10 }}
+              />
+              <Row style={{ justifyContent: "space-around" }}>
+                <Picker
+                  selectedValue={startTime}
+                  onValueChange={(itemValue, itemIndex) => setStartTime(itemValue)}
+                  style={{
+                    width: "45%",
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    borderColor: LIGHT_LINE,
+                    height: 40,
+                    textAlign: "center",
+                  }}
+                >
+                  {timeOptions.map((value, index) => (
+                    <Picker.Item label={value} value={value} key={index} />
+                  ))}
+                </Picker>
+
+                <Picker
+                  selectedValue={endTime}
+                  onValueChange={(itemValue, itemIndex) => setEndTime(itemValue)}
+                  style={{
+                    width: "45%",
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    borderColor: LIGHT_LINE,
+                    height: 40,
+                    textAlign: "center",
+                  }}
+                >
+                  {timeOptions.map((value, index) => (
+                    <Picker.Item label={value} value={value} key={index} />
+                  ))}
+                </Picker>
+              </Row>
+            </>
+          )}
+
+          {/*//* 위치 선택 */}
           <RowRoundedButton
             onPress={() => {
-              setIsCalendarOpen(true)
-              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+              // navigate("test-map-screen")
+              alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
             }}
-            image={images.calendar}
-            text={
-              date
-                ? `${date.dateString.replace("-", ".").replace("-", ".")}`
-                : "날짜를 선택해주세요"
-            }
+            image={images.location}
+            text={"경기도 안산시 상록구 한양대학로 55"}
             textColor={HEAD_LINE}
-            style={{ marginTop: HEIGHT * 36 }}
+            style={{ marginTop: HEIGHT * 12 }}
           />
-        ) : (
-          //? 캘린더 표출
-          <Calendar
-            onDayPress={(date) => {
-              setIsCalendarOpen(!isCalendarOpen)
-              setDate(date)
-              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+
+          {/*//* 반려동물 선택 */}
+          <SelectPetDropdownBox
+            style={{ marginTop: HEIGHT * 12 }}
+            isOpen={isDropdownOpen}
+            onPress={() => {
+              setIsDropdownOpen(!isDropdownOpen)
+              // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
+              //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
             }}
-            style={{
-              marginTop: HEIGHT * 36,
-              backgroundColor: "#F0F0F6",
-              padding: 4,
-              borderRadius: 8,
-            }}
-            // Collection of dates that have to be marked. Default = {}
-            markedDates={
-              {
-                // _time: { selected: true, marked: true, selectedColor: "red" },
-                // "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
-                // "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
-              }
-            }
+            selectedPets={selectedPets}
+            setSelectedPets={setSelectedPets}
           />
-        )}
 
-        {/* //* 시간 선택 */}
-        {serviceType === "방문" && (
-          // <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
-          //! (임시로 추가함) - Web 에서는 @gorhom/bottom-sheet 작동 안 함 🥲
-          <>
-            <PreReg16
-              text={"방문시간을 선택해주세요"}
-              textColor={HEAD_LINE}
-              style={{ marginVertical: HEIGHT * 10 }}
-            />
-            <Row style={{ justifyContent: "space-around" }}>
-              <Picker
-                selectedValue={startTime}
-                onValueChange={(itemValue, itemIndex) => setStartTime(itemValue)}
-                style={{
-                  width: "45%",
-                  borderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: LIGHT_LINE,
-                  height: 40,
-                  textAlign: "center",
+          {/*//* 선택된 반려동물 */}
+          <PreBol14
+            text="선택된 반려동물"
+            color={SUB_HEAD_LINE}
+            style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+          />
+          <View style={isDropdownOpen ? styles.hidden : styles.shown}>
+            {selectedPets.map((value, index) => (
+              <SelectedPetCard
+                petData={value}
+                onPress={() => {
+                  setSelectedPets((pets) => pets.filter((pet) => pet.id !== value.id))
                 }}
-              >
-                {timeOptions.map((value, index) => (
-                  <Picker.Item label={value} value={value} key={index} />
-                ))}
-              </Picker>
-
-              <Picker
-                selectedValue={endTime}
-                onValueChange={(itemValue, itemIndex) => setEndTime(itemValue)}
-                style={{
-                  width: "45%",
-                  borderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: LIGHT_LINE,
-                  height: 40,
-                  textAlign: "center",
-                }}
-              >
-                {timeOptions.map((value, index) => (
-                  <Picker.Item label={value} value={value} key={index} />
-                ))}
-              </Picker>
-            </Row>
-          </>
-        )}
-
-        {/*//* 위치 선택 */}
-        <RowRoundedButton
-          onPress={() => {
-            // navigate("test-map-screen")
-            alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
-          }}
-          image={images.location}
-          text={"경기도 안산시 상록구 한양대학로 55"}
-          textColor={HEAD_LINE}
-          style={{ marginTop: HEIGHT * 12 }}
-        />
-
-        {/*//* 반려동물 선택 */}
-        <SelectPetDropdownBox
-          style={{ marginTop: HEIGHT * 12 }}
-          isOpen={isDropdownOpen}
-          onPress={() => {
-            setIsDropdownOpen(!isDropdownOpen)
-            // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
-            //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
-            LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
-          }}
-          selectedPets={selectedPets}
-          setSelectedPets={setSelectedPets}
-        />
-
-        {/*//* 선택된 반려동물 */}
-        <PreBol14
-          text="선택된 반려동물"
-          color={SUB_HEAD_LINE}
-          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
-        />
-        <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-          {/*//* 선택된 반려동물 리스트 */}
-          <FlatList
+                key={index}
+              />
+            ))}
+            {/* //* 선택된 반려동물 리스트 */}
+            {/* //- TODO: 높이가 굉장히 협소할떄는 이렇게 하면, 아래 버튼이 안 보임 */}
+            {/* //- TODO: 버튼 스타일을 수정하던가, 아니면 지금처럼 바깥을 ScrollView 로 감싸야함 */}
+            {/* <FlatList
             data={selectedPets}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
@@ -345,8 +360,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               />
             )}
             // indicatorStyle={"black"} //! scroll indicator 의 디자인 props 는 black 과 white 두 종류 밖에 없다. custom scroll indicator 는 따로 직접 만들어야 한다.
-          />
-        </View>
+          /> */}
+          </View>
+        </ScrollView>
 
         {/*//* 펫시터 찾기 */}
         <ConditionalButton

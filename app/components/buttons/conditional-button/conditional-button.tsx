@@ -14,6 +14,7 @@ export const ConditionalButton = (props) => {
     onPress,
     label,
     children,
+    style,
     ...rest
   } = props
 
