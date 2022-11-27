@@ -32,6 +32,9 @@ import { BookingStoreModel } from "../../../models"
 import { styles } from "./styles"
 import { images } from "#images"
 
+// * 예약 정보를 읽어올 유저 id
+const USER_ID = 7
+
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
 > = observer(({ navigation, route }) => {
@@ -56,7 +59,7 @@ export const AllBookingsScreen: FC<
   useLayoutEffect(() => {
     // ? 현재 유저의 예약 정보를 bookingStore의 bookings에 저장하기
     async function fetchData() {
-      await bookingStore.setBookings(7)
+      await bookingStore.setBookings(USER_ID)
       setBookings(bookingStore.bookings)
     }
     fetchData()
