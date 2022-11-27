@@ -1,4 +1,4 @@
-import { Api } from "#api/api"
+import { Api } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { IStateTreeNode, SnapshotIn } from "mobx-state-tree"
 

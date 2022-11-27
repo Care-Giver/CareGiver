@@ -21,8 +21,17 @@ import {
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
-import { HEADER_HEIGHT, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme"
-import { BODY, DBG, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  HEADER_HEIGHT,
+  HEIGHT,
+  IOS_BOTTOM_HOME_BAR_HEIGHT,
+  WIDTH,
+  BODY,
+  DBG,
+  LBG,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
 
 const commentsDummy = [
   {
@@ -126,7 +135,13 @@ export const CaregiverDetailInformationScreen: FC<
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
     //! 따라서, ScreenRootView 는 fixed 로 한다
     //! 이에따라, 스크린 엣지 기본 padding 도 컴포넌트마다 각각 적용해야 한다
-    <ScreenRootView preset="fixed" testID="testetst">
+    <ScreenRootView
+      preset="fixed"
+      testID="testetst"
+      style={{
+        paddingHorizontal: 0,
+      }}
+    >
       {/* //? 예약 신청하기 버튼을 "제외한" 전부 */}
       <ScrollView
         // preset="scroll"

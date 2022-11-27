@@ -103,7 +103,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             <Row style={styles.profileCard}>
               {/* //? 프로필 사진 */}
               <Image
-                source={user.profileImg ? user.profileImg : IMAGES.default_pet_image_60}
+                source={user.profileImg ? user.profileImg : images.default_pet_image_60}
                 style={styles.profileImg}
                 resizeMode="contain"
               />
@@ -153,7 +153,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                     return (
                       <PetImageCard
                         key={index}
-                        petImage={item.image ? item.image : IMAGES.default_pet_image_60}
+                        petImage={item.image ? item.image : images.default_pet_image_60}
                         name={item.name}
                       />
                     )

@@ -1,5 +1,5 @@
-import { Api } from "#api/api"
-import { FormattedPetData } from "#api/api.types"
+import { Api } from "#api"
+import { FormattedPetData } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { PetModel } from "../pet/pet"
 

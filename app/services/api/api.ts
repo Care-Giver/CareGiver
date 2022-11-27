@@ -308,12 +308,11 @@ export class Api {
     }
 
     const getSpeciesName = (speciesId) => {
-
       const { speciesStoreModel } = useStores() //! 아.. MST
       const species = speciesStoreModel.getSpecies //! 아.. MST
-      
-      const speciesObj = species.find(item, index) => (speciesId === item.id))
-      const { name } = speciesObj 
+
+      const speciesObj = species.find((item, index) => speciesId === item.id)
+      const { name } = speciesObj
       return name
     }
 

@@ -36,8 +36,8 @@ export const ScreenRootView = (props) => {
       preset={props.preset}
       style={
         isNonScrolling(props.preset)
-          ? [FULL, BASIC_BACKGROUND_PADDING]
-          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING]
+          ? [FULL, BASIC_BACKGROUND_PADDING, props.style]
+          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING, props.style]
       }
       //! custom-header 를 header prop 에 적용시킬때, iOS statusbar 가 흰색에 뭍혀 버린다. 이를 보완하기 위해 추가함
       statusBar={Platform.select({

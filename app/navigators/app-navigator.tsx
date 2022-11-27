@@ -39,11 +39,9 @@ import {
   AllCommentsScreenHeader,
   GobackAndTitleSpacebetweenHeader,
 } from "#components"
-import { HEADER_ROOT } from "#components/screen-headers/common-styles"
 import { images } from "#images"
 import { HEIGHT, STANDARD_WIDTH, WIDTH } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -99,8 +97,8 @@ const AppStack = () => {
       screenOptions={{
         headerShown: true,
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="mypage-screen"
+      initialRouteName="home-screen"
+      // initialRouteName="mypage-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

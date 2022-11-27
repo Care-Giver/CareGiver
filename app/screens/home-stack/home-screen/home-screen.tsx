@@ -70,7 +70,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           <RowRoundedButton
             onPress={() => {
               //TODO: params 값 추가해줘야 함
-              navigate("test-map-screen")
+              // navigate("test-map-screen")
+              alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
             }}
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
