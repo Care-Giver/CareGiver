@@ -426,25 +426,31 @@ export const AppNavigator = (props: NavigationProps) => {
     prefixes: ["https://care-giver-web.vercel.app"],
     config: {
       screens: {
-        "home-screen": "/",
-        "search-screen": "/search-screen",
-        "search-result": "/search-result",
-        "caregiver-detail-information-screen": "/caregiver-detail-information-screen",
-        "all-reviews-screen": "/all-reviews-screen",
-        "caregiver-self-introduction-screen": "/caregiver-self-introduction-screen",
-        "all-comments-screen": "/all-comments-screen",
-        "writing-comment-screen": "/writing-comment-screen",
-        "all-bookings-screen": "/all-bookings-screen",
-        "booking-detail-screen": "/booking-detail-screen",
+        Favorites: {
+          initialRouteName: "home-screen",
+          screens: {
+            "home-screen": "/",
+            "search-screen": "/search-screen",
+            "search-result": "/search-result",
+            "caregiver-detail-information-screen": "/caregiver-detail-information-screen",
+            "all-reviews-screen": "/all-reviews-screen",
+            "caregiver-self-introduction-screen": "/caregiver-self-introduction-screen",
+            "all-comments-screen": "/all-comments-screen",
+            "writing-comment-screen": "/writing-comment-screen",
+            "all-bookings-screen": "/all-bookings-screen",
+            "booking-detail-screen": "/booking-detail-screen",
 
-        // * pay stack
-        "payment-request-screen": "/payment-request-screen",
+            // * pay stack
+            "payment-request-screen": "/payment-request-screen",
 
-        // * mypage stack
-        "mypage-screen": "/mypage-screen",
-        "all-pets-screen": "/all-pets-screen",
-        "setting-screen": "/setting-screen",
-        "service-center-screen": "/service-center-screen",
+            // * mypage stack
+            "mypage-screen": "/mypage-screen",
+            "all-pets-screen": "/all-pets-screen",
+            "setting-screen": "/setting-screen",
+            "service-center-screen": "/service-center-screen",
+          },
+        },
+        NotFound: "*",
       },
     },
   }
