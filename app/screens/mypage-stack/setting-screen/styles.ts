@@ -1,8 +1,6 @@
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme/palette"
-import { StyleSheet, useWindowDimensions } from "react-native"
+import { HEIGHT, WIDTH, GIVER_CASUAL_NAVY, LIGHT_LINE, color } from "#theme"
+import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
-import { color } from "#theme/color"
 
 export const styles = StyleSheet.create({
   divisionLine: {

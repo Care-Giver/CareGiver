@@ -1,10 +1,10 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme/index"
+import { WIDTH } from "#theme"
 import { PreMed20, PreBol16 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
+import { images } from "#images"
 import { styles } from "./styles"
-import { DISABLED, GIVER_CASUAL_NAVY } from "#theme/palette"
+import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { HEADER_ROOT } from "../common-styles"
 
 export const WritingCommentScreenHeader = (props) => {
@@ -19,7 +19,7 @@ export const WritingCommentScreenHeader = (props) => {
           props.navigation.goBack()
         }}
       >
-        <Image style={styles.goBackButton} source={IMAGES.go_back} />
+        <Image style={styles.goBackButton} source={images.go_back} />
       </Pressable>
 
       {/* //* 타이틀 */}

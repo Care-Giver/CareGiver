@@ -13,16 +13,23 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
-import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY } from "#theme/palette"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import IMAGES from "#images"
+import {
+  STRONG_LINE,
+  GIVER_CASUAL_NAVY,
+  SUB_HEAD_LINE,
+  BODY,
+  LIGHT_LINE,
+  HEIGHT,
+  WIDTH,
+} from "#theme"
+import { images } from "#images"
 import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
-import { Api } from "#api/api"
+import { Api } from "#api"
 import { useStores } from "../../../models"
 
 const IS_AUTH = true
@@ -114,7 +121,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreBol14 text="내 프로필 관리" color={BODY} />
                   <Image
                     style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={IMAGES.arrow_left}
+                    source={images.arrow_left}
                   />
                 </Pressable>
               </View>
@@ -133,7 +140,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
                   <Image
                     style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={IMAGES.arrow_left}
+                    source={images.arrow_left}
                   />
                 </Pressable>
               </Row>
@@ -177,7 +184,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         <Pressable style={styles.modeChangeBtn}>
           <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
           <Image
-            source={IMAGES.arrow_change}
+            source={images.arrow_change}
             style={{ marginLeft: WIDTH * 2, width: WIDTH * 28, height: HEIGHT * 28 }}
           />
         </Pressable>

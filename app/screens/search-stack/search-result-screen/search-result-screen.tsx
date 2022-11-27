@@ -11,9 +11,8 @@ import {
   SitterProfileCard,
   SelectOptionDropdownBox,
 } from "#components"
-import { HEIGHT, WIDTH, palette } from "#theme/index"
-import { LBG } from "#theme/palette"
-import IMAGES from "#images"
+import { HEIGHT, WIDTH, palette, LBG } from "#theme"
+import { images } from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,
@@ -159,7 +158,7 @@ export const SearchResultScreen: FC<
               setIsOpen(!isOpen)
             }}
             isOpen={isOpen}
-            logoSrc={IMAGES.list_bars}
+            logoSrc={images.list_bars}
             logoStyle={{
               width: WIDTH * 16,
               height: HEIGHT * 16,

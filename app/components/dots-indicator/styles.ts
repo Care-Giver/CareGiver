@@ -1,6 +1,6 @@
-import { GIVER_CASUAL_NAVY, CARE_NATURAL_BLUE } from "#theme/palette"
+import { GIVER_CASUAL_NAVY, CARE_NATURAL_BLUE } from "#theme"
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
+import { WIDTH, HEIGHT } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {

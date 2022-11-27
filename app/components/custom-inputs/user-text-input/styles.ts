@@ -1,5 +1,5 @@
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import { LBG } from "#theme/palette"
+import { HEIGHT, WIDTH } from "#theme"
+import { LBG } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({

@@ -21,7 +21,7 @@ import {
   PreBol32,
   PopReg20,
 } from "#components"
-import { color, spacing, typography, SHADOW_1, WIDTH } from "#theme/index"
+import { color, spacing, typography, SHADOW_1, WIDTH } from "#theme"
 import { NavigatorParamList } from "#navigators"
 
 //* export convention of Our Project

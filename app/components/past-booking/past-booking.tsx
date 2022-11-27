@@ -2,10 +2,10 @@ import { View, Text, Pressable, Image, ImageBackground } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH } from "#theme"
 import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme/palette"
+import { images } from "#images"
+import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { pastBooking } from "./dummy-data"
 import { CaregiverTypeButton } from "#components"
@@ -44,7 +44,7 @@ export const PastBooking = (props) => {
           <PreReg14 text="유혜린 펫시터" color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={ONPRESS_LIKED_BTN}>
-            <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+            <Image style={styles.likeBtn} source={images.empty_heart} />
           </Pressable>
         </Row>
 

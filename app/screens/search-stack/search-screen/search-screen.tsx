@@ -15,9 +15,9 @@ import {
   RowRoundedTimeIntervalPicker,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
-import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme/index"
-import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme/palette"
-import IMAGES from "#images"
+import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme"
+import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme"
+import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
 
@@ -85,7 +85,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
         </Row>
         <Row style={{ marginTop: HEIGHT * 16 }}>
-          <Image source={IMAGES.right_arrow_grey} style={styles.image} />
+          <Image source={images.right_arrow_grey} style={styles.image} />
           <PreReg14
             text={
               serviceType === "방문"
@@ -104,7 +104,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               setIsCalendarOpen(true)
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
             }}
-            image={IMAGES.calendar}
+            image={images.calendar}
             text={
               date
                 ? `${date.dateString.replace("-", ".").replace("-", ".")}`
@@ -148,7 +148,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           onPress={() => {
             navigate("test-map-screen")
           }}
-          image={IMAGES.location}
+          image={images.location}
           text={"경기도 안산시 상록구 한양대학로 55"}
           textColor={HEAD_LINE}
           style={{ marginTop: HEIGHT * 12 }}

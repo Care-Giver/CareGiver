@@ -1,14 +1,11 @@
 import { View, Text, Modal, Image, Pressable } from "react-native"
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { MypageButton, PreMed16, PreReg14, ScreenRootView } from "#components"
-import { HEAD_LINE, BODY } from "#theme/palette"
+import { MypageButton, PreMed16, PreReg14, ScreenRootView, CustomModal } from "#components"
+import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme/device-size-constant"
-import { useState } from "react"
-import { CustomModal } from "#components/custom-modal/custom-modal"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {

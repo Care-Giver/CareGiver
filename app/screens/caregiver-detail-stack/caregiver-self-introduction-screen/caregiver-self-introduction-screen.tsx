@@ -5,8 +5,8 @@ import { observer } from "mobx-react-lite"
 
 import { NavigatorParamList } from "#navigators"
 import { PreReg14, ScreenRootView } from "#components"
-import { SUB_HEAD_LINE } from "#theme/palette"
-import { HEIGHT } from "#theme/index"
+import { SUB_HEAD_LINE } from "#theme"
+import { HEIGHT } from "#theme"
 
 export const CaregiverSelfIntroductionScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-self-introduction-screen">

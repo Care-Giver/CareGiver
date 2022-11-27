@@ -1,11 +1,11 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 import { PreReg12, PreReg16 } from "../basics/custom-texts/custom-texts"
-import { SUB_HEAD_LINE } from "#theme/palette"
+import { SUB_HEAD_LINE } from "#theme"
 import { Row } from "../basics/row/row"
-import IMAGES from "#images"
+import { images } from "#images"
 
 export const CaregiverCertificate = (props) => {
   const { style: viewStyle } = props
@@ -15,7 +15,7 @@ export const CaregiverCertificate = (props) => {
     <View style={viewStyle}>
       <Row style={styles.root}>
         {/* //* 뱃지 */}
-        <Image source={IMAGES.certificate_badge} style={styles.badgeImage} />
+        <Image source={images.certificate_badge} style={styles.badgeImage} />
 
         {/* //* 라벨(자격증 이름) */}
         <PreReg16
@@ -30,7 +30,7 @@ export const CaregiverCertificate = (props) => {
             alert(detail)
           }}
         >
-          <Image source={IMAGES.more_info} style={styles.moreInfoImage} />
+          <Image source={images.more_info} style={styles.moreInfoImage} />
           {/* <PreReg12
             text={detail}
             color={BODY}

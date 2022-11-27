@@ -1,4 +1,4 @@
-import { Api } from "#api/index"
+import { Api } from "#api"
 
 let ReactotronDev
 if (__DEV__) {

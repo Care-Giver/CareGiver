@@ -16,7 +16,7 @@ import {
   ScreenRootView,
   SelectedPetCard,
 } from "#components"
-import { color, HEIGHT, SHADOW_1, WIDTH } from "#theme/index"
+import { color, HEIGHT, SHADOW_1, WIDTH } from "#theme"
 import {
   DBG,
   GIVER_CASUAL_NAVY,
@@ -25,9 +25,9 @@ import {
   LIGHT_LINE,
   MIDDLE_LINE,
   SUB_HEAD_LINE,
-} from "#theme/palette"
+} from "#theme"
 import { korCgType, korSvcType, won } from "../utils/format"
-import IMAGES from "#images"
+import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -90,7 +90,7 @@ export const BookingDetailScreen: FC<
   return (
     <ScreenRootView testID="BookingDetail" preset="scroll">
       <Row>
-        <Image style={styles.profileImage} source={IMAGES.default_pet_image_60} />
+        <Image style={styles.profileImage} source={images.default_pet_image_60} />
 
         <View
           style={{
@@ -117,7 +117,7 @@ export const BookingDetailScreen: FC<
           </Row>
 
           <Row mt={HEIGHT * 4}>
-            <Image style={styles.star} source={IMAGES.rating_star} />
+            <Image style={styles.star} source={images.rating_star} />
 
             <PreReg12
               text={`(${ratings})`}

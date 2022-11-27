@@ -1,5 +1,5 @@
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import { LIGHT_LINE } from "#theme/palette"
+import { HEIGHT, WIDTH } from "#theme"
+import { LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 

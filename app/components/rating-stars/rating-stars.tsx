@@ -1,8 +1,8 @@
 import { View, Text, Image } from "react-native"
 import React from "react"
-import IMAGES from "#images"
+import { images } from "#images"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
 
 const styles = {
@@ -36,18 +36,18 @@ const RatingStars = (props: { ratings: number; style?: object }) => {
       {/* //* 채워진 별 */}
       {new Array(fillStars).fill(0).map((value, index) => (
         <Image
-          source={IMAGES.rating_star}
+          source={images.rating_star}
           //! 첫 번째 별에만 marginLeft = 0
           style={[styles.star, index === 0 ? { marginLeft: 0 } : null]}
         />
       ))}
       {/* //* 반쪽 별 */}
       {new Array(halfStars).fill(0).map(() => (
-        <Image source={IMAGES.rating_star_half} style={styles.star} />
+        <Image source={images.rating_star_half} style={styles.star} />
       ))}
       {/* //* 빈 별 */}
       {new Array(emptyStars).fill(0).map(() => (
-        <Image source={IMAGES.rating_star_empty} style={styles.star} />
+        <Image source={images.rating_star_empty} style={styles.star} />
       ))}
 
       {/* //* 별점 */}

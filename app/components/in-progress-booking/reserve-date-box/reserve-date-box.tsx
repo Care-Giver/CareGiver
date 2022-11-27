@@ -2,9 +2,9 @@ import { View, Image } from "react-native"
 import React from "react"
 import { Row } from "../../basics/row/row"
 import { PreBol14, PreReg12 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
+import { images } from "#images"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme/index"
+import { HEIGHT } from "#theme"
 
 const setStartDateText = (startDateTime: Date, serviceType: string): string => {
   const startMonth = startDateTime.getMonth() + 1
@@ -62,7 +62,7 @@ export const ReserveDateBox = ({
         <PreBol14 text={startDateText} style={{ marginTop: HEIGHT * 4 }} />
       </View>
       {/* //* 화살표(->) */}
-      <Image source={IMAGES.right_arrow_grey} style={styles.arrow} />
+      <Image source={images.right_arrow_grey} style={styles.arrow} />
       {/* //* 끝나는 날짜 컨테이너 */}
       <View style={styles.dateBox}>
         <PreReg12 text="체크아웃" />
