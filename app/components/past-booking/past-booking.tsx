@@ -2,10 +2,10 @@ import { View, Text, Pressable, Image, ImageBackground } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH } from "#theme"
 import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme/palette"
+import { images } from "#images"
+import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { pastBooking } from "./dummy-data"
 import { CaregiverTypeButton } from "#components"
@@ -22,12 +22,22 @@ const handleReviewPress = () => {
   console.log("후기 작성하기 클릭")
 }
 
+const handlePress = () => {
+  alert("아직 개발중인 기능입니다 😉")
+}
+
 export const PastBooking = (props) => {
   const { style } = props
   return (
-    <Pressable style={[styles.root, style]}>
+    <Pressable style={[styles.root, style]} onPress={handlePress}>
       {/* //* 케어기버 프로필 사진 */}
-      <ImageBackground source={require("")} style={styles.profileImg}>
+      <ImageBackground
+        source={{
+          uri:
+            "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
+        }}
+        style={styles.profileImg}
+      >
         <Row style={{ backgroundColor: null }}>
           <CaregiverTypeButton text={pastBooking.serviceType} style={styles.typeBtn} />
           <CaregiverTypeButton
@@ -44,7 +54,7 @@ export const PastBooking = (props) => {
           <PreReg14 text="유혜린 펫시터" color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={ONPRESS_LIKED_BTN}>
-            <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+            <Image style={styles.likeBtn} source={images.empty_heart} />
           </Pressable>
         </Row>
 

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 
 export const styles = StyleSheet.create({
   reviewContainer: {

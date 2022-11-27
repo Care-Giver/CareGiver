@@ -1,4 +1,4 @@
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({

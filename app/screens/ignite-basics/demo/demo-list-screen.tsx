@@ -3,7 +3,7 @@ import { FlatList, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { Header, Screen, Text, AutoImage as Image, GradientBackground } from "#components"
-import { color, spacing } from "#theme/index"
+import { color, spacing } from "#theme"
 import { useStores } from "../../../models"
 import { NavigatorParamList } from "#navigators"
 

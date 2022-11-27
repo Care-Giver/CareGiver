@@ -11,8 +11,8 @@ import {
   PreMed14,
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
-import { DISABLED, STRONG_LINE } from "#theme/palette"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { DISABLED, STRONG_LINE } from "#theme"
+import { HEIGHT, WIDTH } from "#theme"
 import { BorderRadioButton } from "#components"
 
 // - 알러지 버튼 이름 목록

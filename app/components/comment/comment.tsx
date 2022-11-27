@@ -1,11 +1,11 @@
 import { View, Image, Pressable } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 import { PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme/palette"
+import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../basics/row/row"
-import IMAGES from "#images"
+import { images } from "#images"
 import { DivisionLine } from "../division-line/division-line"
 
 /* @Entity()
@@ -46,7 +46,7 @@ export class PetSitterReview extends CoreEntity {
 } */
 
 export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
-  const { userId, desc, createdAt, updatedAt, reply } = commentData
+  const { userId, desc, createdAt, updatedAt, reply, profileImg } = commentData
   const _numberOfLines = numberOfLines || undefined
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
@@ -71,7 +71,7 @@ export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
 
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: HEIGHT * 12 }}>
-        <Image source={IMAGES.default_profile_image_comment} style={styles.profileImage} />
+        <Image source={{ uri: profileImg }} style={styles.profileImage} />
         <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 8 }} />
         <PreReg12
           text={date}
@@ -83,7 +83,7 @@ export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
             alert("하위")
           }}
         >
-          <Image source={IMAGES.vertical_3_dots} style={styles.threeDots} />
+          <Image source={images.vertical_3_dots} style={styles.threeDots} />
         </Pressable>
       </Row>
 

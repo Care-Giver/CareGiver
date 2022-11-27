@@ -3,15 +3,16 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { BODY, LBG } from "#theme/palette"
 import {
+  BODY,
+  LBG,
   HEIGHT,
   WIDTH,
   DEVICE_SCREEN_HEIGHT,
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
   ADNROID_BOTTOM_NAVIGATION_HEIGHT,
-} from "#theme/index"
+} from "#theme"
 import { PublicPrivateSwitchButton, ScreenRootView, PopSem14, PopReg14, Row } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "#fonts"
@@ -68,40 +69,50 @@ export const WritingCommentScreen: FC<
   //*ios 에선 키보드가 나타났을 때 키보드에 컴포넌트들이 가리는것 방지
   //*android 에선 키보드가 없을 때 스크린의 길이가 짧아 컴포넌트들이 스크린 밖으로 넘어가는것 방지
   const handleHeight = () => {
-    let height
-    if (Platform.OS === "android") {
-      //?안드로이드에서만 이상하게 layoutAnimation 오류가 남. duration 을 0 으로 하거나 effect 를 "keyboard" 나 "spring" 을 쓰거나 하면 바로 오류가 남
-      //? 아무리 구글링을 해봐도 이유를 모르겠음. "keyboard" effect 를 쓰고 싶은데... 일단은 이 에니메이션에서 멈추겠음
-      //setImmediate(() => LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut));
-      LayoutAnimation.configureNext(LayoutAnimation.create(1, "easeInEaseOut", "scaleY"))
+    let height = 0
 
-      //*android 에선 keyboardWillShow 사용 못함
-      if (keyboard.keyboardShown) {
-        height = HEIGHT * 377
-        //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
-        //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
-      } else {
-        //LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-        height =
-          HEIGHT * 646 -
-          (HEADER_HEIGHT +
-            ADNROID_BOTTOM_NAVIGATION_HEIGHT +
-            ADNROID_STATUS_BAR_HEIGHT +
-            HEIGHT * 95 + //*디자인 상에서 댓글창부터 화면 끝까지의 하단 여백(85)과 헤더 전 까지 상단 여백(10)의 합이 95
+    switch (Platform.OS) {
+      case "android":
+        //?안드로이드에서만 이상하게 layoutAnimation 오류가 남. duration 을 0 으로 하거나 effect 를 "keyboard" 나 "spring" 을 쓰거나 하면 바로 오류가 남
+        //? 아무리 구글링을 해봐도 이유를 모르겠음. "keyboard" effect 를 쓰고 싶은데... 일단은 이 에니메이션에서 멈추겠음
+        //setImmediate(() => LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut));
+        LayoutAnimation.configureNext(LayoutAnimation.create(1, "easeInEaseOut", "scaleY"))
+
+        //*android 에선 keyboardWillShow 사용 못함
+        if (keyboard.keyboardShown) {
+          height = HEIGHT * 377
+          return height
+          //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
+          //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
+        } else {
+          //LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+          height =
             HEIGHT * 646 -
-            // DEVICE_SCREEN_HEIGHT * HEIGHT //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
-            DEVICE_SCREEN_HEIGHT) //FEEDBACK: DEVICE_SCREEN_ 상수에는 WIDTH, HEIGHT 상수를 곱해주면 안 됩니다
-      }
-    } else if (Platform.OS === "ios") {
-      if (keyboardStatus === "Keyboard will Show") {
-        LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity")) //*댓글 입력 창 크기 전환 애니메이션
-        height = HEIGHT * 377 - (keyboard.keyboardHeight - HEIGHT * 303) //* 디자인 상 댓글창 높이 - (기기 키보드 높이 - 디자인상 키보드 높이)
-      } else {
-        LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity"))
+            (HEADER_HEIGHT +
+              ADNROID_BOTTOM_NAVIGATION_HEIGHT +
+              ADNROID_STATUS_BAR_HEIGHT +
+              HEIGHT * 95 + //*디자인 상에서 댓글창부터 화면 끝까지의 하단 여백(85)과 헤더 전 까지 상단 여백(10)의 합이 95
+              HEIGHT * 646 -
+              // DEVICE_SCREEN_HEIGHT * HEIGHT //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
+              DEVICE_SCREEN_HEIGHT) //FEEDBACK: DEVICE_SCREEN_ 상수에는 WIDTH, HEIGHT 상수를 곱해주면 안 됩니다
+          return height
+        }
+
+      case "ios":
+        if (keyboardStatus === "Keyboard will Show") {
+          LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity")) //*댓글 입력 창 크기 전환 애니메이션
+          height = HEIGHT * 377 - (keyboard.keyboardHeight - HEIGHT * 303) //* 디자인 상 댓글창 높이 - (기기 키보드 높이 - 디자인상 키보드 높이)
+          return height
+        } else {
+          LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity"))
+          height = HEIGHT * 646
+          return height
+        }
+
+      case "web":
         height = HEIGHT * 646
-      }
+        return height
     }
-    return height
   }
 
   return (

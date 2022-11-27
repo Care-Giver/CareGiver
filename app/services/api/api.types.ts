@@ -68,6 +68,47 @@ export type GetVisitPetsitterResult =
   | { kind: "ok"; reserves: FormattedPetsitterReserve[] }
   | GeneralApiProblem
 
+// * pet
+
+interface PetProps {
+  age: number
+  birthday: string
+  createAt: string
+  id: number
+  image: string
+  isNeutralizated: boolean
+  name: string
+  petType: "소형" | "중형" | "대형"
+  sex: "male" | "female"
+  speciesId: number
+  specifics: string
+  updatedAt: string
+  weight: number
+}
+export interface PetResultProps {
+  familyId: number
+  pet: PetProps
+}
+
+// ? /pets response props
+export interface PetsResponse {
+  petResults: PetResultProps[]
+}
+
+export interface FormattedPetData {
+  // id: number
+  petId: number
+  name: string
+  image: string
+  age: number
+  sex: "male" | "female"
+  petType: "소형" | "중형" | "대형"
+  species: string
+  familyName: "Dog" | "Cat"
+}
+
+export type GetMyPetResult = { kind: "ok"; pets: FormattedPetData[] } | GeneralApiProblem
+
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
 

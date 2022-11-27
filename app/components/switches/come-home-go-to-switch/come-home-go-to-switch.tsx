@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { ViewStyle, Animated, Easing, TouchableWithoutFeedback, Text, View } from "react-native"
-import { color, WIDTH, HEIGHT, palette } from "#theme/index"
-import { GIVER_CASUAL_NAVY } from "#theme/palette"
+import { color, WIDTH, HEIGHT, palette } from "#theme"
+import { GIVER_CASUAL_NAVY } from "#theme"
 import { SwitchProps } from "./come-home-go-to-switch.props"
 
 // dimensions

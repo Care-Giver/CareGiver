@@ -12,8 +12,8 @@ import {
   GradientBackground,
 } from "#components"
 import { NavigatorParamList } from "#navigators"
-import { color, spacing } from "#theme/index"
-import { Api } from "#api/index"
+import { color, spacing } from "#theme"
+import { Api } from "#api"
 
 export const logoIgnite = require("./logo-ignite.png")
 export const heart = require("./heart.png")

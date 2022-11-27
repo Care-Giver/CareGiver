@@ -26,7 +26,7 @@
       "versionCode": 1
     },
     "web": {
-      "favicon": "./assets/images/default/favicon.png"
+      "favicon": "./assets/images/cg_favicon.png"
     }
   }
 }

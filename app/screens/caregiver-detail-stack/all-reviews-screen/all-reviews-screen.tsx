@@ -5,9 +5,9 @@ import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { DivisionLine, ScreenRootView, ReviewBox, FilterHeader } from "#components"
 import { reviews as _reviews } from "./dummy-data"
-import IMAGES from "#images"
-import { HEIGHT } from "#theme/index"
-import { LBG } from "#theme/palette"
+import { images } from "#images"
+import { HEIGHT } from "#theme"
+import { LBG } from "#theme"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">

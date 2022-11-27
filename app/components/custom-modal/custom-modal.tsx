@@ -1,12 +1,18 @@
-import { View, Text, Image, Pressable, Modal } from "react-native"
 import React from "react"
-import { useWindowDimensions } from "react-native"
+import { View, Text, Image, Pressable, Modal, useWindowDimensions } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH, PreBol14, PreBol20, PreReg14, Row } from "#components"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import IMAGES from "#images"
-import { color } from "#theme/color"
-import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE } from "#theme/palette"
+import {
+  HEIGHT,
+  WIDTH,
+  BODY,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  color,
+  isWeb,
+  STANDARD_WIDTH,
+} from "#theme"
+import { images } from "#images"
 import { CustomModalProps } from "./custom-modal.props"
 
 export const CustomModal = (props: CustomModalProps) => {
@@ -20,18 +26,18 @@ export const CustomModal = (props: CustomModalProps) => {
     handleNoPress,
   } = props
   const windowWidth = useWindowDimensions().width
-
+  const modalWidth = isWeb ? STANDARD_WIDTH : windowWidth
   return (
     <Modal animationType="fade" visible={visibleState} transparent>
       <View style={styles.centeredView}>
         <View
           style={[
             styles.modalView,
-            { width: WIDTH * (windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH) },
+            { width: WIDTH * (modalWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH) },
           ]}
         >
           <Image
-            source={IMAGES.dog_illustration}
+            source={images.dog_illustration}
             style={{ width: WIDTH * 151, height: HEIGHT * 156 }}
           />
           <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: HEIGHT * 4 }} />

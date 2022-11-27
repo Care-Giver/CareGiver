@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, FlatList } from "react-native"
+import { View, Image, Pressable } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import {
   MypageButton,
@@ -13,29 +13,67 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
-import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY, LIGHT_LINE } from "#theme/palette"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import IMAGES from "#images"
+import {
+  STRONG_LINE,
+  GIVER_CASUAL_NAVY,
+  SUB_HEAD_LINE,
+  BODY,
+  LIGHT_LINE,
+  HEIGHT,
+  WIDTH,
+} from "#theme"
+import { images } from "#images"
 import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
+import { PetStoreModel } from "../../../models/pet-store/pet-store"
+import { Pet } from "../../../models/pet/pet"
+import { Api } from "#api"
+import { useStores } from "../../../models"
+import * as Linking from "expo-linking"
 
 const IS_AUTH = true
 // const IS_AUTH = false
 
+const CAREGIVER_INTRO_URL = "https://www.naver.com/"
+
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   ({ navigation, route }) => {
-    const [userInfo, setUserInfo] = useState<UserProps | null>({
-      id: 0,
-      name: "",
-      profileImg: null,
-      role: "Client",
-      // TODO: 나중에 api 코드 짤 때 최대 3개만 가져와서 저장하기
-      pets: [],
-    })
+    // ? 유저 프로필 정보
+    const [userInfo, setUserInfo] = useState<UserProps | null>()
+
+    // ? 펫 store
+    const petStore = PetStoreModel.create()
+    // ? 유저의 펫 리스트
+    const [petsList, setPetsList] = useState<Pet[]>([])
+
+    // const api = new Api()
+    // api.setup()
+    // const 슬프다 = async () => {
+    //   const target = await api.getSpeciesNames()
+    //   console.log("target", target)
+    // }
+    // 슬프다()
+
+    const { speciesStoreModel } = useStores()
+    // speciesStoreModel.setSpecies()
+    speciesStoreModel.getSpecies
+
     useLayoutEffect(() => {
-      IS_AUTH ? setUserInfo(user) : setUserInfo(null)
+      // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
+      if (IS_AUTH) {
+        setUserInfo(user)
+
+        async function fetchData() {
+          await petStore.setMyPets()
+          setPetsList(petStore.pets)
+        }
+
+        fetchData()
+      } else {
+        setUserInfo(null)
+      }
     }, [])
 
     // TODO: 로그인 화면 연결시키기
@@ -59,6 +97,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       navigate("service-center-screen")
     }
 
+    const handleMode = () => {
+      Linking.openURL(CAREGIVER_INTRO_URL)
+    }
+
     return (
       <ScreenRootView preset="fixed">
         {/* //! 로그인 상태일 때 */}
@@ -68,7 +110,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             <Row style={styles.profileCard}>
               {/* //? 프로필 사진 */}
               <Image
-                source={user.profileImg ? user.profileImg : IMAGES.default_pet_image_60}
+                source={user.profileImg ? user.profileImg : images.default_pet_image_60}
                 style={styles.profileImg}
                 resizeMode="contain"
               />
@@ -86,7 +128,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreBol14 text="내 프로필 관리" color={BODY} />
                   <Image
                     style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={IMAGES.arrow_left}
+                    source={images.arrow_left}
                   />
                 </Pressable>
               </View>
@@ -105,20 +147,25 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
                   <Image
                     style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={IMAGES.arrow_left}
+                    source={images.arrow_left}
                   />
                 </Pressable>
               </Row>
 
               {/* //? 반려동물 카드 리스트 */}
               <View style={styles.petListContainer}>
-                {userInfo.pets.map((item, index) => (
-                  <PetImageCard
-                    key={index}
-                    petImage={item.profileImg ? item.profileImg : IMAGES.default_pet_image_60}
-                    name={item.name}
-                  />
-                ))}
+                {petsList.map((item, index) => {
+                  // ! 마이페이지 메인에는 세 마리만 노출
+                  if (index < 3) {
+                    return (
+                      <PetImageCard
+                        key={index}
+                        petImage={item.image ? item.image : images.default_pet_image_60}
+                        name={item.name}
+                      />
+                    )
+                  }
+                })}
               </View>
             </View>
           </>
@@ -142,9 +189,11 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         <View style={[styles.divisionLine]} />
         {/* //* Care Giver 모드 전환 버튼 */}
         <Pressable style={styles.modeChangeBtn}>
-          <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
+          <Pressable onPress={handleMode}>
+            <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
+          </Pressable>
           <Image
-            source={IMAGES.arrow_change}
+            source={images.arrow_change}
             style={{ marginLeft: WIDTH * 2, width: WIDTH * 28, height: HEIGHT * 28 }}
           />
         </Pressable>
@@ -152,7 +201,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton text="결제 수단 및 쿠폰" />
+        <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
@@ -162,7 +211,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* 자주 묻는 질문 버튼 */}
-        <MypageButton text="자주 묻는 질문" />
+        <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
