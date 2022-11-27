@@ -35,39 +35,7 @@ import {
   SUB_HEAD_LINE,
   STANDARD_WIDTH,
 } from "#theme"
-
-const commentsDummy = [
-  {
-    userId: "유저닉네임1r",
-    desc:
-      "안녕하세요, 펫시터님! 몇가지 궁금한 점이 있어서 여쭤보려고 하는데 어디로 연락을 드려야 편하실까요~?? 편하신 연락처 알려알려알려알려",
-    createdAt: "2022-03-22T11:30",
-    updatedAt: "2022-04-01T13:50",
-    reply: false,
-  },
-  {
-    userId: "유저닉네임2",
-    desc: "이 펫시터님 성격도 정말 좋으시구 저희 강아지도 펫시터님 만나면 너무 좋아해요~!!ㅎㅎ",
-    createdAt: "2022-03-22T11:30",
-    updatedAt: "2022-04-01T13:50",
-    reply: false,
-  },
-  {
-    userId: "유저닉네임3",
-    desc: "혹시 사용하시는 강아지 샴푸 어떤 제품인지 알 수 있을까요?",
-    createdAt: "2022-03-22T11:30",
-    updatedAt: "2022-04-01T13:50",
-    reply: false,
-  },
-  {
-    userId: "유저닉네임4",
-    desc:
-      "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있",
-    createdAt: "2022-03-22T11:30",
-    updatedAt: "2022-04-01T13:50",
-    reply: false,
-  },
-]
+import { commentsDummy } from "../all-comments-screen/dummy-data"
 
 const servicesDummy = [
   {

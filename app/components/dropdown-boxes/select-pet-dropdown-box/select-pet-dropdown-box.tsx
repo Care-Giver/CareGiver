@@ -22,7 +22,7 @@ export const SelectPetDropdownBox = (props) => {
   return (
     <View style={style}>
       <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>
-        <PreReg16 text={"반려동물 선택"} color={HEAD_LINE} />
+        <PreReg16 text={"맡기실 반려동물을 선택해주세요"} color={HEAD_LINE} />
         <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
       </RowRoundedBox>
 

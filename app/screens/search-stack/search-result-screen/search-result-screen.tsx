@@ -1,5 +1,5 @@
 import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
-import { View, Animated } from "react-native"
+import { View, Animated, ScrollView, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -11,7 +11,7 @@ import {
   SitterProfileCard,
   SelectOptionDropdownBox,
 } from "#components"
-import { HEIGHT, WIDTH, palette, LBG } from "#theme"
+import { HEIGHT, WIDTH, palette, LBG, isWeb, STANDARD_HEIGHT } from "#theme"
 import { images } from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -118,7 +118,7 @@ export const SearchResultScreen: FC<
 
   return (
     // <ScreenRootView statusBar="dark-content">
-    <ScreenRootView>
+    <ScreenRootView preset="scroll">
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -235,8 +235,7 @@ export const SearchResultScreen: FC<
             showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,
-              // height: 500,
-              height: "auto",
+              height: isWeb ? STANDARD_HEIGHT - 100 : "auto",
               marginBottom: HEIGHT * 34,
             }}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
