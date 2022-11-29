@@ -28,7 +28,7 @@ export const AllCommentsScreenHeader = (props) => {
         style={{ marginLeft: "auto" }}
         onPress={() => {
           // props.navigation.goBack()
-          alert("댓글 검색으로 이동")
+          alert("댓글 검색기능이 곧 추가됩니다! 😚")
         }}
       >
         <Image style={styles.search} source={images.search} />

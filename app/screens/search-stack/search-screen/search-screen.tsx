@@ -27,6 +27,7 @@ import {
   LBG,
   SUB_HEAD_LINE,
   LIGHT_LINE,
+  NAV_BUTTON_BOTTOM_PADDING,
 } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -135,10 +136,10 @@ const timeOptions = [
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
-    const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
-    const [service, setService] = useState(null) //? 팻시팅 or 훈련
+    const [serviceType, setServiceType] = useState<"방문" | "위탁">("방문") //? 방뮨 or 위탁
+    const [service, setService] = useState<"펫시팅" | "훈련" | null>(null) //? 팻시팅 or 훈련
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-    const [date, setDate] = useState() //? 선택된 날짜
+    const [date, setDate] = useState(null) //? 선택된 날짜
     const [selectedPets, setSelectedPets] = useState([])
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
@@ -159,15 +160,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       })
     }, [])
 
-    //? 펫시터 찾기 버튼 활성화 여부 결정
-    const hadle = () => {
-      if (!date) return false
-
-      if (selectedPets.length === 0) return false
-
-      return true
-    }
-
     if (Platform.OS === "android") {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
         UIManager.setLayoutAnimationEnabledExperimental(true)
@@ -178,6 +170,30 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     // console.log(time)
     const _time = time.toISOString().split("T")[0]
     // console.log(_time)
+
+    //* 네비게이션 버튼 라벨 결정
+    const handleLabel = () => {
+      if (!date) {
+        return "날짜를 선택해주세요"
+      }
+
+      if (serviceType === "방문" && (!startTime || !endTime)) {
+        return "시간을 선택해주세요"
+      }
+
+      if (selectedPets.length === 0) {
+        return "반려동물을 선택해주세요"
+      }
+
+      return service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"
+    }
+
+    //* 네비게이션 버튼 활성화 여부 결정
+    const hadleIsActivated = () => {
+      if (!date) return false
+      if (selectedPets.length === 0) return false
+      return true
+    }
 
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
@@ -334,20 +350,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             color={SUB_HEAD_LINE}
             style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
           />
-          <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-            {selectedPets.map((value, index) => (
-              <SelectedPetCard
-                petData={value}
-                onPress={() => {
-                  setSelectedPets((pets) => pets.filter((pet) => pet.id !== value.id))
-                }}
-                key={index}
-              />
-            ))}
-            {/* //* 선택된 반려동물 리스트 */}
-            {/* //- TODO: 높이가 굉장히 협소할떄는 이렇게 하면, 아래 버튼이 안 보임 */}
-            {/* //- TODO: 버튼 스타일을 수정하던가, 아니면 지금처럼 바깥을 ScrollView 로 감싸야함 */}
-            {/* <FlatList
+
+          {/* //* 선택된 반려동물 리스트 */}
+          {/* //- TODO: 높이가 굉장히 협소할떄는 이렇게 하면, 아래 버튼이 안 보임 */}
+          {/* //- TODO: 버튼 스타일을 수정하던가, 아니면 지금처럼 바깥을 ScrollView 로 감싸야함 */}
+          <FlatList
             data={selectedPets}
             renderItem={(
               { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
@@ -360,21 +367,17 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               />
             )}
             // indicatorStyle={"black"} //! scroll indicator 의 디자인 props 는 black 과 white 두 종류 밖에 없다. custom scroll indicator 는 따로 직접 만들어야 한다.
-          /> */}
-          </View>
+          />
         </ScrollView>
 
         {/*//* 펫시터 찾기 */}
         <ConditionalButton
-          label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
-          isActivated={hadle()}
+          label={handleLabel()}
+          isActivated={hadleIsActivated()}
           style={{
             marginTop: "auto",
             // margin: HEIGHT * 24,
-            marginBottom: Platform.select({
-              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-              android: 0,
-            }),
+            marginBottom: HEIGHT * NAV_BUTTON_BOTTOM_PADDING,
           }}
           onPress={() => {
             //? 펫시터 검색결과 스크린으로 이동

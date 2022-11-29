@@ -80,7 +80,7 @@ export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
         />
         <Pressable
           onPress={() => {
-            alert("하위")
+            alert("댓글 편집기능이 곧 추가됩니다! 😚")
           }}
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />

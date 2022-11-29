@@ -34,6 +34,7 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   STANDARD_WIDTH,
+  NAV_BUTTON_BOTTOM_PADDING,
 } from "#theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 
@@ -80,7 +81,7 @@ const petYearsYears = 12
 const petYearsMonths = 4
 
 const desc =
-  "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
+  "안녕하세요. 저희는 스타트업, 케어기버 입니다! 아직 우리나라는 펫시팅 문화가 낯섭니다. 반려동물과 함께하는 1인 가구는 점차 늘고 있지만, 바쁜 일상속에서 정작 집에서 혼자 시간을 보내는 강아지들이 늘고 있습니다. 이러한 현실속에서, 정작 내 주변에 펫시터가 있는지도 알 수 없습니다. 이와 관련된 정보도 부족하고, 무엇보다 펫시터라는 직업과 그 수가 매우 적습니다. 펫시팅의 대중화가 이루어지지 못 한 것입니다. 저희는 이러한 문제점을 해결하고자 스타트업을 시작했습니다. 에어비엔비가 그래왔듯, 저희들도 이전에는 없던 분야를 새로 만드려합니다. 지역사회 기반 커뮤니티와 리뷰-레이팅 시스템을 기반으로 한, 이전에는 없던 서비스. 누구나 쉽게 펫시터가 되고, 내 아이를 손쉽게 믿고 맡길 수 있는 환경을 만들고자 합니다! \n\n이번 테스트에 참여해주셔서 정말 감사드립니다 🙂 \n- 2022년 11월 케어기버 일동."
 
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
@@ -100,7 +101,7 @@ export const CaregiverDetailInformationScreen: FC<
 
   const { sitterData } = route.params
   const { profileImg, name, rating } = sitterData
-  console.log(sitterData)
+  // console.log(sitterData)
 
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
@@ -191,7 +192,7 @@ export const CaregiverDetailInformationScreen: FC<
               style={{ marginLeft: "auto" }}
               onPress={() => {
                 //? 자기소개 전체보기 화면으로 이동
-                navigate("caregiver-self-introduction-screen", desc)
+                navigate("caregiver-self-introduction-screen", { desc })
               }}
             />
           </Row>
@@ -244,6 +245,7 @@ export const CaregiverDetailInformationScreen: FC<
       >
         {/* //* 예약 신청하기 버튼*/}
         <MakeBookingButton
+          style={{ marginBottom: NAV_BUTTON_BOTTOM_PADDING }}
           pricePerHour={50000}
           isActivated={true}
           onPress={() => {

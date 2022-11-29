@@ -36,7 +36,7 @@ import * as Linking from "expo-linking"
 const IS_AUTH = true
 // const IS_AUTH = false
 
-const CAREGIVER_INTRO_URL = "https://www.naver.com/"
+const CAREGIVER_INTRO_URL = "https://xulejsqs236.typeform.com/to/DPdjSIDM"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   ({ navigation, route }) => {

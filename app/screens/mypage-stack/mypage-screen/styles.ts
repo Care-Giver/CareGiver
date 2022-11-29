@@ -1,12 +1,11 @@
-import { HEIGHT, WIDTH } from "#theme"
-import { LIGHT_LINE } from "#theme"
+import { LIGHT_LINE, HEIGHT, WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
   divisionLine: {
     height: HEIGHT * 2,
-    marginHorizontal: -2 * BASIC_BACKGROUND_PADDING_WIDTH,
+    marginHorizontal: -1 * BASIC_BACKGROUND_PADDING_WIDTH,
     backgroundColor: LIGHT_LINE,
   },
 

@@ -5,7 +5,14 @@ import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { Comment, DivisionLine, ScreenRootView, FilterHeader } from "#components"
 import { commentsDummy } from "./dummy-data"
-import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "#theme"
+import {
+  DEVICE_SCREEN_WIDTH,
+  HEIGHT,
+  IOS_BOTTOM_HOME_BAR_HEIGHT,
+  isWeb,
+  LBG,
+  STANDARD_WIDTH,
+} from "#theme"
 
 export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
@@ -22,7 +29,7 @@ export const AllCommentsScreen: FC<
         color={LBG}
         style={{
           alignSelf: "center",
-          width: DEVICE_SCREEN_WIDTH,
+          width: isWeb ? STANDARD_WIDTH : DEVICE_SCREEN_WIDTH,
         }}
       />
 

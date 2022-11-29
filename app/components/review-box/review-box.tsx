@@ -11,7 +11,7 @@ import { PetProfileCard } from "../pet-profile-card/pet-profile-card"
 import { PetInfoDropdownBox } from "../dropdown-boxes/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
 
-export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
+export const ReviewBox = ({ style: viewStyle, key, reviewData, onPress }) => {
   // const profileImg = profileImg
   // const userName = userName
   // const ratings = ratings
@@ -22,8 +22,8 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
   // ? 리뷰 정보
   const { user, ratings, createdAt, review, pets } = reviewData
   const userName = user.name
-  const profileImg = user.profileImg ? user.profileImg : images.profile_default
-  const images = reviewData.images ? reviewData.images : []
+  const profileImg = user.profileImg || images.profile_default
+  const reviewImages = reviewData.images || []
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
@@ -67,7 +67,13 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
         </Pressable>
 
         {/* //? 더보기 버튼 */}
-        <Pressable>
+        <Pressable
+          onPress={onPress}
+          style={{
+            // backgroundColor: "red",
+            paddingHorizontal: 10,
+          }}
+        >
           <Image source={images.three_dots} style={styles.moreBtn} />
         </Pressable>
       </Row>
@@ -92,7 +98,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
       </Row>
 
       {/* //* 리뷰 이미지 */}
-      {images.length > 0 && (
+      {reviewImages.length > 0 && (
         <FlatList
           data={images}
           renderItem={({ item, index }) => (

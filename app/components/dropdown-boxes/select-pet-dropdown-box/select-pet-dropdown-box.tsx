@@ -61,7 +61,7 @@ export const SelectPetDropdownBox = (props) => {
             style={styles.addNewPetBox}
             preset="pressable"
             onPress={() => {
-              alert("gg")
+              alert("아직 개발중인 기능입니다 😉")
             }}
           >
             <PreMed14 text="+ 추가 등록하기" color={BODY} />

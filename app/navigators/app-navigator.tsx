@@ -77,7 +77,7 @@ export type NavigatorParamList = {
   "search-result": undefined
   "caregiver-detail-information-screen": undefined
   "all-reviews-screen": undefined
-  "caregiver-self-introduction-screen": undefined
+  "caregiver-self-introduction-screen": any
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined

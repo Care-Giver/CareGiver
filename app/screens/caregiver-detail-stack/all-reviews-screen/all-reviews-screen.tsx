@@ -6,8 +6,7 @@ import { observer } from "mobx-react-lite"
 import { DivisionLine, ScreenRootView, ReviewBox, FilterHeader } from "#components"
 import { reviews as _reviews } from "./dummy-data"
 import { images } from "#images"
-import { HEIGHT } from "#theme"
-import { LBG } from "#theme"
+import { HEIGHT, LBG } from "#theme"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
@@ -15,7 +14,7 @@ export const AllReviewsScreen: FC<
   // ? 리뷰 리스트
   const [reviews, setReviews] = useState([])
   // ? 선택된 정렬 옵션
-  const [seletedOption, setSelectedOption] = useState("최신순")
+  const [selectedOption, setSelectedOption] = useState("최신순")
 
   useLayoutEffect(() => {
     setReviews(_reviews)
@@ -33,7 +32,10 @@ export const AllReviewsScreen: FC<
       <FilterHeader
         title={"전체"}
         number={reviews.length < 1000 ? `${reviews.length}` : "999+"}
-        seletedOption={seletedOption}
+        selectedOption={selectedOption}
+        onPress={() => {
+          alert("리뷰 정렬 필터는 기획중입니다 🤔")
+        }}
       />
 
       <DivisionLine color={LBG} />
@@ -50,6 +52,9 @@ export const AllReviewsScreen: FC<
               }}
               key={index}
               reviewData={item}
+              onPress={() => {
+                alert("리뷰 편집기능은 개발중입니다 😉")
+              }}
             />
             <DivisionLine
               color={LBG}

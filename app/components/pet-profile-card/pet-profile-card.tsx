@@ -8,7 +8,7 @@ import { HEIGHT, WIDTH } from "#theme"
 import { Row } from "../basics/row/row"
 
 export const PetProfileCard = (props) => {
-  const { petData, style, index } = props
+  const { petData, style, index, deletable = false } = props
   const { name, petType, species, age, sex } = petData
 
   let _sex = ""
@@ -48,9 +48,11 @@ export const PetProfileCard = (props) => {
         </View>
 
         {/* //? 삭제 버튼 */}
-        <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
-          <Image style={styles.deleteButton} source={images.x_grey} />
-        </Pressable>
+        {deletable && (
+          <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
+            <Image style={styles.deleteButton} source={images.x_grey} />
+          </Pressable>
+        )}
       </Row>
 
       {/* //?  카드 하단, 구분선

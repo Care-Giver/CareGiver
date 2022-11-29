@@ -8,8 +8,7 @@ import { PopSem14 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { PetInfoDropdownBoxProps } from "./pet-info-dropdown-box.props"
 import { DivisionLine } from "../../division-line/division-line"
-import { LBG } from "#theme"
-import { WIDTH } from "#theme"
+import { LBG, WIDTH } from "#theme"
 
 export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
   const { isOpen, onPress, pets, style } = props
