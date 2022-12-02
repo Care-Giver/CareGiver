@@ -16,6 +16,7 @@ import {
   PreReg16,
   BASIC_BACKGROUND_PADDING,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  PreBol12,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -248,6 +249,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           ) : (
             //? 캘린더 표출
             <Calendar
+              //! Web 빌드에서는, arrow 가 안 보이는 버그가 있어서, 이렇게 커스텀 arrow를 만들었음
+              renderArrow={(direction) => (
+                <PreBol14 text={direction === "left" ? "◀" : "▶"} color={"#5dbcfc"} />
+              )}
               onDayPress={(date) => {
                 setIsCalendarOpen(!isCalendarOpen)
                 setDate(date)
@@ -256,6 +261,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               style={{
                 marginTop: HEIGHT * 36,
                 backgroundColor: "#F0F0F6",
+                // backgroundColor: "#1010d3",
                 padding: 4,
                 borderRadius: 8,
               }}

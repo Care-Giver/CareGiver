@@ -1,7 +1,7 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
 import { Row } from "../../basics/row/row"
-import { PreReg12 } from "../../basics/custom-texts/custom-texts"
+import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { FlatList } from "react-native-gesture-handler"
 
 export const SelectOptionDropdownBox = (props) => {
@@ -21,11 +21,16 @@ export const SelectOptionDropdownBox = (props) => {
           alignItems: "center",
         }}
       >
-        <PreReg12 text={currentOption} />
+        <PreReg14 text={currentOption} />
         <Image source={logoSrc} style={[logoStyle]} />
       </Row>
       {isOpen && (
         <FlatList
+          contentContainerStyle={{
+            paddingVertical: 4,
+            // backgroundColor: "red",
+            paddingHorizontal: 4,
+          }}
           data={labels}
           renderItem={({ item, index }) => (
             <Pressable
@@ -34,11 +39,14 @@ export const SelectOptionDropdownBox = (props) => {
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "#ffffff",
+                backgroundColor: "#efefef5d",
+                borderRadius: 4,
+
+                marginVertical: 4,
               }}
               onPress={() => handlePress(item)}
             >
-              <PreReg12 text={item} />
+              <PreReg12 text={item === currentOption ? "" : item} />
             </Pressable>
           )}
         />
