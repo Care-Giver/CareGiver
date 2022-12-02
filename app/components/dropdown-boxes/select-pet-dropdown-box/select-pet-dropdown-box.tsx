@@ -19,6 +19,8 @@ export const SelectPetDropdownBox = (props) => {
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
 
+  console.log("selectedPets", selectedPets)
+
   return (
     <View style={style}>
       <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>

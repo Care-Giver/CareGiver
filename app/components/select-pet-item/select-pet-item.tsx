@@ -11,9 +11,6 @@ export const SelectPetItem = (props) => {
   const { id, name, size, species, age, sex } = petData
 
   const [isOn, setIsOn] = useState(false)
-  const toggle = () => {
-    isOn ? setIsOn(false) : setIsOn(true)
-  }
 
   // console.log("id")
   // console.log(selectedPets.includes(id))
@@ -33,7 +30,7 @@ export const SelectPetItem = (props) => {
 
   useLayoutEffect(() => {
     isSelected ? setIsOn(true) : setIsOn(false)
-  }, [])
+  }, [isSelected])
 
   const handle = () => {
     // ? 선택이 되어있는 상태에서 누른다 = 선택취소

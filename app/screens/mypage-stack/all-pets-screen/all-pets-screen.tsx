@@ -26,8 +26,8 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
       async function fetchData() {
         petStore.setMyPets()
       }
-      fetchData()
-      setPets(petStore.pets)
+      // fetchData()
+      // setPets(petStore.pets)
     }, [])
 
     return (

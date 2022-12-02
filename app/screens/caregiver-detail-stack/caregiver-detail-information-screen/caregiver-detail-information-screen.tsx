@@ -173,7 +173,7 @@ export const CaregiverDetailInformationScreen: FC<
           />
           <CaregiverCertificate
             label={"반려동물행동교정사"}
-            detail={"반려동물을 행동교정 행동교정 행동교정 행동교정 행동교정 행동교정"}
+            detail={"반려동물 행동교정을 위한 전문 훈련 과정을 이수한 사람들에게 주어지는 자격증"}
           />
 
           {/* //* 서비스 */}
@@ -249,7 +249,7 @@ export const CaregiverDetailInformationScreen: FC<
           pricePerHour={50000}
           isActivated={true}
           onPress={() => {
-            alert("결제하기 화면으로 이동")
+            alert("결제기능이 곧 추가됩니다! 😚")
           }}
         />
       </View>

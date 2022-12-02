@@ -218,43 +218,43 @@ const AllStacks = () => {
 
       {/* //! 마이페이지 스택 */}
       {/* //* 마이페이지 메인 */}
-      <Stack.Screen
+      {/* <Stack.Screen
         name="mypage-screen"
         component={MypageScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //* 반려동물 전체보기 */}
-      <Stack.Screen
+      {/* <Stack.Screen
         name="all-pets-screen"
         component={AllPetsScreen}
         options={{
           title: "나의 반려동물",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //* 환경설정 스크린 */}
-      <Stack.Screen
+      {/* <Stack.Screen
         name="setting-screen"
         component={SettingScreen}
         options={{
           title: "환경설정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //* 고객센터 스크린 */}
-      <Stack.Screen
+      {/* <Stack.Screen
         name="service-center-screen"
         component={ServiceCenterScreen}
         options={{
           title: "고객센터",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
       {/* //! -------- */}
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
@@ -290,6 +290,59 @@ const TabStacks = () => {
           <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
         </View>
       </ScreenRootView>
+    )
+  }
+
+  const MyPageStack = () => {
+    const navigation = useNavigation()
+    return (
+      <Stack.Navigator
+        //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
+        screenOptions={{
+          headerShown: true,
+        }}
+        initialRouteName="mypage-screen"
+      >
+        {/* //! 마이페이지 스택 */}
+        {/* //* 마이페이지 메인 */}
+        <Stack.Screen
+          name="mypage-screen"
+          component={MypageScreen}
+          options={{
+            header: (props) => <HomeScreenHeader {...props} />,
+          }}
+        />
+
+        {/* //* 반려동물 전체보기 */}
+        <Stack.Screen
+          name="all-pets-screen"
+          component={AllPetsScreen}
+          options={{
+            title: "나의 반려동물",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+
+        {/* //* 환경설정 스크린 */}
+        <Stack.Screen
+          name="setting-screen"
+          component={SettingScreen}
+          options={{
+            title: "환경설정",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+
+        {/* //* 고객센터 스크린 */}
+        <Stack.Screen
+          name="service-center-screen"
+          component={ServiceCenterScreen}
+          options={{
+            title: "고객센터",
+            header: (props) => <GobackAndTitleHeader {...props} />,
+          }}
+        />
+      </Stack.Navigator>
     )
   }
 
@@ -336,6 +389,10 @@ const TabStacks = () => {
         name="Bookings"
         component={AllBookingsScreen}
         options={{
+          title: "예약내역",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+          headerShown: true,
+
           tabBarLabel: "예약내역",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
@@ -345,14 +402,13 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          headerTitle: "예약내역",
         }}
       />
       <Tab.Screen
         name="Searching"
         component={SearchResultScreen}
         options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
           tabBarLabel: "검색",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
@@ -370,6 +426,10 @@ const TabStacks = () => {
         name="Chats"
         component={ChatsStack}
         options={{
+          title: "채팅(개발중)",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+          headerShown: true,
+
           tabBarLabel: "채팅",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
@@ -379,13 +439,11 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          headerTitle: "채팅(개발중)",
         }}
       />
       <Tab.Screen
         name="Mypage"
-        component={MypageScreen}
+        component={MyPageStack}
         options={{
           tabBarLabel: "내정보",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
@@ -396,9 +454,10 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          header: (props) => <HomeScreenHeader {...props} />,
-          headerShown: true,
-          headerTitle: "",
+
+          // header: (props) => <HomeScreenHeader {...props} />,
+          // headerShown: true,
+          // headerTitle: "",
         }}
       />
     </Tab.Navigator>
@@ -444,12 +503,37 @@ export const AppNavigator = (props: NavigationProps) => {
             "payment-request-screen": "/payment-request-screen",
 
             // * mypage stack
+            // "mypage-screen": "/mypage-screen",
+            // "all-pets-screen": "/all-pets-screen",
+            // "setting-screen": "/setting-screen",
+            // "service-center-screen": "/service-center-screen",
+          },
+        },
+
+        Bookings: {
+          initialRouteName: "all-bookings-screen",
+          // screens: {
+          //   "all-bookings-screen": "/all-bookings-screen",
+          // },
+        },
+
+        Searching: {
+          initialRouteName: "search-result",
+          // screens: {
+          //   "search-result": "/search-result",
+          // },
+        },
+
+        Mypage: {
+          initialRouteName: "mypage-screen",
+          screens: {
             "mypage-screen": "/mypage-screen",
             "all-pets-screen": "/all-pets-screen",
             "setting-screen": "/setting-screen",
             "service-center-screen": "/service-center-screen",
           },
         },
+
         NotFound: "*",
       },
     },

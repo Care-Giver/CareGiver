@@ -85,16 +85,19 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
     const handleMyPetsPress = () => {
       navigate("all-pets-screen")
+      // navigate("Mypage", { screen: "all-pets-screen" })
     }
 
     // * 환경설정 버튼 클릭시 실행되는 함수
     const handleSettingPress = () => {
       navigate("setting-screen")
+      // navigate("Mypage", { screen: "setting-screen" })
     }
 
     // * 고객센터 버튼 클릭시 실행되는 함수
     const handleServiceCenterPress = () => {
       navigate("service-center-screen")
+      // navigate("Mypage", { screen: "service-center-screen" })
     }
 
     const handleMode = () => {

@@ -7,25 +7,29 @@ import { HEADER_ROOT } from "../common-styles"
 import { navigate } from "#navigators"
 
 export const HomeScreenHeader = (props) => {
-  // console.log("HomeScreenHeader props:", props)
+  // const routeName = props?.route.name
+  // console.log("routeName", routeName)
+
+  const handleBackButton = () => {
+    // if (routeName === "Mypage") {
+    //   navigate("Mypage", { screen: "mypage-screen" })
+    //   return
+    // }
+
+    navigate("Favorites", { screen: "home-screen" })
+  }
 
   return (
     <View {...props} style={HEADER_ROOT}>
       {/* //? 케어기버 로고 */}
-      <Pressable
-        onPress={() => {
-          navigate("Favorites", { screen: "home-screen" })
-        }}
-      >
+      <Pressable onPress={handleBackButton}>
         <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />
       </Pressable>
 
       {/* //? 알람 버튼 */}
       <Pressable
         onPress={() => {
-          // alert("알림 기능은 준비중입니다.")
-          // console.warn("임시로 마이페이지 이동버튼으로 사용중")
-          navigate("mypage-screen")
+          alert("알림 기능은 준비중입니다. 😙")
         }}
         style={{
           marginLeft: "auto",

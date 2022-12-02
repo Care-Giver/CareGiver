@@ -1,6 +1,6 @@
 export const user = {
   id: 7,
-  name: "방울이엄마",
+  name: "게스트",
   profileImg: null,
   role: "Client",
   pets: [

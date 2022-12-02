@@ -156,12 +156,18 @@ export const AllBookingsScreen: FC<
       <Row style={{ marginTop: HEIGHT * 60, justifyContent: "space-between" }}>
         <PreReg16 text="지난 예약" color={DISABLED} />
         <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
-          <PreMed16 text="더보기" color={BODY} />
+          <PreMed16
+            text="더보기 "
+            color={BODY}
+            onPress={() => {
+              alert("더보기는 아직 개발중입니다 🥲")
+            }}
+          />
           <Image source={images.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
         </Pressable>
       </Row>
 
-      <PastBooking style={{ marginTop: HEIGHT * 13 }} />
+      <PastBooking style={{ marginTop: HEIGHT * 13, marginBottom: 30 }} />
 
       {/* <TimeSelector bottomSheetRef={bottomSheetRef} /> */}
     </ScreenRootView>
