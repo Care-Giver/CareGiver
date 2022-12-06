@@ -34,7 +34,7 @@ export const PastBooking = (props) => {
       <ImageBackground
         source={{
           uri:
-            "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZPwI-F84eCmi0XR3NntwW6I0YGXaxMUovF1HKNGd_RWilt123bIe83Fn8K52s25DABjA&usqp=CAU",
         }}
         style={styles.profileImg}
       >

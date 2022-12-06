@@ -44,6 +44,7 @@ import {
   PreReg24,
   PreReg18,
 } from "#components"
+import { CustomIcon } from "app/components/CustomIcon"
 import { images } from "#images"
 import {
   DEVICE_SCREEN_WIDTH,
@@ -56,7 +57,6 @@ import {
   WIDTH,
 } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -377,10 +377,10 @@ const TabStacks = () => {
           tabBarLabel: "홈",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="cards-heart"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            <CustomIcon
+              icon={focused ? "favorite_navy" : "favorite_grey"}
+              size={28}
+              style={{ marginBottom: isWeb ? 10 : 0 }}
             />
           ),
         }}
@@ -396,10 +396,10 @@ const TabStacks = () => {
           tabBarLabel: "예약내역",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="calendar-multiselect"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            <CustomIcon
+              icon={focused ? "schedule_navy" : "schedule_grey"}
+              size={28}
+              style={{ marginBottom: isWeb ? 10 : 0 }}
             />
           ),
         }}
@@ -412,10 +412,10 @@ const TabStacks = () => {
           tabBarLabel: "검색",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="card-search-outline"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            <CustomIcon
+              icon={focused ? "search_navy" : "search_grey"}
+              size={28}
+              style={{ marginBottom: isWeb ? 10 : 0 }}
             />
           ),
           headerShown: true,
@@ -433,10 +433,10 @@ const TabStacks = () => {
           tabBarLabel: "채팅",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="message"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            <CustomIcon
+              icon={focused ? "chatting_navy" : "chatting_grey"}
+              size={28}
+              style={{ marginBottom: isWeb ? 10 : 0 }}
             />
           ),
         }}
@@ -448,10 +448,10 @@ const TabStacks = () => {
           tabBarLabel: "내정보",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            <CustomIcon
+              icon={focused ? "myinfo_navy" : "myinfo_grey"}
+              size={28}
+              style={{ marginBottom: isWeb ? 10 : 0 }}
             />
           ),
 

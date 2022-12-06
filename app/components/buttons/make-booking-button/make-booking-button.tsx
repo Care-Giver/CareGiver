@@ -1,4 +1,5 @@
 import * as React from "react"
+import { View } from "react-native"
 import { PreBol16, PreReg10, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 import { styles } from "./styles"
@@ -22,10 +23,10 @@ export const MakeBookingButton = (props) => {
       />
       <PreReg14 text={" / 시간"} color={"white"} /> */}
 
-      <>
-        <PreReg14 text={"가격은 펫시터가 마음대로 설정할 수 있어요!"} color={"white"} />
-        <PreReg10 text={"(예시: 10,000원 / 시간)"} color={"white"} />
-      </>
+      <View>
+        <PreReg14 text={"(예시) 10,000원 / 시간"} color={"white"} />
+        <PreReg10 text={"가격은 펫시터가 마음대로 설정할 수 있어요!"} color={"white"} />
+      </View>
       <PreBol16 text={"예약 신청하기"} color={"white"} style={{ marginLeft: "auto" }} />
     </PressableButton>
   )

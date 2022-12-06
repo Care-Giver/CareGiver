@@ -61,7 +61,7 @@ export const AllBookingsScreen: FC<
       reviews: 12,
       introduce: "안녕하세요! 방문 펫시팅을 주로 하고 있는 오예성 펫시터 입니다!",
       profileImg:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLE12J5yqz_9IDzhh7J3Efh2t7x_1eKBpz5A&usqp=CAU",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSxN-8yMIzwpWwzMCssCmqJNMT8aEr-Ex5Zw&usqp=CAU",
       serviceType: "visit",
       caregiverType: "petsitter",
       startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
@@ -74,7 +74,7 @@ export const AllBookingsScreen: FC<
       reviews: 2,
       introduce: "반갑습니다! 배변훈련을 주로 맡고 있습니다 🙂",
       profileImg:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8DSugC2cBHLBU6m92loBTs2sXpxPectTysg&usqp=CAU",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSijzyN-JVRvoCrV-MiGmZgZxbpz-t8qOLgvg&usqp=CAU",
       serviceType: "creche",
       caregiverType: "trainer",
       startDate: "2022-12-03T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
@@ -87,7 +87,7 @@ export const AllBookingsScreen: FC<
       reviews: 19,
       introduce: "필요하신 시간, 날짜 아무때나 펫시팅 가능합니다 ☺️",
       profileImg:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV0nEtscWXxj9CrZY48XcAZas4EhDXWFaLJg&usqp=CAU",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBMS7_Dt01wzfhxb9c53vi1dvgMCk3nBi_6g&usqp=CAU",
       serviceType: "creche",
       caregiverType: "petsitter",
       startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함

@@ -15,8 +15,13 @@ import {
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import { HEIGHT, WIDTH, BODY, SUB_HEAD_LINE } from "#theme"
-import { petsittersDummy, trainersDummy } from "./dummy-data"
+// import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { images } from "#images"
+
+import { petsitters } from "../../../../dummy-data"
+
+const petsittersDummy = petsitters.slice(0, 5)
+const trainersDummy = petsitters.slice(5)
 
 const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""

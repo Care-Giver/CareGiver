@@ -19,7 +19,7 @@ import {
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
-import { petsitters as _petsitters } from "./dummy-data"
+import { petsitters as petsittersDummy } from "../../../../dummy-data"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
@@ -29,7 +29,7 @@ export const SearchResultScreen: FC<
   const [petsitters, setPetsitters] = useState([])
 
   useLayoutEffect(() => {
-    setPetsitters(_petsitters)
+    setPetsitters(petsittersDummy)
   }, [])
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
@@ -49,7 +49,7 @@ export const SearchResultScreen: FC<
     switch (optionValue) {
       //? 최근 등록순
       case optionLabels.recent:
-        _petsitters.sort((a, b) => {
+        petsittersDummy.sort((a, b) => {
           //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
           return Date.parse(b.createdAt) - Date.parse(a.createdAt)
         })
@@ -57,7 +57,7 @@ export const SearchResultScreen: FC<
 
       //? 별점 높은 순
       case optionLabels.ratings:
-        _petsitters.sort((a, b) => {
+        petsittersDummy.sort((a, b) => {
           //? 내림차순 정렬 -> 높은 별점을 상위 노출
           return Number(b.rating * 10) - Number(a.rating * 10)
         })
@@ -65,7 +65,7 @@ export const SearchResultScreen: FC<
 
       //? 리뷰 많은 순
       case optionLabels.reviews:
-        _petsitters.sort((a, b) => {
+        petsittersDummy.sort((a, b) => {
           //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
           return b.review - a.review
         })
@@ -73,7 +73,7 @@ export const SearchResultScreen: FC<
     }
 
     setIsOpen(false)
-    setPetsitters(_petsitters)
+    setPetsitters(petsittersDummy)
     setCurrentOption(optionValue)
   }, [])
 

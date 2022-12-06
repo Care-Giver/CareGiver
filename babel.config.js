@@ -19,6 +19,7 @@ module.exports = {
 
           //* 예외들
           //! storybook 은 절대로 절대경로 설정하지 말것!
+          app: "./app",
         },
       },
     ],
