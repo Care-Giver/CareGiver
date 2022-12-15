@@ -10,6 +10,13 @@ export const styles = StyleSheet.create({
 
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+
+    paddingRight: 0,
+  },
+
+  x_container: {
+    paddingHorizontal: WIDTH * 16,
   },
 
   x_img: {
