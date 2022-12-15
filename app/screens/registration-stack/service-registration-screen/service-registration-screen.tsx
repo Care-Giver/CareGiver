@@ -1,21 +1,19 @@
-import { FlatList, TextStyle, View } from "react-native"
-import React, { useCallback, useEffect, useLayoutEffect } from "react"
-import { FC } from "react"
+import { FlatList, TextStyle, View, StyleProp } from "react-native"
+import React, { useCallback, useEffect, useLayoutEffect, FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators/app-navigator"
+import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { RegistrationButton } from "#components/"
-import { PreReg14 } from "#components/"
-import { ScreenRootView } from "#components/"
-import { PressableButton } from "#components/"
-import { PreBol16 } from "#components/"
+import {
+  RegistrationButton,
+  PreReg14,
+  ScreenRootView,
+  PressableButton,
+  PreBol16,
+} from "#components"
 import { styles } from "./styles"
-import { useState } from "react"
-import { StyleProp } from "react-native"
-import { color } from "#theme/color"
+import { color, HEIGHT } from "#theme"
 // * 화면에 띄울 서비스 배열
 import { services } from "./service-data"
-import { HEIGHT } from "#theme/device-size-constant"
 
 // - 버튼의 가로 간격
 const WIDTH_INTERVAL = 16

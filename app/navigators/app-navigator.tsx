@@ -114,8 +114,7 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="service-registration-screen"
+      // initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
     >
       {/* //* 홈 */}

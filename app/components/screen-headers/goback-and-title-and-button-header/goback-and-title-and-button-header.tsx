@@ -1,12 +1,10 @@
 import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { HEADER_ROOT } from "../common-styles"
-import { Row } from "#components/basics/row/row"
-import { PreMed16, PreMed18 } from "#components/basics/custom-texts/custom-texts"
-import { WIDTH } from "#theme/device-size-constant"
-import IMAGES from "#images"
+import { Row, PreMed16, PreMed18 } from "#components"
+import { WIDTH, DISABLED } from "#theme"
+import { images } from "#images"
 import { styles } from "./styles"
-import { DISABLED } from "#theme/palette"
 
 export const GobackAndTitleAndButtonHeader = (props) => {
   const title = props.options.title ? props.options.title : props.route.name
@@ -25,7 +23,7 @@ export const GobackAndTitleAndButtonHeader = (props) => {
             props.navigation.goBack()
           }}
         >
-          <Image style={styles.goBackButton} source={IMAGES.go_back} />
+          <Image style={styles.goBackButton} source={images.go_back} />
         </Pressable>
 
         {/* //? 타이틀 */}
