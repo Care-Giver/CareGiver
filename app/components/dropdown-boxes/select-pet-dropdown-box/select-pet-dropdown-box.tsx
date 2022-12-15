@@ -2,8 +2,8 @@ import { View, Image, FlatList } from "react-native"
 import React from "react"
 import { PreMed14, PreReg16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
-import IMAGES from "#images"
-import { BODY, HEAD_LINE, LBG } from "#theme/palette"
+import { images } from "#images"
+import { BODY, HEAD_LINE, LBG } from "#theme"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
@@ -22,8 +22,8 @@ export const SelectPetDropdownBox = (props) => {
   return (
     <View style={style}>
       <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>
-        <PreReg16 text={"반려동물 선택"} color={HEAD_LINE} />
-        <Image source={!isOpen ? IMAGES.arrow_down : IMAGES.arrow_up} style={styles.image} />
+        <PreReg16 text={"맡기실 반려동물을 선택해주세요"} color={HEAD_LINE} />
+        <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
       </RowRoundedBox>
 
       {isOpen && (

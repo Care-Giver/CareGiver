@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
+import { WIDTH, HEIGHT } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {

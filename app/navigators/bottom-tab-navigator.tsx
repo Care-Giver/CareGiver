@@ -9,10 +9,10 @@ import {
   AllReviewsScreen,
 } from "../screens"
 import { PreMed12 } from "../components"
-import IMAGES from "#images"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { images } from "#images"
+import { HEIGHT, WIDTH } from "#theme"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { GIVER_CASUAL_NAVY } from "#theme/palette"
+import { GIVER_CASUAL_NAVY } from "#theme"
 
 //TODO: BottomTabNavigatorProps 작성
 type BottomTabNavigatorProps = {}
@@ -43,7 +43,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={focused ? IMAGES.favorite_navy : IMAGES.favorite_grey}
+              source={focused ? images.favorite_navy : images.favorite_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -70,7 +70,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={focused ? IMAGES.schedule_navy : IMAGES.schedule_grey}
+              source={focused ? images.schedule_navy : images.schedule_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -97,7 +97,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={focused ? IMAGES.search_navy : IMAGES.search_grey}
+              source={focused ? images.search_navy : images.search_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -123,7 +123,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={focused ? IMAGES.chatting_navy : IMAGES.chatting_grey}
+              source={focused ? images.chatting_navy : images.chatting_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,
@@ -149,7 +149,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={focused ? IMAGES.myinfo_navy : IMAGES.myinfo_grey}
+              source={focused ? images.myinfo_navy : images.myinfo_grey}
               style={{
                 width: WIDTH * 28,
                 height: HEIGHT * 28,

@@ -14,7 +14,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
+import { HEIGHT, WIDTH, GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
 import { bookingsDummy } from "./dummy-data"
 import {
   FlatList,
@@ -26,23 +26,25 @@ import {
   Text,
   Image,
 } from "react-native"
-import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme/palette"
 import { BookingStoreModel } from "../../../models"
 // import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { styles } from "./styles"
-import IMAGES from "#images"
+import { images } from "#images"
+
+// * 예약 정보를 읽어올 유저 id
+const USER_ID = 7
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
-> = observer(({ navigation, route }) => {
+> = observer(() => {
   const windowWidth = useWindowDimensions().width
 
   // ? dotsIndicator의 현재 인덱스를 나타내는 state
   const [activeIndex, setActiveIndex] = useState(0)
   // ? flatlist에서 viewable item이 바뀌면 할 일 -> activeIndex 변경
   const onViewableChange = useCallback(({ viewableItems }) => {
-    console.log("== viewable items ==")
-    console.log(viewableItems)
+    // console.log("== viewable items ==")
+    // console.log(viewableItems)
     if (viewableItems.length > 0) {
       setActiveIndex(viewableItems[0].index || 0)
     }
@@ -51,18 +53,58 @@ export const AllBookingsScreen: FC<
   const bookingStore = BookingStoreModel.create({
     bookings: [],
   })
-  const [bookings, setBookings] = useState([])
+  const [bookings, setBookings] = useState([
+    {
+      id: 1,
+      name: "오예성",
+      ratings: 4.7,
+      reviews: 12,
+      introduce: "안녕하세요! 방문 펫시팅을 주로 하고 있는 오예성 펫시터 입니다!",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLE12J5yqz_9IDzhh7J3Efh2t7x_1eKBpz5A&usqp=CAU",
+      serviceType: "visit",
+      caregiverType: "petsitter",
+      startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
+      endDate: "2022-12-02T13:00:00",
+    },
+    {
+      id: 2,
+      name: "유태서",
+      ratings: 3.9,
+      reviews: 2,
+      introduce: "반갑습니다! 배변훈련을 주로 맡고 있습니다 🙂",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8DSugC2cBHLBU6m92loBTs2sXpxPectTysg&usqp=CAU",
+      serviceType: "creche",
+      caregiverType: "trainer",
+      startDate: "2022-12-03T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
+      endDate: "2022-12-04T13:00:00",
+    },
+    {
+      id: 3,
+      name: "이기원",
+      ratings: 4.9,
+      reviews: 19,
+      introduce: "필요하신 시간, 날짜 아무때나 펫시팅 가능합니다 ☺️",
+      profileImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV0nEtscWXxj9CrZY48XcAZas4EhDXWFaLJg&usqp=CAU",
+      serviceType: "creche",
+      caregiverType: "petsitter",
+      startDate: "2022-12-01T09:00:00", //! TODO: Datetime 인데 Date 라고 선언됨. 수정해야함
+      endDate: "2022-12-19T13:00:00",
+    },
+  ])
 
-  useLayoutEffect(() => {
-    // ? 현재 유저의 예약 정보를 bookingStore의 bookings에 저장하기
-    async function fetchData() {
-      await bookingStore.setBookings(7)
-      setBookings(bookingStore.bookings)
-    }
-    fetchData()
-    // console.log("=== bookings ===")
-    // console.log(bookings)
-  }, [])
+  // useLayoutEffect(() => {
+  //   // ? 현재 유저의 예약 정보를 bookingStore의 bookings에 저장하기
+  //   async function fetchData() {
+  //     await bookingStore.setBookings(USER_ID)
+  //     setBookings(bookingStore.bookings)
+  //   }
+  //   fetchData()
+  //   // console.log("=== bookings ===")
+  //   // console.log(bookings)
+  // }, [])
 
   //   const handlePress = (id: number) => {
   //     // TODO: BookingCaregiverStore(가제)에서 caregiverData(케어기버 정보) 반환해서 넘기기
@@ -73,14 +115,14 @@ export const AllBookingsScreen: FC<
 
   return (
     <ScreenRootView preset={"scroll"}>
-      <Pressable
+      {/* <Pressable
         onPress={() => {
           // bottomSheetRef.current.expand()
         }}
         style={{ backgroundColor: "lime" }}
       >
         <Text>바텀시트 열기</Text>
-      </Pressable>
+      </Pressable> */}
 
       {/* // * 진행중인 예약 */}
       <PreBol16
@@ -88,17 +130,12 @@ export const AllBookingsScreen: FC<
         color={GIVER_CASUAL_NAVY}
         style={{ marginTop: HEIGHT * 20 }}
       />
+
       {/* // * 진행중인 예약 리스트 */}
       <FlatList
         style={{ marginTop: HEIGHT * 10 }}
         data={bookings}
-        renderItem={(currentItem) => (
-          <InProgressBooking
-            reserveData={{
-              ...currentItem.item,
-            }}
-          />
-        )}
+        renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
         horizontal
         showsHorizontalScrollIndicator={false}
         snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
@@ -108,6 +145,7 @@ export const AllBookingsScreen: FC<
         onViewableItemsChanged={onViewableChange}
         decelerationRate={"fast"}
       />
+
       <Row style={[styles.dotsContainer, { marginTop: HEIGHT * 14 }]}>
         {bookings.map((item, index) => (
           <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
@@ -119,7 +157,7 @@ export const AllBookingsScreen: FC<
         <PreReg16 text="지난 예약" color={DISABLED} />
         <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
           <PreMed16 text="더보기" color={BODY} />
-          <Image source={IMAGES.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
+          <Image source={images.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
         </Pressable>
       </Row>
 

@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 
 export const styles = StyleSheet.create({
   background: {
     width: WIDTH * 358,
     height: HEIGHT * 229,
+    // backgroundColor: "yellow",
 
     paddingHorizontal: WIDTH * 16,
     paddingTop: HEIGHT * 16,

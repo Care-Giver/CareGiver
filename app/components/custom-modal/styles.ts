@@ -1,6 +1,4 @@
-import { color } from "#theme/color"
-import { HEIGHT, WIDTH } from "#theme/device-size-constant"
-import { GIVER_CASUAL_NAVY } from "#theme/palette"
+import { color, GIVER_CASUAL_NAVY, HEIGHT, WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({

@@ -1,7 +1,7 @@
 import React from "react"
 import { Image, Pressable, ViewStyle, TextStyle } from "react-native"
-import { PopReg16, PreReg16 } from "#texts"
-import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
+import { PopReg16, PreReg16 } from "../../basics/custom-texts/custom-texts" //! 건드리지 말것! (cycle warning 메시지)
+import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box" //! 건드리지 말것! (cycle warning 메시지)
 
 interface RowRoundedButtonProps {
   image?: undefined

@@ -3,9 +3,9 @@ import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme/palette"
-import IMAGES from "#images"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
+import { images } from "#images"
+import { HEIGHT, WIDTH } from "#theme"
 
 export const SitterProfileCard = (props: SitterProfileCardProps) => {
   const { style, image, name, rating, review, title, desc, onPress } = props
@@ -24,7 +24,7 @@ export const SitterProfileCard = (props: SitterProfileCardProps) => {
           {/* rating, reviews */}
           <View style={styles.reviewContainer}>
             {/* rating */}
-            <Image style={styles.star} source={IMAGES.rating_star} />
+            <Image style={styles.star} source={images.rating_star} />
             {/* reviews */}
             <PreReg12
               text={"(" + rating + ")"}
@@ -48,7 +48,7 @@ export const SitterProfileCard = (props: SitterProfileCardProps) => {
           />
         </View>
         {/* like button */}
-        <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+        <Image style={styles.likeBtn} source={images.empty_heart} />
       </View>
     </Pressable>
   )

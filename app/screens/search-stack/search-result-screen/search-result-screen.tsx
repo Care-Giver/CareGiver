@@ -1,5 +1,5 @@
 import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
-import { View, Animated } from "react-native"
+import { View, Animated, ScrollView, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -11,9 +11,8 @@ import {
   SitterProfileCard,
   SelectOptionDropdownBox,
 } from "#components"
-import { HEIGHT, WIDTH, palette } from "#theme/index"
-import { LBG } from "#theme/palette"
-import IMAGES from "#images"
+import { HEIGHT, WIDTH, palette, LBG, isWeb, STANDARD_HEIGHT } from "#theme"
+import { images } from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,
@@ -94,15 +93,22 @@ export const SearchResultScreen: FC<
   })
 
   useLayoutEffect(() => {
+    //? case1. 바텀탭으로 넘어오는경우
     if (!route.params) {
-      console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      if (!route.params.serviceType)
-        console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
+      // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+      var _service = "펫시팅"
+      var _serviceType = "위탁"
+
+      // if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
+      // if (!route.params.serviceType)
+      //   console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
     }
-    //? service 할당
-    let _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
-    let _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    //? case2. 서치스크린 이후 넘어오는 경우
+    else {
+      //? service 할당
+      var _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
+      var _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    }
 
     //? Header, 이름 설정
     navigation.setOptions({
@@ -112,7 +118,7 @@ export const SearchResultScreen: FC<
 
   return (
     // <ScreenRootView statusBar="dark-content">
-    <ScreenRootView>
+    <ScreenRootView preset="scroll">
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -159,7 +165,7 @@ export const SearchResultScreen: FC<
               setIsOpen(!isOpen)
             }}
             isOpen={isOpen}
-            logoSrc={IMAGES.list_bars}
+            logoSrc={images.list_bars}
             logoStyle={{
               width: WIDTH * 16,
               height: HEIGHT * 16,
@@ -229,8 +235,7 @@ export const SearchResultScreen: FC<
             showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,
-              // height: 500,
-              height: "auto",
+              height: isWeb ? STANDARD_HEIGHT - 100 : "auto",
               marginBottom: HEIGHT * 34,
             }}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)

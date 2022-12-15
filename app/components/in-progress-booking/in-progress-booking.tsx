@@ -1,12 +1,12 @@
 import { ImageBackground, Pressable, View } from "react-native"
 import React, { useLayoutEffect, useState } from "react"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 import { InProgressBookingProfile } from "./in-progress-booking-profile/in-progress-booking-profile"
 import { DivisionLine } from "../division-line/division-line"
-import { LBG } from "#theme/palette"
+import { LBG } from "#theme"
 import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { styles } from "./styles"
-import IMAGES from "#images"
+import { images } from "#images"
 import { InProgressBookingProps } from "./in-progress-booking.props"
 
 export const InProgressBooking = (props: InProgressBookingProps) => {
@@ -52,20 +52,22 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
     })
   }, [])
 
-  const handlePress = () => {}
+  const handlePress = () => {
+    alert("아직 개발중인 기능입니다 😉")
+  }
 
   return (
     // <Pressable style={styles.root}>
     //   </Pressable>
-    <Pressable style={style} onPress={handlePress}>
+    <Pressable style={[{ width: "100%" }, style]} onPress={handlePress}>
       <ImageBackground
-        source={IMAGES.in_progress_booking_background}
-        resizeMode="stretch"
+        source={images.in_progress_booking_background}
+        // resizeMode="stretch"
         style={styles.background}
       >
         <InProgressBookingProfile
           // userData={serviceType === "방문" ? reserveData.petsitter : reserveData.crecheId}
-          caregiverData={caregiverData}
+          caregiverData={reserveData}
         />
 
         <ReserveDateBox

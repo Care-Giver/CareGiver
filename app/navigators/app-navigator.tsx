@@ -13,6 +13,7 @@ import {
   useNavigation,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
   WritingCommentScreen,
   HomeScreen,
@@ -40,12 +41,24 @@ import {
   AllCommentsScreenHeader,
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
+  ScreenRootView,
+  PreReg32,
+  PreReg24,
+  PreReg18,
 } from "#components"
-import { HEADER_ROOT } from "#components/screen-headers/common-styles"
-import IMAGES from "#images"
-import { HEIGHT, STANDARD_WIDTH, WIDTH } from "#theme"
+import { images } from "#images"
+import {
+  DEVICE_SCREEN_WIDTH,
+  DEVICE_WINDOW_WIDTH,
+  GIVER_CASUAL_NAVY,
+  GIVER_ROMANTIC_GRAY,
+  HEIGHT,
+  isWeb,
+  STANDARD_WIDTH,
+  WIDTH,
+} from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -89,16 +102,13 @@ export type NavigatorParamList = {
   "test-map-screen": undefined
 }
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
-const AppStack = () => {
-  const navigation = useNavigation()
+const Tab = createBottomTabNavigator()
 
+const AllStacks = () => {
+  const navigation = useNavigation()
   return (
-    //! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android
-    //? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
-    // <GestureHandlerRootView style={{ flex: 1 }}>
     <Stack.Navigator
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
@@ -106,6 +116,7 @@ const AppStack = () => {
       }}
       // initialRouteName="home-screen"
       initialRouteName="service-registration-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -113,19 +124,6 @@ const AppStack = () => {
         component={HomeScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
-          // headerBackground: () => (
-          //   <View
-          //     style={{
-          //       alignSelf: "center",
-          //       flex: 1,
-          //       height: "100%",
-          //       width: STANDARD_WIDTH,
-          //       backgroundColor: "red",
-          //       flexDirection: "row",
-          //       alignItems: "center",
-          //     }}
-          //   />
-          // ),
         }}
       />
 
@@ -160,7 +158,7 @@ const AppStack = () => {
                 navigation.goBack()
               }}
             >
-              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={IMAGES.go_back} />
+              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={images.go_back} />
             </Pressable>
           ),
           // title: null,
@@ -297,7 +295,148 @@ const AppStack = () => {
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
     </Stack.Navigator>
-    // {/* </GestureHandlerRootView> */}
+  )
+}
+
+const TabStacks = () => {
+  const FavoritesStack = () => {
+    return null
+  }
+  const ChatsStack = () => {
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: "auto",
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
+  }
+
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: [
+          {
+            width: STANDARD_WIDTH,
+            alignSelf: "center",
+            backgroundColor: "white",
+          },
+          isWeb && { paddingTop: 8, paddingBottom: 8 },
+        ],
+        headerStyle: [
+          {
+            backgroundColor: "white",
+          },
+          isWeb && { width: STANDARD_WIDTH },
+        ],
+        headerTitleStyle: isWeb && {
+          color: "black",
+          marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Favorites"
+        component={AllStacks}
+        options={{
+          tabBarLabel: "홈",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="cards-heart"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bookings"
+        component={AllBookingsScreen}
+        options={{
+          tabBarLabel: "예약내역",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="calendar-multiselect"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          headerTitle: "예약내역",
+        }}
+      />
+      <Tab.Screen
+        name="Searching"
+        component={SearchResultScreen}
+        options={{
+          tabBarLabel: "검색",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="card-search-outline"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          // headerTitle: "",
+        }}
+      />
+      <Tab.Screen
+        name="Chats"
+        component={ChatsStack}
+        options={{
+          tabBarLabel: "채팅",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="message"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          headerTitle: "채팅(개발중)",
+        }}
+      />
+      <Tab.Screen
+        name="Mypage"
+        component={MypageScreen}
+        options={{
+          tabBarLabel: "내정보",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          header: (props) => <HomeScreenHeader {...props} />,
+          headerShown: true,
+          headerTitle: "",
+        }}
+      />
+    </Tab.Navigator>
+  )
+}
+
+const AppStack = () => {
+  return (
+    // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android
+    // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
+    //?  <GestureHandlerRootView style={{ flex: 1 }}>
+    <>
+      <TabStacks />
+    </>
   )
 }
 

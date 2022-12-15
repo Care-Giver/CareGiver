@@ -2,10 +2,10 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme/palette"
-import IMAGES from "#images"
+import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme"
+import { images } from "#images"
 import { DivisionLine } from "../division-line/division-line"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEIGHT, WIDTH } from "#theme"
 import { Row } from "../basics/row/row"
 
 export const SelectedPetCard = (props) => {
@@ -23,7 +23,7 @@ export const SelectedPetCard = (props) => {
     <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <Row>
-        <Image style={styles.image} source={IMAGES.default_pet_image_60} />
+        <Image style={styles.image} source={images.default_pet_image_60} />
         <View style={styles.infoContainer}>
           {/*//? 펫 이름 */}
           <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />
@@ -47,7 +47,7 @@ export const SelectedPetCard = (props) => {
         {/*//? 삭제 버튼 */}
         {deletable && (
           <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
-            <Image style={styles.deleteButton} source={IMAGES.x_grey} />
+            <Image style={styles.deleteButton} source={images.x_grey} />
           </Pressable>
         )}
       </Row>

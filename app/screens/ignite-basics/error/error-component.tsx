@@ -1,6 +1,6 @@
 import React, { ErrorInfo } from "react"
 import { TextStyle, View, ViewStyle, ScrollView, ImageStyle } from "react-native"
-import { color } from "#theme/index"
+import { color } from "#theme"
 import { Button, Icon, Text } from "#components"
 
 const CONTAINER: ViewStyle = {

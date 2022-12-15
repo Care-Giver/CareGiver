@@ -3,12 +3,14 @@ import { Dimensions, Platform } from "react-native"
 export const isWeb = Platform.OS === "web"
 
 export const STANDARD_WIDTH = 390
-const STANDARD_HEIGHT = 763
+export const STANDARD_HEIGHT = 763
 
 //* 디바이스 스크린 사이즈 값
 //! 이상수에는 그대로 WIDTH, HEIGHT 상수 곱해주면 안 된다!
 export const DEVICE_SCREEN_WIDTH = Dimensions.get("screen").width
 export const DEVICE_SCREEN_HEIGHT = Dimensions.get("screen").height
+
+export const DEVICE_WINDOW_WIDTH = Dimensions.get("window").width
 
 const getWIDTH = () => {
   if (isWeb) {

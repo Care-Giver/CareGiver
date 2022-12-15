@@ -6,7 +6,7 @@ import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
 
-const FULL: ViewStyle = isWeb
+export const FULL: ViewStyle = isWeb
   ? {
       alignSelf: "center",
       flex: 1,
@@ -16,7 +16,7 @@ const FULL: ViewStyle = isWeb
     }
   : { flex: 1 }
 
-const FULL_WITH_SCROLLING: ViewStyle = isWeb
+export const FULL_WITH_SCROLLING: ViewStyle = isWeb
   ? {
       alignSelf: "center",
       flex: 1,
@@ -26,7 +26,7 @@ const FULL_WITH_SCROLLING: ViewStyle = isWeb
     }
   : { width: "100%", height: "auto" }
 
-const BASIC_BACKGROUND_PADDING: FlexStyle = {
+export const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 
@@ -36,8 +36,8 @@ export const ScreenRootView = (props) => {
       preset={props.preset}
       style={
         isNonScrolling(props.preset)
-          ? [FULL, BASIC_BACKGROUND_PADDING]
-          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING]
+          ? [FULL, BASIC_BACKGROUND_PADDING, props.style]
+          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING, props.style]
       }
       //! custom-header 를 header prop 에 적용시킬때, iOS statusbar 가 흰색에 뭍혀 버린다. 이를 보완하기 위해 추가함
       statusBar={Platform.select({

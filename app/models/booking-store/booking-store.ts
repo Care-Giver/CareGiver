@@ -1,5 +1,4 @@
-import { Api } from "#api/api"
-import { FormattedPetsitterReserve } from "#api/api.types"
+import { Api, FormattedPetsitterReserve } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { BookingModel } from "../booking/booking"
 

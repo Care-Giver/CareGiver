@@ -3,7 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
-import { WIDTH, palette, HEIGHT } from "#theme/index"
+import { WIDTH, palette, HEIGHT } from "#theme"
 import RatingReviewBox from "../../rating-review-box/rating-review-box"
 import { InProgressBookingProfileProps } from "./in-progress-booking-profile.props"
 import { CaregiverTypeButton } from "#components"
@@ -18,7 +18,9 @@ export const InProgressBookingProfile = ({
       {/* //* 프로필 사진 */}
       <Image
         // source={require(caregiverData.profileImg)}
-        source={require("")}
+        source={{
+          uri: caregiverData.profileImg,
+        }}
         style={styles.profileImg}
       />
 
