@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   submitBtn: {
+    // position: "absolute",
+    // bottom: 0,
     marginTop: "auto",
 
     alignItems: "center",
