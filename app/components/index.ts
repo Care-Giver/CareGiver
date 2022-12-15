@@ -18,6 +18,7 @@ export * from "./buttons/service-choice-button/service-choice-button"
 export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/radio-buttons/border-radio-button/border-radio-button"
 export * from "./mypage-button/mypage-button"
+export * from "./buttons/registration-button/registration-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"
@@ -28,6 +29,7 @@ export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
 export * from "./screen-headers/home-screen-header/home-screen-header"
 export * from "./screen-headers/writing-comment-screen-header/writing-comment-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
+export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 
 //* others
 export * from "./division-line/division-line"
