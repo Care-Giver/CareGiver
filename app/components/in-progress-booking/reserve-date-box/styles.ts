@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme"
 
 export const styles = StyleSheet.create({
   dateBox: {
@@ -7,9 +6,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   arrow: {
-    width: WIDTH * 16,
-    height: HEIGHT * 16,
+    width: 16,
+    height: 16,
 
-    marginHorizontal: WIDTH * 36,
+    marginHorizontal: 36,
   },
 })

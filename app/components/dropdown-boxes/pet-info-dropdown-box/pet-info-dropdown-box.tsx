@@ -9,7 +9,6 @@ import { images } from "#images"
 import { PetInfoDropdownBoxProps } from "./pet-info-dropdown-box.props"
 import { DivisionLine } from "../../division-line/division-line"
 import { LBG } from "#theme"
-import { WIDTH } from "#theme"
 
 export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
   const { isOpen, onPress, pets, style } = props
@@ -30,7 +29,7 @@ export const PetInfoDropdownBox = (props: PetInfoDropdownBoxProps) => {
               <PetProfileCard
                 key={index}
                 petData={item}
-                style={{ paddingHorizontal: WIDTH * 10, borderRadius: 8 }}
+                style={{ paddingHorizontal: 10, borderRadius: 8 }}
               />
               {/* //? 마지막 요소 아닐 때, 뒤에 구분선 배치 */}
               {index < pets.length - 1 && <DivisionLine color={LBG} />}

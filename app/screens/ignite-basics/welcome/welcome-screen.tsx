@@ -52,7 +52,7 @@ import { NavigatorParamList } from "#navigators"
 
 //- 3. 무조건 styles.ts 따로 만든다!!!!!!!!!!!
 
-//- 4. width 와 heihgt 는 무조건 WIDTH * 값, HEIGTH * 값 으로 사용해야한다. (값: xd 값))
+//- 4. width 와 heihgt 는 무조건 값, HEIGTH * 값 으로 사용해야한다. (값: xd 값))
 //~   WIDTH, HEIGTH 는 상수이며, import 해서 쓸꺼임.
 //~  웬만하면 이짓거리 안하게, component 화 하겠으나,
 //~   혼자 작업할때 필요하다면, styles 작성시 위에처럼 곱해서 사용할것!
@@ -161,7 +161,7 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             <View
               style={[
                 {
-                  width: 100 * WIDTH,
+                  width: 100 ,
                   height: 100,
                   backgroundColor: "yellow",
                 },

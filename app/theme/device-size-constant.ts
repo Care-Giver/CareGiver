@@ -47,12 +47,12 @@ export const WIDTH = getWIDTH()
 export const HEIGHT = getHEIGHT()
 
 // * header 높이
-export const HEADER_HEIGHT = HEIGHT * 56
+export const HEADER_HEIGHT = 56
 
 // * iOS (12/13 pro기준) 노치, 하단 높이
-export const IOS_NOTCH_STATUS_BAR_HEIGHT = HEIGHT * 47
-export const IOS_BOTTOM_HOME_BAR_HEIGHT = HEIGHT * 34
+export const IOS_NOTCH_STATUS_BAR_HEIGHT = 47
+export const IOS_BOTTOM_HOME_BAR_HEIGHT = 34
 
 // * 안드로이드 상단 status bar, 하단 네비게이션 높이
-export const ADNROID_STATUS_BAR_HEIGHT = HEIGHT * 21.25
-export const ADNROID_BOTTOM_NAVIGATION_HEIGHT = HEIGHT * 26.75
+export const ADNROID_STATUS_BAR_HEIGHT = 21.25
+export const ADNROID_BOTTOM_NAVIGATION_HEIGHT = 26.75

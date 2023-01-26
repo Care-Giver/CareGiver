@@ -1,13 +1,13 @@
 import React from "react"
 import { ViewStyle, View } from "react-native"
-import { color, WIDTH, HEIGHT, palette } from "#theme"
+import { color, palette } from "#theme"
 import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol12 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 
 const ROOT: ViewStyle = {
-  width: WIDTH * 72,
-  height: HEIGHT * 21,
+  width: 72,
+  height: 21,
   borderRadius: 4,
   backgroundColor: "#F1F1F4",
   // backgroundColor: "red",
@@ -15,8 +15,8 @@ const ROOT: ViewStyle = {
 }
 
 const DEFAULT_VIEW_STYLE: ViewStyle = {
-  width: WIDTH * 36,
-  height: HEIGHT * 21,
+  width: 36,
+  height: 21,
   borderRadius: 4,
   backgroundColor: "#F1F1F4",
   justifyContent: "center",
@@ -24,8 +24,8 @@ const DEFAULT_VIEW_STYLE: ViewStyle = {
 }
 
 const PRESSED_VIEW_STYLE: ViewStyle = {
-  width: WIDTH * 36,
-  height: HEIGHT * 21,
+  width: 36,
+  height: 21,
   borderRadius: 4,
   backgroundColor: GIVER_CASUAL_NAVY,
   justifyContent: "center",

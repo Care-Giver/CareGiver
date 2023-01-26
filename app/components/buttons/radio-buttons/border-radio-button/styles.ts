@@ -1,4 +1,3 @@
-import { HEIGHT } from "#theme"
 import { GIVER_CASUAL_NAVY } from "#theme"
 import { StyleSheet } from "react-native"
 
@@ -7,7 +6,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    paddingVertical: HEIGHT * 14,
+    paddingVertical: 14,
 
     borderWidth: 1,
     borderRadius: 8,

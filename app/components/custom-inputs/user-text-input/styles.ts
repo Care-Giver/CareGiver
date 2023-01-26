@@ -1,13 +1,12 @@
-import { HEIGHT, WIDTH } from "#theme"
 import { LBG } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
-    height: HEIGHT * 78,
+    height: 78,
 
-    paddingVertical: HEIGHT * 14,
-    paddingHorizontal: WIDTH * 18,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
 
     backgroundColor: LBG,
 

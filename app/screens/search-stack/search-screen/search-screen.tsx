@@ -17,9 +17,7 @@ import {
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
-  HEIGHT,
   IOS_BOTTOM_HOME_BAR_HEIGHT,
-  WIDTH,
   DISABLED,
   HEAD_LINE,
   LBG,
@@ -179,7 +177,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
-        <Row style={{ marginTop: HEIGHT * 12 }}>
+        <Row style={{ marginTop: 12 }}>
           <ServiceTypeIndicatorHeader
             onPress={() => {
               setServiceType("방문")
@@ -191,12 +189,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             onPress={() => {
               setServiceType("위탁")
             }}
-            style={{ marginLeft: WIDTH * 10 }}
+            style={{ marginLeft: 10 }}
             label={"위탁"}
             state={serviceType}
           />
         </Row>
-        <Row style={{ marginTop: HEIGHT * 16 }}>
+        <Row style={{ marginTop: 16 }}>
           <Image source={images.right_arrow_grey} style={styles.image} />
           <PreReg14
             text={
@@ -223,7 +221,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                 : "날짜를 선택해주세요"
             }
             textColor={HEAD_LINE}
-            style={{ marginTop: HEIGHT * 36 }}
+            style={{ marginTop: 36 }}
           />
         ) : (
           //? 캘린더 표출
@@ -234,7 +232,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
             }}
             style={{
-              marginTop: HEIGHT * 36,
+              marginTop: 36,
               backgroundColor: "#F0F0F6",
               padding: 4,
               borderRadius: 8,
@@ -252,13 +250,13 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
         {/* //* 시간 선택 */}
         {serviceType === "방문" && (
-          // <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+          // <RowRoundedTimeIntervalPicker style={{ marginTop: 12 }} platform={Platform.OS} />
           //! (임시로 추가함) - Web 에서는 @gorhom/bottom-sheet 작동 안 함 🥲
           <>
             <PreReg16
               text={"방문시간을 선택해주세요"}
               textColor={HEAD_LINE}
-              style={{ marginVertical: HEIGHT * 10 }}
+              style={{ marginVertical: 10 }}
             />
             <Row style={{ justifyContent: "space-around" }}>
               <Picker
@@ -307,12 +305,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           image={images.location}
           text={"경기도 안산시 상록구 한양대학로 55"}
           textColor={HEAD_LINE}
-          style={{ marginTop: HEIGHT * 12 }}
+          style={{ marginTop: 12 }}
         />
 
         {/*//* 반려동물 선택 */}
         <SelectPetDropdownBox
-          style={{ marginTop: HEIGHT * 12 }}
+          style={{ marginTop: 12 }}
           isOpen={isDropdownOpen}
           onPress={() => {
             setIsDropdownOpen(!isDropdownOpen)
@@ -328,7 +326,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
         <PreBol14
           text="선택된 반려동물"
           color={SUB_HEAD_LINE}
-          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+          style={{ marginTop: 18, marginLeft: 16 }}
         />
         <View style={isDropdownOpen ? styles.hidden : styles.shown}>
           {/*//* 선택된 반려동물 리스트 */}
@@ -354,7 +352,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           isActivated={hadle()}
           style={{
             marginTop: "auto",
-            // margin: HEIGHT * 24,
+            // margin: 24,
             marginBottom: Platform.select({
               ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
               android: 0,

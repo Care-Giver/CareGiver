@@ -3,7 +3,7 @@ import React from "react"
 import { PreMed14, PreBol16 } from "../basics/custom-texts/custom-texts"
 import { BODY, LIGHT_LINE, STRONG_LINE } from "#theme"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme"
+
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 
 export const HiredTimesAndPetYears = (props) => {
@@ -24,11 +24,11 @@ export const HiredTimesAndPetYears = (props) => {
       {/*//* divider 기준 왼쪽 텍스트 */}
       <View style={styles.textAlignment}>
         <PreMed14 color={BODY} text={"고용된 횟수"} />
-        <PreBol16 color={STRONG_LINE} text={hiredTimes + "회"} style={{ marginTop: HEIGHT * 8 }} />
+        <PreBol16 color={STRONG_LINE} text={hiredTimes + "회"} style={{ marginTop: 8 }} />
       </View>
 
       {/*//* 세로 중간 divider*/}
-      <DivisionLineVertical color={LIGHT_LINE} height={HEIGHT * 44} />
+      <DivisionLineVertical color={LIGHT_LINE} height={44} />
 
       {/*//*  divider 기준 오른쪽 텍스트*/}
       <View style={styles.textAlignment}>
@@ -36,7 +36,7 @@ export const HiredTimesAndPetYears = (props) => {
         <PreBol16
           color={STRONG_LINE}
           text={`${petYearsYears}년 ${petYearsMonths}개월`}
-          style={{ marginTop: HEIGHT * 8 }}
+          style={{ marginTop: 8 }}
         />
       </View>
     </View>

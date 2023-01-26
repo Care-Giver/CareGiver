@@ -1,6 +1,6 @@
 import { ImageBackground, Pressable, View } from "react-native"
 import React, { useLayoutEffect, useState } from "react"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { InProgressBookingProfile } from "./in-progress-booking-profile/in-progress-booking-profile"
 import { DivisionLine } from "../division-line/division-line"
 import { LBG } from "#theme"
@@ -75,7 +75,7 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
           startDateTime={new Date(reserveData.startDate)}
           endDateTime={new Date(reserveData.endDate)}
           serviceType={reserveData.serviceType}
-          style={{ marginTop: HEIGHT * 44 }}
+          style={{ marginTop: 44 }}
         />
       </ImageBackground>
     </Pressable>

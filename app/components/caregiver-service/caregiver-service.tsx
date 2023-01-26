@@ -1,7 +1,7 @@
 import { View, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { PreMed16 } from "../basics/custom-texts/custom-texts"
 import { BODY } from "#theme"
 import { Row } from "../basics/row/row"

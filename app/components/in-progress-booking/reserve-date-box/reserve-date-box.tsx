@@ -4,7 +4,6 @@ import { Row } from "../../basics/row/row"
 import { PreBol14, PreReg12 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme"
 
 const setStartDateText = (startDateTime: Date, serviceType: string): string => {
   const startMonth = startDateTime.getMonth() + 1
@@ -59,14 +58,14 @@ export const ReserveDateBox = ({
       {/* //* 시작 날짜 컨테이너 */}
       <View style={styles.dateBox}>
         <PreReg12 text="체크인" />
-        <PreBol14 text={startDateText} style={{ marginTop: HEIGHT * 4 }} />
+        <PreBol14 text={startDateText} style={{ marginTop: 4 }} />
       </View>
       {/* //* 화살표(->) */}
       <Image source={images.right_arrow_grey} style={styles.arrow} />
       {/* //* 끝나는 날짜 컨테이너 */}
       <View style={styles.dateBox}>
         <PreReg12 text="체크아웃" />
-        <PreBol14 text={endDateText} style={{ marginTop: HEIGHT * 4 }} />
+        <PreBol14 text={endDateText} style={{ marginTop: 4 }} />
       </View>
     </Row>
   )

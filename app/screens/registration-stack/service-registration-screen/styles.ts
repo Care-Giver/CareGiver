@@ -1,4 +1,3 @@
-import { HEIGHT } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -12,6 +11,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 8,
 
-    paddingVertical: HEIGHT * 18,
+    paddingVertical: 18,
   },
 })

@@ -6,8 +6,6 @@ import { observer } from "mobx-react-lite"
 import {
   BODY,
   LBG,
-  HEIGHT,
-  WIDTH,
   DEVICE_SCREEN_HEIGHT,
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
@@ -80,20 +78,20 @@ export const WritingCommentScreen: FC<
 
         //*android 에선 keyboardWillShow 사용 못함
         if (keyboard.keyboardShown) {
-          height = HEIGHT * 377
+          height = 377
           return height
           //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
           //LayoutAnimation.configureNext(LayoutAnimation.create(1, "spring", "scaleY"))
         } else {
           //LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
           height =
-            HEIGHT * 646 -
+            646 -
             (HEADER_HEIGHT +
               ADNROID_BOTTOM_NAVIGATION_HEIGHT +
               ADNROID_STATUS_BAR_HEIGHT +
-              HEIGHT * 95 + //*디자인 상에서 댓글창부터 화면 끝까지의 하단 여백(85)과 헤더 전 까지 상단 여백(10)의 합이 95
-              HEIGHT * 646 -
-              // DEVICE_SCREEN_HEIGHT * HEIGHT //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
+              95 + //*디자인 상에서 댓글창부터 화면 끝까지의 하단 여백(85)과 헤더 전 까지 상단 여백(10)의 합이 95
+              646 -
+              // DEVICE_SCREEN_HEIGHT  //*디자인 상 사용자 기기에 들어가야 하는 총 높이(네비게이션바높이,상단바높이,헤더높이,댓글창높이,댓글창 위아래 여백높이의 합 ) 와 실제 기계 스크린 높이의 차이를 댓글창 높이 646 에서 빼줌
               DEVICE_SCREEN_HEIGHT) //FEEDBACK: DEVICE_SCREEN_ 상수에는 WIDTH, HEIGHT 상수를 곱해주면 안 됩니다
           return height
         }
@@ -101,16 +99,16 @@ export const WritingCommentScreen: FC<
       case "ios":
         if (keyboardStatus === "Keyboard will Show") {
           LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity")) //*댓글 입력 창 크기 전환 애니메이션
-          height = HEIGHT * 377 - (keyboard.keyboardHeight - HEIGHT * 303) //* 디자인 상 댓글창 높이 - (기기 키보드 높이 - 디자인상 키보드 높이)
+          height = 377 - (keyboard.keyboardHeight - 303) //* 디자인 상 댓글창 높이 - (기기 키보드 높이 - 디자인상 키보드 높이)
           return height
         } else {
           LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity"))
-          height = HEIGHT * 646
+          height = 646
           return height
         }
 
       case "web":
-        height = HEIGHT * 646
+        height = 646
         return height
     }
   }
@@ -120,16 +118,16 @@ export const WritingCommentScreen: FC<
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
         style={{
-          marginTop: HEIGHT * 10,
-          width: WIDTH * 358,
+          marginTop: 10,
+          width: 358,
           backgroundColor: LBG,
           borderRadius: 8,
           textAlignVertical: "top",
           fontFamily: PRETENDARD_REGULAR,
-          fontSize: HEIGHT * 14, //*폰트 패밀리로 쓸때는 size 에 HEIGHT 을 곱해줘야 함
-          lineHeight: HEIGHT * 20, //* lineHeight 에도 마찬가지
-          paddingTop: HEIGHT * 20,
-          paddingHorizontal: WIDTH * 20,
+          fontSize: 14, //*폰트 패밀리로 쓸때는 size 에 HEIGHT 을 곱해줘야 함
+          lineHeight: 20, //* lineHeight 에도 마찬가지
+          paddingTop: 20,
+          paddingHorizontal: 20,
           height: handleHeight(),
         }}
         multiline
@@ -148,17 +146,17 @@ export const WritingCommentScreen: FC<
       />
 
       {/* //* 공개/비공개 컴포넌트 + 단어 수 세는 컴포넌트  */}
-      <Row style={{ marginTop: HEIGHT * 10 }}>
+      <Row style={{ marginTop: 10 }}>
         {/*//*공개/비공개 컴포넌트 */}
         <PublicPrivateSwitchButton
           state={isPublicComment}
           setState={setIsPublicComment}
-          // style={{ marginRight: WIDTH * 233 }}
+          // style={{ marginRight: 233 }}
           //FEEDBACK: "가능한 최대" margin, padding 값은 아래처럼 "auto" 를 사용하면 됩니다. (안드로이드 스튜디오에서 ConstraintLayout 과 유사한 개념입니다)
           style={{ marginRight: "auto" }}
         />
         {/*//*사용자가 입력한 단어 수 */}
-        <PopSem14 color={BODY} text={`${wordLength}`} style={{ marginRight: WIDTH * 2 }} />
+        <PopSem14 color={BODY} text={`${wordLength}`} style={{ marginRight: 2 }} />
         {/*//* max 단어수 (여기선 300) */}
         <PopReg14 color={BODY} text={`/300`} />
       </Row>

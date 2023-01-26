@@ -1,4 +1,4 @@
-import { color, GIVER_CASUAL_NAVY, HEIGHT, WIDTH } from "#theme"
+import { color, GIVER_CASUAL_NAVY } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -11,12 +11,12 @@ export const styles = StyleSheet.create({
   modalView: {
     alignItems: "center",
 
-    paddingTop: HEIGHT * 48,
-    paddingBottom: HEIGHT * 16,
+    paddingTop: 48,
+    paddingBottom: 16,
 
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
 
-    height: HEIGHT * 370,
+    height: 370,
 
     backgroundColor: color.palette.white,
     borderRadius: 8,
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: GIVER_CASUAL_NAVY,
 
-    paddingVertical: HEIGHT * 16,
+    paddingVertical: 16,
   },
   modalNoBtn: {
     flex: 1,
@@ -43,6 +43,6 @@ export const styles = StyleSheet.create({
 
     backgroundColor: GIVER_CASUAL_NAVY,
 
-    paddingVertical: HEIGHT * 16,
+    paddingVertical: 16,
   },
 })

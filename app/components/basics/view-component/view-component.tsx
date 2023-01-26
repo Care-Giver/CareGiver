@@ -4,7 +4,7 @@ import { CARE_NATURAL_BLUE, CARE_SOFT_YELLOW, isWeb, palette, STANDARD_WIDTH, WI
 import { Screen } from "../ignite-basics/screen/screen"
 import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 
-export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
+export const BASIC_BACKGROUND_PADDING_WIDTH = 16
 
 export const FULL: ViewStyle = isWeb
   ? {

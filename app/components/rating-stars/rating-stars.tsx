@@ -2,14 +2,14 @@ import { View, Text, Image } from "react-native"
 import React from "react"
 import { images } from "#images"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
 
 const styles = {
   star: {
-    width: WIDTH * 13.12,
-    height: HEIGHT * 12,
-    marginLeft: WIDTH * 1.4,
+    width: 13.12,
+    height: 12,
+    marginLeft: 1.4,
   },
 }
 
@@ -51,7 +51,7 @@ const RatingStars = (props: { ratings: number; style?: object }) => {
       ))}
 
       {/* //* 별점 */}
-      <PreReg12 text={`(${ratings})`} style={{ marginLeft: WIDTH * 1.7 }} />
+      <PreReg12 text={`(${ratings})`} style={{ marginLeft: 1.7 }} />
     </View>
   )
 }

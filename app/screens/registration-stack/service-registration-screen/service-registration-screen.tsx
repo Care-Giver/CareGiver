@@ -65,7 +65,7 @@ export const ServiceRegistrationScreen: FC<
       {/* //? grid 처럼 배치하기 - https://deemmun.tistory.com/46 */}
       <FlatList
         style={{
-          marginTop: HEIGHT * 20,
+          marginTop: 20,
         }}
         data={services}
         // onLayout: 레이아웃이 생성될 때, 해당 레이아웃의 width를 가져올 수 있다
@@ -83,7 +83,7 @@ export const ServiceRegistrationScreen: FC<
         )}
         numColumns={NUM_OF_COLS}
         columnWrapperStyle={{
-          marginBottom: HEIGHT * 16,
+          marginBottom: 16,
           justifyContent: "space-between",
         }}
       />

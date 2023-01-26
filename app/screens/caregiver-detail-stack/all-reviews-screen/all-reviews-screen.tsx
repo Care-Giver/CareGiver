@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { DivisionLine, ScreenRootView, ReviewBox, FilterHeader } from "#components"
 import { reviews as _reviews } from "./dummy-data"
 import { images } from "#images"
-import { HEIGHT } from "#theme"
+
 import { LBG } from "#theme"
 
 export const AllReviewsScreen: FC<
@@ -46,7 +46,7 @@ export const AllReviewsScreen: FC<
           <>
             <ReviewBox
               style={{
-                marginTop: HEIGHT * 12,
+                marginTop: 12,
               }}
               key={index}
               reviewData={item}
@@ -54,9 +54,9 @@ export const AllReviewsScreen: FC<
             <DivisionLine
               color={LBG}
               style={{
-                marginTop: HEIGHT * 32,
+                marginTop: 32,
                 // ? 마지막 구분 선에는 marginBottom 값 존재
-                marginBottom: index === reviews.length - 1 ? HEIGHT * 21 : 0,
+                marginBottom: index === reviews.length - 1 ? 21 : 0,
               }}
             />
           </>

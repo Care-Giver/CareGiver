@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image, ImageBackground } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
@@ -42,7 +42,7 @@ export const PastBooking = (props) => {
           <CaregiverTypeButton text={pastBooking.serviceType} style={styles.typeBtn} />
           <CaregiverTypeButton
             text={pastBooking.caregiverType}
-            style={[styles.typeBtn, { marginLeft: WIDTH * 6 }]}
+            style={[styles.typeBtn, { marginLeft: 6 }]}
           />
         </Row>
       </ImageBackground>
@@ -63,28 +63,16 @@ export const PastBooking = (props) => {
           {/* //? 체크인 */}
           <View>
             <PreReg10 text={"체크인"} color={DISABLED} />
-            <PreReg12
-              text={pastBooking.checkIn}
-              color={DISABLED}
-              style={{ marginTop: HEIGHT * 4 }}
-            />
+            <PreReg12 text={pastBooking.checkIn} color={DISABLED} style={{ marginTop: 4 }} />
           </View>
 
           {/* //? division line */}
-          <PreReg12
-            text={"|"}
-            color={MIDDLE_LINE}
-            style={{ marginLeft: WIDTH * 3, marginRight: WIDTH * 8 }}
-          />
+          <PreReg12 text={"|"} color={MIDDLE_LINE} style={{ marginLeft: 3, marginRight: 8 }} />
 
           {/* //? 체크아웃 */}
           <View>
             <PreReg10 text={"체크아웃"} color={DISABLED} />
-            <PreReg12
-              text={pastBooking.checkOut}
-              color={DISABLED}
-              style={{ marginTop: HEIGHT * 4 }}
-            />
+            <PreReg12 text={pastBooking.checkOut} color={DISABLED} style={{ marginTop: 4 }} />
           </View>
         </Row>
 

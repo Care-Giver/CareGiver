@@ -1,6 +1,6 @@
 import { LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "#theme"
+import  palette } from "#theme"
 
 export const styles = StyleSheet.create({
   ROW_PRESET: {
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
 
   ROW_ROUNDED_BOX_PRESET: {
     width: "100%",
-    height: HEIGHT * 48,
+    height: 48,
     backgroundColor: palette.white,
     flexDirection: "row",
     alignItems: "center",

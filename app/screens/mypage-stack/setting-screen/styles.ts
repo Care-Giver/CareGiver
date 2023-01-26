@@ -1,17 +1,17 @@
-import { HEIGHT, WIDTH, GIVER_CASUAL_NAVY, LIGHT_LINE, color } from "#theme"
+import { GIVER_CASUAL_NAVY, LIGHT_LINE, color } from "#theme"
 import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
   divisionLine: {
-    height: HEIGHT * 2,
+    height: 2,
     backgroundColor: LIGHT_LINE,
 
     marginHorizontal: -2 * BASIC_BACKGROUND_PADDING_WIDTH,
   },
   versionBox: {
-    paddingTop: HEIGHT * 20,
-    paddingBottom: HEIGHT * 16,
+    paddingTop: 20,
+    paddingBottom: 16,
   },
   centeredView: {
     flex: 1,
@@ -22,12 +22,12 @@ export const styles = StyleSheet.create({
   modalView: {
     alignItems: "center",
 
-    paddingTop: HEIGHT * 48,
-    paddingBottom: HEIGHT * 16,
+    paddingTop: 48,
+    paddingBottom: 16,
 
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
 
-    height: HEIGHT * 370,
+    height: 370,
 
     backgroundColor: color.palette.white,
     borderRadius: 8,
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: GIVER_CASUAL_NAVY,
 
-    paddingVertical: HEIGHT * 16,
+    paddingVertical: 16,
   },
   modalNoBtn: {
     flex: 1,
@@ -54,6 +54,6 @@ export const styles = StyleSheet.create({
 
     backgroundColor: GIVER_CASUAL_NAVY,
 
-    paddingVertical: HEIGHT * 16,
+    paddingVertical: 16,
   },
 })

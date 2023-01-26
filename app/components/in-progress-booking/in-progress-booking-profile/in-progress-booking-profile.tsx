@@ -3,7 +3,6 @@ import React from "react"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
-import { WIDTH, palette, HEIGHT } from "#theme"
 import RatingReviewBox from "../../rating-review-box/rating-review-box"
 import { InProgressBookingProfileProps } from "./in-progress-booking-profile.props"
 import { CaregiverTypeButton } from "#components"
@@ -25,7 +24,7 @@ export const InProgressBookingProfile = ({
       />
 
       {/* //? 케어기버 정보 컨테이너 */}
-      <View style={{ marginLeft: WIDTH * 18 }}>
+      <View style={{ marginLeft: 18 }}>
         {/* //* 예약 유형 - 방문or위탁 / 펫시터or훈련사 */}
         <Row>
           {/* //TODO: 방문or위탁 / 펫시터or훈련사 데이터 구분 어떻게 할건지 */}
@@ -46,19 +45,19 @@ export const InProgressBookingProfile = ({
                 ? "훈련사"
                 : ""
             }
-            style={{ marginLeft: WIDTH * 4 }}
+            style={{ marginLeft: 4 }}
           />
         </Row>
 
         {/* //? 케어기버 정보 박스 - 이름, 별점, 후기, 자기소개 */}
-        <View style={[styles.infoBox, { marginTop: HEIGHT * 10 }]}>
+        <View style={[styles.infoBox, { marginTop: 10 }]}>
           {/* //* 케어기버 이름 */}
           <PreReg14 text={caregiverData.name} />
           {/* //* 별점 & 리뷰 박스 */}
           <RatingReviewBox
             rating={caregiverData.ratings}
             review={caregiverData.reviews}
-            style={{ marginVertical: HEIGHT * 8 }}
+            style={{ marginVertical: 8 }}
           />
           {/* //* 케어기버 자기소개 */}
           <PreReg12
@@ -66,7 +65,7 @@ export const InProgressBookingProfile = ({
             numberOfLines={1}
             ellipsizeMode="tail"
             // TODO: width(글 길이 제한) 몇으로 할 건지?
-            style={{ width: WIDTH * 168 }}
+            style={{ width: 168 }}
           />
         </View>
       </View>

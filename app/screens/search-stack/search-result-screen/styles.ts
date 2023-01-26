@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "#theme"
+import  palette } from "#theme"
 
 export const styles = StyleSheet.create({
-  image: { width: WIDTH * 16, height: HEIGHT * 16 },
-  text: { marginLeft: WIDTH * 8 },
+  image: { width: 16, height: 16 },
+  text: { marginLeft: 8 },
 })

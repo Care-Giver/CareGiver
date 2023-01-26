@@ -52,10 +52,8 @@ import {
   DEVICE_WINDOW_WIDTH,
   GIVER_CASUAL_NAVY,
   GIVER_ROMANTIC_GRAY,
-  HEIGHT,
   isWeb,
   STANDARD_WIDTH,
-  WIDTH,
 } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -157,7 +155,7 @@ const AllStacks = () => {
                 navigation.goBack()
               }}
             >
-              <Image style={{ width: WIDTH * 28, height: HEIGHT * 28 }} source={images.go_back} />
+              <Image style={{ width: 28, height: 28 }} source={images.go_back} />
             </Pressable>
           ),
           // title: null,

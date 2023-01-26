@@ -1,7 +1,7 @@
 import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { WIDTH, HEIGHT } from "#theme"
+
 import { PreBol14, PreMed16 } from "../basics/custom-texts/custom-texts"
 import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../basics/row/row"
@@ -22,23 +22,19 @@ export const CaregiverNameStarReview = (props) => {
           style={{
             height: "100%",
             justifyContent: "space-evenly",
-            marginLeft: WIDTH * 10,
+            marginLeft: 10,
           }}
         >
-          <PreMed16 text={name} color={HEAD_LINE} style={{ marginLeft: WIDTH * 4 }} />
+          <PreMed16 text={name} color={HEAD_LINE} style={{ marginLeft: 4 }} />
           <Row>
             <Image style={styles.star} source={images.rating_star} />
-            <PreMed16
-              text={`(${ratings})`}
-              color={SUB_HEAD_LINE}
-              style={{ marginLeft: WIDTH * 4 }}
-            />
+            <PreMed16 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
 
             <DivisionLineVertical
               color={DBG}
-              width={WIDTH * 1}
-              height={HEIGHT * 14}
-              style={{ marginLeft: WIDTH * 8, marginRight: WIDTH * 8 }}
+              width={1}
+              height={14}
+              style={{ marginLeft: 8, marginRight: 8 }}
             />
 
             <Pressable
@@ -52,7 +48,7 @@ export const CaregiverNameStarReview = (props) => {
                 <PreBol14
                   text={`리뷰 ${numberOfReviews}개`}
                   color={GIVER_CASUAL_NAVY}
-                  // style={{ marginLeft: WIDTH * 4 }}
+                  // style={{ marginLeft: 4 }}
                 />
                 <Image source={images.right_arrow_navy} style={styles.rightArrow} />
               </Row>

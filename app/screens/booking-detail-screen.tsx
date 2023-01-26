@@ -16,7 +16,7 @@ import {
   ScreenRootView,
   SelectedPetCard,
 } from "#components"
-import { color, HEIGHT, SHADOW_1, WIDTH } from "#theme"
+import { color, SHADOW_1, WIDTH } from "#theme"
 import {
   DBG,
   GIVER_CASUAL_NAVY,
@@ -96,7 +96,7 @@ export const BookingDetailScreen: FC<
           style={{
             height: "100%",
             width: "74%",
-            marginLeft: WIDTH * 12,
+            marginLeft: 12,
           }}
         >
           <Row>
@@ -109,37 +109,30 @@ export const BookingDetailScreen: FC<
             >
               {/* //TODO: 방문or위탁 / 펫시터or훈련사 데이터 구분 어떻게 할건지 */}
               <CaregiverTypeButton text={korSvcType(serviceType)} />
-              <CaregiverTypeButton
-                text={korCgType(caregiverType)}
-                style={{ marginLeft: WIDTH * 4 }}
-              />
+              <CaregiverTypeButton text={korCgType(caregiverType)} style={{ marginLeft: 4 }} />
             </Row>
           </Row>
 
-          <Row mt={HEIGHT * 4}>
+          <Row mt={4}>
             <Image style={styles.star} source={images.rating_star} />
 
-            <PreReg12
-              text={`(${ratings})`}
-              color={SUB_HEAD_LINE}
-              style={{ marginLeft: WIDTH * 4 }}
-            />
+            <PreReg12 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
 
             <DivisionLineVertical
               color={DBG}
-              width={WIDTH * 1}
-              height={HEIGHT * 14}
-              style={{ marginLeft: WIDTH * 8, marginRight: WIDTH * 8 }}
+              width={1}
+              height={14}
+              style={{ marginLeft: 8, marginRight: 8 }}
             />
 
             <PreReg12
               text={`후기 ${numberOfReviews}개`}
               color={GIVER_CASUAL_NAVY}
-              // style={{ marginLeft: WIDTH * 4 }}
+              // style={{ marginLeft: 4 }}
             />
           </Row>
 
-          <Row mt={HEIGHT * 12} style={{ justifyContent: "space-between" }}>
+          <Row mt={12} style={{ justifyContent: "space-between" }}>
             <Pressable
               style={[$pressableBox, SHADOW_1]}
               onPress={() => {
@@ -169,15 +162,15 @@ export const BookingDetailScreen: FC<
         </View>
       </Row>
 
-      <DivisionLine mt={HEIGHT * 16} />
+      <DivisionLine mt={16} />
 
-      <PreBol14 text={"방문 장소"} color={SUB_HEAD_LINE} mt={HEIGHT * 16} />
-      <PreReg14 text={location} color={SUB_HEAD_LINE} mt={HEIGHT * 8} />
+      <PreBol14 text={"방문 장소"} color={SUB_HEAD_LINE} mt={16} />
+      <PreReg14 text={location} color={SUB_HEAD_LINE} mt={8} />
 
-      <PreBol14 text={"방문 시간"} color={SUB_HEAD_LINE} mt={HEIGHT * 36} />
-      <PreReg14 text={time} color={SUB_HEAD_LINE} mt={HEIGHT * 8} />
+      <PreBol14 text={"방문 시간"} color={SUB_HEAD_LINE} mt={36} />
+      <PreReg14 text={time} color={SUB_HEAD_LINE} mt={8} />
 
-      <PreBol14 text={"맡길 반려동물"} color={SUB_HEAD_LINE} mt={HEIGHT * 36} mb={HEIGHT * 12} />
+      <PreBol14 text={"맡길 반려동물"} color={SUB_HEAD_LINE} mt={36} mb={12} />
       {selectedPets.map((item, index) => (
         <SelectedPetCard
           key={index}
@@ -189,9 +182,9 @@ export const BookingDetailScreen: FC<
         />
       ))}
 
-      <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={HEIGHT * 36} />
+      <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={36} />
 
-      <Row style={{ justifyContent: "space-between" }} mt={HEIGHT * 16}>
+      <Row style={{ justifyContent: "space-between" }} mt={16}>
         <PreReg14
           text={`상품합계(${korSvcType(serviceType)}-${korCgType(caregiverType)})`}
           color={SUB_HEAD_LINE}
@@ -199,12 +192,12 @@ export const BookingDetailScreen: FC<
         <PreReg14 text={won(price)} color={SUB_HEAD_LINE} />
       </Row>
 
-      <Row style={{ justifyContent: "space-between" }} mt={HEIGHT * 10}>
+      <Row style={{ justifyContent: "space-between" }} mt={10}>
         <PreReg14 text={"할인 합계"} color={SUB_HEAD_LINE} />
         <PreReg14 text={won(discount)} color={SUB_HEAD_LINE} />
       </Row>
 
-      <DivisionLine mv={HEIGHT * 12} />
+      <DivisionLine mv={12} />
 
       <Row style={{ justifyContent: "space-between" }}>
         <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
@@ -217,8 +210,8 @@ export const BookingDetailScreen: FC<
 const $pressableBox: ViewStyle = {
   width: "auto",
   height: "auto",
-  paddingHorizontal: WIDTH * 22,
-  paddingVertical: HEIGHT * 8,
+  paddingHorizontal: 22,
+  paddingVertical: 8,
   borderRadius: 4,
   backgroundColor: "white",
 }
@@ -226,8 +219,8 @@ const $pressableBox: ViewStyle = {
 const $pressableAlarmBox: ViewStyle = {
   width: "auto",
   height: "auto",
-  paddingHorizontal: WIDTH * 6,
-  paddingVertical: HEIGHT * 6,
+  paddingHorizontal: 6,
+  paddingVertical: 6,
   borderRadius: 6,
   backgroundColor: "white",
 }
@@ -235,19 +228,19 @@ const $pressableAlarmBox: ViewStyle = {
 const styles = StyleSheet.create({
   root: {
     width: "100%",
-    height: HEIGHT * 60,
+    height: 60,
   },
   profileImage: {
-    width: WIDTH * 84,
-    height: HEIGHT * 84,
+    width: 84,
+    height: 84,
     borderRadius: 84,
     borderWidth: 2,
     borderColor: LIGHT_LINE,
     resizeMode: "cover",
   },
   star: {
-    width: WIDTH * 13.12,
-    height: HEIGHT * 12,
+    width: 13.12,
+    height: 12,
   },
-  rightArrow: { width: WIDTH * 16, height: HEIGHT * 16 },
+  rightArrow: { width: 16, height: 16 },
 })
