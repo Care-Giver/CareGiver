@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
 
   x_container: {
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
   },
 
   x_img: {

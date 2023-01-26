@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     // position: "absolute",
     // bottom: 0,
     marginTop: "auto",
-    marginBottom: HEIGHT * 8,
+    marginBottom: 8,
 
     alignItems: "center",
 
