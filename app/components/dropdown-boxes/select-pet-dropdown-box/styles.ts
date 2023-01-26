@@ -1,6 +1,6 @@
 import { LBG, LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
-import  palette } from "#theme"
+import { palette } from "#theme"
 
 export const styles = StyleSheet.create({
   test: {

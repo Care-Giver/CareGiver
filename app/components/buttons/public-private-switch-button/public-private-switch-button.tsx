@@ -1,6 +1,6 @@
 import React from "react"
 import { ViewStyle, View } from "react-native"
-import  palette } from "#theme"
+import { palette } from "#theme"
 import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol12 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"

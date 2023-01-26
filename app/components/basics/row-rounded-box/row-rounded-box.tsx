@@ -2,7 +2,7 @@ import React from "react"
 import { Pressable, Text, View, ViewProps, ViewStyle } from "react-native"
 import { isPressable } from "./row-rounded-box.presets"
 // import { styles } from "../common-styles"
-import  palette, LIGHT_LINE } from "#theme"
+import { palette, LIGHT_LINE } from "#theme"
 
 //- TODO: RowRoundedBoxProps 생성 (ScreenProps) 참고할 것
 export const RowRoundedBox = (props: ViewProps) => {
