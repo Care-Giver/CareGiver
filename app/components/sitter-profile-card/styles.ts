@@ -1,44 +1,43 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme"
 
 export const styles = StyleSheet.create({
   container: {
-    width: WIDTH * 358,
-    height: HEIGHT * 110,
+    width: 358,
+    height: 110,
 
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   profileImg: {
-    width: WIDTH * 128,
-    height: HEIGHT * 110,
+    width: 128,
+    height: 110,
     borderRadius: 8,
   },
   infoContainer: {
-    width: WIDTH * 214,
-    height: HEIGHT * 102,
+    width: 214,
+    height: 102,
 
     flexDirection: "row",
     justifyContent: "space-between",
   },
   infoWrapper: {
-    width: WIDTH * 166,
-    height: HEIGHT * 102,
+    width: 166,
+    height: 102,
   },
   reviewContainer: {
     flexDirection: "row",
     alignItems: "center",
 
-    marginTop: HEIGHT * 4,
+    marginTop: 4,
   },
   star: {
-    width: WIDTH * 13,
-    height: HEIGHT * 12,
+    width: 13,
+    height: 12,
   },
   likeBtn: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
+    width: 28,
+    height: 28,
     resizeMode: "cover",
   },
 })

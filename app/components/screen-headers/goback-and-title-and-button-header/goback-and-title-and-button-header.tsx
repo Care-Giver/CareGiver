@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { HEADER_ROOT } from "../common-styles"
 import { Row, PreMed16, PreMed18 } from "#components"
-import { WIDTH, DISABLED } from "#theme"
+import { DISABLED } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
 
@@ -14,7 +14,7 @@ export const GobackAndTitleAndButtonHeader = (props) => {
   return (
     <View
       {...props}
-      style={[HEADER_ROOT, { justifyContent: "space-between", paddingHorizontal: WIDTH * 16 }]}
+      style={[HEADER_ROOT, { justifyContent: "space-between", paddingHorizontal: 16 }]}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         {/* //? 뒤로가기 버튼 */}
@@ -27,7 +27,7 @@ export const GobackAndTitleAndButtonHeader = (props) => {
         </Pressable>
 
         {/* //? 타이틀 */}
-        <PreMed18 style={{ marginLeft: WIDTH * 8 }}>{title}</PreMed18>
+        <PreMed18 style={{ marginLeft: 8 }}>{title}</PreMed18>
       </View>
 
       <Pressable onPress={handlePress}>

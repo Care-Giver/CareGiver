@@ -4,7 +4,6 @@ import { HEADER_ROOT } from "../common-styles"
 import { styles } from "./styles"
 import { images } from "#images"
 import { PreMed18 } from "#components"
-import { WIDTH } from "#theme"
 
 export const GobackAndTitleSpacebetweenHeader = (props) => {
   const title = props.options.title ? props.options.title : props.route.name
@@ -12,7 +11,7 @@ export const GobackAndTitleSpacebetweenHeader = (props) => {
   return (
     <View
       {...props}
-      style={[HEADER_ROOT, { justifyContent: "space-between", paddingHorizontal: WIDTH * 16 }]}
+      style={[HEADER_ROOT, { justifyContent: "space-between", paddingHorizontal: 16 }]}
     >
       <Pressable
         onPress={() => {

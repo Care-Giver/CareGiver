@@ -1,26 +1,25 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {
-    width: WIDTH * 358,
+    width: 358,
     height: "auto",
     // backgroundColor: "pink",
   },
   profileImage: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
+    width: 28,
+    height: 28,
     borderRadius: 28,
   },
   threeDots: {
-    width: WIDTH * 3,
-    height: HEIGHT * 14,
+    width: 3,
+    height: 14,
   },
   desc: {
-    marginTop: HEIGHT * 10,
+    marginTop: 10,
     // backgroundColor: "yellow",
-    // maxWidth: WIDTH * 342,
-    marginRight: WIDTH * 13,
-    lineHeight: HEIGHT * 20,
+    // maxWidth: 342,
+    marginRight: 13,
+    lineHeight: 20,
   },
 })

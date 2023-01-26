@@ -1,7 +1,7 @@
 import { View, ImageBackground, Text, FlatList } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, HEIGHT, STANDARD_WIDTH } from "#theme"
+import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, STANDARD_WIDTH } from "#theme"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
 
 export const FullWidthSizeImagesBoxWithIndicator = (props) => {
@@ -56,7 +56,7 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
             style={{
               // width: "100%",
               width: STANDARD_WIDTH,
-              height: HEIGHT * 444,
+              height: 444,
               backgroundColor: CARE_NATURAL_BLUE,
               // margin: 2,
             }}
@@ -78,11 +78,7 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
         onViewableItemsChanged={onFlatlistUpdate}
       />
 
-      <DotsIndicator
-        items={images}
-        activeIndex={currentImage}
-        style={{ marginTop: HEIGHT * -28 }}
-      />
+      <DotsIndicator items={images} activeIndex={currentImage} style={{ marginTop: -28 }} />
     </View>
   )
 }

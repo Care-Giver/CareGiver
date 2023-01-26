@@ -1,6 +1,6 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme"
+
 import { PreMed20, PreBol16 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -23,7 +23,7 @@ export const WritingCommentScreenHeader = (props) => {
       </Pressable>
 
       {/* //* 타이틀 */}
-      <PreMed20 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed20>
+      <PreMed20 style={{ marginLeft: 8 }}> {title}</PreMed20>
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
       <Pressable
         onPress={() => {
@@ -31,7 +31,7 @@ export const WritingCommentScreenHeader = (props) => {
         }}
         style={{
           marginLeft: "auto",
-          marginRight: WIDTH * 16,
+          marginRight: 16,
         }}
       >
         <PreBol16 color={ableToRegister > 0 ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />

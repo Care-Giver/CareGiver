@@ -10,7 +10,7 @@ import {
 } from "../screens"
 import { PreMed12 } from "../components"
 import { images } from "#images"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { GIVER_CASUAL_NAVY } from "#theme"
 
@@ -45,10 +45,10 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <Image
               source={focused ? images.favorite_navy : images.favorite_grey}
               style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
+                width: 28,
+                height: 28,
                 backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
+                marginTop: 6,
               }}
             />
           ),
@@ -56,7 +56,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <PreMed12
               text={focused ? "즐겨찾기" : ""}
               color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
+              style={{ marginBottom: 6 }}
             />
           ),
           // tabBarBadge: 3,
@@ -72,10 +72,10 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <Image
               source={focused ? images.schedule_navy : images.schedule_grey}
               style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
+                width: 28,
+                height: 28,
                 backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
+                marginTop: 6,
               }}
             />
           ),
@@ -83,7 +83,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <PreMed12
               text={focused ? "일정" : ""}
               color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
+              style={{ marginBottom: 6 }}
             />
           ),
           // tabBarBadge: 3,
@@ -99,10 +99,10 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <Image
               source={focused ? images.search_navy : images.search_grey}
               style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
+                width: 28,
+                height: 28,
                 backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
+                marginTop: 6,
               }}
             />
           ),
@@ -110,7 +110,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <PreMed12
               text={focused ? "검색" : ""}
               color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
+              style={{ marginBottom: 6 }}
             />
           ),
         }}
@@ -125,10 +125,10 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <Image
               source={focused ? images.chatting_navy : images.chatting_grey}
               style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
+                width: 28,
+                height: 28,
                 backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
+                marginTop: 6,
               }}
             />
           ),
@@ -136,7 +136,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <PreMed12
               text={focused ? "채팅" : ""}
               color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
+              style={{ marginBottom: 6 }}
             />
           ),
         }}
@@ -151,10 +151,10 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <Image
               source={focused ? images.myinfo_navy : images.myinfo_grey}
               style={{
-                width: WIDTH * 28,
-                height: HEIGHT * 28,
+                width: 28,
+                height: 28,
                 backgroundColor: "transparent",
-                marginTop: HEIGHT * 6,
+                marginTop: 6,
               }}
             />
           ),
@@ -162,7 +162,7 @@ export const BottomTabNavigator = (props: BottomTabNavigatorProps) => {
             <PreMed12
               text={focused ? "내정보" : ""}
               color={GIVER_CASUAL_NAVY}
-              style={{ marginBottom: HEIGHT * 6 }}
+              style={{ marginBottom: 6 }}
             />
           ),
         }}

@@ -1,9 +1,8 @@
-import { HEIGHT, WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
-    height: HEIGHT * 48,
+    height: 48,
 
     flexDirection: "row",
     justifyContent: "space-between",
@@ -11,7 +10,7 @@ export const styles = StyleSheet.create({
   },
 
   arrow: {
-    width: WIDTH * 16,
-    height: HEIGHT * 16,
+    width: 16,
+    height: 16,
   },
 })

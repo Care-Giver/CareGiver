@@ -1,6 +1,6 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme"
+
 import { PreMed18 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -21,7 +21,7 @@ export const AllCommentsScreenHeader = (props) => {
 
       {/* //* 타이틀 */}
 
-      <PreMed18 style={{ marginLeft: WIDTH * 8 }}> 댓글</PreMed18>
+      <PreMed18 style={{ marginLeft: 8 }}> 댓글</PreMed18>
 
       {/* //*  댓글 검색 */}
       <Pressable
@@ -36,7 +36,7 @@ export const AllCommentsScreenHeader = (props) => {
 
       {/* //*  댓글 작성 */}
       <Pressable
-        style={{ marginLeft: WIDTH * 12, marginRight: WIDTH * 16 }}
+        style={{ marginLeft: 12, marginRight: 16 }}
         onPress={() => {
           // props.navigation.goBack()
           // alert("댓글 작성으로 이동")

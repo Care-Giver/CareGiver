@@ -1,10 +1,10 @@
-import { HEIGHT } from "#theme"
+
 
 // ? 검색 필터(날짜, 시간, 장소 선택 필터) "컨테이너" 높이
-export const HEADER_HEIGHT = HEIGHT * 105
+export const HEADER_HEIGHT = 105
 
-export const HEADER_MARGIN_TOP = HEIGHT * 20
-export const HEADER_MARGIN_BOTTOM = HEIGHT * 22
+export const HEADER_MARGIN_TOP = 20
+export const HEADER_MARGIN_BOTTOM = 22
 
 // ? 검색 필터 "영역" 높이
 // ? -> 영역에 해당 영역 높이 만큼의 음수 top 마진 값을 주면, 영역 높이만큼 위쪽으로 이동하게 됨

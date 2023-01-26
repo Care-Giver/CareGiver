@@ -13,15 +13,7 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
-import {
-  STRONG_LINE,
-  GIVER_CASUAL_NAVY,
-  SUB_HEAD_LINE,
-  BODY,
-  LIGHT_LINE,
-  HEIGHT,
-  WIDTH,
-} from "#theme"
+import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY } from "#theme"
 import { images } from "#images"
 import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -119,17 +111,12 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 {/* //? 사용자 이름 */}
                 <Row>
                   <PreBol20 text={userInfo.name} color={STRONG_LINE} />
-                  <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: WIDTH * 2 }} />
+                  <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                 </Row>
                 {/* //? 내 프로필 관리 버튼 */}
-                <Pressable
-                  style={{ marginTop: HEIGHT * 8, flexDirection: "row", alignItems: "center" }}
-                >
+                <Pressable style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}>
                   <PreBol14 text="내 프로필 관리" color={BODY} />
-                  <Image
-                    style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={images.arrow_left}
-                  />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
                 </Pressable>
               </View>
             </Row>
@@ -145,10 +132,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 {/* //? 전체보기 버튼 */}
                 <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
                   <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
-                  <Image
-                    style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-                    source={images.arrow_left}
-                  />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
                 </Pressable>
               </Row>
 
@@ -176,11 +160,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             {/* //? "로그인 후 이용해주세요" 카드 */}
             <Pressable style={{ flexDirection: "row" }} onPress={handleLoginPress}>
               <PreBol16 text="로그인" color={GIVER_CASUAL_NAVY} />
-              <PreReg16
-                text="후 이용해주세요."
-                color={SUB_HEAD_LINE}
-                style={{ marginLeft: WIDTH * 2 }}
-              />
+              <PreReg16 text="후 이용해주세요." color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
             </Pressable>
           </Row>
         )}
@@ -192,10 +172,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           <Pressable onPress={handleMode}>
             <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
           </Pressable>
-          <Image
-            source={images.arrow_change}
-            style={{ marginLeft: WIDTH * 2, width: WIDTH * 28, height: HEIGHT * 28 }}
-          />
+          <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>
 
         {/* //? divider */}

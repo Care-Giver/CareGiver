@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { GIVER_CASUAL_NAVY } from "#theme"
 
 export const styles = StyleSheet.create({
@@ -7,13 +7,13 @@ export const styles = StyleSheet.create({
   //     flexDirection: "row",
   //   },
   profileImg: {
-    width: WIDTH * 142,
-    height: HEIGHT * 108,
+    width: 142,
+    height: 108,
     borderRadius: 9,
     backgroundColor: "red",
   },
   infoBox: {
-    // height: HEIGHT * 63,
+    // height: 63,
     // flexDirection: "column",
     // justifyContent: "space-between",
   },

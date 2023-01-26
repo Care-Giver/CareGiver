@@ -11,7 +11,7 @@
 //   RowRoundedButton,
 // } from "#components"
 // import { petsitters } from "./dummy-data"
-// import { HEIGHT, WIDTH } from "#theme"
+//
 // import { HEAD_LINE, LBG } from "#theme"
 // import { images } from "#images"
 // import { NavigatorParamList } from "#navigators"

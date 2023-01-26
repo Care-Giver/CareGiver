@@ -1,6 +1,6 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme"
+
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
@@ -23,7 +23,7 @@ export const HomeScreenHeader = (props) => {
         }}
         style={{
           marginLeft: "auto",
-          marginRight: WIDTH * 16,
+          marginRight: 16,
         }}
       >
         <Image style={styles.bell} source={images.bell} />

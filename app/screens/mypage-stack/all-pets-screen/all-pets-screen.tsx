@@ -35,8 +35,8 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
         {/* //* 제목 - 전체 n 마리 */}
         <Row style={styles.title}>
           <PreBol16 text="전체" color={SUB_HEAD_LINE} />
-          <PopSem16 text={"" + pets.length} color={HEAD_LINE} style={{ marginLeft: WIDTH * 4 }} />
-          <PreBol16 text="마리" color={SUB_HEAD_LINE} style={{ marginLeft: WIDTH * 2 }} />
+          <PopSem16 text={"" + pets.length} color={HEAD_LINE} style={{ marginLeft: 4 }} />
+          <PreBol16 text="마리" color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
         </Row>
 
         {/* //? division line */}

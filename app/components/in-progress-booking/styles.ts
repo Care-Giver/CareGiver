@@ -1,14 +1,13 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme"
 
 export const styles = StyleSheet.create({
   background: {
-    width: WIDTH * 358,
-    height: HEIGHT * 229,
+    width: 358,
+    height: 229,
     // backgroundColor: "yellow",
 
-    paddingHorizontal: WIDTH * 16,
-    paddingTop: HEIGHT * 16,
-    paddingBottom: HEIGHT * 25,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 25,
   },
 })

@@ -11,7 +11,6 @@ import {
   POPPINS_REGULAR,
   POPPINS_SEMIBOLD,
 } from "#fonts"
-import { HEIGHT } from "#theme"
 
 /**
  * For your text displaying needs.
@@ -34,7 +33,7 @@ const PretendardBold = (props: TextProps) => {
           fontFamily: PRETENDARD_BOLD,
           fontWeight: "bold",
           includeFontPadding: false,
-          fontSize: HEIGHT * size,
+          fontSize: size,
           color: color,
         },
       ]}
@@ -59,7 +58,7 @@ const PretendardMedium = (props: TextProps) => {
           fontFamily: PRETENDARD_MEDIUM,
           fontWeight: "normal",
           includeFontPadding: false,
-          fontSize: HEIGHT * size,
+          fontSize: size,
           color: color,
         },
       ]}
@@ -84,7 +83,7 @@ const PretendardRegular = (props: TextProps) => {
           fontFamily: PRETENDARD_REGULAR,
           fontWeight: "normal",
           includeFontPadding: false,
-          fontSize: HEIGHT * size,
+          fontSize: size,
           color: color,
         },
       ]}
@@ -612,7 +611,7 @@ const PoppinsSemiBold = (props: TextProps) => {
           fontFamily: POPPINS_SEMIBOLD,
           fontWeight: "bold",
           includeFontPadding: false,
-          fontSize: HEIGHT * size,
+          fontSize: size,
           color: color,
         },
       ]}
@@ -637,7 +636,7 @@ const PoppinsRegular = (props: TextProps) => {
           fontFamily: POPPINS_REGULAR,
           fontWeight: "normal",
           includeFontPadding: false,
-          fontSize: HEIGHT * size,
+          fontSize: size,
           color: color,
         },
       ]}

@@ -14,12 +14,12 @@ import {
   PreBol18,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
-import { HEIGHT, WIDTH, BODY, SUB_HEAD_LINE } from "#theme"
+import { BODY, SUB_HEAD_LINE } from "#theme"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { images } from "#images"
 
-const FLATLIST_PADDING_VERTICAL = HEIGHT * 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
-const FLATLIST_PADDING_HORIZONTAL = WIDTH * 10 //? ""
+const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
+const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = observer(
   ({ navigation, route }) => {
@@ -76,15 +76,15 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
             textColor={BODY}
-            style={{ marginTop: HEIGHT * 18 }}
+            style={{ marginTop: 18 }}
           />
 
           {/*//? Title */}
-          <PreBol20 text="케어기버에게 요청할 서비스를" style={{ marginTop: HEIGHT * 50 }} />
-          <PreBol20 text="선택해주세요!" style={{ marginTop: HEIGHT * 8 }} />
+          <PreBol20 text="케어기버에게 요청할 서비스를" style={{ marginTop: 50 }} />
+          <PreBol20 text="선택해주세요!" style={{ marginTop: 8 }} />
 
           {/*//? 펫시팅 | 훈련 선택 박스 */}
-          <Row style={{ marginTop: HEIGHT * 20 }}>
+          <Row style={{ marginTop: 20 }}>
             <ServiceChoiceButton
               onPress={() => {
                 navigate("search-screen", { service: "펫시팅" })
@@ -103,9 +103,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           </Row>
 
           {/*//? Title */}
-          <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: HEIGHT * 60 }} />
+          <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: 60 }} />
           {/*//? 펫시터 */}
-          <Row style={{ marginTop: HEIGHT * 20 }}>
+          <Row style={{ marginTop: 20 }}>
             <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
             {/*//? 방문/위탁 토글 버튼 */}
             <VisitingDropOffSwitchButton
@@ -118,8 +118,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           {/*//? 펫시터 선택 박스 리스트 Horzontal FaltList*/}
           <Row
             style={{
-              marginTop: HEIGHT * (12 - FLATLIST_PADDING_VERTICAL / 2),
-              marginLeft: WIDTH * -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
+              marginTop: 12 - FLATLIST_PADDING_VERTICAL / 2,
+              marginLeft: -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
             }}
           >
             <FlatList
@@ -137,7 +137,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
                   rating={item.rating}
                   desc={item.desc}
                   image={item.profileImg}
-                  style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 10 }}
+                  style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 10 }}
                 />
               )}
               contentContainerStyle={{
@@ -161,13 +161,13 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           <DotsIndicator
             items={petsitters}
             activeIndex={selectedPetsitter}
-            style={{ marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2) }}
+            style={{ marginTop: 16 - FLATLIST_PADDING_VERTICAL / 2 }}
           />
 
           {/*//? 훈련사 */}
           <Row
             style={{
-              marginTop: HEIGHT * 60,
+              marginTop: 60,
               backgroundColor: "white",
             }}
           >
@@ -184,8 +184,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           {/*//? 훈련사 선택 박스 리스트 Horzontal FaltList*/}
           <Row
             style={{
-              marginTop: HEIGHT * (12 - FLATLIST_PADDING_VERTICAL / 2),
-              marginLeft: WIDTH * -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
+              marginTop: 12 - FLATLIST_PADDING_VERTICAL / 2,
+              marginLeft: -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
             }}
           >
             <FlatList
@@ -203,7 +203,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
                   rating={item.rating}
                   desc={item.desc}
                   image={item.profileImg}
-                  style={{ marginLeft: index === 0 ? 0 : WIDTH * 10, zIndex: 1 }}
+                  style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 1 }}
                 />
               )}
               contentContainerStyle={{
@@ -226,8 +226,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             items={trainers}
             activeIndex={selectedTrainer}
             style={{
-              marginTop: HEIGHT * (16 - FLATLIST_PADDING_VERTICAL / 2),
-              marginBottom: HEIGHT * 60, //! 예외적으로 marginBottom 허용
+              marginTop: 16 - FLATLIST_PADDING_VERTICAL / 2,
+              marginBottom: 60, //! 예외적으로 marginBottom 허용
             }}
           />
         </ScrollView>

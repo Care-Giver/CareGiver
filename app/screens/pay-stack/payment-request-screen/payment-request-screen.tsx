@@ -12,7 +12,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { DISABLED, STRONG_LINE } from "#theme"
-import { HEIGHT, WIDTH } from "#theme"
+
 import { BorderRadioButton } from "#components"
 
 // - 알러지 버튼 이름 목록
@@ -206,12 +206,12 @@ export const PaymentRequestScreen: FC<
 
       {/* //* 첫 번째 요청사항 - 도구, 사료 위치 */}
       <PreBol14
-        style={{ marginTop: HEIGHT * 24 }}
+        style={{ marginTop: 24 }}
         text={"펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"}
         color={STRONG_LINE}
       />
       <UserTextInput
-        style={{ marginTop: HEIGHT * 8 }}
+        style={{ marginTop: 8 }}
         placeholder={"Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"}
         placeholderColor={DISABLED}
         value={toolsLocation}
@@ -221,21 +221,19 @@ export const PaymentRequestScreen: FC<
 
       {/* //* 두 번재 요청사항 - 먹으면 안되는 음식 */}
       <PreBol14
-        style={{ marginTop: HEIGHT * 16 }}
+        style={{ marginTop: 16 }}
         text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
         color={STRONG_LINE}
       />
       {/* //? 버튼 입력 */}
-      <View
-        style={{ marginTop: HEIGHT * 14, flexDirection: "row", justifyContent: "space-between" }}
-      >
+      <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
         {ALLERGYS.map((allergy) => (
           <BorderRadioButton
             style={{
               width: getButtonWidth(
                 windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
                 ALLERGYS.length,
-                WIDTH * 6,
+                6,
               ),
             }}
             active={allergy.value}
@@ -248,7 +246,7 @@ export const PaymentRequestScreen: FC<
 
       {/* //? 텍스트 입력 */}
       <UserTextInput
-        style={{ marginTop: HEIGHT * 11 }}
+        style={{ marginTop: 11 }}
         placeholder={"주의할 음식을 직접 작성해주세요!"}
         placeholderColor={DISABLED}
         value={allergyText}
@@ -258,20 +256,20 @@ export const PaymentRequestScreen: FC<
 
       {/* //* 세 번째 요청사항 - 반려동물과 친해지는 팁 */}
       <PreBol14
-        style={{ marginTop: HEIGHT * 16 }}
+        style={{ marginTop: 16 }}
         text="반려동물과 친해질 수 있는 꿀팁을 알려주세요."
         color={STRONG_LINE}
       />
       {/* //? 버튼 입력 */}
       <View
         style={{
-          marginTop: HEIGHT * 14,
+          marginTop: 14,
           alignItems: "stretch",
         }}
       >
         {TIPS.map((tip, index) => (
           <BorderRadioButton
-            style={{ marginTop: index === 0 ? 0 : HEIGHT * 8 }}
+            style={{ marginTop: index === 0 ? 0 : 8 }}
             active={tip.value}
             onPress={() => handleTipPress(tip.name)}
           >
@@ -282,7 +280,7 @@ export const PaymentRequestScreen: FC<
 
       {/* //? 텍스트 입력 */}
       <UserTextInput
-        style={{ marginTop: HEIGHT * 8 }}
+        style={{ marginTop: 8 }}
         placeholder="꿀팁을 자유롭게 작성해주세요"
         placeholderColor={DISABLED}
         value={tipText}
@@ -290,14 +288,10 @@ export const PaymentRequestScreen: FC<
       />
 
       {/* //* 네 번째 요청사항 - 배변 처리 방법 */}
-      <PreBol14
-        style={{ marginTop: HEIGHT * 16 }}
-        text="배변 처리 방법을 알려주세요"
-        color={STRONG_LINE}
-      />
+      <PreBol14 style={{ marginTop: 16 }} text="배변 처리 방법을 알려주세요" color={STRONG_LINE} />
       {/* //? 텍스트 입력 */}
       <UserTextInput
-        style={{ marginTop: HEIGHT * 8 }}
+        style={{ marginTop: 8 }}
         placeholder="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
         placeholderColor={DISABLED}
         value={howTreatPoop}
@@ -306,21 +300,19 @@ export const PaymentRequestScreen: FC<
 
       {/* //* 다섯 번째 요청사항 - 스킨십 싫어하는 부위 */}
       <PreBol14
-        style={{ marginTop: HEIGHT * 16 }}
+        style={{ marginTop: 16 }}
         text="스킨십할 때 싫어하는 부위를 말씀해주세요"
         color={STRONG_LINE}
       />
       {/* //? 버튼 입력 */}
-      <View
-        style={{ marginTop: HEIGHT * 14, flexDirection: "row", justifyContent: "space-between" }}
-      >
+      <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
         {DISLIKED_PARTS.map((part) => (
           <BorderRadioButton
             style={{
               width: getButtonWidth(
                 windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
                 DISLIKED_PARTS.length,
-                WIDTH * 6,
+                6,
               ),
             }}
             active={part.value}
@@ -332,17 +324,17 @@ export const PaymentRequestScreen: FC<
       </View>
 
       {/* //* 여섯 번째 요청사항 - 자율 작성 */}
-      <PreBol14 style={{ marginTop: HEIGHT * 72 }} text="자유 요청 사항" color={STRONG_LINE} />
+      <PreBol14 style={{ marginTop: 72 }} text="자유 요청 사항" color={STRONG_LINE} />
       {/* //? 텍스트 입력 */}
       <UserTextInput
-        style={{ marginTop: HEIGHT * 8, height: HEIGHT * 161 }}
+        style={{ marginTop: 8, height: 161 }}
         placeholder="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
         placeholderColor={DISABLED}
         value={freeRequest}
         handleChange={setFreeRequest}
       />
       {/* //? 마진 */}
-      <View style={{ height: HEIGHT * 290 }} />
+      <View style={{ height: 290 }} />
     </ScreenRootView>
   )
 })

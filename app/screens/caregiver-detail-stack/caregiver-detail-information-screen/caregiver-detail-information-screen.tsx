@@ -62,12 +62,7 @@ const services = (services) => {
 
   return arr.map((item, index) =>
     item === "division-line-vertical" ? (
-      <DivisionLineVertical
-        color={DBG}
-        height={HEIGHT * 16}
-        style={{ marginHorizontal: WIDTH * 10 }}
-        key={index}
-      />
+      <DivisionLineVertical color={DBG} height={16} style={{ marginHorizontal: 10 }} key={index} />
     ) : (
       <CaregiverService emoji={item.emoji} label={item.label} key={index} />
     ),
@@ -144,7 +139,7 @@ export const CaregiverDetailInformationScreen: FC<
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>
           {/* //* 케어기버 이름/ 별점/ 리뷰  */}
           <CaregiverNameStarReview
-            style={{ marginTop: HEIGHT * 36 }}
+            style={{ marginTop: 36 }}
             caregiverData={{
               name: name,
               ratings: rating,
@@ -154,19 +149,19 @@ export const CaregiverDetailInformationScreen: FC<
 
           {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
           <HiredTimesAndPetYears
-            style={{ marginTop: HEIGHT * 20 }}
+            style={{ marginTop: 20 }}
             hiredTimes={hiredTimes}
             petYearsYears={petYearsYears}
             petYearsMonths={petYearsMonths}
           />
 
           {/* //* 자격증 */}
-          <Row style={{ marginTop: HEIGHT * 60 }}>
+          <Row style={{ marginTop: 60 }}>
             <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
           </Row>
-          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <DivisionLine color={LBG} style={{ marginTop: 8 }} />
           <CaregiverCertificate
-            style={{ marginTop: HEIGHT * 8 }}
+            style={{ marginTop: 8 }}
             label={"반려동물관리사"}
             detail={"반려동물을 종합적으로 관리할 수 있는 사람에게 수여되는 자격증"}
           />
@@ -176,14 +171,14 @@ export const CaregiverDetailInformationScreen: FC<
           />
 
           {/* //* 서비스 */}
-          <Row style={{ marginTop: HEIGHT * 60 }}>
+          <Row style={{ marginTop: 60 }}>
             <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
           </Row>
-          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
-          <Row style={{ marginTop: HEIGHT * 12 }} children={services(servicesDummy)} />
+          <DivisionLine color={LBG} style={{ marginTop: 8 }} />
+          <Row style={{ marginTop: 12 }} children={services(servicesDummy)} />
 
           {/* //* 자기소개 */}
-          <Row style={{ marginTop: HEIGHT * 28 }}>
+          <Row style={{ marginTop: 28 }}>
             <PreBol16 text={"자기소개"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
@@ -195,16 +190,16 @@ export const CaregiverDetailInformationScreen: FC<
               }}
             />
           </Row>
-          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <DivisionLine color={LBG} style={{ marginTop: 8 }} />
           <PreReg14
             text={desc}
             color={SUB_HEAD_LINE}
             numberOfLines={8}
-            style={{ marginTop: HEIGHT * 10, lineHeight: HEIGHT * 20 }}
+            style={{ marginTop: 10, lineHeight: 20 }}
           />
 
           {/* //* 댓글 */}
-          <Row style={{ marginTop: HEIGHT * 60 }}>
+          <Row style={{ marginTop: 60 }}>
             <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
@@ -216,16 +211,11 @@ export const CaregiverDetailInformationScreen: FC<
               }}
             />
           </Row>
-          <DivisionLine color={LBG} style={{ marginTop: HEIGHT * 8 }} />
+          <DivisionLine color={LBG} style={{ marginTop: 8 }} />
 
-          <View style={{ paddingVertical: HEIGHT * -1, marginBottom: HEIGHT * 120 }}>
+          <View style={{ paddingVertical: -1, marginBottom: 120 }}>
             {commentsDummy.slice(0, 3).map((item, index) => (
-              <Comment
-                commentData={item}
-                numberOfLines={2}
-                style={{ marginTop: HEIGHT * -1 }}
-                key={index}
-              />
+              <Comment commentData={item} numberOfLines={2} style={{ marginTop: -1 }} key={index} />
             ))}
           </View>
         </View>

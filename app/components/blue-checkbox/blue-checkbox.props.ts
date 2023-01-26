@@ -1,5 +1,5 @@
+import { TxKeyPath } from "app/i18n"
 import { StyleProp, ViewStyle } from "react-native"
-import { TxKeyPath } from "~/app/i18n"
 
 export interface BlueCheckboxProps {
   /**

@@ -1,7 +1,6 @@
 import { View, ViewStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { HEIGHT } from "#theme"
 
 interface DivisionLineProps {
   color?: string
@@ -26,7 +25,7 @@ interface DivisionLineProps {
 
 export const DivisionLine = ({
   color = "#F0F0F6",
-  height = HEIGHT * 2,
+  height = 2,
   style = undefined,
   mt,
   mb,

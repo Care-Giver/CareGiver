@@ -1,11 +1,10 @@
-import { HEIGHT, WIDTH } from "#theme"
 import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, palette } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
-    paddingHorizontal: WIDTH * 16,
-    paddingVertical: HEIGHT * 16,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
 
     flexDirection: "row",
     // alignItems: "center",
@@ -30,8 +29,8 @@ export const styles = StyleSheet.create({
   },
 
   profileImg: {
-    width: WIDTH * 142,
-    height: HEIGHT * 108,
+    width: 142,
+    height: 108,
 
     padding: 8,
 
@@ -44,23 +43,23 @@ export const styles = StyleSheet.create({
   },
 
   bookingInfo: {
-    // width: WIDTH * 164,
+    // width: 164,
     flex: 1,
-    marginLeft: WIDTH * 16,
+    marginLeft: 16,
     flexDirection: "column",
     justifyContent: "space-between",
 
-    paddingVertical: HEIGHT * 7.5,
+    paddingVertical: 7.5,
   },
 
   likeBtn: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
+    width: 28,
+    height: 28,
 
-    marginTop: HEIGHT * -8,
+    marginTop: -8,
   },
 
   divisionLine: {
-    marginHorizontal: WIDTH * 8,
+    marginHorizontal: 8,
   },
 })

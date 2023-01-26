@@ -1,34 +1,34 @@
 import { LBG, LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "#theme"
+import { palette } from "#theme"
 
 export const styles = StyleSheet.create({
   test: {
     backgroundColor: "red",
   },
   root: {
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
   },
   placeholderBoxClosed: {
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
   },
   placeholderBoxOpen: {
-    paddingHorizontal: WIDTH * 16,
+    paddingHorizontal: 16,
     borderBottomWidth: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    height: HEIGHT * 46, //? borderBottomWidth = 0 이 되므로 이것을 고려하여 높이도 조정
+    height: 46, //? borderBottomWidth = 0 이 되므로 이것을 고려하여 높이도 조정
   },
   image: {
-    width: WIDTH * 16,
-    height: HEIGHT * 16,
+    width: 16,
+    height: 16,
     marginLeft: "auto",
   },
   text: {
-    marginLeft: WIDTH * 8,
+    marginLeft: 8,
   },
   addNewPetBox: {
-    height: HEIGHT * 52,
+    height: 52,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     // borderTopWidth: 0,

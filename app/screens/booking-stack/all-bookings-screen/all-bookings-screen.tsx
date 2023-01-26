@@ -14,7 +14,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { HEIGHT, WIDTH, GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
+import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
 import { bookingsDummy } from "./dummy-data"
 import {
   FlatList,
@@ -125,15 +125,11 @@ export const AllBookingsScreen: FC<
       </Pressable> */}
 
       {/* // * 진행중인 예약 */}
-      <PreBol16
-        text="진행 중인 예약"
-        color={GIVER_CASUAL_NAVY}
-        style={{ marginTop: HEIGHT * 20 }}
-      />
+      <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
 
       {/* // * 진행중인 예약 리스트 */}
       <FlatList
-        style={{ marginTop: HEIGHT * 10 }}
+        style={{ marginTop: 10 }}
         data={bookings}
         renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
         horizontal
@@ -146,22 +142,22 @@ export const AllBookingsScreen: FC<
         decelerationRate={"fast"}
       />
 
-      <Row style={[styles.dotsContainer, { marginTop: HEIGHT * 14 }]}>
+      <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
         {bookings.map((item, index) => (
           <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
         ))}
       </Row>
 
       {/* // * 지난 예약 */}
-      <Row style={{ marginTop: HEIGHT * 60, justifyContent: "space-between" }}>
+      <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
         <PreReg16 text="지난 예약" color={DISABLED} />
         <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
           <PreMed16 text="더보기" color={BODY} />
-          <Image source={images.arrow_left} style={{ width: WIDTH * 16, height: HEIGHT * 16 }} />
+          <Image source={images.arrow_left} style={{ width: 16, height: 16 }} />
         </Pressable>
       </Row>
 
-      <PastBooking style={{ marginTop: HEIGHT * 13 }} />
+      <PastBooking style={{ marginTop: 13 }} />
 
       {/* <TimeSelector bottomSheetRef={bottomSheetRef} /> */}
     </ScreenRootView>

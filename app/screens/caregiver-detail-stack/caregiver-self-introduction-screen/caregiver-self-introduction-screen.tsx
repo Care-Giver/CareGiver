@@ -6,7 +6,6 @@ import { observer } from "mobx-react-lite"
 import { NavigatorParamList } from "#navigators"
 import { PreReg14, ScreenRootView } from "#components"
 import { SUB_HEAD_LINE } from "#theme"
-import { HEIGHT } from "#theme"
 
 export const CaregiverSelfIntroductionScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-self-introduction-screen">
@@ -17,7 +16,7 @@ export const CaregiverSelfIntroductionScreen: FC<
 
   return (
     <ScreenRootView testID="CaregiverSelfIntroductionScreen" preset="fixed">
-      <PreReg14 text={route.params} color={SUB_HEAD_LINE} style={{ marginTop: HEIGHT * 20 }} />
+      <PreReg14 text={route.params} color={SUB_HEAD_LINE} style={{ marginTop: 20 }} />
     </ScreenRootView>
   )
 })

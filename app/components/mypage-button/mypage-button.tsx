@@ -5,7 +5,6 @@ import { styles } from "./styles"
 import { PreMed16 } from "../basics/custom-texts/custom-texts"
 import { STRONG_LINE } from "#theme"
 import { images } from "#images"
-import { HEIGHT, WIDTH } from "#theme"
 
 export const MypageButton = (props: MypageButtonProps) => {
   const { text, style, onPress } = props
