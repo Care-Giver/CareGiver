@@ -25,7 +25,7 @@ export const RegistrationButton = (props: RegistrationButtonProps, { children })
     <Pressable onPress={!isActive ? onPress : null} style={[styles.root, style, buttonStyle]}>
       <PreReg14 text={text} color={isActive ? color.palette.white : DISABLED} />
       {isActive && (
-        <Pressable onPress={onXPress}>
+        <Pressable style={styles.x_container} onPress={onXPress}>
           <Image source={images.x_white} style={styles.x_img} />
         </Pressable>
       )}
