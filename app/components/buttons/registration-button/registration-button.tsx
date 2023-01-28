@@ -29,9 +29,11 @@ export const RegistrationButton = (props: RegistrationButtonProps, { children })
     // ? 버튼이 선택되지 않았을 때만 onPress 지정 (onPress -> 옵션을 '선택된 옵션' 배열에 추가하는 작업을 시행)
     <Pressable onPress={!isActive ? onPress : null} style={[styles.root, style, buttonStyle]}>
       <PreReg14 text={text} color={isActive ? color.palette.white : DISABLED} />
-      <Pressable style={styles.x_container} onPress={isActive ? onXPress : null}>
-        {isActive && <Image source={images.x_white} style={styles.x_img} />}
-      </Pressable>
+      {isActive && (
+        <Pressable style={styles.x_container} onPress={onXPress}>
+          <Image source={images.x_white} style={styles.x_img} />
+        </Pressable>
+      )}
     </Pressable>
   )
 }
