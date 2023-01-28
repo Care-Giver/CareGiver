@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
-    paddingVertical: 8,
+    // paddingVertical: 8,
     paddingHorizontal: 16,
 
     borderRadius: 4,
@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
 
   x_container: {
     paddingHorizontal: 16,
+    paddingVertical: 14,
   },
 
   x_img: {
