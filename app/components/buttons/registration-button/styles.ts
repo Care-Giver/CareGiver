@@ -14,9 +14,15 @@ export const styles = StyleSheet.create({
     paddingRight: 0,
   },
 
+  text: {
+    paddingVertical: 8,
+  },
+
   x_container: {
+    height: "100%",
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   x_img: {
