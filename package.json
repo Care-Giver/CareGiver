@@ -49,6 +49,7 @@
     "expo-status-bar": "~1.4.0",
     "expo-updates": "~0.14.7",
     "i18n-js": "3.8.0",
+    "ignite-cli": "^7.10.8",
     "jimp": "^0.16.2",
     "mobx": "6.1.8",
     "mobx-react-lite": "3.2.0",
