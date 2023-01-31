@@ -1,22 +1,22 @@
-import { View, Text, Pressable, Image, StyleProp, TextStyle } from "react-native"
+import { Pressable, Image, StyleProp, ViewStyle } from "react-native"
 import React from "react"
 import { RegistrationButtonProps } from "./registration-button.props"
 import { styles } from "./styles"
 import { images } from "#images"
 import { DISABLED, GIVER_CASUAL_NAVY, LIGHT_LINE, color } from "#theme"
-import { PreBol12, PreReg14 } from "#components"
+import { PreReg14 } from "#components"
 
 export const RegistrationButton = (props: RegistrationButtonProps, { children }) => {
   const { text, isActive, onPress, onXPress, style } = props
 
   // * 버튼이 활성화 상태일 때 적용되는 스타일
-  const activeStyle: StyleProp<TextStyle> = {
+  const activeStyle: StyleProp<ViewStyle> = {
     borderColor: GIVER_CASUAL_NAVY,
     borderWidth: 2,
     backgroundColor: GIVER_CASUAL_NAVY,
   }
   // * 버튼이 비활성화 상태일 때 적용되는 스타일
-  const inactiveStyle: StyleProp<TextStyle> = {
+  const inactiveStyle: StyleProp<ViewStyle> = {
     borderColor: LIGHT_LINE,
     borderWidth: 2,
   }
