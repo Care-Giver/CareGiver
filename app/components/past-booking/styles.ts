@@ -1,4 +1,4 @@
-import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, palette } from "#theme"
+import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     padding: 8,
 
     borderRadius: 9,
-    backgroundColor: "red",
+    backgroundColor: "black",
   },
 
   typeBtn: {

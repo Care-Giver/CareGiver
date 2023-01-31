@@ -1,11 +1,8 @@
-import { LBG, LIGHT_LINE } from "#theme"
 import { StyleSheet } from "react-native"
-import { palette } from "#theme"
+import { LBG } from "#theme"
+
 
 export const styles = StyleSheet.create({
-  test: {
-    backgroundColor: "red",
-  },
   root: {
     paddingHorizontal: 16,
   },
