@@ -49,7 +49,7 @@ export const UserStoreModel = types
 
     email: types.optional(types.string, ""),
     password: types.optional(types.string, ""),
-    provider: types.optional(types.string, null), //TODO: To be changed to Provider enum
+    provider: types.optional(types.string, ""), //TODO: To be changed to Provider enum
 
     name: types.optional(types.string, ""),
     phoneNumber: types.optional(types.string, ""),
