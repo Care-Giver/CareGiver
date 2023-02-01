@@ -116,10 +116,8 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
-
       // initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
-
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -207,7 +205,6 @@ const AllStacks = () => {
         }}
       />
 
-
       {/* //* 내 프로필 관리 */}
       <Stack.Screen
         name="my-profile-management-screen"
@@ -215,6 +212,8 @@ const AllStacks = () => {
         options={{
           title: "내 프로필 관리",
           header: (props) => <MyProfileManangementScreenHeader {...props} />,
+        }}
+      />
 
       {/* //* 예약 확인 */}
       <Stack.Screen
