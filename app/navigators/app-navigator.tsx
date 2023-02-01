@@ -32,6 +32,7 @@ import {
   SettingScreen,
   ServiceCenterScreen,
   ServiceRegistrationScreen,
+  FacilityRegistrationScreen,
 } from "#screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -94,6 +95,7 @@ export type NavigatorParamList = {
 
   // * registration
   "service-registration-screen": undefined
+  "facility-registration-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -112,8 +114,8 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
-      // initialRouteName="service-registration-screen"
-      initialRouteName="home-screen"
+      initialRouteName="facility-registration-screen"
+      // initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -272,6 +274,22 @@ const AllStacks = () => {
               {...props}
               buttonText={"건너뛰기"}
               // TODO: Event Listener 어디에 작성..? app navigator.tsx 파일에 작성해야하나?
+              handlePress={() => alert("건너뛰기")}
+            />
+          ),
+        }}
+      />
+
+      {/* //* 편의시설 등록 스크린 */}
+      <Stack.Screen
+        name="facility-registration-screen"
+        component={FacilityRegistrationScreen}
+        options={{
+          title: "근처 편의시설 등록",
+          header: (props) => (
+            <GobackAndTitleAndButtonHeader
+              {...props}
+              buttonText={"건너뛰기"}
               handlePress={() => alert("건너뛰기")}
             />
           ),

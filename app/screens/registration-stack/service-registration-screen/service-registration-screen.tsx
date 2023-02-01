@@ -15,11 +15,7 @@ import { styles } from "./styles"
 import { color } from "#theme"
 // * 화면에 띄울 서비스 배열
 import { services } from "./service-data"
-
-// - 버튼의 가로 간격
-const WIDTH_INTERVAL = 16
-// - 버튼의 column 수
-const NUM_OF_COLS = 2
+import { NUM_OF_COLS, WIDTH_INTERVAL } from "../style-const"
 
 export const ServiceRegistrationScreen: FC<
   StackScreenProps<NavigatorParamList, "service-registration-screen">
