@@ -17,9 +17,7 @@ export const HomeScreenHeader = (props) => {
       {/* //? 알람 버튼 */}
       <Pressable
         onPress={() => {
-          // alert("알림 기능은 준비중입니다.")
-          console.warn("임시로 마이페이지 이동버튼으로 사용중")
-          navigate("mypage-screen")
+          alert("알림 기능은 준비중입니다.")
         }}
         style={{
           marginLeft: "auto",

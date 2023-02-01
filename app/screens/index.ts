@@ -34,3 +34,4 @@ export * from "./mypage-stack/service-center-screen/service-center-screen"
 
 //* registration-stack
 export * from "./registration-stack/service-registration-screen/service-registration-screen"
+export * from "./favorites/favorites-screen"

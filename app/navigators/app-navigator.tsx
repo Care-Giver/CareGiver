@@ -82,6 +82,7 @@ export type NavigatorParamList = {
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
   "booking-detail-screen": undefined
+  "favorites-screen": undefined
 
   // * pay stack
   "payment-request-screen": undefined
@@ -297,7 +298,18 @@ const AllStacks = () => {
 
 const TabStacks = () => {
   const FavoritesStack = () => {
-    return null
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: "auto",
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>즐겨찾기 기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
   }
   const ChatsStack = () => {
     return (
@@ -340,9 +352,9 @@ const TabStacks = () => {
     >
       <Tab.Screen
         name="Favorites"
-        component={AllStacks}
+        component={FavoritesStack}
         options={{
-          tabBarLabel: "홈",
+          tabBarLabel: "즐겨찾기",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
@@ -351,6 +363,8 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
+          headerShown: true,
+          headerTitle: "즐겨찾기(개발중)",
         }}
       />
       <Tab.Screen
@@ -372,19 +386,17 @@ const TabStacks = () => {
       />
       <Tab.Screen
         name="Searching"
-        component={SearchResultScreen}
+        component={AllStacks}
         options={{
           tabBarLabel: "검색",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="card-search-outline"
+              name="search-web"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          // headerTitle: "",
         }}
       />
       <Tab.Screen
