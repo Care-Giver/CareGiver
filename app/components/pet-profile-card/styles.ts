@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT, palette } from "#theme/index"
+import { palette } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {
     width: "100%",
-    height: HEIGHT * 78,
+    height: 78,
     // alignSelf: "center",
     justifyContent: "center",
     backgroundColor: palette.white,
@@ -12,22 +12,22 @@ export const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "auto",
-    height: HEIGHT * 72,
-    marginLeft: WIDTH * 17,
+    height: 72,
+    marginLeft: 17,
     // backgroundColor: "yellow",
     justifyContent: "center",
   },
   deleteButton: {
-    width: WIDTH * 16,
-    height: HEIGHT * 16,
+    width: 16,
+    height: 16,
   },
   deleteButtonContainer: {
     alignSelf: "center",
     marginLeft: "auto",
   },
   image: {
-    width: WIDTH * 60,
-    height: HEIGHT * 60,
+    width: 60,
+    height: 60,
     borderRadius: 8,
     // backgroundColor: CARE_NATURAL_BLUE,
     alignSelf: "center",

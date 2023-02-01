@@ -2,8 +2,8 @@ import { View, Pressable, Image } from "react-native"
 import React from "react"
 import { Row } from "../basics/row/row"
 import { PopSem16, PreBol16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEIGHT, WIDTH } from "#theme/index"
-import IMAGES from "#images"
+
+import { images } from "#images"
 import { FilterHeaderProps } from "./filter-header.props"
 
 // ? 필터 헤더 부분에 오는 숫자는 Poppins 폰트를 사용하기 때문에, 따로 전달 받음
@@ -13,7 +13,7 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
     <Row
       style={{
         justifyContent: "space-between",
-        height: HEIGHT * 47,
+        height: 47,
       }}
     >
       {/* //* 제목 */}
@@ -27,7 +27,7 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
         <PopSem16
           text={number}
           style={{
-            marginLeft: WIDTH * 4,
+            marginLeft: 4,
           }}
         />
       </View>
@@ -42,11 +42,11 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
         >
           <PreReg12 text={seletedOption} />
           <Image
-            source={IMAGES.list_bars}
+            source={images.list_bars}
             style={{
-              width: WIDTH * 16,
-              height: HEIGHT * 16,
-              marginLeft: WIDTH * 5,
+              width: 16,
+              height: 16,
+              marginLeft: 5,
             }}
           />
         </Pressable>

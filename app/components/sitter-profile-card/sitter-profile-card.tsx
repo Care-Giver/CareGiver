@@ -3,9 +3,9 @@ import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme/palette"
-import IMAGES from "#images"
-import { HEIGHT, WIDTH } from "#theme/index"
+import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
+import { images } from "#images"
+
 import RatingReviewBox from "../rating-review-box/rating-review-box"
 
 const ONPRESS_LIKED_BTN = () => {
@@ -42,16 +42,16 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
           <PreMed16 text={name} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={rating} review={review} style={{ marginTop: HEIGHT * 4 }} />
+          <RatingReviewBox rating={rating} review={review} style={{ marginTop: 4 }} />
 
           {/* description title */}
-          <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: HEIGHT * 12 }} />
+          <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />
 
           {/* description details */}
           <PreReg12
             text={desc}
             color={DISABLED}
-            style={{ marginTop: HEIGHT * 6 }}
+            style={{ marginTop: 6 }}
             numberOfLines={2}
             ellipsizeMode="tail"
           />
@@ -59,7 +59,7 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
         {/* like button */}
         {/* // TODO: alert로 변경 */}
         <Pressable onPress={ONPRESS_LIKED_BTN}>
-          <Image style={styles.likeBtn} source={IMAGES.empty_heart} />
+          <Image style={styles.likeBtn} source={images.empty_heart} />
         </Pressable>
       </View>
     </Pressable>

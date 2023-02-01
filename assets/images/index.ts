@@ -1,6 +1,8 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-const IMAGES = {
+
+export const images = {
   //* images
+  arrow_change: require("../images/arrow_change.png"),
   arrow_down: require("../images/arrow_down.png"),
   arrow_left: require("../images/arrow_left.png"),
   arrow_up: require("../images/arrow_up.png"),
@@ -12,6 +14,7 @@ const IMAGES = {
   default_pet_image_60: require("../images/default_pet_image_60.png"),
   default_profile_image_comment: require("../images/default_profile_image_comment.png"),
   deselect_checkbox: require("../images/deselect_checkbox.png"),
+  dog_illustration: require("../images/dog_illustration.png"),
   empty_12: require("../images/empty_12.png"),
   empty_heart: require("../images/empty_heart.png"),
   go_back: require("../images/go_back.png"),
@@ -40,7 +43,7 @@ const IMAGES = {
   pencil: require("../images/pencil.png"),
   my_profile_management_default: require("../images/my_profile_management_default.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
-
+  x_white: require("../images/x_white.png"),
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
@@ -54,5 +57,3 @@ const IMAGES = {
   search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
 }
 
-//! 예외적으로 export default 허용
-export default IMAGES

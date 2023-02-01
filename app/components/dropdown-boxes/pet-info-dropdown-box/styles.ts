@@ -1,15 +1,15 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme/index"
-import { LBG } from "#theme/palette"
+
+import { LBG } from "#theme"
 
 export const styles = StyleSheet.create({
   cardContainer: {
-    marginTop: HEIGHT * 4,
+    marginTop: 4,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: LBG,
     // borderColor: "red",
-    // paddingHorizontal: WIDTH * 10,
+    // paddingHorizontal: 10,
   },
 
   dropdownTitle: {
@@ -18,8 +18,8 @@ export const styles = StyleSheet.create({
   },
 
   dropdownLogo: {
-    width: WIDTH * 16,
-    height: HEIGHT * 16,
-    marginLeft: WIDTH * 4,
+    width: 16,
+    height: 16,
+    marginLeft: 4,
   },
 })

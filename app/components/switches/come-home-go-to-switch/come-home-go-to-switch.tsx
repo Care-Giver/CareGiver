@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { ViewStyle, Animated, Easing, TouchableWithoutFeedback, Text, View } from "react-native"
-import { color, WIDTH, HEIGHT, palette } from "#theme/index"
-import { GIVER_CASUAL_NAVY } from "#theme/palette"
+import { color, palette } from "#theme"
+import { GIVER_CASUAL_NAVY } from "#theme"
 import { SwitchProps } from "./come-home-go-to-switch.props"
 
 // dimensions
-const ROOT_WIDTH = WIDTH * 72
-const ROOT_HEIGHT = HEIGHT * 21
-const MOVING_BLCOK_WIDTH = WIDTH * 36
+const ROOT_WIDTH = 72
+const ROOT_HEIGHT = 21
+const MOVING_BLCOK_WIDTH = 36
 const MARGIN = 2
 const OFF_POSITION = -0.5
 const ON_POSITION = ROOT_WIDTH - MOVING_BLCOK_WIDTH - MARGIN

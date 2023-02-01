@@ -1,10 +1,10 @@
 import { View, Animated } from "react-native"
 import React from "react"
 import { Row, RowRoundedButton } from "#components"
-import { HEIGHT, WIDTH } from "#theme/index"
-import IMAGES from "#images"
+
+import { images } from "#images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
-import { DISABLED } from "#theme/palette"
+import { DISABLED } from "#theme"
 
 export const AnimatedHeader = ({ animatedValue }) => {
   const headerOpacity = animatedValue.interpolate({
@@ -36,27 +36,27 @@ export const AnimatedHeader = ({ animatedValue }) => {
         >
           {/*//? 날짜 선택 */}
           <RowRoundedButton
-            image={IMAGES.calender_disabled}
+            image={images.calender_disabled}
             text={"2022.03.20"}
             textColor={DISABLED}
-            style={{ width: WIDTH * 174 }}
+            style={{ width: 174 }}
           />
 
           {/* //? 시간 선택 */}
           <RowRoundedButton
-            image={IMAGES.timer_disabled}
+            image={images.timer_disabled}
             text={"08:00-12:00"}
             textColor={DISABLED}
-            style={{ width: WIDTH * 174 }}
+            style={{ width: 174 }}
           />
         </Row>
 
         {/*//? 주소 선택 */}
         <RowRoundedButton
-          image={IMAGES.location_disabled}
+          image={images.location_disabled}
           text={"경기도 안산시 상록구 한양대학로 55"}
           textColor={DISABLED}
-          style={{ marginTop: HEIGHT * 12 }}
+          style={{ marginTop: 12 }}
         />
       </View>
     </Animated.View>

@@ -1,14 +1,13 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
 
 export const styles = StyleSheet.create({
   container: {
-    width: WIDTH * 175,
-    height: HEIGHT * 230,
+    width: 175,
+    height: 230,
 
-    paddingHorizontal: WIDTH * 16,
-    paddingTop: HEIGHT * 18,
-    paddingBottom: HEIGHT * 16,
+    paddingHorizontal: 16,
+    paddingTop: 18,
+    paddingBottom: 16,
 
     borderRadius: 13,
 
@@ -17,20 +16,20 @@ export const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: HEIGHT * 8.2,
+    marginTop: 8.2,
   },
   star: {
-    width: WIDTH * 13,
-    height: HEIGHT * 12,
+    width: 13,
+    height: 12,
   },
   starMargin: {
-    marginLeft: WIDTH * 2.9,
+    marginLeft: 2.9,
   },
   //TODO: desc 가 2줄이면 marginTop 조정해야 함...
   image: {
-    width: WIDTH * 142,
-    height: HEIGHT * 108,
-    marginTop: HEIGHT * 24,
+    width: 142,
+    height: 108,
+    marginTop: 24,
     borderRadius: 9,
     resizeMode: "cover",
   },

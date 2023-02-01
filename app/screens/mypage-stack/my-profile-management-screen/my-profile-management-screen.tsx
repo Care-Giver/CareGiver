@@ -88,4 +88,16 @@ export const MyProfileManagementScreen: FC<
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
     </ScreenRootView>
   )
+
 })
+
+
+})
+
+//*일단 닉네임 부분은 유저 이름으로 불러오기. -> 세팅 화면부터 먼저 만ㅡ었어야 할것 같지만... 이걸 먼저 했기 때문에.. 
+//* mst 필요? mst 만들어서 유저 정보들 좌라라락 넣기 -> update 되는 함수는 아직 모르겠음. flow 가 안나와서 . 
+//* 유저 정보 어떻게 넣나? 로그인 된 유저 토큰은 무엇? 
+//* rest api 공부 -> mst 안에 넣기 
+//* 연필 눌렀을 때 화면 바뀌는 부분 구현 
+//* 닉네임 눌렀을 때 화면 바뀌는 부분 구현 
+

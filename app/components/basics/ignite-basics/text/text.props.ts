@@ -39,4 +39,19 @@ export interface TextProps extends TextProperties {
   color?: string
 
   size?: number
+
+  /**
+   * marginTop
+   */
+  mt?: number
+
+  /**
+   * marginBottom
+   */
+  mb?: number
+
+  /**
+   * marginVertical (could be overlapped by mt or mb)
+   */
+  mv?: number
 }

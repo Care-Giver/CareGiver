@@ -4,7 +4,7 @@ import { styles } from "./styles"
 import { PopReg16, PopSem16, PreReg16 } from "../basics/custom-texts/custom-texts"
 import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { Row } from "../basics/row/row"
-import { WIDTH, HEIGHT } from "#theme/index"
+
 import { RowRoundedBox } from "../basics/row-rounded-box/row-rounded-box"
 
 export const RowRoundedTimeIntervalPicker = (props) => {
@@ -37,7 +37,7 @@ export const RowRoundedTimeIntervalPicker = (props) => {
             mode="time"
             //? 선택한 시작시간(fromTime)이 현재시간(NOW_TIME) 보다 이전이면, 현재시간을 시작시간으로 강제한다
             value={fromTime ? (fromTime < NOW_TIME ? NOW_TIME : fromTime) : NOW_TIME}
-            style={{ width: WIDTH * 90, height: HEIGHT * 40 }}
+            style={{ width: 90, height: 40 }}
             // display="inline"
             minuteInterval={5}
             onChange={(event, date) => setFromTime(date)}
@@ -48,8 +48,8 @@ export const RowRoundedTimeIntervalPicker = (props) => {
           {fromTime === false ? (
             <View
               style={{
-                width: WIDTH * 90,
-                height: HEIGHT * 40,
+                width: 90,
+                height: 40,
               }}
             />
           ) : (
@@ -59,8 +59,8 @@ export const RowRoundedTimeIntervalPicker = (props) => {
               value={toTime ? (fromTime < toTime ? toTime : fromTime || NOW_TIME) : TO_TIME}
               // value={toTime || TO_TIME}
               style={{
-                width: WIDTH * 90,
-                height: HEIGHT * 40,
+                width: 90,
+                height: 40,
               }}
               onChange={(event, date) => setToTime(date)}
               disabled={fromTime === false}
@@ -76,7 +76,7 @@ export const RowRoundedTimeIntervalPicker = (props) => {
             mode="time"
             //? 선택한 시작시간(fromTime)이 현재시간(NOW_TIME) 보다 이전이면, 현재시간을 시작시간으로 강제한다
             value={fromTime ? (fromTime < NOW_TIME ? NOW_TIME : fromTime) : NOW_TIME}
-            style={{ width: WIDTH * 90, height: HEIGHT * 40 }}
+            style={{ width: 90, height: 40 }}
             // display="inline"
             minuteInterval={5}
             onChange={(event, date) => setFromTime(date)}
@@ -90,7 +90,7 @@ export const RowRoundedTimeIntervalPicker = (props) => {
           {/* <RNDateTimePicker
             mode="time"
             value={toTime || TO_TIME}
-            style={{ width: WIDTH * 90, height: HEIGHT * 40 }}
+            style={{ width: 90, height: 40 }}
             onChange={(event, date) => setToTime(date)}
             //? 안드로이드만
             is24Hour={false}

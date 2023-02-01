@@ -1,19 +1,17 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme/index"
-import { GIVER_CASUAL_NAVY } from "#theme/palette"
 
 export const styles = StyleSheet.create({
   //   root: {
   //     flexDirection: "row",
   //   },
   profileImg: {
-    width: WIDTH * 142,
-    height: HEIGHT * 108,
+    width: 142,
+    height: 108,
     borderRadius: 9,
-    backgroundColor: "red",
+    backgroundColor: "black",
   },
   infoBox: {
-    // height: HEIGHT * 63,
+    // height: 63,
     // flexDirection: "column",
     // justifyContent: "space-between",
   },

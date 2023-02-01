@@ -4,8 +4,8 @@
 import * as React from "react"
 import { View, ViewStyle } from "react-native"
 import { storiesOf } from "@storybook/react-native"
-import { StoryScreen, Story, UseCase } from "#storybook/views/index"
-import { Toggle } from "~/app/utils/react-powerplug"
+import { StoryScreen, Story, UseCase } from "../../../../../storybook/views"
+import { Toggle } from "../../../../utils/react-powerplug"
 import { Switch } from "./switch"
 
 declare let module

@@ -1,8 +1,8 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme/index"
+
 import { PreMed18 } from "../../basics/custom-texts/custom-texts"
-import IMAGES from "#images"
+import { images } from "#images"
 import { styles } from "./styles"
 import { navigate } from "#navigators"
 import { HEADER_ROOT } from "../common-styles"
@@ -16,12 +16,12 @@ export const AllCommentsScreenHeader = (props) => {
           props.navigation.goBack()
         }}
       >
-        <Image style={styles.goBackButton} source={IMAGES.go_back} />
+        <Image style={styles.goBackButton} source={images.go_back} />
       </Pressable>
 
       {/* //* 타이틀 */}
 
-      <PreMed18 style={{ marginLeft: WIDTH * 8 }}> 댓글</PreMed18>
+      <PreMed18 style={{ marginLeft: 8 }}> 댓글</PreMed18>
 
       {/* //*  댓글 검색 */}
       <Pressable
@@ -31,12 +31,12 @@ export const AllCommentsScreenHeader = (props) => {
           alert("댓글 검색으로 이동")
         }}
       >
-        <Image style={styles.search} source={IMAGES.search} />
+        <Image style={styles.search} source={images.search} />
       </Pressable>
 
       {/* //*  댓글 작성 */}
       <Pressable
-        style={{ marginLeft: WIDTH * 12, marginRight: WIDTH * 16 }}
+        style={{ marginLeft: 12, marginRight: 16 }}
         onPress={() => {
           // props.navigation.goBack()
           // alert("댓글 작성으로 이동")
@@ -44,7 +44,7 @@ export const AllCommentsScreenHeader = (props) => {
           navigate("writing-comment-screen", null)
         }}
       >
-        <Image style={styles.writeComment} source={IMAGES.write_comment} />
+        <Image style={styles.writeComment} source={images.write_comment} />
       </Pressable>
     </View>
   )

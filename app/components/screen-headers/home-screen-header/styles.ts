@@ -1,15 +1,14 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
 
 export const styles = StyleSheet.create({
   careGiverLogo: {
-    width: WIDTH * 162,
-    height: WIDTH * 20,
-    marginLeft: WIDTH * 16,
+    width: 162,
+    height: 20,
+    marginLeft: 16,
     // backgroundColor: "red",
   },
   bell: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
+    width: 28,
+    height: 28,
   },
 })

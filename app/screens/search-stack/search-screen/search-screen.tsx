@@ -13,13 +13,120 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   RowRoundedTimeIntervalPicker,
+  PreReg16,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
-import { HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT, WIDTH } from "#theme/index"
-import { DISABLED, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme/palette"
-import IMAGES from "#images"
+import {
+  IOS_BOTTOM_HOME_BAR_HEIGHT,
+  DISABLED,
+  HEAD_LINE,
+  LBG,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+} from "#theme"
+import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar } from "react-native-calendars"
+import { Picker } from "@react-native-picker/picker"
+
+const timeOptions = [
+  "00:00",
+  "00:15",
+  "00:30",
+  "00:45",
+  "01:00",
+  "01:15",
+  "01:30",
+  "01:45",
+  "02:00",
+  "02:15",
+  "02:30",
+  "02:45",
+  "03:00",
+  "03:15",
+  "03:30",
+  "03:45",
+  "04:00",
+  "04:15",
+  "04:30",
+  "04:45",
+  "05:00",
+  "05:15",
+  "05:30",
+  "05:45",
+  "06:00",
+  "06:15",
+  "06:30",
+  "06:45",
+  "07:00",
+  "07:15",
+  "07:30",
+  "07:45",
+  "08:00",
+  "08:15",
+  "08:30",
+  "08:45",
+  "09:00",
+  "09:15",
+  "09:30",
+  "09:45",
+  "10:00",
+  "10:15",
+  "10:30",
+  "10:45",
+  "11:00",
+  "11:15",
+  "11:30",
+  "11:45",
+  "12:00",
+  "12:15",
+  "12:30",
+  "12:45",
+  "13:00",
+  "13:15",
+  "13:30",
+  "13:45",
+  "14:00",
+  "14:15",
+  "14:30",
+  "14:45",
+  "15:00",
+  "15:15",
+  "15:30",
+  "15:45",
+  "16:00",
+  "16:15",
+  "16:30",
+  "16:45",
+  "17:00",
+  "17:15",
+  "17:30",
+  "17:45",
+  "18:00",
+  "18:15",
+  "18:30",
+  "18:45",
+  "19:00",
+  "19:15",
+  "19:30",
+  "19:45",
+  "20:00",
+  "20:15",
+  "20:30",
+  "20:45",
+  "21:00",
+  "21:15",
+  "21:30",
+  "21:45",
+  "22:00",
+  "22:15",
+  "22:30",
+  "22:45",
+  "23:00",
+  "23:15",
+  "23:30",
+  "23:45",
+]
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
@@ -29,6 +136,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [date, setDate] = useState() //? 선택된 날짜
     const [selectedPets, setSelectedPets] = useState([])
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const [startTime, setStartTime] = useState()
+    const [endTime, setEndTime] = useState()
 
     //! useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
     useLayoutEffect(() => {
@@ -67,7 +177,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
-        <Row style={{ marginTop: HEIGHT * 12 }}>
+        <Row style={{ marginTop: 12 }}>
           <ServiceTypeIndicatorHeader
             onPress={() => {
               setServiceType("방문")
@@ -79,13 +189,13 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             onPress={() => {
               setServiceType("위탁")
             }}
-            style={{ marginLeft: WIDTH * 10 }}
+            style={{ marginLeft: 10 }}
             label={"위탁"}
             state={serviceType}
           />
         </Row>
-        <Row style={{ marginTop: HEIGHT * 16 }}>
-          <Image source={IMAGES.right_arrow_grey} style={styles.image} />
+        <Row style={{ marginTop: 16 }}>
+          <Image source={images.right_arrow_grey} style={styles.image} />
           <PreReg14
             text={
               serviceType === "방문"
@@ -104,14 +214,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               setIsCalendarOpen(true)
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
             }}
-            image={IMAGES.calendar}
+            image={images.calendar}
             text={
               date
                 ? `${date.dateString.replace("-", ".").replace("-", ".")}`
-                : "날짜를 선택해보세요."
+                : "날짜를 선택해주세요"
             }
             textColor={HEAD_LINE}
-            style={{ marginTop: HEIGHT * 36 }}
+            style={{ marginTop: 36 }}
           />
         ) : (
           //? 캘린더 표출
@@ -122,7 +232,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
             }}
             style={{
-              marginTop: HEIGHT * 36,
+              marginTop: 36,
               backgroundColor: "#F0F0F6",
               padding: 4,
               borderRadius: 8,
@@ -138,25 +248,69 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
         )}
 
-        {/*//* 시간 선택 */}
+        {/* //* 시간 선택 */}
         {serviceType === "방문" && (
-          <RowRoundedTimeIntervalPicker style={{ marginTop: HEIGHT * 12 }} platform={Platform.OS} />
+          // <RowRoundedTimeIntervalPicker style={{ marginTop: 12 }} platform={Platform.OS} />
+          //! (임시로 추가함) - Web 에서는 @gorhom/bottom-sheet 작동 안 함 🥲
+          <>
+            <PreReg16
+              text={"방문시간을 선택해주세요"}
+              textColor={HEAD_LINE}
+              style={{ marginVertical: 10 }}
+            />
+            <Row style={{ justifyContent: "space-around" }}>
+              <Picker
+                selectedValue={startTime}
+                onValueChange={(itemValue, itemIndex) => setStartTime(itemValue)}
+                style={{
+                  width: "45%",
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: LIGHT_LINE,
+                  height: 40,
+                  textAlign: "center",
+                }}
+              >
+                {timeOptions.map((value, index) => (
+                  <Picker.Item label={value} value={value} key={index} />
+                ))}
+              </Picker>
+
+              <Picker
+                selectedValue={endTime}
+                onValueChange={(itemValue, itemIndex) => setEndTime(itemValue)}
+                style={{
+                  width: "45%",
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: LIGHT_LINE,
+                  height: 40,
+                  textAlign: "center",
+                }}
+              >
+                {timeOptions.map((value, index) => (
+                  <Picker.Item label={value} value={value} key={index} />
+                ))}
+              </Picker>
+            </Row>
+          </>
         )}
 
         {/*//* 위치 선택 */}
         <RowRoundedButton
           onPress={() => {
-            navigate("test-map-screen")
+            // navigate("test-map-screen")
+            alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
           }}
-          image={IMAGES.location}
+          image={images.location}
           text={"경기도 안산시 상록구 한양대학로 55"}
           textColor={HEAD_LINE}
-          style={{ marginTop: HEIGHT * 12 }}
+          style={{ marginTop: 12 }}
         />
 
         {/*//* 반려동물 선택 */}
         <SelectPetDropdownBox
-          style={{ marginTop: HEIGHT * 12 }}
+          style={{ marginTop: 12 }}
           isOpen={isDropdownOpen}
           onPress={() => {
             setIsDropdownOpen(!isDropdownOpen)
@@ -172,7 +326,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
         <PreBol14
           text="선택된 반려동물"
           color={SUB_HEAD_LINE}
-          style={{ marginTop: HEIGHT * 18, marginLeft: WIDTH * 16 }}
+          style={{ marginTop: 18, marginLeft: 16 }}
         />
         <View style={isDropdownOpen ? styles.hidden : styles.shown}>
           {/*//* 선택된 반려동물 리스트 */}
@@ -198,7 +352,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           isActivated={hadle()}
           style={{
             marginTop: "auto",
-            // margin: HEIGHT * 24,
+            // margin: 24,
             marginBottom: Platform.select({
               ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
               android: 0,

@@ -19,6 +19,8 @@ import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
 import { ErrorBoundary } from "./screens/ignite-basics/error/error-boundary"
+import {  useAssets } from "expo-asset"
+import { images } from "#images"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -36,6 +38,7 @@ function App() {
     onNavigationStateChange,
     isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+  const [areImagesLoaded] = useAssets(Object.values(images))
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
@@ -51,7 +54,7 @@ function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
-  if (!rootStore || !isNavigationStateRestored) return null
+  if (!rootStore || !isNavigationStateRestored || !areImagesLoaded) return null
 
   // otherwise, we're ready to render the app
   return (

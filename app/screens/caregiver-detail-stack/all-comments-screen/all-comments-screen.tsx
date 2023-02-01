@@ -1,13 +1,11 @@
-import { FlatList } from "react-native"
+import { FlatList, Platform } from "react-native"
 import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { Comment, DivisionLine, ScreenRootView, FilterHeader } from "#components"
 import { commentsDummy } from "./dummy-data"
-import { DEVICE_SCREEN_WIDTH, HEIGHT, IOS_BOTTOM_HOME_BAR_HEIGHT } from "#theme/index"
-import { LBG } from "#theme/palette"
-import { Platform } from "expo-modules-core"
+import { DEVICE_SCREEN_WIDTH, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "#theme"
 
 export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
@@ -31,15 +29,13 @@ export const AllCommentsScreen: FC<
       {/* //? 댓글 리스트 */}
       <FlatList
         data={commentsDummy}
-        renderItem={({ item, index }) => (
-          <Comment commentData={item} style={{ marginTop: HEIGHT * -1 }} />
-        )}
+        renderItem={({ item, index }) => <Comment commentData={item} style={{ marginTop: -1 }} />}
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         style={{
           marginBottom: Platform.select({
-            ios: HEIGHT * 2 + IOS_BOTTOM_HOME_BAR_HEIGHT,
-            android: HEIGHT * 2,
+            ios: 2 + IOS_BOTTOM_HOME_BAR_HEIGHT,
+            android: 2,
           }),
         }}
       />

@@ -2,15 +2,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "#components": ["./app/components/index.ts"],
-      "#navigators": ["./app/navigators/index.ts"],
-      "#screens": ["./app/screens/index.ts"],
-      "#theme/*": ["./app/theme/*"],
-      "#api/*": ["./app/services/api/*"],
-      "#images": ["./assets/images/index.ts"],
-      "#fonts": ["./assets/fonts/index.ts"],
-      "#storybook": ["./storybook/*"],
-      "./*": ["./*"]
+      "#components": ["./app/components/index"],
+      "#navigators": ["./app/navigators/index"],
+      "#screens": ["./app/screens/index"],
+      "#theme": ["./app/theme/index"],
+      "#api": ["./app/services/api/index"],
+      "#images": ["./assets/images/index"],
+      "#fonts": ["./assets/fonts/index"]
+
+      //* 예외들
+      //! storybook 은 절대로 절대경로 설정하지 말것!
     },
     "allowJs": false,
     "allowSyntheticDefaultImports": true,

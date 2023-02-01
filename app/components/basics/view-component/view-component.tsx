@@ -1,16 +1,32 @@
 import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
-import { palette, WIDTH } from "#theme/index"
+import { CARE_NATURAL_BLUE, CARE_SOFT_YELLOW, isWeb, palette, STANDARD_WIDTH, WIDTH } from "#theme"
 import { Screen } from "../ignite-basics/screen/screen"
 import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 
-export const BASIC_BACKGROUND_PADDING_WIDTH = WIDTH * 16
+export const BASIC_BACKGROUND_PADDING_WIDTH = 16
 
-const FULL: ViewStyle = { flex: 1 }
+export const FULL: ViewStyle = isWeb
+  ? {
+      alignSelf: "center",
+      flex: 1,
+      height: "100%",
+      width: STANDARD_WIDTH,
+      backgroundColor: "white",
+    }
+  : { flex: 1 }
 
-const FULL_WITH_SCROLLING: ViewStyle = { width: "100%", height: "auto" }
+export const FULL_WITH_SCROLLING: ViewStyle = isWeb
+  ? {
+      alignSelf: "center",
+      flex: 1,
+      height: "100%",
+      width: STANDARD_WIDTH,
+      backgroundColor: "white",
+    }
+  : { width: "100%", height: "auto" }
 
-const BASIC_BACKGROUND_PADDING: FlexStyle = {
+export const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 
@@ -18,7 +34,6 @@ export const ScreenRootView = (props) => {
   return (
     <Screen
       preset={props.preset}
-      backgroundColor={palette.white}
       style={
         isNonScrolling(props.preset)
           ? [FULL, BASIC_BACKGROUND_PADDING, props.style]

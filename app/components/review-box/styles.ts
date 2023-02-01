@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, WIDTH } from "#theme/index"
 
 export const styles = StyleSheet.create({
   root: {},
@@ -8,11 +7,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImg: {
-    width: WIDTH * 28,
-    height: HEIGHT * 28,
+    width: 28,
+    height: 28,
   },
   moreBtn: {
-    width: WIDTH * 3,
-    height: HEIGHT * 14,
+    width: 3,
+    height: 14,
   },
 })

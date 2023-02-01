@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Pressable, Image, View, ViewStyle } from "react-native"
-import IMAGES from "#images"
-import { color, HEIGHT, spacing, WIDTH } from "#theme/index"
+import { images } from "#images"
 import { BlueCheckboxProps } from "./blue-checkbox.props"
 
 const ROOT: ViewStyle = {
@@ -10,8 +9,8 @@ const ROOT: ViewStyle = {
 }
 
 const IMAGE: ViewStyle = {
-  width: WIDTH * 20,
-  height: HEIGHT * 20,
+  width: 20,
+  height: 20,
 }
 
 export function BlueCheckbox(props: BlueCheckboxProps) {
@@ -29,7 +28,7 @@ export function BlueCheckbox(props: BlueCheckboxProps) {
     >
       <Image
         style={IMAGE}
-        source={props.value ? IMAGES.select_checkbox : IMAGES.deselect_checkbox}
+        source={props.value ? images.select_checkbox : images.deselect_checkbox}
       />
     </Pressable>
   )

@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native"
-import { WIDTH, HEIGHT } from "#theme/index"
-import { LBG, LIGHT_LINE } from "#theme/palette"
+
+import { LBG, LIGHT_LINE } from "#theme"
 
 export const styles = StyleSheet.create({
-  image: { width: WIDTH * 16, height: HEIGHT * 16 },
-  text: { marginLeft: WIDTH * 8 },
+  image: { width: 16, height: 16 },
+  text: { marginLeft: 8 },
   addNewPetBox: {
-    height: HEIGHT * 52,
+    height: 52,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     borderColor: LBG,
@@ -15,8 +15,8 @@ export const styles = StyleSheet.create({
   },
   shown: {
     width: "auto",
-    height: HEIGHT * 236,
-    marginTop: HEIGHT * 8,
+    height: 236,
+    marginTop: 8,
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderWidth: 2,

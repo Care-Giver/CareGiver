@@ -1,5 +1,5 @@
 import { ViewStyle } from "react-native"
-import { color } from "#theme/index"
+import { CARE_SOFT_YELLOW, color, GIVER_ROMANTIC_GRAY, isWeb, STANDARD_WIDTH } from "#theme"
 
 /**
  * All screen keyboard offsets.
@@ -22,16 +22,25 @@ export const presets = {
    * which have built-in scrolling like FlatList.
    */
   fixed: {
-    outer: {
-      backgroundColor: color.background,
-      flex: 1,
-      height: "100%",
-    } as ViewStyle,
+    outer: isWeb
+      ? {
+          width: "100%",
+          backgroundColor: GIVER_ROMANTIC_GRAY,
+          alignSelf: "center",
+          flex: 1,
+          height: "100%",
+        }
+      : ({
+          backgroundColor: color.background,
+          flex: 1,
+          height: "100%",
+        } as ViewStyle),
     inner: {
       justifyContent: "flex-start",
       alignItems: "stretch",
       height: "100%",
       width: "100%",
+      backgroundColor: "white",
     } as ViewStyle,
   },
 
@@ -41,12 +50,24 @@ export const presets = {
    * Pick this one if you don't know which one you want yet.
    */
   scroll: {
-    outer: {
-      backgroundColor: color.background,
-      flex: 1,
+    outer: isWeb
+      ? {
+          width: "100%",
+          backgroundColor: GIVER_ROMANTIC_GRAY,
+          alignSelf: "center",
+          flex: 1,
+          height: "100%",
+        }
+      : ({
+          backgroundColor: color.background,
+          flex: 1,
+          height: "100%",
+        } as ViewStyle),
+    inner: {
+      justifyContent: "flex-start",
+      alignItems: "stretch",
       height: "100%",
     } as ViewStyle,
-    inner: { justifyContent: "flex-start", alignItems: "stretch" } as ViewStyle,
   },
 }
 

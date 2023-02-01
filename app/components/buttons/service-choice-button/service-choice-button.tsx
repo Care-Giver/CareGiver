@@ -3,9 +3,9 @@ import React from "react"
 import { styles } from "./styles"
 import { ChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../basics/custom-texts/custom-texts"
-import { SHADOW_1 } from "#theme/index"
-import { BODY, SUB_HEAD_LINE } from "#theme/palette"
-import IMAGES from "#images"
+import { SHADOW_1 } from "#theme"
+import { BODY, SUB_HEAD_LINE } from "#theme"
+import { images } from "#images"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
   const { title, subtitle, style, onPress } = props
@@ -14,7 +14,7 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
-        <Image style={styles.titleImage} source={IMAGES.arrow_left} />
+        <Image style={styles.titleImage} source={images.arrow_left} />
       </View>
 
       {/* subtitle */}
@@ -27,9 +27,9 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
         style={styles.image}
         source={
           title === "펫시팅"
-            ? IMAGES.service_petsitting
+            ? images.service_petsitting
             : title === "훈련"
-            ? IMAGES.service_training
+            ? images.service_training
             : ""
         }
       />

@@ -1,5 +1,5 @@
 import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
-import { View, Animated } from "react-native"
+import { View, Animated, ScrollView, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -11,9 +11,8 @@ import {
   SitterProfileCard,
   SelectOptionDropdownBox,
 } from "#components"
-import { HEIGHT, WIDTH, palette } from "#theme/index"
-import { LBG } from "#theme/palette"
-import IMAGES from "#images"
+import { palette, LBG, isWeb, STANDARD_HEIGHT } from "#theme"
+import { images } from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
   HEADER_MARGIN_TOP,
@@ -94,15 +93,22 @@ export const SearchResultScreen: FC<
   })
 
   useLayoutEffect(() => {
+    //? case1. 바텀탭으로 넘어오는경우
     if (!route.params) {
-      console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      if (!route.params.serviceType)
-        console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
+      // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+      var _service = "펫시팅"
+      var _serviceType = "위탁"
+
+      // if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
+      // if (!route.params.serviceType)
+      //   console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
     }
-    //? service 할당
-    let _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
-    let _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    //? case2. 서치스크린 이후 넘어오는 경우
+    else {
+      //? service 할당
+      var _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
+      var _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+    }
 
     //? Header, 이름 설정
     navigation.setOptions({
@@ -112,7 +118,7 @@ export const SearchResultScreen: FC<
 
   return (
     // <ScreenRootView statusBar="dark-content">
-    <ScreenRootView>
+    <ScreenRootView preset="scroll">
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -142,7 +148,7 @@ export const SearchResultScreen: FC<
         {/* //? title container - 검색 결과 텍스트 + 정렬옵션 드롭다운 */}
         <Row
           style={{
-            paddingVertical: HEIGHT * 12,
+            paddingVertical: 12,
             justifyContent: "space-between",
             alignItems: "center",
             position: "absolute",
@@ -159,11 +165,11 @@ export const SearchResultScreen: FC<
               setIsOpen(!isOpen)
             }}
             isOpen={isOpen}
-            logoSrc={IMAGES.list_bars}
+            logoSrc={images.list_bars}
             logoStyle={{
-              width: WIDTH * 16,
-              height: HEIGHT * 16,
-              marginLeft: WIDTH * 5,
+              width: 16,
+              height: 16,
+              marginLeft: 5,
             }}
             labels={Object.values(optionLabels)}
             handlePress={handlePress}
@@ -179,17 +185,17 @@ export const SearchResultScreen: FC<
         {/* <View
           style={{
             width: "100%",
-            height: HEIGHT * 2,
+            height: 2,
             backgroundColor: LBG,
             position: "absolute",
-            top: HEIGHT * 47,
+            top: 47,
           }}
         /> */}
         <DivisionLine
           color={LBG}
           style={{
             position: "absolute",
-            top: HEIGHT * 47,
+            top: 47,
           }}
         />
 
@@ -198,8 +204,8 @@ export const SearchResultScreen: FC<
           style={{
             backgroundColor: palette.white,
             height: "auto",
-            marginTop: HEIGHT * (47 + 2),
-            // marginBottom: HEIGHT * 34,
+            marginTop: 47 + 2,
+            // marginBottom: 34,
           }}
         >
           <Animated.FlatList
@@ -219,19 +225,14 @@ export const SearchResultScreen: FC<
                   //TODO: params 값 추가해줘야 함
                   navigate("caregiver-detail-information-screen", { sitterData: item })
                 }}
-                style={
-                  index < petsitters.length - 1
-                    ? { marginTop: HEIGHT * 20 }
-                    : { marginVertical: HEIGHT * 20 }
-                }
+                style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
               />
             )}
             showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,
-              // height: 500,
-              height: "auto",
-              marginBottom: HEIGHT * 34,
+              height: isWeb ? STANDARD_HEIGHT - 100 : "auto",
+              marginBottom: 34,
             }}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {

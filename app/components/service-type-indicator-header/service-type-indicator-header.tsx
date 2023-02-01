@@ -2,9 +2,9 @@ import { View, Text, Pressable } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { DivisionLine } from "../division-line/division-line"
-import { color, HEIGHT, palette } from "#theme/index"
+import { color, palette } from "#theme"
 import { PreBol18, PreReg18 } from "../basics/custom-texts/custom-texts"
-import { DISABLED, GIVER_CASUAL_NAVY } from "#theme/palette"
+import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 
 export const ServiceTypeIndicatorHeader = ({ label, state, onPress, style }) => {
   const isActivated = label === state
@@ -19,7 +19,7 @@ export const ServiceTypeIndicatorHeader = ({ label, state, onPress, style }) => 
       {isActivated ? (
         <DivisionLine
           color={GIVER_CASUAL_NAVY}
-          height={HEIGHT * 8}
+          height={8}
           style={{
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
@@ -30,7 +30,7 @@ export const ServiceTypeIndicatorHeader = ({ label, state, onPress, style }) => 
       ) : (
         <DivisionLine
           color={color.transparent}
-          height={HEIGHT * 8}
+          height={8}
           style={{
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
