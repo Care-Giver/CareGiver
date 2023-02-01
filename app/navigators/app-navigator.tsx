@@ -24,6 +24,7 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
+  MyProfileManagementScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
   BookingDetailScreen,
@@ -39,6 +40,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
+  MyProfileManangementScreenHeader,
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
@@ -95,6 +97,8 @@ export type NavigatorParamList = {
   // * registration
   "service-registration-screen": undefined
 
+  "my-profile-management-screen": undefined
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -112,8 +116,10 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
+
       // initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
+
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -200,6 +206,15 @@ const AllStacks = () => {
           header: (props) => <WritingCommentScreenHeader {...props} />,
         }}
       />
+
+
+      {/* //* 내 프로필 관리 */}
+      <Stack.Screen
+        name="my-profile-management-screen"
+        component={MyProfileManagementScreen}
+        options={{
+          title: "내 프로필 관리",
+          header: (props) => <MyProfileManangementScreenHeader {...props} />,
 
       {/* //* 예약 확인 */}
       <Stack.Screen
