@@ -9,10 +9,11 @@ import {
   Image,
   ImageStore,
   Pressable,
+  Button,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { navigationRef, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import {
   BODY,
@@ -43,10 +44,29 @@ import {
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 //import { PRETENDARD_REGULAR } from "~/assets/fonts"
+import { NavigationContainer } from "@react-navigation/native"
 
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
+  const [visiable, setVisable] = useState(false)
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={() => setVisable(true)}
+          style={{
+            marginLeft: "auto",
+            marginRight: 8, //!
+          }}
+        >
+          <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+        </Pressable>
+      ),
+    })
+  }, [])
+
   return (
     <ScreenRootView preset="fixed">
       <Image
@@ -90,6 +110,9 @@ export const MyProfileManagementScreen: FC<
 
       {/* //* 전화번호우 */}
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+
+      {/* //* visiabillity Test */}
+      {visiable ? <Button title="hi" /> : <Button title="bi" />}
     </ScreenRootView>
   )
 })

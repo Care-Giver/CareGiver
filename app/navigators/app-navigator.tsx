@@ -47,6 +47,7 @@ import {
   PreReg32,
   PreReg24,
   PreReg18,
+  PreMed18,
 } from "#components"
 import { images } from "#images"
 import {
@@ -59,6 +60,7 @@ import {
 } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+//import { Row } from "../basics/row/row"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -117,8 +119,8 @@ const AllStacks = () => {
         headerShown: true,
       }}
       //initialRouteName="service-registration-screen"
-      initialRouteName="home-screen"
-      //initialRouteName="my-profile-management-screen"
+      //initialRouteName="home-screen"
+      initialRouteName="my-profile-management-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -210,10 +212,43 @@ const AllStacks = () => {
       <Stack.Screen
         name="my-profile-management-screen"
         component={MyProfileManagementScreen}
-        options={{
-          title: "내 프로필 관리",
-          header: (props) => <MyProfileManangementScreenHeader {...props} />,
-        }}
+        options={({ navigation, route }) => ({
+          headerShadowVisible: false,
+          headerLeft: (props) => (
+            <View style={{ flexDirection: "row" }}>
+              <Pressable
+                onPress={() => {
+                  navigation.goBack()
+                }}
+              >
+                <Image style={{ width: 28, height: 28 }} source={images.go_back} />
+              </Pressable>
+              <PreMed18 style={{ marginLeft: 16, alignSelf: "center" }}>
+                {"내 프로필 관리"}
+              </PreMed18>
+            </View>
+          ),
+          /*//?headerTitle은 ios 에서 가운데 정렬이 기본이라 위의 headerleft 에서 다 해결했는데 괜찮은걸까.... 
+           * headerTitleAlign: "left",
+          headerTitle: (props) => (
+            <PreMed18 style={{ marginLeft: 0 }}> {"내 프로필 관리"}</PreMed18>
+          ),*/
+          headerTitle: "",
+          //?! headerRight 설정 안해도 작동 잘 되는데 이건 왜일까..?
+          /*
+          headerRight: (props) => (
+            <Pressable
+              style={{
+                marginLeft: "auto",
+                marginRight: 8, //!
+              }}
+            >
+              <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+            </Pressable>
+          ),*/
+
+          //header: (props) => <MyProfileManangementScreenHeader {...props} />,
+        })}
       />
 
       {/* //* 예약 확인 */}

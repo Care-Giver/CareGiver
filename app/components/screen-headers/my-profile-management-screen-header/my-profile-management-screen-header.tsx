@@ -5,6 +5,7 @@ import { PreMed18 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
+import { NavigationContainer } from "@react-navigation/native"
 //import { allowStateReadsStart } from "mobx/dist/internal"
 
 export const MyProfileManangementScreenHeader = (props) => {
@@ -20,10 +21,9 @@ export const MyProfileManangementScreenHeader = (props) => {
       >
         <Image style={styles.goBackButton} source={images.go_back} />
       </Pressable>
-
       {/* //? 타이틀 */}
       <PreMed18 style={{ marginLeft: WIDTH * 8 }}> {title}</PreMed18>
-
+      navigation.setOptions({})
       <Pressable
         onPress={() => {
           alert("수정 기능 구현 예정")
