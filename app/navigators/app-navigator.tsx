@@ -116,8 +116,9 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
-      // initialRouteName="service-registration-screen"
+      //initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
+      //initialRouteName="my-profile-management-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -471,6 +472,8 @@ export const AppNavigator = (props: NavigationProps) => {
         "writing-comment-screen": "/writing-comment-screen",
         "all-bookings-screen": "/all-bookings-screen",
         "booking-detail-screen": "/booking-detail-screen",
+        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
+        "my-profile-management-screen": "/my-profile-management-screen",
 
         // * pay stack
         "payment-request-screen": "/payment-request-screen",
