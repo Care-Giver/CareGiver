@@ -1,4 +1,5 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
+
 export const images = {
   //* images
   arrow_change: require("../images/arrow_change.png"),
@@ -39,6 +40,9 @@ export const images = {
   vertical_3_dots: require("../images/vertical_3_dots.png"),
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
+  pencil: require("../images/pencil.png"),
+  my_profile_management_default: require("../images/my_profile_management_default.png"),
+  more_info_bigger: require("../images/more_info_bigger.png"),
   x_white: require("../images/x_white.png"),
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
@@ -52,3 +56,4 @@ export const images = {
   search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
   search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
 }
+
