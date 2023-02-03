@@ -20,6 +20,7 @@ export const RegisterButtonsContainer = (props: RegisterButtonsContainerProps) =
   }, [windowWidth])
 
   return (
+    // ? grid 처럼 배치하기 - https://deemmun.tistory.com/46
     <FlatList
       style={{
         marginTop: 20,

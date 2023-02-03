@@ -26,7 +26,6 @@ import {
   AllReviewsScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
-  BookingDetailScreen,
   MypageScreen,
   AllPetsScreen,
   SettingScreen,
@@ -43,13 +42,10 @@ import {
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
-  PreReg32,
-  PreReg24,
   PreReg18,
 } from "#components"
 import { images } from "#images"
 import {
-  DEVICE_SCREEN_WIDTH,
   DEVICE_WINDOW_WIDTH,
   GIVER_CASUAL_NAVY,
   GIVER_ROMANTIC_GRAY,
@@ -114,8 +110,7 @@ const AllStacks = () => {
       screenOptions={{
         headerShown: true,
       }}
-      initialRouteName="facility-registration-screen"
-      // initialRouteName="home-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

@@ -33,8 +33,9 @@ export const FacilityRegistrationScreen: FC<
 
   // * 제출 버튼을 클릭했을 때 동작하는 함수
   const handleSubmitPress = () => {
-    console.log(selectedOptions)
+    console.log("selected options: ", selectedOptions)
     alert("제출 버튼 클릭")
+    setSelectedOptions([])
   }
 
   return (
