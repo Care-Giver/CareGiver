@@ -40,6 +40,7 @@ import {
   UserOrPetProfileInfo,
   DivisionLine,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  ConditionalButton,
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
@@ -49,13 +50,30 @@ import { NavigationContainer } from "@react-navigation/native"
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
-  const [visiable, setVisable] = useState(false)
+  const [visiable, setVisable] = useState(true)
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      /*
+      headerRight: () => ({
+        visiable ? (
+          <Pressable
+            //onPress={() => setVisable((prev) => !prev)}
+            style={{
+              marginLeft: "auto",
+              marginRight: 8, //!
+            }}
+          >
+            <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+          </Pressable>
+        ) : null
+
+      }
+      ),
+      */
       headerRight: () => (
         <Pressable
-          onPress={() => setVisable(true)}
+          onPress={() => setVisable((prev) => !prev)}
           style={{
             marginLeft: "auto",
             marginRight: 8, //!
@@ -64,8 +82,23 @@ export const MyProfileManagementScreen: FC<
           <Image style={{ width: 28, height: 28 }} source={images.pencil} />
         </Pressable>
       ),
+
+      //visiable
+      //? 아래와 같이 쓰면 안되는 이유?
+      /*headerRight: () => (
+        {visiable?  (<Pressable
+          onPress={() => setVisable((prev) => !prev)}
+          style={{
+            marginLeft: "auto",
+            marginRight: 8, //!
+          }}
+        >
+          <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+        </Pressable>) : null }
+       
+      ),*/
     })
-  }, [])
+  }, [visiable])
 
   return (
     <ScreenRootView preset="fixed">
@@ -112,7 +145,18 @@ export const MyProfileManagementScreen: FC<
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
 
       {/* //* visiabillity Test */}
-      {visiable ? <Button title="hi" /> : <Button title="bi" />}
+      {visiable ? (
+        <ConditionalButton
+          label="저장하기"
+          isActivated={true}
+          style={{
+            marginTop: "auto",
+          }}
+          onPress={() => {
+            alert("saved")
+          }}
+        />
+      ) : null}
     </ScreenRootView>
   )
 })

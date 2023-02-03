@@ -235,8 +235,8 @@ const AllStacks = () => {
           ),*/
           headerTitle: "",
           //?! headerRight 설정 안해도 작동 잘 되는데 이건 왜일까..?
-          /*
-          headerRight: (props) => (
+          //?console.log (props)?
+          /* headerRight: (props) => (
             <Pressable
               style={{
                 marginLeft: "auto",
