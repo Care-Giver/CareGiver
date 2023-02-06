@@ -10,6 +10,7 @@ import {
   ImageStore,
   Pressable,
   Button,
+  Modal,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -51,26 +52,10 @@ export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
   const [visiable, setVisable] = useState(true)
+  const [touched, setTouched] = useState(false)
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      /*
-      headerRight: () => ({
-        visiable ? (
-          <Pressable
-            //onPress={() => setVisable((prev) => !prev)}
-            style={{
-              marginLeft: "auto",
-              marginRight: 8, //!
-            }}
-          >
-            <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-          </Pressable>
-        ) : null
-
-      }
-      ),
-      */
       headerRight: () => (
         <Pressable
           onPress={() => setVisable((prev) => !prev)}
@@ -133,6 +118,53 @@ export const MyProfileManagementScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
+      {visiable ? (
+        <Pressable
+          onPress={() => {
+            setTouched(true)
+            alert("touched")
+          }}
+        >
+          <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
+        </Pressable>
+      ) : (
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
+      )}
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={touched}
+        /*onRequestClose={() => {
+          //Alert.alert('Modal has been closed.');
+          //setModalVisible(false);
+        }*/
+      >
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{
+              alignItems: "center",
+              paddingTop: 36,
+              paddingBottom: 16,
+              paddingHorizontal: 16,
+              height: 226,
+              borderRadius: 8,
+            }}
+          >
+            <ConditionalButton
+              label="저장하기"
+              isActivated={true}
+              style={{
+                marginTop: "auto",
+              }}
+              onPress={() => {
+                alert("saved")
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
 
       {/* //* 성별 */}
