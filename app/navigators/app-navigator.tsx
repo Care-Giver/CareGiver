@@ -33,7 +33,7 @@ import {
   ServiceCenterScreen,
   ServiceRegistrationScreen,
 } from "#screens"
-import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
@@ -106,7 +106,6 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Tab = createBottomTabNavigator()
 
 const AllStacks = () => {
-  const navigation = useNavigation()
   return (
     <Stack.Navigator
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
@@ -154,7 +153,7 @@ const AllStacks = () => {
           headerLeft: (props) => (
             <Pressable
               onPress={() => {
-                navigation.goBack()
+                goBack()
               }}
             >
               <Image style={{ width: 28, height: 28 }} source={images.go_back} />
@@ -343,13 +342,13 @@ const TabStacks = () => {
           {
             backgroundColor: "white",
           },
-          // isWeb && { width: STANDARD_WIDTH },
         ],
         // headerTitleStyle: isWeb && {
         //   color: "black",
         //   marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
         // },
       }}
+      initialRouteName="Searching"
     >
       <Tab.Screen
         name="Favorites"
