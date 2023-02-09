@@ -112,6 +112,7 @@ const AllStacks = () => {
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
         headerShown: true,
+        animation: "slide_from_right",
       }}
       // initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
@@ -330,24 +331,24 @@ const TabStacks = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: [
-          {
-            width: STANDARD_WIDTH,
-            alignSelf: "center",
-            backgroundColor: "white",
-          },
-          isWeb && { paddingTop: 8, paddingBottom: 8 },
-        ],
+        // tabBarStyle: [
+        //   {
+        //     width: STANDARD_WIDTH,
+        //     alignSelf: "center",
+        //     backgroundColor: "white",
+        //   },
+        //   isWeb && { paddingTop: 8, paddingBottom: 8 },
+        // ],
         headerStyle: [
           {
             backgroundColor: "white",
           },
-          isWeb && { width: STANDARD_WIDTH },
+          // isWeb && { width: STANDARD_WIDTH },
         ],
-        headerTitleStyle: isWeb && {
-          color: "black",
-          marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
-        },
+        // headerTitleStyle: isWeb && {
+        //   color: "black",
+        //   marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
+        // },
       }}
     >
       <Tab.Screen
