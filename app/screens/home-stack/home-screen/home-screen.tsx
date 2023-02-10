@@ -12,6 +12,7 @@ import {
   VisitingDropOffSwitchButton,
   PreBol20,
   PreBol18,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import { BODY, SUB_HEAD_LINE } from "#theme"
@@ -65,8 +66,11 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
     }, [])
 
     return (
-      <ScreenRootView testID="HomeScreen" preset="fixed">
-        <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "white" }}>
+      <ScreenRootView testID="HomeScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ backgroundColor: "white", paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        >
           <RowRoundedButton
             onPress={() => {
               //TODO: params 값 추가해줘야 함
@@ -84,7 +88,14 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           <PreBol20 text="선택해주세요!" style={{ marginTop: 8 }} />
 
           {/*//? 펫시팅 | 훈련 선택 박스 */}
-          <Row style={{ marginTop: 20 }}>
+          <Row
+            style={{
+              marginTop: 20,
+              width: "100%",
+              paddingHorizontal: -BASIC_BACKGROUND_PADDING_WIDTH,
+              justifyContent: "space-between",
+            }}
+          >
             <ServiceChoiceButton
               onPress={() => {
                 navigate("search-screen", { service: "펫시팅" })
@@ -115,53 +126,46 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             />
           </Row>
 
-          {/*//? 펫시터 선택 박스 리스트 Horzontal FaltList*/}
-          <Row
-            style={{
-              marginTop: 12 - FLATLIST_PADDING_VERTICAL / 2,
-              marginLeft: -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
+          {/*//* 내 주변 펫시터들 */}
+          <FlatList
+            data={petsitters}
+            renderItem={(
+              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+            ) => (
+              <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
+                name={item.name}
+                rating={item.rating}
+                desc={item.desc}
+                image={item.profileImg}
+                style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 10 }}
+              />
+            )}
+            contentContainerStyle={{
+              paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
-          >
-            <FlatList
-              data={petsitters}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SitterProfileButton
-                  onPress={() => {
-                    //? 상세정보 스크린으로 이동
-                    //TODO: params 값 추가해줘야 함
-                    navigate("caregiver-detail-information-screen", { sitterData: item })
-                  }}
-                  name={item.name}
-                  rating={item.rating}
-                  desc={item.desc}
-                  image={item.profileImg}
-                  style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 10 }}
-                />
-              )}
-              contentContainerStyle={{
-                paddingVertical: FLATLIST_PADDING_VERTICAL,
-                paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-              }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              // snapToInterval={windowWidth - 20}
-              snapToAlignment={"end"}
-              decelerationRate={"fast"}
-              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-              viewabilityConfig={{
-                viewAreaCoveragePercentThreshold: 120, //? 이미지의 120 퍼센트가 표출되면 대상 이미지 변경으로 인식
-              }}
-              //? 이미지가 바뀌었을때 실행 할 행동 설정.
-              onViewableItemsChanged={onPetsitterFlatlistUpdate}
-              // onViewableItemsChanged={(info) => console.log(info)}
-            />
-          </Row>
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            // snapToInterval={windowWidth - 20}
+            snapToAlignment={"end"}
+            decelerationRate={"fast"}
+            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+            viewabilityConfig={{
+              viewAreaCoveragePercentThreshold: 120, //? 이미지의 120 퍼센트가 표출되면 대상 이미지 변경으로 인식
+            }}
+            //? 이미지가 바뀌었을때 실행 할 행동 설정.
+            onViewableItemsChanged={onPetsitterFlatlistUpdate}
+            // onViewableItemsChanged={(info) => console.log(info)}
+          />
           <DotsIndicator
             items={petsitters}
             activeIndex={selectedPetsitter}
-            style={{ marginTop: 16 - FLATLIST_PADDING_VERTICAL / 2 }}
+            style={{ marginTop: 16 - FLATLIST_PADDING_VERTICAL }}
           />
 
           {/*//? 훈련사 */}
@@ -181,52 +185,45 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             />
           </Row>
 
-          {/*//? 훈련사 선택 박스 리스트 Horzontal FaltList*/}
-          <Row
-            style={{
-              marginTop: 12 - FLATLIST_PADDING_VERTICAL / 2,
-              marginLeft: -FLATLIST_PADDING_HORIZONTAL, //? ScreenRootView paddingHorizontal 값 보정
+          {/*//* 내 주변 훈련사들 */}
+          <FlatList
+            data={trainers}
+            renderItem={(
+              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+            ) => (
+              <SitterProfileButton
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  //TODO: params 값 추가해줘야 함
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
+                name={item.name}
+                rating={item.rating}
+                desc={item.desc}
+                image={item.profileImg}
+                style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 1 }}
+              />
+            )}
+            contentContainerStyle={{
+              paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
-          >
-            <FlatList
-              data={trainers}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SitterProfileButton
-                  onPress={() => {
-                    //? 상세정보 스크린으로 이동
-                    //TODO: params 값 추가해줘야 함
-                    navigate("caregiver-detail-information-screen", { sitterData: item })
-                  }}
-                  name={item.name}
-                  rating={item.rating}
-                  desc={item.desc}
-                  image={item.profileImg}
-                  style={{ marginLeft: index === 0 ? 0 : 10, zIndex: 1 }}
-                />
-              )}
-              contentContainerStyle={{
-                paddingVertical: FLATLIST_PADDING_VERTICAL,
-                paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-              }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              // snapToInterval={windowWidth - 20}
-              snapToAlignment={"end"}
-              decelerationRate={"fast"}
-              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-              viewabilityConfig={{
-                viewAreaCoveragePercentThreshold: 120, //? 이미지의 120 퍼센트가 표출되면 대상 이미지 변경으로 인식
-              }}
-              onViewableItemsChanged={onTrainerFlatlistUpdate}
-            />
-          </Row>
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            // snapToInterval={windowWidth - 20}
+            snapToAlignment={"end"}
+            decelerationRate={"fast"}
+            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+            viewabilityConfig={{
+              viewAreaCoveragePercentThreshold: 120, //? 이미지의 120 퍼센트가 표출되면 대상 이미지 변경으로 인식
+            }}
+            onViewableItemsChanged={onTrainerFlatlistUpdate}
+          />
           <DotsIndicator
             items={trainers}
             activeIndex={selectedTrainer}
             style={{
-              marginTop: 16 - FLATLIST_PADDING_VERTICAL / 2,
+              marginTop: 16 - FLATLIST_PADDING_VERTICAL,
               marginBottom: 60, //! 예외적으로 marginBottom 허용
             }}
           />
