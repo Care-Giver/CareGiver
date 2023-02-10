@@ -24,14 +24,15 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
+  MyProfileManagementScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
-  BookingDetailScreen,
   MypageScreen,
   AllPetsScreen,
   SettingScreen,
   ServiceCenterScreen,
   ServiceRegistrationScreen,
+  FacilityRegistrationScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -39,16 +40,14 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
+  MyProfileManangementScreenHeader,
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
-  PreReg32,
-  PreReg24,
   PreReg18,
 } from "#components"
 import { images } from "#images"
 import {
-  DEVICE_SCREEN_WIDTH,
   DEVICE_WINDOW_WIDTH,
   GIVER_CASUAL_NAVY,
   GIVER_ROMANTIC_GRAY,
@@ -95,6 +94,9 @@ export type NavigatorParamList = {
 
   // * registration
   "service-registration-screen": undefined
+  "facility-registration-screen": undefined
+
+  "my-profile-management-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -113,7 +115,6 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="service-registration-screen"
       initialRouteName="home-screen"
     >
       {/* //* 홈 */}
@@ -202,6 +203,16 @@ const AllStacks = () => {
         }}
       />
 
+      {/* //* 내 프로필 관리 */}
+      <Stack.Screen
+        name="my-profile-management-screen"
+        component={MyProfileManagementScreen}
+        options={{
+          title: "내 프로필 관리",
+          header: (props) => <MyProfileManangementScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 예약 확인 */}
       <Stack.Screen
         name="all-bookings-screen"
@@ -273,6 +284,22 @@ const AllStacks = () => {
               {...props}
               buttonText={"건너뛰기"}
               // TODO: Event Listener 어디에 작성..? app navigator.tsx 파일에 작성해야하나?
+              handlePress={() => alert("건너뛰기")}
+            />
+          ),
+        }}
+      />
+
+      {/* //* 편의시설 등록 스크린 */}
+      <Stack.Screen
+        name="facility-registration-screen"
+        component={FacilityRegistrationScreen}
+        options={{
+          title: "근처 편의시설 등록",
+          header: (props) => (
+            <GobackAndTitleAndButtonHeader
+              {...props}
+              buttonText={"건너뛰기"}
               handlePress={() => alert("건너뛰기")}
             />
           ),

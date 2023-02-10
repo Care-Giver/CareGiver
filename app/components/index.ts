@@ -19,6 +19,7 @@ export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/radio-buttons/border-radio-button/border-radio-button"
 export * from "./mypage-button/mypage-button"
 export * from "./buttons/registration-button/registration-button"
+export * from "./buttons/register-submit-button/register-submit-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"
@@ -28,6 +29,7 @@ export * from "./screen-headers/all-comments-screen-header/all-comments-screen-h
 export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
 export * from "./screen-headers/home-screen-header/home-screen-header"
 export * from "./screen-headers/writing-comment-screen-header/writing-comment-screen-header"
+export * from "./screen-headers/my-profile-management-screen-header/my-profile-management-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 
@@ -53,8 +55,11 @@ export * from "./filter-header/filter-header"
 export * from "./review-box/review-box"
 export * from "./sitter-profile-card/sitter-profile-card"
 export * from "./in-progress-booking/in-progress-booking"
+
+export * from "./user-or-pet-profile-info/user-or-pet-profile-info"
 export * from "./time-selector/time-selector"
 export * from "./past-booking/past-booking"
 export * from "./pet-profile-card/pet-profile-card"
 export * from "./pet-image-card/pet-image-card"
 export * from "./custom-modal/custom-modal"
+export * from "../screens/registration-stack/register-buttons-container/register-buttons-container"
