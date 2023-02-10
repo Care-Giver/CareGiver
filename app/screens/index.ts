@@ -35,4 +35,6 @@ export * from "./mypage-stack/my-profile-management-screen/my-profile-management
 
 //* registration-stack
 export * from "./registration-stack/service-registration-screen/service-registration-screen"
+export * from "./registration-stack/facility-registration-screen/facility-registration-screen"
 export * from "./favorites/favorites-screen"
+export * from "./test-web-view/test-web-view-screen"

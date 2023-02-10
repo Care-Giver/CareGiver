@@ -8,7 +8,7 @@ import { services } from "./service-data"
 
 export const ServiceRegistrationScreen: FC<
   StackScreenProps<NavigatorParamList, "service-registration-screen">
-> = observer(() => {
+> = observer(function ServiceRegistrationScreen() {
   // * 선택된 옵션들의 배열
   const [selectedOptions, setSelectedOptions] = useState<Array<string>>([])
 

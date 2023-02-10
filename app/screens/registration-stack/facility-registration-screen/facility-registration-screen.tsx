@@ -7,7 +7,7 @@ import { facilities } from "./facility-data"
 
 export const FacilityRegistrationScreen: FC<
   StackScreenProps<NavigatorParamList, "facility-registration-screen">
-> = observer(() => {
+> = observer(function FacilityRegistrationScreen() {
   const [selectedOptions, setSelectedOptions] = useState<Array<string>>([])
 
   const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
