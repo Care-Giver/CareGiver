@@ -117,7 +117,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="TestWebView"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

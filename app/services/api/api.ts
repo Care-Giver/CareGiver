@@ -353,4 +353,19 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
+  //! TODO: Will be removed
+  async getAuthKakao(): Promise<any> {
+    const response: ApiResponse<any> = await this.apisauce.get(`/auth/kakao`)
+    console.log("getAuthKakao response", response)
+  }
+
+  //! TODO: Will be removed
+  async getAuthGoogle(): Promise<any> {
+    const response: ApiResponse<any> = await this.apisauce.get(`/auth/google`)
+    // console.log("getAuthGoogle response", response)
+    const html = response?.data
+
+    return html
+  }
 }
