@@ -69,7 +69,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
       <ScreenRootView testID="HomeScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{ backgroundColor: "white", paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          style={{
+            backgroundColor: "white",
+          }}
         >
           <RowRoundedButton
             onPress={() => {
@@ -80,19 +82,28 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
             textColor={BODY}
-            style={{ marginTop: 18 }}
+            style={{
+              marginTop: 18,
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
           />
 
           {/*//? Title */}
-          <PreBol20 text="케어기버에게 요청할 서비스를" style={{ marginTop: 50 }} />
-          <PreBol20 text="선택해주세요!" style={{ marginTop: 8 }} />
+          <PreBol20
+            text="케어기버에게 요청할 서비스를"
+            style={{ marginTop: 50, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          />
+          <PreBol20
+            text="선택해주세요!"
+            style={{ marginTop: 8, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          />
 
           {/*//? 펫시팅 | 훈련 선택 박스 */}
           <Row
             style={{
               marginTop: 20,
               width: "100%",
-              paddingHorizontal: -BASIC_BACKGROUND_PADDING_WIDTH,
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
               justifyContent: "space-between",
             }}
           >
@@ -114,9 +125,12 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           </Row>
 
           {/*//? Title */}
-          <PreBol20 text="내 주변 케어기버 둘러보기" style={{ marginTop: 60 }} />
+          <PreBol20
+            text="내 주변 케어기버 둘러보기"
+            style={{ marginTop: 60, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          />
           {/*//? 펫시터 */}
-          <Row style={{ marginTop: 20 }}>
+          <Row style={{ marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <PreBol18 text="펫시터" color={SUB_HEAD_LINE} />
             {/*//? 방문/위탁 토글 버튼 */}
             <VisitingDropOffSwitchButton
@@ -149,6 +163,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
               paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
@@ -165,7 +182,10 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           <DotsIndicator
             items={petsitters}
             activeIndex={selectedPetsitter}
-            style={{ marginTop: 16 - FLATLIST_PADDING_VERTICAL }}
+            style={{
+              marginTop: 16 - FLATLIST_PADDING_VERTICAL,
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
           />
 
           {/*//? 훈련사 */}
@@ -173,6 +193,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             style={{
               marginTop: 60,
               backgroundColor: "white",
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
           >
             {/*//? 훈련사 */}
@@ -208,6 +229,9 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
               paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
             }}
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             // snapToInterval={windowWidth - 20}
@@ -225,6 +249,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             style={{
               marginTop: 16 - FLATLIST_PADDING_VERTICAL,
               marginBottom: 60, //! 예외적으로 marginBottom 허용
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
           />
         </ScrollView>
