@@ -214,34 +214,9 @@ const AllStacks = () => {
         name="my-profile-management-screen"
         component={MyProfileManagementScreen}
         options={({ navigation, route }) => ({
-          //! FEEDBACK: custom header 를 사용할때는, header prop 에 지정하는 게 적절합니다. headerLeft 와 headerRight 는 사용하지 않습니다 즉, header props 만으로, headerLeft, headerRight 위치에 들어오는 컴포넌트를 조절해야 합니다. 이를 위해,아래 코드를 참고해주세요 :)
+          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
           headerShadowVisible: false,
-          header: (props) => (
-            <View style={[HEADER_ROOT, { flexDirection: "row", backgroundColor: "pink" }]}>
-              {/* //* 뒤로가기 (headerLeft 위치) */}
-              <Pressable
-                onPress={() => {
-                  navigation.goBack()
-                }}
-              >
-                <Image style={{ width: 28, height: 28 }} source={images.go_back} />
-              </Pressable>
-
-              {/* //* 타이틀 */}
-              <PreMed18 style={{ marginLeft: 16, alignSelf: "center" }}>내 프로필 관리</PreMed18>
-
-              {/* //* 편집버튼 (headerRight 위치) */}
-              <Pressable
-                // onPress={() => setVisable((prev) => !prev)}
-                style={{
-                  marginLeft: "auto",
-                  marginRight: 8, //!
-                }}
-              >
-                <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-              </Pressable>
-            </View>
-          ),
+          header: (props) => <MyProfileManangementScreenHeader {...props} />,
           /*//?headerTitle은 ios 에서 가운데 정렬이 기본이라 위의 headerleft 에서 다 해결했는데 괜찮은걸까.... 
            * headerTitleAlign: "left",
           headerTitle: (props) => (
