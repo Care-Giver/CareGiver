@@ -46,19 +46,21 @@ import {
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 //import { PRETENDARD_REGULAR } from "~/assets/fonts"
-import { NavigationContainer } from "@react-navigation/native"
 
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
-  const [visiable, setVisable] = useState(true)
+  console.log("route @MyProfileManagementScreen", route)
+
+  // const [visible, setVisable] = useState(true)
   const [touched, setTouched] = useState(false)
 
   // useLayoutEffect(() => {
-  //     //visiable
+  //     //visible
   //     //? 아래와 같이 쓰면 안되는 이유?
+  //     //! FEEDBACK: -> headerRight prop 은 return 값이 있어야 합니다. null 때문에 문제가 생긴것입니다 :)
   //     /*headerRight: () => (
-  //       {visiable?  (<Pressable
+  //       {visible?  (<Pressable
   //         onPress={() => setVisable((prev) => !prev)}
   //         style={{
   //           marginLeft: "auto",
@@ -70,7 +72,22 @@ export const MyProfileManagementScreen: FC<
 
   //     ),*/
   //   })
-  // }, [visiable])
+  // }, [visible])
+
+  //* 스크린을 렌더링할때 최초실행됩니다.
+  useLayoutEffect(() => {
+    showEditButton() //* 편집버튼을 보여주는 상태로 설정합니다.
+  }, [])
+
+  const visible = route.params?.visible
+  console.log("visible", visible)
+
+  //* 편집버튼 보이기
+  const showEditButton = () => {
+    navigation.setParams({
+      visible: false,
+    })
+  }
 
   return (
     <ScreenRootView preset="fixed">
@@ -105,7 +122,7 @@ export const MyProfileManagementScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
-      {visiable ? (
+      {visible ? (
         <Pressable
           onPress={() => {
             setTouched(true)
@@ -164,7 +181,7 @@ export const MyProfileManagementScreen: FC<
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
 
       {/* //* visiabillity Test */}
-      {visiable ? (
+      {visible ? (
         <ConditionalButton
           label="저장하기"
           isActivated={true}
@@ -172,7 +189,8 @@ export const MyProfileManagementScreen: FC<
             marginTop: "auto",
           }}
           onPress={() => {
-            alert("saved")
+            // alert("saved")
+            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
           }}
         />
       ) : null}

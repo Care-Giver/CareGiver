@@ -100,7 +100,7 @@ export type NavigatorParamList = {
   // * registration
   "service-registration-screen": undefined
 
-  "my-profile-management-screen": undefined
+  "my-profile-management-screen": { visible: boolean }
 
   //* test screens
   "minseon-test": undefined

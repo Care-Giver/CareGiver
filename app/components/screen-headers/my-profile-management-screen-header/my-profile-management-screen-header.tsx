@@ -1,19 +1,36 @@
 import { View, Image, Pressable } from "react-native"
 import React from "react"
-import { WIDTH } from "#theme"
 import { PreMed18 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
-import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
-import { NavigationContainer } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { goBack } from "#navigators"
 //import { allowStateReadsStart } from "mobx/dist/internal"
 
 export const MyProfileManangementScreenHeader = (props) => {
   // console.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
+  const navigation = useNavigation()
+  const route = useRoute()
+
+  const params = route.params //* route.params 를 통해, screen 의 params 를 가져올 수 있습니다.
+  // console.log("params", params)
+
+  // @ts-ignore
+  const visible = params?.visible
+  const isEditButtonShown = !visible //*  (modal) visible 이 아닌 경우 -> 편집버튼 보이기 |  (modal) visible 인 경우 -> 편집버튼 숨기기
+  console.log("isEditButtonShown", isEditButtonShown)
+
+  //* 편집버튼 숨기기
+  const hideEditButton = () => {
+    //* setParams 를 통해, screen 의 params 를 수정할 수 있습니다.
+    // @ts-ignore
+    navigation.setParams({
+      visible: true,
+    })
+  }
 
   return (
-    <View style={[HEADER_ROOT, { flexDirection: "row", backgroundColor: "pink" }]}>
+    <View style={[HEADER_ROOT, { flexDirection: "row", backgroundColor: "tomato" }]}>
       {/* //* 뒤로가기 (headerLeft 위치) */}
       <Pressable onPress={goBack}>
         <Image style={{ width: 28, height: 28 }} source={images.go_back} />
@@ -24,13 +41,17 @@ export const MyProfileManangementScreenHeader = (props) => {
 
       {/* //* 편집버튼 (headerRight 위치) */}
       <Pressable
-        // onPress={() => setVisable((prev) => !prev)}
+        onPress={hideEditButton}
         style={{
           marginLeft: "auto",
           marginRight: 8, //!
         }}
+        // disabled={visible}
       >
-        <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+        <Image
+          style={{ width: 28, height: 28 }}
+          source={isEditButtonShown ? images.pencil : images.empty_12}
+        />
       </Pressable>
     </View>
   )
