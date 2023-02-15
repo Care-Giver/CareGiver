@@ -54,36 +54,23 @@ export const MyProfileManagementScreen: FC<
   const [visiable, setVisable] = useState(true)
   const [touched, setTouched] = useState(false)
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable
-          onPress={() => setVisable((prev) => !prev)}
-          style={{
-            marginLeft: "auto",
-            marginRight: 8, //!
-          }}
-        >
-          <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-        </Pressable>
-      ),
+  // useLayoutEffect(() => {
+  //     //visiable
+  //     //? 아래와 같이 쓰면 안되는 이유?
+  //     /*headerRight: () => (
+  //       {visiable?  (<Pressable
+  //         onPress={() => setVisable((prev) => !prev)}
+  //         style={{
+  //           marginLeft: "auto",
+  //           marginRight: 8, //!
+  //         }}
+  //       >
+  //         <Image style={{ width: 28, height: 28 }} source={images.pencil} />
+  //       </Pressable>) : null }
 
-      //visiable
-      //? 아래와 같이 쓰면 안되는 이유?
-      /*headerRight: () => (
-        {visiable?  (<Pressable
-          onPress={() => setVisable((prev) => !prev)}
-          style={{
-            marginLeft: "auto",
-            marginRight: 8, //!
-          }}
-        >
-          <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-        </Pressable>) : null }
-       
-      ),*/
-    })
-  }, [visiable])
+  //     ),*/
+  //   })
+  // }, [visiable])
 
   return (
     <ScreenRootView preset="fixed">

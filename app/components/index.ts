@@ -31,6 +31,7 @@ export * from "./screen-headers/writing-comment-screen-header/writing-comment-sc
 export * from "./screen-headers/my-profile-management-screen-header/my-profile-management-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
+export * from "./screen-headers/common-styles"
 
 //* others
 export * from "./division-line/division-line"
@@ -61,4 +62,3 @@ export * from "./past-booking/past-booking"
 export * from "./pet-profile-card/pet-profile-card"
 export * from "./pet-image-card/pet-image-card"
 export * from "./custom-modal/custom-modal"
-
