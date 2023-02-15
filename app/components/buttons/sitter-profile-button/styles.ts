@@ -1,8 +1,9 @@
+import { WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   container: {
-    width: 175,
+    width: WIDTH * 175, //! DO NOT REMOVE THIS
     height: 230,
 
     paddingHorizontal: 16,
@@ -27,7 +28,7 @@ export const styles = StyleSheet.create({
   },
   //TODO: desc 가 2줄이면 marginTop 조정해야 함...
   image: {
-    width: 142,
+    width: WIDTH * 142, //! DO NOT REMOVE THIS
     height: 108,
     marginTop: 24,
     borderRadius: 9,

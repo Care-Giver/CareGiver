@@ -161,9 +161,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             )}
             contentContainerStyle={{
               paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
-            style={{
               paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
             horizontal
@@ -227,9 +224,6 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             )}
             contentContainerStyle={{
               paddingVertical: 2 * FLATLIST_PADDING_VERTICAL,
-              paddingHorizontal: FLATLIST_PADDING_HORIZONTAL,
-            }}
-            style={{
               paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
             horizontal
