@@ -10,13 +10,13 @@ export const FacilityRegistrationScreen: FC<
 > = observer(function FacilityRegistrationScreen() {
   const [selectedOptions, setSelectedOptions] = useState<Array<string>>([])
 
-  const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
+  //   const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
   const submitText = `총 ${selectedOptions.length}개 등록`
 
-  // * 선택된 옵션 항목이 존재할 때 submit 버튼을 active 상태로 변경
-  useLayoutEffect(() => {
-    setIsSubmitActive(selectedOptions.length > 0)
-  }, [selectedOptions])
+  //   // * 선택된 옵션 항목이 존재할 때 submit 버튼을 active 상태로 변경
+  //   useLayoutEffect(() => {
+  //     setIsSubmitActive(selectedOptions.length > 0)
+  //   }, [selectedOptions])
 
   // - press 이벤트 핸들러
   // * 옵션 버튼을 클릭했을 때 동작하는 함수
@@ -47,11 +47,7 @@ export const FacilityRegistrationScreen: FC<
         handleXPress={handleXPress}
       />
 
-      <RegisterSubmitButton
-        isActive={isSubmitActive}
-        text={submitText}
-        onPress={handleSubmitPress}
-      />
+      <RegisterSubmitButton text={submitText} onPress={handleSubmitPress} />
     </ScreenRootView>
   )
 })
