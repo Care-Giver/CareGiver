@@ -11,6 +11,7 @@ import {
   Pressable,
   Button,
   Modal,
+  useWindowDimensions,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -28,6 +29,9 @@ import {
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
   ADNROID_BOTTOM_NAVIGATION_HEIGHT,
+  isWeb,
+  STANDARD_WIDTH,
+  palette,
 } from "#theme"
 import {
   PublicPrivateSwitchButton,
@@ -42,6 +46,8 @@ import {
   DivisionLine,
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  PreBol18,
+  PreReg12,
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
@@ -54,6 +60,9 @@ export const MyProfileManagementScreen: FC<
 
   // const [visible, setVisable] = useState(true)
   const [touched, setTouched] = useState(false)
+  //!const windowWidth = useWindowDimensions().width
+  //!const modalWidth = isWeb ? STANDARD_WIDTH : windowWidth
+  const modalWidth = 358
 
   // useLayoutEffect(() => {
   //     //visible
@@ -79,8 +88,28 @@ export const MyProfileManagementScreen: FC<
     showEditButton() //* 편집버튼을 보여주는 상태로 설정합니다.
   }, [])
 
-  const visible = route.params?.visible
-  console.log("visible", visible)
+  const visible = route.params?.visible //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
+  console.log("visible screen", visible)
+  const [text, setText] = React.useState("")
+  const [changeCount, onChangeChangeCount] = React.useState(1)
+  const [nicknameMessage, setNicknameMessage] = React.useState("")
+  const [warningColor, setWarnigColor] = React.useState("")
+  //![^A-Za-z0-9_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
+  const checkNickname = (input) => {
+    setText(input)
+    if (/[^\w_]/.test(input)) {
+      console.log("specialsymbols!")
+      setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
+      setWarnigColor(palette.orange)
+    }
+    //*중복 기능 구현
+    else if (changeCount === 3) {
+      setNicknameMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
+    } else {
+      setNicknameMessage("* 사용가능한 이름입니다!")
+      setWarnigColor(palette.deepPurple)
+    }
+  }
 
   //* 편집버튼 보이기
   const showEditButton = () => {
@@ -116,10 +145,84 @@ export const MyProfileManagementScreen: FC<
             />
           </Pressable>
         </Row>
-        <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+        {visible ? (
+          <Pressable
+            onPress={() => {
+              setTouched(true)
+              //alert("touched")
+            }}
+          >
+            <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+          </Pressable>
+        ) : (
+          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+        )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={false}
+        visible={touched}
+        /*onRequestClose={() => {
+          //Alert.alert('Modal has been closed.');
+          //setModalVisible(false);
+        }*/
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: MIDDLE_LINE,
+          }}
+        >
+          <View
+            style={{
+              width: modalWidth - 16 * 2,
+              //alignItems: "center",
+              paddingTop: 36,
+              paddingBottom: 16,
+              paddingHorizontal: 16,
+              height: 226,
+              borderRadius: 8,
+              backgroundColor: palette.white,
+            }}
+          >
+            <View
+              style={{
+                paddingHorizontal: 24,
+              }}
+            >
+              <PreBol18 color={HEAD_LINE} text={"이름"} />
+              <TextInput
+                style={{
+                  paddingTop: 43,
+                  //backgroundColor: palette.black,
+                }}
+                placeholder="닉네임을 입력해주세요."
+                onChangeText={(newText) => checkNickname(newText)}
+                value={text}
+              />
+              <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
+              <PreReg12 text={nicknameMessage} color={warningColor} />
+            </View>
+
+            <ConditionalButton
+              label="확인"
+              isActivated={true}
+              style={{
+                marginTop: "auto",
+              }}
+              onPress={() => {
+                alert("saved")
+                setTouched(false)
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
 
       {/* //* 생년월일 */}
       {visible ? (
@@ -134,40 +237,6 @@ export const MyProfileManagementScreen: FC<
       ) : (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
       )}
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={touched}
-        /*onRequestClose={() => {
-          //Alert.alert('Modal has been closed.');
-          //setModalVisible(false);
-        }*/
-      >
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <View
-            style={{
-              alignItems: "center",
-              paddingTop: 36,
-              paddingBottom: 16,
-              paddingHorizontal: 16,
-              height: 226,
-              borderRadius: 8,
-            }}
-          >
-            <ConditionalButton
-              label="저장하기"
-              isActivated={true}
-              style={{
-                marginTop: "auto",
-              }}
-              onPress={() => {
-                alert("saved")
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
 
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
 

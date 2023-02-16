@@ -8,12 +8,14 @@ import { goBack } from "#navigators"
 //import { allowStateReadsStart } from "mobx/dist/internal"
 
 export const MyProfileManangementScreenHeader = (props) => {
-  // console.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
+  console.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
   const navigation = useNavigation()
   const route = useRoute()
 
   const params = route.params //* route.params 를 통해, screen 의 params 를 가져올 수 있습니다.
-  // console.log("params", params)
+  //!그렇군요!
+  console.log("route", route)
+  console.log("params", params)
 
   // @ts-ignore
   const visible = params?.visible
@@ -22,7 +24,7 @@ export const MyProfileManangementScreenHeader = (props) => {
 
   //* 편집버튼 숨기기
   const hideEditButton = () => {
-    //* setParams 를 통해, screen 의 params 를 수정할 수 있습니다.
+    //* setParams 를 통해, screen 의 params 를 수정할 수 있습니다. (update screen params)
     // @ts-ignore
     navigation.setParams({
       visible: true,
@@ -30,7 +32,7 @@ export const MyProfileManangementScreenHeader = (props) => {
   }
 
   return (
-    <View style={[HEADER_ROOT, { flexDirection: "row", backgroundColor: "tomato" }]}>
+    <View style={[HEADER_ROOT, { flexDirection: "row" }]}>
       {/* //* 뒤로가기 (headerLeft 위치) */}
       <Pressable onPress={goBack}>
         <Image style={{ width: 28, height: 28 }} source={images.go_back} />
