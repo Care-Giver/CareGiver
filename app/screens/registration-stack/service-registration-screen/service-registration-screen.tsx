@@ -12,15 +12,15 @@ export const ServiceRegistrationScreen: FC<
   // * 선택된 옵션들의 배열
   const [selectedOptions, setSelectedOptions] = useState<Array<string>>([])
 
-  // * submit 버튼이 활성화되었는지 나타내는 state 값
-  const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
+  // // * submit 버튼이 활성화되었는지 나타내는 state 값
+  // const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
   // ? submit 버튼의 텍스트
   const submitText = `총 ${selectedOptions.length}개 등록`
 
-  // * 선택된 옵션 항목이 존재할 때 submit 버튼을 active 상태로 변경
-  useLayoutEffect(() => {
-    setIsSubmitActive(selectedOptions.length > 0)
-  }, [selectedOptions])
+  // // * 선택된 옵션 항목이 존재할 때 submit 버튼을 active 상태로 변경
+  // useLayoutEffect(() => {
+  //   setIsSubmitActive(selectedOptions.length > 0)
+  // }, [selectedOptions])
 
   // - press 이벤트 핸들러
   // * 옵션 버튼을 클릭했을 때 동작하는 함수
@@ -52,7 +52,7 @@ export const ServiceRegistrationScreen: FC<
       />
 
       <RegisterSubmitButton
-        isActive={isSubmitActive}
+        // isActive={isSubmitActive}
         text={submitText}
         onPress={handleSubmitPress}
       />

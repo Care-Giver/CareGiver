@@ -275,20 +275,14 @@ const AllStacks = () => {
       />
       {/* //! -------- */}
 
+      {/* //! 등록 스택 */}
       {/* //* 서비스 등록 스크린 */}
       <Stack.Screen
         name="service-registration-screen"
         component={ServiceRegistrationScreen}
         options={{
           title: "서비스 등록",
-          header: (props) => (
-            <GobackAndTitleAndButtonHeader
-              {...props}
-              buttonText={"건너뛰기"}
-              // TODO: Event Listener 어디에 작성..? app navigator.tsx 파일에 작성해야하나?
-              handlePress={() => alert("건너뛰기")}
-            />
-          ),
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
@@ -298,15 +292,10 @@ const AllStacks = () => {
         component={FacilityRegistrationScreen}
         options={{
           title: "근처 편의시설 등록",
-          header: (props) => (
-            <GobackAndTitleAndButtonHeader
-              {...props}
-              buttonText={"건너뛰기"}
-              handlePress={() => alert("건너뛰기")}
-            />
-          ),
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+      {/* //! ------- */}
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
