@@ -12,6 +12,7 @@ import {
   Button,
   Modal,
   useWindowDimensions,
+  KeyboardAvoidingView,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -32,6 +33,9 @@ import {
   isWeb,
   STANDARD_WIDTH,
   palette,
+  ERROR_RED,
+  SUCCESS_BLUE,
+  DEVICE_SCREEN_WIDTH,
 } from "#theme"
 import {
   PublicPrivateSwitchButton,
@@ -91,23 +95,31 @@ export const MyProfileManagementScreen: FC<
   const visible = route.params?.visible //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
   console.log("visible screen", visible)
   const [text, setText] = React.useState("")
-  const [changeCount, onChangeChangeCount] = React.useState(1)
+  const [changeCount, onChangeChangeCount] = React.useState(2)
   const [nicknameMessage, setNicknameMessage] = React.useState("")
-  const [warningColor, setWarnigColor] = React.useState("")
-  //![^A-Za-z0-9_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
+  const [warningColor, setWarnigColor] = React.useState(MIDDLE_LINE)
+  const [abletoSave, setAlbeToSave] = React.useState(false)
+  //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
   const checkNickname = (input) => {
     setText(input)
-    if (/[^\w_]/.test(input)) {
-      console.log("specialsymbols!")
-      setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
-      setWarnigColor(palette.orange)
+    if (input.length === 0) {
+      setNicknameMessage("")
+      setWarnigColor(MIDDLE_LINE)
+      setAlbeToSave(false)
     }
-    //*중복 기능 구현
+    //* 닉네임 변환 카운트를 먼저 알려줘야 할거 같아서
     else if (changeCount === 3) {
       setNicknameMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
+      setAlbeToSave(false)
+    } else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
+      console.log("specialsymbols!")
+      setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
+      setWarnigColor(ERROR_RED)
+      setAlbeToSave(false)
     } else {
       setNicknameMessage("* 사용가능한 이름입니다!")
-      setWarnigColor(palette.deepPurple)
+      setWarnigColor(SUCCESS_BLUE)
+      setAlbeToSave(true)
     }
   }
 
@@ -163,55 +175,69 @@ export const MyProfileManagementScreen: FC<
 
       <Modal
         animationType="fade"
-        transparent={false}
+        transparent={true}
         visible={touched}
+
         /*onRequestClose={() => {
           //Alert.alert('Modal has been closed.');
           //setModalVisible(false);
         }*/
       >
-        <View
+        {/* //* Modal Backgound View */}
+        <KeyboardAvoidingView
+          behavior={"padding"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
           style={{
+            width: DEVICE_SCREEN_WIDTH,
             flex: 1,
-            justifyContent: "center",
+            //justifyContent: "center",
+            // alignSelf: "center",
+            marginTop: "auto",
+            marginBottom: "auto",
             alignItems: "center",
-            backgroundColor: MIDDLE_LINE,
+            justifyContent: "center",
+            backgroundColor: "rgba(0,0,0,0.25)",
+
+            // position: "absolute",
+            // backgroundColor: "red",
           }}
         >
           <View
             style={{
-              width: modalWidth - 16 * 2,
+              //width: modalWidth - 16 * 2,
               //alignItems: "center",
+              width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
               paddingTop: 36,
               paddingBottom: 16,
               paddingHorizontal: 16,
               height: 226,
               borderRadius: 8,
               backgroundColor: palette.white,
+              //opacity: 1,
             }}
           >
             <View
               style={{
-                paddingHorizontal: 24,
+                //paddingHorizontal: 24,
+                paddingHorizontal: 10,
               }}
             >
               <PreBol18 color={HEAD_LINE} text={"이름"} />
               <TextInput
                 style={{
-                  paddingTop: 43,
+                  paddingTop: 43, //?
                   //backgroundColor: palette.black,
                 }}
                 placeholder="닉네임을 입력해주세요."
                 onChangeText={(newText) => checkNickname(newText)}
                 value={text}
               />
-              <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
-              <PreReg12 text={nicknameMessage} color={warningColor} />
+              <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
+              {<PreReg12 text={nicknameMessage} color={warningColor} />}
             </View>
 
             <ConditionalButton
               label="확인"
-              isActivated={true}
+              isActivated={abletoSave}
               style={{
                 marginTop: "auto",
               }}
@@ -221,22 +247,10 @@ export const MyProfileManagementScreen: FC<
               }}
             />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* //* 생년월일 */}
-      {visible ? (
-        <Pressable
-          onPress={() => {
-            setTouched(true)
-            alert("touched")
-          }}
-        >
-          <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
-        </Pressable>
-      ) : (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
-      )}
 
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
 
@@ -250,6 +264,8 @@ export const MyProfileManagementScreen: FC<
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
 
       {/* //* visiabillity Test */}
+      {/* //* Ternary: 조건  ? 충족 : 불충족 */}
+      {/* {visible ? (
       {visible ? (
         <ConditionalButton
           label="저장하기"
@@ -262,7 +278,21 @@ export const MyProfileManagementScreen: FC<
             showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
           }}
         />
-      ) : null}
+      ) : null} */}
+
+      {visible && (
+        <ConditionalButton
+          label="저장하기"
+          isActivated={true}
+          style={{
+            marginTop: "auto",
+          }}
+          onPress={() => {
+            // alert("saved")
+            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
+          }}
+        />
+      )}
     </ScreenRootView>
   )
 })
