@@ -27,8 +27,7 @@ import { images } from "#images"
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-const 컨플릭트테스트 = 1
-
+const 컨플릭트테스트 = 2
 /**
  * This is the root component of our app.
  */
