@@ -24,6 +24,7 @@ import {
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
   ADNROID_BOTTOM_NAVIGATION_HEIGHT,
+  DISABLED,
 } from "#theme"
 
 import {
@@ -44,12 +45,13 @@ import { images } from "#images"
 export const UserOrPetProfileInfo = (props) => {
   //? props 를 이런 문법으로 쓰는 이유?
   //? 아래와 같은 방뻐과 좀 다름 https://react.vlpt.us/basic/05-props.html
-  const { title, profileInfo } = props
+  const { title, profileInfo, color } = props
 
   return (
     <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, paddingTop: 20 }}>
       <PreMed14 color={BODY} text={title} style={{ marginBottom: 10 }} />
-      <PreMed16 color={HEAD_LINE} text={profileInfo} />
+      {/*<PreMed16 color={color} text={profileInfo} />*/}
+      <PreMed16 color={color === true ? DISABLED : HEAD_LINE} text={profileInfo} />
       <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
     </View>
   )

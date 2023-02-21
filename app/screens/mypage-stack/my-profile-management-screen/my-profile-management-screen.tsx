@@ -36,6 +36,7 @@ import {
   ERROR_RED,
   SUCCESS_BLUE,
   DEVICE_SCREEN_WIDTH,
+  DISABLED,
 } from "#theme"
 import {
   PublicPrivateSwitchButton,
@@ -108,10 +109,11 @@ export const MyProfileManagementScreen: FC<
       setAlbeToSave(false)
     }
     //* 닉네임 변환 카운트를 먼저 알려줘야 할거 같아서
-    else if (changeCount === 3) {
+    /*else if (changeCount === 3) {
       setNicknameMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
-      setAlbeToSave(false)
-    } else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
+      setAlbeToSave(false) //*3회 시 코드 -> 후에 변동 
+    } */
+    else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
       console.log("specialsymbols!")
       setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
       setWarnigColor(ERROR_RED)
@@ -157,7 +159,7 @@ export const MyProfileManagementScreen: FC<
             />
           </Pressable>
         </Row>
-        {visible ? (
+        {visible && changeCount < 3 ? (
           <Pressable
             onPress={() => {
               setTouched(true)
@@ -165,14 +167,16 @@ export const MyProfileManagementScreen: FC<
             }}
           >
             <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+            {/* //*저장하기 버튼도 보이고 3번 안썼을때*/}
           </Pressable>
+        ) : visible === true && changeCount === 3 ? (
+          <PreMed16 color={DISABLED} text={`방울이엄마`} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         ) : (
-          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} /> //* visible이 아닐때. 즉 저장하기 버튼이 안보일때
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
       </View>
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -249,20 +253,22 @@ export const MyProfileManagementScreen: FC<
           </View>
         </KeyboardAvoidingView>
       </Modal>
-
       {/* //* 생년월일 */}
-
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} />
-
+      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
+      {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
+      //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
+            //?이해해도 되는것?*/}
+      {/*visible ? (
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
+      ) : (
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
+      )//*이전 코드 */}
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} />
-
+      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={visible} />
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} />
-
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
       {/* //* 전화번호우 */}
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
-
       {/* //* visiabillity Test */}
       {/* //* Ternary: 조건  ? 충족 : 불충족 */}
       {/* {visible ? (
@@ -279,7 +285,6 @@ export const MyProfileManagementScreen: FC<
           }}
         />
       ) : null} */}
-
       {visible && (
         <ConditionalButton
           label="저장하기"
@@ -303,3 +308,6 @@ export const MyProfileManagementScreen: FC<
 //* rest api 공부 -> mst 안에 넣기
 //* 연필 눌렀을 때 화면 바뀌는 부분 구현
 //* 닉네임 눌렀을 때 화면 바뀌는 부분 구현
+
+//TODO - 스크린 이름 바꾸기
+//TODO - variable name change. (visiable , etc .. )
