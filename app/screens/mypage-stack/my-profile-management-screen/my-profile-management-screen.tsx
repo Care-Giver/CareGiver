@@ -13,6 +13,7 @@ import {
   Modal,
   useWindowDimensions,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -56,6 +57,7 @@ import {
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
+import {} from "react-native-gesture-handler"
 //import { PRETENDARD_REGULAR } from "~/assets/fonts"
 
 export const MyProfileManagementScreen: FC<
@@ -133,7 +135,7 @@ export const MyProfileManagementScreen: FC<
   }
 
   return (
-    <ScreenRootView preset="fixed">
+    <ScreenRootView preset={"fixed"}>
       <Image
         style={{
           marginTop: HEIGHT * 20,
@@ -188,70 +190,86 @@ export const MyProfileManagementScreen: FC<
         }*/
       >
         {/* //* Modal Backgound View */}
-        <KeyboardAvoidingView
-          behavior={"padding"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
+        <View
           style={{
-            width: DEVICE_SCREEN_WIDTH,
             flex: 1,
-            //justifyContent: "center",
-            // alignSelf: "center",
-            marginTop: "auto",
-            marginBottom: "auto",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(0,0,0,0.25)",
-
-            // position: "absolute",
-            // backgroundColor: "red",
+            backgroundColor: "transparent",
           }}
         >
-          <View
-            style={{
-              //width: modalWidth - 16 * 2,
-              //alignItems: "center",
-              width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-              paddingTop: 36,
-              paddingBottom: 16,
-              paddingHorizontal: 16,
-              height: 226,
-              borderRadius: 8,
-              backgroundColor: palette.white,
-              //opacity: 1,
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => {
+              setTouched(false)
             }}
           >
-            <View
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
+              //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
               style={{
-                //paddingHorizontal: 24,
-                paddingHorizontal: 10,
+                width: DEVICE_SCREEN_WIDTH,
+                flex: 1,
+                //justifyContent: "center",
+                // alignSelf: "center",
+                marginTop: "auto",
+                marginBottom: 60, //*iskeyboardwhown : 60, not auto
+                alignItems: "center",
+                //justifyContent: "flex-end", //*iskeyboardshown : flexend not center
+                justifyContent: "center",
+                backgroundColor: "rgba(0,0,0,0.25)",
+
+                // position: "absolute",
+                // backgroundColor: "red",
               }}
             >
-              <PreBol18 color={HEAD_LINE} text={"이름"} />
-              <TextInput
+              <View
                 style={{
-                  paddingTop: 43, //?
-                  //backgroundColor: palette.black,
+                  //width: modalWidth - 16 * 2,
+                  //alignItems: "center",
+                  width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                  paddingTop: 36,
+                  paddingBottom: 16,
+                  paddingHorizontal: 16,
+                  height: 226,
+                  borderRadius: 8,
+                  backgroundColor: palette.white,
+                  //opacity: 1,
                 }}
-                placeholder="닉네임을 입력해주세요."
-                onChangeText={(newText) => checkNickname(newText)}
-                value={text}
-              />
-              <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
-              {<PreReg12 text={nicknameMessage} color={warningColor} />}
-            </View>
+              >
+                <View
+                  style={{
+                    //paddingHorizontal: 24,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <PreBol18 color={HEAD_LINE} text={"이름"} />
+                  <TextInput
+                    style={{
+                      paddingTop: 43, //?
+                      //backgroundColor: palette.black,
+                    }}
+                    placeholder="닉네임을 입력해주세요."
+                    onChangeText={(newText) => checkNickname(newText)}
+                    value={text}
+                  />
+                  <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
+                  {<PreReg12 text={nicknameMessage} color={warningColor} />}
+                </View>
 
-            <ConditionalButton
-              label="확인"
-              isActivated={abletoSave}
-              style={{
-                marginTop: "auto",
-              }}
-              onPress={() => {
-                alert("saved")
-                setTouched(false)
-              }}
-            />
-          </View>
-        </KeyboardAvoidingView>
+                <ConditionalButton
+                  label="확인"
+                  isActivated={abletoSave}
+                  style={{
+                    marginTop: "auto",
+                  }}
+                  onPress={() => {
+                    alert("saved")
+                    setTouched(false)
+                  }}
+                />
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableOpacity>
+        </View>
       </Modal>
       {/* //* 생년월일 */}
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
@@ -269,6 +287,7 @@ export const MyProfileManagementScreen: FC<
       <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
       {/* //* 전화번호우 */}
       <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+
       {/* //* visiabillity Test */}
       {/* //* Ternary: 조건  ? 충족 : 불충족 */}
       {/* {visible ? (
@@ -291,6 +310,7 @@ export const MyProfileManagementScreen: FC<
           isActivated={true}
           style={{
             marginTop: "auto",
+            marginBottom: 0,
           }}
           onPress={() => {
             // alert("saved")
