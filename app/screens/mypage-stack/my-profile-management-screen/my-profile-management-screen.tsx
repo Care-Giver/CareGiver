@@ -63,7 +63,7 @@ import {} from "react-native-gesture-handler"
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
-  console.log("route @MyProfileManagementScreen", route)
+  //*console.log("route @MyProfileManagementScreen", route)
 
   // const [visible, setVisable] = useState(true)
   const [touched, setTouched] = useState(false)
@@ -96,7 +96,7 @@ export const MyProfileManagementScreen: FC<
   }, [])
 
   const visible = route.params?.visible //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
-  console.log("visible screen", visible)
+  //*console.log("visible screen", visible)
   const [text, setText] = React.useState("")
   const [changeCount, onChangeChangeCount] = React.useState(2)
   const [nicknameMessage, setNicknameMessage] = React.useState("")
@@ -116,7 +116,7 @@ export const MyProfileManagementScreen: FC<
       setAlbeToSave(false) //*3회 시 코드 -> 후에 변동 
     } */
     else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
-      console.log("specialsymbols!")
+      //console.log("specialsymbols!")
       setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
       setWarnigColor(ERROR_RED)
       setAlbeToSave(false)
@@ -132,6 +132,91 @@ export const MyProfileManagementScreen: FC<
     navigation.setParams({
       visible: false,
     })
+  }
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
+  const keyboard = useKeyboard()
+
+  useLayoutEffect(() => {
+    const keyboardUp = Keyboard.addListener("keyboardWillShow", () => {
+      setKeyboardStatus("Keyboard will Show")
+    })
+    const keyboardDown = Keyboard.addListener("keyboardWillHide", () => {
+      // LayoutAnimation.configureNext(LayoutAnimation.create(100000, "keyboard", "opacity"))
+      setKeyboardStatus("Keyboard hidden")
+    })
+
+    return () => {
+      keyboardUp.remove()
+      keyboardDown.remove()
+    }
+  }, []) //TODO : keyboard 관련 더 공부. 쓸데없는 코드 쳐내기
+
+  const handleMargin = () => {
+    let marginNumber = 0
+    let marginString = ""
+
+    switch (Platform.OS) {
+      case "android":
+        //*android 에선 keyboardWillShow 사용 못함
+        if (keyboard.keyboardShown) {
+          marginNumber = 60
+          console.log("marginNumber", marginNumber)
+          console.log("marginString", marginString)
+          return marginNumber
+        } else {
+          marginString = "auto"
+          console.log("marginNumber", marginNumber)
+          console.log("marginString", marginString)
+          return marginString
+        }
+
+      case "ios":
+        if (keyboardStatus === "Keyboard will Show") {
+          marginNumber = 60
+          console.log("marginNumber", marginNumber)
+          console.log("marginString", marginString)
+          return marginNumber
+        } else {
+          marginString = "auto"
+          console.log("marginNumber", marginNumber)
+          console.log("marginString", marginString)
+          return marginString
+        }
+
+      /*case "web":
+          
+      position = "center"
+       
+      return position*/
+    }
+  }
+  const handlePosition = () => {
+    let position = ""
+
+    switch (Platform.OS) {
+      case "android":
+        //*android 에선 keyboardWillShow 사용 못함
+        if (keyboard.keyboardShown) {
+          position = "flex-end"
+          console.log("position", position)
+          return position
+        } else {
+          position = "center"
+          console.log("position", position)
+          return position
+        }
+
+      case "ios":
+        if (keyboardStatus === "Keyboard will Show") {
+          position = "flex-end"
+          console.log("position", position)
+          return position
+        } else {
+          position = "center"
+          console.log("position", position)
+          return position
+        }
+    }
   }
 
   return (
@@ -190,86 +275,80 @@ export const MyProfileManagementScreen: FC<
         }*/
       >
         {/* //* Modal Backgound View */}
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "transparent",
+
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => {
+            setTouched(false)
           }}
         >
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => {
-              setTouched(false)
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
+            //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
+            style={{
+              width: DEVICE_SCREEN_WIDTH,
+              flex: 1,
+              //justifyContent: "center",
+              // alignSelf: "center",
+              marginTop: "auto",
+              marginBottom: handleMargin(), //*iskeyboardwhown : 60, not auto
+              alignItems: "center",
+              //justifyContent: "flex-end", //*iskeyboardshown : flexend not center
+              justifyContent: handlePosition(),
+              backgroundColor: "rgba(0,0,0,0.25)",
+
+              // position: "absolute",
+              // backgroundColor: "red",
             }}
           >
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
-              //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
+            <View
               style={{
-                width: DEVICE_SCREEN_WIDTH,
-                flex: 1,
-                //justifyContent: "center",
-                // alignSelf: "center",
-                marginTop: "auto",
-                marginBottom: 60, //*iskeyboardwhown : 60, not auto
-                alignItems: "center",
-                //justifyContent: "flex-end", //*iskeyboardshown : flexend not center
-                justifyContent: "center",
-                backgroundColor: "rgba(0,0,0,0.25)",
-
-                // position: "absolute",
-                // backgroundColor: "red",
+                //width: modalWidth - 16 * 2,
+                //alignItems: "center",
+                width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                paddingTop: 36,
+                paddingBottom: 16,
+                paddingHorizontal: 16,
+                height: 226,
+                borderRadius: 8,
+                backgroundColor: palette.white,
+                //opacity: 1,
               }}
             >
               <View
                 style={{
-                  //width: modalWidth - 16 * 2,
-                  //alignItems: "center",
-                  width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-                  paddingTop: 36,
-                  paddingBottom: 16,
-                  paddingHorizontal: 16,
-                  height: 226,
-                  borderRadius: 8,
-                  backgroundColor: palette.white,
-                  //opacity: 1,
+                  //paddingHorizontal: 24,
+                  paddingHorizontal: 10,
                 }}
               >
-                <View
+                <PreBol18 color={HEAD_LINE} text={"이름"} />
+                <TextInput
                   style={{
-                    //paddingHorizontal: 24,
-                    paddingHorizontal: 10,
+                    paddingTop: 43, //?
+                    //backgroundColor: palette.black,
                   }}
-                >
-                  <PreBol18 color={HEAD_LINE} text={"이름"} />
-                  <TextInput
-                    style={{
-                      paddingTop: 43, //?
-                      //backgroundColor: palette.black,
-                    }}
-                    placeholder="닉네임을 입력해주세요."
-                    onChangeText={(newText) => checkNickname(newText)}
-                    value={text}
-                  />
-                  <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
-                  {<PreReg12 text={nicknameMessage} color={warningColor} />}
-                </View>
-
-                <ConditionalButton
-                  label="확인"
-                  isActivated={abletoSave}
-                  style={{
-                    marginTop: "auto",
-                  }}
-                  onPress={() => {
-                    alert("saved")
-                    setTouched(false)
-                  }}
+                  placeholder="닉네임을 입력해주세요."
+                  onChangeText={(newText) => checkNickname(newText)}
+                  value={text}
                 />
+                <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
+                {<PreReg12 text={nicknameMessage} color={warningColor} />}
               </View>
-            </KeyboardAvoidingView>
-          </TouchableOpacity>
-        </View>
+
+              <ConditionalButton
+                label="확인"
+                isActivated={abletoSave}
+                style={{
+                  marginTop: "auto",
+                }}
+                onPress={() => {
+                  alert("saved")
+                  setTouched(false)
+                }}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableOpacity>
       </Modal>
       {/* //* 생년월일 */}
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
