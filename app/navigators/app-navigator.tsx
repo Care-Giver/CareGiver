@@ -34,6 +34,7 @@ import {
   ServiceRegistrationScreen,
   FacilityRegistrationScreen,
   TestWebViewScreen,
+  TestPushNotificationScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -103,6 +104,7 @@ export type NavigatorParamList = {
   "minseon-test": undefined
   "test-map-screen": undefined
   TestWebView: undefined
+  testPushNotification: undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -117,7 +119,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="testPushNotification"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -311,6 +313,7 @@ const AllStacks = () => {
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
     </Stack.Navigator>
   )
 }
