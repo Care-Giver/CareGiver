@@ -119,7 +119,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="testPushNotification"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -313,6 +313,7 @@ const AllStacks = () => {
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+      {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
     </Stack.Navigator>
   )
