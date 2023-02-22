@@ -38,3 +38,4 @@ export * from "./registration-stack/service-registration-screen/service-registra
 export * from "./registration-stack/facility-registration-screen/facility-registration-screen"
 export * from "./favorites/favorites-screen"
 export * from "./test-web-view/test-web-view-screen"
+export * from "./test-push-notification/test-push-notification-screen"
