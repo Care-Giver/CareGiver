@@ -98,6 +98,7 @@ export const MyProfileManagementScreen: FC<
 
   const visible = route.params?.visible //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
   //*console.log("visible screen", visible)
+  //TODO 변수명 바꾸기
   const [text, setText] = React.useState("")
   const [changeCount, onChangeChangeCount] = React.useState(2)
   const [nicknameMessage, setNicknameMessage] = React.useState("")
@@ -251,73 +252,20 @@ export const MyProfileManagementScreen: FC<
         style={{
           paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           marginTop: HEIGHT * 20,
-          //backgroundColor: "red",
         }}
       >
         <Row style={{ marginBottom: HEIGHT * 10 }}>
           <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
           <Pressable
             onPress={() => {
-              //alert("hi")
               setInfoTouched(true)
-              console.log("!!!!!!!!TOUCHED!!!!!")
             }}
-            style={{ backgroundColor: "red" }}
           >
             <Image
               source={images.more_info_bigger}
               style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
             />
-
-            {infoTouced && (
-              <Image
-                source={images.speech_bubble}
-                style={{
-                  width: 172,
-                  height: 50.03,
-                  position: "absolute",
-                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
-                }}
-              />
-            )}
           </Pressable>
-          {/*//? 이렇게 modal 창이 자식으로 안에 있을때 모달창은 어떻게 작동하고 그 parent 위치에 맞춰서 모달창이 생길순 없는건지?*/}
-
-          {/*//? 아래의 view 의 경우 row 컴포넌트 밑의, 다음 컴포넌트 인 '방울이 엄마' 보다 먼저 그려져서 그런지 방울이 엄마 글자 뒤에 배경처럼 들어감. 먼저 그려진 컴포넌트가 그 다음 컴포넌트 위에 그려지기 위해선 position 조절밖에 없는가? 다음 컴포넌트와는 parent 관계가 아니니 이 경우엔 불가능해보이는데 이를 해결할 방법이 궁금해졌음*/}
-          <View
-            style={{
-              backgroundColor: "pink",
-              padding: 30,
-              position: "absolute",
-              left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-              bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
-            }}
-          >
-            <Modal animationType="fade" transparent={true} visible={true}>
-              <View
-                style={{
-                  //flex: 1,
-                  padding: 100,
-                  backgroundColor: "blue",
-                  alignContent: "center",
-                  alignItems: "center",
-
-                  position: "absolute",
-                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
-                }}
-              >
-                <Image
-                  source={images.speech_bubble}
-                  style={{
-                    width: 172,
-                    height: 50.03,
-                  }}
-                />
-              </View>
-            </Modal>
-          </View>
         </Row>
         {visible && changeCount < 3 ? (
           <Pressable
@@ -336,6 +284,30 @@ export const MyProfileManagementScreen: FC<
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
+        {infoTouced && (
+          <ImageBackground
+            source={images.speech_bubble}
+            style={{
+              width: 172,
+              height: 50.03,
+              position: "absolute",
+              top: 18.5, //*'닉네임' 에서부터 18.5 떨어짐
+              left: BASIC_BACKGROUND_PADDING_WIDTH, //*parent view 에 주어진 padding 만큼 띄우기
+              alignItems: "center",
+              alignContent: "center",
+            }}
+          >
+            <PreMed14 text={`이번 달 수정 가능 횟수 ${changeCount}회`} style={{ paddingTop: 20 }} />
+            <Pressable
+              onPress={() => {
+                setInfoTouched(false)
+              }}
+              style={{ position: "absolute", top: 3.5, right: -6 }}
+            >
+              <Image source={images.x_in_circle} style={{ width: 15, height: 15 }} />
+            </Pressable>
+          </ImageBackground>
+        )}
       </View>
 
       {/* //* 생년월일 */}
