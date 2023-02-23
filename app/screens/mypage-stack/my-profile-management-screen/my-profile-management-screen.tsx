@@ -14,6 +14,7 @@ import {
   useWindowDimensions,
   KeyboardAvoidingView,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -221,7 +222,7 @@ export const MyProfileManagementScreen: FC<
 
   return (
     <ScreenRootView preset={"fixed"}>
-      <Image
+      <ImageBackground
         style={{
           marginTop: HEIGHT * 20,
           width: WIDTH * 130,
@@ -230,7 +231,19 @@ export const MyProfileManagementScreen: FC<
           alignSelf: "center",
         }} //? width 를 곱하는것이 맞는지?
         source={images.my_profile_management_default}
-      />
+      >
+        {visible && (
+          <Pressable
+            onPress={() => {
+              alert("이미지 등록 준비중입니다.")
+            }}
+            style={{ position: "absolute", right: 0, bottom: 0 }}
+          >
+            <Image source={images.camera} style={{ width: 42, height: 42 }} />
+          </Pressable>
+        )}
+      </ImageBackground>
+
       {/* //*닉네임 info 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
       <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, marginTop: HEIGHT * 20 }}>
         <Row style={{ marginBottom: HEIGHT * 10 }}>
@@ -275,8 +288,17 @@ export const MyProfileManagementScreen: FC<
         }*/
       >
         {/* //* Modal Backgound View */}
-
-        <TouchableOpacity
+        {/* //*모달 바깥쪽 터치시 사용 */}
+        {/*  <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => {
+            setTouched(false)
+          }}
+          //?activeOpacity={0.2} -> default : 0.2 가 괜찮아 보여서 냅뒀는데 값 조정? 
+          //?touchableOpacity 보다 pressable 이 더 범용성이 넓어서 이를 우리 프로젝트에서도 많이 쓴거 같은데 이에 대한 질문 
+          //? 언제 touchableOpacity 쓰고 언제 Pressable 쓸지 ? 
+        >*/}
+        <Pressable
           style={{ flex: 1 }}
           onPress={() => {
             setTouched(false)
@@ -348,7 +370,8 @@ export const MyProfileManagementScreen: FC<
               />
             </View>
           </KeyboardAvoidingView>
-        </TouchableOpacity>
+        </Pressable>
+        {/*</TouchableOpacity>*/}
       </Modal>
       {/* //* 생년월일 */}
       <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />

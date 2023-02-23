@@ -44,6 +44,7 @@ export const images = {
   my_profile_management_default: require("../images/my_profile_management_default.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
   x_white: require("../images/x_white.png"),
+  camera: require("../images/camera.png"),
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
@@ -56,4 +57,3 @@ export const images = {
   search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
   search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
 }
-
