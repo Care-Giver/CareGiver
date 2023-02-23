@@ -45,6 +45,8 @@ export const images = {
   more_info_bigger: require("../images/more_info_bigger.png"),
   x_white: require("../images/x_white.png"),
   camera: require("../images/camera.png"),
+  speech_bubble: require("../images/speech_bubble.png"),
+  x_in_circle: require("../images/x_in_circle.png"),
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),

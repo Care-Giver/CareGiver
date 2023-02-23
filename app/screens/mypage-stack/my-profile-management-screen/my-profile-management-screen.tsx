@@ -101,8 +101,9 @@ export const MyProfileManagementScreen: FC<
   const [text, setText] = React.useState("")
   const [changeCount, onChangeChangeCount] = React.useState(2)
   const [nicknameMessage, setNicknameMessage] = React.useState("")
-  const [warningColor, setWarnigColor] = React.useState(MIDDLE_LINE)
+  const [warningColor, setWarnigColor] = React.useState(MIDDLE_LINE) //TODO ? React 써여하나? 그냥 useState 하면 안됨?
   const [abletoSave, setAlbeToSave] = React.useState(false)
+  const [infoTouced, setInfoTouched] = useState(false)
   //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
   const checkNickname = (input) => {
     setText(input)
@@ -151,6 +152,7 @@ export const MyProfileManagementScreen: FC<
       keyboardDown.remove()
     }
   }, []) //TODO : keyboard 관련 더 공부. 쓸데없는 코드 쳐내기
+  //TODO : height, width 곱한거 다 지우기
 
   const handleMargin = () => {
     let marginNumber = 0
@@ -247,16 +249,68 @@ export const MyProfileManagementScreen: FC<
       {/* //*닉네임 info 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
       <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, marginTop: HEIGHT * 20 }}>
         <Row style={{ marginBottom: HEIGHT * 10 }}>
-          <PreMed14 color={BODY} text={`닉네임`} />
+          <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
           <Pressable
             onPress={() => {
-              alert("hi")
+              //alert("hi")
+              setInfoTouched(true)
+              console.log("!!!!!!!!TOUCHED!!!!!")
             }}
+            style={{ backgroundColor: "red" }}
           >
             <Image
               source={images.more_info_bigger}
-              style={{ width: WIDTH * 16, height: HEIGHT * 16, marginLeft: WIDTH * 4 }}
+              style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
             />
+
+            {/*<View
+              style={{
+                backgroundColor: "pink",
+                padding: 30,
+                position: "absolute",
+                left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+                bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+              }}>*/}
+
+            {/*<Modal animationType="fade" transparent={true} visible={true}>
+              <View
+                style={{
+                  //flex: 1,
+                  padding: 100,
+                  backgroundColor: "blue",
+                  alignContent: "center",
+                  alignItems: "center",
+
+                  position: "absolute",
+                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+                }}
+              >
+                <Image
+                  source={images.speech_bubble}
+                  style={{
+                    width: 172,
+                    height: 50.03,
+                    //position: "absolute",
+                    //left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+                    //bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+                  }}
+                />
+              </View>
+            </Modal>
+            {/* </View>*/}
+            {infoTouced && (
+              <Image
+                source={images.speech_bubble}
+                style={{
+                  width: 172,
+                  height: 50.03,
+                  position: "absolute",
+                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+                }}
+              />
+            )}
           </Pressable>
         </Row>
         {visible && changeCount < 3 ? (
@@ -277,6 +331,56 @@ export const MyProfileManagementScreen: FC<
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
       </View>
+
+      {/* //* 생년월일 */}
+      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
+      {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
+      //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
+            //?이해해도 되는것?*/}
+      {/*visible ? (
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
+      ) : (
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
+      )//*이전 코드 */}
+      {/* //* 성별 */}
+      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={visible} />
+      {/* //* 이메일 */}
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
+      {/* //* 전화번호우 */}
+      <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+
+      {/* //* visiabillity Test */}
+      {/* //* Ternary: 조건  ? 충족 : 불충족 */}
+      {/* {visible ? (
+      {visible ? (
+        <ConditionalButton
+          label="저장하기"
+          isActivated={true}
+          style={{
+            marginTop: "auto",
+          }}
+          onPress={() => {
+            // alert("saved")
+            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
+          }}
+        />
+      ) : null} */}
+      {visible && (
+        <ConditionalButton
+          label="저장하기"
+          isActivated={true}
+          style={{
+            marginTop: "auto",
+            marginBottom: 0,
+          }}
+          onPress={() => {
+            // alert("saved")
+            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
+          }}
+        />
+      )}
+      {/*//*modal 창 따로 뺌. -> 모달이 스크린 전체를 parent 로 삼는다면 -> 여기선 keyboardavoidigView flex : 1 이 그걸 해줌? 모달이 컴포넌트 내에서 어디 있어도 상관없음 */}
+      {/* //?그렇다면 질문 :  modal 이 어떤 컴포넌트 안의 자식으로 있어서 flex : 1 을 해도 그 컴포넌트 크기 안에 갇힌다면 ? 위의 주석처리 해놓은, info 버튼 눌렀을때의 모달 창으로 말풍선 띄우기 시도 참고 */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -373,53 +477,6 @@ export const MyProfileManagementScreen: FC<
         </Pressable>
         {/*</TouchableOpacity>*/}
       </Modal>
-      {/* //* 생년월일 */}
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
-      {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
-      //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
-            //?이해해도 되는것?*/}
-      {/*visible ? (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
-      ) : (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
-      )//*이전 코드 */}
-      {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={visible} />
-      {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
-      {/* //* 전화번호우 */}
-      <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
-
-      {/* //* visiabillity Test */}
-      {/* //* Ternary: 조건  ? 충족 : 불충족 */}
-      {/* {visible ? (
-      {visible ? (
-        <ConditionalButton
-          label="저장하기"
-          isActivated={true}
-          style={{
-            marginTop: "auto",
-          }}
-          onPress={() => {
-            // alert("saved")
-            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
-          }}
-        />
-      ) : null} */}
-      {visible && (
-        <ConditionalButton
-          label="저장하기"
-          isActivated={true}
-          style={{
-            marginTop: "auto",
-            marginBottom: 0,
-          }}
-          onPress={() => {
-            // alert("saved")
-            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
-          }}
-        />
-      )}
     </ScreenRootView>
   )
 })
