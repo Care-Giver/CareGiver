@@ -105,6 +105,8 @@ export const MyProfileManagementScreen: FC<
   const [warningColor, setWarnigColor] = React.useState(MIDDLE_LINE) //TODO ? React 써여하나? 그냥 useState 하면 안됨?
   const [abletoSave, setAlbeToSave] = React.useState(false)
   const [infoTouced, setInfoTouched] = useState(false)
+  const [phoneNumTouched, setPhoneNumTouched] = useState(false)
+  const [phoneNum, setPhoneNum] = useState("")
   //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
   const checkNickname = (input) => {
     setText(input)
@@ -325,7 +327,13 @@ export const MyProfileManagementScreen: FC<
       {/* //* 이메일 */}
       <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
       {/* //* 전화번호우 */}
-      <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+      {visible ? (
+        <Pressable onPress={() => setPhoneNumTouched(true)}>
+          <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+        </Pressable>
+      ) : (
+        <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+      )}
 
       {/* //* visiabillity Test */}
       {/* //* Ternary: 조건  ? 충족 : 불충족 */}
@@ -357,6 +365,7 @@ export const MyProfileManagementScreen: FC<
           }}
         />
       )}
+
       {/*//*modal 창 따로 뺌. -> 모달이 스크린 전체를 parent 로 삼는다면 -> 여기선 keyboardavoidigView flex : 1 이 그걸 해줌? 모달이 컴포넌트 내에서 어디 있어도 상관없음 */}
       {/* //?그렇다면 질문 :  modal 이 어떤 컴포넌트 안의 자식으로 있어서 flex : 1 을 해도 그 컴포넌트 크기 안에 갇힌다면 ? 위의 주석처리 해놓은, info 버튼 눌렀을때의 모달 창으로 말풍선 띄우기 시도 참고 */}
       <Modal
@@ -448,6 +457,105 @@ export const MyProfileManagementScreen: FC<
                 onPress={() => {
                   alert("saved")
                   setTouched(false)
+                }}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </Pressable>
+        {/*</TouchableOpacity>*/}
+      </Modal>
+
+      {/*//*두번째 모달창 : 전화번호우  */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={phoneNumTouched}
+
+        /*onRequestClose={() => {
+          //Alert.alert('Modal has been closed.');
+          //setModalVisible(false);
+        }*/
+      >
+        {/* //* Modal Backgound View */}
+        {/* //*모달 바깥쪽 터치시 사용 */}
+        {/*  <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => {
+            setTouched(false)
+          }}
+          //?activeOpacity={0.2} -> default : 0.2 가 괜찮아 보여서 냅뒀는데 값 조정? 
+          //?touchableOpacity 보다 pressable 이 더 범용성이 넓어서 이를 우리 프로젝트에서도 많이 쓴거 같은데 이에 대한 질문 
+          //? 언제 touchableOpacity 쓰고 언제 Pressable 쓸지 ? 
+        >*/}
+        <Pressable
+          style={{ flex: 1 }}
+          onPress={() => {
+            setPhoneNumTouched(false)
+          }}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
+            //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
+            style={{
+              width: DEVICE_SCREEN_WIDTH,
+              flex: 1,
+              //justifyContent: "center",
+              // alignSelf: "center",
+              marginTop: "auto",
+              //marginBottom: handleMargin(), //*iskeyboardwhown : 60, not? auto
+              marginBottom: "auto",
+              alignItems: "center",
+              justifyContent: "center",
+              //justifyContent: "flex-end", //*iskeyboardshown : flexend not? center
+              //justifyContent: handlePosition(),
+              backgroundColor: "rgba(0,0,0,0.25)",
+
+              // position: "absolute",
+              // backgroundColor: "red",
+            }}
+          >
+            <View
+              style={{
+                //width: modalWidth - 16 * 2,
+                //alignItems: "center",
+                width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                paddingTop: 36,
+                paddingBottom: 16,
+                paddingHorizontal: 16,
+                height: 226,
+                borderRadius: 8,
+                backgroundColor: palette.white,
+                //opacity: 1,
+              }}
+            >
+              <View
+                style={{
+                  //paddingHorizontal: 24,
+                  paddingHorizontal: 10,
+                }}
+              >
+                <PreBol18 color={HEAD_LINE} text={"전화번호"} />
+                <TextInput
+                  style={{
+                    paddingTop: 43, //?
+                    //backgroundColor: palette.black,
+                  }}
+                  placeholder="전화번호를 입력해주세요."
+                  onChangeText={setPhoneNum}
+                  value={phoneNum}
+                />
+                <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
+              </View>
+
+              <ConditionalButton
+                label="확인"
+                isActivated={phoneNum.length > 0}
+                style={{
+                  marginTop: "auto",
+                }}
+                onPress={() => {
+                  alert("saved")
+                  setPhoneNumTouched(false)
                 }}
               />
             </View>
