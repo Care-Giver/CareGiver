@@ -247,7 +247,13 @@ export const MyProfileManagementScreen: FC<
       </ImageBackground>
 
       {/* //*닉네임 info 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
-      <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, marginTop: HEIGHT * 20 }}>
+      <View
+        style={{
+          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+          marginTop: HEIGHT * 20,
+          //backgroundColor: "red",
+        }}
+      >
         <Row style={{ marginBottom: HEIGHT * 10 }}>
           <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
           <Pressable
@@ -263,16 +269,32 @@ export const MyProfileManagementScreen: FC<
               style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
             />
 
-            {/*<View
-              style={{
-                backgroundColor: "pink",
-                padding: 30,
-                position: "absolute",
-                left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-                bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
-              }}>*/}
+            {infoTouced && (
+              <Image
+                source={images.speech_bubble}
+                style={{
+                  width: 172,
+                  height: 50.03,
+                  position: "absolute",
+                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+                }}
+              />
+            )}
+          </Pressable>
+          {/*//? 이렇게 modal 창이 자식으로 안에 있을때 모달창은 어떻게 작동하고 그 parent 위치에 맞춰서 모달창이 생길순 없는건지?*/}
 
-            {/*<Modal animationType="fade" transparent={true} visible={true}>
+          {/*//? 아래의 view 의 경우 row 컴포넌트 밑의, 다음 컴포넌트 인 '방울이 엄마' 보다 먼저 그려져서 그런지 방울이 엄마 글자 뒤에 배경처럼 들어감. 먼저 그려진 컴포넌트가 그 다음 컴포넌트 위에 그려지기 위해선 position 조절밖에 없는가? 다음 컴포넌트와는 parent 관계가 아니니 이 경우엔 불가능해보이는데 이를 해결할 방법이 궁금해졌음*/}
+          <View
+            style={{
+              backgroundColor: "pink",
+              padding: 30,
+              position: "absolute",
+              left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
+              bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
+            }}
+          >
+            <Modal animationType="fade" transparent={true} visible={true}>
               <View
                 style={{
                   //flex: 1,
@@ -291,27 +313,11 @@ export const MyProfileManagementScreen: FC<
                   style={{
                     width: 172,
                     height: 50.03,
-                    //position: "absolute",
-                    //left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-                    //bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
                   }}
                 />
               </View>
             </Modal>
-            {/* </View>*/}
-            {infoTouced && (
-              <Image
-                source={images.speech_bubble}
-                style={{
-                  width: 172,
-                  height: 50.03,
-                  position: "absolute",
-                  left: -39, //* info 버튼 x = 55, 말풍선 x = 16 -> 차이는 39
-                  bottom: -52.53, //*말풍선 height 50.03 + 인포 버튼 사이 빈틈 2.5
-                }}
-              />
-            )}
-          </Pressable>
+          </View>
         </Row>
         {visible && changeCount < 3 ? (
           <Pressable
