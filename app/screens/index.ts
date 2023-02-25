@@ -39,3 +39,6 @@ export * from "./registration-stack/facility-registration-screen/facility-regist
 export * from "./favorites/favorites-screen"
 export * from "./test-web-view/test-web-view-screen"
 export * from "./test-push-notification/test-push-notification-screen"
+
+//* set-price-stack
+export * from "./set-price-stack/caregiver/caregiver-set-price-screen"
