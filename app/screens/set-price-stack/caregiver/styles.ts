@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
 
   testUnderline: {
     height: "100%",
-    borderBottomColor: CARE_NATURAL_BLUE,
+    borderBottomColor: `rgba(177, 201, 222, 0.6)`,
     borderBottomWidth: 6,
   },
 
