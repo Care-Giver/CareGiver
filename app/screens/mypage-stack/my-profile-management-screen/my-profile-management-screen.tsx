@@ -138,8 +138,13 @@ export const MyProfileManagementScreen: FC<
       visible: false,
     })
   }
+  //*키보드 관련
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   const keyboard = useKeyboard()
+
+  if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true)
+  }
 
   useLayoutEffect(() => {
     const keyboardUp = Keyboard.addListener("keyboardWillShow", () => {
@@ -157,50 +162,16 @@ export const MyProfileManagementScreen: FC<
   }, []) //TODO : keyboard 관련 더 공부. 쓸데없는 코드 쳐내기
   //TODO : height, width 곱한거 다 지우기
 
-  const handleMargin = () => {
-    let marginNumber = 0
-    let marginString = ""
-
-    switch (Platform.OS) {
-      case "android":
-        //*android 에선 keyboardWillShow 사용 못함
-        if (keyboard.keyboardShown) {
-          marginNumber = 60
-          console.log("marginNumber", marginNumber)
-          console.log("marginString", marginString)
-          return marginNumber
-        } else {
-          marginString = "auto"
-          console.log("marginNumber", marginNumber)
-          console.log("marginString", marginString)
-          return marginString
-        }
-
-      case "ios":
-        if (keyboardStatus === "Keyboard will Show") {
-          marginNumber = 60
-          console.log("marginNumber", marginNumber)
-          console.log("marginString", marginString)
-          return marginNumber
-        } else {
-          marginString = "auto"
-          console.log("marginNumber", marginNumber)
-          console.log("marginString", marginString)
-          return marginString
-        }
-
-      /*case "web":
-          
-      position = "center"
-       
-      return position*/
-    }
-  }
   const handlePosition = () => {
     let position = ""
 
     switch (Platform.OS) {
       case "android":
+        LayoutAnimation.configureNext(LayoutAnimation.create(1, "easeInEaseOut", "scaleY"))
+        //*안드로이드에선 layoutanitmation 과 모달창의 종료가 충돌하는 일은 없음. 다만 에니메이션을 준 효과가 나지 않게 갱장히 버벅거림.
+        //*그래도 다행히 실제 기기에서 테스트시에는 그렇게 버벅거리지 않음.
+        //? ios 와 안드로이드 둘다 화면 움직임을 고려하여 키보드 띄워져 있을때 굳이 모달창을 키보드 가깝게 붙이는 이 코드를 추가로 고집 하는 것이 득이될지 실이될지 따지기 필요
+
         //*android 에선 keyboardWillShow 사용 못함
         if (keyboard.keyboardShown) {
           position = "flex-end"
@@ -214,10 +185,14 @@ export const MyProfileManagementScreen: FC<
 
       case "ios":
         if (keyboardStatus === "Keyboard will Show") {
+          //!LayoutAnimation.configureNext(LayoutAnimation.create(0, "easeIn", "scaleY"))
+          //!화면 전환을 부드럽게 시도해 봤지만 모달창이 닫혔을 때에도 다시 열리는 문제가 있음. 찾아보니 2018년에 동일한 문제가 발견되었는데 해결책은 아직 나오지 않은듯하고 2022년까지 issue 였던듯 함.
+          //!https://github.com/facebook/react-native/issues/33733
           position = "flex-end"
           console.log("position", position)
           return position
         } else {
+          //LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity"))
           position = "center"
           console.log("position", position)
           return position
@@ -368,16 +343,7 @@ export const MyProfileManagementScreen: FC<
 
       {/*//*modal 창 따로 뺌. -> 모달이 스크린 전체를 parent 로 삼는다면 -> 여기선 keyboardavoidigView flex : 1 이 그걸 해줌? 모달이 컴포넌트 내에서 어디 있어도 상관없음 */}
       {/* //?그렇다면 질문 :  modal 이 어떤 컴포넌트 안의 자식으로 있어서 flex : 1 을 해도 그 컴포넌트 크기 안에 갇힌다면 ? 위의 주석처리 해놓은, info 버튼 눌렀을때의 모달 창으로 말풍선 띄우기 시도 참고 */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={touched}
-
-        /*onRequestClose={() => {
-          //Alert.alert('Modal has been closed.');
-          //setModalVisible(false);
-        }*/
-      >
+      <Modal animationType="fade" transparent={true} visible={touched}>
         {/* //* Modal Backgound View */}
         {/* //*모달 바깥쪽 터치시 사용 */}
         {/*  <TouchableOpacity
@@ -404,7 +370,6 @@ export const MyProfileManagementScreen: FC<
               //justifyContent: "center",
               // alignSelf: "center",
               marginTop: "auto",
-              marginBottom: handleMargin(), //*iskeyboardwhown : 60, not auto
               alignItems: "center",
               //justifyContent: "flex-end", //*iskeyboardshown : flexend not center
               justifyContent: handlePosition(),
@@ -425,6 +390,7 @@ export const MyProfileManagementScreen: FC<
                 height: 226,
                 borderRadius: 8,
                 backgroundColor: palette.white,
+                marginBottom: 60,
                 //opacity: 1,
               }}
             >
@@ -467,7 +433,7 @@ export const MyProfileManagementScreen: FC<
 
       {/*//*두번째 모달창 : 전화번호우  */}
       <Modal
-        animationType="fade"
+        animationType="none"
         transparent={true}
         visible={phoneNumTouched}
 
@@ -478,15 +444,7 @@ export const MyProfileManagementScreen: FC<
       >
         {/* //* Modal Backgound View */}
         {/* //*모달 바깥쪽 터치시 사용 */}
-        {/*  <TouchableOpacity
-          style={{ flex: 1 }}
-          onPress={() => {
-            setTouched(false)
-          }}
-          //?activeOpacity={0.2} -> default : 0.2 가 괜찮아 보여서 냅뒀는데 값 조정? 
-          //?touchableOpacity 보다 pressable 이 더 범용성이 넓어서 이를 우리 프로젝트에서도 많이 쓴거 같은데 이에 대한 질문 
-          //? 언제 touchableOpacity 쓰고 언제 Pressable 쓸지 ? 
-        >*/}
+
         <Pressable
           style={{ flex: 1 }}
           onPress={() => {
@@ -499,25 +457,15 @@ export const MyProfileManagementScreen: FC<
             style={{
               width: DEVICE_SCREEN_WIDTH,
               flex: 1,
-              //justifyContent: "center",
-              // alignSelf: "center",
               marginTop: "auto",
-              //marginBottom: handleMargin(), //*iskeyboardwhown : 60, not? auto
               marginBottom: "auto",
               alignItems: "center",
-              justifyContent: "center",
-              //justifyContent: "flex-end", //*iskeyboardshown : flexend not? center
-              //justifyContent: handlePosition(),
+              justifyContent: handlePosition(),
               backgroundColor: "rgba(0,0,0,0.25)",
-
-              // position: "absolute",
-              // backgroundColor: "red",
             }}
           >
             <View
               style={{
-                //width: modalWidth - 16 * 2,
-                //alignItems: "center",
                 width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
                 paddingTop: 36,
                 paddingBottom: 16,
@@ -525,12 +473,11 @@ export const MyProfileManagementScreen: FC<
                 height: 226,
                 borderRadius: 8,
                 backgroundColor: palette.white,
-                //opacity: 1,
+                marginBottom: 60,
               }}
             >
               <View
                 style={{
-                  //paddingHorizontal: 24,
                   paddingHorizontal: 10,
                 }}
               >
@@ -538,7 +485,6 @@ export const MyProfileManagementScreen: FC<
                 <TextInput
                   style={{
                     paddingTop: 43, //?
-                    //backgroundColor: palette.black,
                   }}
                   placeholder="전화번호를 입력해주세요."
                   onChangeText={setPhoneNum}
