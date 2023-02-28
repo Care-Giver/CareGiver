@@ -1,8 +1,33 @@
 /**
  금액(number)을 원화 표기(string)로 바꿔준다
+ ex: 27000 -> 27,000원
+ input: number, output: string
+ TextField 컴포넌트에 사용하지말것! Text 컴포넌트에만 사용할것!
 */
-export const won = (number: number) =>
+export const won = (number: number): string =>
   number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원"
+
+/**
+ 숫자 문자열(number string) 에 세자리마다 ","" 를 삽입한다.
+ ex: 27000 -> 27,000
+ input, output 모두 string 임을 주의할 것.
+ toLocaleString 은 android 에서 작동하지 않는 문제 때문에, 이 함수를 대신 사용한다.
+*/
+export const price = (_numberString: string): string => {
+  //* 값에 이미 comma (,) 가 포함되어 있다면, 모두 제거
+  const numberString = _numberString.replace(/,/g, "")
+
+  //* 정규표현식
+  //? This regex is used to match every digit that is followed by groups of 3 digits (except the last group) and replace it with that digit followed by a comma.
+  const regex = /(\d)(?=(\d{3})+(?!\d))/g
+
+  //* 사용자가 숫자 문자열 (number string) 값만 입력했는지 확인
+  //? -> 만약 number string 이 아닌 string 을 입력한 경우에는, "" (empty string) 리턴
+  if (!/^-?\d+$/.test(numberString)) return ""
+
+  //? $1 refers to the matched group of digits. The `,` is a literal comma that is inserted between the matched group of digits and the following group of digits (if any). So $1, means that the matched group of digits should be followed by a comma.
+  return numberString.replace(regex, "$1,")
+}
 
 /**
  serviceType 값을 한글표기(방문 || 위탁)로 바꿔준다

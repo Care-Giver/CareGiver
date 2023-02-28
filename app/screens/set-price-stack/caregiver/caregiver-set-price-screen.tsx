@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
@@ -17,8 +17,7 @@ import { BODY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
 import { TextInput, View } from "react-native"
 import { styles } from "./styles"
 import { standardCosts } from "./dummy-data"
-
-const CHECK = /^[0-9]+$/
+import { price } from "../../../utils/format"
 
 export const CaregiverSetPriceScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
@@ -63,18 +62,6 @@ export const CaregiverSetPriceScreen: FC<
     }
   }, [standardCosts, serviceType])
 
-  // * 사용자가 숫자 값만 입력했는지 확인.
-  // ? -> 만약 숫자가 아닌 값을 입력한 경우에는 입력값 초기화
-  useEffect(() => {
-    const cost = inputCost.replace(/,/g, "")
-    // TODO: 잘못된 입력 처리 논의하기
-    if (inputCost !== "" && !CHECK.test(cost)) {
-      // ? 알림창 없이: 문자값은 아무리 입력해도 무시할 수 있는 방법 없을까?
-      alert("가격은 숫자만 입력 가능합니다.")
-      setInputCost("")
-    }
-  }, [inputCost])
-
   // * 사용자가 값을 입력하면 다음 버튼 활성화
   useLayoutEffect(() => {
     if (inputCost.length > 0) {
@@ -106,7 +93,7 @@ export const CaregiverSetPriceScreen: FC<
           <TextInput
             keyboardType="numeric"
             placeholder="105,000"
-            value={inputCost}
+            value={price(inputCost)} //! toLocaleString 사용하지 말 것 - android 이슈 존재
             onChangeText={setInputCost}
           />
         </View>
