@@ -26,8 +26,6 @@ import {
   CARE_NATURAL_BLUE,
   HEAD_LINE,
   MIDDLE_LINE,
-  HEIGHT,
-  WIDTH,
   DEVICE_SCREEN_HEIGHT,
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
@@ -59,74 +57,52 @@ import {
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 import {} from "react-native-gesture-handler"
-//import { PRETENDARD_REGULAR } from "~/assets/fonts"
 
 export const MyProfileManagementScreen: FC<
   StackScreenProps<NavigatorParamList, "my-profile-management-screen">
 > = observer(({ navigation, route }) => {
   //*console.log("route @MyProfileManagementScreen", route)
 
-  // const [visible, setVisable] = useState(true)
   const [touched, setTouched] = useState(false)
   //!const windowWidth = useWindowDimensions().width
   //!const modalWidth = isWeb ? STANDARD_WIDTH : windowWidth
-  const modalWidth = 358
-
-  // useLayoutEffect(() => {
-  //     //visible
-  //     //? 아래와 같이 쓰면 안되는 이유?
-  //     //! FEEDBACK: -> headerRight prop 은 return 값이 있어야 합니다. null 때문에 문제가 생긴것입니다 :)
-  //     /*headerRight: () => (
-  //       {visible?  (<Pressable
-  //         onPress={() => setVisable((prev) => !prev)}
-  //         style={{
-  //           marginLeft: "auto",
-  //           marginRight: 8, //!
-  //         }}
-  //       >
-  //         <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-  //       </Pressable>) : null }
-
-  //     ),*/
-  //   })
-  // }, [visible])
 
   //* 스크린을 렌더링할때 최초실행됩니다.
   useLayoutEffect(() => {
     showEditButton() //* 편집버튼을 보여주는 상태로 설정합니다.
   }, [])
+  console.log("mainscreen", route.params)
 
-  const visible = route.params?.visible //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
+  const editable = route.params?.editable //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
-  const [text, setText] = React.useState("")
-  const [changeCount, onChangeChangeCount] = React.useState(2)
-  const [nicknameMessage, setNicknameMessage] = React.useState("")
-  const [warningColor, setWarnigColor] = React.useState(MIDDLE_LINE) //TODO ? React 써여하나? 그냥 useState 하면 안됨?
-  const [abletoSave, setAlbeToSave] = React.useState(false)
-  const [infoTouced, setInfoTouched] = useState(false)
-  const [phoneNumTouched, setPhoneNumTouched] = useState(false)
-  const [phoneNum, setPhoneNum] = useState("")
+  const [nicknameInput, setNicknmaeInput] = useState("") //*닉네임 + 전화번호 인풋 (전화번호는 따로 빼기?)
+  const [nicknameCount, setNicknameCount] = useState(2) //*닉네임 변경 횟수
+  const [nicknameWarningMessage, setNicknameWarningMessage] = useState("") //*닉네임 입력이 조건에 안맞으면 띄우는 경고 메세지
+  const [warningColor, setWarnigColor] = useState(MIDDLE_LINE) //*입력된 닉네임 조건 부합 여부에 따라 바뀌는 input 창 아래 border
+  const [abletoSave, setAlbeToSave] = useState(false) //*입력된 닉네임 / 전화번호 모달창에서 저장버튼 누를수 있는지 없는지
+  const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
+  const [phoneNumTouched, setPhoneNumTouched] = useState(false) //*전화번호 부분 눌렸는지 아닌지 체크
+  const [phoneNum, setPhoneNum] = useState("") //* 전화번호 인풋
   //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
   const checkNickname = (input) => {
-    setText(input)
+    setNicknmaeInput(input)
     if (input.length === 0) {
-      setNicknameMessage("")
+      setNicknameWarningMessage("")
       setWarnigColor(MIDDLE_LINE)
       setAlbeToSave(false)
     }
     //* 닉네임 변환 카운트를 먼저 알려줘야 할거 같아서
-    /*else if (changeCount === 3) {
-      setNicknameMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
+    /*else if (nicknameCount === 3) {
+      setNicknameWarningMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
       setAlbeToSave(false) //*3회 시 코드 -> 후에 변동 
     } */
     else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
-      //console.log("specialsymbols!")
-      setNicknameMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
+      setNicknameWarningMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
       setWarnigColor(ERROR_RED)
       setAlbeToSave(false)
     } else {
-      setNicknameMessage("* 사용가능한 이름입니다!")
+      setNicknameWarningMessage("* 사용가능한 이름입니다!")
       setWarnigColor(SUCCESS_BLUE)
       setAlbeToSave(true)
     }
@@ -135,7 +111,7 @@ export const MyProfileManagementScreen: FC<
   //* 편집버튼 보이기
   const showEditButton = () => {
     navigation.setParams({
-      visible: false,
+      editable: false,
     })
   }
   //*키보드 관련
@@ -159,8 +135,7 @@ export const MyProfileManagementScreen: FC<
       keyboardUp.remove()
       keyboardDown.remove()
     }
-  }, []) //TODO : keyboard 관련 더 공부. 쓸데없는 코드 쳐내기
-  //TODO : height, width 곱한거 다 지우기
+  }, [])
 
   const handlePosition = () => {
     let position = ""
@@ -204,15 +179,15 @@ export const MyProfileManagementScreen: FC<
     <ScreenRootView preset={"fixed"}>
       <ImageBackground
         style={{
-          marginTop: HEIGHT * 20,
-          width: WIDTH * 130,
-          height: HEIGHT * 130,
-          borderRadius: (WIDTH * 130) / 2,
+          marginTop: 20,
+          width: 130,
+          height: 130,
+          borderRadius: 130 / 2,
           alignSelf: "center",
         }} //? width 를 곱하는것이 맞는지?
         source={images.my_profile_management_default}
       >
-        {visible && (
+        {editable && (
           <Pressable
             onPress={() => {
               alert("이미지 등록 준비중입니다.")
@@ -228,23 +203,20 @@ export const MyProfileManagementScreen: FC<
       <View
         style={{
           paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-          marginTop: HEIGHT * 20,
+          marginTop: 20,
         }}
       >
-        <Row style={{ marginBottom: HEIGHT * 10 }}>
+        <Row style={{ marginBottom: 10 }}>
           <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
           <Pressable
             onPress={() => {
               setInfoTouched(true)
             }}
           >
-            <Image
-              source={images.more_info_bigger}
-              style={{ width: WIDTH * 16, height: HEIGHT * 16 }}
-            />
+            <Image source={images.more_info_bigger} style={{ width: 16, height: 16 }} />
           </Pressable>
         </Row>
-        {visible && changeCount < 3 ? (
+        {editable && nicknameCount < 3 ? (
           <Pressable
             onPress={() => {
               setTouched(true)
@@ -254,13 +226,13 @@ export const MyProfileManagementScreen: FC<
             <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
             {/* //*저장하기 버튼도 보이고 3번 안썼을때*/}
           </Pressable>
-        ) : visible === true && changeCount === 3 ? (
+        ) : editable === true && nicknameCount === 3 ? (
           <PreMed16 color={DISABLED} text={`방울이엄마`} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         ) : (
-          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} /> //* visible이 아닐때. 즉 저장하기 버튼이 안보일때
+          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} /> //* editable이 아닐때. 즉 저장하기 버튼이 안보일때
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
-        <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
+        <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
         {infoTouced && (
           <ImageBackground
             source={images.speech_bubble}
@@ -274,7 +246,10 @@ export const MyProfileManagementScreen: FC<
               alignContent: "center",
             }}
           >
-            <PreMed14 text={`이번 달 수정 가능 횟수 ${changeCount}회`} style={{ paddingTop: 20 }} />
+            <PreMed14
+              text={`이번 달 수정 가능 횟수 ${nicknameCount}회`}
+              style={{ paddingTop: 20 }}
+            />
             <Pressable
               onPress={() => {
                 setInfoTouched(false)
@@ -288,21 +263,21 @@ export const MyProfileManagementScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={visible} />
+      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={editable} />
       {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
       //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
             //?이해해도 되는것?*/}
-      {/*visible ? (
+      {/*editable ? (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
       ) : (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
       )//*이전 코드 */}
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={visible} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={editable} />
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={visible} />
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={editable} />
       {/* //* 전화번호우 */}
-      {visible ? (
+      {editable ? (
         <Pressable onPress={() => setPhoneNumTouched(true)}>
           <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
         </Pressable>
@@ -312,8 +287,8 @@ export const MyProfileManagementScreen: FC<
 
       {/* //* visiabillity Test */}
       {/* //* Ternary: 조건  ? 충족 : 불충족 */}
-      {/* {visible ? (
-      {visible ? (
+      {/* {editable ? (
+      {editable ? (
         <ConditionalButton
           label="저장하기"
           isActivated={true}
@@ -326,7 +301,7 @@ export const MyProfileManagementScreen: FC<
           }}
         />
       ) : null} */}
-      {visible && (
+      {editable && (
         <ConditionalButton
           label="저장하기"
           isActivated={true}
@@ -408,10 +383,10 @@ export const MyProfileManagementScreen: FC<
                   }}
                   placeholder="닉네임을 입력해주세요."
                   onChangeText={(newText) => checkNickname(newText)}
-                  value={text}
+                  value={nicknameInput}
                 />
-                <DivisionLine color={warningColor} style={{ marginTop: HEIGHT * 4 }} />
-                {<PreReg12 text={nicknameMessage} color={warningColor} />}
+                <DivisionLine color={warningColor} style={{ marginTop: 4 }} />
+                {<PreReg12 text={nicknameWarningMessage} color={warningColor} />}
               </View>
 
               <ConditionalButton
@@ -453,7 +428,6 @@ export const MyProfileManagementScreen: FC<
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
-            //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
             style={{
               width: DEVICE_SCREEN_WIDTH,
               flex: 1,
@@ -490,7 +464,7 @@ export const MyProfileManagementScreen: FC<
                   onChangeText={setPhoneNum}
                   value={phoneNum}
                 />
-                <DivisionLine color={MIDDLE_LINE} style={{ marginTop: HEIGHT * 4 }} />
+                <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
               </View>
 
               <ConditionalButton
@@ -507,6 +481,7 @@ export const MyProfileManagementScreen: FC<
             </View>
           </KeyboardAvoidingView>
         </Pressable>
+
         {/*</TouchableOpacity>*/}
       </Modal>
     </ScreenRootView>
@@ -521,4 +496,3 @@ export const MyProfileManagementScreen: FC<
 //* 닉네임 눌렀을 때 화면 바뀌는 부분 구현
 
 //TODO - 스크린 이름 바꾸기
-//TODO - variable name change. (visiable , etc .. )

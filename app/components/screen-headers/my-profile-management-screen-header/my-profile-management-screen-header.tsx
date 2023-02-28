@@ -14,12 +14,14 @@ export const MyProfileManangementScreenHeader = (props) => {
 
   const params = route.params //* route.params 를 통해, screen 의 params 를 가져올 수 있습니다.
   //!그렇군요!
-  console.log("route", route)
-  console.log("params", params)
+  //console.log("route", route)
+  console.log("params!!", params)
 
   // @ts-ignore
-  const visible = params?.visible
-  const isEditButtonShown = !visible //*  (modal) visible 이 아닌 경우 -> 편집버튼 보이기 |  (modal) visible 인 경우 -> 편집버튼 숨기기
+
+  console.log("editable", params?.editable)
+  const editable = params?.editable
+  const isEditButtonShown = !editable //*  (modal) editable 이 아닌 경우 -> 편집버튼 보이기 |  (modal) editable 인 경우 -> 편집버튼 숨기기
   console.log("isEditButtonShown", isEditButtonShown)
 
   //* 편집버튼 숨기기
@@ -27,7 +29,7 @@ export const MyProfileManangementScreenHeader = (props) => {
     //* setParams 를 통해, screen 의 params 를 수정할 수 있습니다. (update screen params)
     // @ts-ignore
     navigation.setParams({
-      visible: true,
+      editable: true,
     })
   }
 
@@ -48,7 +50,6 @@ export const MyProfileManangementScreenHeader = (props) => {
           marginLeft: "auto",
           marginRight: 8, //!
         }}
-        // disabled={visible}
       >
         <Image
           style={{ width: 28, height: 28 }}

@@ -223,20 +223,6 @@ const AllStacks = () => {
             <PreMed18 style={{ marginLeft: 0 }}> {"내 프로필 관리"}</PreMed18>
           ),*/
           headerTitle: "",
-          //?! headerRight 설정 안해도 작동 잘 되는데 이건 왜일까..?
-          //?console.log (props)?
-          /* headerRight: (props) => (
-            <Pressable
-              style={{
-                marginLeft: "auto",
-                marginRight: 8, //!
-              }}
-            >
-              <Image style={{ width: 28, height: 28 }} source={images.pencil} />
-            </Pressable>
-          ),*/
-
-          //header: (props) => <MyProfileManangementScreenHeader {...props} />,
         })}
       />
 
