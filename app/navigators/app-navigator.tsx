@@ -102,7 +102,7 @@ export type NavigatorParamList = {
   "my-profile-management-screen": undefined
 
   // * caregiver - set price stack
-  "caregiver-set-price-screen": undefined
+  "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
 
   //* test screens
   "minseon-test": undefined

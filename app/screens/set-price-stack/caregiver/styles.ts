@@ -1,4 +1,4 @@
-import { CARE_NATURAL_BLUE } from "#theme"
+import { LBG } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -14,22 +14,22 @@ export const styles = StyleSheet.create({
     overflow: "visible",
   },
 
-  underline: {
-    borderBottomColor: CARE_NATURAL_BLUE,
-    borderBottomWidth: 6,
-  },
-
   priceContainer: {
     marginTop: 24,
   },
 
-  testUnderline: {
-    height: "100%",
-    borderBottomColor: `rgba(177, 201, 222, 0.6)`,
-    borderBottomWidth: 6,
+  textInput: {
+    paddingVertical: 4,
   },
 
-  testColor: {
-    color: "transparent",
+  descriptionContainer: {
+    marginTop: 24,
+
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+
+    backgroundColor: LBG,
+
+    borderRadius: 4,
   },
 })
