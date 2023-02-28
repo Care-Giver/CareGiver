@@ -8,7 +8,7 @@ export const won = (number: number): string =>
   number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원"
 
 /**
- 숫자 문자열(number string) 에 세자리마다 ","" 를 삽입한다.
+ 숫자 문자열(number string) 에 세자리마다 "," 를 삽입한다.
  ex: 27000 -> 27,000
  input, output 모두 string 임을 주의할 것.
  toLocaleString 은 android 에서 작동하지 않는 문제 때문에, 이 함수를 대신 사용한다.
