@@ -35,6 +35,7 @@ import {
   FacilityRegistrationScreen,
   TestWebViewScreen,
   TestPushNotificationScreen,
+  CaregiverSetPriceScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -100,6 +101,9 @@ export type NavigatorParamList = {
 
   "my-profile-management-screen": undefined
 
+  // * caregiver - set price stack
+  "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -119,7 +123,8 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      // initialRouteName="home-screen"
+      initialRouteName="caregiver-set-price-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -298,6 +303,18 @@ const AllStacks = () => {
         }}
       />
       {/* //! ------- */}
+
+      {/* //! 요금 설정 스택 */}
+      {/* //* 케어기버 요금 설정 스크린 */}
+      <Stack.Screen
+        name="caregiver-set-price-screen"
+        component={CaregiverSetPriceScreen}
+        options={{
+          title: "요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //! ----------- */}
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
