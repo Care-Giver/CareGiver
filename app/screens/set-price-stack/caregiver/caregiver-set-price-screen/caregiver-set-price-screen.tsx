@@ -13,11 +13,11 @@ import {
   ScreenRootView,
   UnderlineText,
 } from "#components"
-import { BODY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { TextInput, View } from "react-native"
 import { styles } from "./styles"
 import { standardCosts } from "./dummy-data"
-import { price } from "../../../utils/format"
+import { price } from "../../../../utils/format"
 
 export const CaregiverSetPriceScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
@@ -87,7 +87,7 @@ export const CaregiverSetPriceScreen: FC<
       {/* // * price input container */}
       {/* // TODO: keyboard avoiding view */}
       <View style={styles.priceContainer}>
-        <PreMed14 color={BODY} text="요금(원)" />
+        <PreMed14 color={SUB_HEAD_LINE} text="요금(원)" />
         <View style={styles.textInput}>
           {/* // TODO: placeholder에 들어갈 가격을 백엔드 서버에 저장해둘 것인지, 하한가 + 상한가 기준으로 프론트에서 직접 계산할 것인지? */}
           <TextInput
@@ -95,9 +95,10 @@ export const CaregiverSetPriceScreen: FC<
             placeholder="105,000"
             value={price(inputCost)} //! toLocaleString 사용하지 말 것 - android 이슈 존재
             onChangeText={setInputCost}
+            placeholderTextColor={BODY}
           />
         </View>
-        <DivisionLine />
+        <DivisionLine color={MIDDLE_LINE} />
       </View>
 
       {/* // * description container */}
@@ -129,6 +130,7 @@ export const CaregiverSetPriceScreen: FC<
       </View>
 
       {/* // * 다음 button */}
+      {/* // TODO: onPress */}
       <RegisterSubmitButton text="다음" isActive={isSubmitActive} />
     </ScreenRootView>
   )

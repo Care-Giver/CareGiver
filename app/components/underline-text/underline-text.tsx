@@ -13,7 +13,7 @@ export const UnderlineText = (props: UnderlineTextProps) => {
       {/* // ? underline default height: 6 */}
       <View
         style={{
-          height: "100%",
+          height: "110%",
           borderBottomColor: `rgba(177, 201, 222, 0.6)`,
           borderBottomWidth: underlineHeight ? underlineHeight : 6,
         }}
