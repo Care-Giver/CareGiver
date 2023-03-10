@@ -125,8 +125,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="caregiver-set-additional-price-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
