@@ -36,6 +36,7 @@ import {
   TestWebViewScreen,
   TestPushNotificationScreen,
   CaregiverSetPriceScreen,
+  CaregiverSetAdditionalPriceScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -103,6 +104,7 @@ export type NavigatorParamList = {
 
   // * caregiver - set price stack
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
+  "caregiver-set-additional-price-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -123,8 +125,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="caregiver-set-price-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -311,6 +312,15 @@ const AllStacks = () => {
         component={CaregiverSetPriceScreen}
         options={{
           title: "요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      <Stack.Screen
+        name="caregiver-set-additional-price-screen"
+        component={CaregiverSetAdditionalPriceScreen}
+        options={{
+          title: "강아지 크기 별 추가 요금 설정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
