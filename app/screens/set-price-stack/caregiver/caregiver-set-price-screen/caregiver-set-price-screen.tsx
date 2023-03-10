@@ -15,9 +15,9 @@ import {
 } from "#components"
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { TextInput, View } from "react-native"
-import { styles } from "./styles"
 import { standardCosts } from "./dummy-data"
 import { price } from "../../../../utils/format"
+import { common_styles } from "../../common_styles"
 
 export const CaregiverSetPriceScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
@@ -74,11 +74,11 @@ export const CaregiverSetPriceScreen: FC<
   return (
     <ScreenRootView>
       {/* // * title container */}
-      <View style={styles.titleContainer}>
+      <View style={common_styles.titleContainer}>
         {/* // ? first line */}
         <PreBol18 color={HEAD_LINE} text={`${serviceText}의 경우 기본 예약 요금을`} />
         {/* // ? second line */}
-        <View style={styles.secondTitleContainer}>
+        <View style={common_styles.secondTitleContainer}>
           <UnderlineText text={`${standardText} 기준`} />
           <PreBol18 color={HEAD_LINE} text="으로 설정해주세요!" />
         </View>
@@ -86,9 +86,9 @@ export const CaregiverSetPriceScreen: FC<
 
       {/* // * price input container */}
       {/* // TODO: keyboard avoiding view */}
-      <View style={styles.priceContainer}>
+      <View style={common_styles.priceContainer}>
         <PreMed14 color={SUB_HEAD_LINE} text="요금(원)" />
-        <View style={styles.textInput}>
+        <View style={common_styles.textInput}>
           {/* // TODO: placeholder에 들어갈 가격을 백엔드 서버에 저장해둘 것인지, 하한가 + 상한가 기준으로 프론트에서 직접 계산할 것인지? */}
           <TextInput
             keyboardType="numeric"
@@ -102,7 +102,7 @@ export const CaregiverSetPriceScreen: FC<
       </View>
 
       {/* // * description container */}
-      <View style={styles.descriptionContainer}>
+      <View style={common_styles.descriptionContainer}>
         <PreBol14
           text={`이 지역 ${serviceText} 케어기버가 받는 평균 요금은?`}
           color={SUB_HEAD_LINE}
@@ -121,7 +121,7 @@ export const CaregiverSetPriceScreen: FC<
         <PreReg12 style={{ marginTop: 4 }} text="사이의 요금을 받습니다." color={BODY} />
 
         <PreReg12
-          style={{ marginTop: 12 }}
+          style={{ marginTop: 12, lineHeight: 18 }}
           text={`- 기본적으로 지역 평균 요금이 적정가로 설정되어있습니다. 
 - 적정가는 추천금액일 뿐이며, 원하는 금액으로 직접 설정 가능합니다.
 - 요금은 지역마다, 개인마다 차이가 있을 수 있습니다.`}

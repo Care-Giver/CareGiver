@@ -1,7 +1,7 @@
 import { LBG } from "#theme"
 import { StyleSheet } from "react-native"
 
-export const styles = StyleSheet.create({
+export const common_styles = StyleSheet.create({
   titleContainer: {
     marginTop: 16,
   },
