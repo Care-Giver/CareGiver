@@ -20,7 +20,7 @@ export const MyProfileManangementScreenHeader = (props) => {
   // @ts-ignore
 
   console.log("editable", params?.editable)
-  const editable = params?.editable
+  const editable = params?.editable //?여기서도 mainscreen과 같은 질문
   const isEditButtonShown = !editable //*  (modal) editable 이 아닌 경우 -> 편집버튼 보이기 |  (modal) editable 인 경우 -> 편집버튼 숨기기
   console.log("isEditButtonShown", isEditButtonShown)
 

@@ -73,7 +73,8 @@ export const MyProfileManagementScreen: FC<
   }, [])
   console.log("mainscreen", route.params)
 
-  const editable = route.params?.editable //? 저장 버튼 누를때마다 visiable 변수가 자동으로 자신의 state 를 바꾸는것 -> 함수가 없어도 params 와 연결되어 있어서 가능한것?
+  const editable = route.params?.editable 
+  //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why? 
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
   const [nicknameInput, setNicknmaeInput] = useState("") //*닉네임 + 전화번호 인풋 (전화번호는 따로 빼기?)
@@ -385,7 +386,8 @@ export const MyProfileManagementScreen: FC<
                   onChangeText={(newText) => checkNickname(newText)}
                   value={nicknameInput}
                 />
-                <DivisionLine color={warningColor} style={{ marginTop: 4 }} />
+                <DivisionLine color={warningColor} style={{ marginTop: 4 }} /> 
+                {/* //?useState 안써도 되는데 UseState 쓰게 바꿔야 할지?  */}
                 {<PreReg12 text={nicknameWarningMessage} color={warningColor} />}
               </View>
 
