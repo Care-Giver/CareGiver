@@ -4,16 +4,11 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
-  Text,
   View,
   Image,
-  ImageStore,
   Pressable,
-  Button,
   Modal,
-  useWindowDimensions,
   KeyboardAvoidingView,
-  TouchableOpacity,
   ImageBackground,
 } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
@@ -22,30 +17,17 @@ import { navigationRef, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import {
   BODY,
-  LBG,
-  CARE_NATURAL_BLUE,
   HEAD_LINE,
   MIDDLE_LINE,
-  DEVICE_SCREEN_HEIGHT,
-  HEADER_HEIGHT,
-  ADNROID_STATUS_BAR_HEIGHT,
-  ADNROID_BOTTOM_NAVIGATION_HEIGHT,
-  isWeb,
-  STANDARD_WIDTH,
-  palette,
   ERROR_RED,
   SUCCESS_BLUE,
   DEVICE_SCREEN_WIDTH,
   DISABLED,
 } from "#theme"
 import {
-  PublicPrivateSwitchButton,
   ScreenRootView,
-  PopSem14,
-  PopReg14,
   Row,
   PreMed14,
-  styles,
   PreMed16,
   UserOrPetProfileInfo,
   DivisionLine,
@@ -57,9 +39,10 @@ import {
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 import {} from "react-native-gesture-handler"
+import { styles } from "./styles"
 
-export const MyProfileManagementScreen: FC<
-  StackScreenProps<NavigatorParamList, "my-profile-management-screen">
+export const EditMypageScreen: FC<
+  StackScreenProps<NavigatorParamList, "edit-mypage-screen">
 > = observer(({ navigation, route }) => {
   //*console.log("route @MyProfileManagementScreen", route)
 
@@ -73,18 +56,16 @@ export const MyProfileManagementScreen: FC<
   }, [])
   console.log("mainscreen", route.params)
 
-  const editable = route.params?.editable 
-  //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why? 
+  const editable = route.params?.editable
+  //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why?
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
   const [nicknameInput, setNicknmaeInput] = useState("") //*닉네임 + 전화번호 인풋 (전화번호는 따로 빼기?)
-  const [nicknameCount, setNicknameCount] = useState(2) //*닉네임 변경 횟수
+  const [nicknameCount, setNicknameCount] = useState(3) //*닉네임 변경 횟수
   const [nicknameWarningMessage, setNicknameWarningMessage] = useState("") //*닉네임 입력이 조건에 안맞으면 띄우는 경고 메세지
   const [warningColor, setWarnigColor] = useState(MIDDLE_LINE) //*입력된 닉네임 조건 부합 여부에 따라 바뀌는 input 창 아래 border
   const [abletoSave, setAlbeToSave] = useState(false) //*입력된 닉네임 / 전화번호 모달창에서 저장버튼 누를수 있는지 없는지
   const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
-  const [phoneNumTouched, setPhoneNumTouched] = useState(false) //*전화번호 부분 눌렸는지 아닌지 체크
-  const [phoneNum, setPhoneNum] = useState("") //* 전화번호 인풋
   //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
   const checkNickname = (input) => {
     setNicknmaeInput(input)
@@ -179,14 +160,8 @@ export const MyProfileManagementScreen: FC<
   return (
     <ScreenRootView preset={"fixed"}>
       <ImageBackground
-        style={{
-          marginTop: 20,
-          width: 130,
-          height: 130,
-          borderRadius: 130 / 2,
-          alignSelf: "center",
-        }} //? width 를 곱하는것이 맞는지?
-        source={images.my_profile_management_default}
+        style={styles.defaultImage}
+        source={images.default_profile_image_edit_mypage}
       >
         {editable && (
           <Pressable
@@ -221,7 +196,6 @@ export const MyProfileManagementScreen: FC<
           <Pressable
             onPress={() => {
               setTouched(true)
-              //alert("touched")
             }}
           >
             <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
@@ -235,18 +209,7 @@ export const MyProfileManagementScreen: FC<
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
         {infoTouced && (
-          <ImageBackground
-            source={images.speech_bubble}
-            style={{
-              width: 172,
-              height: 50.03,
-              position: "absolute",
-              top: 18.5, //*'닉네임' 에서부터 18.5 떨어짐
-              left: BASIC_BACKGROUND_PADDING_WIDTH, //*parent view 에 주어진 padding 만큼 띄우기
-              alignItems: "center",
-              alignContent: "center",
-            }}
-          >
+          <ImageBackground source={images.speech_bubble} style={styles.speechBubble}>
             <PreMed14
               text={`이번 달 수정 가능 횟수 ${nicknameCount}회`}
               style={{ paddingTop: 20 }}
@@ -268,18 +231,19 @@ export const MyProfileManagementScreen: FC<
       {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
       //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
             //?이해해도 되는것?*/}
-      {/*editable ? (
+      {/*//*이전 코드
+      editable ? (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
       ) : (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
-      )//*이전 코드 */}
+      ) */}
       {/* //* 성별 */}
       <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={editable} />
       {/* //* 이메일 */}
       <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={editable} />
       {/* //* 전화번호우 */}
       {editable ? (
-        <Pressable onPress={() => setPhoneNumTouched(true)}>
+        <Pressable onPress={() => alert("전화번호 등록 플로우 준비중")}>
           <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
         </Pressable>
       ) : (
@@ -355,24 +319,9 @@ export const MyProfileManagementScreen: FC<
               // backgroundColor: "red",
             }}
           >
-            <View
-              style={{
-                //width: modalWidth - 16 * 2,
-                //alignItems: "center",
-                width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-                paddingTop: 36,
-                paddingBottom: 16,
-                paddingHorizontal: 16,
-                height: 226,
-                borderRadius: 8,
-                backgroundColor: palette.white,
-                marginBottom: 60,
-                //opacity: 1,
-              }}
-            >
+            <View style={styles.modalName}>
               <View
                 style={{
-                  //paddingHorizontal: 24,
                   paddingHorizontal: 10,
                 }}
               >
@@ -380,13 +329,14 @@ export const MyProfileManagementScreen: FC<
                 <TextInput
                   style={{
                     paddingTop: 43, //?
-                    //backgroundColor: palette.black,
                   }}
                   placeholder="닉네임을 입력해주세요."
                   onChangeText={(newText) => checkNickname(newText)}
                   value={nicknameInput}
+                  autoCapitalize="none"
+                  maxLength={10}
                 />
-                <DivisionLine color={warningColor} style={{ marginTop: 4 }} /> 
+                <DivisionLine color={warningColor} style={{ marginTop: 4 }} />
                 {/* //?useState 안써도 되는데 UseState 쓰게 바꿔야 할지?  */}
                 {<PreReg12 text={nicknameWarningMessage} color={warningColor} />}
               </View>
@@ -405,85 +355,6 @@ export const MyProfileManagementScreen: FC<
             </View>
           </KeyboardAvoidingView>
         </Pressable>
-        {/*</TouchableOpacity>*/}
-      </Modal>
-
-      {/*//*두번째 모달창 : 전화번호우  */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={phoneNumTouched}
-
-        /*onRequestClose={() => {
-          //Alert.alert('Modal has been closed.');
-          //setModalVisible(false);
-        }*/
-      >
-        {/* //* Modal Backgound View */}
-        {/* //*모달 바깥쪽 터치시 사용 */}
-
-        <Pressable
-          style={{ flex: 1 }}
-          onPress={() => {
-            setPhoneNumTouched(false)
-          }}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
-            style={{
-              width: DEVICE_SCREEN_WIDTH,
-              flex: 1,
-              marginTop: "auto",
-              marginBottom: "auto",
-              alignItems: "center",
-              justifyContent: handlePosition(),
-              backgroundColor: "rgba(0,0,0,0.25)",
-            }}
-          >
-            <View
-              style={{
-                width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-                paddingTop: 36,
-                paddingBottom: 16,
-                paddingHorizontal: 16,
-                height: 226,
-                borderRadius: 8,
-                backgroundColor: palette.white,
-                marginBottom: 60,
-              }}
-            >
-              <View
-                style={{
-                  paddingHorizontal: 10,
-                }}
-              >
-                <PreBol18 color={HEAD_LINE} text={"전화번호"} />
-                <TextInput
-                  style={{
-                    paddingTop: 43, //?
-                  }}
-                  placeholder="전화번호를 입력해주세요."
-                  onChangeText={setPhoneNum}
-                  value={phoneNum}
-                />
-                <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
-              </View>
-
-              <ConditionalButton
-                label="확인"
-                isActivated={phoneNum.length > 0}
-                style={{
-                  marginTop: "auto",
-                }}
-                onPress={() => {
-                  alert("saved")
-                  setPhoneNumTouched(false)
-                }}
-              />
-            </View>
-          </KeyboardAvoidingView>
-        </Pressable>
-
         {/*</TouchableOpacity>*/}
       </Modal>
     </ScreenRootView>

@@ -1,46 +1,9 @@
-import {
-  Keyboard,
-  TextInput,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  Text,
-  View,
-  Image,
-  ImageStore,
-  Pressable,
-} from "react-native"
-import React, { FC, useLayoutEffect, useState } from "react"
-import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import { observer } from "mobx-react-lite"
-import {
-  BODY,
-  LBG,
-  CARE_NATURAL_BLUE,
-  HEAD_LINE,
-  MIDDLE_LINE,
-  DEVICE_SCREEN_HEIGHT,
-  HEADER_HEIGHT,
-  ADNROID_STATUS_BAR_HEIGHT,
-  ADNROID_BOTTOM_NAVIGATION_HEIGHT,
-  DISABLED,
-} from "#theme"
+import { View } from "react-native"
+import React from "react"
 
-import {
-  PublicPrivateSwitchButton,
-  ScreenRootView,
-  PopSem14,
-  PopReg14,
-  Row,
-  PreMed16,
-  PreMed14,
-  styles,
-  DivisionLine,
-  BASIC_BACKGROUND_PADDING_WIDTH,
-} from "#components"
-import { useKeyboard } from "@react-native-community/hooks"
-import { images } from "#images"
+import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED } from "#theme"
+
+import { PreMed16, PreMed14, DivisionLine, BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const UserOrPetProfileInfo = (props) => {
   //? props 를 이런 문법으로 쓰는 이유?

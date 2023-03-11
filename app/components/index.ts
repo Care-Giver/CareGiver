@@ -28,7 +28,7 @@ export * from "./screen-headers/all-comments-screen-header/all-comments-screen-h
 export * from "./screen-headers/goback-and-title-header/goback-and-title-header"
 export * from "./screen-headers/home-screen-header/home-screen-header"
 export * from "./screen-headers/writing-comment-screen-header/writing-comment-screen-header"
-export * from "./screen-headers/my-profile-management-screen-header/my-profile-management-screen-header"
+export * from "./screen-headers/edit-mypage-screen-header/edit-mypage-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 

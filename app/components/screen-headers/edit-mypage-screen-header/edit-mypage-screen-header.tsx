@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { goBack } from "#navigators"
 //import { allowStateReadsStart } from "mobx/dist/internal"
 
-export const MyProfileManangementScreenHeader = (props) => {
+export const EditMypageScreenHeader = (props) => {
   console.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
   const navigation = useNavigation()
   const route = useRoute()

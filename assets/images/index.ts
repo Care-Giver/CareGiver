@@ -41,7 +41,7 @@ export const images = {
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
   pencil: require("../images/pencil.png"),
-  my_profile_management_default: require("../images/my_profile_management_default.png"),
+  default_profile_image_edit_mypage: require("../images/default_profile_image_edit_mypage.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
   x_white: require("../images/x_white.png"),
   camera: require("../images/camera.png"),
