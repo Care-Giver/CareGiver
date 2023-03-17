@@ -75,6 +75,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
+
 export type NavigatorParamList = {
   //* general screens
   "home-screen": undefined
@@ -100,7 +101,7 @@ export type NavigatorParamList = {
   // * registration
   "service-registration-screen": undefined
 
-  "edit-mypage-screen": { visible: boolean }
+  "edit-mypage-screen": { editable: boolean }
 
   //* test screens
   "minseon-test": undefined

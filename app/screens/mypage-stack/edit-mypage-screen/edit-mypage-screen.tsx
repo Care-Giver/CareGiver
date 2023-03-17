@@ -59,6 +59,12 @@ export const EditMypageScreen: FC<
   console.log("mainscreen", route.params)
 
   const editable = route.params?.editable
+
+  //* 지금은 user 더미네이터에서 가져옴.
+  //* 실제상황 -> 로그인한유저 -> 로그인한 유저의 정보를 담고 있는 user 데이터 가 있겠죠.-> MST 에도 있을꺼에요.
+  //* 이유: 실제로그인한 유저의 user 데이터는 굉장히 많은 스크린에서 쓰임 -> MST 에 있음.
+  const [nickname, setNickname] = useState(user.nickname) //*?진짜로 api 에 접근해서 바꾸는법? -> have to use mst ?
+
   //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why?
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
@@ -68,7 +74,6 @@ export const EditMypageScreen: FC<
   const [warningColor, setWarnigColor] = useState(MIDDLE_LINE) //*입력된 닉네임 조건 부합 여부에 따라 바뀌는 input 창 아래 border
   const [abletoSave, setAlbeToSave] = useState(false) //*입력된 닉네임 / 전화번호 모달창에서 저장버튼 누를수 있는지 없는지
   const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
-  const [nickname, setNickname] = useState(user.nickname) //*?진짜로 api 에 접근해서 바꾸는법? -> have to use mst ?
 
   const checkNickname = (input) => {
     setNicknmaeInput(input)
@@ -124,6 +129,13 @@ export const EditMypageScreen: FC<
 
   const handlePosition = () => {
     let position = ""
+
+    //* 이유: 귀찮아서. -> 자동완성을 하고싶어. -> props 의 type 이 지정되어있으면, 자동완성 가능! 넘나 좋음
+    //* type 은 type 키워드 또는 interface 키워드로 작성합니다!
+    //* type 키워드 또는 interface 키워드 차이점은 무엇이냐?? 왜 두개 있음?
+    //* type 키워드 는 상속이 불가능 (extends 불가능 -> scallable 범용도 낮음! / 대신 엄격함! 어떠한 대상만을 위한 type 지정가능)
+    //* interface 키워드 는 상속이 가능 (extends 가능 -> 범용도가 높음.
+    //* 코딩 100번할떄 99번 interface 쓰고 1번 type 씀. 이유는: 코딩은 "다 같이" 하는거기 때문.
 
     switch (Platform.OS) {
       case "android":
@@ -230,20 +242,20 @@ export const EditMypageScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={user.birthday} color={editable} />
+      <UserOrPetProfileInfo title={"생년월일"} profileInfo={user.birthday} showOption={editable} />
       {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
       //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
             //?이해해도 되는것?*/}
       {/*//*이전 코드
       editable ? (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={DISABLED} />
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={DISABLED} />
       ) : (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
+        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={HEAD_LINE} />
       ) */}
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={user.sex} color={editable} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={user.sex} showOption={editable} />
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={user.email} color={editable} />
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={user.email} showOption={editable} />
       {/* //* 전화번호우 */}
       {editable ? (
         <Pressable onPress={() => alert("전화번호 등록 플로우 준비중")}>
@@ -356,6 +368,7 @@ export const EditMypageScreen: FC<
                   setNickname(nicknameInput)
                   alert("saved")
                   setTouched(false)
+                  // updateUserNickname() //* server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
                 }}
               />
             </View>
