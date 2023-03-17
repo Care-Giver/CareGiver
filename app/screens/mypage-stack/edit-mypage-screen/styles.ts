@@ -2,7 +2,7 @@ import { DEVICE_SCREEN_WIDTH, LIGHT_LINE, palette } from "#theme"
 import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 export const styles = StyleSheet.create({
-  defaultImage: {
+  profileImage: {
     marginTop: 20,
     width: 130,
     height: 130,

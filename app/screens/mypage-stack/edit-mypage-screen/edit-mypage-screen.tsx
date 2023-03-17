@@ -40,11 +40,13 @@ import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 import {} from "react-native-gesture-handler"
 import { styles } from "./styles"
+import { user } from "./dummy-data"
+import { UserProps } from "./user.props" //?사용의 의미?
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
 > = observer(({ navigation, route }) => {
-  //*console.log("route @MyProfileManagementScreen", route)
+  //*console.log("route @EditMypageScreen", route)
 
   const [touched, setTouched] = useState(false)
   //!const windowWidth = useWindowDimensions().width
@@ -61,12 +63,13 @@ export const EditMypageScreen: FC<
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
   const [nicknameInput, setNicknmaeInput] = useState("") //*닉네임 + 전화번호 인풋 (전화번호는 따로 빼기?)
-  const [nicknameCount, setNicknameCount] = useState(3) //*닉네임 변경 횟수
+  //const [nicknameCount, setNicknameCount] = useState(user.nicknameChangeCount) //*닉네임 변경 횟수
   const [nicknameWarningMessage, setNicknameWarningMessage] = useState("") //*닉네임 입력이 조건에 안맞으면 띄우는 경고 메세지
   const [warningColor, setWarnigColor] = useState(MIDDLE_LINE) //*입력된 닉네임 조건 부합 여부에 따라 바뀌는 input 창 아래 border
   const [abletoSave, setAlbeToSave] = useState(false) //*입력된 닉네임 / 전화번호 모달창에서 저장버튼 누를수 있는지 없는지
   const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
-  //![^A-Za-z0-9_] ,[^\w_] 도 가능 . 필요에 따라 이걸로 교환도 가능. 차이점이 있다면..
+  const [nickname, setNickname] = useState(user.nickname) //*?진짜로 api 에 접근해서 바꾸는법? -> have to use mst ?
+
   const checkNickname = (input) => {
     setNicknmaeInput(input)
     if (input.length === 0) {
@@ -160,8 +163,8 @@ export const EditMypageScreen: FC<
   return (
     <ScreenRootView preset={"fixed"}>
       <ImageBackground
-        style={styles.defaultImage}
-        source={images.default_profile_image_edit_mypage}
+        style={styles.profileImage}
+        source={user.profileImage ? user.profileImage : images.default_profile_image_edit_mypage}
       >
         {editable && (
           <Pressable
@@ -175,7 +178,7 @@ export const EditMypageScreen: FC<
         )}
       </ImageBackground>
 
-      {/* //*닉네임 info 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
+      {/* //*닉네임 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
       <View
         style={{
           paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
@@ -192,26 +195,26 @@ export const EditMypageScreen: FC<
             <Image source={images.more_info_bigger} style={{ width: 16, height: 16 }} />
           </Pressable>
         </Row>
-        {editable && nicknameCount < 3 ? (
+        {editable && user.nicknameChangeCount < 3 ? (
           <Pressable
             onPress={() => {
               setTouched(true)
             }}
           >
-            <PreMed16 color={HEAD_LINE} text={`방울이엄마`} />
+            <PreMed16 color={HEAD_LINE} text={nickname} />
             {/* //*저장하기 버튼도 보이고 3번 안썼을때*/}
           </Pressable>
-        ) : editable === true && nicknameCount === 3 ? (
-          <PreMed16 color={DISABLED} text={`방울이엄마`} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
+        ) : editable === true && user.nicknameChangeCount === 3 ? (
+          <PreMed16 color={DISABLED} text={nickname} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         ) : (
-          <PreMed16 color={HEAD_LINE} text={`방울이엄마`} /> //* editable이 아닐때. 즉 저장하기 버튼이 안보일때
+          <PreMed16 color={HEAD_LINE} text={nickname} /> //* editable이 아닐때. 즉 저장하기 버튼이 안보일때
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
         {infoTouced && (
           <ImageBackground source={images.speech_bubble} style={styles.speechBubble}>
             <PreMed14
-              text={`이번 달 수정 가능 횟수 ${nicknameCount}회`}
+              text={`이번 달 수정 가능 횟수 ${3 - user.nicknameChangeCount}회`}
               style={{ paddingTop: 20 }}
             />
             <Pressable
@@ -227,7 +230,7 @@ export const EditMypageScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={editable} />
+      <UserOrPetProfileInfo title={"생년월일"} profileInfo={user.birthday} color={editable} />
       {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
       //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
             //?이해해도 되는것?*/}
@@ -238,16 +241,16 @@ export const EditMypageScreen: FC<
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} color={HEAD_LINE} />
       ) */}
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={"여"} color={editable} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={user.sex} color={editable} />
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={"hhh@gmail.com"} color={editable} />
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={user.email} color={editable} />
       {/* //* 전화번호우 */}
       {editable ? (
         <Pressable onPress={() => alert("전화번호 등록 플로우 준비중")}>
-          <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+          <UserOrPetProfileInfo title={"전화번호"} profileInfo={user.phoneNumber} />
         </Pressable>
       ) : (
-        <UserOrPetProfileInfo title={"전화번호"} profileInfo={"010-0000-0000"} />
+        <UserOrPetProfileInfo title={"전화번호"} profileInfo={user.phoneNumber} />
       )}
 
       {/* //* visiabillity Test */}
@@ -319,13 +322,15 @@ export const EditMypageScreen: FC<
               // backgroundColor: "red",
             }}
           >
+            {/*//? modal 따로 빼고 싶은데 여러 함수 + 재사용이 가능할지에 대한 의문 때문에 따로 빼는게 맞는지 모르겠음
+            //? 만약 따로 뺀다면 다른 펫 설정 스크린에서의 몸무게,  이름 화면 등에서 재사용이 가능? -> 각자 사용이 다른 error 함수 등과, 서로 다른 submit 조건 등 맞출 수 있나? */}
             <View style={styles.modalName}>
               <View
                 style={{
                   paddingHorizontal: 10,
                 }}
               >
-                <PreBol18 color={HEAD_LINE} text={"이름"} />
+                <PreBol18 color={HEAD_LINE} text={"닉네임"} />
                 <TextInput
                   style={{
                     paddingTop: 43, //?
@@ -348,6 +353,7 @@ export const EditMypageScreen: FC<
                   marginTop: "auto",
                 }}
                 onPress={() => {
+                  setNickname(nicknameInput)
                   alert("saved")
                   setTouched(false)
                 }}
