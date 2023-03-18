@@ -42,6 +42,7 @@ import {} from "react-native-gesture-handler"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
 import { UserProps } from "./user.props" //?사용의 의미?
+import { useForm } from "react-hook-form"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
