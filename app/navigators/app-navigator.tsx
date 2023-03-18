@@ -129,9 +129,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      //initialRouteName="service-registration-screen"
-      //initialRouteName="home-screen"
-      initialRouteName="edit-mypage-screen"
+      initialRouteName="test-bottom-sheet"
     >
       {/* //* 홈 */}
       <Stack.Screen
