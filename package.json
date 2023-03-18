@@ -54,6 +54,7 @@
     "mobx-react-lite": "3.2.0",
     "mobx-state-tree": "5.0.1",
     "react": "18.0.0",
+    "react-hook-form": "^7.43.7",
     "react-native": "0.69.6",
     "react-native-calendars": "^1.1284.0",
     "react-native-dropdown-picker": "^5.4.2",
