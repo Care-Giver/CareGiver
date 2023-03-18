@@ -37,6 +37,7 @@ import {
   TestPushNotificationScreen,
   CaregiverSetPriceScreen,
   CaregiverSetAdditionalPriceScreen,
+  TestBottomSheetScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -109,6 +110,7 @@ export type NavigatorParamList = {
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
+  "test-bottom-sheet": undefined
   TestWebView: undefined
   testPushNotification: undefined
 }
@@ -340,8 +342,12 @@ const AllStacks = () => {
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+
+      {/* //? bottom-sheet 테스트 화면 */}
+      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
     </Stack.Navigator>
   )
 }
