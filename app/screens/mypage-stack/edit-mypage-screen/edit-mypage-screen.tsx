@@ -40,9 +40,10 @@ import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
 import {} from "react-native-gesture-handler"
 import { styles } from "./styles"
-import { user } from "./dummy-data"
+import { Users } from "./dummy-data"
 import { UserProps } from "./user.props" //?사용의 의미?
 import { useForm, Controller } from "react-hook-form"
+import { values } from "mobx"
 
 type NicknameForm = {
   nickname: string
@@ -54,8 +55,6 @@ export const EditMypageScreen: FC<
   //*console.log("route @EditMypageScreen", route)
 
   const [touched, setTouched] = useState(false)
-  //!const windowWidth = useWindowDimensions().width
-  //!const modalWidth = isWeb ? STANDARD_WIDTH : windowWidth
 
   //* 스크린을 렌더링할때 최초실행됩니다.
   useLayoutEffect(() => {
@@ -68,11 +67,11 @@ export const EditMypageScreen: FC<
   //* 지금은 user 더미네이터에서 가져옴.
   //* 실제상황 -> 로그인한유저 -> 로그인한 유저의 정보를 담고 있는 user 데이터 가 있겠죠.-> MST 에도 있을꺼에요.
   //* 이유: 실제로그인한 유저의 user 데이터는 굉장히 많은 스크린에서 쓰임 -> MST 에 있음.
-  const [nickname, setNickname] = useState(user.nickname) //*?진짜로 api 에 접근해서 바꾸는법? -> have to use mst ?
 
-  //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why?
-  //*console.log("visible screen", visible)
-  //TODO 변수명 바꾸기
+  const currentUser = Users.find((User) => User.id === 1)
+  //*일단 더미데이터의 user id 1 인 user 의 닉네임 가져옴.
+  const [nickname, setNickname] = useState(currentUser.nickname)
+
   const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
 
   const {
@@ -82,19 +81,18 @@ export const EditMypageScreen: FC<
     reset,
   } = useForm<NicknameForm>({
     mode: "onChange",
-    //mode: "all",
     defaultValues: {
       nickname: "",
     },
   })
 
   const onSubmit = (data: NicknameForm) => {
+    //*user data 실제로 변경하는 코드 필요
     setNickname(data.nickname)
     console.log("data!!", data.nickname)
     alert("saved")
     setTouched(false)
     reset()
-    //onChangeEmail(""), onChangeName(""), onChangePassword("");
   }
 
   //* 편집버튼 보이기
@@ -129,13 +127,6 @@ export const EditMypageScreen: FC<
   const handlePosition = () => {
     let position = ""
 
-    //* 이유: 귀찮아서. -> 자동완성을 하고싶어. -> props 의 type 이 지정되어있으면, 자동완성 가능! 넘나 좋음
-    //* type 은 type 키워드 또는 interface 키워드로 작성합니다!
-    //* type 키워드 또는 interface 키워드 차이점은 무엇이냐?? 왜 두개 있음?
-    //* type 키워드 는 상속이 불가능 (extends 불가능 -> scallable 범용도 낮음! / 대신 엄격함! 어떠한 대상만을 위한 type 지정가능)
-    //* interface 키워드 는 상속이 가능 (extends 가능 -> 범용도가 높음.
-    //* 코딩 100번할떄 99번 interface 쓰고 1번 type 씀. 이유는: 코딩은 "다 같이" 하는거기 때문.
-
     switch (Platform.OS) {
       case "android":
         LayoutAnimation.configureNext(LayoutAnimation.create(1, "easeInEaseOut", "scaleY"))
@@ -163,19 +154,25 @@ export const EditMypageScreen: FC<
           console.log("position", position)
           return position
         } else {
-          //LayoutAnimation.configureNext(LayoutAnimation.create(0, "keyboard", "opacity"))
           position = "center"
           console.log("position", position)
           return position
         }
     }
   }
-
+  const isDuplicateNickname = (newNickname: string) => {
+    return Users.some((User) => User.id !== currentUser.id && User.nickname === newNickname)
+    //*현재 로그인 유저의 정보와 같지 않은 유저들 안에서 nickname 같은지 비교
+  }
   return (
     <ScreenRootView preset={"fixed"}>
       <ImageBackground
         style={styles.profileImage}
-        source={user.profileImage ? user.profileImage : images.default_profile_image_edit_mypage}
+        source={
+          currentUser.profileImage
+            ? currentUser.profileImage
+            : images.default_profile_image_edit_mypage
+        }
       >
         {editable && (
           <Pressable
@@ -206,7 +203,7 @@ export const EditMypageScreen: FC<
             <Image source={images.more_info_bigger} style={{ width: 16, height: 16 }} />
           </Pressable>
         </Row>
-        {editable && user.nicknameChangeCount < 3 ? (
+        {editable && currentUser.nicknameChangeCount < 3 ? (
           <Pressable
             onPress={() => {
               setTouched(true)
@@ -215,7 +212,7 @@ export const EditMypageScreen: FC<
             <PreMed16 color={HEAD_LINE} text={nickname} />
             {/* //*저장하기 버튼도 보이고 3번 안썼을때*/}
           </Pressable>
-        ) : editable === true && user.nicknameChangeCount === 3 ? (
+        ) : editable === true && currentUser.nicknameChangeCount === 3 ? (
           <PreMed16 color={DISABLED} text={nickname} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         ) : (
           <PreMed16 color={HEAD_LINE} text={nickname} /> //* editable이 아닐때. 즉 저장하기 버튼이 안보일때
@@ -225,7 +222,7 @@ export const EditMypageScreen: FC<
         {infoTouced && (
           <ImageBackground source={images.speech_bubble} style={styles.speechBubble}>
             <PreMed14
-              text={`이번 달 수정 가능 횟수 ${3 - user.nicknameChangeCount}회`}
+              text={`이번 달 수정 가능 횟수 ${3 - currentUser.nicknameChangeCount}회`}
               style={{ paddingTop: 20 }}
             />
             <Pressable
@@ -241,45 +238,35 @@ export const EditMypageScreen: FC<
       </View>
 
       {/* //* 생년월일 */}
-      <UserOrPetProfileInfo title={"생년월일"} profileInfo={user.birthday} showOption={editable} />
-      {/*//? 이렇게 써도 작동이 되는것은 route.params 가 업데이트 될때마다 스크린 rerender, 그리고
-      //?route.params 의 값을 받은 visable 이 들어간 컴포넌트들을 모두 리랜더링 시키기 때문이라고
-            //?이해해도 되는것?*/}
-      {/*//*이전 코드
+      <UserOrPetProfileInfo
+        title={"생년월일"}
+        profileInfo={currentUser.birthday}
+        showOption={editable}
+      />
+
+      {/*//*이전 코드 -> 혹시 모름에 따라 남겨둠. 후에 수정 필요시 
       editable ? (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={DISABLED} />
       ) : (
         <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={HEAD_LINE} />
       ) */}
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={user.sex} showOption={editable} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={currentUser.sex} showOption={editable} />
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={user.email} showOption={editable} />
+      <UserOrPetProfileInfo
+        title={"이메일"}
+        profileInfo={currentUser.email}
+        showOption={editable}
+      />
       {/* //* 전화번호우 */}
       {editable ? (
         <Pressable onPress={() => alert("전화번호 등록 플로우 준비중")}>
-          <UserOrPetProfileInfo title={"전화번호"} profileInfo={user.phoneNumber} />
+          <UserOrPetProfileInfo title={"전화번호"} profileInfo={currentUser.phoneNumber} />
         </Pressable>
       ) : (
-        <UserOrPetProfileInfo title={"전화번호"} profileInfo={user.phoneNumber} />
+        <UserOrPetProfileInfo title={"전화번호"} profileInfo={currentUser.phoneNumber} />
       )}
 
-      {/* //* visiabillity Test */}
-      {/* //* Ternary: 조건  ? 충족 : 불충족 */}
-      {/* {editable ? (
-      {editable ? (
-        <ConditionalButton
-          label="저장하기"
-          isActivated={true}
-          style={{
-            marginTop: "auto",
-          }}
-          onPress={() => {
-            // alert("saved")
-            showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
-          }}
-        />
-      ) : null} */}
       {editable && (
         <ConditionalButton
           label="저장하기"
@@ -289,26 +276,16 @@ export const EditMypageScreen: FC<
             marginBottom: 0,
           }}
           onPress={() => {
-            // alert("saved")
             showEditButton() //* 저장하기를 누르면, 편집버튼이 보여야 합니다
           }}
         />
       )}
 
       {/*//*modal 창 따로 뺌. -> 모달이 스크린 전체를 parent 로 삼는다면 -> 여기선 keyboardavoidigView flex : 1 이 그걸 해줌? 모달이 컴포넌트 내에서 어디 있어도 상관없음 */}
-      {/* //?그렇다면 질문 :  modal 이 어떤 컴포넌트 안의 자식으로 있어서 flex : 1 을 해도 그 컴포넌트 크기 안에 갇힌다면 ? 위의 주석처리 해놓은, info 버튼 눌렀을때의 모달 창으로 말풍선 띄우기 시도 참고 */}
       <Modal animationType="fade" transparent={true} visible={touched}>
         {/* //* Modal Backgound View */}
         {/* //*모달 바깥쪽 터치시 사용 */}
-        {/*  <TouchableOpacity
-          style={{ flex: 1 }}
-          onPress={() => {
-            setTouched(false)
-          }}
-          //?activeOpacity={0.2} -> default : 0.2 가 괜찮아 보여서 냅뒀는데 값 조정? 
-          //?touchableOpacity 보다 pressable 이 더 범용성이 넓어서 이를 우리 프로젝트에서도 많이 쓴거 같은데 이에 대한 질문 
-          //? 언제 touchableOpacity 쓰고 언제 Pressable 쓸지 ? 
-        >*/}
+
         <Pressable
           style={{ flex: 1 }}
           onPress={() => {
@@ -321,16 +298,11 @@ export const EditMypageScreen: FC<
             style={{
               width: DEVICE_SCREEN_WIDTH,
               flex: 1,
-              //justifyContent: "center",
-              // alignSelf: "center",
+
               marginTop: "auto",
               alignItems: "center",
-              //justifyContent: "flex-end", //*iskeyboardshown : flexend not center
               justifyContent: handlePosition(),
               backgroundColor: "rgba(0,0,0,0.25)",
-
-              // position: "absolute",
-              // backgroundColor: "red",
             }}
           >
             {/*//? modal 따로 빼고 싶은데 여러 함수 + 재사용이 가능할지에 대한 의문 때문에 따로 빼는게 맞는지 모르겠음
@@ -363,7 +335,11 @@ export const EditMypageScreen: FC<
                       value: /[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]+$/,
                       message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
                     },
-                    minLength: 1,
+                    validate: {
+                      duplicatSearch: (value) =>
+                        isDuplicateNickname(value) ? "중복된 닉네임입니다." : true,
+                      //*validation rule to true to indicate that the field is valid and has no error.
+                    },
                   }}
                 />
                 {console.log("errors! ", errors.nickname)}
@@ -373,7 +349,14 @@ export const EditMypageScreen: FC<
                       color={errors.nickname.type === "required" ? MIDDLE_LINE : ERROR_RED}
                       style={{ marginTop: 4 }}
                     />
-                    <PreReg12 text={errors.nickname.message} color={ERROR_RED} />
+                    <PreReg12
+                      text={
+                        errors.nickname.type === "pattern"
+                          ? errors.nickname.message
+                          : errors.nickname.message
+                      }
+                      color={ERROR_RED}
+                    />
                   </View>
                 ) : (
                   <View>
@@ -403,17 +386,7 @@ export const EditMypageScreen: FC<
             </View>
           </KeyboardAvoidingView>
         </Pressable>
-        {/*</TouchableOpacity>*/}
       </Modal>
     </ScreenRootView>
   )
 })
-
-//*일단 닉네임 부분은 유저 이름으로 불러오기. -> 세팅 화면부터 먼저 만ㅡ었어야 할것 같지만... 이걸 먼저 했기 때문에..
-//* mst 필요? mst 만들어서 유저 정보들 좌라라락 넣기 -> update 되는 함수는 아직 모르겠음. flow 가 안나와서 .
-//* 유저 정보 어떻게 넣나? 로그인 된 유저 토큰은 무엇?
-//* rest api 공부 -> mst 안에 넣기
-//* 연필 눌렀을 때 화면 바뀌는 부분 구현
-//* 닉네임 눌렀을 때 화면 바뀌는 부분 구현
-
-//TODO - 스크린 이름 바꾸기
