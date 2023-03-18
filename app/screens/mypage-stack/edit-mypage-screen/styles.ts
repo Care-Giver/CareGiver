@@ -19,14 +19,4 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
   },
-  modalName: {
-    width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-    paddingTop: 36,
-    paddingBottom: 16,
-    paddingHorizontal: 16,
-    height: 226,
-    borderRadius: 8,
-    backgroundColor: palette.white,
-    marginBottom: 60,
-  },
 })

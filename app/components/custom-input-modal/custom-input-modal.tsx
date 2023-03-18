@@ -1,3 +1,6 @@
+//*edit-mypage-screen, edit-pet-info-screen 에서 닉네임, 이름 등의 input 받을때 사용하는 컴포넌트
+//*재사용 할때 어떻게 refactor 할지 추후 고민 필요
+
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
@@ -20,12 +23,10 @@ import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components
 import { useKeyboard } from "@react-native-community/hooks"
 import { useForm, Controller } from "react-hook-form"
 
+//*hook form 위한 form 정해놓기
 type NicknameForm = {
   nickname: string
 }
-
-//*edit-mypage-screen, edit-pet-info-screen 에서 닉네임, 이름 등의 input 받을때 사용 .
-//*재사용 할때 어떻게 refactor 할지 추후 고민 필요
 
 export interface CustomInputModalProps {
   visibleState: boolean
@@ -47,6 +48,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     validateFunction,
     handleInput,
   } = props
+
   //*키보드 관련
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   const keyboard = useKeyboard()
@@ -72,6 +74,9 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     }
   }, [])
 
+  //* 모달창 떠오른 후에 키보드 pop up 됐을때 모달창이 디자인 파일과 다른 위치, 너무 상단부로 밀리는 문제 발생.
+  //* 이에 keyboard pop up 시 모달창 위치 (position) 다시 잡아주는 함수 구현
+  //* 에니메이션들은 오류 때문에 주석 처리 해 이를 어떻게 할지 고민 필요
   const handlePosition = () => {
     let position = ""
     //?애니메이션 부분들 주석 질문들
@@ -110,11 +115,12 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
         }
     }
   }
-  const _styles = Object.assign({}, styles, style)
+  const _styles = Object.assign({}, styles, style) //? 필요?
 
+  //* 유저 nickname 설정 위한 hook form 설정
   const {
     control: userNickname,
-    handleSubmit, //*handleNicknameSubmit
+    handleSubmit, //추후 다른 스크린의 모달과 섞어 써야할시 : handleNicknameSubmit로 바꾸기
     formState: { errors, isValid, isDirty, dirtyFields },
     reset,
   } = useForm<NicknameForm>({
@@ -124,8 +130,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     },
   })
 
-  const onSubmit = (data: NicknameForm) => {
-    //*onNicknameSubmit
+  const onNicknameSubmit = (data: NicknameForm) => {
     handleInput(data.nickname)
     handleModalHide()
     reset()
@@ -133,7 +138,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
 
   return (
     <Modal animationType="fade" transparent={true} visible={visibleState}>
-      {/* //*모달 바깥쪽 터치시 사용 */}
+      {/* //*모달 바깥쪽 터치시 모달창 사라지는데에 사용 */}
       <Pressable
         style={{ flex: 1 }}
         onPress={() => {
@@ -146,25 +151,31 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
           style={{
             width: DEVICE_SCREEN_WIDTH,
             flex: 1,
-
             marginTop: "auto",
             alignItems: "center",
+            // *키보드 popup 에 따라 모달 창 위치 일정하게 유지 :
             justifyContent: handlePosition(),
             backgroundColor: "rgba(0,0,0,0.25)",
           }}
         >
-          <View style={styles.modalName}>
+          <View style={styles.modalUserNickname}>
             <View
               style={{
                 paddingHorizontal: 10,
+                //*확인 버튼 위에는 다 추가적 패딩 필요
               }}
             >
+              {/* //*모달창 제목 부분  */}
               <PreBol18 color={HEAD_LINE} text={title} />
-              {/*//?재사용 방법 생각  {controlMode === "userNickname" && } */}
+
+              {/*//?이후 다른 스크린에서도 사용시 효율적 재사용 방법 생각  {controlMode === "userNickname" && } */}
+
+              {/* //* hook form*/}
               <Controller
                 name="nickname"
                 control={userNickname}
-                //control = {contrilMode} //? -> type : string 안맞아서 안됨. 이 경우에 어떻게 재활용 코드로 바꿀지?
+                //control = {contrilMode} //? -> type : string 안맞아서 안됨. 이 경우에 어떻게 재활용 기능한 코드로 바꿀지?
+                //?원래 계획 : control 에 controlMode 를 string 으로 받고 parent screen 에서 여기에 뭘 주느냐에 따라 달라지는 Controller control 설정들
                 render={({ field: { onChange, value } }) => (
                   <TextInput
                     style={{
@@ -184,6 +195,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                     message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
                   },
                   validate: {
+                    //* 중복 닉네임 찾기 위한 코드
                     duplicateSearch: (value) =>
                       validateFunction(value) ? "중복된 닉네임입니다." : true,
                     //*validation rule to true to indicate that the field is valid and has no error.
@@ -191,8 +203,10 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 }}
               />
               {/* {console.log("errors! ", errors.nickname)} */}
+              {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
               {errors.nickname ? (
                 <View>
+                  {/* //*오류 있을 때 : 빈칸일때 회색, 패턴/중복 오류 있으면 빨간색 */}
                   <DivisionLine
                     color={errors.nickname.type === "required" ? MIDDLE_LINE : ERROR_RED}
                     style={{ marginTop: 4 }}
@@ -207,8 +221,11 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                   />
                 </View>
               ) : (
+                // *오류 없을 때
                 <View>
                   <DivisionLine
+                    // *dirtyFields : 첫 실행때 오류가 없어 입력 안한 창에서 닉네임 변경 가능 표시 뜨지 않기 위함. (오류 없는데 입력값이 있을때에만 succes_blue)
+                    //*모달창에 현재 입력창 하나 밖에 없어 isDirty 써도 되지만 후에 좀 다른 상황 대비 범용성 높은 dirtyFields 사용
                     color={dirtyFields.nickname ? SUCCESS_BLUE : MIDDLE_LINE}
                     style={{ marginTop: 4 }}
                   />
@@ -218,6 +235,8 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 </View>
               )}
             </View>
+
+            {/* //*확인 버튼 -> 새로 입력한 닉네임이 에러가 없을때만 activated */}
             <ConditionalButton
               label="확인"
               isActivated={isValid}
@@ -225,7 +244,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 marginTop: "auto",
               }}
               onPress={
-                handleSubmit(onSubmit)
+                handleSubmit(onNicknameSubmit)
 
                 // updateUserNickname() //TODO server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
               }
