@@ -42,7 +42,11 @@ import {} from "react-native-gesture-handler"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
 import { UserProps } from "./user.props" //?사용의 의미?
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
+
+type NicknameForm = {
+  nickname: string
+}
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -69,34 +73,28 @@ export const EditMypageScreen: FC<
   //? params 에 있는 visible 을 delete 했고 editable로 다시 만들었는데 (변수명을 수정하기 위해 이렇게 함) console.log에는 잘 뜨고 가상머신에서 작동도 잘 되는데 코드에서만 editable을 찾을수 없다고 밑줄이 그어지고 params. 자동완성으로 아직 visible이 뜸 why?
   //*console.log("visible screen", visible)
   //TODO 변수명 바꾸기
-  const [nicknameInput, setNicknmaeInput] = useState("") //*닉네임 + 전화번호 인풋 (전화번호는 따로 빼기?)
-  //const [nicknameCount, setNicknameCount] = useState(user.nicknameChangeCount) //*닉네임 변경 횟수
-  const [nicknameWarningMessage, setNicknameWarningMessage] = useState("") //*닉네임 입력이 조건에 안맞으면 띄우는 경고 메세지
-  const [warningColor, setWarnigColor] = useState(MIDDLE_LINE) //*입력된 닉네임 조건 부합 여부에 따라 바뀌는 input 창 아래 border
-  const [abletoSave, setAlbeToSave] = useState(false) //*입력된 닉네임 / 전화번호 모달창에서 저장버튼 누를수 있는지 없는지
   const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
 
-  const checkNickname = (input) => {
-    setNicknmaeInput(input)
-    if (input.length === 0) {
-      setNicknameWarningMessage("")
-      setWarnigColor(MIDDLE_LINE)
-      setAlbeToSave(false)
-    }
-    //* 닉네임 변환 카운트를 먼저 알려줘야 할거 같아서
-    /*else if (nicknameCount === 3) {
-      setNicknameWarningMessage("* 이번 달 수정 가능 횟수를 다 사용하셨습니다.")
-      setAlbeToSave(false) //*3회 시 코드 -> 후에 변동 
-    } */
-    else if (/[^ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]/.test(input)) {
-      setNicknameWarningMessage("* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.")
-      setWarnigColor(ERROR_RED)
-      setAlbeToSave(false)
-    } else {
-      setNicknameWarningMessage("* 사용가능한 이름입니다!")
-      setWarnigColor(SUCCESS_BLUE)
-      setAlbeToSave(true)
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isDirty, dirtyFields },
+    reset,
+  } = useForm<NicknameForm>({
+    mode: "onChange",
+    //mode: "all",
+    defaultValues: {
+      nickname: "",
+    },
+  })
+
+  const onSubmit = (data: NicknameForm) => {
+    setNickname(data.nickname)
+    console.log("data!!", data.nickname)
+    alert("saved")
+    setTouched(false)
+    reset()
+    //onChangeEmail(""), onChangeName(""), onChangePassword("");
   }
 
   //* 편집버튼 보이기
@@ -344,33 +342,63 @@ export const EditMypageScreen: FC<
                 }}
               >
                 <PreBol18 color={HEAD_LINE} text={"닉네임"} />
-                <TextInput
-                  style={{
-                    paddingTop: 43, //?
+                <Controller
+                  name="nickname"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={{
+                        paddingTop: 43,
+                      }}
+                      placeholder={"닉네임을 입력해주세요. (최대 10자)"}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      maxLength={10}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                    pattern: {
+                      value: /[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|_]+$/,
+                      message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
+                    },
+                    minLength: 1,
                   }}
-                  placeholder="닉네임을 입력해주세요."
-                  onChangeText={(newText) => checkNickname(newText)}
-                  value={nicknameInput}
-                  autoCapitalize="none"
-                  maxLength={10}
                 />
-                <DivisionLine color={warningColor} style={{ marginTop: 4 }} />
-                {/* //?useState 안써도 되는데 UseState 쓰게 바꿔야 할지?  */}
-                {<PreReg12 text={nicknameWarningMessage} color={warningColor} />}
+                {console.log("errors! ", errors.nickname)}
+                {errors.nickname ? (
+                  <View>
+                    <DivisionLine
+                      color={errors.nickname.type === "required" ? MIDDLE_LINE : ERROR_RED}
+                      style={{ marginTop: 4 }}
+                    />
+                    <PreReg12 text={errors.nickname.message} color={ERROR_RED} />
+                  </View>
+                ) : (
+                  <View>
+                    <DivisionLine
+                      color={dirtyFields.nickname ? SUCCESS_BLUE : MIDDLE_LINE}
+                      style={{ marginTop: 4 }}
+                    />
+                    {dirtyFields.nickname && (
+                      <PreReg12 text={"* 사용가능한 이름입니다!"} color={SUCCESS_BLUE} />
+                    )}
+                  </View>
+                )}
               </View>
 
               <ConditionalButton
                 label="확인"
-                isActivated={abletoSave}
+                isActivated={isValid}
                 style={{
                   marginTop: "auto",
                 }}
-                onPress={() => {
-                  setNickname(nicknameInput)
-                  alert("saved")
-                  setTouched(false)
+                onPress={
+                  handleSubmit(onSubmit)
+
                   // updateUserNickname() //* server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
-                }}
+                }
               />
             </View>
           </KeyboardAvoidingView>
