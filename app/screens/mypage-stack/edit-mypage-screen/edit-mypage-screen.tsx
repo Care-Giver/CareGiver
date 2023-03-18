@@ -35,26 +35,28 @@ import {
   ConditionalButton,
   PreBol18,
   PreReg12,
+  CustomInputModal,
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { images } from "#images"
-import {} from "react-native-gesture-handler"
 import { styles } from "./styles"
 import { Users } from "./dummy-data"
 import { UserProps } from "./user.props" //?사용의 의미?
 import { useForm, Controller } from "react-hook-form"
-import { values } from "mobx"
 
-type NicknameForm = {
-  nickname: string
-}
+// type NicknameForm = {
+//   nickname: string
+// }
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
 > = observer(({ navigation, route }) => {
   //*console.log("route @EditMypageScreen", route)
 
-  const [touched, setTouched] = useState(false)
+  const [nicknameTouched, setNicknameTouched] = useState(false)
+  const handleNicknameModalHide = () => {
+    setNicknameTouched(false)
+  }
 
   //* 스크린을 렌더링할때 최초실행됩니다.
   useLayoutEffect(() => {
@@ -70,29 +72,13 @@ export const EditMypageScreen: FC<
 
   const currentUser = Users.find((User) => User.id === 1)
   //*일단 더미데이터의 user id 1 인 user 의 닉네임 가져옴.
+  //*user.id === 2 : 닉네임 변경 횟수 잘 작동하는지 확인 가능 (닉네임 옆의 i 눌렀을 때 )
+  //*user.id ===3 : 닉네임 변경 횟수 다 썼을때 수정 버튼 누르면 닉네임 부분 disabled 되는거 확인 가능
   const [nickname, setNickname] = useState(currentUser.nickname)
-
-  const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isValid, isDirty, dirtyFields },
-    reset,
-  } = useForm<NicknameForm>({
-    mode: "onChange",
-    defaultValues: {
-      nickname: "",
-    },
-  })
-
-  const onSubmit = (data: NicknameForm) => {
-    setNickname(data.nickname)
-    //console.log("data!!", data.nickname)
-    //alert("saved")
-    setTouched(false)
-    reset()
+  const handleNicknameInput = (nickname) => {
+    setNickname(nickname)
   }
+  const [infoTouced, setInfoTouched] = useState(false) //*화면 닉네임 글자 옆 i 버튼 누르는것 체크
 
   //* 편집버튼 보이기
   const showEditButton = () => {
@@ -100,73 +86,12 @@ export const EditMypageScreen: FC<
       editable: false,
     })
   }
-  //*키보드 관련
-  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
-  const keyboard = useKeyboard()
 
-  if (Platform.OS === "android") {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true)
-    }
-  }
-
-  useLayoutEffect(() => {
-    const keyboardUp = Keyboard.addListener("keyboardWillShow", () => {
-      setKeyboardStatus("Keyboard will Show")
-    })
-    const keyboardDown = Keyboard.addListener("keyboardWillHide", () => {
-      // LayoutAnimation.configureNext(LayoutAnimation.create(100000, "keyboard", "opacity"))
-      setKeyboardStatus("Keyboard hidden")
-    })
-
-    return () => {
-      keyboardUp.remove()
-      keyboardDown.remove()
-    }
-  }, [])
-
-  const handlePosition = () => {
-    let position = ""
-    //?애니메이션 부분들 주석 질문들
-    switch (Platform.OS) {
-      case "android":
-        //!LayoutAnimation.configureNext(LayoutAnimation.create(1, "easeInEaseOut", "opacity"))
-        //*안드로이드에선 layoutanitmation 과 모달창의 종료가 충돌하는 일은 없음. 다만 에니메이션을 준 효과가 나지 않게 갱장히 버벅거림.
-        //*그래도 다행히 실제 기기에서 테스트시에는 그렇게 버벅거리지 않음.
-        //? ios 와 안드로이드 둘다 화면 움직임을 고려하여 키보드 띄워져 있을때 굳이 모달창을 키보드 가깝게 붙이는 이 코드를 추가로 고집 하는 것이 득이될지 실이될지 따지기 필요
-        //! android 에서 위의 애니메이션 썼을때 초기 저장하기 사용 후 다시 연필 버튼 눌렀을 때 trying to remove a view index above child count 에러 발생
-        //!어차피 저 에니메이션이 있으나 없으나 소용이 없어서 (있어도 뚝딱거리고 없어도 비슷하게 뚝딱거림) 일단 주석처리하고 없앰
-        //!밑의 ios 에서도 오류 때문에 어차피 못쓰고 있으니 이를 해결 못할시 그냥 switch platform.os 하지 말고 그냥 코드 통합하는게 좋아보임
-        //*android 에선 keyboardWillShow 사용 못함
-        if (keyboard.keyboardShown) {
-          position = "flex-end"
-          //console.log("position", position)
-          return position
-        } else {
-          position = "center"
-          //console.log("position", position)
-          return position
-        }
-
-      case "ios":
-        if (keyboardStatus === "Keyboard will Show") {
-          //!LayoutAnimation.configureNext(LayoutAnimation.create(0, "easeIn", "scaleY"))
-          //!화면 전환을 부드럽게 시도해 봤지만 모달창이 닫혔을 때에도 다시 열리는 문제가 있음. 찾아보니 2018년에 동일한 문제가 발견되었는데 해결책은 아직 나오지 않은듯하고 2022년까지 issue 였던듯 함.
-          //!https://github.com/facebook/react-native/issues/33733
-          position = "flex-end"
-          //console.log("position", position)
-          return position
-        } else {
-          position = "center"
-          //console.log("position", position)
-          return position
-        }
-    }
-  }
   const isDuplicateNickname = (newNickname: string) => {
     return Users.some((User) => User.id !== currentUser.id && User.nickname === newNickname)
     //*현재 로그인 유저의 정보와 같지 않은 유저들 안에서 nickname 같은지 비교
   }
+
   return (
     <ScreenRootView preset={"fixed"}>
       <ImageBackground
@@ -209,16 +134,19 @@ export const EditMypageScreen: FC<
         {editable && currentUser.nicknameChangeCount < 3 ? (
           <Pressable
             onPress={() => {
-              setTouched(true)
+              setNicknameTouched(true)
             }}
           >
             <PreMed16 color={HEAD_LINE} text={nickname} />
             {/* //*저장하기 버튼도 보이고 3번 안썼을때*/}
           </Pressable>
-        ) : editable === true && currentUser.nicknameChangeCount === 3 ? (
-          <PreMed16 color={DISABLED} text={nickname} /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         ) : (
-          <PreMed16 color={HEAD_LINE} text={nickname} /> //* editable이 아닐때. 즉 저장하기 버튼이 안보일때
+          <PreMed16
+            color={
+              editable === true && currentUser.nicknameChangeCount === 3 ? DISABLED : HEAD_LINE
+            }
+            text={nickname}
+          /> //*저장하기 버튼이 보이는데 3번 다 썼을때
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
@@ -284,113 +212,14 @@ export const EditMypageScreen: FC<
           }}
         />
       )}
-
-      {/*//*modal 창 따로 뺌. -> 모달이 스크린 전체를 parent 로 삼는다면 -> 여기선 keyboardavoidigView flex : 1 이 그걸 해줌? 모달이 컴포넌트 내에서 어디 있어도 상관없음 */}
-      <Modal animationType="fade" transparent={true} visible={touched}>
-        {/* //* Modal Backgound View */}
-        {/* //*모달 바깥쪽 터치시 사용 */}
-
-        <Pressable
-          style={{ flex: 1 }}
-          onPress={() => {
-            setTouched(false)
-          }}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
-            //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
-            style={{
-              width: DEVICE_SCREEN_WIDTH,
-              flex: 1,
-
-              marginTop: "auto",
-              alignItems: "center",
-              justifyContent: handlePosition(),
-              backgroundColor: "rgba(0,0,0,0.25)",
-            }}
-          >
-            {/*//? modal 따로 빼고 싶은데 여러 함수 + 재사용이 가능할지에 대한 의문 때문에 따로 빼는게 맞는지 모르겠음
-            //? 만약 따로 뺀다면 다른 펫 설정 스크린에서의 몸무게,  이름 화면 등에서 재사용이 가능? -> 각자 사용이 다른 error 함수 등과, 서로 다른 submit 조건 등 맞출 수 있나? */}
-            <View style={styles.modalName}>
-              <View
-                style={{
-                  paddingHorizontal: 10,
-                }}
-              >
-                <PreBol18 color={HEAD_LINE} text={"닉네임"} />
-                <Controller
-                  name="nickname"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextInput
-                      style={{
-                        paddingTop: 43,
-                      }}
-                      placeholder={"닉네임을 입력해주세요. (최대 10자)"}
-                      onChangeText={onChange}
-                      value={value}
-                      autoCapitalize="none"
-                      maxLength={10}
-                    />
-                  )}
-                  rules={{
-                    required: true,
-                    pattern: {
-                      value: /[ㄱ-ㅎ|가-힣|ㅏ-ㅣ|a-z|A-Z|0-9|_]+$/,
-                      message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
-                    },
-                    validate: {
-                      duplicatSearch: (value) =>
-                        isDuplicateNickname(value) ? "중복된 닉네임입니다." : true,
-                      //*validation rule to true to indicate that the field is valid and has no error.
-                    },
-                  }}
-                />
-                {/* {console.log("errors! ", errors.nickname)} */}
-                {errors.nickname ? (
-                  <View>
-                    <DivisionLine
-                      color={errors.nickname.type === "required" ? MIDDLE_LINE : ERROR_RED}
-                      style={{ marginTop: 4 }}
-                    />
-                    <PreReg12
-                      text={
-                        errors.nickname.type === "pattern"
-                          ? errors.nickname.message
-                          : errors.nickname.message
-                      }
-                      color={ERROR_RED}
-                    />
-                  </View>
-                ) : (
-                  <View>
-                    <DivisionLine
-                      color={dirtyFields.nickname ? SUCCESS_BLUE : MIDDLE_LINE}
-                      style={{ marginTop: 4 }}
-                    />
-                    {dirtyFields.nickname && (
-                      <PreReg12 text={"* 사용가능한 이름입니다!"} color={SUCCESS_BLUE} />
-                    )}
-                  </View>
-                )}
-              </View>
-
-              <ConditionalButton
-                label="확인"
-                isActivated={isValid}
-                style={{
-                  marginTop: "auto",
-                }}
-                onPress={
-                  handleSubmit(onSubmit)
-
-                  // updateUserNickname() //TODO server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
-                }
-              />
-            </View>
-          </KeyboardAvoidingView>
-        </Pressable>
-      </Modal>
+      <CustomInputModal
+        visibleState={nicknameTouched}
+        handleModalHide={handleNicknameModalHide}
+        title="닉네임"
+        controlMode="userNickname"
+        validateFunction={isDuplicateNickname} //? 인자 뭘로 ?
+        handleInput={handleNicknameInput}
+      />
     </ScreenRootView>
   )
 })
