@@ -1,5 +1,6 @@
 import { ImageSourcePropType } from "react-native"
 
+//? do i need this file?
 export interface UserProps {
   id: number //? 필수?
   proileImage: ImageSourcePropType

@@ -8,21 +8,21 @@ import { goBack } from "#navigators"
 //import { allowStateReadsStart } from "mobx/dist/internal"
 
 export const EditMypageScreenHeader = (props) => {
-  console.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
+  //.log("props", props) //! FEEDBACK: spread operator (...) 를 사용해서 {...props} 를 잘 넘겨받은 것을 확인 할 수 있습니다!
   const navigation = useNavigation()
   const route = useRoute()
 
   const params = route.params //* route.params 를 통해, screen 의 params 를 가져올 수 있습니다.
-  //!그렇군요!
+
   //console.log("route", route)
-  console.log("params!!", params)
+  //console.log("params!!", params)
 
   // @ts-ignore
 
-  console.log("editable", params?.editable)
+  //console.log("editable", params?.editable)
   const editable = params?.editable //?여기서도 mainscreen과 같은 질문
   const isEditButtonShown = !editable //*  (modal) editable 이 아닌 경우 -> 편집버튼 보이기 |  (modal) editable 인 경우 -> 편집버튼 숨기기
-  console.log("isEditButtonShown", isEditButtonShown)
+  //console.log("isEditButtonShown", isEditButtonShown)
 
   //* 편집버튼 숨기기
   const hideEditButton = () => {
