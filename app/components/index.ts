@@ -19,6 +19,7 @@ export * from "./buttons/sitter-profile-button/sitter-profile-button"
 export * from "./buttons/radio-buttons/border-radio-button/border-radio-button"
 export * from "./mypage-button/mypage-button"
 export * from "./buttons/registration-button/registration-button"
+export * from "./buttons/register-submit-button/register-submit-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"
@@ -62,3 +63,5 @@ export * from "./pet-profile-card/pet-profile-card"
 export * from "./pet-image-card/pet-image-card"
 export * from "./custom-modal/custom-modal"
 export * from "./custom-input-modal/custom-input-modal"
+export * from "../screens/registration-stack/register-buttons-container/register-buttons-container"
+export * from "./underline-text/underline-text"

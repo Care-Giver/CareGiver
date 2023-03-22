@@ -36,7 +36,7 @@ const USER_ID = 7
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
-> = observer(() => {
+> = observer(function AllBookingsScreen() {
   const windowWidth = useWindowDimensions().width
 
   // ? dotsIndicator의 현재 인덱스를 나타내는 state

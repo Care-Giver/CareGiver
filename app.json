@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.cgtestbuild.tomtimmy",
@@ -27,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/images/cg_favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6f1b8f47-f5f7-4066-99d1-26e1f066cb6f"
+      }
     }
   }
 }

@@ -19,8 +19,9 @@ import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
 import { ErrorBoundary } from "./screens/ignite-basics/error/error-boundary"
-import {  useAssets } from "expo-asset"
+import { useAssets } from "expo-asset"
 import { images } from "#images"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -33,11 +34,14 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
  */
 function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
-  const {
-    initialNavigationState,
-    onNavigationStateChange,
-    isRestored: isNavigationStateRestored,
-  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+
+  //* Do NOT use before the deployment
+  // const {
+  //   initialNavigationState,
+  //   onNavigationStateChange,
+  //   isRestored: isNavigationStateRestored,
+  // } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+  const isNavigationStateRestored = true
   const [areImagesLoaded] = useAssets(Object.values(images))
 
   // Kick off initial async loading actions, like loading fonts and RootStore
@@ -62,10 +66,12 @@ function App() {
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ErrorBoundary catchErrors={"always"}>
-            <AppNavigator
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <AppNavigator
+              // initialState={initialNavigationState} //* Do NOT use before the deployment
+              // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
+              />
+            </GestureHandlerRootView>
           </ErrorBoundary>
         </SafeAreaProvider>
       </RootStoreProvider>

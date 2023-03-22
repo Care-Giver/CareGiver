@@ -1,8 +1,9 @@
+import { DEVICE_SCREEN_WIDTH, WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   container: {
-    width: 175,
+    width: WIDTH * 175, //! DO NOT REMOVE THIS
     height: 205,
 
     paddingHorizontal: 16,
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
     lineHeight: 18,
   },
   image: {
-    width: 142,
+    width: WIDTH * 142, //! DO NOT REMOVE THIS
     height: 88,
     marginTop: 20,
   },

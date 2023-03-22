@@ -1,9 +1,14 @@
-import { View } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { LinearGradient } from "expo-linear-gradient"
+interface DotsIndicatorProps {
+  items: undefined
+  activeIndex: number
+  style?: StyleProp<ViewStyle>
+}
 
-export const DotsIndicator = (props) => {
+export const DotsIndicator = (props: DotsIndicatorProps) => {
   const { items, activeIndex, style: viewStyle } = props
 
   return (

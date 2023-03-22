@@ -1,6 +1,6 @@
 import { Api } from "#api"
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { IStateTreeNode, SnapshotIn } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, IStateTreeNode, SnapshotIn } from "mobx-state-tree"
+import { withSetPropAction } from "../extensions/with-set-prop-action"
 
 /**
  * If you include this in your model in an action() block just under your props,
@@ -23,13 +23,6 @@ import { IStateTreeNode, SnapshotIn } from "mobx-state-tree"
  *   user.setProp("age", 30)      // no type error
  *   user.setProp("age", "30")    // type error -- must be number
  */
-export const withSetPropAction = <T extends IStateTreeNode>(mstInstance: T) => ({
-  // generic setter for all properties
-  setProp<K extends keyof SnapshotIn<T>, V extends SnapshotIn<T>[K]>(field: K, newValue: V) {
-    // @ts-ignore - for some reason TS complains about this, but it still works fine
-    mstInstance[field] = newValue
-  },
-})
 
 export interface Species {
   speciesId: number
@@ -46,7 +39,7 @@ export const SpeciesStoreModel = types
   .props({
     species: types.frozen<Species[]>(),
   })
-  // .actions(withSetPropAction)
+  .actions(withSetPropAction)
   .views((self) => ({
     get getSpecies() {
       return self.species

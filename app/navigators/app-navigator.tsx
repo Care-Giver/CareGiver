@@ -26,15 +26,20 @@ import {
   AllReviewsScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
-  BookingDetailScreen,
   MypageScreen,
   AllPetsScreen,
   SettingScreen,
   ServiceCenterScreen,
   ServiceRegistrationScreen,
   EditMypageScreen,
+  FacilityRegistrationScreen,
+  TestWebViewScreen,
+  TestPushNotificationScreen,
+  CaregiverSetPriceScreen,
+  CaregiverSetAdditionalPriceScreen,
+  TestBottomSheetScreen,
 } from "#screens"
-import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
@@ -44,15 +49,10 @@ import {
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
-  PreReg32,
-  PreReg24,
   PreReg18,
-  PreMed18,
-  HEADER_ROOT,
 } from "#components"
 import { images } from "#images"
 import {
-  DEVICE_SCREEN_WIDTH,
   DEVICE_WINDOW_WIDTH,
   GIVER_CASUAL_NAVY,
   GIVER_ROMANTIC_GRAY,
@@ -88,6 +88,7 @@ export type NavigatorParamList = {
   "writing-comment-screen": undefined
   "all-bookings-screen": undefined
   "booking-detail-screen": undefined
+  "favorites-screen": undefined
 
   // * pay stack
   "payment-request-screen": undefined
@@ -100,12 +101,20 @@ export type NavigatorParamList = {
 
   // * registration
   "service-registration-screen": undefined
+  "facility-registration-screen": undefined
 
   "edit-mypage-screen": { editable: boolean }
+
+  // * caregiver - set price stack
+  "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
+  "caregiver-set-additional-price-screen": undefined
 
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
+  "test-bottom-sheet": undefined
+  TestWebView: undefined
+  testPushNotification: undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -113,12 +122,12 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Tab = createBottomTabNavigator()
 
 const AllStacks = () => {
-  const navigation = useNavigation()
   return (
     <Stack.Navigator
       //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
         headerShown: true,
+        animation: "slide_from_right",
       }}
       //initialRouteName="service-registration-screen"
       //initialRouteName="home-screen"
@@ -161,7 +170,7 @@ const AllStacks = () => {
           headerLeft: (props) => (
             <Pressable
               onPress={() => {
-                navigation.goBack()
+                goBack()
               }}
             >
               <Image style={{ width: 28, height: 28 }} source={images.go_back} />
@@ -287,22 +296,48 @@ const AllStacks = () => {
       />
       {/* //! -------- */}
 
+      {/* //! 등록 스택 */}
       {/* //* 서비스 등록 스크린 */}
       <Stack.Screen
         name="service-registration-screen"
         component={ServiceRegistrationScreen}
         options={{
           title: "서비스 등록",
-          header: (props) => (
-            <GobackAndTitleAndButtonHeader
-              {...props}
-              buttonText={"건너뛰기"}
-              // TODO: Event Listener 어디에 작성..? app navigator.tsx 파일에 작성해야하나?
-              handlePress={() => alert("건너뛰기")}
-            />
-          ),
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+
+      {/* //* 편의시설 등록 스크린 */}
+      <Stack.Screen
+        name="facility-registration-screen"
+        component={FacilityRegistrationScreen}
+        options={{
+          title: "근처 편의시설 등록",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //! ------- */}
+
+      {/* //! 요금 설정 스택 */}
+      {/* //* 케어기버 요금 설정 스크린 */}
+      <Stack.Screen
+        name="caregiver-set-price-screen"
+        component={CaregiverSetPriceScreen}
+        options={{
+          title: "요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      <Stack.Screen
+        name="caregiver-set-additional-price-screen"
+        component={CaregiverSetAdditionalPriceScreen}
+        options={{
+          title: "강아지 크기 별 추가 요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //! ----------- */}
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
@@ -317,13 +352,31 @@ const AllStacks = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
+      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+
+      {/* //? 푸시알림 테스트 화면 */}
+      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+
+      {/* //? bottom-sheet 테스트 화면 */}
+      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
     </Stack.Navigator>
   )
 }
 
 const TabStacks = () => {
   const FavoritesStack = () => {
-    return null
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: "auto",
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>즐겨찾기 기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
   }
   const ChatsStack = () => {
     return (
@@ -344,31 +397,31 @@ const TabStacks = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: [
-          {
-            width: STANDARD_WIDTH,
-            alignSelf: "center",
-            backgroundColor: "white",
-          },
-          isWeb && { paddingTop: 8, paddingBottom: 8 },
-        ],
+        // tabBarStyle: [
+        //   {
+        //     width: STANDARD_WIDTH,
+        //     alignSelf: "center",
+        //     backgroundColor: "white",
+        //   },
+        //   isWeb && { paddingTop: 8, paddingBottom: 8 },
+        // ],
         headerStyle: [
           {
             backgroundColor: "white",
           },
-          isWeb && { width: STANDARD_WIDTH },
         ],
-        headerTitleStyle: isWeb && {
-          color: "black",
-          marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
-        },
+        // headerTitleStyle: isWeb && {
+        //   color: "black",
+        //   marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
+        // },
       }}
+      initialRouteName="Searching"
     >
       <Tab.Screen
         name="Favorites"
-        component={AllStacks}
+        component={FavoritesStack}
         options={{
-          tabBarLabel: "홈",
+          tabBarLabel: "즐겨찾기",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
@@ -377,6 +430,8 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
+          headerShown: true,
+          headerTitle: "즐겨찾기(개발중)",
         }}
       />
       <Tab.Screen
@@ -398,19 +453,17 @@ const TabStacks = () => {
       />
       <Tab.Screen
         name="Searching"
-        component={SearchResultScreen}
+        component={AllStacks}
         options={{
           tabBarLabel: "검색",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="card-search-outline"
+              name="search-web"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          // headerTitle: "",
         }}
       />
       <Tab.Screen

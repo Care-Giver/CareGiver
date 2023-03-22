@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
-    width: 390,
+    width: "100%",
     height: 28,
     justifyContent: "center",
     alignItems: "center",

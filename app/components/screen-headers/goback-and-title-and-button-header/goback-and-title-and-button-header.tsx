@@ -5,6 +5,7 @@ import { Row, PreMed16, PreMed18 } from "#components"
 import { DISABLED } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
+import { Props } from "./goback-and-title-and-button-header.props"
 
 export const GobackAndTitleAndButtonHeader = (props) => {
   const title = props.options.title ? props.options.title : props.route.name

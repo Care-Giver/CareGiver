@@ -3,8 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { ChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../basics/custom-texts/custom-texts"
-import { SHADOW_1 } from "#theme"
-import { BODY, SUB_HEAD_LINE } from "#theme"
+import { BODY, SUB_HEAD_LINE, SHADOW_1 } from "#theme"
 import { images } from "#images"
 
 export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
@@ -32,6 +31,7 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
             ? images.service_training
             : ""
         }
+        resizeMode="stretch" //! DO NOT REMOVE THIS
       />
     </Pressable>
   )
