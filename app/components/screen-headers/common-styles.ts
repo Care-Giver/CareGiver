@@ -1,4 +1,4 @@
-import { Platform } from "react-native"
+import { Platform, ViewStyle } from "react-native"
 import {
   isWeb,
   HEADER_HEIGHT,
@@ -8,7 +8,7 @@ import {
   GIVER_ROMANTIC_GRAY,
 } from "#theme"
 
-export const HEADER_ROOT = isWeb
+export const HEADER_ROOT: ViewStyle = isWeb
   ? {
       alignSelf: "center",
       // flex: 1,

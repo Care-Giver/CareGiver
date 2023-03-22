@@ -24,7 +24,6 @@ import {
   CaregiverSelfIntroductionScreen,
   AllCommentsScreen,
   AllReviewsScreen,
-  MyProfileManagementScreen,
   AllBookingsScreen,
   PaymentRequestScreen,
   MypageScreen,
@@ -32,6 +31,7 @@ import {
   SettingScreen,
   ServiceCenterScreen,
   ServiceRegistrationScreen,
+  EditMypageScreen,
   FacilityRegistrationScreen,
   TestWebViewScreen,
   TestPushNotificationScreen,
@@ -45,7 +45,7 @@ import {
   HomeScreenHeader,
   WritingCommentScreenHeader,
   AllCommentsScreenHeader,
-  MyProfileManangementScreenHeader,
+  EditMypageScreenHeader,
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
@@ -61,6 +61,7 @@ import {
 } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+//import { Row } from "../basics/row/row"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -74,6 +75,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
+
 export type NavigatorParamList = {
   //* general screens
   "home-screen": undefined
@@ -101,7 +103,7 @@ export type NavigatorParamList = {
   "service-registration-screen": undefined
   "facility-registration-screen": undefined
 
-  "my-profile-management-screen": undefined
+  "edit-mypage-screen": { editable: boolean }
 
   // * caregiver - set price stack
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
@@ -127,7 +129,9 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      //initialRouteName="service-registration-screen"
+      //initialRouteName="home-screen"
+      initialRouteName="edit-mypage-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -217,12 +221,19 @@ const AllStacks = () => {
 
       {/* //* 내 프로필 관리 */}
       <Stack.Screen
-        name="my-profile-management-screen"
-        component={MyProfileManagementScreen}
-        options={{
-          title: "내 프로필 관리",
-          header: (props) => <MyProfileManangementScreenHeader {...props} />,
-        }}
+        name="edit-mypage-screen"
+        component={EditMypageScreen}
+        options={({ navigation, route }) => ({
+          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
+          headerShadowVisible: false,
+          header: (props) => <EditMypageScreenHeader {...props} />,
+          /*//?headerTitle은 ios 에서 가운데 정렬이 기본이라 위의 headerleft 에서 다 해결했는데 괜찮은걸까.... 
+           * headerTitleAlign: "left",
+          headerTitle: (props) => (
+            <PreMed18 style={{ marginLeft: 0 }}> {"내 프로필 관리"}</PreMed18>
+          ),*/
+          headerTitle: "",
+        })}
       />
 
       {/* //* 예약 확인 */}
@@ -525,6 +536,8 @@ export const AppNavigator = (props: NavigationProps) => {
         "writing-comment-screen": "/writing-comment-screen",
         "all-bookings-screen": "/all-bookings-screen",
         "booking-detail-screen": "/booking-detail-screen",
+        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
+        "edit-mypage-screen": "/edit-mypage-screen",
 
         // * pay stack
         "payment-request-screen": "/payment-request-screen",

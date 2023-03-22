@@ -58,6 +58,41 @@ export interface FormattedPetsitterReserve {
   endDate: string
 }
 
+enum UserRole {
+  CLIENT = "CLIENT",
+  ADMIN = "ADMIN",
+}
+
+enum Sex {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
+
+export interface IUpdateUserNicknameRequest {
+  // 'sex',
+  // 'birthday',
+  // 'desc',
+  // 'address',
+  // 'profileImage',
+  sex: Sex
+  birthday: string
+  desc?: string
+  address?: string
+  profileImage?: string
+
+  //   nickname: string;
+  // email: string;
+  // password?: string;
+  // role: UserRole;
+  // phoneNumber: string;
+  // provider: string;
+  // refreshToken: string;
+  // isCertified: boolean;
+  // pushToken?: string;
+  // maxDistance?: number;
+}
+export interface IUpdateUserNicknameResponse {}
+
 // ? 위탁 - 펫시터 API (/reserve/creche) 요청 결과
 export type GetCrechePetsittersResult =
   | { kind: "ok"; reserves: FormattedPetsitterReserve[] }
