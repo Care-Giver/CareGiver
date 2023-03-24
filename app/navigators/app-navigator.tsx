@@ -106,7 +106,7 @@ export type NavigatorParamList = {
   "facility-registration-screen": undefined
 
   "edit-mypage-screen": { editable: boolean }
-  //!"edit-pet-info-screen": { editable: boolean }
+  "edit-pet-info-screen": { editable: boolean }
 
   // * caregiver - set price stack
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
@@ -132,9 +132,10 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="edit-mypage-screen"
+      //initialRouteName="edit-mypage-screen"
       //initialRouteName="home-screen"
-      //initialRouteName="edit-pet-info-screen"
+      initialRouteName="edit-pet-info-screen"
+      //initialRouteName="all-comments-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -304,9 +305,10 @@ const AllStacks = () => {
         component={EditPetInfoScreen}
         options={({ navigation, route }) => ({
           //?need? headerShadowVisible: false,
+          title: "반려동물 정보 수정",
           header: (props) => <EditPetInfoScreenHeader {...props} />,
-          //?title?
-          headerTitle: "",
+
+          //?headerTitle: "",
         })}
       />
 
