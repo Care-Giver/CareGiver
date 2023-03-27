@@ -20,11 +20,11 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.cgtestbuild.tomtimmy",
+      "bundleIdentifier": "pet.caregiver",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.cgtestbuild.tomtimmy",
+      "package": "pet.caregiver",
       "versionCode": 1
     },
     "web": {
