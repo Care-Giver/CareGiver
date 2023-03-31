@@ -1,5 +1,4 @@
 import React, { FC } from "react"
-import { ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
