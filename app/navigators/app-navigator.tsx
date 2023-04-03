@@ -131,8 +131,8 @@ const AllStacks = () => {
         animation: "slide_from_right",
       }}
       //initialRouteName="service-registration-screen"
-      //initialRouteName="home-screen"
-      initialRouteName="favorites-screen"
+      initialRouteName="home-screen"
+      // initialRouteName="favorites-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

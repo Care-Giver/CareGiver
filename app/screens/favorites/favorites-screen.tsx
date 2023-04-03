@@ -15,7 +15,7 @@ export const FavoritesScreen: FC<
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
-    <ScreenRootView testID="Favorites" preset="fixed">
+    <ScreenRootView testID="Favorites" preset="scroll">
       {/* 해피코딩^^ */}
     </ScreenRootView>
   )
