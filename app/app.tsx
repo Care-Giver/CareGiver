@@ -13,7 +13,6 @@ import "./i18n"
 import "./utils/ignore-warnings"
 import React, { useState, useEffect } from "react"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
-import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
@@ -47,7 +46,6 @@ function App() {
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     ;(async () => {
-      await initFonts() // expo
       setupRootStore().then(setRootStore)
     })()
   }, [])
