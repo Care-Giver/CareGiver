@@ -108,6 +108,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       }
     }
 
+    const hasSelectedPets = selectedPets.length > 0
+
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
@@ -222,36 +224,36 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
 
           {/*//* 선택된 반려동물 */}
-          <PreBol14
-            text="선택된 반려동물"
-            color={SUB_HEAD_LINE}
-            style={{ marginTop: 18, marginLeft: 16 }}
-          />
-          <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-            {/*//* 선택된 반려동물 리스트 */}
-            <FlatList
-              data={selectedPets}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SelectedPetCard
-                  petData={item}
-                  onPress={() => {
-                    setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-                  }}
-                />
-              )}
-              // indicatorStyle={"black"} //! scroll indicator 의 디자인 props 는 black 과 white 두 종류 밖에 없다. custom scroll indicator 는 따로 직접 만들어야 한다.
-            />
-          </View>
+          {hasSelectedPets && (
+            <View>
+              <PreBol14
+                text="선택된 반려동물"
+                color={SUB_HEAD_LINE}
+                style={{ marginTop: 18, marginLeft: 16 }}
+              />
+              <View style={isDropdownOpen ? styles.hidden : styles.shown}>
+                {/*//* 선택된 반려동물 리스트 */}
+
+                {selectedPets.map((item, index) => (
+                  <SelectedPetCard
+                    key={index}
+                    petData={item}
+                    onPress={() => {
+                      setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                    }}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
 
           {/*//* 펫시터 찾기 */}
+
           <ConditionalButton
             label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
             isActivated={hadle()}
             style={{
-              marginTop: 20,
-              // margin: 24,
+              marginTop: 40,
               marginBottom: Platform.select({
                 ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
                 android: 0,

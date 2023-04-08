@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
   shown: {
     width: "auto",
-    height: 236,
+    minHeight: 10,
     marginTop: 8,
     borderRadius: 8,
     borderColor: LIGHT_LINE,
