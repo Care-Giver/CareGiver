@@ -5,6 +5,24 @@ import { DivisionLine, PreReg14, PreReg16, PreReg32 } from "#components"
 import { GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import DatePicker from "react-native-date-picker"
 
+// Calculate the number of minutes passed since the start of the hour
+const now = new Date()
+const minutesPassed = now.getMinutes()
+
+// Calculate how many minutes remain to reach the nearest multiple of 5
+const remainder = minutesPassed % 5
+
+// Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
+const nearestPastTime = new Date(now)
+
+// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
+nearestPastTime.setMinutes(minutesPassed - remainder)
+// console.log(nearestPastTime)
+
+const MODE_PRESSABLE_WIDTH = 114
+
+type Mode = "BEGIN" | "END"
+
 export interface TimePickerProps {
   /**
    * An optional style override useful for padding & margin.
@@ -17,15 +35,16 @@ export interface TimePickerProps {
   setEndDate: Dispatch<SetStateAction<Date>>
 }
 
-const MODE_PRESSABLE_WIDTH = 114
-
-type Mode = "BEGIN" | "END"
-
 export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const { style, beginDate, setBeginDate, endDate, setEndDate } = props
   const _styles = Object.assign({}, styles.container, style)
 
   const [mode, setMode] = useState<Mode>("BEGIN")
+
+  useEffect(() => {
+    setBeginDate(nearestPastTime)
+    setEndDate(nearestPastTime)
+  }, [])
 
   useEffect(() => {
     // console.log("beginDate >>>", beginDate)
