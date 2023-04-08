@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme, Image, Pressable, View } from "react-native"
+import { useColorScheme, Image, Pressable, View, ViewStyle, Platform } from "react-native"
 import {
   NavigationContainer,
   DefaultTheme,
@@ -129,9 +129,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      //initialRouteName="service-registration-screen"
-      //initialRouteName="home-screen"
-      initialRouteName="edit-mypage-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -393,27 +391,24 @@ const TabStacks = () => {
     )
   }
 
+  const $tabBarStyleAndroid: ViewStyle = {
+    backgroundColor: "white",
+    borderTopWidth: 0,
+  }
+
+  const $tabBarStyleIOS: ViewStyle = {
+    backgroundColor: "white",
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        // tabBarStyle: [
-        //   {
-        //     width: STANDARD_WIDTH,
-        //     alignSelf: "center",
-        //     backgroundColor: "white",
-        //   },
-        //   isWeb && { paddingTop: 8, paddingBottom: 8 },
-        // ],
-        headerStyle: [
-          {
-            backgroundColor: "white",
-          },
-        ],
-        // headerTitleStyle: isWeb && {
-        //   color: "black",
-        //   marginLeft: (DEVICE_WINDOW_WIDTH - STANDARD_WIDTH) / 2,
-        // },
+        headerStyle: { backgroundColor: "white" },
+        tabBarStyle: Platform.select({
+          android: $tabBarStyleAndroid,
+          ios: $tabBarStyleIOS,
+        }),
       }}
       initialRouteName="Searching"
     >

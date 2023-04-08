@@ -1,7 +1,6 @@
 /* eslint-disable spaced-comment */
 import * as React from "react"
-import { Image, Text as ReactNativeText } from "react-native"
-import { presets } from "../ignite-basics/text/text.presets"
+import { Text as ReactNativeText } from "react-native"
 import { TextProps } from "../ignite-basics/text/text.props"
 import { translate } from "../../../i18n"
 import {
@@ -31,7 +30,6 @@ const PretendardBold = (props: TextProps) => {
         style,
         {
           fontFamily: PRETENDARD_BOLD,
-          fontWeight: "bold",
           includeFontPadding: false,
           fontSize: size,
           color: color,

@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Poppins-Regular.ttf",
+      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
+    },
+    {
+      "path": "assets/fonts/Poppins-SemiBold.ttf",
+      "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
+    },
+    {
+      "path": "assets/fonts/Pretendard-Bold.ttf",
+      "sha1": "278de380517cb0d95affb06c3aa53cdb31665bd6"
+    },
+    {
+      "path": "assets/fonts/Pretendard-Medium.ttf",
+      "sha1": "bb3fe69b151c8d28284c541858cc19ccc8bfb3ac"
+    },
+    {
+      "path": "assets/fonts/Pretendard-Regular.ttf",
+      "sha1": "ea97acaadb3ed77206db497c9e9052f9f8121e10"
+    },
+    {
+      "path": "assets/fonts/custom-fonts.md",
+      "sha1": "16faf0572766edf945b496c322c7bbce1e4cb955"
+    },
+    {
+      "path": "assets/fonts/index.ts",
+      "sha1": "5883238109e27475271fe8046521e20cdab25635"
+    }
+  ]
+}

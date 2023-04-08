@@ -1,14 +1,17 @@
-import React, { FC, useCallback, useMemo, useRef } from "react"
-import { View, Text, StyleSheet } from "react-native"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView } from "#components"
+import { ScreenRootView, TimePicker } from "#components"
 import BottomSheet from "@gorhom/bottom-sheet"
 
 export const TestBottomSheetScreen: FC<
   StackScreenProps<NavigatorParamList, "test-bottom-sheet">
 > = observer(function TestBottomSheetScreen() {
+  const [beginDate, setBeginDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null)
 
@@ -21,16 +24,24 @@ export const TestBottomSheetScreen: FC<
   }, [])
 
   return (
-    <ScreenRootView testID="TestBottomSheet" preset="fixed">
+    <ScreenRootView
+      testID="TestBottomSheet"
+      preset="fixed"
+      style={{ backgroundColor: "lightgrey" }}
+    >
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
+        index={0}
+        // snapPoints={snapPoints}
+        snapPoints={["60%"]}
+        // onChange={handleSheetChanges}
       >
-        <View style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
-        </View>
+        <TimePicker
+          beginDate={beginDate}
+          setBeginDate={setBeginDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
       </BottomSheet>
     </ScreenRootView>
   )
