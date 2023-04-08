@@ -19,13 +19,10 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { Users } from "./dummy-data"
 import { UserProps } from "./user.props" //?사용의 의미
-import DatePicker from "react-native-date-picker"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
 > = observer(({ navigation, route }) => {
-  const [date, setDate] = useState(new Date())
-
   //console.log("route @EditMypageScreen", route)
 
   //* <변수>위주 정리:
@@ -83,7 +80,6 @@ export const EditMypageScreen: FC<
 
   return (
     <ScreenRootView preset={"fixed"}>
-      <DatePicker date={date} onDateChange={setDate} mode="time" />
       {/* //*프사 부분 */}
       <ImageBackground
         style={styles.profileImage}
