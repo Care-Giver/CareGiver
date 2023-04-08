@@ -1,20 +1,27 @@
 import * as React from "react"
-import { Pressable, Text, PressableProps } from "react-native"
+import { StyleProp, ViewStyle } from "react-native"
 import { palette } from "#theme"
 import { PreBol16 } from "../../basics/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 import { styles } from "./styles"
 
-//TODO: ConditionalButtonProps 만들기
-export const ConditionalButton = (props) => {
+interface ConditionalButtonProps {
+  /**
+   * An optional style override useful for padding & margin.
+   */
+  style?: StyleProp<ViewStyle>
+  isActivated: boolean
+  label: string
+  onPress: () => void
+}
+
+export const ConditionalButton = (props: ConditionalButtonProps) => {
   const {
     isActivated = false,
     // activatedViewStyle,
     // defaultTextStyle,
-    onPress,
     label,
-    children,
-    ...rest
+    onPress,
   } = props
 
   const activatedViewStyle = [styles.root, styles.activatedViewStyle, props.style]
