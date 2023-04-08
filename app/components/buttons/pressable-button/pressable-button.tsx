@@ -35,10 +35,8 @@ export const PressableButton = (props: PressableButtonProps) => {
   // const content = children || <Text style={textStyle}>{label} </Text>
   const content = children
 
-  const _styles = Object.assign({}, style, viewStyle)
-
   return (
-    <Pressable style={_styles} {...rest} disabled={isDisabled}>
+    <Pressable style={[style, viewStyle]} {...rest} disabled={isDisabled}>
       {content}
     </Pressable>
   )
