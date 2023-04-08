@@ -5,25 +5,11 @@ import { DivisionLine, PreReg14, PreReg16, PreReg32 } from "#components"
 import { GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import DatePicker from "react-native-date-picker"
 
-// Calculate the number of minutes passed since the start of the hour
-const now = new Date()
-const minutesPassed = now.getMinutes()
-
-// Calculate how many minutes remain to reach the nearest multiple of 5
-const remainder = minutesPassed % 5
-
-// Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
-const nearestPastTime = new Date(now)
-
-// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
-nearestPastTime.setMinutes(minutesPassed - remainder)
-// console.log(nearestPastTime)
-
 const MODE_PRESSABLE_WIDTH = 114
 
 type Mode = "BEGIN" | "END"
 
-export interface TimePickerProps {
+interface TimePickerProps {
   /**
    * An optional style override useful for padding & margin.
    */
@@ -41,19 +27,17 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
 
   const [mode, setMode] = useState<Mode>("BEGIN")
 
+  // 선택한 시간이 바뀔때마다 핸들링
   useEffect(() => {
-    setBeginDate(nearestPastTime)
-    setEndDate(nearestPastTime)
-  }, [])
+    const oneHourLaterFromBegin = new Date(beginDate.getTime() + 60 * 60 * 1000)
 
-  useEffect(() => {
-    // console.log("beginDate >>>", beginDate)
-    // console.log("endDate >>>", endDate)
-    // console.log("beginDate >>>", timeText(beginDate))
-    // console.log("endDate >>>", timeText(endDate))
-
-    if (endDate < beginDate) {
-      setEndDate(beginDate)
+    // 끝 시간이 시작시간보다 이전이면, 무조건 시작시간보다 1시간뒤로 강제
+    if (endDate <= beginDate) {
+      setEndDate(oneHourLaterFromBegin)
+    }
+    // 끝 시간이 "시작시간보다 1시간 후" 보다 이전이면, 무조건 시작시간보다 1시간뒤로 강제
+    else if (endDate < oneHourLaterFromBegin) {
+      setEndDate(oneHourLaterFromBegin)
     }
   }, [beginDate, endDate])
 

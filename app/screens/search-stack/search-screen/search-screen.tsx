@@ -1,6 +1,5 @@
 import React, { FC, useState, useLayoutEffect, useRef, useCallback } from "react"
 import {
-  FlatList,
   Image,
   View,
   LayoutAnimation,
@@ -30,6 +29,23 @@ import { styles } from "./styles"
 import { Calendar, DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
 
+// Calculate the number of minutes passed since the start of the hour
+const now = new Date()
+const minutesPassed = now.getMinutes()
+
+// Calculate how many minutes remain to reach the nearest multiple of 5
+const remainder = minutesPassed % 5
+
+// Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
+const nearestPastTime = new Date(now)
+
+// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
+nearestPastTime.setMinutes(minutesPassed - remainder)
+// console.log(nearestPastTime)
+
+// "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
+const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
+
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     //* 서비스 형태
@@ -44,9 +60,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [selectedPets, setSelectedPets] = useState([])
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-    //* 시간선택 - imePicker
-    const [beginDate, setBeginDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
+    //* 시간선택 - TimePicker
+    const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
+    const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
     const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
 
     // 시간선택 BottomSheet - ref
@@ -94,8 +110,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     }, [])
 
     //? 펫시터 찾기 버튼 활성화 여부 결정
-    const hadle = () => {
+    const hadleIsActivated = () => {
       if (!date) return false
+
+      if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
       if (selectedPets.length === 0) return false
 
@@ -108,7 +126,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       }
     }
 
-    const hasSelectedPets = selectedPets.length > 0
+    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
+
+    const isActivated = hadleIsActivated()
 
     return (
       <ScreenRootView testID="SearchScreen" preset="fixed">
@@ -224,7 +244,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
 
           {/*//* 선택된 반려동물 */}
-          {hasSelectedPets && (
+          {hasSelectedPetsAndDropdownClosed && (
             <View>
               <PreBol14
                 text="선택된 반려동물"
@@ -251,7 +271,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
           <ConditionalButton
             label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
-            isActivated={hadle()}
+            isActivated={isActivated}
             style={{
               marginTop: 40,
               marginBottom: Platform.select({
@@ -266,6 +286,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           />
         </ScrollView>
 
+        {/* 시간 선택 바텀시트 - !항상 컴포넌트 최하단에 있을것! */}
         <BottomSheet
           ref={bottomSheetRef}
           index={-1}
