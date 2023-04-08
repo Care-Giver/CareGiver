@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, StyleProp, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { DivisionLine, PreReg14, PreReg16, PreReg32 } from "#components"
-import { PRETENDARD_REGULAR } from "#fonts"
 import { GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import DatePicker from "react-native-date-picker"
 
@@ -11,6 +10,11 @@ export interface TimePickerProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+
+  beginDate: Date
+  setBeginDate: Dispatch<SetStateAction<Date>>
+  endDate: Date
+  setEndDate: Dispatch<SetStateAction<Date>>
 }
 
 const MODE_PRESSABLE_WIDTH = 114
@@ -18,12 +22,10 @@ const MODE_PRESSABLE_WIDTH = 114
 type Mode = "BEGIN" | "END"
 
 export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
-  const { style } = props
+  const { style, beginDate, setBeginDate, endDate, setEndDate } = props
   const _styles = Object.assign({}, styles.container, style)
 
   const [mode, setMode] = useState<Mode>("BEGIN")
-  const [beginDate, setBeginDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
 
   useEffect(() => {
     // console.log("beginDate >>>", beginDate)
@@ -127,6 +129,6 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flexDirection: "row",
     alignSelf: "center",
-    // backgroundColor: "pink",
+    backgroundColor: "white",
   },
 })
