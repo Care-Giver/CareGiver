@@ -127,11 +127,23 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
       {/* Time Picker Area */}
       <View style={styles.pickerContainer}>
         {mode === "BEGIN" && (
-          <DatePicker date={beginDate} onDateChange={setBeginDate} mode="time" minuteInterval={5} />
+          <DatePicker
+            date={beginDate}
+            onDateChange={setBeginDate}
+            mode="time"
+            minuteInterval={5}
+            textColor="black"
+          />
         )}
 
         {mode === "END" && (
-          <DatePicker date={endDate} onDateChange={setEndDate} mode="time" minuteInterval={5} />
+          <DatePicker
+            date={endDate}
+            onDateChange={setEndDate}
+            mode="time"
+            minuteInterval={5}
+            textColor="black"
+          />
         )}
       </View>
     </View>
