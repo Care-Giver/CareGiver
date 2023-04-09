@@ -1,10 +1,11 @@
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
-import { LBG } from "#theme"
+import { LBG, MIDDLE_LINE } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   filterBox: {
-    paddingVertical: 12,
+    paddingTop: 20,
+    paddingBottom: 12,
     justifyContent: "space-between",
   },
 
@@ -27,5 +28,17 @@ export const styles = StyleSheet.create({
   bottomSheetTitleBox: {
     paddingVertical: 12,
     justifyContent: "space-between",
+  },
+
+  radioContainer: {
+    width: 172,
+    padding: 14.5,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    borderColor: MIDDLE_LINE,
+    borderWidth: 2,
+    borderRadius: 9,
   },
 })
