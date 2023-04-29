@@ -14,6 +14,7 @@ module.exports = {
           "#screens": "./app/screens/index",
           "#theme": "./app/theme/index",
           "#api": "./app/services/api/index",
+          "#axios": "./app/services/axios/index",
           "#images": "./assets/images/index",
           "#fonts": "./assets/fonts/index",
 

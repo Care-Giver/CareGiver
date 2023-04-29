@@ -18,6 +18,7 @@ import { navigate, NavigatorParamList } from "#navigators"
 import { BODY, SUB_HEAD_LINE } from "#theme"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { images } from "#images"
+import { getCreche, getCrechePetsitters, getPosts, createCreche } from "#axios"
 
 const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
@@ -77,7 +78,31 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             onPress={() => {
               //TODO: params 값 추가해줘야 함
               // navigate("test-map-screen")
-              alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
+              // alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
+              // getCrechePetsitters(7)
+
+              // getCreche(17)
+
+              createCreche({
+                userId: 2,
+                title: "ENFP의 친화력 - 3",
+                address: "경기도 안산시 사동 한양대학로 55",
+                detailAddress: "제5공학관 지하1층 창업3실",
+                desc: "강아지 3년 기른 경력으로 보살핍니다.",
+                maxUnit: 100,
+                handleType: ["대형", "중형", "소형"],
+                roomType: "아파트",
+                images: { imageUrl: "이미지 주소", desc: "이미지 설명" },
+                services: ["산책, 목욕, 미용"],
+                defaultFee: 9999,
+                extraSizeFee: {
+                  SMALL: 999,
+                  MEDIUM: 10,
+                  LARGE: 0,
+                },
+                promoted: false,
+                facilities: ["공원, 동물병원"],
+              })
             }}
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
