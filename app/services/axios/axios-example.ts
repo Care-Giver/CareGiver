@@ -90,3 +90,33 @@ export async function getUserById(id: number): Promise<User> {
     return {} as User
   }
 }
+
+/**
+ * Create a new post on the jsonplaceholder API.
+ * @param {Post} post - The Post object to create.
+ * @returns {Promise<Post>} Promise object representing the created Post object.
+ */
+export async function createPost(post: Post): Promise<Post> {
+  try {
+    const response = await axios.post<Post>("https://jsonplaceholder.typicode.com/posts", post)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    return {} as Post
+  }
+}
+
+/**
+ * Create a new user on the jsonplaceholder API.
+ * @param {User} user - The User object to create.
+ * @returns {Promise<User>} Promise object representing the created User object.
+ */
+export async function createUser(user: User): Promise<User> {
+  try {
+    const response = await axios.post<User>("https://jsonplaceholder.typicode.com/users", user)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    return {} as User
+  }
+}
