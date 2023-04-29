@@ -25,5 +25,6 @@ export function StorybookUIRoot() {
     })()
   }, [])
 
+  // @ts-ignore
   return <StorybookUI />
 }
