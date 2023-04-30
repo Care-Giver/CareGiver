@@ -16,17 +16,8 @@ import {
   ScreenRootView,
   SelectedPetCard,
 } from "#components"
-import { color, SHADOW_1, WIDTH } from "#theme"
-import {
-  DBG,
-  GIVER_CASUAL_NAVY,
-  HEAD_LINE,
-  LBG,
-  LIGHT_LINE,
-  MIDDLE_LINE,
-  SUB_HEAD_LINE,
-} from "#theme"
-import { korCgType, korSvcType, won } from "../utils/format"
+import { SHADOW_1, DBG, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import { korCgType, korSvcType, won } from "../../../utils/format"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 // import { useNavigation } from "@react-navigation/native"
