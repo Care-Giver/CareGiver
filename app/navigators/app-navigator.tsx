@@ -52,13 +52,7 @@ import {
   PreReg18,
 } from "#components"
 import { images } from "#images"
-import {
-  DEVICE_WINDOW_WIDTH,
-  GIVER_CASUAL_NAVY,
-  GIVER_ROMANTIC_GRAY,
-  isWeb,
-  STANDARD_WIDTH,
-} from "#theme"
+import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 //import { Row } from "../basics/row/row"
