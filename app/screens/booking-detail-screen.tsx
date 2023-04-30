@@ -88,7 +88,7 @@ export const BookingDetailScreen: FC<
   const { price, discount, totalPrice } = paymentData
 
   return (
-    <ScreenRootView testID="BookingDetail" preset="scroll">
+    <ScreenRootView testID="BookingDetail">
       <Row>
         <Image style={styles.profileImage} source={images.default_pet_image_60} />
 

@@ -118,7 +118,7 @@ export const SearchResultScreen: FC<
 
   return (
     // <ScreenRootView statusBar="dark-content">
-    <ScreenRootView preset="scroll">
+    <ScreenRootView>
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,

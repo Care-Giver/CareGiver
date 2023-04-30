@@ -196,7 +196,7 @@ export const PaymentRequestScreen: FC<
   // ? ------------
 
   return (
-    <ScreenRootView preset={"scroll"}>
+    <ScreenRootView>
       {/* //* 안내 문구 */}
       <PreReg12
         style={{ marginLeft: "auto" }}
@@ -227,8 +227,9 @@ export const PaymentRequestScreen: FC<
       />
       {/* //? 버튼 입력 */}
       <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
-        {ALLERGYS.map((allergy) => (
+        {ALLERGYS.map((allergy, index) => (
           <BorderRadioButton
+            key={index}
             style={{
               width: getButtonWidth(
                 windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
@@ -269,6 +270,7 @@ export const PaymentRequestScreen: FC<
       >
         {TIPS.map((tip, index) => (
           <BorderRadioButton
+            key={index}
             style={{ marginTop: index === 0 ? 0 : 8 }}
             active={tip.value}
             onPress={() => handleTipPress(tip.name)}
@@ -306,8 +308,9 @@ export const PaymentRequestScreen: FC<
       />
       {/* //? 버튼 입력 */}
       <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
-        {DISLIKED_PARTS.map((part) => (
+        {DISLIKED_PARTS.map((part, index) => (
           <BorderRadioButton
+            key={index}
             style={{
               width: getButtonWidth(
                 windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,

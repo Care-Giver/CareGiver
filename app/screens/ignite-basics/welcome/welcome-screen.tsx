@@ -137,60 +137,22 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
     return (
       <View testID="WelcomeScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
-        {/* <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
-          <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
 
-
-          <PreReg14 color="red">
-            {" "}
-            하하하하
-            <PreBol32>이건 큰 하하하하</PreBol32>
-            하하하하
-            {"\n"}
-          </PreReg14>
-
-          <View
-            style={{
-              width: 300,
-              height: 300,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={[
-                {
-                  width: 100 ,
-                  height: 100,
-                  backgroundColor: "yellow",
-                },
-                SHADOW_4,
-              ]}
-            />
-          </View>
-
-          <PopSem14 text="LETS GET PSYCICAL" color="#21ffff" />
-
-        </Screen> */}
-
-        <ScreenRootView preset={"scroll"}>
-          <PreBol32>ㅇㅇㅇㅇ</PreBol32>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <PopReg20>OOOOOOOO</PopReg20>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-          <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
-        </ScreenRootView>
+        <PreBol32>ㅇㅇㅇㅇ</PreBol32>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <PopReg20>OOOOOOOO</PopReg20>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
+        <ReactNativeText>ㅇㅇㅇㅇ</ReactNativeText>
 
         <SafeAreaView style={FOOTER}>
           <View style={FOOTER_CONTENT}>

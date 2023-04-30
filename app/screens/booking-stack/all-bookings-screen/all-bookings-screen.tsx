@@ -25,6 +25,7 @@ import {
   ViewStyle,
   Text,
   Image,
+  ScrollView,
 } from "react-native"
 import { BookingStoreModel } from "../../../models"
 // import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
@@ -114,8 +115,9 @@ export const AllBookingsScreen: FC<
   // const bottomSheetRef = useRef<BottomSheet>(null)
 
   return (
-    <ScreenRootView preset={"scroll"}>
-      {/* <Pressable
+    <ScreenRootView>
+      <ScrollView>
+        {/* <Pressable
         onPress={() => {
           // bottomSheetRef.current.expand()
         }}
@@ -124,40 +126,41 @@ export const AllBookingsScreen: FC<
         <Text>바텀시트 열기</Text>
       </Pressable> */}
 
-      {/* // * 진행중인 예약 */}
-      <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
+        {/* // * 진행중인 예약 */}
+        <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
 
-      {/* // * 진행중인 예약 리스트 */}
-      <FlatList
-        style={{ marginTop: 10 }}
-        data={bookings}
-        renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
-        viewabilityConfig={{
-          viewAreaCoveragePercentThreshold: 50,
-        }}
-        onViewableItemsChanged={onViewableChange}
-        decelerationRate={"fast"}
-      />
+        {/* // * 진행중인 예약 리스트 */}
+        <FlatList
+          style={{ marginTop: 10 }}
+          data={bookings}
+          renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+          viewabilityConfig={{
+            viewAreaCoveragePercentThreshold: 50,
+          }}
+          onViewableItemsChanged={onViewableChange}
+          decelerationRate={"fast"}
+        />
 
-      <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
-        {bookings.map((item, index) => (
-          <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
-        ))}
-      </Row>
+        <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
+          {bookings.map((item, index) => (
+            <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+          ))}
+        </Row>
 
-      {/* // * 지난 예약 */}
-      <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
-        <PreReg16 text="지난 예약" color={DISABLED} />
-        <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
-          <PreMed16 text="더보기" color={BODY} />
-          <Image source={images.arrow_left} style={{ width: 16, height: 16 }} />
-        </Pressable>
-      </Row>
+        {/* // * 지난 예약 */}
+        <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
+          <PreReg16 text="지난 예약" color={DISABLED} />
+          <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+            <PreMed16 text="더보기" color={BODY} />
+            <Image source={images.arrow_left} style={{ width: 16, height: 16 }} />
+          </Pressable>
+        </Row>
 
-      <PastBooking style={{ marginTop: 13 }} />
+        <PastBooking style={{ marginTop: 13 }} />
+      </ScrollView>
 
       {/* <TimeSelector bottomSheetRef={bottomSheetRef} /> */}
     </ScreenRootView>

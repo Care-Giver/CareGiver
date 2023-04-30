@@ -2,7 +2,6 @@ import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
 import { CARE_NATURAL_BLUE, CARE_SOFT_YELLOW, isWeb, palette, STANDARD_WIDTH, WIDTH } from "#theme"
 import { Screen } from "../ignite-basics/screen/screen"
-import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = 16
 
@@ -16,29 +15,21 @@ export const FULL: ViewStyle = isWeb
     }
   : { flex: 1 }
 
-export const FULL_WITH_SCROLLING: ViewStyle = isWeb
-  ? {
-      alignSelf: "center",
-      flex: 1,
-      height: "100%",
-      width: STANDARD_WIDTH,
-      backgroundColor: "white",
-    }
-  : { width: "100%", height: "auto" }
-
 export const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 
+/**
+ * 모든 screen 컴포넌트는 해당 컴포넌트가 최상위에 위치해야 합니다.
+ * 본 컴포넌트는 scrolling 이 없는 고정된 컴포넌트입니다.
+ * scroll 필요시, 자식 컴포넌트로써 ScrollView 를 추가하세요.
+ * @param props 추후 type 업데이트 예정
+ */
 export const ScreenRootView = (props) => {
   return (
     <Screen
-      preset={props.preset}
-      style={
-        isNonScrolling(props.preset)
-          ? [FULL, BASIC_BACKGROUND_PADDING, props.style]
-          : [FULL_WITH_SCROLLING, BASIC_BACKGROUND_PADDING, props.style]
-      }
+      preset="fixed"
+      style={[FULL, BASIC_BACKGROUND_PADDING, props.style]}
       //! custom-header 를 header prop 에 적용시킬때, iOS statusbar 가 흰색에 뭍혀 버린다. 이를 보완하기 위해 추가함
       statusBar={Platform.select({
         ios: "dark-content",
