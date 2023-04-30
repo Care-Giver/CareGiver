@@ -9,7 +9,9 @@
       "#api": ["./app/services/api/index"],
       "#axios": ["./app/services/axios/index"],
       "#images": ["./assets/images/index"],
-      "#fonts": ["./assets/fonts/index"]
+      "#fonts": ["./assets/fonts/index"],
+
+      "react": ["./node_modules/@types/react"]
 
       //* 예외들
       //! storybook 은 절대로 절대경로 설정하지 말것!
