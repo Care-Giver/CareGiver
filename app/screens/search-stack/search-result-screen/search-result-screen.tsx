@@ -11,7 +11,7 @@ import {
   SitterProfileCard,
   SelectOptionDropdownBox,
 } from "#components"
-import { palette, LBG, isWeb, STANDARD_HEIGHT } from "#theme"
+import { palette, LBG } from "#theme"
 import { images } from "#images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -118,7 +118,7 @@ export const SearchResultScreen: FC<
 
   return (
     // <ScreenRootView statusBar="dark-content">
-    <ScreenRootView preset="scroll">
+    <ScreenRootView>
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -231,7 +231,7 @@ export const SearchResultScreen: FC<
             showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,
-              height: isWeb ? STANDARD_HEIGHT - 100 : "auto",
+              height: "auto",
               marginBottom: 34,
             }}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)

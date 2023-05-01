@@ -18,7 +18,6 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   MakeBookingButton,
   DivisionLineVertical,
-  FULL_WITH_SCROLLING,
   BASIC_BACKGROUND_PADDING,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -105,14 +104,12 @@ export const CaregiverDetailInformationScreen: FC<
       preset="fixed"
       testID="testetst"
       style={{
-        ...FULL_WITH_SCROLLING,
         ...BASIC_BACKGROUND_PADDING,
         paddingHorizontal: 0,
       }}
     >
       {/* //? 예약 신청하기 버튼을 "제외한" 전부 */}
       <ScrollView
-        // preset="scroll"
         showsVerticalScrollIndicator={false}
         //? 스크롤할 때 헤더 투명도 바꾸기. 출처: https://stackoverflow.com/questions/52469579/transparent-background-for-header-using-createstacknavigator-react-native
         onScroll={(event) => {

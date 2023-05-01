@@ -1,18 +1,32 @@
 import * as React from "react"
-import { Pressable, Text, PressableProps } from "react-native"
+import { Pressable, PressableProps, StyleProp, ViewStyle, TextStyle } from "react-native"
 
-//- TODO: CustomPressableProps 만들기
-export const PressableButton = (props: PressableProps) => {
+interface PressableButtonProps extends PressableProps {
+  /**
+   * An optional style override useful for padding & margin.
+   */
+  style?: StyleProp<ViewStyle>
+  isPressed?: boolean
+  defaultViewStyle?: StyleProp<ViewStyle>
+  pressedViewStyle?: StyleProp<ViewStyle>
+  defaultTextStyle?: StyleProp<TextStyle>
+  pressedTextStyle?: StyleProp<TextStyle>
+  label?: string
+  isDisabled: boolean
+}
+
+export const PressableButton = (props: PressableButtonProps) => {
   // grab the props
   const {
+    style,
     isPressed = false,
     defaultViewStyle,
     pressedViewStyle,
     defaultTextStyle,
     pressedTextStyle,
     label,
-    children,
     isDisabled,
+    children,
     ...rest
   } = props
 
@@ -22,7 +36,7 @@ export const PressableButton = (props: PressableProps) => {
   const content = children
 
   return (
-    <Pressable style={viewStyle} {...rest} disabled={isDisabled}>
+    <Pressable style={[style, viewStyle]} {...rest} disabled={isDisabled}>
       {content}
     </Pressable>
   )

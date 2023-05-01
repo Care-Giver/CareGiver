@@ -140,7 +140,7 @@ export const DemoScreen: FC<StackScreenProps<NavigatorParamList, "demo">> = obse
     return (
       <View testID="DemoScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
-        <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+        <Screen style={CONTAINER} backgroundColor={color.transparent}>
           <Header
             headerTx="demoScreen.howTo"
             leftIcon="back"

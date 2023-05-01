@@ -1,5 +1,5 @@
 import { ViewStyle } from "react-native"
-import { CARE_SOFT_YELLOW, color, GIVER_ROMANTIC_GRAY, isWeb, STANDARD_WIDTH } from "#theme"
+import { CARE_SOFT_YELLOW, color, GIVER_ROMANTIC_GRAY, STANDARD_WIDTH } from "#theme"
 
 /**
  * All screen keyboard offsets.
@@ -22,19 +22,11 @@ export const presets = {
    * which have built-in scrolling like FlatList.
    */
   fixed: {
-    outer: isWeb
-      ? {
-          width: "100%",
-          backgroundColor: GIVER_ROMANTIC_GRAY,
-          alignSelf: "center",
-          flex: 1,
-          height: "100%",
-        }
-      : ({
-          backgroundColor: color.background,
-          flex: 1,
-          height: "100%",
-        } as ViewStyle),
+    outer: {
+      backgroundColor: color.background,
+      flex: 1,
+      height: "100%",
+    } as ViewStyle,
     inner: {
       justifyContent: "flex-start",
       alignItems: "stretch",
@@ -50,19 +42,11 @@ export const presets = {
    * Pick this one if you don't know which one you want yet.
    */
   scroll: {
-    outer: isWeb
-      ? {
-          width: "100%",
-          backgroundColor: GIVER_ROMANTIC_GRAY,
-          alignSelf: "center",
-          flex: 1,
-          height: "100%",
-        }
-      : ({
-          backgroundColor: color.background,
-          flex: 1,
-          height: "100%",
-        } as ViewStyle),
+    outer: {
+      backgroundColor: color.background,
+      flex: 1,
+      height: "100%",
+    } as ViewStyle,
     inner: {
       justifyContent: "flex-start",
       alignItems: "stretch",
@@ -75,13 +59,3 @@ export const presets = {
  * The variations of screens.
  */
 export type ScreenPresets = keyof typeof presets
-
-/**
- * Is this preset a non-scrolling one?
- *
- * @param preset The preset to check
- */
-export function isNonScrolling(preset?: ScreenPresets) {
-  // any of these things will make you scroll
-  return !preset || !presets[preset] || preset === "fixed"
-}

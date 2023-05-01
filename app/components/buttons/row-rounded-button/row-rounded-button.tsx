@@ -10,9 +10,7 @@ interface RowRoundedButtonProps {
   textStyle?: TextStyle
   style?: ViewStyle
   fontType?: "Pretendard" | "Poppins"
-  // state? :string
-  // setState? :string
-  onPress?: undefined
+  onPress?: () => void
 }
 
 export const RowRoundedButton = (props: RowRoundedButtonProps) => {

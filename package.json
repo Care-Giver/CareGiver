@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "expo start --dev-client",
-    "ios": "expo run:ios",
-    "android": "expo run:android",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android",
     "test:e2e": "./bin/downloadExpoApp.sh && detox test --configuration ios.sim.expo",
     "build:e2e": "detox build -c ios.sim.expo",
     "ci:test:e2e": "detox test -c ios.sim.release -l verbose --cleanup",
@@ -40,6 +40,7 @@
     "@react-navigation/native-stack": "^6.0.2",
     "@react-navigation/stack": "~6.0.1",
     "apisauce": "2.0.0",
+    "axios": "^1.4.0",
     "expo": "^46.0.0",
     "expo-constants": "~13.2.4",
     "expo-device": "~4.3.0",
@@ -219,6 +220,10 @@
       "react/no-children-prop": "off",
       "space-before-function-paren": 0,
       "spaced-comment": 0
-    }
+    },
+    "ignorePatterns": [
+      "babel.config.js",
+      "metro.config.backup.js"
+    ]
   }
 }
