@@ -19,7 +19,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
-  const placeholder = props.placeholder ? props.placeholder : "맡기실 반려동물을 선택해주세요"
+  const placeholder = props.placeholder || "맡기실 반려동물을 선택해주세요"
 
   return (
     <View style={style}>
