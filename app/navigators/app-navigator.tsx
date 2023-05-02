@@ -38,6 +38,7 @@ import {
   CaregiverSetPriceScreen,
   CaregiverSetAdditionalPriceScreen,
   TestBottomSheetScreen,
+  FavoritesScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -330,6 +331,15 @@ const AllStacks = () => {
         }}
       />
       {/* //! ----------- */}
+
+      {/* //* 클라이언트 - 즐겨찾기 */}
+      <Stack.Screen
+        name="favorites-screen"
+        component={FavoritesScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
 
       {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
 
