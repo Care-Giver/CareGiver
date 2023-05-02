@@ -61,7 +61,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
           {/* //? 추가 등록하기 버튼 */}
           <RowRoundedBox
             style={styles.addNewPetBox}
-            preset="pressable"
+            preset="Pressable"
             onPress={() => {
               alert("gg")
             }}
