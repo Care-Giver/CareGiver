@@ -8,21 +8,23 @@ import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
 import { petsDummy } from "../../../screens/search-stack/search-screen/dummy-data"
+import { SelectPetDropdownBoxProps } from "./select-pet-dropdown-box.props"
 
 const INITIAL_NUMBER_OF_PET_ITEMS = 3
 
-export const SelectPetDropdownBox = (props) => {
+export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const style = props.style
   const isOpen = props.isOpen
   const onPress = props.onPress
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
+  const placeholder = props.placeholder ? props.placeholder : "맡기실 반려동물을 선택해주세요"
 
   return (
     <View style={style}>
       <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>
-        <PreReg16 text={"맡기실 반려동물을 선택해주세요"} color={HEAD_LINE} />
+        <PreReg16 text={placeholder} color={HEAD_LINE} />
         <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
       </RowRoundedBox>
 
