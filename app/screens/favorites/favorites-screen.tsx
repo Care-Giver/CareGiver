@@ -111,9 +111,6 @@ export const FavoritesScreen: FC<
 
   const [markedDates, setMarkedDates] = useState({})
 
-  console.log("startDate", startDate?.dateString)
-  console.log("endDate", endDate?.dateString)
-
   // * Callendar - 날짜 선택시 실행되는 함수
   const handleDayPress = useCallback(
     (date: DateData) => {
