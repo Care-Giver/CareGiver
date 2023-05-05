@@ -88,6 +88,7 @@ export const FavoritesScreen: FC<
     [],
   )
 
+  // * load petsitters
   useLayoutEffect(() => {
     setPetsitters(_petsitters)
     // setPetsitters([])
@@ -108,26 +109,40 @@ export const FavoritesScreen: FC<
     setFilterInfoText(DEFAULT_FILTER_INFO_TEXT)
   }, [])
 
+  const [markedDates, setMarkedDates] = useState({})
+
+  console.log("startDate", startDate?.dateString)
+  console.log("endDate", endDate?.dateString)
+
   // * Callendar - 날짜 선택시 실행되는 함수
   const handleDayPress = useCallback(
     (date: DateData) => {
       // * startDate와 endDate가 모두 설정된 상태에서 date를 입력한 경우 -> 날짜 초기화(startDate부터 다시)
-      if (startDate && endDate) {
+      if ((startDate && endDate) || (startDate === undefined && endDate === undefined)) {
         setStartDate(date)
         setEndDate(undefined)
-        return
-      }
 
-      // * 입력된 date가 startDate로 설정되는 경우
-      // ? startDate와 endDate가 모두 설정되지 않은 경우
-      if (startDate === undefined && endDate === undefined) {
-        setStartDate(date)
+        const new_markedDates = {}
+        new_markedDates[date.dateString] = {
+          selected: true,
+          marked: true,
+          selectedColor: "gray",
+        }
+        setMarkedDates(new_markedDates)
         return
       }
 
       // ? 입력한 날짜가 startDate보다 앞서는 경우
-      if (date.timestamp <= startDate.timestamp) {
+      else if (date.timestamp <= startDate.timestamp) {
         setStartDate(date)
+
+        const new_markedDates = {}
+        new_markedDates[date.dateString] = {
+          selected: true,
+          marked: true,
+          selectedColor: "gray",
+        }
+        setMarkedDates(new_markedDates)
         return
       }
 
@@ -136,6 +151,15 @@ export const FavoritesScreen: FC<
       if (startDate && date.timestamp > startDate.timestamp) {
         setEndDate(date)
         setIsCalendarOpen(false)
+
+        const new_markedDates = { ...markedDates }
+        new_markedDates[date.dateString] = {
+          selected: true,
+          marked: true,
+          selectedColor: "gray",
+        }
+        setMarkedDates(new_markedDates)
+
         LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
         return
       }
@@ -337,7 +361,7 @@ export const FavoritesScreen: FC<
                 padding: 4,
                 borderRadius: 8,
               }}
-              markedDates={{}}
+              markedDates={markedDates}
             />
           ) : (
             <RowRoundedButton
