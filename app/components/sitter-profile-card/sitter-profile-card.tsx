@@ -59,6 +59,7 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
         {/* like button */}
         {/* // TODO: alert로 변경 */}
         <Pressable onPress={ONPRESS_LIKED_BTN}>
+          {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
           <Image style={styles.likeBtn} source={images.empty_heart} />
         </Pressable>
       </View>

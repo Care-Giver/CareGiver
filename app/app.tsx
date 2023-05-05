@@ -21,6 +21,7 @@ import { ErrorBoundary } from "./screens/ignite-basics/error/error-boundary"
 import { useAssets } from "expo-asset"
 import { images } from "#images"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -65,10 +66,12 @@ function App() {
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ErrorBoundary catchErrors={"always"}>
             <GestureHandlerRootView style={{ flex: 1 }}>
-              <AppNavigator
-              // initialState={initialNavigationState} //* Do NOT use before the deployment
-              // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
-              />
+              <BottomSheetModalProvider>
+                <AppNavigator
+                // initialState={initialNavigationState} //* Do NOT use before the deployment
+                // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
+                />
+              </BottomSheetModalProvider>
             </GestureHandlerRootView>
           </ErrorBoundary>
         </SafeAreaProvider>
