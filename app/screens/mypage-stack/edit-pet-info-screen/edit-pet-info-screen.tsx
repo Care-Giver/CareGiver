@@ -253,9 +253,17 @@ export const EditPetInfoScreen: FC<
             <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
           )}
 
-          <UserOrPetProfileInfo title="품종" profileInfo={currentPet.species} showOption={false} />
+          <UserOrPetProfileInfo
+            title="품종"
+            profileInfo={currentPet.species}
+            showOption={editable}
+          />
 
-          <UserOrPetProfileInfo title="크기" profileInfo={currentPet.petType} showOption={false} />
+          <UserOrPetProfileInfo
+            title="크기"
+            profileInfo={currentPet.petType}
+            showOption={editable}
+          />
           {editable ? (
             <Pressable
               onPress={() => {
@@ -268,8 +276,12 @@ export const EditPetInfoScreen: FC<
             <UserOrPetProfileInfo title="몸무게" profileInfo={weight + "kg"} showOption={false} />
           )}
 
-          <UserOrPetProfileInfo title="성별" profileInfo={sex} showOption={false} />
-          <UserOrPetProfileInfo title="중성화여부" profileInfo={Neutralizated} showOption={false} />
+          <UserOrPetProfileInfo title="성별" profileInfo={sex} showOption={editable} />
+          <UserOrPetProfileInfo
+            title="중성화여부"
+            profileInfo={Neutralizated}
+            showOption={editable}
+          />
           {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={{ paddingTop: 20 }}>
