@@ -29,7 +29,7 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { images } from "#images"
-import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, color } from "#theme"
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
@@ -269,165 +269,168 @@ export const FavoritesScreen: FC<
         enablePanDownToClose={false}
         style={styles.bottomSheetContainer}
       >
-        {/* //? filters container */}
-        <View>
-          <Row style={styles.bottomSheetTitleBox}>
-            {/* // ? "X" close button */}
-            <Pressable onPress={() => bottomSheetModalRef.current?.close()} style={{ flex: 1 }}>
-              <Image source={images.x_grey} style={{ width: 16, height: 16 }} />
-            </Pressable>
+        <BottomSheetScrollView>
+          {/* //? filters container */}
+          <View>
+            <Row style={styles.bottomSheetTitleBox}>
+              {/* // ? "X" close button */}
+              <Pressable onPress={() => bottomSheetModalRef.current?.close()} style={{ flex: 1 }}>
+                <Image source={images.x_grey} style={{ width: 16, height: 16 }} />
+              </Pressable>
 
-            {/* //? "필터" title text */}
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <PreBol18 text="필터" />
-            </View>
-
-            {/* //? "초기화" reset button */}
-            <Pressable style={{ flex: 1 }} onPress={handleResetPress}>
-              <PreMed16 text="초기화" color={DISABLED} style={{ marginLeft: "auto" }} />
-            </Pressable>
-          </Row>
-
-          {/* //* division line */}
-          <View style={styles.divisionLine} />
-
-          {/* //* 위탁 | 방문 버튼 */}
-          <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
-            {/* // ? 방문 버튼 */}
-            <Pressable
-              style={[
-                styles.radioContainer,
-                {
-                  borderColor: filterServiceType === "visiting" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
-                },
-              ]}
-              onPress={() => setFilterServiceType("visiting")}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={
-                    filterServiceType === "visiting" ? images.radio_active : images.radio_inactive
-                  }
-                  style={styles.radioImg}
-                />
-                <PreMed16
-                  style={{ marginLeft: 6 }}
-                  text="방문"
-                  color={filterServiceType === "visiting" ? GIVER_CASUAL_NAVY : DISABLED}
-                />
+              {/* //? "필터" title text */}
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <PreBol18 text="필터" />
               </View>
-            </Pressable>
 
-            {/* // ? 위탁 버튼 */}
-            <Pressable
-              style={[
-                styles.radioContainer,
-                { borderColor: filterServiceType === "creche" ? GIVER_CASUAL_NAVY : MIDDLE_LINE },
-              ]}
-              onPress={() => setFilterServiceType("creche")}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={
-                    filterServiceType === "creche" ? images.radio_active : images.radio_inactive
-                  }
-                  style={styles.radioImg}
-                />
-                <PreMed16
-                  style={{ marginLeft: 6 }}
-                  text="위탁"
-                  color={filterServiceType === "creche" ? GIVER_CASUAL_NAVY : DISABLED}
-                />
-              </View>
-            </Pressable>
-          </Row>
+              {/* //? "초기화" reset button */}
+              <Pressable style={{ flex: 1 }} onPress={handleResetPress}>
+                <PreMed16 text="초기화" color={DISABLED} style={{ marginLeft: "auto" }} />
+              </Pressable>
+            </Row>
 
-          {/* //* 날짜 선택 */}
-          {isCalendarOpen ? (
-            <Calendar
-              onDayPress={(date) => handleDayPress(date)}
-              style={{
-                marginTop: 36,
-                backgroundColor: "#F0F0F6",
-                padding: 4,
-                borderRadius: 8,
-              }}
-              markedDates={markedDates}
-            />
-          ) : (
-            <RowRoundedButton
-              onPress={() => {
-                setIsCalendarOpen(true)
-                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
-              }}
-              image={images.calendar}
-              text={
-                startDate && endDate
-                  ? `${startDate.dateString
-                      .replace("-", ".")
-                      .replace("-", ".")} - ${endDate.dateString
-                      .replace("-", ".")
-                      .replace("-", ".")}`
-                  : "날짜를 선택해주세요"
-              }
-              textColor={HEAD_LINE}
-              style={{ marginTop: 12 }}
-            />
-          )}
+            {/* //* division line */}
+            <View style={styles.divisionLine} />
 
-          {/* //* select pet (반려동물 선택) */}
-          <SelectPetDropdownBox
-            style={{ marginTop: 12 }}
-            placeholder="반려동물 선택"
-            isOpen={isPetDropdownOpen}
-            onPress={() => {
-              setIsPetDropdownOpen((prev) => !prev)
-              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
-            }}
-            selectedPets={filterPet}
-            setSelectedPets={setFilterPet}
-            inBottomSheet={true}
-          />
-          {/*//* 선택된 반려동물 */}
-          {hasSelectedPetsAndDropdownClosed && (
-            <View>
-              <PreBol14
-                text="선택된 반려동물"
-                color={SUB_HEAD_LINE}
-                style={{ marginTop: 12, marginLeft: 16 }}
-              />
-              <View style={isPetDropdownOpen ? styles.hidden : styles.shown}>
-                {/*//* 선택된 반려동물 리스트 */}
-                {filterPet.map((item, index) => (
-                  <SelectedPetCard
-                    key={index}
-                    petData={item}
-                    onPress={() => {
-                      setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
-                    }}
+            {/* //* 위탁 | 방문 버튼 */}
+            <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
+              {/* // ? 방문 버튼 */}
+              <Pressable
+                style={[
+                  styles.radioContainer,
+                  {
+                    borderColor: filterServiceType === "visiting" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                  },
+                ]}
+                onPress={() => setFilterServiceType("visiting")}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={
+                      filterServiceType === "visiting" ? images.radio_active : images.radio_inactive
+                    }
+                    style={styles.radioImg}
                   />
-                ))}
-              </View>
-            </View>
-          )}
-        </View>
+                  <PreMed16
+                    style={{ marginLeft: 6 }}
+                    text="방문"
+                    color={filterServiceType === "visiting" ? GIVER_CASUAL_NAVY : DISABLED}
+                  />
+                </View>
+              </Pressable>
 
-        {/* //* 안내문구 + 확인 버튼 */}
-        <View style={styles.btnContainer}>
-          <PreReg12
-            text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
-            color={DISABLED}
-          />
-          <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
-            <PreBol16 text="확인" color={color.palette.white} />
-          </Pressable>
-        </View>
+              {/* // ? 위탁 버튼 */}
+              <Pressable
+                style={[
+                  styles.radioContainer,
+                  { borderColor: filterServiceType === "creche" ? GIVER_CASUAL_NAVY : MIDDLE_LINE },
+                ]}
+                onPress={() => setFilterServiceType("creche")}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={
+                      filterServiceType === "creche" ? images.radio_active : images.radio_inactive
+                    }
+                    style={styles.radioImg}
+                  />
+                  <PreMed16
+                    style={{ marginLeft: 6 }}
+                    text="위탁"
+                    color={filterServiceType === "creche" ? GIVER_CASUAL_NAVY : DISABLED}
+                  />
+                </View>
+              </Pressable>
+            </Row>
+
+            {/* //* 날짜 선택 */}
+            {isCalendarOpen ? (
+              <Calendar
+                onDayPress={(date) => handleDayPress(date)}
+                style={{
+                  marginTop: 36,
+                  backgroundColor: "#F0F0F6",
+                  padding: 4,
+                  borderRadius: 8,
+                }}
+                markedDates={markedDates}
+              />
+            ) : (
+              <RowRoundedButton
+                onPress={() => {
+                  setIsCalendarOpen(true)
+                  LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+                }}
+                image={images.calendar}
+                text={
+                  startDate && endDate
+                    ? `${startDate.dateString
+                        .replace("-", ".")
+                        .replace("-", ".")} - ${endDate.dateString
+                        .replace("-", ".")
+                        .replace("-", ".")}`
+                    : "날짜를 선택해주세요"
+                }
+                textColor={HEAD_LINE}
+                style={{ marginTop: 12 }}
+              />
+            )}
+
+            {/* //* select pet (반려동물 선택) */}
+            <SelectPetDropdownBox
+              style={{ marginTop: 12 }}
+              placeholder="반려동물 선택"
+              isOpen={isPetDropdownOpen}
+              onPress={() => {
+                setIsPetDropdownOpen((prev) => !prev)
+                LayoutAnimation.configureNext(
+                  LayoutAnimation.create(170, "easeInEaseOut", "opacity"),
+                )
+              }}
+              selectedPets={filterPet}
+              setSelectedPets={setFilterPet}
+              inBottomSheet={true}
+            />
+            {/*//* 선택된 반려동물 */}
+            {hasSelectedPetsAndDropdownClosed && (
+              <View>
+                <PreBol14
+                  text="선택된 반려동물"
+                  color={SUB_HEAD_LINE}
+                  style={{ marginTop: 12, marginLeft: 16 }}
+                />
+                <View style={isPetDropdownOpen ? styles.hidden : styles.shown}>
+                  {/*//* 선택된 반려동물 리스트 */}
+                  {filterPet.map((item, index) => (
+                    <SelectedPetCard
+                      key={index}
+                      petData={item}
+                      onPress={() => {
+                        setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
+                      }}
+                    />
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+          {/* //* 안내문구 + 확인 버튼 */}
+          <View style={[styles.btnContainer, { marginTop: isPetDropdownOpen ? "auto" : 180 }]}>
+            <PreReg12
+              text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
+              color={DISABLED}
+            />
+            <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
+              <PreBol16 text="확인" color={color.palette.white} />
+            </Pressable>
+          </View>
+        </BottomSheetScrollView>
       </BottomSheetModal>
     </ScreenRootView>
   )

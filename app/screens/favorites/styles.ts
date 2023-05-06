@@ -50,7 +50,8 @@ export const styles = StyleSheet.create({
   },
 
   btnContainer: {
-    marginTop: "auto",
+    marginTop: 180,
+    // marginTop: "auto",
     marginBottom: 34,
 
     justifyContent: "center",
@@ -68,6 +69,9 @@ export const styles = StyleSheet.create({
 
     justifyContent: "center",
     alignItems: "center",
+
+    // position: "absolute",
+    // top: 0,
   },
 
   shown: {
