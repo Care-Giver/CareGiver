@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useLayoutEffect,
 } from "react"
-import { View, Image, Pressable, LayoutAnimation, FlatList } from "react-native"
+import { View, Image, Pressable, LayoutAnimation, FlatList, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -30,7 +30,15 @@ import {
 import { styles } from "./styles"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, color } from "#theme"
+import {
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  MIDDLE_LINE,
+  SUB_HEAD_LINE,
+  color,
+  palette,
+} from "#theme"
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
@@ -69,6 +77,7 @@ export const FavoritesScreen: FC<
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
   const [isPetDropdownOpen, setIsPetDropdownOpen] = useState<boolean>(false)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
+  const [bottomSheetIndex, setbottomSheetIndex] = useState<number>(-1)
   const hasSelectedPetsAndDropdownClosed = filterPet.length > 0 && !isPetDropdownOpen
 
   // * BottomSheet Modal
@@ -94,10 +103,29 @@ export const FavoritesScreen: FC<
     // setPetsitters([])
   }, [])
 
-  const handleSheetChange = useCallback((index: number) => {
-    if (index >= 0) setIsBottomSheetOpen(true)
-    else setIsBottomSheetOpen(false)
-  }, [])
+  const [bottomSheetAnimatedValue] = useState(new Animated.Value(400))
+
+  const handleSheetChange = useCallback(
+    (index: number) => {
+      if (index >= 0) {
+        setIsBottomSheetOpen(true)
+        setbottomSheetIndex(index)
+        Animated.timing(bottomSheetAnimatedValue, {
+          toValue: index === 0 ? 400 : 600,
+          duration: 300,
+          useNativeDriver: false,
+        }).start()
+      } else {
+        setIsBottomSheetOpen(false)
+        Animated.timing(bottomSheetAnimatedValue, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }).start()
+      }
+    },
+    [bottomSheetAnimatedValue],
+  )
 
   // * filter에서 "초기화" 버튼 클릭시 실행되는 함수
   const handleResetPress = useCallback(() => {
@@ -420,17 +448,27 @@ export const FavoritesScreen: FC<
               </View>
             )}
           </View>
-          {/* //* 안내문구 + 확인 버튼 */}
-          <View style={[styles.btnContainer, { marginTop: isPetDropdownOpen ? "auto" : 180 }]}>
-            <PreReg12
-              text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
-              color={DISABLED}
-            />
-            <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
-              <PreBol16 text="확인" color={color.palette.white} />
-            </Pressable>
-          </View>
         </BottomSheetScrollView>
+        {/* //* 안내문구 + 확인 버튼 */}
+        <Animated.View
+          style={[
+            styles.btnContainer,
+            {
+              top: bottomSheetAnimatedValue,
+            },
+          ]}
+        >
+          <PreReg12
+            text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
+            color={DISABLED}
+            style={{
+              backgroundColor: palette.white,
+            }}
+          />
+          <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
+            <PreBol16 text="확인" color={color.palette.white} />
+          </Pressable>
+        </Animated.View>
       </BottomSheetModal>
     </ScreenRootView>
   )

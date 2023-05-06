@@ -50,12 +50,12 @@ export const styles = StyleSheet.create({
   },
 
   btnContainer: {
-    marginTop: 180,
-    // marginTop: "auto",
-    marginBottom: 34,
-
+    // marginBottom: 34,
     justifyContent: "center",
     alignItems: "center",
+    position: "absolute",
+    left: 0,
+    right: 0,
   },
 
   submitBtn: {
