@@ -9,4 +9,5 @@ export interface SelectPetDropdownBoxProps {
   selectedPets: Array<Pet>
   setSelectedPets: Dispatch<SetStateAction<any[]>>
   placeholder?: string
+  inBottomSheet?: boolean
 }

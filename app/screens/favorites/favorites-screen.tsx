@@ -392,6 +392,7 @@ export const FavoritesScreen: FC<
             }}
             selectedPets={filterPet}
             setSelectedPets={setFilterPet}
+            inBottomSheet={true}
           />
           {/*//* 선택된 반려동물 */}
           {hasSelectedPetsAndDropdownClosed && (
