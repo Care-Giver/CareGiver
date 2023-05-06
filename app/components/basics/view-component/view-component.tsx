@@ -3,6 +3,7 @@ import React from "react"
 import { CARE_NATURAL_BLUE, CARE_SOFT_YELLOW, isWeb, palette, STANDARD_WIDTH, WIDTH } from "#theme"
 import { Screen } from "../ignite-basics/screen/screen"
 import { isNonScrolling } from "../ignite-basics/screen/screen.presets"
+import { ScreenProps } from "../ignite-basics/screen/screen.props"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = 16
 
@@ -30,7 +31,14 @@ export const BASIC_BACKGROUND_PADDING: FlexStyle = {
   paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
 }
 
-export const ScreenRootView = (props) => {
+interface ScreenRootViewProps extends ScreenProps {
+  testID?: string
+}
+
+/**
+ * ScreenRootView 는 기본적으로 side edge padding 16px 이 적용되어있습니다 :)
+ */
+export const ScreenRootView = (props: ScreenRootViewProps) => {
   return (
     <Screen
       preset={props.preset}

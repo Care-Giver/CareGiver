@@ -11,7 +11,7 @@ export const UserOrPetProfileInfo = (props: props) => {
   const { title, profileInfo, showOption } = props
 
   return (
-    <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, paddingTop: 20 }}>
+    <View style={{ paddingTop: 20 }}>
       <PreMed14 color={BODY} text={title} style={{ marginBottom: 10 }} />
       {/*<PreMed16 color={color} text={profileInfo} />*/}
       <PreMed16 color={showOption === true ? DISABLED : HEAD_LINE} text={profileInfo} />

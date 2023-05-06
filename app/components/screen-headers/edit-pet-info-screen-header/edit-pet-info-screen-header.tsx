@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { StyleProp, View, ViewStyle, Image, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreMed18 } from "#components"
@@ -78,3 +78,6 @@ export const EditPetInfoScreenHeader = observer(function EditPetInfoScreenHeader
     </View>
   )
 })
+
+//TODO : 한번에 나타나고 사라지기 코드로 구현? view editable && 이용?
+//TODO : image 스타일 통일 (pressable에 전체 스타일 줬을때 차이. -> All comment screen styles 참고 )

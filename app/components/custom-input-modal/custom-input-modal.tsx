@@ -33,6 +33,7 @@ export interface CustomInputModalProps {
   style?: StyleProp<ViewStyle>
   title: string
   controlMode: string
+  placeholderInput?: string
   validateFunction?: (arg: any) => any
   handleModalHide: () => any
   handleInput: (arg: any) => any
@@ -47,8 +48,15 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     controlMode,
     validateFunction,
     handleInput,
+    placeholderInput,
   } = props
 
+  //*pet, user 에 따라 달라지는 Placeholder 관련 변수
+  const getPlaceholder = (placeholderInput) => {
+    if (placeholderInput === "pet") {
+      return "반려동물의 이름을 입력해주세요."
+    } else return "닉네임을 입력해주세요. (최대 10자)"
+  }
   //*키보드 관련
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   const keyboard = useKeyboard()
@@ -181,7 +189,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                     style={{
                       paddingTop: 43,
                     }}
-                    placeholder={"닉네임을 입력해주세요. (최대 10자)"}
+                    placeholder={getPlaceholder(placeholderInput)}
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"

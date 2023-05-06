@@ -133,9 +133,10 @@ const AllStacks = () => {
         animation: "slide_from_right",
       }}
       //initialRouteName="edit-mypage-screen"
-      //initialRouteName="home-screen"
+      ///initialRouteName="home-screen"
       initialRouteName="edit-pet-info-screen"
       //initialRouteName="all-comments-screen"
+      //initialRouteName="search-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

@@ -105,7 +105,6 @@ export const EditMypageScreen: FC<
       {/* //*닉네임 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
       <View
         style={{
-          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           marginTop: 20,
         }}
       >
@@ -216,6 +215,7 @@ export const EditMypageScreen: FC<
         controlMode="userNickname"
         validateFunction={isDuplicateNickname} //? 인자 뭘로 ?
         handleInput={handleNicknameInput}
+        placeholderInput="user"
       />
     </ScreenRootView>
   )

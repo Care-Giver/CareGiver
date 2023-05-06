@@ -32,10 +32,10 @@ export const Pets: Pet[] = [
     id: 1,
     profileImage: null, //?array?
     name: "방울이",
-    birthday: "05.01.23", //? number ?
+    birthday: "2005-01-23", //? number ?
     species: "포메라니안",
     sex: "FEMALE",
-    petType: "소형",
+    petType: "소형", //? 백엔드 데이터에선 영어? 이를 바꿀 필요 있? -> large 다음엔 뭐? medium , small  ? 
     weight: 3,
     isNeutralizated: false,
     desc:
@@ -45,7 +45,7 @@ export const Pets: Pet[] = [
     id: 2,
     profileImage: null,
     name: "식빵",
-    birthday: "21.09.09",
+    birthday: "2022-09-09",
     species: "믹스",
     sex: "FEMALE",
     petType: "중형",
@@ -59,7 +59,7 @@ export const Pets: Pet[] = [
     id: 3,
     profileImage: null,
     name: "구름이",
-    birthday: "19.03.01",
+    birthday: "2019-03-01",
     species: "코리안숏헤어",
     sex: "MALE",
     petType: "중형", //? cat 의 경우 ?
