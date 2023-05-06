@@ -33,57 +33,23 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
       </RowRoundedBox>
 
       {isOpen && (
-        <View>
+        <View
+          style={{
+            borderColor: LBG,
+            borderWidth: 2,
+            borderBottomWidth: 0,
+            height: "auto",
+          }}
+        >
           {/* //? 반려동물 리스트 */}
-          {!inBottomSheet ? (
-            <FlatList
-              data={petsDummy}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SelectPetItem
-                  petData={item}
-                  selectedPets={selectedPets}
-                  setSelectedPets={setSelectedPets}
-                />
-              )}
-              style={{
-                borderColor: LBG,
-                borderWidth: 2,
-                borderBottomWidth: 0,
-                //! Scroll 영역 자체의 height 를 제한할때는 style prop 에 다가 height 를 줘야 한다.
-                height: PET_ITEM_HEIGHT * INITIAL_NUMBER_OF_PET_ITEMS,
-              }}
-              contentContainerStyle={
-                {
-                  //! 이처럼, contentContainerStyle 에다가 height 를 주면 안 된다! (그럼 끝까지 스크롤이 안 된다)
-                  // height: PET_ITEM_HEIGHT * INITIAL_NUMBER_OF_PET_ITEMS,
-                }
-              }
-              scrollsToTop={false}
+          {petsDummy.map((item, index) => (
+            <SelectPetItem
+              petData={item}
+              selectedPets={selectedPets}
+              setSelectedPets={setSelectedPets}
+              key={index}
             />
-          ) : (
-            <BottomSheetFlatList
-              data={petsDummy}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <SelectPetItem
-                  petData={item}
-                  selectedPets={selectedPets}
-                  setSelectedPets={setSelectedPets}
-                />
-              )}
-              style={{
-                borderColor: LBG,
-                borderWidth: 2,
-                borderBottomWidth: 0,
-                //! Scroll 영역 자체의 height 를 제한할때는 style prop 에 다가 height 를 줘야 한다.
-                height: PET_ITEM_HEIGHT * INITIAL_NUMBER_OF_PET_ITEMS,
-              }}
-              scrollsToTop={false}
-            />
-          )}
+          ))}
 
           {/* //? 추가 등록하기 버튼 */}
           <RowRoundedBox
