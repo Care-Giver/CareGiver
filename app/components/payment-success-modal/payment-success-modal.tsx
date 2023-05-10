@@ -12,11 +12,12 @@ export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
   const {
     visibleState,
     title,
-    subtitle,
-    yesBtnText,
-    noBtnText,
-    handleYesPress,
-    handleNoPress,
+    subtitle1,
+    subtitle2,
+    HomeBtnText,
+    BookBtnText,
+    handleHomePress,
+    handleBookPress,
   } = props
   const windowWidth = useWindowDimensions().width
   const modalWidth = windowWidth
@@ -28,13 +29,14 @@ export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
         >
           <Image source={images.select_checkbox} style={{ width: 66, height: 66 }} />
           <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 16 }} />
-          {subtitle && <PreReg14 text={subtitle} color={BODY} style={{ marginTop: 8 }} />}
+          <PreReg14 text={subtitle1} color={BODY} style={{ marginTop: 8 }} />
+          <PreReg14 text={subtitle2} color={BODY} style={{}} />
           <Row style={{ marginTop: 60}}>
-            <Pressable style={styles.modalYesBtn} onPress={handleYesPress}>
-              <PreBol14 text={yesBtnText} color={GIVER_CASUAL_NAVY} />
+            <Pressable style={styles.modalYesBtn} onPress={handleHomePress}>
+              <PreBol14 text={HomeBtnText} color={GIVER_CASUAL_NAVY} />
             </Pressable>
-            <Pressable style={styles.modalNoBtn} onPress={handleNoPress}>
-              <PreBol14 text={noBtnText} color={color.palette.white} />
+            <Pressable style={styles.modalNoBtn} onPress={handleBookPress}>
+              <PreBol14 text={BookBtnText} color={color.palette.white} />
             </Pressable>
           </Row>
         </View>

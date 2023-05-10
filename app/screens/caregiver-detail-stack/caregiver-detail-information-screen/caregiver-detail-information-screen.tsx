@@ -106,11 +106,11 @@ export const CaregiverDetailInformationScreen: FC<
       setmodalState(true)
     }
   }
-  const handleyes = () => {
+  const handleHomePress = () => {
     handleModal()
     navigate("home-screen")
   }
-  const handleno = () => {
+  const handleBookPress = () => {
     handleModal()
     navigate("booking-detail-screen")
   }
@@ -240,11 +240,12 @@ export const CaregiverDetailInformationScreen: FC<
       <PaymentSuccessModal 
         visibleState={modalState}
         title="결제가 완료되었습니다!"
-        subtitle="케어기버가 서비스를 승인할 때까지 잠시만 기다려주세요"
-        yesBtnText="홈으로 가기"
-        noBtnText="예약 내역 확인"
-        handleYesPress={handleyes}
-        handleNoPress={handleno}
+        subtitle1="케어기버가 서비스를 승인할 때까지"
+        subtitle2="잠시만 기다려주세요"
+        HomeBtnText="홈으로 가기"
+        BookBtnText="예약 내역 확인"
+        handleHomePress={handleHomePress}
+        handleBookPress={handleBookPress}
       />
 
 
