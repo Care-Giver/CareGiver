@@ -1,0 +1,6 @@
+module Pods_CareGiver {
+  umbrella header "Pods-CareGiver-umbrella.h"
+
+  export *
+  module * { export * }
+}
