@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { Platform, Pressable, ScrollView, View, Modal, Text} from "react-native"
+import { Platform, Pressable, ScrollView, View, Modal, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
@@ -19,7 +19,7 @@ import {
   MakeBookingButton,
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
-  PaymentSuccessModal // modal test
+  PaymentSuccessModal, // modal test
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -99,10 +99,9 @@ export const CaregiverDetailInformationScreen: FC<
 
   const [modalState, setmodalState] = useState(true)
   const handleModal = () => {
-    if (modalState == true){
+    if (modalState == true) {
       setmodalState(false)
-    }
-    else{
+    } else {
       setmodalState(true)
     }
   }
@@ -237,17 +236,15 @@ export const CaregiverDetailInformationScreen: FC<
         </View>
       </ScrollView>
       {/* // 모달 테스트 */}
-      <PaymentSuccessModal 
+      <PaymentSuccessModal
         visibleState={modalState}
         title="결제가 완료되었습니다!"
-        subtitle1="케어기버가 서비스를 승인할 때까지"
-        subtitle2="잠시만 기다려주세요"
+        subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
         HomeBtnText="홈으로 가기"
         BookBtnText="예약 내역 확인"
         handleHomePress={handleHomePress}
         handleBookPress={handleBookPress}
       />
-
 
       {/* //? 예약 신청하기 버튼 */}
       <View
