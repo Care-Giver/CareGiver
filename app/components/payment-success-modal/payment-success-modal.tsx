@@ -7,7 +7,9 @@ import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, color } from "#theme"
 import { images } from "#images"
 import { PaymentSuccessModalProps } from "./payment-success-modal.props"
 
-export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
+export const PaymentSuccessModal = observer(function PaymentSuccessModal(
+  props: PaymentSuccessModalProps,
+) {
   const {
     visibleState,
     title,
@@ -40,4 +42,4 @@ export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
       </View>
     </Modal>
   )
-}
+})
