@@ -7,7 +7,6 @@ import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, color } from "#theme"
 import { images } from "#images"
 import { PaymentSuccessModalProps } from "./payment-success-modal.props"
 
-
 export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
   const {
     visibleState,
@@ -31,7 +30,7 @@ export const PaymentSuccessModal = (props: PaymentSuccessModalProps) => {
           <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 16 }} />
           <PreReg14 text={subtitle1} color={BODY} style={{ marginTop: 8 }} />
           <PreReg14 text={subtitle2} color={BODY} style={{}} />
-          <Row style={{ marginTop: 60}}>
+          <Row style={{ marginTop: 60 }}>
             <Pressable style={styles.modalYesBtn} onPress={handleHomePress}>
               <PreBol14 text={HomeBtnText} color={GIVER_CASUAL_NAVY} />
             </Pressable>
