@@ -25,19 +25,19 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
 
-    height: 49,
+    height:49,
 
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
     borderWidth: 2,
     borderColor: GIVER_CASUAL_NAVY,
-    paddingTop: 15,
+    paddingVertical: 16,
   },
   modalNoBtn: {
     flex: 1,
     alignItems: "center",
 
-    height: 49,
+    height:49,
 
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
@@ -46,6 +46,6 @@ export const styles = StyleSheet.create({
 
     backgroundColor: GIVER_CASUAL_NAVY,
 
-    paddingTop: 15,
+    paddingVertical: 16,
   },
 })
