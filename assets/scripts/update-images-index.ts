@@ -46,16 +46,14 @@ const generate = () => {
     .join(",\n  ")
 
   const string = `//! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-  const images = {
+  
+  export const images = {
   //* images
   ${properties},
   
   //* bottom-tab-navigator
   ${properties2}
 }
-
-//! 예외적으로 export default 허용 
-export default images
 `
 
   fs.writeFileSync("../images/index.ts", string, "utf8")

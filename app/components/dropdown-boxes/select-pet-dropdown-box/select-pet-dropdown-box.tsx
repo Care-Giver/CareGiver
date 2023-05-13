@@ -20,10 +20,9 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
-  const placeholder = props.placeholder ? props.placeholder : "맡기실 반려동물을 선택해주세요"
   const inBottomSheet = props.inBottomSheet ? props.inBottomSheet : false
-
   console.log("inBottomSheet", inBottomSheet)
+  const placeholder = props.placeholder || "맡기실 반려동물을 선택해주세요"
 
   return (
     <View style={style}>
@@ -54,7 +53,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
           {/* //? 추가 등록하기 버튼 */}
           <RowRoundedBox
             style={styles.addNewPetBox}
-            preset="pressable"
+            preset="Pressable"
             onPress={() => {
               alert("gg")
             }}
