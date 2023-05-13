@@ -15,10 +15,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		154E7EFB81FD4C7393B82AD4 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46973A1107674825BB81EEAB /* Pretendard-Medium.ttf */; };
 		34CA17E3C5A24C2EBA48CC77 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = C788CA18DF894C0C8AA69A0C /* noop-file.swift */; };
-		3BE9FDC19ADC5B7A8C16ED5C /* libPods-CareGiver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 936838255BC1F3569E3BAE22 /* libPods-CareGiver.a */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		4154824BDECB4BB58A690105 /* custom-fonts.md in Resources */ = {isa = PBXBuildFile; fileRef = 541850411D8C4DF8A32D0F96 /* custom-fonts.md */; };
 		5B61E9BF43A7420DBCD0CEE0 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44AD4BD5C08544AEA92E0119 /* Poppins-SemiBold.ttf */; };
+		96905EF65AED1B983A6B3ABC /* libPods-CareGiver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-CareGiver.a */; };
 		A21E21C5E40F4FF2B4A42E0D /* index.ts in Resources */ = {isa = PBXBuildFile; fileRef = 0B8515767DE24128B8A64FDB /* index.ts */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -37,14 +37,14 @@
 		46973A1107674825BB81EEAB /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.ttf"; path = "../assets/fonts/Pretendard-Medium.ttf"; sourceTree = "<group>"; };
 		4A81989A07F949C49136A0F5 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.ttf"; path = "../assets/fonts/Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		541850411D8C4DF8A32D0F96 /* custom-fonts.md */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "custom-fonts.md"; path = "../assets/fonts/custom-fonts.md"; sourceTree = "<group>"; };
-		555828216A39DFFCB72465F7 /* Pods-CareGiver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CareGiver.debug.xcconfig"; path = "Target Support Files/Pods-CareGiver/Pods-CareGiver.debug.xcconfig"; sourceTree = "<group>"; };
+		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-CareGiver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CareGiver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DE9CDE4BAF94FE0B8F9B711 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
-		936838255BC1F3569E3BAE22 /* libPods-CareGiver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CareGiver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C2E3173556A471DD304B334 /* Pods-CareGiver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CareGiver.debug.xcconfig"; path = "Target Support Files/Pods-CareGiver/Pods-CareGiver.debug.xcconfig"; sourceTree = "<group>"; };
+		7A4D352CD337FB3A3BF06240 /* Pods-CareGiver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CareGiver.release.xcconfig"; path = "Target Support Files/Pods-CareGiver/Pods-CareGiver.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = CareGiver/SplashScreen.storyboard; sourceTree = "<group>"; };
 		AEC1234279504B1EB9AA6265 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.ttf"; path = "../assets/fonts/Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		C788CA18DF894C0C8AA69A0C /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "CareGiver/noop-file.swift"; sourceTree = "<group>"; };
-		DFB79FB8BEADD7036152BE1F /* Pods-CareGiver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CareGiver.release.xcconfig"; path = "Target Support Files/Pods-CareGiver/Pods-CareGiver.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-CareGiver/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BE9FDC19ADC5B7A8C16ED5C /* libPods-CareGiver.a in Frameworks */,
+				0E080EF8E41AC6EBC0B473C5 /* libPods-CareGiver.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				936838255BC1F3569E3BAE22 /* libPods-CareGiver.a */,
+				7E15227B6DADBC2EDC7D046F /* libPods-CareGiver.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -152,8 +152,8 @@
 		D65327D7A22EEC0BE12398D9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				555828216A39DFFCB72465F7 /* Pods-CareGiver.debug.xcconfig */,
-				DFB79FB8BEADD7036152BE1F /* Pods-CareGiver.release.xcconfig */,
+				8AAF090F191C52A95814CD74 /* Pods-CareGiver.debug.xcconfig */,
+				25D1C568467A70261C9E5DEF /* Pods-CareGiver.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -338,7 +338,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 555828216A39DFFCB72465F7 /* Pods-CareGiver.debug.xcconfig */;
+			baseConfigurationReference = 8AAF090F191C52A95814CD74 /* Pods-CareGiver.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -369,7 +369,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DFB79FB8BEADD7036152BE1F /* Pods-CareGiver.release.xcconfig */;
+			baseConfigurationReference = 25D1C568467A70261C9E5DEF /* Pods-CareGiver.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
