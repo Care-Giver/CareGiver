@@ -17,6 +17,7 @@ interface ExampleProps {
     id: string
     image: string
     name: string
+    profileImg: string
     rating: number
     review: number
     title: string

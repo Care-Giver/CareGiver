@@ -27,7 +27,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
 
   return (
     <View style={style}>
-      <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>
+      <RowRoundedBox preset="Pressable" onPress={onPress} style={placeholderBoxStyle}>
         <PreReg16 text={placeholder} color={HEAD_LINE} />
         <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
       </RowRoundedBox>

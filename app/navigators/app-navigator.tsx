@@ -124,8 +124,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="favorites-screen"
+      initialRouteName="home-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
