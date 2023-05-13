@@ -1,12 +1,13 @@
 import React from "react"
 import { View, Image, Pressable, Modal, useWindowDimensions } from "react-native"
+import { observer } from "mobx-react-lite"
 import { BASIC_BACKGROUND_PADDING_WIDTH, PreBol14, PreBol20, PreReg14, Row } from "#components"
 import { styles } from "./styles"
 import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, color } from "#theme"
 import { images } from "#images"
 import { CustomModalProps } from "./custom-modal.props"
 
-export const CustomModal = (props: CustomModalProps) => {
+export const CustomModal = observer(function CustomModal(props: CustomModalProps) {
   const {
     visibleState,
     title,
@@ -39,4 +40,4 @@ export const CustomModal = (props: CustomModalProps) => {
       </View>
     </Modal>
   )
-}
+})
