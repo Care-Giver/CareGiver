@@ -147,13 +147,13 @@ export const FavoritesScreen: FC<
         setStartDate(date)
         setEndDate(undefined)
 
-        const new_markedDates = {}
-        new_markedDates[date.dateString] = {
+        const newMarkedDates = {}
+        newMarkedDates[date.dateString] = {
           selected: true,
           marked: true,
           selectedColor: "gray",
         }
-        setMarkedDates(new_markedDates)
+        setMarkedDates(newMarkedDates)
         return
       }
 
@@ -161,13 +161,13 @@ export const FavoritesScreen: FC<
       else if (date.timestamp <= startDate.timestamp) {
         setStartDate(date)
 
-        const new_markedDates = {}
-        new_markedDates[date.dateString] = {
+        const newMarkedDates = {}
+        newMarkedDates[date.dateString] = {
           selected: true,
           marked: true,
           selectedColor: "gray",
         }
-        setMarkedDates(new_markedDates)
+        setMarkedDates(newMarkedDates)
         return
       }
 
@@ -177,15 +177,16 @@ export const FavoritesScreen: FC<
         setEndDate(date)
         setIsCalendarOpen(false)
 
-        const new_markedDates = { ...markedDates }
-        new_markedDates[date.dateString] = {
+        const newMarkedDates = { ...markedDates }
+        newMarkedDates[date.dateString] = {
           selected: true,
           marked: true,
           selectedColor: "gray",
         }
-        setMarkedDates(new_markedDates)
+        setMarkedDates(newMarkedDates)
 
         LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+        // eslint-disable-next-line no-useless-return
         return
       }
     },
