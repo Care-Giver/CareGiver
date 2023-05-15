@@ -50,7 +50,7 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
   }
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, SHADOW_1, style]}>
       {
         <Row
           style={{
@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 16,
-    borderColor: "#999999",
     borderRadius: 8,
     backgroundColor: "white",
     marginLeft: 20,
