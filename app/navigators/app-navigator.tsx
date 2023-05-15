@@ -39,6 +39,7 @@ import {
   CaregiverSetAdditionalPriceScreen,
   TestBottomSheetScreen,
   FavoritesScreen,
+  TempScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -110,6 +111,7 @@ export type NavigatorParamList = {
   "test-bottom-sheet": undefined
   TestWebView: undefined
   testPushNotification: undefined
+  "temp-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -124,8 +126,16 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="temp-screen"
     >
+      {/* //* 작업을 임시로 추가함 */}
+      <Stack.Screen
+        name="temp-screen"
+        component={TempScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
