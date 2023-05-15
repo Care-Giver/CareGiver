@@ -1,5 +1,5 @@
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
-import { LBG, LIGHT_LINE, MIDDLE_LINE } from "#theme"
+import { GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, MIDDLE_LINE } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -64,14 +64,11 @@ export const styles = StyleSheet.create({
 
     width: "100%",
 
-    backgroundColor: "#00196C",
+    backgroundColor: GIVER_CASUAL_NAVY,
     borderRadius: 8,
 
     justifyContent: "center",
     alignItems: "center",
-
-    // position: "absolute",
-    // top: 0,
   },
 
   shown: {
@@ -81,7 +78,6 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderWidth: 2,
-    // backgroundColor: "red",
   },
   hidden: {
     width: 0,
