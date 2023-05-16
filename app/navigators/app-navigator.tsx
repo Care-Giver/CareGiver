@@ -417,8 +417,8 @@ const TabStacks = () => {
       initialRouteName="Searching"
     >
       <Tab.Screen
-        name="Favorites"
-        component={FavoritesStack}
+        name="favorites-screen"
+        component={FavoritesScreen}
         options={{
           tabBarLabel: "즐겨찾기",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
