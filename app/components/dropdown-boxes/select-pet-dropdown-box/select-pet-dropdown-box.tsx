@@ -9,6 +9,7 @@ import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
 import { petsDummy } from "../../../screens/search-stack/search-screen/dummy-data"
 import { SelectPetDropdownBoxProps } from "./select-pet-dropdown-box.props"
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
 const INITIAL_NUMBER_OF_PET_ITEMS = 3
 
@@ -19,44 +20,35 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
+  const inBottomSheet = props.inBottomSheet ? props.inBottomSheet : false
+  console.log("inBottomSheet", inBottomSheet)
   const placeholder = props.placeholder || "맡기실 반려동물을 선택해주세요"
 
   return (
     <View style={style}>
-      <RowRoundedBox preset={"Pressable"} onPress={onPress} style={placeholderBoxStyle}>
+      <RowRoundedBox preset="Pressable" onPress={onPress} style={placeholderBoxStyle}>
         <PreReg16 text={placeholder} color={HEAD_LINE} />
         <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
       </RowRoundedBox>
 
       {isOpen && (
-        <View>
+        <View
+          style={{
+            borderColor: LBG,
+            borderWidth: 2,
+            borderBottomWidth: 0,
+            height: "auto",
+          }}
+        >
           {/* //? 반려동물 리스트 */}
-          <FlatList
-            data={petsDummy}
-            renderItem={(
-              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-            ) => (
-              <SelectPetItem
-                petData={item}
-                selectedPets={selectedPets}
-                setSelectedPets={setSelectedPets}
-              />
-            )}
-            style={{
-              borderColor: LBG,
-              borderWidth: 2,
-              borderBottomWidth: 0,
-              //! Scroll 영역 자체의 height 를 제한할때는 style prop 에 다가 height 를 줘야 한다.
-              height: PET_ITEM_HEIGHT * INITIAL_NUMBER_OF_PET_ITEMS,
-            }}
-            contentContainerStyle={
-              {
-                //! 이처럼, contentContainerStyle 에다가 height 를 주면 안 된다! (그럼 끝까지 스크롤이 안 된다)
-                // height: PET_ITEM_HEIGHT * INITIAL_NUMBER_OF_PET_ITEMS,
-              }
-            }
-            scrollsToTop={false}
-          />
+          {petsDummy.map((item, index) => (
+            <SelectPetItem
+              petData={item}
+              selectedPets={selectedPets}
+              setSelectedPets={setSelectedPets}
+              key={index}
+            />
+          ))}
 
           {/* //? 추가 등록하기 버튼 */}
           <RowRoundedBox
