@@ -5,7 +5,9 @@ import { PreBol14, PreReg12, PopSem12 } from "#components"
 import { GIVER_CASUAL_NAVY, LBG } from "#theme"
 
 const ROOT: ViewStyle = {
-  justifyContent: "center",
+  backgroundColor: LBG,
+  paddingVertical: 12,
+  paddingHorizontal: 16,
 }
 
 export interface CertificateRegistrationNoteProps {
@@ -22,7 +24,7 @@ export const CertificateRegistrationNote = observer(function CertificateRegistra
   const styles = Object.assign({}, ROOT, style)
 
   return (
-    <View style={{ backgroundColor: LBG, paddingVertical: 12, paddingHorizontal: 16 }}>
+    <View style={styles}>
       <PreBol14 text="자격증 등록 전, 잠깐!" color={GIVER_CASUAL_NAVY} />
       <View style={{ marginTop: 9 }}>
         <PreReg12>
