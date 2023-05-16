@@ -1,20 +1,18 @@
 import React, { FC, useCallback, useEffect, useState } from "react"
 import {
-  ViewStyle,
   View,
   ImageBackground,
   FlatList,
   Image,
   Pressable,
   BackHandler,
-  Alert,
   TextInput,
   KeyboardAvoidingView,
   Platform,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate, goBack, navigationRef } from "#navigators"
+import { NavigatorParamList, goBack } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
@@ -25,15 +23,16 @@ import {
   CustomInputModal,
   WeightModal,
   BirthdayModal,
+  CustomModal,
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { BODY, DEVICE_SCREEN_WIDTH, LBG, STANDARD_WIDTH } from "#theme"
+import { BODY, DEVICE_SCREEN_WIDTH, LBG } from "#theme"
 import { images } from "#images"
-//?!import {ImagePicker}
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { PRETENDARD_MEDIUM } from "#fonts"
+import { styles } from "./styles"
 
+//*images 임시 데이터베이스
 const imagess = [
   {
     id: "1",
@@ -66,6 +65,12 @@ export const EditPetInfoScreen: FC<
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
 
+  //*뒤에 버튼 눌림 감지
+  const isBackPressed = route.params?.isBackPressed
+
+  //* 변화 감지 변수
+  const [anyChangeMade, setAnyChangeMade] = useState(false)
+
   //*현재 펫 데이터 가져오기 (일단은 더미데이터)
   const currentPet = Pets.find((Pet) => Pet.id === 1)
 
@@ -84,11 +89,16 @@ export const EditPetInfoScreen: FC<
   //*중성화 여부 한국어로 변환
   const Neutralizated = currentPet.isNeutralizated === true ? "함" : "안 함"
 
-  //* birthday 자르는 함수? 장치? 필요
-
   //*수정 불가 상태 (수정(연필) 버튼 보이는 상태)로 만들기
   const notEditable = () => {
     navigation.setParams({ editable: false }) //? 왜 object 없다고 하는지?
+  }
+
+  //*anyChangeMade 를 true 로 바꾸기
+  const isChangeMade = () => {
+    if (anyChangeMade === false) {
+      setAnyChangeMade(true)
+    }
   }
 
   //*닉네임 누르면 모달 창 뜨게 관리
@@ -102,6 +112,7 @@ export const EditPetInfoScreen: FC<
   //*모달창에서 이름 변경시 사용 함수
   const handleNameInput = (newName) => {
     setName(newName)
+    isChangeMade()
   }
 
   //*몸무게 누르면 모달 창 뜨게 관리
@@ -115,6 +126,7 @@ export const EditPetInfoScreen: FC<
   //*모달창에서 몸무게 변경시 사용 함수
   const handleWeightInput = (newWeight) => {
     setWeight(newWeight)
+    isChangeMade()
   }
 
   //*생년월일 누르면 모달 창 뜨게 관리
@@ -125,17 +137,36 @@ export const EditPetInfoScreen: FC<
     setBirthdayTouched(false)
   }
 
+  //*생년월일 input 받으넋 형식에 맞게 슬라이싱 함수
+  const formatBirthdayInput = (birthdayDigits) => {
+    const year = birthdayDigits.slice(0, 4)
+    const month = birthdayDigits.slice(4, 6)
+    const day = birthdayDigits.slice(6, 8)
+    const formattedBirthday = `${year}-${month}-${day}`
+    setBirthday(formattedBirthday)
+  }
+
   //*모달창에서 생년월일 변경시 사용 함수
   const handleBirthdayInput = (newBirthday) => {
     //TODO 벌스데이 숫자 나눠서 형식 맞춰서 넣어주기 함수
-    setBirthday(newBirthday)
+    formatBirthdayInput(newBirthday)
+    isChangeMade()
   }
 
+  //*반려동물 소개 관련 변수
+  const [text, setText] = useState(currentPet.desc)
+
+  //*반려동물 소개 text 변화 함수
+  const handleTextChange = (newText) => {
+    setText(newText)
+    isChangeMade()
+  }
+
+  //*image 관련 변수,함수들
+  //* image
   const [currentImage, setCurrentImage] = useState(0)
 
   const onFlatlistUpdate = useCallback(({ viewableItems }) => {
-    // ? 선택된 이미지, 즉 viewableItems 의 index 값을 activeIndex 로 설정.
-    // ? 왜 viewableItems[0] 인지는 console.log(viewableItems); 로 보면 이해 갈꺼임
     if (viewableItems.length > 0) {
       setCurrentImage(viewableItems[0].index || 0)
     }
@@ -145,49 +176,69 @@ export const EditPetInfoScreen: FC<
   //* ref: https://reactnative.dev/docs/backhandler
   //* ref: https://reactnavigation.org/docs/custom-android-back-button-handling/
 
-  const onBackPress = () => {
-    Alert.alert("편집을 취소하시겠어요?", "저장하지 않으면 내용이 유실돼요!", [
-      {
-        text: "남아있을래요",
-        style: "cancel",
-        onPress: () => null,
-      },
-      {
-        text: "떠날래요",
-        style: "destructive",
-        onPress: () => {
-          goBack()
-        },
-      },
-    ])
-    return true
+  //*수정한 후 저장 안하고 goback 시 뜰 모달 visible 조절 변수
+  const [handleGoBack, setHandleGoBack] = useState(false)
+
+  //* back handler 모달의 버튼 (both for ios and android)
+  //* 계속 수정하기를 눌렀을 때
+  const handleKeepEditPress = () => {
+    navigation.setParams({ isBackPressed: false })
+    setHandleGoBack(false)
+    navigation.setParams({ editable: true })
   }
+  //*수정 취소를 눌렀을 때
+  const handleQuitEditPress = () => {
+    navigation.setParams({ isBackPressed: false })
+    setHandleGoBack(false)
+    goBack()
+    navigation.setParams({ editable: false })
+    setAnyChangeMade(false)
+    //*화면속 바뀐 정보 초기화
+    setName(currentPet.name)
+    setBirthday(currentPet.birthday)
+    setWeight(currentPet.weight)
+    setText(currentPet.desc)
+  }
+
+  //*andorid 용 하드웨어 goback 핸들링
   useFocusEffect(
     useCallback(() => {
-      if (editable) {
-        const subscription = BackHandler.addEventListener("hardwareBackPress", onBackPress)
-
-        return () => subscription.remove()
-      } else return undefined
-    }, [editable]),
+      const androidGoBack = () => {
+        if (anyChangeMade) {
+          setHandleGoBack(true)
+          return true
+        } else {
+          notEditable()
+          return false
+        }
+      }
+      const subscription = BackHandler.addEventListener("hardwareBackPress", androidGoBack)
+      return () => {
+        subscription.remove()
+      }
+    }, [anyChangeMade]),
   )
 
+  //*ios + android 에서 둘 다 해당되는 back handle : 수정 상태에서 헤더의 go back 을 눌렀을 때
   useEffect(() => {
-    const backOut = navigation.addListener("beforeRemove", (i) => {
-      console.log("backpressed!!")
-      if (editable) {
-        i.preventDefault()
-        onBackPress()
-      }
-    })
-    return backOut
-  }, [editable, navigation])
+    //*수정한게 있다면 모달 창 띄우기
+    if (isBackPressed && anyChangeMade) {
+      setHandleGoBack(true)
+    } else if (isBackPressed) {
+      //*수정한게 없다면 그냥 뒤로 나가지기
+      goBack()
+      notEditable()
+      navigation.setParams({ isBackPressed: false })
+    }
+  }, [isBackPressed])
 
+  //* 본문 코드 :
   return (
     //*저장하기 버튼이 항상 화면 하단에 있게 하기 위해 scroolview 바깥쪽 view 하나 더 필요.
     <View style={{ flex: 1 }}>
       <ScreenRootView testID="EditPetInfo" preset="scroll" style={{ paddingHorizontal: 0 }}>
         <View>
+          {/* //*이미지  */}
           <FlatList
             data={imagess}
             renderItem={(
@@ -197,12 +248,9 @@ export const EditPetInfoScreen: FC<
                 source={{ uri: item.profileImg }}
                 style={{
                   width: 390,
-
                   height: 240,
-
-                  // margin: 2,
                 }}
-                key={index} //? Key Warning 에러 해결.
+                key={index}
               >
                 <Pressable
                   onPress={() => {
@@ -230,6 +278,7 @@ export const EditPetInfoScreen: FC<
         </View>
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          {/* //*이름 */}
           {editable ? (
             <Pressable
               onPress={() => {
@@ -241,6 +290,8 @@ export const EditPetInfoScreen: FC<
           ) : (
             <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
           )}
+
+          {/* //*생년월일 */}
           {editable ? (
             <Pressable
               onPress={() => {
@@ -264,6 +315,8 @@ export const EditPetInfoScreen: FC<
             profileInfo={currentPet.petType}
             showOption={editable}
           />
+
+          {/* //*몸무게 */}
           {editable ? (
             <Pressable
               onPress={() => {
@@ -283,24 +336,19 @@ export const EditPetInfoScreen: FC<
             showOption={editable}
           />
           {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
+          {/* //*반려동물 소개 */}
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={{ paddingTop: 20 }}>
               <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
 
-              <View
-                style={{
-                  width: "auto",
-                  height: "auto",
-                  borderRadius: 8,
-                  backgroundColor: LBG,
-                  marginHorizontal: 0,
-                  paddingHorizontal: 20,
-                  paddingVertical: 20,
-                }}
-              >
-                <TextInput multiline={true} editable={editable}>
-                  <PreMed14 color={BODY} text={currentPet.desc} />
-                </TextInput>
+              <View style={styles.petDescTextBox}>
+                <TextInput
+                  style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
+                  multiline={true}
+                  editable={editable !== undefined ? editable : false}
+                  value={text}
+                  onChangeText={handleTextChange}
+                />
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -316,6 +364,7 @@ export const EditPetInfoScreen: FC<
           placeholderInput="pet"
           validateFunction={() => {
             return false
+            //TODO : 중복 검출 코드  만들기
           }}
         />
         {/* //*몸무게 관리 모달 창 */}
@@ -332,20 +381,23 @@ export const EditPetInfoScreen: FC<
           title="생년월일"
           handleInput={handleBirthdayInput}
         />
+        {/* //*수정 후 back 시 나타나는 경고 모달창  */}
+        <CustomModal
+          visibleState={handleGoBack}
+          title="반려동물 정보 수정을 취소하시겠어요?"
+          subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."
+          yesBtnText="정보 수정 취소"
+          noBtnText="계속 수정하기"
+          handleYesPress={handleQuitEditPress}
+          handleNoPress={handleKeepEditPress}
+        />
+
         {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
         {editable && <View style={{ height: 60 }} />}
       </ScreenRootView>
       {/* //*저장하기 버튼 */}
       {editable && (
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            zIndex: 0,
-            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-          }}
-        >
+        <View style={styles.saveBox}>
           <ConditionalButton
             label="저장하기"
             isActivated={true}
@@ -354,6 +406,9 @@ export const EditPetInfoScreen: FC<
               marginBottom: 0,
             }}
             onPress={() => {
+              if (anyChangeMade === true) {
+                setAnyChangeMade(false)
+              }
               notEditable() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
               //TODO pet data 실제로 변경하는 코드 필요 (변경된 정보들로 저장 (process -> 실제로 한 정보가 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
             }}

@@ -14,19 +14,6 @@ interface Pet {
   //?familyType ?
 }
 
-// {
-//     "name": "상추",
-//     "age": 3,
-//     "sex": "MALE",
-//     "weight": 7.3,
-//     "isNeutralizated": true,
-//     "desc": "사람을 엄청 좋아해요",
-//     "userId": "유저의 id",
-//     "speciesName": "시츄",
-//     "familyType": "반려동물 과, ex) 강아지=DOG 고양이=CAT",
-//     "birthday": "2022-09-14"
-//   }
-
 export const Pets: Pet[] = [
   {
     id: 1,
@@ -35,7 +22,7 @@ export const Pets: Pet[] = [
     birthday: "2005-01-23", //? number ?
     species: "포메라니안",
     sex: "FEMALE",
-    petType: "소형", //? 백엔드 데이터에선 영어? 이를 바꿀 필요 있? -> large 다음엔 뭐? medium , small  ? 
+    petType: "소형", //? 백엔드 데이터에선 영어? 이를 바꿀 필요 있? -> large 다음엔 뭐? medium , small  ?
     weight: 3,
     isNeutralizated: false,
     desc:

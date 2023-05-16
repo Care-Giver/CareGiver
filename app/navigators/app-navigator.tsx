@@ -106,7 +106,7 @@ export type NavigatorParamList = {
   "facility-registration-screen": undefined
 
   "edit-mypage-screen": { editable: boolean }
-  "edit-pet-info-screen": { editable: boolean }
+  "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean }
 
   // * caregiver - set price stack
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }

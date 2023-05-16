@@ -94,6 +94,8 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
     reset,
   } = useForm<BirthdayForm>({
     mode: "onChange",
+    //criteriaMode: "all",
+
     defaultValues: {
       birthday: undefined,
     },
@@ -145,19 +147,32 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
                       paddingTop: 43,
                     }}
                     placeholder={"8자리 생년월일을 입력해주세요."}
+                    //? 모를시 추정 생년월일을 입력해주세요 는 필요 X ?
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"
                     keyboardType="numeric"
-                    //TODO minLength
                     maxLength={8}
                   />
                 )}
                 rules={{
+                  // pattern: {
+                  //   value: /^[0-9]+(\.[0-9]{0,2})?$/,
+                  //   message: "숫자만 입력해주세요.",
+                  // },
                   required: true,
-                  pattern: {
-                    value: /^[0-9]+(\.[0-9]{0,2})?$/,
-                    message: "숫자만 입력해주세요.",
+                  // minLength: 8,
+                  //* minLength 와 pattern 을 활용해 rules 를 관리하면 8자가 다 채워지기 전까지는 pattern rule을 적용 안시킴
+                  //*이에 따라 validate 활용
+                  validate: {
+                    patternBeforeMinLength: (value) => {
+                      const pattern = /^[0-9]+(\.[0-9]{0,2})?$/
+                      if (!pattern.test(String(value))) {
+                        return "* 숫자만 입력해주세요."
+                      } else if (String(value).length < 8) {
+                        return "* 8자리 숫자로 입력해주세요."
+                      } else return null
+                    },
                   },
                 }}
               />
@@ -165,13 +180,18 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
               {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
               {errors.birthday ? (
                 <View>
-                  {/* //*오류 있을 때 : 빈칸일때 회색, 패턴/중복 오류 있으면 빨간색 */}
+                  {/* //*오류 있을 때 : 빈칸일때 회색, 오류 있으면 빨간색  */}
+
                   <DivisionLine
                     color={errors.birthday.type === "required" ? MIDDLE_LINE : ERROR_RED}
                     style={{ marginTop: 4 }}
                   />
                   <PreReg12
-                    text={errors.birthday.type === "pattern" ? errors.birthday.message : ""}
+                    text={
+                      errors.birthday.type === "patternBeforeMinLength"
+                        ? errors.birthday.message
+                        : ""
+                    }
                     color={ERROR_RED}
                   />
                 </View>
@@ -179,25 +199,21 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
                 // *오류 없을 때
                 <View>
                   <DivisionLine
-                    color={dirtyFields.birthday ? SUCCESS_BLUE : MIDDLE_LINE}
+                    color={isValid ? SUCCESS_BLUE : MIDDLE_LINE}
                     style={{ marginTop: 4 }}
                   />
                 </View>
               )}
             </View>
 
-            {/* //*확인 버튼 -> 새로 입력한 닉네임이 에러가 없을때만 activated */}
+            {/* //*확인 버튼 -> 새로 입력한 생년월일이 에러가 없을때만 activated */}
             <ConditionalButton
               label="확인"
               isActivated={isValid}
               style={{
                 marginTop: "auto",
               }}
-              onPress={
-                handleSubmit(onBirthdaySubmit)
-
-                // updateUserNickname() //TODO server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
-              }
+              onPress={handleSubmit(onBirthdaySubmit)}
             />
           </View>
         </KeyboardAvoidingView>

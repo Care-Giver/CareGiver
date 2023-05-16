@@ -34,13 +34,7 @@ export interface WeightModalProps {
 }
 
 export const WeightModal = observer(function WeightModal(props: WeightModalProps) {
-  const {
-    style,
-    visibleState,
-    handleModalHide,
-    title,
-    handleInput,
-  } = props
+  const { style, visibleState, handleModalHide, title, handleInput } = props
 
   const _styles = Object.assign({}, styles, style)
 
@@ -163,7 +157,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
                   required: true,
                   pattern: {
                     value: /^[0-9]+(\.[0-9]{0,2})?$/,
-                    message: "숫자만 입력해주세요.",
+                    message: "* 숫자만 입력해주세요.",
                   },
                 }}
               />
@@ -171,7 +165,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
               {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
               {errors.weight ? (
                 <View>
-                  {/* //*오류 있을 때 : 빈칸일때 회색, 패턴/중복 오류 있으면 빨간색 */}
+                  {/* //*오류 있을 때 : 빈칸일때 회색,  오류 있으면 빨간색 */}
                   <DivisionLine
                     color={errors.weight.type === "required" ? MIDDLE_LINE : ERROR_RED}
                     style={{ marginTop: 4 }}
@@ -192,7 +186,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
               )}
             </View>
 
-            {/* //*확인 버튼 -> 새로 입력한 닉네임이 에러가 없을때만 activated */}
+            {/* //*확인 버튼 -> 새로 입력한 몸무게가 에러가 없을때만 activated */}
             <ConditionalButton
               label="확인"
               isActivated={isValid}
