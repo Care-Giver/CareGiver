@@ -1,10 +1,9 @@
 import * as React from "react"
-import { useState } from "react"
-import { StyleProp, View, ViewStyle, Text, Pressable, Image, StyleSheet } from "react-native"
+//import { useState } from "react"
+import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreBol18, PreBol14, PreBol12, Row, BASIC_BACKGROUND_PADDING_WIDTH } from "#components" //묵 추가
-import { SUB_HEAD_LINE, SHADOW_1, WIDTH, GIVER_CASUAL_NAVY, palette } from "#theme" // 묵 추가
-//import { bookstyles } from "./styles"
+import { PreBol16, PreReg12, PreBol12, Row, BASIC_BACKGROUND_PADDING_WIDTH } from "#components" //묵 추가
+import { SUB_HEAD_LINE, SHADOW_1, GIVER_CASUAL_NAVY, palette, BODY } from "#theme" // 묵 추가
 import { images } from "#images"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { PressableButton } from "../buttons/pressable-button/pressable-button"
@@ -15,16 +14,22 @@ const ROOT: ViewStyle = {
 
 export interface BookingInfoCardProps {
   /**
-   * padding, margin 을 줌으로써, 추가적인 스타일링을 부여할 수 있습니다.
+   * name: 클라이언트 이름
+   * serviceType: 서비스 형태(방문/위탁)
+   * caregiverType: 서비스 종류(펫시터/훈련사)
+   * petname: 펫 이름
+   * species: 펫 종
+   * petservices: 펫 서비스 산책 등
+   * address: 케어 장소
    */
   id: string
-  name: string //클라이언트 이름
-  serviceType: "creche" | "visit" //서비스 형태(방문/위탁)
-  caregiverType: "petsitter" | "trainer" //서비스 종류(펫시터/훈련사)
-  petname: string //펫 이름
-  species: string // 펫 종
-  petservices: Array<string> // 펫 서비스 산책 등
-  address: string // 케어 장소
+  name: string
+  serviceType: "creche" | "visit"
+  caregiverType: "petsitter" | "trainer"
+  petname: string
+  species: string
+  petservices: Array<string>
+  address: string
   style?: StyleProp<ViewStyle>
 }
 
@@ -43,7 +48,7 @@ export const CareGiverReserveDummy: BookingInfoCardProps = {
 export const BookingInfoCard = observer(function BookingInfoCard(props: BookingInfoCardProps) {
   const { style } = props
   //테스트용 useState
-  const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
+  //const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
 
   const handlePress = () => {
     alert("버튼 클릭됨")
@@ -54,76 +59,51 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
       {
         <Row
           style={{
-            marginTop: 5,
-            width: "100%",
             paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
-          <PreBol18
-            text={careGiverReserve.name + " 님"} // 실제 적용 시에는 props.name으로}
+          <PreBol16
+            text={props.name + " 님"} // 실제 적용 시에는 props.name으로
             color={SUB_HEAD_LINE}
-            style={{ marginRight: "6%" }}
+            style={{ marginRight: 20 }}
           />
 
           <PressableButton
-            defaultViewStyle={styles.bookgingchoicestyle}
+            defaultViewStyle={styles.serviceTypeStyle}
             children={() => (
               <PreBol12
                 color={palette.white}
-                text={careGiverReserve.serviceType === "creche" ? "방문" : "위탁"}
+                text={props.serviceType === "creche" ? "방문" : "위탁"}
               />
             )}
           />
 
           <PressableButton
-            defaultViewStyle={styles.bookgingchoicestyle}
+            defaultViewStyle={styles.caregiverTypeStyle}
             children={() => (
               <PreBol12
                 color={palette.white}
-                text={careGiverReserve.caregiverType === "petsitter" ? "펫시터" : "훈련사"}
+                text={props.caregiverType === "petsitter" ? "펫시터" : "훈련사"}
               />
             )}
           />
-
           <TouchableOpacity onPress={handlePress}>
             <Image source={images.arrow_left} style={styles.image} />
           </TouchableOpacity>
         </Row>
       }
-      {
-        <PreBol14
-          text={"펫: " + careGiverReserve.petname}
-          color={"#999999"}
-          style={{ marginTop: "5%", marginLeft: "6%" }}
-        />
-      }
-      {
-        <PreBol14
-          text={"종: " + careGiverReserve.species}
-          color={"#999999"}
-          style={{ marginTop: "1%", marginLeft: "6%" }}
-        />
-      }
-      {
-        <PreBol14
-          text={"서비스: " + careGiverReserve.petservices}
-          color={"#999999"}
-          style={{ marginTop: "1%", marginLeft: "6%" }}
-        />
-      }
-      {
-        <PreBol14
-          text={"케어 장소: " + careGiverReserve.address}
-          color={"#999999"}
-          style={{ marginTop: "1%", marginLeft: "6%" }}
-        />
-      }
+      {<PreReg12 text={"펫: " + props.petname} color={BODY} style={styles.content} />}
+      {<PreReg12 text={"종: " + props.species} color={BODY} style={styles.contentDetail} />}
+      {<PreReg12 text={"서비스: " + props.petservices} color={BODY} style={styles.contentDetail} />}
+      {<PreReg12 text={"케어 장소: " + props.address} color={BODY} style={styles.contentDetail} />}
     </View>
   )
 })
 
 const styles = StyleSheet.create({
   container: {
+    width: 285,
+    height: 148,
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 16,
@@ -133,7 +113,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
 
-  bookgingchoicestyle: {
+  serviceTypeStyle: {
     width: 36,
     height: 21,
     borderRadius: 3,
@@ -144,9 +124,30 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
 
+  caregiverTypeStyle: {
+    width: 46,
+    height: 21,
+    borderRadius: 3,
+    backgroundColor: GIVER_CASUAL_NAVY,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    marginRight: 3,
+  },
+
+  content: {
+    marginTop: 12,
+    marginLeft: 17,
+  },
+
+  contentDetail: {
+    marginTop: 4,
+    marginLeft: 17,
+  },
+
   image: {
     width: 16,
     height: 16,
-    marginLeft: 100,
+    marginLeft: 50,
   },
 })

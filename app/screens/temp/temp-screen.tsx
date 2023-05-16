@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingInfoCard, ScreenRootView } from "#components"
+import { BookingInfoCard, ScreenRootView, CareGiverReserveDummy } from "#components"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -20,7 +20,16 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
     return (
       <ScreenRootView testID="Temp">
         {/* 해피코딩^^ */}
-        <BookingInfoCard />
+        <BookingInfoCard
+          id={CareGiverReserveDummy.id}
+          name={CareGiverReserveDummy.name}
+          serviceType={CareGiverReserveDummy.serviceType}
+          caregiverType={CareGiverReserveDummy.caregiverType}
+          petname={CareGiverReserveDummy.petname}
+          species={CareGiverReserveDummy.species}
+          petservices={CareGiverReserveDummy.petservices}
+          address={CareGiverReserveDummy.address}
+        />
       </ScreenRootView>
     )
   },
