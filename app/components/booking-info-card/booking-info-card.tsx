@@ -81,7 +81,7 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
     <View style={[styles.container, SHADOW_1, style]}>
       <Row>
         <PreBol16
-          text={props.name + " 님"} // 실제 적용 시에는 props.name으로
+          text={`${props.name} 님`} // 실제 적용 시에는 props.name으로
           color={SUB_HEAD_LINE}
           style={{ marginRight: 20 }}
         />
@@ -111,10 +111,10 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
         </Pressable>
       </Row>
 
-      <PreReg12 text={"펫: " + props.petname} color={BODY} style={styles.content} />
-      <PreReg12 text={"종: " + props.species} color={BODY} style={styles.contentDetail} />
-      <PreReg12 text={"서비스: " + props.petservices} color={BODY} style={styles.contentDetail} />
-      <PreReg12 text={"케어 장소: " + props.address} color={BODY} style={styles.contentDetail} />
+      <PreReg12 text={`펫: ${props.petname}`} color={BODY} style={styles.content} />
+      <PreReg12 text={`종: ${props.species}`} color={BODY} style={styles.contentDetail} />
+      <PreReg12 text={`서비스: ${props.petservices}`} color={BODY} style={styles.contentDetail} />
+      <PreReg12 text={`케어 장소: ${props.address}`} color={BODY} style={styles.contentDetail} />
     </View>
   )
 })
