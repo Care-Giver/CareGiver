@@ -1,6 +1,6 @@
 import * as React from "react"
 //import { useState } from "react"
-import { StyleProp, View, ViewStyle, Image, StyleSheet } from "react-native"
+import { StyleProp, View, ViewStyle, Image, StyleSheet, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol16, PreReg12, PreBol12, Row, BASIC_BACKGROUND_PADDING_WIDTH } from "#components" //묵 추가
 import { SUB_HEAD_LINE, SHADOW_1, GIVER_CASUAL_NAVY, palette, BODY } from "#theme" // 묵 추가
@@ -79,11 +79,7 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
 
   return (
     <View style={[styles.container, SHADOW_1, style]}>
-      <Row
-        style={{
-          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-        }}
-      >
+      <Row>
         <PreBol16
           text={props.name + " 님"} // 실제 적용 시에는 props.name으로
           color={SUB_HEAD_LINE}
@@ -109,9 +105,10 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
             />
           )}
         />
-        <TouchableOpacity onPress={handlePress}>
+
+        <Pressable onPress={handlePress} style={{ marginLeft: "auto" }}>
           <Image source={images.arrow_left} style={styles.image} />
-        </TouchableOpacity>
+        </Pressable>
       </Row>
 
       <PreReg12 text={"펫: " + props.petname} color={BODY} style={styles.content} />
@@ -126,13 +123,12 @@ const styles = StyleSheet.create({
   container: {
     width: 285,
     height: 148,
-    paddingHorizontal: 16,
+    paddingLeft: 22,
+    paddingRight: 17,
     paddingTop: 20,
     paddingBottom: 16,
     borderRadius: 8,
     backgroundColor: "white",
-    marginLeft: 20,
-    marginRight: 20,
   },
 
   serviceTypeStyle: {
@@ -159,17 +155,14 @@ const styles = StyleSheet.create({
 
   content: {
     marginTop: 12,
-    marginLeft: 17,
   },
 
   contentDetail: {
     marginTop: 4,
-    marginLeft: 17,
   },
 
   image: {
     width: 16,
     height: 16,
-    marginLeft: 50,
   },
 })
