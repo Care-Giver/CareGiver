@@ -79,46 +79,45 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
 
   return (
     <View style={[styles.container, SHADOW_1, style]}>
-      {
-        <Row
-          style={{
-            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-          }}
-        >
-          <PreBol16
-            text={props.name + " 님"} // 실제 적용 시에는 props.name으로
-            color={SUB_HEAD_LINE}
-            style={{ marginRight: 20 }}
-          />
+      <Row
+        style={{
+          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+        }}
+      >
+        <PreBol16
+          text={props.name + " 님"} // 실제 적용 시에는 props.name으로
+          color={SUB_HEAD_LINE}
+          style={{ marginRight: 20 }}
+        />
 
-          <PressableButton
-            defaultViewStyle={styles.serviceTypeStyle}
-            children={() => (
-              <PreBol12
-                color={palette.white}
-                text={props.serviceType === "creche" ? "방문" : "위탁"}
-              />
-            )}
-          />
+        <PressableButton
+          defaultViewStyle={styles.serviceTypeStyle}
+          children={() => (
+            <PreBol12
+              color={palette.white}
+              text={props.serviceType === "creche" ? "방문" : "위탁"}
+            />
+          )}
+        />
 
-          <PressableButton
-            defaultViewStyle={styles.caregiverTypeStyle}
-            children={() => (
-              <PreBol12
-                color={palette.white}
-                text={props.caregiverType === "petsitter" ? "펫시터" : "훈련사"}
-              />
-            )}
-          />
-          <TouchableOpacity onPress={handlePress}>
-            <Image source={images.arrow_left} style={styles.image} />
-          </TouchableOpacity>
-        </Row>
-      }
-      {<PreReg12 text={"펫: " + props.petname} color={BODY} style={styles.content} />}
-      {<PreReg12 text={"종: " + props.species} color={BODY} style={styles.contentDetail} />}
-      {<PreReg12 text={"서비스: " + props.petservices} color={BODY} style={styles.contentDetail} />}
-      {<PreReg12 text={"케어 장소: " + props.address} color={BODY} style={styles.contentDetail} />}
+        <PressableButton
+          defaultViewStyle={styles.caregiverTypeStyle}
+          children={() => (
+            <PreBol12
+              color={palette.white}
+              text={props.caregiverType === "petsitter" ? "펫시터" : "훈련사"}
+            />
+          )}
+        />
+        <TouchableOpacity onPress={handlePress}>
+          <Image source={images.arrow_left} style={styles.image} />
+        </TouchableOpacity>
+      </Row>
+
+      <PreReg12 text={"펫: " + props.petname} color={BODY} style={styles.content} />
+      <PreReg12 text={"종: " + props.species} color={BODY} style={styles.contentDetail} />
+      <PreReg12 text={"서비스: " + props.petservices} color={BODY} style={styles.contentDetail} />
+      <PreReg12 text={"케어 장소: " + props.address} color={BODY} style={styles.contentDetail} />
     </View>
   )
 })
