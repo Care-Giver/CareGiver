@@ -14,23 +14,46 @@ const ROOT: ViewStyle = {
 
 export interface BookingInfoCardProps {
   /**
-   * name: 클라이언트 이름
-   * serviceType: 서비스 형태(방문/위탁)
-   * caregiverType: 서비스 종류(펫시터/훈련사)
-   * petname: 펫 이름
-   * species: 펫 종
-   * petservices: 펫 서비스 산책 등
-   * address: 케어 장소
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
-  id: string
-  name: string
-  serviceType: "creche" | "visit"
-  caregiverType: "petsitter" | "trainer"
-  petname: string
-  species: string
-  petservices: Array<string>
-  address: string
   style?: StyleProp<ViewStyle>
+
+  id: string
+
+  /**
+   * 클라이언트 이름
+   */
+  name: string
+
+  /**
+   * 서비스 형태(방문/위탁)
+   */
+  serviceType: "creche" | "visit"
+
+  /**
+   * 서비스 종류(펫시터/훈련사)
+   */
+  caregiverType: "petsitter" | "trainer"
+
+  /**
+   * 펫 이름
+   */
+  petname: string
+
+  /**
+   * 펫 종
+   */
+  species: string
+
+  /**
+   * 펫 서비스 산책 등
+   */
+  petservices: Array<string>
+
+  /**
+   * 케어 장소
+   */
+  address: string
 }
 
 //테스트용 더미 데이터
