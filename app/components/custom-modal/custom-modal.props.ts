@@ -1,7 +1,7 @@
-import { StyleProp, ImageStyle, ImageProps } from "react-native"
+import { ImageSourcePropType } from "react-native"
 export interface CustomModalProps {
   visibleState: boolean
-  image: StyleProp<ImageProps>,
+  image: ImageSourcePropType,
   title: string
   subtitle?: string
   yesBtnText: string
