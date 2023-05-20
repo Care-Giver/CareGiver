@@ -10,8 +10,10 @@ import { CustomModalProps } from "./custom-modal.props"
 export const CustomModal = observer(function CustomModal(props: CustomModalProps) {
   const {
     visibleState,
+    image,
     title,
     subtitle,
+    subtitleStyle,
     yesBtnText,
     noBtnText,
     handleYesPress,
@@ -19,15 +21,17 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
   } = props
   const windowWidth = useWindowDimensions().width
   const modalWidth = windowWidth
+
+  const $subtitleStyle = Object.assign({}, styles.subtitle, subtitleStyle)
   return (
     <Modal animationType="fade" visible={visibleState} transparent>
       <View style={styles.centeredView}>
         <View
           style={[styles.modalView, { width: modalWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH }]}
         >
-          <Image source={images.dog_illustration} style={{ width: 151, height: 156 }} />
-          <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 4 }} />
-          {subtitle && <PreReg14 text={subtitle} color={BODY} style={{ marginTop: 8 }} />}
+          <Image source={image} style={{ width: 66, height: 66 }} />
+          <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 16 }} />
+          {subtitle && <PreReg14 text={subtitle} color={BODY} style={$subtitleStyle} />}
           <Row style={{ marginTop: 48 }}>
             <Pressable style={styles.modalYesBtn} onPress={handleYesPress}>
               <PreBol14 text={yesBtnText} color={GIVER_CASUAL_NAVY} />

@@ -11,12 +11,10 @@ export const styles = StyleSheet.create({
   modalView: {
     alignItems: "center",
 
-    paddingTop: 48,
+    paddingTop: 60,
     paddingBottom: 16,
 
     paddingHorizontal: 16,
-
-    height: 370,
 
     backgroundColor: color.palette.white,
     borderRadius: 8,
@@ -44,5 +42,9 @@ export const styles = StyleSheet.create({
     backgroundColor: GIVER_CASUAL_NAVY,
 
     paddingVertical: 16,
+  },
+  subtitle: {
+    marginTop: 8,
+    textAlign: "center",
   },
 })

@@ -19,7 +19,7 @@ import {
   MakeBookingButton,
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
-  PaymentSuccessModal, // modal test
+  CustomModal, // modal test
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -36,6 +36,7 @@ import {
   STANDARD_WIDTH,
 } from "#theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
+import { images } from "#images"
 
 const servicesDummy = [
   {
@@ -236,14 +237,15 @@ export const CaregiverDetailInformationScreen: FC<
         </View>
       </ScrollView>
       {/* // 모달 테스트 */}
-      <PaymentSuccessModal
+      <CustomModal
         visibleState={modalState}
+        image={images.camera}
         title="결제가 완료되었습니다!"
         subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
-        HomeBtnText="홈으로 가기"
-        BookBtnText="예약 내역 확인"
-        handleHomePress={handleHomePress}
-        handleBookPress={handleBookPress}
+        yesBtnText={`홈으로 가기`}
+        noBtnText={`예약 내역 확인`}
+        handleYesPress={handleHomePress}
+        handleNoPress={handleBookPress}
       />
 
       {/* //? 예약 신청하기 버튼 */}
