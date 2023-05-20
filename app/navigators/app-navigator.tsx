@@ -39,7 +39,6 @@ import {
   CaregiverSetAdditionalPriceScreen,
   TestBottomSheetScreen,
   FavoritesScreen,
-  TempScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -126,17 +125,8 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="temp-screen"
+      initialRouteName="home-screen"
     >
-      {/* //* PR#93 코드 리뷰를 위해 임시로 생성 */}
-      <Stack.Screen
-        name="temp-screen"
-        component={TempScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
