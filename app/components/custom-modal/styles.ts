@@ -43,4 +43,8 @@ export const styles = StyleSheet.create({
 
     paddingVertical: 16,
   },
+  subtitle: {
+    marginTop: 8,
+    textAlign: "center",
+  },
 })
