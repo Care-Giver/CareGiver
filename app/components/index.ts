@@ -32,7 +32,7 @@ export * from "./screen-headers/writing-comment-screen-header/writing-comment-sc
 export * from "./screen-headers/edit-mypage-screen-header/edit-mypage-screen-header"
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
-
+export * from "./screen-headers/edit-pet-info-screen-header/edit-pet-info-screen-header"
 //* others
 export * from "./division-line/division-line"
 export * from "./division-line-vertical/division-line-vertical"
@@ -67,3 +67,5 @@ export * from "../screens/registration-stack/register-buttons-container/register
 export * from "./underline-text/underline-text"
 export * from "./time-picker/time-picker"
 export * from "./booking-info-card/booking-info-card"
+export * from "./weight-modal/weight-modal"
+export * from "./birthday-modal/birthday-modal"
