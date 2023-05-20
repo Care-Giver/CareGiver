@@ -36,7 +36,7 @@ export const EditMypageScreenHeader = (props) => {
   return (
     <View style={[HEADER_ROOT, { flexDirection: "row" }]}>
       {/* //* 뒤로가기 (headerLeft 위치) */}
-      <Pressable onPress={goBack}>
+      <Pressable onPress={goBack} style={{ marginLeft: 16 }}>
         <Image style={{ width: 28, height: 28 }} source={images.go_back} />
       </Pressable>
 

@@ -39,6 +39,7 @@ import {
   CaregiverSetAdditionalPriceScreen,
   TestBottomSheetScreen,
   FavoritesScreen,
+  EditPetInfoScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -51,6 +52,7 @@ import {
   GobackAndTitleAndButtonHeader,
   ScreenRootView,
   PreReg18,
+  EditPetInfoScreenHeader,
 } from "#components"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -99,6 +101,7 @@ export type NavigatorParamList = {
   "facility-registration-screen": undefined
 
   "edit-mypage-screen": { editable: boolean }
+  "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean }
 
   // * caregiver - set price stack
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
@@ -213,23 +216,6 @@ const AllStacks = () => {
         }}
       />
 
-      {/* //* 내 프로필 관리 */}
-      <Stack.Screen
-        name="edit-mypage-screen"
-        component={EditMypageScreen}
-        options={({ navigation, route }) => ({
-          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
-          headerShadowVisible: false,
-          header: (props) => <EditMypageScreenHeader {...props} />,
-          /*//?headerTitle은 ios 에서 가운데 정렬이 기본이라 위의 headerleft 에서 다 해결했는데 괜찮은걸까.... 
-           * headerTitleAlign: "left",
-          headerTitle: (props) => (
-            <PreMed18 style={{ marginLeft: 0 }}> {"내 프로필 관리"}</PreMed18>
-          ),*/
-          headerTitle: "",
-        })}
-      />
-
       {/* //* 예약 확인 */}
       <Stack.Screen
         name="all-bookings-screen"
@@ -288,6 +274,37 @@ const AllStacks = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+
+      {/* //* 내 프로필 관리 */}
+      <Stack.Screen
+        name="edit-mypage-screen"
+        component={EditMypageScreen}
+        options={({ navigation, route }) => ({
+          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
+          headerShadowVisible: false,
+          header: (props) => <EditMypageScreenHeader {...props} />,
+          /*//?headerTitle은 ios 에서 가운데 정렬이 기본이라 위의 headerleft 에서 다 해결했는데 괜찮은걸까.... 
+           * headerTitleAlign: "left",
+          headerTitle: (props) => (
+            <PreMed18 style={{ marginLeft: 0 }}> {"내 프로필 관리"}</PreMed18>
+          ),*/
+          headerTitle: "",
+        })}
+      />
+
+      {/* //* 반려동물 정보 수정 */}
+      <Stack.Screen
+        name="edit-pet-info-screen"
+        component={EditPetInfoScreen}
+        options={({ navigation, route }) => ({
+          //?need? headerShadowVisible: false,
+          title: "반려동물 정보 수정",
+          header: (props) => <EditPetInfoScreenHeader {...props} />,
+
+          //?headerTitle: "",
+        })}
+      />
+
       {/* //! -------- */}
 
       {/* //! 등록 스택 */}
@@ -418,8 +435,8 @@ const TabStacks = () => {
       initialRouteName="Searching"
     >
       <Tab.Screen
-        name="Favorites"
-        component={FavoritesStack}
+        name="favorites-screen"
+        component={FavoritesScreen}
         options={{
           tabBarLabel: "즐겨찾기",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
@@ -536,8 +553,6 @@ export const AppNavigator = (props: NavigationProps) => {
         "writing-comment-screen": "/writing-comment-screen",
         "all-bookings-screen": "/all-bookings-screen",
         "booking-detail-screen": "/booking-detail-screen",
-        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
-        "edit-mypage-screen": "/edit-mypage-screen",
 
         // * pay stack
         "payment-request-screen": "/payment-request-screen",
@@ -547,6 +562,9 @@ export const AppNavigator = (props: NavigationProps) => {
         "all-pets-screen": "/all-pets-screen",
         "setting-screen": "/setting-screen",
         "service-center-screen": "/service-center-screen",
+        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
+        "edit-mypage-screen": "/edit-mypage-screen",
+        "edit-pet-info-screen": "/edit-pet-info-screen",
       },
     },
   }

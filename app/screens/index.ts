@@ -32,6 +32,7 @@ export * from "./mypage-stack/all-pets-screen/all-pets-screen"
 export * from "./mypage-stack/setting-screen/setting-screen"
 export * from "./mypage-stack/service-center-screen/service-center-screen"
 export * from "./mypage-stack/edit-mypage-screen/edit-mypage-screen"
+export * from "./mypage-stack/edit-pet-info-screen/edit-pet-info-screen"
 
 //* registration-stack
 export * from "./registration-stack/service-registration-screen/service-registration-screen"

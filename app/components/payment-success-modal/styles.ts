@@ -16,6 +16,8 @@ export const styles = StyleSheet.create({
 
     paddingHorizontal: 16,
 
+    height: 336,
+
     backgroundColor: color.palette.white,
     borderRadius: 8,
   },
@@ -23,16 +25,19 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
 
+    height: 49,
+
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
     borderWidth: 2,
     borderColor: GIVER_CASUAL_NAVY,
-
-    paddingVertical: 16,
+    paddingTop: 15,
   },
   modalNoBtn: {
     flex: 1,
     alignItems: "center",
+
+    height: 49,
 
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
@@ -41,10 +46,6 @@ export const styles = StyleSheet.create({
 
     backgroundColor: GIVER_CASUAL_NAVY,
 
-    paddingVertical: 16,
-  },
-  subtitle: {
-    marginTop: 8,
-    textAlign: "center",
+    paddingTop: 15,
   },
 })

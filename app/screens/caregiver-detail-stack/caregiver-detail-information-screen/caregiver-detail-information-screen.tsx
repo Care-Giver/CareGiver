@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { Platform, Pressable, ScrollView, View } from "react-native"
+import { Platform, Pressable, ScrollView, View, Modal, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
@@ -19,6 +19,7 @@ import {
   MakeBookingButton,
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
+  CustomModal, // modal test
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -35,6 +36,7 @@ import {
   STANDARD_WIDTH,
 } from "#theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
+import { images } from "#images"
 
 const servicesDummy = [
   {
@@ -95,6 +97,23 @@ export const CaregiverDetailInformationScreen: FC<
   const { sitterData } = route.params
   const { profileImg, name, rating } = sitterData
   console.log(sitterData)
+
+  const [modalState, setmodalState] = useState(true)
+  const handleModal = () => {
+    if (modalState == true) {
+      setmodalState(false)
+    } else {
+      setmodalState(true)
+    }
+  }
+  const handleHomePress = () => {
+    handleModal()
+    navigate("home-screen")
+  }
+  const handleBookPress = () => {
+    handleModal()
+    navigate("booking-detail-screen")
+  }
 
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
@@ -217,6 +236,17 @@ export const CaregiverDetailInformationScreen: FC<
           </View>
         </View>
       </ScrollView>
+      {/* // 모달 테스트 */}
+      <CustomModal
+        visibleState={modalState}
+        image={images.camera}
+        title="결제가 완료되었습니다!"
+        subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
+        yesBtnText={`홈으로 가기`}
+        noBtnText={`예약 내역 확인`}
+        handleYesPress={handleHomePress}
+        handleNoPress={handleBookPress}
+      />
 
       {/* //? 예약 신청하기 버튼 */}
       <View
@@ -233,9 +263,11 @@ export const CaregiverDetailInformationScreen: FC<
         <MakeBookingButton
           pricePerHour={50000}
           isActivated={true}
-          onPress={() => {
+          /*onPress={() => {
+            // 원본
             alert("결제하기 화면으로 이동")
-          }}
+          }}*/
+          onPress={handleModal}
         />
       </View>
     </ScreenRootView>
