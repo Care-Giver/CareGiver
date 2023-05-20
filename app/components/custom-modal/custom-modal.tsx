@@ -28,8 +28,8 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
         >
           <Image source={image} style={{ width: 66, height: 66 }} />
           <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 16 }} />
-          {subtitle && <PreReg14 text={subtitle} color={BODY} style={{ marginTop: 8 }} />}
-          <Row style={{ marginTop: 48 }}>
+          {subtitle && <PreReg14 text={subtitle} color={BODY} style={{ marginTop: 8, textAlign:"center" }} />}
+          <Row style={{ marginTop: 60 }}>
             <Pressable style={styles.modalYesBtn} onPress={handleYesPress}>
               <PreBol14 text={yesBtnText} color={GIVER_CASUAL_NAVY} />
             </Pressable>
