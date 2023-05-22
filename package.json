@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "expo start --dev-client",
-    "ios": "react-native run-ios",
-    "android": "react-native run-android",
+    "start-expo": "npx expo start --dev-client",
+    "ios": "npx react-native run-ios",
+    "android": "npx react-native run-android",
     "screen": "npx ignite-cli@7.10.8 g screen",
     "component": "npx ignite-cli@7.10.8 g component",
     "model": "npx ignite-cli@7.10.8 g model",
@@ -27,7 +27,8 @@
     "postinstall": "node ./bin/postInstall",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "web": "expo start --web",
+    "clear-cache": "watchman watch-del-all",
+    "c": "watchman watch-del-all",
     "eject": "expo eject"
   },
   "dependencies": {
