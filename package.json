@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start-metro": "npx react-native start",
     "start-expo": "npx expo start --dev-client",
     "ios": "npx react-native run-ios",
     "android": "npx react-native run-android",
@@ -27,8 +28,8 @@
     "postinstall": "node ./bin/postInstall",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "clear-cache": "watchman watch-del-all",
-    "c": "watchman watch-del-all",
+    "clear-cache": "npx react-native clean --include android,cocoapods,metro,watchman,yarn",
+    "c": "npx react-native clean --include android,cocoapods,metro,watchman,yarn",
     "eject": "expo eject"
   },
   "dependencies": {
