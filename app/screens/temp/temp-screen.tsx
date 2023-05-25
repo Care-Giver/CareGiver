@@ -20,9 +20,9 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
   }
   return (
     <ScreenRootView testID="TempScreen">
-        <CgServiceChoiceButton title="펫시터 등록하기" subtitle="산책, 간식 주기 등 펫을 돌봐주는 서비스입니다." 
+        <CgServiceChoiceButton title="펫시터 등록하기" subtitle={`산책, 간식 주기 등 펫을\n 돌봐주는 서비스입니다.`} 
         onPress={onPress}/>
-        <CgServiceChoiceButton title="훈련사 등록하기" subtitle="손 주기, 기다려 등의 훈련을 시켜주는 서비스입니다." 
+        <CgServiceChoiceButton title="훈련사 등록하기" subtitle={`손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다.`} 
         onPress={onPress}/>
     </ScreenRootView>
     

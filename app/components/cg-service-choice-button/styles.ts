@@ -28,7 +28,6 @@ export const styles = StyleSheet.create({
   subtitle: {
     marginLeft:20,
     marginTop: 8,
-    width: 120,
     lineHeight: 18,
   },
 
