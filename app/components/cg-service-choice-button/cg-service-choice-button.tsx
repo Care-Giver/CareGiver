@@ -11,20 +11,17 @@ export const CgServiceChoiceButton = observer(function CgServiceChoiceButton(
   props: CgServiceChoiceButtonProps,
 ) {
   const { title, subtitle, onPress } = props
+
+  const imageSelector = () => {
+    if (title === "펫시터 등록하기") return images.service_petsitting
+    if (title === "훈련사 등록하기") return images.service_training
+    return ""
+  }
+
   return (
     <Pressable style={[styles.container, SHADOW_1]}>
       {/* image */}
-      <Image
-        style={styles.image}
-        source={
-          title === "펫시터 등록하기"
-            ? images.service_petsitting
-            : title === "훈련사 등록하기"
-            ? images.service_training
-            : ""
-        }
-        resizeMode="stretch"
-      />
+      <Image style={styles.image} source={imageSelector()} resizeMode="stretch" />
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
