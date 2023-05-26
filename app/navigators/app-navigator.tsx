@@ -59,7 +59,7 @@ import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { Type, useStores } from "../models"
+import { Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
 //import { Row } from "../basics/row/row"
 

@@ -22,7 +22,7 @@ import { observer } from "mobx-react-lite"
 import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
 import { Api } from "#api"
-import { Type, useStores } from "../../../models"
+import { Type, useStores } from "#models"
 import { delay } from "../../../utils/delay"
 
 const IS_AUTH = true

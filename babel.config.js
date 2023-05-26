@@ -10,6 +10,7 @@ module.exports = {
         root: ["."],
         alias: {
           "#components": "./app/components/index",
+          "#models": "./app/models/index",
           "#navigators": "./app/navigators/index",
           "#screens": "./app/screens/index",
           "#theme": "./app/theme/index",
