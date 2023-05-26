@@ -134,7 +134,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
           >
             <ServiceChoiceButton
               onPress={() => {
-                navigate("search-screen", { service: "펫시팅" })
+                //navigate("search-screen", { service: "펫시팅" })
+                navigate("temp-screen")
               }}
               title="펫시팅"
               subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}

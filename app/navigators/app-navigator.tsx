@@ -15,6 +15,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
+  TempScreen,
   WritingCommentScreen,
   HomeScreen,
   SearchScreen,
@@ -365,6 +366,14 @@ const AllStacks = () => {
       <Stack.Screen
         name="minseon-test"
         component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/*//? MVP-15 */}
+      <Stack.Screen
+        name="temp-screen"
+        component={TempScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
