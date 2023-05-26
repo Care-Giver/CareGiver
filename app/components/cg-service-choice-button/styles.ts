@@ -13,22 +13,21 @@ export const styles = StyleSheet.create({
   },
   image: {
     height: 99,
-    width:171
+    width: 171,
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft:20,
-    marginTop:16
+    marginLeft: 20,
+    marginTop: 16,
   },
   titleImage: {
     width: 16,
     height: 16,
   },
   subtitle: {
-    marginLeft:20,
+    marginLeft: 20,
     marginTop: 8,
     lineHeight: 18,
   },
-
 })
