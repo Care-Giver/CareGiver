@@ -1,5 +1,7 @@
 import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { delay } from "../../utils/delay"
+import { navigate } from "#navigators"
 
 /* //* User Model 
         ~ type: ENUM! ( CARE_GIVER | CLIENT )
@@ -20,7 +22,7 @@ import { withSetPropAction } from "../extensions/with-set-prop-action"
         ~ isCertified: bool!
  */
 
-enum Type {
+export enum Type {
   CARE_GIVER = "CARE_GIVER",
   CLIENT = "CLIENT",
 }
@@ -78,6 +80,20 @@ export const UserStoreModel = types
   .actions((self) => ({
     reset() {
       applySnapshot(self, {})
+    },
+    /**
+     * 유저의 역할을 케어기버와 클라이언트 두 종류 사이에서 전환합니다.
+     *  */
+    async switchType() {
+      if (self.type === Type.CLIENT) {
+        self.type = Type.CARE_GIVER
+        await delay(100)
+        navigate("Calendar")
+      } else {
+        self.type = Type.CLIENT
+        await delay(100)
+        navigate("Searching")
+      }
     },
 
     setLoggedIn(value?: boolean) {

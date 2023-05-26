@@ -4,7 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { useColorScheme, Image, Pressable, View, ViewStyle, Platform } from "react-native"
 import {
   NavigationContainer,
@@ -40,6 +40,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  ManageBookingScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -58,6 +59,8 @@ import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { Type, useStores } from "../models"
+import { observer } from "mobx-react-lite"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -383,36 +386,37 @@ const AllStacks = () => {
   )
 }
 
-const TabStacks = () => {
-  const FavoritesStack = () => {
-    return (
-      <ScreenRootView>
-        <View
-          style={{
-            marginVertical: "auto",
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>즐겨찾기 기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </ScreenRootView>
-    )
-  }
-  const ChatsStack = () => {
-    return (
-      <ScreenRootView>
-        <View
-          style={{
-            marginVertical: "auto",
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </ScreenRootView>
-    )
-  }
+const ChatsStack = () => {
+  return (
+    <ScreenRootView>
+      <View
+        style={{
+          marginVertical: "auto",
+          alignSelf: "center",
+        }}
+      >
+        <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
+      </View>
+    </ScreenRootView>
+  )
+}
 
+const StatisticsStack = () => {
+  return (
+    <ScreenRootView>
+      <View
+        style={{
+          marginVertical: "auto",
+          alignSelf: "center",
+        }}
+      >
+        <PreReg18>통계 기능은 곧 추가될 예정입니다 😉</PreReg18>
+      </View>
+    </ScreenRootView>
+  )
+}
+
+const ClientStacks = () => {
   const $tabBarStyleAndroid: ViewStyle = {
     backgroundColor: "white",
     borderTopWidth: 0,
@@ -522,16 +526,128 @@ const TabStacks = () => {
   )
 }
 
-const AppStack = () => {
+const CareGiverStacks = () => {
+  const $tabBarStyleAndroid: ViewStyle = {
+    backgroundColor: "white",
+    borderTopWidth: 0,
+  }
+
+  const $tabBarStyleIOS: ViewStyle = {
+    backgroundColor: "white",
+  }
+
   return (
-    // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android
-    // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
-    //?  <GestureHandlerRootView style={{ flex: 1 }}>
-    <>
-      <TabStacks />
-    </>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
+        headerTitleStyle: { color: "white" },
+        tabBarStyle: Platform.select({
+          android: $tabBarStyleAndroid,
+          ios: $tabBarStyleIOS,
+        }),
+      }}
+      initialRouteName="Calendar"
+    >
+      <Tab.Screen
+        name="Statistics"
+        component={StatisticsStack}
+        options={{
+          tabBarLabel: "통계",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="elevation-rise"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          headerTitle: "통계(개발중)",
+        }}
+      />
+      <Tab.Screen
+        name="CgBookings"
+        component={ManageBookingScreen}
+        options={{
+          tabBarLabel: "예약 관리",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="pencil"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          headerTitle: "예약 관리",
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={AllStacks}
+        options={{
+          tabBarLabel: "달력",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="calendar-blank"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chats"
+        component={ChatsStack}
+        options={{
+          tabBarLabel: "채팅",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="message"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          headerShown: true,
+          headerTitle: "채팅(개발중)",
+        }}
+      />
+      <Tab.Screen
+        name="CgMypage"
+        component={MypageScreen}
+        options={{
+          tabBarLabel: "내정보",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+          header: (props) => <HomeScreenHeader {...props} />,
+          headerShown: true,
+          headerTitle: "",
+        }}
+      />
+    </Tab.Navigator>
   )
 }
+
+const AppStack = observer(function AppStack() {
+  const { userStore } = useStores()
+  const type = userStore.type
+  console.log("type", type)
+  // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
+  // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
+  // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
+  // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
+  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
+  return <>{type === Type.CLIENT ? <ClientStacks /> : <CareGiverStacks />}</>
+})
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
