@@ -12,13 +12,6 @@ export const SelectedPetCard = (props) => {
   const { petData, style, onPress, index, deletable = true } = props
   const { name, size, species, age, sex } = petData
 
-  let _sex = ""
-  if (sex === "male") {
-    _sex = "남"
-  } else {
-    _sex = "여"
-  }
-
   return (
     <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
@@ -40,7 +33,7 @@ export const SelectedPetCard = (props) => {
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
-            <PreReg14 text={_sex} color={BODY} style={{ marginLeft: 8 }} />
+            <PreReg14 text={sex} color={BODY} style={{ marginLeft: 8 }} />
           </Row>
         </View>
 
