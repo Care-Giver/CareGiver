@@ -67,3 +67,4 @@ export * from "../screens/registration-stack/register-buttons-container/register
 export * from "./underline-text/underline-text"
 export * from "./time-picker/time-picker"
 export * from "./certificate-registration-note/certificate-registration-note"
+export * from "./cg-register-step/cg-register-step"
