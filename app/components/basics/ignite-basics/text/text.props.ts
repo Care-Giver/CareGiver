@@ -56,13 +56,14 @@ export interface CustomTextProps {
    * marginVertical (mt, mb 사용시, 무시됩니다)
    */
   mv?: number
+
   /**
-   * marginTop
+   * marginLeft
    */
   ml?: number
 
   /**
-   * marginBottom
+   * marginRight
    */
   mr?: number
 
