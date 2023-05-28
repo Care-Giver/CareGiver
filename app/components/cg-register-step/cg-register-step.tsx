@@ -62,22 +62,23 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
 
   const getStatusComponent = (step: number, currentStep: number) => {
     if (step < currentStep) {
-      return <TodoComponent currentStep={currentStep} />
+      return <Todo currentStep={currentStep} />
     } else if (step === currentStep) {
-      return <ProgressComponent currentStep={currentStep} />
+      return <Progress currentStep={currentStep} />
     } else {
-      return <DoneComponent currentStep={currentStep} />
+      return <Done currentStep={currentStep} />
     }
   }
 
-  const DoneComponent = ({ currentStep }) => {
+  const Todo = ({ currentStep }) => {
     return (
-      <View style={_styles.done}>
-        <PopSem12 text={currentStep} color={"#FFFFFF"} />
+      <View style={_styles.todo}>
+        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY_20} />
       </View>
     )
   }
-  const ProgressComponent = ({ currentStep }) => {
+
+  const Progress = ({ currentStep }) => {
     return (
       <Row style={_styles.progress}>
         <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY} style={{ marginLeft: 10 }} />
@@ -89,13 +90,15 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
       </Row>
     )
   }
-  const TodoComponent = ({ currentStep }) => {
+
+  const Done = ({ currentStep }) => {
     return (
-      <View style={_styles.todo}>
-        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY_20} />
+      <View style={_styles.done}>
+        <PopSem12 text={currentStep} color={"#FFFFFF"} />
       </View>
     )
   }
+
   //컴포넌트 내부에서 margin을 주는 방법도 있지만, 뭔가 그렇게되면 모듈화라고 보기 어렵고 헷갈릴 것 같습니다. 그래서 외부에서 margin을 주는 방법을 택했습니다.
   //애초에 Row에서 각 컴포넌트를 margin 10을 주는 것을 찾아보았는데, 없다고 판단되었습니다.
 
