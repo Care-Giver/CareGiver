@@ -1,13 +1,13 @@
-import { View, Image, Pressable } from "react-native"
 import React from "react"
-
+import { View, Image, Pressable } from "react-native"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
 import { navigate } from "#navigators"
 import { SHADOW_1 } from "#theme"
+import { observer } from "mobx-react-lite"
 
-export const HomeScreenHeader = (props) => {
+export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
   // console.log("HomeScreenHeader props:", props)
 
   return (
@@ -29,4 +29,4 @@ export const HomeScreenHeader = (props) => {
       </Pressable>
     </View>
   )
-}
+})

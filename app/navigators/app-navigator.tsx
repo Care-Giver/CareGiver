@@ -41,6 +41,7 @@ import {
   FavoritesScreen,
   EditPetInfoScreen,
   ManageBookingScreen,
+  CgCalendarListScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -54,6 +55,7 @@ import {
   ScreenRootView,
   PreReg18,
   EditPetInfoScreenHeader,
+  CgScreenHeader,
 } from "#components"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -110,6 +112,9 @@ export type NavigatorParamList = {
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
   "caregiver-set-additional-price-screen": undefined
 
+  // * cg - calendar stack
+  "cg-calendar-list-screen": undefined
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -122,6 +127,26 @@ export type NavigatorParamList = {
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const Tab = createBottomTabNavigator()
+
+const CalendarStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="cg-calendar-list-screen"
+    >
+      <Stack.Screen
+        name="cg-calendar-list-screen"
+        component={CgCalendarListScreen}
+        options={{
+          header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
 
 const AllStacks = () => {
   return (
@@ -585,7 +610,7 @@ const CareGiverStacks = () => {
       />
       <Tab.Screen
         name="Calendar"
-        component={AllStacks}
+        component={CalendarStack}
         options={{
           tabBarLabel: "달력",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,

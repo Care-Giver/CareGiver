@@ -46,3 +46,4 @@ export * from "./set-price-stack/caregiver/caregiver-set-price-screen/caregiver-
 export * from "./set-price-stack/caregiver/caregiver-set-additional-price-screen/caregiver-set-additional-price-screen"
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./manage-booking/manage-booking-screen"
+export * from "./cg-calendar-list/cg-calendar-list-screen"
