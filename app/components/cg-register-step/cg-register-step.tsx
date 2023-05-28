@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useState } from "react"
-import { StyleProp, View, ViewStyle, Text, Button } from "react-native"
+import { StyleProp, View, ViewStyle, Button, StyleSheet } from "react-native"
 import { Row } from "../basics/row/row"
 import { observer } from "mobx-react-lite"
-import { GIVER_CASUAL_NAVY, LBG } from "#theme"
+import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20 } from "#theme"
 import { PopSem12 } from "#components"
 
 const ROOT: ViewStyle = {
@@ -11,12 +11,16 @@ const ROOT: ViewStyle = {
   paddingVertical: 10,
   //paddingLeft: 16,
 }
-const styles1 = {
+const _styles = StyleSheet.create({
   done: {
     width: 24,
     height: 24,
     backgroundColor: GIVER_CASUAL_NAVY,
+    borderColor: GIVER_CASUAL_NAVY,
+    borderWidth: 2,
     borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   progress: {
     width: "auto",
@@ -24,6 +28,7 @@ const styles1 = {
     borderColor: GIVER_CASUAL_NAVY,
     borderWidth: 2,
     borderRadius: 15,
+    justifyContent: "center",
   },
   todo: {
     width: 24,
@@ -31,8 +36,10 @@ const styles1 = {
     borderColor: "#CBD1E1",
     borderWidth: 2,
     borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
-}
+})
 
 export interface CgRegisterStepProps {
   /**
@@ -65,39 +72,27 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
 
   const DoneComponent = ({ currentStep }) => {
     return (
-      <View style={styles1.done}>
-        <PopSem12
-          text={currentStep}
-          color={"#FFFFFF"}
-          style={{ marginHorizontal: 10, marginVertical: 3 }}
-        />
+      <View style={_styles.done}>
+        <PopSem12 text={currentStep} color={"#FFFFFF"} />
       </View>
     )
   }
   const ProgressComponent = ({ currentStep }) => {
     return (
-      <Row style={styles1.progress}>
-        <PopSem12
-          text={currentStep}
-          color={GIVER_CASUAL_NAVY}
-          style={{ marginLeft: 10, marginVertical: 3 }}
-        />
+      <Row style={_styles.progress}>
+        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY} style={{ marginLeft: 10 }} />
         <PopSem12
           text={title}
           color={GIVER_CASUAL_NAVY}
-          style={{ marginLeft: 10, marginVertical: 3, marginRight: 15 }}
+          style={{ marginLeft: 10, marginRight: 16 }}
         />
       </Row>
     )
   }
   const TodoComponent = ({ currentStep }) => {
     return (
-      <View style={styles1.todo}>
-        <PopSem12
-          text={currentStep}
-          color={"#CBD1E1"}
-          style={{ marginHorizontal: 8, marginVertical: 3 }}
-        />
+      <View style={_styles.todo}>
+        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY_20} />
       </View>
     )
   }
@@ -115,6 +110,7 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
         <View style={{ marginRight: 10 }} />
         {getStatusComponent(step, 3)}
       </Row>
+
       <Button title="1번째 단계입니다." onPress={() => handleStepChange(1, "펫시터 정보 설정")} />
       <Button title="2번째 단계입니다." onPress={() => handleStepChange(2, "펫시터 서비스 설정")} />
       <Button
