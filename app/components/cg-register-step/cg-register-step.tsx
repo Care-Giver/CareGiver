@@ -4,40 +4,6 @@ import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20 } from "#theme"
 import { PopSem12 } from "#components"
 
-const _styles = StyleSheet.create({
-  done: {
-    width: 24,
-    height: 24,
-    backgroundColor: GIVER_CASUAL_NAVY,
-    borderColor: GIVER_CASUAL_NAVY,
-    borderWidth: 2,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  progress: {
-    width: "auto",
-    height: 24,
-    borderColor: GIVER_CASUAL_NAVY,
-    borderWidth: 2,
-    borderRadius: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start", // == 'display: inline-block'  (ref: https://stackoverflow.com/a/45335695/16673541)
-  },
-
-  todo: {
-    width: 24,
-    height: 24,
-    borderColor: "#CBD1E1",
-    borderWidth: 2,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-})
-
 export type Step = "todo" | "progress" | "done"
 
 export interface CgRegisterStepProps {
@@ -114,4 +80,38 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
     case "done":
       return <Done />
   }
+})
+
+const _styles = StyleSheet.create({
+  done: {
+    width: 24,
+    height: 24,
+    backgroundColor: GIVER_CASUAL_NAVY,
+    borderColor: GIVER_CASUAL_NAVY,
+    borderWidth: 2,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  progress: {
+    width: "auto",
+    height: 24,
+    borderColor: GIVER_CASUAL_NAVY,
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start", // == 'display: inline-block'  (ref: https://stackoverflow.com/a/45335695/16673541)
+  },
+
+  todo: {
+    width: 24,
+    height: 24,
+    borderColor: "#CBD1E1",
+    borderWidth: 2,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 })
