@@ -22,7 +22,14 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
       <ScreenRootView testID="Temp">
         <CgRegisterStep step="todo" number={1} title="가격 및 특이사항 설정" />
         <CgRegisterStep step="progress" number={1} title="가격 및 특이사항 설정" />
-        <CgRegisterStep step="done" number={1} title="가격 및 특이사항 설정" />
+        <CgRegisterStep
+          step="done"
+          number={1}
+          title="가격 및 특이사항 설정"
+          onPress={() => {
+            alert("hi")
+          }}
+        />
       </ScreenRootView>
     )
   },

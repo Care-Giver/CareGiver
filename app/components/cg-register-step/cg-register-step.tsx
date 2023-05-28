@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
+import { StyleProp, View, ViewStyle, StyleSheet, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20 } from "#theme"
 import { PopSem12 } from "#components"
@@ -66,40 +66,43 @@ export interface CgRegisterStepProps {
    * progress 단계일때 표시됩니다.
    */
   title: string
+
+  onPress?: () => void
 }
 
 export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegisterStepProps) {
-  const { style, step = "todo", number = 1, title = "제목없음" } = props
+  const { style, step = "todo", number = 1, title = "제목없음", onPress } = props
+  const Wrapper = onPress ? Pressable : View
 
   const Todo = () => {
     const styles = Object.assign({}, _styles.todo, style)
     return (
-      <View style={styles}>
+      <Wrapper style={styles} onPress={onPress}>
         <PopSem12 text={number.toString()} color={GIVER_CASUAL_NAVY_20} />
-      </View>
+      </Wrapper>
     )
   }
 
   const Progress = () => {
     const styles = Object.assign({}, _styles.progress, style)
     return (
-      <View style={styles}>
+      <Wrapper style={styles} onPress={onPress}>
         <PopSem12 text={number.toString()} color={GIVER_CASUAL_NAVY} style={{ marginLeft: 10 }} />
         <PopSem12
           text={title}
           color={GIVER_CASUAL_NAVY}
           style={{ marginLeft: 10, marginRight: 16 }}
         />
-      </View>
+      </Wrapper>
     )
   }
 
   const Done = () => {
     const styles = Object.assign({}, _styles.done, style)
     return (
-      <View style={styles}>
+      <Wrapper style={styles} onPress={onPress}>
         <PopSem12 text={number.toString()} color={"#FFFFFF"} />
-      </View>
+      </Wrapper>
     )
   }
 
