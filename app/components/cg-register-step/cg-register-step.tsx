@@ -38,7 +38,7 @@ const _styles = StyleSheet.create({
   },
 })
 
-type Step = "todo" | "progress" | "done"
+export type Step = "todo" | "progress" | "done"
 
 export interface CgRegisterStepProps {
   /**
@@ -105,12 +105,6 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
       </Wrapper>
     )
   }
-
-  //컴포넌트 내부에서 margin을 주는 방법도 있지만, 뭔가 그렇게되면 모듈화라고 보기 어렵고 헷갈릴 것 같습니다. 그래서 외부에서 margin을 주는 방법을 택했습니다.
-  //애초에 Row에서 각 컴포넌트를 margin 10을 주는 것을 찾아보았는데, 없다고 판단되었습니다.
-
-  // 그리고, 값에따라 View가 달라지는 것보다 뭔가 3개의 Component를 생성하여 모듈화가 활성화된게 나은지 고민했는데 전자는 애초에 구현이 좀 힘들어보이고 복잡해서 후자를 택했습니다.
-  // Q. PopSem12 같은 CareGiver 내장함수(?)를 사용할 때, Text나 View처럼 다룰 수는 없는 것인지가 좀 궁금합니다. 저렇게 text = 해서 구성해야하는지 꼭 stylesheet안에 담고싶은데 잘 안되어서요..
 
   switch (step) {
     case "todo":

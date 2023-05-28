@@ -1,9 +1,8 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView, CgRegisterStep, PreBol12 } from "#components"
-import { View } from "react-native"
+import { ScreenRootView, CgRegisterStep, Step } from "#components"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -18,17 +17,35 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
 
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
+
+    const [step, setStep] = useState<Step>("todo")
+
+    const stepHandler = () => {
+      switch (step) {
+        case "todo":
+          setStep("progress")
+          break
+        case "progress":
+          setStep("done")
+          break
+        case "done":
+          setStep("todo")
+          break
+      }
+    }
+
     return (
       <ScreenRootView testID="Temp">
         <CgRegisterStep step="todo" number={1} title="가격 및 특이사항 설정" />
         <CgRegisterStep step="progress" number={1} title="가격 및 특이사항 설정" />
+        <CgRegisterStep step="done" number={1} title="가격 및 특이사항 설정" />
+
         <CgRegisterStep
-          step="done"
-          number={1}
-          title="가격 및 특이사항 설정"
-          onPress={() => {
-            alert("hi")
-          }}
+          step={step}
+          number={2}
+          title="펫시터 서비스 설정"
+          onPress={stepHandler}
+          style={{ marginTop: 100 }}
         />
       </ScreenRootView>
     )
