@@ -1,13 +1,11 @@
 import React, { ReactNode } from "react"
-import { FlexStyle, View, ViewStyle } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import { styles } from "../common-styles"
-//- TODO: RowProps 생성 (ScreenProps) 참고할 것
-// export const Row = (props: RowProps) => {
 
 interface RowProps {
   children: ReactNode
 
-  style?: FlexStyle | ViewStyle
+  style?: StyleProp<ViewStyle>
 
   /**
    * marginTop
@@ -20,14 +18,39 @@ interface RowProps {
   mb?: number
 
   /**
-   * marginVertical (could be overlapped by mt or mb)
+   * marginVertical (mt, mb 사용시, 무시됩니다)
    */
   mv?: number
+
+  /**
+   * marginLeft
+   */
+  ml?: number
+
+  /**
+   * marginRight
+   */
+  mr?: number
+
+  /**
+   * marginHorizontal (mr, ml 사용시, 무시됩니다)
+   */
+  mh?: number
 }
 
 export const Row = (props: RowProps) => {
-  const { children, style, mv, mt, mb } = props
-  const $style = Object.assign({}, { marginVertical: mv, marginTop: mt, marginBottom: mb })
+  const { children, style, mt, mb, mv, ml, mr, mh } = props
+  const $style = Object.assign(
+    {},
+    {
+      marginVertical: mv,
+      marginHorizontal: mh,
+      marginTop: mt,
+      marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
+    },
+  )
 
   return <View style={[styles.ROW_PRESET, $style, style]}>{children}</View>
 }

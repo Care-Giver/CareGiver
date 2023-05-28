@@ -124,12 +124,11 @@ const Tab = createBottomTabNavigator()
 const AllStacks = () => {
   return (
     <Stack.Navigator
-      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
       {/* //* 홈 */}
       <Stack.Screen

@@ -36,6 +36,14 @@ export const LBG = "#F8F8FA"
 // * Brand colors
 export const GIVER_CASUAL_NAVY = "#00206C"
 
+export const GIVER_CASUAL_NAVY_80 = "#324C89"
+
+export const GIVER_CASUAL_NAVY_60 = "#6578A6"
+
+export const GIVER_CASUAL_NAVY_40 = "#98A5C3"
+
+export const GIVER_CASUAL_NAVY_20 = "#CBD1E1"
+
 export const GIVER_ROMANTIC_GRAY = "#E8E7E5"
 
 export const CARE_NATURAL_BLUE = "#B1C9DE"

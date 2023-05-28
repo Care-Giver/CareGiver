@@ -33,6 +33,7 @@ export * from "./screen-headers/edit-mypage-screen-header/edit-mypage-screen-hea
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 export * from "./screen-headers/edit-pet-info-screen-header/edit-pet-info-screen-header"
+
 //* others
 export * from "./division-line/division-line"
 export * from "./division-line-vertical/division-line-vertical"
@@ -55,7 +56,6 @@ export * from "./filter-header/filter-header"
 export * from "./review-box/review-box"
 export * from "./sitter-profile-card/sitter-profile-card"
 export * from "./in-progress-booking/in-progress-booking"
-
 export * from "./user-or-pet-profile-info/user-or-pet-profile-info"
 export * from "./time-selector/time-selector"
 export * from "./past-booking/past-booking"
@@ -70,3 +70,5 @@ export * from "./booking-info-card/booking-info-card"
 export * from "./weight-modal/weight-modal"
 export * from "./birthday-modal/birthday-modal"
 export * from "./cg-service-choice-button/cg-service-choice-button"
+export * from "./certificate-registration-note/certificate-registration-note"
+export * from "./cg-register-step/cg-register-step"
