@@ -125,16 +125,8 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="temp-screen" //자격증 등록 사항 표시하기 위해 임시 추가
+      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
-      {/* //* 자격증 등록 사항 표시하기 위해 임시 추가 */}
-      <Stack.Screen
-        name="temp-screen"
-        component={TempScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
