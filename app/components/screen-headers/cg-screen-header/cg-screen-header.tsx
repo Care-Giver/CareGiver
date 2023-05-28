@@ -1,5 +1,5 @@
 import React from "react"
-import { View, StyleSheet, Image, Pressable } from "react-native"
+import { View, StyleSheet, Image, Pressable, StatusBar } from "react-native"
 import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { images } from "#images"
@@ -7,23 +7,26 @@ import { HEADER_ROOT } from "../common-styles"
 
 export const CgScreenHeader = observer(function CgScreenHeader(props) {
   return (
-    <View {...props} style={[_styles.root, SHADOW_1]}>
-      {/* //? 케어기버 로고 */}
-      <Image style={_styles.careGiverLogo} source={images.care_giver_logo_light_162x20} />
+    <>
+      <StatusBar backgroundColor={GIVER_CASUAL_NAVY} barStyle="light-content" animated />
+      <View {...props} style={[_styles.root, SHADOW_1]}>
+        {/* //? 케어기버 로고 */}
+        <Image style={_styles.careGiverLogo} source={images.care_giver_logo_light_162x20} />
 
-      {/* //? 알람 버튼 */}
-      <Pressable
-        onPress={() => {
-          alert("알림 기능은 준비중입니다.")
-        }}
-        style={{
-          marginLeft: "auto",
-          marginRight: 16,
-        }}
-      >
-        <Image style={_styles.bell} source={images.bell_light} />
-      </Pressable>
-    </View>
+        {/* //? 알람 버튼 */}
+        <Pressable
+          onPress={() => {
+            alert("알림 기능은 준비중입니다.")
+          }}
+          style={{
+            marginLeft: "auto",
+            marginRight: 16,
+          }}
+        >
+          <Image style={_styles.bell} source={images.bell_light} />
+        </Pressable>
+      </View>
+    </>
   )
 })
 
