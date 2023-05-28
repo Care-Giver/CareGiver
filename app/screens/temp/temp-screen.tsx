@@ -2,7 +2,8 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView, CgRegisterStep } from "#components"
+import { ScreenRootView, CgRegisterStep, PreBol12 } from "#components"
+import { View } from "react-native"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -19,7 +20,9 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
     // const navigation = useNavigation()
     return (
       <ScreenRootView testID="Temp">
-        <CgRegisterStep />
+        <CgRegisterStep step="todo" number={1} title="가격 및 특이사항 설정" />
+        <CgRegisterStep step="progress" number={1} title="가격 및 특이사항 설정" />
+        <CgRegisterStep step="done" number={1} title="가격 및 특이사항 설정" />
       </ScreenRootView>
     )
   },

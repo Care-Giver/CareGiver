@@ -1,16 +1,9 @@
 import * as React from "react"
-import { useState } from "react"
-import { StyleProp, View, ViewStyle, Button, StyleSheet } from "react-native"
-import { Row } from "../basics/row/row"
+import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20 } from "#theme"
 import { PopSem12 } from "#components"
 
-const ROOT: ViewStyle = {
-  justifyContent: "center",
-  paddingVertical: 10,
-  //paddingLeft: 16,
-}
 const _styles = StyleSheet.create({
   done: {
     width: 24,
@@ -22,14 +15,18 @@ const _styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   progress: {
     width: "auto",
     height: 24,
     borderColor: GIVER_CASUAL_NAVY,
     borderWidth: 2,
     borderRadius: 15,
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start", // == 'display: inline-block'  (ref: https://stackoverflow.com/a/45335695/16673541)
   },
+
   todo: {
     width: 24,
     height: 24,
@@ -41,60 +38,67 @@ const _styles = StyleSheet.create({
   },
 })
 
+type Step = "todo" | "progress" | "done"
+
 export interface CgRegisterStepProps {
   /**
    * padding, margin 을 줌으로써, 추가적인 스타일링을 부여할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
+
+  /**
+   * 단계를 입력해주세요
+   * - "todo"
+   * - "progress"
+   * - "done"
+   */
+  step: Step
+
+  /**
+   * 몇번째 단계인지 입력해주세요.
+   * number 로 입력해주세요.
+   * (TODO: stepNumber 에 따른 logic 분기)
+   */
+  number: number
+
+  /**
+   * step 의 제목을 입력해주세요
+   * progress 단계일때 표시됩니다.
+   */
+  title: string
 }
 
 export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegisterStepProps) {
-  const { style } = props
-  const styles = Object.assign({}, ROOT, style)
+  const { style, step = "todo", number = 1, title = "제목없음" } = props
 
-  const [step, setStep] = useState(1) // 단계 번호 상태
-  const [title, setTitle] = useState("펫시터 서비스 설정") // 단계 제목 상태
-  const handleStepChange = (step: number, title: string) => {
-    //번호와 제목 한번에 변경
-    setStep(step)
-    setTitle(title)
-  }
-
-  const getStatusComponent = (step: number, currentStep: number) => {
-    if (step < currentStep) {
-      return <Todo currentStep={currentStep} />
-    } else if (step === currentStep) {
-      return <Progress currentStep={currentStep} />
-    } else {
-      return <Done currentStep={currentStep} />
-    }
-  }
-
-  const Todo = ({ currentStep }) => {
+  const Todo = () => {
+    const styles = Object.assign({}, _styles.todo, style)
     return (
-      <View style={_styles.todo}>
-        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY_20} />
+      <View style={styles}>
+        <PopSem12 text={number.toString()} color={GIVER_CASUAL_NAVY_20} />
       </View>
     )
   }
 
-  const Progress = ({ currentStep }) => {
+  const Progress = () => {
+    const styles = Object.assign({}, _styles.progress, style)
     return (
-      <Row style={_styles.progress}>
-        <PopSem12 text={currentStep} color={GIVER_CASUAL_NAVY} style={{ marginLeft: 10 }} />
+      <View style={styles}>
+        <PopSem12 text={number.toString()} color={GIVER_CASUAL_NAVY} style={{ marginLeft: 10 }} />
         <PopSem12
           text={title}
           color={GIVER_CASUAL_NAVY}
           style={{ marginLeft: 10, marginRight: 16 }}
         />
-      </Row>
+      </View>
     )
   }
 
-  const Done = ({ currentStep }) => {
+  const Done = () => {
+    const styles = Object.assign({}, _styles.done, style)
     return (
-      <View style={_styles.done}>
-        <PopSem12 text={currentStep} color={"#FFFFFF"} />
+      <View style={styles}>
+        <PopSem12 text={number.toString()} color={"#FFFFFF"} />
       </View>
     )
   }
@@ -104,22 +108,13 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
 
   // 그리고, 값에따라 View가 달라지는 것보다 뭔가 3개의 Component를 생성하여 모듈화가 활성화된게 나은지 고민했는데 전자는 애초에 구현이 좀 힘들어보이고 복잡해서 후자를 택했습니다.
   // Q. PopSem12 같은 CareGiver 내장함수(?)를 사용할 때, Text나 View처럼 다룰 수는 없는 것인지가 좀 궁금합니다. 저렇게 text = 해서 구성해야하는지 꼭 stylesheet안에 담고싶은데 잘 안되어서요..
-  return (
-    <View style={styles}>
-      <Row style={{ flexDirection: "row" }}>
-        {getStatusComponent(step, 1)}
-        <View style={{ marginRight: 10 }} />
-        {getStatusComponent(step, 2)}
-        <View style={{ marginRight: 10 }} />
-        {getStatusComponent(step, 3)}
-      </Row>
 
-      <Button title="1번째 단계입니다." onPress={() => handleStepChange(1, "펫시터 정보 설정")} />
-      <Button title="2번째 단계입니다." onPress={() => handleStepChange(2, "펫시터 서비스 설정")} />
-      <Button
-        title="3번째 단계입니다."
-        onPress={() => handleStepChange(3, "가격 및 특이사항 설정")}
-      />
-    </View>
-  )
+  switch (step) {
+    case "todo":
+      return <Todo />
+    case "progress":
+      return <Progress />
+    case "done":
+      return <Done />
+  }
 })
