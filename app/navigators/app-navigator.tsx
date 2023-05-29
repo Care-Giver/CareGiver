@@ -41,6 +41,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  TempHyeriScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -115,6 +116,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "temp-hyeri-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -129,8 +131,17 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="temp-hyeri-screen"
     >
+      {/* //* 혜리 작업용 임시스크린 */}
+      <Stack.Screen
+        name="temp-hyeri-screen"
+        component={TempHyeriScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
