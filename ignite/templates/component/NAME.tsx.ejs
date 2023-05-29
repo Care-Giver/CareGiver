@@ -1,10 +1,6 @@
-import * as React from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
+import React from "react"
+import { View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-
-const ROOT: ViewStyle = {
-  justifyContent: "center",
-}
 
 export interface <%= props.pascalCaseName %>Props {
   /**
@@ -15,11 +11,17 @@ export interface <%= props.pascalCaseName %>Props {
 
 export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
   const { style } = props
-  const styles = Object.assign({}, ROOT, style)
+  const allStyles = Object.assign({}, styles.root, style)
 
   return (
-    <View style={styles}>
+    <View style={allStyles}>
       {/* 해피코딩^^ */}
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  root: {
+    
+  },
 })
