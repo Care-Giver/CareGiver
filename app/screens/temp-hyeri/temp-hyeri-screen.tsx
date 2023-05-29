@@ -19,7 +19,7 @@ export const TempHyeriScreen: FC<
   // const navigation = useNavigation()
   return (
     <ScreenRootView testID="TempHyeri">
-      <PhotoRegistrationNote />
+      <PhotoRegistrationNote style={{ marginTop: 100 }} />
     </ScreenRootView>
   )
 })
