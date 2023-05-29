@@ -1,7 +1,6 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle, Text } from "react-native"
+import { StyleProp, View, ViewStyle, Text, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { StyleSheet } from "react-native"
 
 const ROOT: ViewStyle = {
   justifyContent: "center",
