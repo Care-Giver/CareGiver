@@ -2,7 +2,8 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView } from "#components"
+import { PreReg18, ScreenRootView } from "#components"
+import { View } from "react-native"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -17,5 +18,16 @@ export const ManageBookingScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-  return <ScreenRootView testID="ManageBooking">{/* 해피코딩^^ */}</ScreenRootView>
+  return (
+    <ScreenRootView testID="ManageBooking">
+      <View
+        style={{
+          marginVertical: 200,
+          alignSelf: "center",
+        }}
+      >
+        <PreReg18>예약 관리</PreReg18>
+      </View>
+    </ScreenRootView>
+  )
 })
