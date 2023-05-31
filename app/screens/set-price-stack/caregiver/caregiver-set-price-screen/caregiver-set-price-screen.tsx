@@ -79,7 +79,9 @@ export const CaregiverSetPriceScreen: FC<
         <PreBol18 color={HEAD_LINE} text={`${serviceText}의 경우 기본 예약 요금을`} />
         {/* // ? second line */}
         <View style={common_styles.secondTitleContainer}>
-          <UnderlineText text={`${standardText} 기준`} />
+          <UnderlineText>
+            <PreBol18 text={`${standardText} 기준`} />
+          </UnderlineText>
           <PreBol18 color={HEAD_LINE} text="으로 설정해주세요!" />
         </View>
       </View>
