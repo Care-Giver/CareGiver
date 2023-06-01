@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgServiceChoiceButton, ScreenRootView, Row, CustomModal } from "#components"
+import { CgServiceChoiceButton, ScreenRootView, Row, CustomModal, PreReg12 } from "#components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 
@@ -31,6 +31,7 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
           subtitle={`손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다.`}
           onPress={onPress}
         />
+     
       </ScreenRootView>
     )
   },
