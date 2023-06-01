@@ -46,4 +46,3 @@ export * from "./set-price-stack/caregiver/caregiver-set-price-screen/caregiver-
 export * from "./set-price-stack/caregiver/caregiver-set-additional-price-screen/caregiver-set-additional-price-screen"
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./temp/temp-screen"
-export * from "./temp-hyeri/temp-hyeri-screen"
