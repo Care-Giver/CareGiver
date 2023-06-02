@@ -41,6 +41,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  CgCalendarScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -115,6 +116,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "cg-calendar-screen"
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -374,6 +376,15 @@ const AllStacks = () => {
       <Stack.Screen
         name="temp-screen"
         component={TempScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/*//? MVP-17 */}
+      <Stack.Screen
+        name="cg-calendar-screen"
+        component={CgCalendarScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
