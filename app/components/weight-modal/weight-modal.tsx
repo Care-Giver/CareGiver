@@ -102,7 +102,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
   })
 
   const onNicknameSubmit = (data: WeightForm) => {
-    console.log("pressed!!!!")
+    //console.log("pressed!!!!")
     handleInput(data.weight)
     handleModalHide()
     reset()
@@ -114,7 +114,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
       <Pressable
         style={{ flex: 1 }}
         onPress={() => {
-          console.log("pressed0")
+          //console.log("pressed0")
           reset()
           handleModalHide()
         }}
@@ -132,11 +132,12 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
           }}
         >
           {/* //*모달 안쪽 눌렀을 때는 모달창 닫히기 방지 */}
-          <Pressable onPress={() => console.log("pressed")}>
+          <Pressable //onPress={() => console.log("pressed")}
+          >
             <View style={styles.modalPetWeight}>
               <View
                 style={{
-                  paddingHorizontal: 24,
+                  paddingHorizontal: 15,
                 }}
               >
                 {/* //*모달창 제목 부분  */}
@@ -156,14 +157,14 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
                       value={value}
                       autoCapitalize="none"
                       keyboardType="numeric"
-                      maxLength={5} //*두자리수 몸무게인 경우 00.00 까지 쓸수있게.
+                      maxLength={4} //*두자리수 몸무게인 경우 00.0 까지 쓸수있게.
                     />
                   )}
                   rules={{
                     required: true,
                     pattern: {
                       value: /^[0-9]+(\.[0-9]{0,2})?$/,
-                      message: "* 숫자만 입력해주세요.",
+                      message: "* 숫자만 입력해주세요.(소수점 첫째 자리까지 입력 가능합니다)",
                     },
                   }}
                 />
