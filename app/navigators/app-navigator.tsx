@@ -59,7 +59,7 @@ import {
   CgScreenHeader,
 } from "#components"
 import { images } from "#images"
-import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
+import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { Type, useStores } from "#models"
@@ -474,6 +474,7 @@ const ClientTabs = () => {
   const $tabBarStyleAndroid: ViewStyle = {
     backgroundColor: "white",
     borderTopWidth: 0,
+    height: BOTTOM_TAB_NAVIGATOR,
   }
 
   const $tabBarStyleIOS: ViewStyle = {
@@ -486,8 +487,12 @@ const ClientTabs = () => {
         tabBarStyle: ((route) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? ""
           console.log("routeName", routeName)
-          if (HideBottomNavigatorScreens.includes(routeName) || !routeName) {
-            return { display: "none" }
+          if (HideBottomNavigatorScreens.includes(routeName)) {
+            return {
+              backgroundColor: "white",
+              height: 0,
+              borderTopWidth: 0,
+            }
           }
 
           return Platform.select({
@@ -495,6 +500,12 @@ const ClientTabs = () => {
             ios: $tabBarStyleIOS,
           })
         })(route),
+        tabBarLabelStyle: {
+          paddingBottom: Platform.select({
+            android: 8,
+            ios: 0,
+          }),
+        },
         headerShown: false,
         headerStyle: { backgroundColor: "white" },
       })}
@@ -782,6 +793,7 @@ const CareGiverTabs = () => {
   const $tabBarStyleAndroid: ViewStyle = {
     backgroundColor: "white",
     borderTopWidth: 0,
+    height: BOTTOM_TAB_NAVIGATOR,
   }
 
   const $tabBarStyleIOS: ViewStyle = {
@@ -790,15 +802,33 @@ const CareGiverTabs = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
+        tabBarStyle: ((route) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+          console.log("routeName", routeName)
+          if (HideBottomNavigatorScreens.includes(routeName)) {
+            return {
+              backgroundColor: "white",
+              height: 0,
+              borderTopWidth: 0,
+            }
+          }
+
+          return Platform.select({
+            android: $tabBarStyleAndroid,
+            ios: $tabBarStyleIOS,
+          })
+        })(route),
+        tabBarLabelStyle: {
+          paddingBottom: Platform.select({
+            android: 8,
+            ios: 0,
+          }),
+        },
         headerShown: false,
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
-        tabBarStyle: Platform.select({
-          android: $tabBarStyleAndroid,
-          ios: $tabBarStyleIOS,
-        }),
-      }}
+      })}
       initialRouteName="Calendar"
     >
       <Tab.Screen
