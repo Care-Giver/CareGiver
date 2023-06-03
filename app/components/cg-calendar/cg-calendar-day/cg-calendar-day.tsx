@@ -3,6 +3,7 @@ import { View, Pressable, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
 import { CgCalendarDayProps } from "./cg-calendar-day.props"
+import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
   const { date, state, selected } = props
@@ -12,10 +13,10 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     console.log(date.dateString)
     console.log(selected)
     if (date.dateString == selected) {
-      return "#00206C"
+      return GIVER_CASUAL_NAVY
     }
     if (state == "today") {
-      return "#F8F8FA"
+      return LBG
     }
     return null
   }
@@ -24,12 +25,12 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
       return "white"
     }
     if (state == "today") {
-      return "#00206C"
+      return GIVER_CASUAL_NAVY
     }
     if (state == "disabled") {
-      return "#E5E5EC"
+      return MIDDLE_LINE
     }
-    return "#999999"
+    return DISABLED
   }
 
   return (
@@ -37,7 +38,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
       style={[
         styles.dayContainer,
         {
-          backgroundColor: state === "today" ? "#F8F8FA" : null,
+          backgroundColor: state === "today" ? LBG : null,
           alignItems: "center",
         },
       ]}
