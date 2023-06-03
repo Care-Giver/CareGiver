@@ -564,7 +564,7 @@ const ClientTabs = () => {
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="message"
+              name="forum"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
@@ -884,7 +884,7 @@ const CareGiverTabs = () => {
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="message"
+              name="forum"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
