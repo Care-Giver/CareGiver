@@ -132,6 +132,7 @@ const AllStacks = () => {
       }}
       //initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
       initialRouteName="edit-pet-info-screen"
+      //initialRouteName="edit-mypage-screen"
     >
       {/* //* 혜리 작업용 임시스크린
       <Stack.Screen

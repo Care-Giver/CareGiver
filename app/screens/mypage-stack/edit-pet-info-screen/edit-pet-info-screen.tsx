@@ -283,14 +283,25 @@ export const EditPetInfoScreen: FC<
             {/* //*이름 */}
             {editable ? (
               <Pressable
+                style={{ paddingTop: 7 }}
                 onPress={() => {
                   setNameTouched(true)
                 }}
               >
-                <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
+                <UserOrPetProfileInfo
+                  title="이름"
+                  profileInfo={name}
+                  showOption={false}
+                  additionalPadding={35}
+                />
               </Pressable>
             ) : (
-              <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
+              <UserOrPetProfileInfo
+                title="이름"
+                profileInfo={name}
+                showOption={false}
+                additionalPadding={35}
+              />
             )}
 
             {/* //*생년월일 */}
@@ -300,22 +311,41 @@ export const EditPetInfoScreen: FC<
                   setBirthdayTouched(true)
                 }}
               >
-                <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
+                <UserOrPetProfileInfo
+                  title="생년월일"
+                  profileInfo={birthday}
+                  showOption={false}
+                  additionalPadding={35}
+                />
               </Pressable>
             ) : (
-              <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
+              <UserOrPetProfileInfo
+                title="생년월일"
+                profileInfo={birthday}
+                showOption={false}
+                additionalPadding={35}
+              />
             )}
 
             <UserOrPetProfileInfo
               title="품종"
               profileInfo={currentPet.species}
               showOption={editable}
+              additionalPadding={35}
+            />
+
+            <UserOrPetProfileInfo
+              title="성별"
+              profileInfo={sex}
+              showOption={editable}
+              additionalPadding={35}
             />
 
             <UserOrPetProfileInfo
               title="크기"
               profileInfo={currentPet.petType}
               showOption={editable}
+              additionalPadding={35}
             />
 
             {/* //*몸무게 */}
@@ -329,22 +359,28 @@ export const EditPetInfoScreen: FC<
                   title="몸무게"
                   profileInfo={weight + "kg"}
                   showOption={false}
+                  additionalPadding={35}
                 />
               </Pressable>
             ) : (
-              <UserOrPetProfileInfo title="몸무게" profileInfo={weight + "kg"} showOption={false} />
+              <UserOrPetProfileInfo
+                title="몸무게"
+                profileInfo={weight + "kg"}
+                showOption={false}
+                additionalPadding={35}
+              />
             )}
 
-            <UserOrPetProfileInfo title="성별" profileInfo={sex} showOption={editable} />
             <UserOrPetProfileInfo
               title="중성화여부"
               profileInfo={Neutralizated}
               showOption={editable}
+              additionalPadding={35}
             />
             {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
             {/* //*반려동물 소개 */}
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-              <View style={{ paddingTop: 20 }}>
+              <View style={{ paddingTop: 35 }}>
                 <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
 
                 <View style={styles.petDescTextBox}>
