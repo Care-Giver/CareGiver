@@ -31,6 +31,7 @@ import { BODY, DEVICE_SCREEN_WIDTH, LBG } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
+import { ScrollView } from "react-native-gesture-handler"
 
 //*images 임시 데이터베이스
 const imagess = [
@@ -236,164 +237,172 @@ export const EditPetInfoScreen: FC<
   return (
     //*저장하기 버튼이 항상 화면 하단에 있게 하기 위해 scroolview 바깥쪽 view 하나 더 필요.
     <View style={{ flex: 1 }}>
-      <ScreenRootView testID="EditPetInfo" preset="scroll" style={{ paddingHorizontal: 0 }}>
-        <View>
-          {/* //*이미지  */}
-          <FlatList
-            data={imagess}
-            renderItem={(
-              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-            ) => (
-              <ImageBackground
-                source={{ uri: item.profileImg }}
-                style={{
-                  width: 390,
-                  height: 240,
-                }}
-                key={index}
-              >
-                <Pressable
-                  onPress={() => {
-                    alert("이미지 등록 준비중입니다.")
+      <ScreenRootView testID="EditPetInfo" preset="fixed" style={{ paddingHorizontal: 0 }}>
+        <ScrollView>
+          <View>
+            {/* //*이미지  */}
+            <FlatList
+              data={imagess}
+              renderItem={(
+                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+              ) => (
+                <ImageBackground
+                  source={{ uri: item.profileImg }}
+                  style={{
+                    width: 390,
+                    height: 240,
                   }}
-                  style={{ position: "absolute", right: 16, bottom: 8 }}
+                  key={index}
                 >
-                  <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
-                </Pressable>
-              </ImageBackground>
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={DEVICE_SCREEN_WIDTH}
-            snapToAlignment={"end"}
-            decelerationRate={"fast"}
-            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-            viewabilityConfig={{
-              viewAreaCoveragePercentThreshold: 51,
-            }}
-            //? 이미지가 바뀌었을때 실행 할 행동 설정.
-            onViewableItemsChanged={onFlatlistUpdate}
-          />
-          <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
-        </View>
-
-        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-          {/* //*이름 */}
-          {editable ? (
-            <Pressable
-              onPress={() => {
-                setNameTouched(true)
+                  <Pressable
+                    onPress={() => {
+                      alert("이미지 등록 준비중입니다.")
+                    }}
+                    style={{ position: "absolute", right: 16, bottom: 8 }}
+                  >
+                    <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                  </Pressable>
+                </ImageBackground>
+              )}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={DEVICE_SCREEN_WIDTH}
+              snapToAlignment={"end"}
+              decelerationRate={"fast"}
+              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+              viewabilityConfig={{
+                viewAreaCoveragePercentThreshold: 51,
               }}
-            >
+              //? 이미지가 바뀌었을때 실행 할 행동 설정.
+              onViewableItemsChanged={onFlatlistUpdate}
+            />
+            <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
+          </View>
+
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+            {/* //*이름 */}
+            {editable ? (
+              <Pressable
+                onPress={() => {
+                  setNameTouched(true)
+                }}
+              >
+                <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
+              </Pressable>
+            ) : (
               <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
-            </Pressable>
-          ) : (
-            <UserOrPetProfileInfo title="이름" profileInfo={name} showOption={false} />
-          )}
+            )}
 
-          {/* //*생년월일 */}
-          {editable ? (
-            <Pressable
-              onPress={() => {
-                setBirthdayTouched(true)
-              }}
-            >
+            {/* //*생년월일 */}
+            {editable ? (
+              <Pressable
+                onPress={() => {
+                  setBirthdayTouched(true)
+                }}
+              >
+                <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
+              </Pressable>
+            ) : (
               <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
-            </Pressable>
-          ) : (
-            <UserOrPetProfileInfo title="생년월일" profileInfo={birthday} showOption={false} />
-          )}
+            )}
 
-          <UserOrPetProfileInfo
-            title="품종"
-            profileInfo={currentPet.species}
-            showOption={editable}
-          />
+            <UserOrPetProfileInfo
+              title="품종"
+              profileInfo={currentPet.species}
+              showOption={editable}
+            />
 
-          <UserOrPetProfileInfo
-            title="크기"
-            profileInfo={currentPet.petType}
-            showOption={editable}
-          />
+            <UserOrPetProfileInfo
+              title="크기"
+              profileInfo={currentPet.petType}
+              showOption={editable}
+            />
 
-          {/* //*몸무게 */}
-          {editable ? (
-            <Pressable
-              onPress={() => {
-                setWeightTouched(true)
-              }}
-            >
-              <UserOrPetProfileInfo title="몸무게" profileInfo={weight + "kg"} showOption={false} />
-            </Pressable>
-          ) : (
-            <UserOrPetProfileInfo title="몸무게" profileInfo={weight + "kg"} showOption={false} />
-          )}
-
-          <UserOrPetProfileInfo title="성별" profileInfo={sex} showOption={editable} />
-          <UserOrPetProfileInfo
-            title="중성화여부"
-            profileInfo={Neutralizated}
-            showOption={editable}
-          />
-          {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
-          {/* //*반려동물 소개 */}
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <View style={{ paddingTop: 20 }}>
-              <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
-
-              <View style={styles.petDescTextBox}>
-                <TextInput
-                  style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
-                  multiline={true}
-                  editable={editable !== undefined ? editable : false}
-                  value={text}
-                  onChangeText={handleTextChange}
+            {/* //*몸무게 */}
+            {editable ? (
+              <Pressable
+                onPress={() => {
+                  setWeightTouched(true)
+                }}
+              >
+                <UserOrPetProfileInfo
+                  title="몸무게"
+                  profileInfo={weight + "kg"}
+                  showOption={false}
                 />
+              </Pressable>
+            ) : (
+              <UserOrPetProfileInfo title="몸무게" profileInfo={weight + "kg"} showOption={false} />
+            )}
+
+            <UserOrPetProfileInfo title="성별" profileInfo={sex} showOption={editable} />
+            <UserOrPetProfileInfo
+              title="중성화여부"
+              profileInfo={Neutralizated}
+              showOption={editable}
+            />
+            {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
+            {/* //*반려동물 소개 */}
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+              <View style={{ paddingTop: 20 }}>
+                <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
+
+                <View style={styles.petDescTextBox}>
+                  <TextInput
+                    style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
+                    multiline={true}
+                    editable={editable !== undefined ? editable : false}
+                    value={text}
+                    onChangeText={handleTextChange}
+                  />
+                  {/* <PreMed14 color={BODY} text={text} style={{ marginBottom: 10 }} />
+                </TextInput> */}
+                </View>
               </View>
-            </View>
-          </KeyboardAvoidingView>
-        </View>
+            </KeyboardAvoidingView>
+          </View>
 
-        {/* //*닉네임 관리 모달 창  */}
-        <CustomInputModal
-          visibleState={nameTouched}
-          handleModalHide={handleNameModalHide}
-          title="이름"
-          controlMode="userNickname"
-          handleInput={handleNameInput}
-          placeholderInput="pet"
-          validateFunction={() => {
-            return false
-            //TODO : 중복 검출 코드  만들기
-          }}
-        />
-        {/* //*몸무게 관리 모달 창 */}
-        <WeightModal
-          visibleState={weightTouched}
-          handleModalHide={handleweightModalHide}
-          title="몸무게"
-          handleInput={handleWeightInput}
-        />
-        {/* //*생일 관리 모달 창  */}
-        <BirthdayModal
-          visibleState={birthdayTouched}
-          handleModalHide={handleBirthdayModalHide}
-          title="생년월일"
-          handleInput={handleBirthdayInput}
-        />
-        {/* //*수정 후 back 시 나타나는 경고 모달창  */}
-        <CustomModal
-          visibleState={handleGoBack}
-          title="반려동물 정보 수정을 취소하시겠어요?"
-          subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."
-          yesBtnText="정보 수정 취소"
-          noBtnText="계속 수정하기"
-          handleYesPress={handleQuitEditPress}
-          handleNoPress={handleKeepEditPress}
-        />
+          {/* //*닉네임 관리 모달 창  */}
+          <CustomInputModal
+            visibleState={nameTouched}
+            handleModalHide={handleNameModalHide}
+            title="이름"
+            controlMode="userNickname"
+            handleInput={handleNameInput}
+            placeholderInput="pet"
+            validateFunction={() => {
+              return false
+              //TODO : 중복 검출 코드  만들기
+            }}
+          />
+          {/* //*몸무게 관리 모달 창 */}
+          <WeightModal
+            visibleState={weightTouched}
+            handleModalHide={handleweightModalHide}
+            title="몸무게"
+            handleInput={handleWeightInput}
+          />
+          {/* //*생일 관리 모달 창  */}
+          <BirthdayModal
+            visibleState={birthdayTouched}
+            handleModalHide={handleBirthdayModalHide}
+            title="생년월일"
+            handleInput={handleBirthdayInput}
+          />
+          {/* //*수정 후 back 시 나타나는 경고 모달창  */}
+          <CustomModal
+            visibleState={handleGoBack}
+            title="반려동물 정보 수정을 취소하시겠어요?"
+            subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."
+            yesBtnText="정보 수정 취소"
+            noBtnText="계속 수정하기"
+            handleYesPress={handleQuitEditPress}
+            handleNoPress={handleKeepEditPress}
+          />
 
-        {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
-        {editable && <View style={{ height: 60 }} />}
+          {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
+          {editable && <View style={{ height: 60 }} />}
+        </ScrollView>
       </ScreenRootView>
       {/* //*저장하기 버튼 */}
       {editable && (
