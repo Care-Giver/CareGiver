@@ -1,3 +1,4 @@
+import { POPPINS_REGULAR } from "#fonts"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -21,8 +22,7 @@ export const styles = StyleSheet.create({
     marginTop: 8,
   },
   dayText: {
-    fontFamily: "Poppins",
-    fontWeight: "600",
+    fontFamily: POPPINS_REGULAR,
     width: 24,
     height: 24,
     textAlign: "center",
@@ -34,9 +34,8 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     width: 358,
     height: "auto",
-    paddingRight: 0,
-    paddingLeft: 0,
+    paddingBottom: 6,
     zIndex: 1,
-    boxShadow: "0px 0px 4px #00206C",
+    boxShadow: "0px 0px 4px #00206C", // RN StyleSheet 에서 boxShadow prop 은 존재하지 않습니다. 적용되지 않을 스타일링입니다. 제거해주세요 :) -수민
   },
 })

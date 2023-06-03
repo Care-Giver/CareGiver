@@ -7,6 +7,8 @@ import { styles } from "./styles"
 import { CgCalendarProps } from "./cg-calendar.props"
 import "./localeConfig"
 import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
+import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
+import { POPPINS_REGULAR } from "#fonts"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const {} = props
@@ -39,8 +41,9 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }
         monthFormat={"MMMM"}
         theme={{
+          textMonthFontFamily: POPPINS_REGULAR,
           textMonthFontWeight: "bold",
-          monthTextColor: "#00206C",
+          monthTextColor: GIVER_CASUAL_NAVY,
           textMonthFontSize: 20,
         }}
         dayComponent={({ date, state }) => (
@@ -48,7 +51,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
             <CgCalendarDay date={date} state={state} selected={selected} />
           </Pressable>
         )}
-        style={styles.calendar}
+        style={[styles.calendar, SHADOW_1]}
       ></Calendar>
     </View>
   )
