@@ -24,6 +24,7 @@ import {
   WeightModal,
   BirthdayModal,
   CustomModal,
+  PreMed12,
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
@@ -306,18 +307,25 @@ export const EditPetInfoScreen: FC<
 
             {/* //*생년월일 */}
             {editable ? (
-              <Pressable
-                onPress={() => {
-                  setBirthdayTouched(true)
-                }}
-              >
-                <UserOrPetProfileInfo
-                  title="생년월일"
-                  profileInfo={birthday}
-                  showOption={false}
-                  additionalPadding={35}
+              <View>
+                <Pressable
+                  onPress={() => {
+                    setBirthdayTouched(true)
+                  }}
+                >
+                  <UserOrPetProfileInfo
+                    title="생년월일"
+                    profileInfo={birthday}
+                    showOption={false}
+                    additionalPadding={35}
+                  />
+                </Pressable>
+                <PreMed12
+                  color={BODY}
+                  text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
+                  style={{ marginTop: 3 }}
                 />
-              </Pressable>
+              </View>
             ) : (
               <UserOrPetProfileInfo
                 title="생년월일"

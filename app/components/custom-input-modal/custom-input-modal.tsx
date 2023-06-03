@@ -157,7 +157,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
           behavior={Platform.OS === "ios" ? "padding" : "height"} //* iOS 에서 키보드에 모달 안 가리게 하기 ref: https://stackoverflow.com/questions/64961683/in-react-native-how-can-i-use-keyboardavoidingview-with-a-modal-in-ios
           //TODO *react 문서 예시대로 해봄. 안드로이드 behavior 를 셋 중 뭘로 바꿔도 키보드가 등장할 시 밑의 저장 버튼이 올라오는 문제 발생
           style={{
-            width: DEVICE_SCREEN_WIDTH,
+            width: 390,
             flex: 1,
             marginTop: "auto",
             alignItems: "center",
@@ -169,7 +169,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
           <View style={styles.modalUserNickname}>
             <View
               style={{
-                paddingHorizontal: 10,
+                paddingHorizontal: 24,
                 //*확인 버튼 위에는 다 추가적 패딩 필요
               }}
             >
@@ -187,7 +187,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 render={({ field: { onChange, value } }) => (
                   <TextInput
                     style={{
-                      paddingTop: 43,
+                      paddingTop: 20,
                     }}
                     placeholder={getPlaceholder(placeholderInput)}
                     onChangeText={onChange}
