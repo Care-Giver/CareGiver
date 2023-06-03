@@ -15,7 +15,6 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
-  TempScreen,
   WritingCommentScreen,
   HomeScreen,
   SearchScreen,
@@ -41,6 +40,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  CgCertificateRegistrationScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -54,6 +54,7 @@ import {
   ScreenRootView,
   PreReg18,
   EditPetInfoScreenHeader,
+  CgCertificateRegistrationScreenHeader,
 } from "#components"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -115,6 +116,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "cg-certificate-registration-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -128,7 +130,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
+      initialRouteName="cg-certificate-registration-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -369,13 +371,12 @@ const AllStacks = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/*//? MVP-15 */}
+
+      {/* //* MVP-18 */}
       <Stack.Screen
-        name="temp-screen"
-        component={TempScreen}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
+        name="cg-certificate-registration-screen"
+        component={CgCertificateRegistrationScreen}
+        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
       />
 
       {/* //? 위치(지도) 테스트 화면 */}
