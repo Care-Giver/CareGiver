@@ -15,7 +15,7 @@ import {
 } from "#components"
 import { Pressable, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import { launchImageLibrary } from "react-native-image-picker"
-import { LIGHT_LINE, HEAD_LINE, BODY } from "#theme"
+import { LIGHT_LINE, HEAD_LINE, BODY, GIVER_CASUAL_NAVY } from "#theme"
 import { images } from "#images"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -43,13 +43,13 @@ export const CgCertificateRegistrationScreen: FC<
     maxHeight: 128,
     maxWidth: 128,
     //includeBase64: true -> 큰 이미지 피함
-    selectionLimit: 10, // 최대 등록할 수 있는 이미지 개수
+    selectionLimit: 10, // 최대 등록할 수 있는 이미지 개수 / 10 정도면 괜찮을까요 ?
   }
   const openGallery = () => {
     launchImageLibrary(options, (response) => {
       if (!response.didCancel) {
         const newImages = response.assets.map((current) => current.uri)
-        setSelectedImages((Images) => [...newImages, ...Images]) //새로운 이미지를 앞으로 할 것인가? 뒤로할 것인가.
+        setSelectedImages((Images) => [...Images, ...newImages]) //새로운 이미지를 앞으로 할 것인가? 뒤로할 것인가.
       }
     })
   }
@@ -59,27 +59,27 @@ export const CgCertificateRegistrationScreen: FC<
       {/* Screen header 컴포넌트 -> app.navigator로 이동 */}
       {/*<CgCertificateRegistrationScreenHeader options={{ title: "저장 후 나가기" }} />*/}
       {/* 단계별 컴포넌트 */}
-      <View style={styles.cvcertificateregistration}>
+      <View style={styles.cgregistration}>
         <CgRegisterStep style={styles.step} step="todo" number={1} title=" " />
         <CgRegisterStep style={styles.step} step="progress" number={2} title="펫시터 서비스 설정" />
         <CgRegisterStep style={styles.step} step="done" number={3} title=" " />
       </View>
-      {/* Text */}
-      <View style={styles.first}>
+      {/* 텍스트 : 반려동물 관련 자격증을 등록해주세요 */}
+      <View style={styles.text1}>
         <PreBol20 text={"반려동물"} color={HEAD_LINE} />
       </View>
-      <View style={styles.second}>
+      <View style={styles.text2}>
         <UnderlineText>
           <PreBol20 text={"자격증"} />
         </UnderlineText>
         <PreBol20 color={HEAD_LINE} text="을 설정해주세요!" />
       </View>
-      {/* 자격 증 등록 전, 잠깐! 컴포넌트 */}
-      <View style={styles.third}>
+      {/* 컴포넌트 : 자격 증 등록 전, 잠깐! */}
+      <View style={styles.cgregistrationnote}>
         <CertificateRegistrationNote />
       </View>
       {/* 이미지 추가 View */}
-      <View style={{ height: 204, width: "100%" }}>
+      <View style={styles.imageview}>
         <ScrollView
           contentContainerStyle={{ flexDirection: "row" }}
           horizontal={true}
@@ -101,7 +101,7 @@ export const CgCertificateRegistrationScreen: FC<
         </Pressable>
       </View>
       {/* 하단 버튼 GoBackSaveNext 컴포넌트 */}
-      <View style={styles.normal}>
+      <View style={styles.bottombutton}>
         <GoBackSaveNext />
       </View>
     </ScreenRootView>
@@ -109,25 +109,35 @@ export const CgCertificateRegistrationScreen: FC<
 })
 
 const styles = StyleSheet.create({
-  cvcertificateregistration: {
+  cgregistration: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
   },
-  first: {
+  step: {
+    marginVertical: 10,
+    marginRight: 10,
+  },
+  text1: {
+    marginTop: 24,
     height: 24,
     alignItems: "flex-start",
     justifyContent: "center",
   },
-  second: {
-    height: 21,
+  text2: {
+    height: 24,
     marginTop: 6,
     flexDirection: "row",
   },
-  third: {
+  cgregistrationnote: {
+    marginTop: 4,
     height: 142,
     alignItems: "center",
     justifyContent: "center",
+  },
+  imageview: {
+    height: 204,
+    width: "100%",
   },
   button: {
     width: 358,
@@ -137,15 +147,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
-  },
-  normal: {
-    marginTop: 181,
-    flex: 1,
-    alignItems: "center",
-  },
-  step: {
-    marginVertical: 10,
-    marginRight: 10,
   },
   imageContainer: {
     position: "relative",
@@ -158,5 +159,11 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: "center",
     alignItems: "center",
+  },
+  bottombutton: {
+    height: 72,
+    marginTop: 173,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })
