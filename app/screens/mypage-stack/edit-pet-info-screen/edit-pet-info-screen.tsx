@@ -423,7 +423,7 @@ export const EditPetInfoScreen: FC<
           <WeightModal
             visibleState={weightTouched}
             handleModalHide={handleweightModalHide}
-            title="몸무게"
+            title="몸무게(kg)"
             handleInput={handleWeightInput}
           />
           {/* //*생일 관리 모달 창  */}
@@ -435,6 +435,7 @@ export const EditPetInfoScreen: FC<
           />
           {/* //*수정 후 back 시 나타나는 경고 모달창  */}
           <CustomModal
+            image={images.dog_illustration}
             visibleState={handleGoBack}
             title="반려동물 정보 수정을 취소하시겠어요?"
             subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."

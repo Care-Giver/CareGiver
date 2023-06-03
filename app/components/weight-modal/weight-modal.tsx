@@ -19,6 +19,7 @@ import { HEAD_LINE, MIDDLE_LINE, ERROR_RED, SUCCESS_BLUE, DEVICE_SCREEN_WIDTH } 
 import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { useForm, Controller } from "react-hook-form"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 //*hook form 위한 form 정해놓기
 type WeightForm = {
@@ -101,6 +102,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
   })
 
   const onNicknameSubmit = (data: WeightForm) => {
+    console.log("pressed!!!!")
     handleInput(data.weight)
     handleModalHide()
     reset()
@@ -112,6 +114,8 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
       <Pressable
         style={{ flex: 1 }}
         onPress={() => {
+          console.log("pressed0")
+          reset()
           handleModalHide()
         }}
       >
@@ -127,79 +131,84 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
             backgroundColor: "rgba(0,0,0,0.25)",
           }}
         >
-          <View style={styles.modalPetWeight}>
-            <View
-              style={{
-                paddingHorizontal: 10,
-              }}
-            >
-              {/* //*모달창 제목 부분  */}
-              <PreBol18 color={HEAD_LINE} text={title} />
-
-              {/* //* hook form*/}
-              <Controller
-                name="weight"
-                control={petWeight}
-                render={({ field: { onChange, value } }) => (
-                  <TextInput
-                    style={{
-                      paddingTop: 43,
-                    }}
-                    placeholder={"숫자만 입력해주세요."}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    keyboardType="numeric"
-                    maxLength={4}
-                  />
-                )}
-                rules={{
-                  required: true,
-                  pattern: {
-                    value: /^[0-9]+(\.[0-9]{0,2})?$/,
-                    message: "* 숫자만 입력해주세요.",
-                  },
+          {/* //*모달 안쪽 눌렀을 때는 모달창 닫히기 방지 */}
+          <Pressable onPress={() => console.log("pressed")}>
+            <View style={styles.modalPetWeight}>
+              <View
+                style={{
+                  paddingHorizontal: 24,
                 }}
+              >
+                {/* //*모달창 제목 부분  */}
+                <PreBol18 color={HEAD_LINE} text={title} />
+
+                {/* //* hook form*/}
+                <Controller
+                  name="weight"
+                  control={petWeight}
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={{
+                        paddingTop: 20,
+                      }}
+                      placeholder={"숫자만 입력해주세요."}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      keyboardType="numeric"
+                      maxLength={5} //*두자리수 몸무게인 경우 00.00 까지 쓸수있게.
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                    pattern: {
+                      value: /^[0-9]+(\.[0-9]{0,2})?$/,
+                      message: "* 숫자만 입력해주세요.",
+                    },
+                  }}
+                />
+
+                {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
+                {errors.weight ? (
+                  <View>
+                    {/* //*오류 있을 때 : 빈칸일때 회색,  오류 있으면 빨간색 */}
+                    <DivisionLine
+                      color={errors.weight.type === "required" ? MIDDLE_LINE : ERROR_RED}
+                      style={styles.divisionLine}
+                    />
+                    <PreReg12
+                      text={errors.weight.type === "pattern" ? errors.weight.message : ""}
+                      color={ERROR_RED}
+                    />
+                  </View>
+                ) : (
+                  // *오류 없을 때
+                  <View>
+                    <DivisionLine
+                      color={dirtyFields.weight ? SUCCESS_BLUE : MIDDLE_LINE}
+                      style={styles.divisionLine}
+                    />
+                  </View>
+                )}
+              </View>
+
+              {/* //*확인 버튼 -> 새로 입력한 몸무게가 에러가 없을때만 activated */}
+              <ConditionalButton
+                label="확인"
+                isActivated={isValid}
+                style={{
+                  marginTop: "auto",
+                  height: 49,
+                  width: 326,
+                }}
+                onPress={
+                  handleSubmit(onNicknameSubmit)
+
+                  // updateUserNickname() //TODO server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
+                }
               />
-
-              {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
-              {errors.weight ? (
-                <View>
-                  {/* //*오류 있을 때 : 빈칸일때 회색,  오류 있으면 빨간색 */}
-                  <DivisionLine
-                    color={errors.weight.type === "required" ? MIDDLE_LINE : ERROR_RED}
-                    style={{ marginTop: 4 }}
-                  />
-                  <PreReg12
-                    text={errors.weight.type === "pattern" ? errors.weight.message : ""}
-                    color={ERROR_RED}
-                  />
-                </View>
-              ) : (
-                // *오류 없을 때
-                <View>
-                  <DivisionLine
-                    color={dirtyFields.weight ? SUCCESS_BLUE : MIDDLE_LINE}
-                    style={{ marginTop: 4 }}
-                  />
-                </View>
-              )}
             </View>
-
-            {/* //*확인 버튼 -> 새로 입력한 몸무게가 에러가 없을때만 activated */}
-            <ConditionalButton
-              label="확인"
-              isActivated={isValid}
-              style={{
-                marginTop: "auto",
-              }}
-              onPress={
-                handleSubmit(onNicknameSubmit)
-
-                // updateUserNickname() //TODO server 로 통신하는 함수. API call 을 통해서 server DB 에있는 유저 data 속 닉네임을 바꾸는 함수
-              }
-            />
-          </View>
+          </Pressable>
         </KeyboardAvoidingView>
       </Pressable>
     </Modal>

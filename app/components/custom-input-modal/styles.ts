@@ -12,4 +12,5 @@ export const styles = StyleSheet.create({
     backgroundColor: palette.white,
     marginBottom: 60,
   },
+  divisionLine: { marginTop: 4, marginBottom: 4 },
 })
