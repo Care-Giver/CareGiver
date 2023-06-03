@@ -11,6 +11,7 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
+  getFocusedRouteNameFromRoute,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
@@ -123,6 +124,34 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
 }
+
+const HideBottomNavigatorScreens = [
+  "search-screen",
+  "caregiver-detail-information-screen",
+  "caregiver-self-introduction-screen",
+  "all-reviews-screen",
+  "all-comments-screen",
+  "writing-comment-screen",
+  "all-pets-screen",
+  "setting-screen",
+  "service-center-screen",
+  "edit-mypage-screen",
+  "edit-pet-info-screen",
+  "edit-pet-intro-screen",
+  "add-pet-1-screen",
+  "add-pet-2-screen",
+  "add-pet-3-screen",
+  "add-pet-4-screen",
+  "make-booking-screen",
+  "payment-screen",
+  "payment-success-screen",
+  "payment-failure-screen",
+  "booking-detail-screen",
+  "all-noti-screen",
+  "edit-phone-number-screen",
+  "verify-phone-number-screen",
+  "chatroom-screen",
+]
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Tab = createBottomTabNavigator()
@@ -453,14 +482,22 @@ const ClientTabs = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
+        tabBarStyle: ((route) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+          console.log("routeName", routeName)
+          if (HideBottomNavigatorScreens.includes(routeName) || !routeName) {
+            return { display: "none" }
+          }
+
+          return Platform.select({
+            android: $tabBarStyleAndroid,
+            ios: $tabBarStyleIOS,
+          })
+        })(route),
         headerShown: false,
         headerStyle: { backgroundColor: "white" },
-        tabBarStyle: Platform.select({
-          android: $tabBarStyleAndroid,
-          ios: $tabBarStyleIOS,
-        }),
-      }}
+      })}
       initialRouteName="Searching"
     >
       <Tab.Screen
