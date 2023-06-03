@@ -97,6 +97,7 @@ export const CgCertificateRegistrationScreen: FC<
           ))}
         </ScrollView>
         <Pressable style={styles.button} onPress={openGallery}>
+          <Image source={images.x_in_circle} style={styles.crossButton} />
           <PreReg16 text={"자격증 추가하기"} color={BODY}></PreReg16>
         </Pressable>
       </View>
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
+    flexDirection: "row",
     width: 358,
     height: 48,
     borderRadius: 8,
@@ -159,6 +161,11 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: "center",
     alignItems: "center",
+  },
+  crossButton: {
+    width: 16,
+    height: 16,
+    marginRight: 10,
   },
   bottombutton: {
     height: 72,
