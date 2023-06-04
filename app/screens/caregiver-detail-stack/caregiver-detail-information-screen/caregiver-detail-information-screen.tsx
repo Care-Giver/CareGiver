@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
-import { Platform, Pressable, ScrollView, View, Modal, Text } from "react-native"
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { Platform, Pressable, ScrollView, View, Modal, Text, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
@@ -37,6 +37,7 @@ import {
 } from "#theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { images } from "#images"
+import { delay } from "../../../utils/delay"
 
 const servicesDummy = [
   {
@@ -82,6 +83,38 @@ export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
 > = observer(({ navigation, route }) => {
   const [post, setPost] = useState(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  const animationValue = useRef(new Animated.Value(0)).current
+
+  useLayoutEffect(() => {
+    delayedIsMount()
+  }, [])
+
+  const delayedIsMount = async () => {
+    await delay(600)
+    setIsMounted(true)
+  }
+
+  useEffect(() => {
+    if (isMounted) {
+      Animated.timing(animationValue, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [animationValue, isMounted])
+
+  const buttonOpacity = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  })
+
+  const buttonScale = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.8, 1],
+  })
 
   // useEffect(() => {
   //   const api = new Api()
@@ -230,27 +263,31 @@ export const CaregiverDetailInformationScreen: FC<
       </ScrollView>
 
       {/* //? 예약 신청하기 버튼 */}
-      <View
-        style={{
-          // paddingVertical: 100,
-          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-          marginBottom: Platform.select({
-            ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-            android: 0,
-          }),
-        }}
-      >
-        {/* //* 예약 신청하기 버튼*/}
-        <MakeBookingButton
-          pricePerHour={50000}
-          isActivated={true}
-          /*onPress={() => {
+      {isMounted && (
+        <Animated.View
+          style={{
+            // paddingVertical: 100,
+            opacity: buttonOpacity,
+            transform: [{ scale: buttonScale }],
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            bottom: Platform.select({
+              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+              android: 8,
+            }),
+          }}
+        >
+          {/* //* 예약 신청하기 버튼*/}
+          <MakeBookingButton
+            pricePerHour={50000}
+            isActivated={true}
+            /*onPress={() => {
             // 원본
             alert("결제하기 화면으로 이동")
           }}*/
-          onPress={handleModal}
-        />
-      </View>
+            onPress={handleModal}
+          />
+        </Animated.View>
+      )}
     </ScreenRootView>
   )
 })
