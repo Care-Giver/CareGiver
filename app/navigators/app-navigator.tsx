@@ -167,7 +167,7 @@ const FavoritesStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="mypage-screen"
+      initialRouteName="favorites-screen"
     >
       {/* //* 즐겨찾기 메인 */}
       <Stack.Screen
@@ -711,14 +711,12 @@ const CgMypageStack = () => {
         animation: "slide_from_right",
       }}
       //  @ts-ignore
-      // initialRouteName="temp-cg-mypage-screen"
-      initialRouteName="mypage-screen"
+      initialRouteName="temp-cg-mypage-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
         //  @ts-ignore
-        // name="temp-cg-mypage-screen"
-        name="mypage-screen"
+        name="temp-cg-mypage-screen"
         component={MypageScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
@@ -739,7 +737,7 @@ const NOT_ORGANISED_CG_SCREENS = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="service-registration-screen"
     >
       {/* //! 등록 스택 */}
       {/* //* 서비스 등록 스크린 */}
