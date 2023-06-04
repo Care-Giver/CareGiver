@@ -4,8 +4,7 @@ import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY } from "#theme"
 import Lottie, { AnimatedLottieViewProps } from "lottie-react-native"
 import { lotties } from "../../../assets/lotties"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../basics/view-component/view-component"
-import { PopReg12, PopSem16 } from "../basics/custom-texts/custom-texts"
+import { PopReg12, PopSem16, PreReg12 } from "../basics/custom-texts/custom-texts"
 
 export interface LoadingProps {
   /**
@@ -34,34 +33,23 @@ export const Loading = observer(function Loading(props: LoadingProps) {
           loop
           autoPlay={true}
         />
-        <PopSem16 style={$text} color={GIVER_CASUAL_NAVY}>
-          Loading...
-        </PopSem16>
-        {text && (
-          <PopReg12 style={$sub} color={GIVER_CASUAL_NAVY}>
-            {text}
-          </PopReg12>
-        )}
+        <PopSem16 style={$title} color={GIVER_CASUAL_NAVY} text={"Loading"} />
+        {text && <PreReg12 style={$sub} color={GIVER_CASUAL_NAVY} text={text} />}
       </View>
     )
   }
 
   return (
-    <View style={$contentContainerStyle}>
+    <View style={$backdrop}>
       <Lottie
         source={lotties.loading_dark}
         style={{ width: size, height: size }}
         loop
         autoPlay={true}
       />
-      <PopSem16 style={$text} color={GIVER_CASUAL_NAVY}>
-        Loading...
-      </PopSem16>
-      {text && (
-        <PopReg12 style={$sub} color={GIVER_CASUAL_NAVY}>
-          {text}
-        </PopReg12>
-      )}
+
+      <PopSem16 style={$title} color={GIVER_CASUAL_NAVY} text={"Loading"} />
+      {text && <PreReg12 style={$sub} color={GIVER_CASUAL_NAVY} text={text} />}
     </View>
   )
 })
@@ -70,19 +58,22 @@ const $root: ViewStyle = {
   justifyContent: "center",
 }
 
-const $contentContainerStyle: ViewStyle = {
+const $backdrop: ViewStyle = {
+  backgroundColor: "rgba(0, 0, 0, 0.4)",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "absolute",
   alignSelf: "center",
   flex: 1,
-  height: "100%",
   width: "100%",
-  backgroundColor: "red",
-  paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-  justifyContent: "center",
-  alignItems: "center",
+  height: "100%",
+  zIndex: 2,
 }
 
-const $text: TextStyle = {
+const $title: TextStyle = {
   marginTop: -20,
 }
 
-const $sub: TextStyle = {}
+const $sub: TextStyle = {
+  marginTop: 2,
+}

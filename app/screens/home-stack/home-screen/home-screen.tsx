@@ -19,12 +19,19 @@ import { BODY, SUB_HEAD_LINE } from "#theme"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
 import { images } from "#images"
 import { getCreche, getCrechePetsitters, getPosts, createCreche } from "#axios"
+import { useStores } from "#models"
+import { delay } from "../../../utils/delay"
+import { consoleInfoAsync } from "../../../utils/console-async"
 
 const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = observer(
-  ({ navigation, route }) => {
+  function HomeScreen({ navigation, route }) {
+    const {
+      userStore: { onSwitchingType, setOnSwitchingTypeFalse },
+    } = useStores()
+
     const [isOn, setIsOn] = useState(false)
     const toggle = () => {
       isOn ? setIsOn(false) : setIsOn(true)
@@ -63,6 +70,24 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
     const onTrainerFlatlistUpdate = useCallback(({ viewableItems }) => {
       if (viewableItems.length > 0) {
         setSelectedTrainer(viewableItems[0].index || 0)
+      }
+    }, [])
+
+    /**
+     * 모드 전환 도중 앱 충돌로 인한 비정상적인 종료시, 재실행하면 무한 로딩에 갇힐 수 있음
+     * 이를 방지하기 위해, 시간차이를 두고 검증하여, onSwitchingType 을 false 로 만들어줍니다.
+     * */
+    const forceOnSwtichingTypeFalse = async () => {
+      await delay(3000)
+      if (onSwitchingType) {
+        setOnSwitchingTypeFalse()
+        await consoleInfoAsync("비정상적인 onSwitchingType 초기화 됨 - HomeScreen", 100)
+      }
+    }
+
+    useEffect(() => {
+      return () => {
+        forceOnSwtichingTypeFalse()
       }
     }, [])
 

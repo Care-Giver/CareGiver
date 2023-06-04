@@ -33,8 +33,9 @@ const CAREGIVER_INTRO_URL = "https://www.naver.com/"
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   ({ navigation, route }) => {
     const {
-      userStore: { switchType, type },
+      userStore: { switchType },
     } = useStores()
+
     // ? 유저 프로필 정보
     const [userInfo, setUserInfo] = useState<UserProps | null>()
 

@@ -57,6 +57,7 @@ import {
   PreReg18,
   EditPetInfoScreenHeader,
   CgScreenHeader,
+  Loading,
 } from "#components"
 import { images } from "#images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -486,7 +487,7 @@ const ClientTabs = () => {
       screenOptions={({ route }) => ({
         tabBarStyle: ((route) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-          console.log("routeName", routeName)
+          // console.log("routeName", routeName)
           if (HideBottomNavigatorScreens.includes(routeName)) {
             return {
               backgroundColor: "white",
@@ -805,7 +806,7 @@ const CareGiverTabs = () => {
       screenOptions={({ route }) => ({
         tabBarStyle: ((route) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-          console.log("routeName", routeName)
+          // console.log("routeName", routeName)
           if (HideBottomNavigatorScreens.includes(routeName)) {
             return {
               backgroundColor: "white",
@@ -912,16 +913,21 @@ const CareGiverTabs = () => {
 
 const AllTabs = observer(function AllTabs() {
   const {
-    userStore: { type },
+    userStore: { type, onSwitchingType },
   } = useStores()
-  console.log("type", type)
 
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
   // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
   // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
-  return <>{type === Type.CLIENT ? <ClientTabs /> : <CareGiverTabs />}</>
+  return (
+    <>
+      {type === Type.CLIENT && <ClientTabs />}
+      {type === Type.CARE_GIVER && <CareGiverTabs />}
+      {onSwitchingType && <Loading text={"모드 전환중"} />}
+    </>
+  )
 })
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}

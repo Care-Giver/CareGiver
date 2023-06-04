@@ -46,6 +46,9 @@ export const UserStoreModel = types
   .model("UserStore")
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
+    // onSwitchingType: types.optional(types.boolean, false),
+    onSwitchingType: false,
+
     loggedIn: false,
     pushToken: types.optional(types.string, ""),
 
@@ -83,17 +86,40 @@ export const UserStoreModel = types
     },
     /**
      * 유저의 역할을 케어기버와 클라이언트 두 종류 사이에서 전환합니다.
+     * [중요] 하나의 action 에서 하나의 object 만 변경할 것. 그렇지 않으면 정상 작동 하지 않음
      *  */
     async switchType() {
       if (self.type === Type.CLIENT) {
         self.type = Type.CARE_GIVER
-        await delay(100)
+        this.setOnSwitchingTypeTrue()
+        console.log("self.onSwitchingType - CLIENT", self.onSwitchingType)
+        await delay(300)
         navigate("Calendar")
+        await delay(200)
+        this.setOnSwitchingTypeFalse()
+        console.log("self.onSwitchingType - CLIENT", self.onSwitchingType)
       } else {
         self.type = Type.CLIENT
-        await delay(100)
+        this.setOnSwitchingTypeTrue()
+        console.log("self.onSwitchingType - CG", self.onSwitchingType)
+        await delay(300)
         navigate("Searching")
+        await delay(200)
+        this.setOnSwitchingTypeFalse()
+        console.log("self.onSwitchingType - CG", self.onSwitchingType)
       }
+    },
+
+    setOnSwitchingType() {
+      self.onSwitchingType = !self.onSwitchingType
+    },
+
+    setOnSwitchingTypeFalse() {
+      self.onSwitchingType = false
+    },
+
+    setOnSwitchingTypeTrue() {
+      self.onSwitchingType = true
     },
 
     setLoggedIn(value?: boolean) {
