@@ -32,6 +32,7 @@ export const Loading = observer(function Loading(props: LoadingProps) {
           style={{ width: size, height: size, alignSelf: "center" }}
           loop
           autoPlay={true}
+          duration={500}
         />
         <PopSem16 style={$title} color={GIVER_CASUAL_NAVY} text={"Loading"} />
         {text && <PreReg12 style={$sub} color={GIVER_CASUAL_NAVY} text={text} />}
@@ -46,6 +47,7 @@ export const Loading = observer(function Loading(props: LoadingProps) {
         style={{ width: size, height: size }}
         loop
         autoPlay={true}
+        duration={500}
       />
 
       <PopSem16 style={$title} color={GIVER_CASUAL_NAVY} text={"Loading"} />
