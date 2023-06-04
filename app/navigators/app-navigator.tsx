@@ -11,7 +11,6 @@ import {
   DefaultTheme,
   DarkTheme,
   useNavigation,
-  getFocusedRouteNameFromRoute,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
@@ -65,6 +64,7 @@ import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
+import { useShowBottomTab } from "../utils/hooks"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -125,34 +125,6 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
 }
-
-const HideBottomNavigatorScreens = [
-  "search-screen",
-  "caregiver-detail-information-screen",
-  "caregiver-self-introduction-screen",
-  "all-reviews-screen",
-  "all-comments-screen",
-  "writing-comment-screen",
-  "all-pets-screen",
-  "setting-screen",
-  "service-center-screen",
-  "edit-mypage-screen",
-  "edit-pet-info-screen",
-  "edit-pet-intro-screen",
-  "add-pet-1-screen",
-  "add-pet-2-screen",
-  "add-pet-3-screen",
-  "add-pet-4-screen",
-  "make-booking-screen",
-  "payment-screen",
-  "payment-success-screen",
-  "payment-failure-screen",
-  "booking-detail-screen",
-  "all-noti-screen",
-  "edit-phone-number-screen",
-  "verify-phone-number-screen",
-  "chatroom-screen",
-]
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Tab = createBottomTabNavigator()
@@ -346,7 +318,9 @@ const ChatsStack = observer(function ChatsStack() {
     userStore: { type },
   } = useStores()
 
-  const TempChatScreen = () => {
+  const TempChatScreen = ({ navigation }) => {
+    useShowBottomTab(navigation)
+
     return (
       <ScreenRootView>
         <View
@@ -472,35 +446,10 @@ const MypageStack = () => {
  * 클라이언트(반려인) 전용 탭들
  */
 const ClientTabs = () => {
-  const $tabBarStyleAndroid: ViewStyle = {
-    backgroundColor: "white",
-    borderTopWidth: 0,
-    height: BOTTOM_TAB_NAVIGATOR,
-  }
-
-  const $tabBarStyleIOS: ViewStyle = {
-    backgroundColor: "white",
-  }
-
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: ((route) => {
-          const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-          // console.log("routeName", routeName)
-          if (HideBottomNavigatorScreens.includes(routeName)) {
-            return {
-              backgroundColor: "white",
-              height: 0,
-              borderTopWidth: 0,
-            }
-          }
-
-          return Platform.select({
-            android: $tabBarStyleAndroid,
-            ios: $tabBarStyleIOS,
-          })
-        })(route),
+      screenOptions={{
+        tabBarStyle: { display: "none" },
         tabBarLabelStyle: {
           paddingBottom: Platform.select({
             android: 8,
@@ -509,7 +458,7 @@ const ClientTabs = () => {
         },
         headerShown: false,
         headerStyle: { backgroundColor: "white" },
-      })}
+      }}
       initialRouteName="Searching"
     >
       <Tab.Screen
@@ -599,7 +548,9 @@ const ClientTabs = () => {
  * CG - 통계 스택
  */
 const StatisticsStack = () => {
-  const TempStatisticsScreen = () => {
+  const TempStatisticsScreen = ({ navigation }) => {
+    useShowBottomTab(navigation)
+
     return (
       <ScreenRootView>
         <View
@@ -789,35 +740,10 @@ const NOT_ORGANISED_CG_SCREENS = () => {
  * 케어기버 전용 탭들
  */
 const CareGiverTabs = () => {
-  const $tabBarStyleAndroid: ViewStyle = {
-    backgroundColor: "white",
-    borderTopWidth: 0,
-    height: BOTTOM_TAB_NAVIGATOR,
-  }
-
-  const $tabBarStyleIOS: ViewStyle = {
-    backgroundColor: "white",
-  }
-
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: ((route) => {
-          const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-          // console.log("routeName", routeName)
-          if (HideBottomNavigatorScreens.includes(routeName)) {
-            return {
-              backgroundColor: "white",
-              height: 0,
-              borderTopWidth: 0,
-            }
-          }
-
-          return Platform.select({
-            android: $tabBarStyleAndroid,
-            ios: $tabBarStyleIOS,
-          })
-        })(route),
+      screenOptions={{
+        tabBarStyle: { display: "none" },
         tabBarLabelStyle: {
           paddingBottom: Platform.select({
             android: 8,
@@ -827,7 +753,7 @@ const CareGiverTabs = () => {
         headerShown: false,
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
-      })}
+      }}
       initialRouteName="Calendar"
     >
       <Tab.Screen

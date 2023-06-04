@@ -22,12 +22,16 @@ import { getCreche, getCrechePetsitters, getPosts, createCreche } from "#axios"
 import { useStores } from "#models"
 import { delay } from "../../../utils/delay"
 import { consoleInfoAsync } from "../../../utils/console-async"
+import { useFocusEffect } from "@react-navigation/native"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
 
 export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = observer(
   function HomeScreen({ navigation, route }) {
+    useShowBottomTab(navigation)
+
     const {
       userStore: { onSwitchingType, setOnSwitchingTypeFalse },
     } = useStores()

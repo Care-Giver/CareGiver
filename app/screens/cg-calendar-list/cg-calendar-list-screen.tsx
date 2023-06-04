@@ -7,13 +7,16 @@ import { View } from "react-native"
 import { useStores } from "#models"
 import { delay } from "../../utils/delay"
 import { consoleInfoAsync } from "../../utils/console-async"
+import { useShowBottomTab } from "../../utils/hooks"
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const CgCalendarListScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-list-screen">
-> = observer(function CgCalendarListScreen() {
+> = observer(function CgCalendarListScreen({ navigation }) {
+  useShowBottomTab(navigation)
+
   const {
     userStore: { onSwitchingType, setOnSwitchingTypeFalse },
   } = useStores()

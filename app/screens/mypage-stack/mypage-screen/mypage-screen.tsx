@@ -24,6 +24,7 @@ import { Pet } from "../../../models/pet/pet"
 import { Api } from "#api"
 import { Type, useStores } from "#models"
 import { delay } from "../../../utils/delay"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 const IS_AUTH = true
 // const IS_AUTH = false
@@ -31,7 +32,9 @@ const IS_AUTH = true
 const CAREGIVER_INTRO_URL = "https://www.naver.com/"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
-  ({ navigation, route }) => {
+  function MypageScreen({ navigation, route }) {
+    useShowBottomTab(navigation)
+
     const {
       userStore: { switchType },
     } = useStores()

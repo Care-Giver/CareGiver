@@ -42,6 +42,7 @@ import {
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
+import { useShowBottomTab } from "../../utils/hooks"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -57,7 +58,9 @@ interface FilterCondition {
 
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
-> = observer(function FavoritesScreen() {
+> = observer(function FavoritesScreen({ navigation }) {
+  useShowBottomTab(navigation)
+
   const [serviceType, setServiceType] = useState<string>("펫시터")
 
   const [petsitters, setPetsitters] = useState<Array<any>>([])

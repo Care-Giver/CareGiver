@@ -4,6 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { PreReg18, ScreenRootView } from "#components"
 import { View } from "react-native"
+import { useShowBottomTab } from "../../utils/hooks"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -12,7 +13,9 @@ import { View } from "react-native"
 // @ts-ignore
 export const ManageBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "manage-booking-screen">
-> = observer(function ManageBookingScreen() {
+> = observer(function ManageBookingScreen({ navigation }) {
+  useShowBottomTab(navigation)
+
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 
