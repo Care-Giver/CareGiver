@@ -41,6 +41,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  CgSetAddressScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -54,6 +55,8 @@ import {
   ScreenRootView,
   PreReg18,
   EditPetInfoScreenHeader,
+  PreMed16,
+  CgsetAddressHeader,
 } from "#components"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -115,6 +118,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "cgSetAddress-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -129,8 +133,18 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="cgSetAddress-screen"
     >
+      {/* //* MVP-13 */}
+      <Stack.Screen
+        name="cgSetAddress-screen"
+        component={CgSetAddressScreen}
+        options={{
+          title: " ",
+          header: (props) => <CgsetAddressHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"

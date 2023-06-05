@@ -5,7 +5,9 @@ require File.join(File.dirname(`node --print "require.resolve('@react-native-com
 require 'json'
 podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '12.4'
+#플랫폼 버전 12.4->13.0으로 변경 mook 5.28
+#platform :ios, podfile_properties['ios.deploymentTarget'] || '12.4'
+platform :ios, podfile_properties['ios.deploymentTarget'] || '13.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
@@ -14,10 +16,14 @@ target 'CareGiver' do
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  ####5.28 묵추가
+  pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  ####
   # Flags change depending on the env values.
   flags = get_default_flags()
-
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => flags[:hermes_enabled] || podfile_properties['expo.jsEngine'] == 'hermes',

@@ -33,6 +33,7 @@ export * from "./screen-headers/edit-mypage-screen-header/edit-mypage-screen-hea
 export * from "./screen-headers/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./screen-headers/goback-and-title-and-button-header/goback-and-title-and-button-header"
 export * from "./screen-headers/edit-pet-info-screen-header/edit-pet-info-screen-header"
+export * from "./screen-headers/cgset-screen-header/cgset-screen-header" //23.6.3. mook 추가
 //* others
 export * from "./division-line/division-line"
 export * from "./division-line-vertical/division-line-vertical"
