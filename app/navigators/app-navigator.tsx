@@ -15,7 +15,6 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
-  TempScreen,
   WritingCommentScreen,
   HomeScreen,
   SearchScreen,
@@ -41,7 +40,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
-  TempHyeriScreen,
+  YeBeomTestScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -117,6 +116,7 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
   "temp-hyeri-screen": undefined
+  "yebeom-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -130,17 +130,8 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
+      initialRouteName="yebeom-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
-      {/* //* 혜리 작업용 임시스크린 */}
-      <Stack.Screen
-        name="temp-hyeri-screen"
-        component={TempHyeriScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -380,10 +371,10 @@ const AllStacks = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/*//? MVP-15 */}
+      {/*// MVP-20 */}
       <Stack.Screen
-        name="temp-screen"
-        component={TempScreen}
+        name="yebeom-screen"
+        component={YeBeomTestScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}

@@ -1,0 +1,25 @@
+import * as React from "react"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+
+const ROOT: ViewStyle = {
+  justifyContent: "center",
+}
+
+export interface RegistrationNoticeNoteProps {
+  /**
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
+   */
+  style?: StyleProp<ViewStyle>
+}
+
+export const RegistrationNoticeNote = observer(function RegistrationNoticeNote(props: RegistrationNoticeNoteProps) {
+  const { style } = props
+  const styles = Object.assign({}, ROOT, style)
+
+  return (
+    <View style={styles}>
+      {/* 해피코딩^^ */}
+    </View>
+  )
+})
