@@ -42,6 +42,7 @@ import {
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
+import { getCrechePetsitters } from "#axios"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -58,9 +59,26 @@ interface FilterCondition {
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
 > = observer(function FavoritesScreen() {
-  const [serviceType, setServiceType] = useState<string>("펫시터")
+  const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
 
   const [petsitters, setPetsitters] = useState<Array<any>>([])
+  // // TODO: Type을 CrecheBooking | VisitingBooking 으로 수정
+  // const [reserves, setReserves] = useState<Array<CrecheBooking>>([])
+
+  // useLayoutEffect(() => {
+  //   switch (serviceType) {
+  //     case "펫시터":
+  //       getCrechePetsitters(7).then((res) => setReserves(res))
+  //       break
+
+  //     case "훈련사":
+  //       setReserves([])
+  //       break
+
+  //     default:
+  //       break
+  //   }
+  // }, [serviceType])
 
   // * filter states
   const [filterServiceType, setFilterServiceType] = useState<Service>()
@@ -234,7 +252,7 @@ export const FavoritesScreen: FC<
   }, [filterServiceType, filters])
 
   return (
-    <ScreenRootView testID="Favorites" preset="scroll">
+    <ScreenRootView testID="Favorites">
       {/* //* 펫시터 | 훈련사 토글 */}
       <Row style={{ marginTop: 24 }}>
         <ServiceTypeIndicatorHeader
@@ -264,7 +282,7 @@ export const FavoritesScreen: FC<
       />
 
       {petsitters.length > 0 ? (
-        //* 펫시터 목록이 존재하는 경우
+        //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
         <FlatList
           data={petsitters}
           renderItem={({ item, index }) => (
@@ -281,7 +299,7 @@ export const FavoritesScreen: FC<
           )}
         />
       ) : (
-        //* 펫시터 목록이 없는 경우
+        //* 펫시터 목록이 없는 경우 - 디폴트 화면 띄우기
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
           <PreMed18 text="즐겨찾기 한 케어기버가 없어요 😢" color={SUB_HEAD_LINE} />
@@ -424,7 +442,7 @@ export const FavoritesScreen: FC<
               }}
               selectedPets={filterPet}
               setSelectedPets={setFilterPet}
-              inBottomSheet={true}
+              inBottomSheet
             />
             {/*//* 선택된 반려동물 */}
             {hasSelectedPetsAndDropdownClosed && (
