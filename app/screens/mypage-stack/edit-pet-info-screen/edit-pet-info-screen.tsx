@@ -234,223 +234,228 @@ export const EditPetInfoScreen: FC<
     }
   }, [isBackPressed])
 
+  /**
+   * [저장하기 버튼]
+   * - editable 일때 표츌
+   * - 단, Modal 창이 켜져있다면 표출하지 않음
+   *  */
+  const showSaveButton =
+    editable && !(nameTouched || weightTouched || birthdayTouched || handleGoBack)
+
   //* 본문 코드 :
   return (
-    //*저장하기 버튼이 항상 화면 하단에 있게 하기 위해 scroolview 바깥쪽 view 하나 더 필요.
-    <View style={{ flex: 1 }}>
-      <ScreenRootView testID="EditPetInfo" preset="fixed" style={{ paddingHorizontal: 0 }}>
-        <ScrollView>
-          <View>
-            {/* //*이미지  */}
-            <FlatList
-              data={imagess}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <ImageBackground
-                  source={{ uri: item.profileImg }}
-                  style={{
-                    width: 390,
-                    height: 240,
-                  }}
-                  key={index}
-                >
-                  <Pressable
-                    onPress={() => {
-                      alert("이미지 등록 준비중입니다.")
-                    }}
-                    style={{ position: "absolute", right: 16, bottom: 8 }}
-                  >
-                    <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
-                  </Pressable>
-                </ImageBackground>
-              )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              snapToInterval={DEVICE_SCREEN_WIDTH}
-              snapToAlignment={"end"}
-              decelerationRate={"fast"}
-              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-              viewabilityConfig={{
-                viewAreaCoveragePercentThreshold: 51,
-              }}
-              //? 이미지가 바뀌었을때 실행 할 행동 설정.
-              onViewableItemsChanged={onFlatlistUpdate}
-            />
-            <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
-          </View>
-
-          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-            {/* //*이름 */}
-            {editable ? (
-              <Pressable
-                style={{ paddingTop: 7 }}
-                onPress={() => {
-                  setNameTouched(true)
+    <ScreenRootView testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
+      <ScrollView>
+        <View>
+          {/* //*이미지  */}
+          <FlatList
+            data={imagess}
+            renderItem={(
+              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+            ) => (
+              <ImageBackground
+                source={{ uri: item.profileImg }}
+                style={{
+                  width: 390,
+                  height: 240,
                 }}
+                key={index}
               >
-                <UserOrPetProfileInfo
-                  title="이름"
-                  profileInfo={name}
-                  showOption={false}
-                  additionalPadding={35}
-                />
-              </Pressable>
-            ) : (
+                <Pressable
+                  onPress={() => {
+                    alert("이미지 등록 준비중입니다.")
+                  }}
+                  style={{ position: "absolute", right: 16, bottom: 8 }}
+                >
+                  <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                </Pressable>
+              </ImageBackground>
+            )}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={DEVICE_SCREEN_WIDTH}
+            snapToAlignment={"end"}
+            decelerationRate={"fast"}
+            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+            viewabilityConfig={{
+              viewAreaCoveragePercentThreshold: 51,
+            }}
+            //? 이미지가 바뀌었을때 실행 할 행동 설정.
+            onViewableItemsChanged={onFlatlistUpdate}
+          />
+          <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
+        </View>
+
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          {/* //*이름 */}
+          {editable ? (
+            <Pressable
+              style={{ paddingTop: 7 }}
+              onPress={() => {
+                setNameTouched(true)
+              }}
+            >
               <UserOrPetProfileInfo
                 title="이름"
                 profileInfo={name}
                 showOption={false}
                 additionalPadding={35}
               />
-            )}
-
-            {/* //*생년월일 */}
-            {editable ? (
-              <View>
-                <Pressable
-                  onPress={() => {
-                    setBirthdayTouched(true)
-                  }}
-                >
-                  <UserOrPetProfileInfo
-                    title="생년월일"
-                    profileInfo={birthday}
-                    showOption={false}
-                    additionalPadding={35}
-                  />
-                </Pressable>
-                <PreMed12
-                  color={BODY}
-                  text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
-                  style={{ marginTop: 3 }}
-                />
-              </View>
-            ) : (
-              <UserOrPetProfileInfo
-                title="생년월일"
-                profileInfo={birthday}
-                showOption={false}
-                additionalPadding={35}
-              />
-            )}
-
+            </Pressable>
+          ) : (
             <UserOrPetProfileInfo
-              title="품종"
-              profileInfo={currentPet.species}
-              showOption={editable}
+              title="이름"
+              profileInfo={name}
+              showOption={false}
               additionalPadding={35}
             />
+          )}
 
-            <UserOrPetProfileInfo
-              title="성별"
-              profileInfo={sex}
-              showOption={editable}
-              additionalPadding={35}
-            />
-
-            <UserOrPetProfileInfo
-              title="크기"
-              profileInfo={currentPet.petType}
-              showOption={editable}
-              additionalPadding={35}
-            />
-
-            {/* //*몸무게 */}
-            {editable ? (
+          {/* //*생년월일 */}
+          {editable ? (
+            <View>
               <Pressable
                 onPress={() => {
-                  setWeightTouched(true)
+                  setBirthdayTouched(true)
                 }}
               >
                 <UserOrPetProfileInfo
-                  title="몸무게"
-                  profileInfo={weight + "kg"}
+                  title="생년월일"
+                  profileInfo={birthday}
                   showOption={false}
                   additionalPadding={35}
                 />
               </Pressable>
-            ) : (
+              <PreMed12
+                color={BODY}
+                text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
+                style={{ marginTop: 3 }}
+              />
+            </View>
+          ) : (
+            <UserOrPetProfileInfo
+              title="생년월일"
+              profileInfo={birthday}
+              showOption={false}
+              additionalPadding={35}
+            />
+          )}
+
+          <UserOrPetProfileInfo
+            title="품종"
+            profileInfo={currentPet.species}
+            showOption={editable}
+            additionalPadding={35}
+          />
+
+          <UserOrPetProfileInfo
+            title="성별"
+            profileInfo={sex}
+            showOption={editable}
+            additionalPadding={35}
+          />
+
+          <UserOrPetProfileInfo
+            title="크기"
+            profileInfo={currentPet.petType}
+            showOption={editable}
+            additionalPadding={35}
+          />
+
+          {/* //*몸무게 */}
+          {editable ? (
+            <Pressable
+              onPress={() => {
+                setWeightTouched(true)
+              }}
+            >
               <UserOrPetProfileInfo
                 title="몸무게"
                 profileInfo={weight + "kg"}
                 showOption={false}
                 additionalPadding={35}
               />
-            )}
-
+            </Pressable>
+          ) : (
             <UserOrPetProfileInfo
-              title="중성화여부"
-              profileInfo={Neutralizated}
-              showOption={editable}
+              title="몸무게"
+              profileInfo={weight + "kg"}
+              showOption={false}
               additionalPadding={35}
             />
-            {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
-            {/* //*반려동물 소개 */}
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-              <View style={{ paddingTop: 35 }}>
-                <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
+          )}
 
-                <View style={styles.petDescTextBox}>
-                  <TextInput
-                    style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
-                    multiline={true}
-                    editable={editable !== undefined ? editable : false}
-                    value={text}
-                    onChangeText={handleTextChange}
-                  />
-                  {/* <PreMed14 color={BODY} text={text} style={{ marginBottom: 10 }} />
+          <UserOrPetProfileInfo
+            title="중성화여부"
+            profileInfo={Neutralizated}
+            showOption={editable}
+            additionalPadding={35}
+          />
+          {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
+          {/* //*반려동물 소개 */}
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            <View style={{ paddingTop: 35 }}>
+              <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
+
+              <View style={styles.petDescTextBox}>
+                <TextInput
+                  style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
+                  multiline={true}
+                  editable={editable !== undefined ? editable : false}
+                  value={text}
+                  onChangeText={handleTextChange}
+                />
+                {/* <PreMed14 color={BODY} text={text} style={{ marginBottom: 10 }} />
                 </TextInput> */}
-                </View>
               </View>
-            </KeyboardAvoidingView>
-          </View>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
 
-          {/* //*닉네임 관리 모달 창  */}
-          <CustomInputModal
-            visibleState={nameTouched}
-            handleModalHide={handleNameModalHide}
-            title="이름"
-            controlMode="userNickname"
-            handleInput={handleNameInput}
-            placeholderInput="pet"
-            validateFunction={() => {
-              return false
-              //TODO : 중복 검출 코드  만들기
-            }}
-          />
-          {/* //*몸무게 관리 모달 창 */}
-          <WeightModal
-            visibleState={weightTouched}
-            handleModalHide={handleweightModalHide}
-            title="몸무게(kg)"
-            handleInput={handleWeightInput}
-          />
-          {/* //*생일 관리 모달 창  */}
-          <BirthdayModal
-            visibleState={birthdayTouched}
-            handleModalHide={handleBirthdayModalHide}
-            title="생년월일"
-            handleInput={handleBirthdayInput}
-          />
-          {/* //*수정 후 back 시 나타나는 경고 모달창  */}
-          <CustomModal
-            image={images.dog_illustration}
-            visibleState={handleGoBack}
-            title="반려동물 정보 수정을 취소하시겠어요?"
-            subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."
-            yesBtnText="정보 수정 취소"
-            noBtnText="계속 수정하기"
-            handleYesPress={handleQuitEditPress}
-            handleNoPress={handleKeepEditPress}
-          />
+        {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
+        {showSaveButton && <View style={{ height: 60 }} />}
+      </ScrollView>
 
-          {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
-          {editable && <View style={{ height: 60 }} />}
-        </ScrollView>
-      </ScreenRootView>
+      {/* //*닉네임 관리 모달 창  */}
+      <CustomInputModal
+        visibleState={nameTouched}
+        handleModalHide={handleNameModalHide}
+        title="이름"
+        controlMode="userNickname"
+        handleInput={handleNameInput}
+        placeholderInput="pet"
+        validateFunction={() => {
+          return false
+          //TODO : 중복 검출 코드  만들기
+        }}
+      />
+      {/* //*몸무게 관리 모달 창 */}
+      <WeightModal
+        visibleState={weightTouched}
+        handleModalHide={handleweightModalHide}
+        title="몸무게(kg)"
+        handleInput={handleWeightInput}
+      />
+      {/* //*생일 관리 모달 창  */}
+      <BirthdayModal
+        visibleState={birthdayTouched}
+        handleModalHide={handleBirthdayModalHide}
+        title="생년월일"
+        handleInput={handleBirthdayInput}
+      />
+      {/* //*수정 후 back 시 나타나는 경고 모달창  */}
+      <CustomModal
+        image={images.dog_illustration}
+        visibleState={handleGoBack}
+        title="반려동물 정보 수정을 취소하시겠어요?"
+        subtitle="취소하면 지금까지 수정한 정보는 저장되지 않습니다."
+        yesBtnText="정보 수정 취소"
+        noBtnText="계속 수정하기"
+        handleYesPress={handleQuitEditPress}
+        handleNoPress={handleKeepEditPress}
+      />
       {/* //*저장하기 버튼 */}
-      {editable && (
+      {showSaveButton && (
         <View style={styles.saveBox}>
           <ConditionalButton
             label="저장하기"
@@ -469,6 +474,6 @@ export const EditPetInfoScreen: FC<
           />
         </View>
       )}
-    </View>
+    </ScreenRootView>
   )
 })
