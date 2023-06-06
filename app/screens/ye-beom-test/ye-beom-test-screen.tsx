@@ -19,7 +19,11 @@ export const YeBeomTestScreen: FC<
   // const navigation = useNavigation()
   return (
     <ScreenRootView testID="YeBeomTest">
-      <RegistrationNoticeNote title="사진 등록 전 잠깐" desc="특정하세요" boldTexts={["특정"]} />
+      <RegistrationNoticeNote
+        title="사진 등록 전, 잠깐!"
+        desc="개인/민감 정보는 직접 삭제 후 등록해야 하며, 등록된 정보가 허위 사실일 경우 발생하는 모든 책임은 본인에게 있습니다.\자격증 확인에는 평균 1~2일 정도 걸리며, 자체적인 심사 후 등록이 완료됩니다."
+        boldTexts={["직접 삭제 후 등록", "모든 책임은 본인", "평균 1~2일"]}
+      />
     </ScreenRootView>
   )
 })
