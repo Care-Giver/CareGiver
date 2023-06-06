@@ -116,7 +116,7 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
   "temp-hyeri-screen": undefined
-  "yebeom-screen": undefined
+  "ye-beom-test-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -130,7 +130,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="yebeom-screen" //자격증 등록 사항 표시하기 위해 임시 추가
+      initialRouteName="ye-beom-test-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -373,10 +373,10 @@ const AllStacks = () => {
       />
       {/*// MVP-20 */}
       <Stack.Screen
-        name="yebeom-screen"
+        name="ye-beom-test-screen"
         component={YeBeomTestScreen}
         options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
