@@ -11,12 +11,12 @@ import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const {} = props
+  const { dateFee } = props
   const [selected, setSelected] = React.useState("")
   const onDayPress = ({ date }) => {
-    console.log(date.dateString) //test
     setSelected(date.dateString)
-    console.log(selected)
+    console.log(date.dateString)
+    console.log("datefee" + dateFee)
   }
   /*const marked = React.useMemo(
     () => ({

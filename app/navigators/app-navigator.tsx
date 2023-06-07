@@ -131,7 +131,7 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="cg-calendar-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen

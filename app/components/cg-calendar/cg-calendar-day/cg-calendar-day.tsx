@@ -10,8 +10,6 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
 
   //const [selected, setSelected] = React.useState("") // 얘만 수정하면 될듯
   const textBgSelectior = ({ date, state }) => {
-    console.log(date.dateString)
-    console.log(selected)
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
     }

@@ -1,9 +1,10 @@
-import React, { FC, useState } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { CgCalendar, ScreenRootView } from "#components"
 import { DateData } from "react-native-calendars"
+import { CalendarModel, DateFee } from "../../models/calendar-store/calendar-store"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -21,12 +22,20 @@ export const CgCalendarScreen: FC<
   // const navigation = useNavigation()
 
   //* 달력 - Calendar
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [date, setDate] = useState<DateData>() //? 선택된 날짜
+  const calendarStore = CalendarModel.create()
+  const [fee, setFees] = useState<DateFee>()
 
+  useLayoutEffect(() => {
+    async function fetchData() {
+      calendarStore.setCalendarFee(4)
+    }
+    fetchData()
+    setFees(calendarStore.datefee)
+    //console.log(calendarStore.datefee)
+  }, [fee])
   return (
     <ScreenRootView testID="CgCalendar">
-      <CgCalendar></CgCalendar>
+      <CgCalendar dateFee={fee}></CgCalendar>
     </ScreenRootView>
   )
 })

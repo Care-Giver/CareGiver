@@ -1,3 +1,5 @@
+import { DateFee } from "../../models/calendar-store/calendar-store"
+
 export interface CgCalendarProps {
-  visibleState: boolean
+  dateFee: DateFee
 }
