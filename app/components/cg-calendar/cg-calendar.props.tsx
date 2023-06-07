@@ -1,5 +1,5 @@
-import { DateFee } from "../../models/calendar-store/calendar-store"
+import { Calendar } from "app/models"
 
 export interface CgCalendarProps {
-  dateFee: DateFee
+  dateFee: Calendar[]
 }

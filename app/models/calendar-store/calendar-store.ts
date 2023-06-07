@@ -1,26 +1,29 @@
-import { Api, FormattedPetsitterReserve } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { getvisitingAvailableTimes } from "../../services/axios/calendar"
+import { getvisitingAvailableTimes, visitingAvailableTimes } from "../../services/axios/calendar"
+import { CalendarModel } from "../calendar/calendar"
+import { withSetPropAction } from "../extensions/with-set-prop-action"
 
 /**
  * Model description here for TypeScript hints.
  */
-export interface DateFee {
-  startTime: string
-  endTime: string
-  fee: string
-}
-export const CalendarModel = types
+
+export const CalendarStoreModel = types
   .model("CalendarStore")
   .props({
-    datefee: types.frozen<DateFee>(),
+    visitingAvailableTimes: types.optional(types.array(CalendarModel), []),
   })
+  .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    addFee: (data: visitingAvailableTimes) => {
+      self.visitingAvailableTimes.push({ ...data })
+    },
+  }))
+  .actions((self) => ({
     setCalendarFee: async (visitingId: number) => {
-      const crecheResponse = await getvisitingAvailableTimes(visitingId)
-      self.datefee = crecheResponse
-      console.log(crecheResponse)
+      const _response = await getvisitingAvailableTimes(visitingId)
+      _response.forEach((value) => self.addFee(value))
+      // _response.forEach((value) => self.visitingAvailableTimes.push(value))
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

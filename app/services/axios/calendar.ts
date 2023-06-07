@@ -1,14 +1,17 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-interface visitingAvailableTimes {
+export interface visitingAvailableTimes {
+  id: number
+  createAt: string
+  updatedAt: string
   startTime: string
   endTime: string
-  fee: string
+  fee: number
 }
 
 interface visitingAvailableTimesResponse extends GeneralResponse {
-  visitingAvailableTimes: visitingAvailableTimes
+  visitingAvailableTimes: visitingAvailableTimes[]
 }
 
 /**
@@ -17,26 +20,22 @@ interface visitingAvailableTimesResponse extends GeneralResponse {
  */
 export const getvisitingAvailableTimes = async (
   visitingId: number,
-): Promise<visitingAvailableTimes> => {
-  try {
-    const response = await axios.get<visitingAvailableTimesResponse>(
-      `${BASE_URL}/visiting-available-time/visitingId?=${visitingId}`,
-      CONFIG,
-    )
+): Promise<visitingAvailableTimes[]> => {
+  const response = await axios.get<visitingAvailableTimesResponse>(
+    `${BASE_URL}/visiting-available-time/${visitingId}`,
+  )
 
-    if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
-      return error
-    }
+  // console.log("calender axios res: ", response)
 
-    // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.crecheBookings", response.data.visitingAvailableTimes)
-    return response.data.visitingAvailableTimes
-  } catch (error) {
-    console.error("catch 에러!!!", error)
-    return null
+  if (!response.data.ok) {
+    const error = response.data.error
+    console.error("response.data.error 에러!!!", error)
+    // @ts-ignore
+    return error
   }
+
+  // console.log("response", response)
+  // console.log("response.data", response.data)
+  // console.log("response.data.visitingAvailableTimes", response.data.visitingAvailableTimes)
+  return response.data.visitingAvailableTimes
 }
