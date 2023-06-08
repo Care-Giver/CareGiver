@@ -18,7 +18,7 @@ interface visitingAvailableTimesResponse extends GeneralResponse {
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<visitingAvailableTimes>}
  */
-export const getvisitingAvailableTimes = async (
+export const getVisitingAvailableTimes = async (
   visitingId: number,
 ): Promise<visitingAvailableTime[]> => {
   try {
@@ -26,8 +26,6 @@ export const getvisitingAvailableTimes = async (
       `${BASE_URL}/visiting-available-time/${visitingId}`,
       CONFIG,
     )
-
-    // console.log("calender axios res: ", response)
 
     if (!response.data.ok) {
       const error = response.data.error

@@ -1,6 +1,9 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { getvisitingAvailableTimes, visitingAvailableTime } from "../../services/axios/calendar"
+import {
+  getVisitingAvailableTimes,
+  visitingAvailableTime,
+} from "../../services/axios/visiting-available-time"
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -17,11 +20,17 @@ export const VisitingAvailableTimesModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    async setAllVisitingAvailableTimes(visitingId: number) {
-      const response = await getvisitingAvailableTimes(visitingId)
-      console.log("axios response", response)
-
+    setResponse(response: visitingAvailableTime[]) {
       self.visitingAvailableTimes = response
+    },
+  }))
+  .actions((self) => ({
+    async setAllVisitingAvailableTimes(visitingId: number) {
+      // const visitingAvailableTimes = await getvisitingAvailableTimes(visitingId)
+      // self.visitingAvailableTimes = visitingAvailableTimes
+      await getVisitingAvailableTimes(visitingId)
+        .then((res) => self.setResponse(res))
+        .catch((res) => console.error(res))
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

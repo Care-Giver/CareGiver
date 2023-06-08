@@ -1,5 +1,5 @@
-import { Calendar } from "app/models"
+import { visitingAvailableTime } from "../../services/axios/visiting-available-time"
 
 export interface CgCalendarProps {
-  dateFee: Calendar[]
+  dateFee: visitingAvailableTime[]
 }

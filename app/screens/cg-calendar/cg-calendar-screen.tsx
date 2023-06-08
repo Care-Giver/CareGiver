@@ -1,13 +1,8 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { CgCalendar, ScreenRootView } from "#components"
-import { DateData } from "react-native-calendars"
-import { CalendarStoreModel } from "../../models/calendar-store/calendar-store"
-import { Calendar } from "../../models/calendar/calendar"
-import { getvisitingAvailableTimes } from "../../services/axios/calendar"
-import { getCrechePetsitters } from "#axios"
 import { useStores } from "../../models"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -32,37 +27,19 @@ export const CgCalendarScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
 
-  //* 달력 - Calendar
-  const calendarStore = CalendarStoreModel.create({
-    visitingAvailableTimes: [],
-  })
-  const [fees, setFees] = useState([])
+  const [dateFees, setDateFees] = useState([])
+  const [userId, setUserId] = useState(4)
 
-  useEffect(() => {
-    async function fetchData() {
-      calendarStore.setCalendarFee(4)
-      console.log("calendarStore.visitingAvailableTimes:", calendarStore.visitingAvailableTimes)
-      setFees(calendarStore.visitingAvailableTimes)
-      // console.log("fetch")
-      // const _response = await getvisitingAvailableTimes(4)
-      // const _fees = []
-      // _response.forEach((value) => _fees.push(value))
-      // // console.log("response: ", _response)
-      // // console.log("_fees:", _fees)
-      // setFees(_fees)
-    }
+  useLayoutEffect(() => {
+    setAllVisitingAvailableTimes(userId)
+    setDateFees(visitingAvailableTimes)
+  }, [userId])
 
-    // fetchData()
-    console.log("fees: ", fees)
-    // console.log(calendarStore.datefee)
+  console.log("fees:", dateFees)
 
-    // setAllVisitingAvailableTimes(4)
-    // console.log("야호 >>>", visitingAvailableTimes)
-    console.log("다시 두잇어게인", visitingAvailableTimes)
-  }, [])
   return (
     <ScreenRootView testID="CgCalendar">
-      <CgCalendar dateFee={fees}></CgCalendar>
+      <CgCalendar dateFee={dateFees}></CgCalendar>
     </ScreenRootView>
   )
 })
