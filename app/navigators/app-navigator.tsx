@@ -132,14 +132,14 @@ const AllStacks = () => {
       }}
       initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
-      {/* //* 혜리 작업용 임시스크린 */}
+      {/* //* 혜리 작업용 임시스크린
       <Stack.Screen
         name="temp-hyeri-screen"
         component={TempHyeriScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //* 홈 */}
       <Stack.Screen
@@ -380,14 +380,14 @@ const AllStacks = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/*//? MVP-15 */}
+      {/* //? MVP-15
       <Stack.Screen
         name="temp-screen"
         component={TempScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
