@@ -12,17 +12,17 @@ export interface RegistrationNoticeNoteProps {
 
   /**
    * 제목 텍스트
-   * */
+   */
   title: string
 
   /**
    * 설명 텍스트
-   *  */
+   */
   desc: string
 
   /**
    * 설명 텍스트 중에서, bold 처리 할 텍스트들
-   *  */
+   */
   boldTexts?: string[]
 }
 
