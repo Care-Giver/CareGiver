@@ -1,7 +1,7 @@
 /* eslint-disable spaced-comment */
 import * as React from "react"
 import { Text as ReactNativeText } from "react-native"
-import { TextProps } from "../ignite-basics/text/text.props"
+import { CustomTextProps, TextProps } from "../ignite-basics/text/text.props"
 import { translate } from "../../../i18n"
 import {
   PRETENDARD_REGULAR,
@@ -94,15 +94,18 @@ const PretendardRegular = (props: TextProps) => {
 }
 
 //- Bold
-export const PreBol12 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol12 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -114,15 +117,18 @@ export const PreBol12 = (props: TextProps) => {
   )
 }
 
-export const PreBol14 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol14 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -134,15 +140,18 @@ export const PreBol14 = (props: TextProps) => {
   )
 }
 
-export const PreBol16 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol16 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -153,15 +162,18 @@ export const PreBol16 = (props: TextProps) => {
     </PretendardBold>
   )
 }
-export const PreBol18 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol18 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -173,15 +185,18 @@ export const PreBol18 = (props: TextProps) => {
   )
 }
 
-export const PreBol20 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol20 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -193,15 +208,18 @@ export const PreBol20 = (props: TextProps) => {
   )
 }
 
-export const PreBol24 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol24 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -213,15 +231,18 @@ export const PreBol24 = (props: TextProps) => {
   )
 }
 
-export const PreBol28 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol28 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -233,15 +254,18 @@ export const PreBol28 = (props: TextProps) => {
   )
 }
 
-export const PreBol32 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreBol32 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -254,15 +278,18 @@ export const PreBol32 = (props: TextProps) => {
 }
 
 //- Medium
-export const PreMed12 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed12 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -274,15 +301,18 @@ export const PreMed12 = (props: TextProps) => {
   )
 }
 
-export const PreMed14 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed14 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -294,15 +324,18 @@ export const PreMed14 = (props: TextProps) => {
   )
 }
 
-export const PreMed16 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed16 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -314,15 +347,18 @@ export const PreMed16 = (props: TextProps) => {
   )
 }
 
-export const PreMed18 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed18 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -334,15 +370,18 @@ export const PreMed18 = (props: TextProps) => {
   )
 }
 
-export const PreMed20 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed20 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -354,15 +393,18 @@ export const PreMed20 = (props: TextProps) => {
   )
 }
 
-export const PreMed24 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed24 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -374,15 +416,18 @@ export const PreMed24 = (props: TextProps) => {
   )
 }
 
-export const PreMed28 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed28 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -394,15 +439,18 @@ export const PreMed28 = (props: TextProps) => {
   )
 }
 
-export const PreMed32 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreMed32 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -415,15 +463,18 @@ export const PreMed32 = (props: TextProps) => {
 }
 
 //- Regular
-export const PreReg10 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg10 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -435,15 +486,18 @@ export const PreReg10 = (props: TextProps) => {
   )
 }
 
-export const PreReg12 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg12 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -455,15 +509,18 @@ export const PreReg12 = (props: TextProps) => {
   )
 }
 
-export const PreReg14 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg14 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -475,15 +532,18 @@ export const PreReg14 = (props: TextProps) => {
   )
 }
 
-export const PreReg16 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg16 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -495,15 +555,18 @@ export const PreReg16 = (props: TextProps) => {
   )
 }
 
-export const PreReg18 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg18 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -515,15 +578,18 @@ export const PreReg18 = (props: TextProps) => {
   )
 }
 
-export const PreReg20 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg20 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -535,15 +601,18 @@ export const PreReg20 = (props: TextProps) => {
   )
 }
 
-export const PreReg24 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg24 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -555,15 +624,18 @@ export const PreReg24 = (props: TextProps) => {
   )
 }
 
-export const PreReg28 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg28 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -575,15 +647,18 @@ export const PreReg28 = (props: TextProps) => {
   )
 }
 
-export const PreReg32 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PreReg32 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -647,15 +722,18 @@ const PoppinsRegular = (props: TextProps) => {
 }
 
 //- SemiBold
-export const PopSem12 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem12 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -667,15 +745,18 @@ export const PopSem12 = (props: TextProps) => {
   )
 }
 
-export const PopSem14 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem14 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -687,15 +768,18 @@ export const PopSem14 = (props: TextProps) => {
   )
 }
 
-export const PopSem16 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem16 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -707,15 +791,18 @@ export const PopSem16 = (props: TextProps) => {
   )
 }
 
-export const PopSem18 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem18 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -727,15 +814,18 @@ export const PopSem18 = (props: TextProps) => {
   )
 }
 
-export const PopSem20 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem20 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -747,15 +837,18 @@ export const PopSem20 = (props: TextProps) => {
   )
 }
 
-export const PopSem24 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem24 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -767,15 +860,18 @@ export const PopSem24 = (props: TextProps) => {
   )
 }
 
-export const PopSem28 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem28 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -787,15 +883,18 @@ export const PopSem28 = (props: TextProps) => {
   )
 }
 
-export const PopSem32 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopSem32 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -808,15 +907,18 @@ export const PopSem32 = (props: TextProps) => {
 }
 
 //- Regular
-export const PopReg12 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg12 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -828,15 +930,18 @@ export const PopReg12 = (props: TextProps) => {
   )
 }
 
-export const PopReg14 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg14 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -848,15 +953,18 @@ export const PopReg14 = (props: TextProps) => {
   )
 }
 
-export const PopReg16 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg16 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -868,15 +976,18 @@ export const PopReg16 = (props: TextProps) => {
   )
 }
 
-export const PopReg18 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg18 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -888,15 +999,18 @@ export const PopReg18 = (props: TextProps) => {
   )
 }
 
-export const PopReg20 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg20 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -908,15 +1022,18 @@ export const PopReg20 = (props: TextProps) => {
   )
 }
 
-export const PopReg24 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg24 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -928,15 +1045,18 @@ export const PopReg24 = (props: TextProps) => {
   )
 }
 
-export const PopReg28 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg28 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children
@@ -948,15 +1068,18 @@ export const PopReg28 = (props: TextProps) => {
   )
 }
 
-export const PopReg32 = (props: TextProps) => {
-  const { tx, txOptions, text, children, style, color, mt, mb, mv, ...rest } = props
+export const PopReg32 = (props: CustomTextProps) => {
+  const { tx, txOptions, text, children, style, color, mt, mb, mv, ml, mr, mh, ...rest } = props
   const i18nText = tx && translate(tx, txOptions)
   const $textStyle = Object.assign(
     {},
     {
       marginVertical: mv,
+      marginHorizontal: mh,
       marginTop: mt,
       marginBottom: mb,
+      marginLeft: ml,
+      marginRight: mr,
     },
   )
   const content = i18nText || text || children

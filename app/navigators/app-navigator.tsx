@@ -15,6 +15,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
+  TempScreen,
   WritingCommentScreen,
   HomeScreen,
   SearchScreen,
@@ -40,6 +41,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  TempHyeriScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -114,6 +116,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "temp-hyeri-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -123,13 +126,21 @@ const Tab = createBottomTabNavigator()
 const AllStacks = () => {
   return (
     <Stack.Navigator
-      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
       screenOptions={{
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
+      {/* //* 혜리 작업용 임시스크린 */}
+      <Stack.Screen
+        name="temp-hyeri-screen"
+        component={TempHyeriScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -365,6 +376,14 @@ const AllStacks = () => {
       <Stack.Screen
         name="minseon-test"
         component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/*//? MVP-15 */}
+      <Stack.Screen
+        name="temp-screen"
+        component={TempScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
