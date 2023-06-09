@@ -11,12 +11,14 @@ import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dateFee } = props
+  const { dates } = props
   const [selected, setSelected] = React.useState("")
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
     console.log(date.dateString)
-    console.log("datefee" + dateFee)
+    console.log("datefee" + dates[0].startTime)
+    console.log("datefee" + dates[1].startTime)
+    console.log("date num : " + dates.length)
   }
   /*const marked = React.useMemo(
     () => ({
@@ -48,7 +50,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }}
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
-            <CgCalendarDay date={date} state={state} selected={selected} />
+            <CgCalendarDay date={date} state={state} selected={selected} dates={dates} />
           </Pressable>
         )}
         style={[styles.calendar, SHADOW_1]}

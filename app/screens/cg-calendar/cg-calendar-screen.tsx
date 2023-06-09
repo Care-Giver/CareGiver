@@ -27,19 +27,19 @@ export const CgCalendarScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
 
-  const [dateFees, setDateFees] = useState([])
+  const [dates, setDates] = useState([])
   const [userId, setUserId] = useState(4)
 
   useLayoutEffect(() => {
     setAllVisitingAvailableTimes(userId)
-    setDateFees(visitingAvailableTimes)
+    setDates(visitingAvailableTimes)
   }, [userId])
 
-  console.log("fees:", dateFees)
+  console.log("dates:", dates)
 
   return (
     <ScreenRootView testID="CgCalendar">
-      <CgCalendar dateFee={dateFees}></CgCalendar>
+      <CgCalendar dates={dates}></CgCalendar>
     </ScreenRootView>
   )
 })
