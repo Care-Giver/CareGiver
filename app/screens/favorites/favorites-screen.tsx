@@ -43,6 +43,8 @@ import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
 import { getCrechePetsitters } from "#axios"
+import { FavoriteModel, useStores } from "../../models"
+import { ProfileCardInfo } from "app/services/axios/favorite"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -59,9 +61,17 @@ interface FilterCondition {
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
 > = observer(function FavoritesScreen() {
+  const {
+    FavoriteModel: { setFavorites, favoriteCreches, favoriteVisitings },
+  } = useStores()
+
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
 
+  // TODO: 백엔드 수정 후 타입 재수정
   const [petsitters, setPetsitters] = useState<Array<any>>([])
+  // const [petsitters, setPetsitters] = useState<ProfileCardInfo[]>([])
+  const [creches, setCreches] = useState<ProfileCardInfo[]>([])
+
   // // TODO: Type을 CrecheBooking | VisitingBooking 으로 수정
   // const [reserves, setReserves] = useState<Array<CrecheBooking>>([])
 
@@ -114,12 +124,6 @@ export const FavoritesScreen: FC<
     ),
     [],
   )
-
-  // * load petsitters
-  useLayoutEffect(() => {
-    setPetsitters(_petsitters)
-    // setPetsitters([])
-  }, [])
 
   const [bottomSheetAnimatedValue] = useState(new Animated.Value(400))
 
@@ -220,6 +224,16 @@ export const FavoritesScreen: FC<
       pets: filterPet,
     })
   }, [filterServiceType, startDate, endDate, filterPet])
+
+  // * load petsitters
+  useLayoutEffect(() => {
+    setPetsitters(_petsitters)
+    setFavorites()
+    console.log("[FAVORITES SCREEN] favoriteCreches:", favoriteCreches)
+    console.log("[FAVORITES SCREEN] favoriteVisitings:", favoriteVisitings)
+    // setPetsitters(favoriteVisitings)
+    // setCreches(favoriteCreches)
+  }, [serviceType])
 
   // * 확인 버튼 누를 시 실행되는 함수
   const handleCheckButton = useCallback(() => {
