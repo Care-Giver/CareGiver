@@ -2,7 +2,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgCalendar, ScreenRootView } from "#components"
+import { CgCalendar, CgCalendarEditButton, ScreenRootView } from "#components"
 import { useStores } from "../../models"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -40,6 +40,7 @@ export const CgCalendarScreen: FC<
   return (
     <ScreenRootView testID="CgCalendar">
       <CgCalendar dates={dates}></CgCalendar>
+      <CgCalendarEditButton></CgCalendarEditButton>
     </ScreenRootView>
   )
 })

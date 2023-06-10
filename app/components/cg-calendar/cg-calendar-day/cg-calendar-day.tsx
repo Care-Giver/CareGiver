@@ -6,10 +6,9 @@ import { CgCalendarDayProps } from "./cg-calendar-day.props"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates } = props
+  const { date, state, selected, dates, month } = props
   const [fee, setFee] = React.useState(null)
   const [availableTime, setAvailableTime] = React.useState(false)
-  //const [selected, setSelected] = React.useState("") // 얘만 수정하면 될듯
   const textBgBdSelectior = ({ date, state }) => {
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
@@ -23,6 +22,9 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     if (availableTime) {
       if (date.dateString == selected) {
         return "white"
+      }
+      if (state == "disabled") {
+        return MIDDLE_LINE
       }
       return "black"
     }
@@ -50,6 +52,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return SUB_HEAD_LINE
   }
   React.useEffect(() => {
+    setFee(null)
+    //setAvailableTime(false)
     const checkDate = ({ date, dates }) => {
       for (let i = 0; i < dates.length; i++) {
         if (date.dateString == dates[i].startTime.substring(0, 10)) {
@@ -61,7 +65,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
       return null
     }
     checkDate({ date, dates })
-  })
+  }, [])
 
   return (
     <View

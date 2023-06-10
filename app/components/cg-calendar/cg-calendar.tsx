@@ -15,21 +15,8 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const [selected, setSelected] = React.useState("")
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
-    console.log(date.dateString)
-    console.log("datefee" + dates[0].startTime)
-    console.log("datefee" + dates[1].startTime)
-    console.log("date num : " + dates.length)
   }
-  /*const marked = React.useMemo(
-    () => ({
-      [selected]: {
-        selected: true,
-        selectedColor: "#222222",
-        selectedTextColor: "yellow",
-      },
-    }),
-    [selected],
-  )*/
+  const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
     <View>
       <Calendar
@@ -41,6 +28,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
             <Image source={images.right_arrow_navy} style={[styles.arrow, { marginRight: 40 }]} />
           )
         }
+        onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
@@ -50,7 +38,13 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }}
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
-            <CgCalendarDay date={date} state={state} selected={selected} dates={dates} />
+            <CgCalendarDay
+              date={date}
+              state={state}
+              selected={selected}
+              dates={dates}
+              month={currentMonth}
+            />
           </Pressable>
         )}
         style={[styles.calendar, SHADOW_1]}

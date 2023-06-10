@@ -7,4 +7,5 @@ export interface CgCalendarDayProps {
   state: DayState
   selected: string
   dates: visitingAvailableTime[]
+  month: Date
 }
