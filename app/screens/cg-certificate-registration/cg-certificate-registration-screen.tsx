@@ -15,7 +15,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { Pressable, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
-import { launchImageLibrary } from "react-native-image-picker"
+import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
 import { LIGHT_LINE, HEAD_LINE, BODY, GIVER_CASUAL_NAVY } from "#theme"
 import { images } from "#images"
 
@@ -33,14 +33,14 @@ export const CgCertificateRegistrationScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-  const [selectedImages, setSelectedImages] = useState([])
+  const [selectedImages, setSelectedImages] = useState<string[]>([])
   const removeImage = (index) => {
     const updatedImages = [...selectedImages]
     updatedImages.splice(index, 1)
     setSelectedImages(updatedImages)
   }
-  let options = {
-    MediaType: "photo",
+  const options: ImageLibraryOptions = {
+    mediaType: "photo",
     maxHeight: 128,
     maxWidth: 128,
     //includeBase64: true -> 큰 이미지 피함
@@ -54,6 +54,8 @@ export const CgCertificateRegistrationScreen: FC<
       }
     })
   }
+
+  const isEmpty = selectedImages.length === 0
 
   return (
     <ScreenRootView testID="CgCertificateRegistration">
@@ -99,6 +101,12 @@ export const CgCertificateRegistrationScreen: FC<
               </TouchableOpacity>
             </View>
           ))}
+          {isEmpty && (
+            <Image
+              source={images.placeholder_image}
+              style={{ width: 128, height: 128, borderRadius: 8 }}
+            />
+          )}
         </ScrollView>
         <Pressable style={styles.button} onPress={openGallery}>
           <Image source={images.plus_grey} style={styles.plusButton} />
