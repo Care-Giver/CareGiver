@@ -75,9 +75,8 @@ export const CgCertificateRegistrationScreen: FC<
         <PreBol20 color={HEAD_LINE} text="을 설정해주세요!" />
       </View>
       {/* 컴포넌트 : 자격 증 등록 전, 잠깐! */}
-      <View style={styles.cgregistrationnote}>
-        <CertificateRegistrationNote />
-      </View>
+      <CertificateRegistrationNote style={styles.cgregistrationnote} />
+
       {/* 이미지 추가 View */}
       <View style={styles.imageview}>
         <ScrollView
@@ -87,17 +86,21 @@ export const CgCertificateRegistrationScreen: FC<
         >
           {selectedImages.map((imageUri, index) => (
             <View key={index} style={styles.imageContainer}>
-              <Image source={{ uri: imageUri }} style={{ width: 128, height: 128 }} />
-              <TouchableOpacity style={styles.deleteButton} onPress={() => removeImage(index)}>
-                <View style={styles.deleteButton}>
-                  <Image source={images.x_in_circle} style={styles.deleteButton} />
-                </View>
+              <Image
+                source={{ uri: imageUri }}
+                style={{ width: 128, height: 128, borderRadius: 8 }}
+              />
+              <TouchableOpacity
+                style={styles.deleteButtonWrapper}
+                onPress={() => removeImage(index)}
+              >
+                <Image source={images.x_in_circle} style={styles.deleteButton} />
               </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
         <Pressable style={styles.button} onPress={openGallery}>
-          <Image source={images.x_in_circle} style={styles.crossButton} />
+          <Image source={images.plus_grey} style={styles.crossButton} />
           <PreReg16 text={"자격증 추가하기"} color={BODY}></PreReg16>
         </Pressable>
       </View>
@@ -131,34 +134,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   cgregistrationnote: {
-    marginTop: 4,
-    height: 142,
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: 16,
   },
   imageview: {
-    height: 204,
+    height: "auto",
     width: "100%",
+    marginTop: 28,
   },
   button: {
     flexDirection: "row",
-    width: 358,
+    width: "100%",
     height: 48,
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 12,
   },
   imageContainer: {
     position: "relative",
     marginRight: 10,
   },
+  deleteButtonWrapper: {
+    position: "absolute",
+    top: 3.5,
+    right: 3.5,
+  },
   deleteButton: {
     position: "absolute",
     right: 0,
-    width: 24,
-    height: 24,
+    width: 17,
+    height: 17,
     justifyContent: "center",
     alignItems: "center",
   },
