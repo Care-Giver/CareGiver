@@ -12,6 +12,7 @@ import {
   CgCertificateRegistrationScreenHeader,
   PreReg16,
   Icon,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { Pressable, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import { launchImageLibrary } from "react-native-image-picker"
@@ -169,9 +170,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   bottomButton: {
-    height: 72,
-    marginTop: 173,
-    alignItems: "center",
-    justifyContent: "center",
+    position: "absolute",
+    left: BASIC_BACKGROUND_PADDING_WIDTH,
+    right: BASIC_BACKGROUND_PADDING_WIDTH,
+    bottom: 7,
   },
 })

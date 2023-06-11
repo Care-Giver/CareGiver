@@ -1,14 +1,12 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle, StyleSheet, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
-import { GIVER_CASUAL_NAVY, white } from "#theme"
+import { GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol16 } from "#components"
 
 const ROOT: ViewStyle = {
   justifyContent: "center",
   flexDirection: "row",
-  paddingHorizontal: 16,
-  paddingVertical: 8,
 }
 
 export interface GoBackSaveNextProps {
@@ -47,7 +45,7 @@ export const GoBackSaveNext = observer(function GoBackSaveNext(props: GoBackSave
 })
 const _styles = StyleSheet.create({
   prebutton: {
-    width: 101,
+    flex: 1,
     height: 56,
     backgroundColor: "#F1F1F4",
     borderRadius: 8,
@@ -55,7 +53,7 @@ const _styles = StyleSheet.create({
     alignItems: "center",
   },
   nextbutton: {
-    width: 250,
+    flex: 2.5,
     hegiht: 56,
     backgroundColor: GIVER_CASUAL_NAVY,
     borderRadius: 8,
