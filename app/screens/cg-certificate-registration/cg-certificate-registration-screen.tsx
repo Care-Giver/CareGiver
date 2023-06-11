@@ -59,26 +59,26 @@ export const CgCertificateRegistrationScreen: FC<
       {/* Screen header 컴포넌트 -> app.navigator로 이동 */}
       {/*<CgCertificateRegistrationScreenHeader options={{ title: "저장 후 나가기" }} />*/}
       {/* 단계별 컴포넌트 */}
-      <View style={styles.cgregistration}>
+      <View style={styles.cgRegistration}>
         <CgRegisterStep style={styles.step} step="todo" number={1} title=" " />
         <CgRegisterStep style={styles.step} step="progress" number={2} title="펫시터 서비스 설정" />
         <CgRegisterStep style={styles.step} step="done" number={3} title=" " />
       </View>
+
       {/* 텍스트 : 반려동물 관련 자격증을 등록해주세요 */}
-      <View style={styles.text1}>
-        <PreBol20 text={"반려동물"} color={HEAD_LINE} />
-      </View>
-      <View style={styles.text2}>
+      <PreBol20 text={"반려동물"} color={HEAD_LINE} mt={24} />
+      <View style={styles.titleWithUnderlineText}>
         <UnderlineText>
           <PreBol20 text={"자격증"} />
         </UnderlineText>
         <PreBol20 color={HEAD_LINE} text="을 설정해주세요!" />
       </View>
+
       {/* 컴포넌트 : 자격 증 등록 전, 잠깐! */}
-      <CertificateRegistrationNote style={styles.cgregistrationnote} />
+      <CertificateRegistrationNote style={styles.cgRegistrationNote} />
 
       {/* 이미지 추가 View */}
-      <View style={styles.imageview}>
+      <View style={styles.imageView}>
         <ScrollView
           contentContainerStyle={{ flexDirection: "row" }}
           horizontal={true}
@@ -100,12 +100,13 @@ export const CgCertificateRegistrationScreen: FC<
           ))}
         </ScrollView>
         <Pressable style={styles.button} onPress={openGallery}>
-          <Image source={images.plus_grey} style={styles.crossButton} />
+          <Image source={images.plus_grey} style={styles.plusButton} />
           <PreReg16 text={"자격증 추가하기"} color={BODY}></PreReg16>
         </Pressable>
       </View>
+
       {/* 하단 버튼 GoBackSaveNext 컴포넌트 */}
-      <View style={styles.bottombutton}>
+      <View style={styles.bottomButton}>
         <GoBackSaveNext />
       </View>
     </ScreenRootView>
@@ -113,7 +114,7 @@ export const CgCertificateRegistrationScreen: FC<
 })
 
 const styles = StyleSheet.create({
-  cgregistration: {
+  cgRegistration: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -122,21 +123,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginRight: 10,
   },
-  text1: {
-    marginTop: 24,
-    height: 24,
-    alignItems: "flex-start",
-    justifyContent: "center",
-  },
-  text2: {
-    height: 24,
+  titleWithUnderlineText: {
     marginTop: 6,
     flexDirection: "row",
   },
-  cgregistrationnote: {
+  cgRegistrationNote: {
     marginTop: 16,
   },
-  imageview: {
+  imageView: {
     height: "auto",
     width: "100%",
     marginTop: 28,
@@ -169,12 +163,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  crossButton: {
+  plusButton: {
     width: 16,
     height: 16,
     marginRight: 10,
   },
-  bottombutton: {
+  bottomButton: {
     height: 72,
     marginTop: 173,
     alignItems: "center",
