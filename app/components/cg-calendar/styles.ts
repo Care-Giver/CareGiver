@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     width: 51.14,
     height: 72,
     zIndex: -1,
-    boxShadow: "0px 0px 100px rgba(10, 100, 79, 0.5)",
   },
   dayTextContainer: {
     borderColor: "#00206C",
@@ -36,6 +35,5 @@ export const styles = StyleSheet.create({
     height: "auto",
     paddingBottom: 6,
     zIndex: 1,
-    boxShadow: "0px 0px 4px #00206C", // RN StyleSheet 에서 boxShadow prop 은 존재하지 않습니다. 적용되지 않을 스타일링입니다. 제거해주세요 :) -수민
   },
 })

@@ -9,12 +9,14 @@ import "./localeConfig"
 import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
+import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const { dates } = props
   const [selected, setSelected] = React.useState("")
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
+    console.log(currentMonth)
   }
   const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
@@ -30,6 +32,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }
         onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
+        firstDay={6}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
           textMonthFontWeight: "bold",
@@ -49,6 +52,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         )}
         style={[styles.calendar, SHADOW_1]}
       ></Calendar>
+      <CgCalendarEditButton style={{ bottom: 0 }} title={"수정"} />
     </View>
   )
 })

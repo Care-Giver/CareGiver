@@ -2,7 +2,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgCalendar, CgCalendarEditButton, ScreenRootView } from "#components"
+import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView } from "#components"
 import { useStores } from "../../models"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -39,8 +39,8 @@ export const CgCalendarScreen: FC<
 
   return (
     <ScreenRootView testID="CgCalendar">
+      <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
       <CgCalendar dates={dates}></CgCalendar>
-      <CgCalendarEditButton></CgCalendarEditButton>
     </ScreenRootView>
   )
 })
