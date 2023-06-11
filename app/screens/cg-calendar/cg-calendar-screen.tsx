@@ -2,8 +2,9 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView } from "#components"
+import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView, Text } from "#components"
 import { useStores } from "../../models"
+import { Pressable, View } from "react-native"
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -21,7 +22,9 @@ export const CgCalendarScreen: FC<
       showAllVisitingAvailableTimes,
     },
   } = useStores()
-
+  const {
+    CrecheDayModel: { setAllCrecheDays, crecheDays },
+  } = useStores()
   // const 데이터가져오기 = visitingAvailableTimesModel.setAllVisitingAvailableTimes
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
@@ -29,18 +32,37 @@ export const CgCalendarScreen: FC<
 
   const [dates, setDates] = useState([])
   const [userId, setUserId] = useState(4)
+  const [version, setVersion] = useState(true)
+  const onTestPress = () => {
+    setVersion(!version)
+  }
 
   useLayoutEffect(() => {
-    setAllVisitingAvailableTimes(userId)
-    setDates(visitingAvailableTimes)
-  }, [userId])
+    if (version) {
+      setAllVisitingAvailableTimes(userId)
+      setDates(visitingAvailableTimes)
+    } else {
+      setAllCrecheDays(userId)
+      setDates(crecheDays)
+    }
+  }, [version])
 
   console.log("dates:", dates)
 
   return (
     <ScreenRootView testID="CgCalendar">
-      <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
+      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        {/*이 전 스크린 제작 전, 위탁 방문을 구분하기 위한 버튼*/}
+        <Pressable style={{ borderColor: "black", borderWidth: 2 }} onPress={onTestPress}>
+          <Text style={{ color: "black" }}>{version ? "방문" : "위탁"}</Text>
+        </Pressable>
+        <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
+      </View>
       <CgCalendar dates={dates}></CgCalendar>
+      <CgCalendarEditButton
+        style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
+        title={"수정"}
+      />
     </ScreenRootView>
   )
 })

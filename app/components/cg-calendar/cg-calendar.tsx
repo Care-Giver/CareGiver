@@ -32,7 +32,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }
         onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
-        firstDay={6}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
           textMonthFontWeight: "bold",
@@ -52,7 +51,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         )}
         style={[styles.calendar, SHADOW_1]}
       ></Calendar>
-      <CgCalendarEditButton style={{ bottom: 0 }} title={"수정"} />
     </View>
   )
 })

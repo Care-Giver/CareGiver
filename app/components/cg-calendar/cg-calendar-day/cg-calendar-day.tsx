@@ -55,6 +55,12 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     setFee(null)
     //setAvailableTime(false)
     const checkDate = ({ date, dates }) => {
+      {
+        /**현재 위탁에 Data가 없음 */
+      }
+      if (dates == undefined) {
+        return null
+      }
       for (let i = 0; i < dates.length; i++) {
         if (date.dateString == dates[i].startTime.substring(0, 10)) {
           setFee(dates[i].fee)
