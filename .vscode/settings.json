@@ -76,5 +76,7 @@
           }
     ],
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "Material Theme Darker High Contrast"
+    "workbench.colorTheme": "Material Theme Darker High Contrast",
+    "search.useParentIgnoreFiles": true,
+    "search.useGlobalIgnoreFiles": true
 }

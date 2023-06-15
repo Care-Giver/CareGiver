@@ -42,6 +42,7 @@ import {
   EditPetInfoScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
+  CgSetAddressScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -56,6 +57,8 @@ import {
   PreReg18,
   EditPetInfoScreenHeader,
   CgCertificateRegistrationScreenHeader,
+  PreMed16,
+  CgsetAddressHeader,
 } from "#components"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
@@ -119,6 +122,7 @@ export type NavigatorParamList = {
   "temp-screen": undefined
   "cg-calendar-screen"
   "cg-certificate-registration-screen": undefined
+  "cg-set-address-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -132,8 +136,18 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="cg-certificate-registration-screen"
+      initialRouteName="home-screen"
     >
+      {/* //* CG - 지도상에서 위치 설정 */}
+      <Stack.Screen
+        name="cg-set-address-screen"
+        component={CgSetAddressScreen}
+        options={{
+          title: " ",
+          header: (props) => <CgsetAddressHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"

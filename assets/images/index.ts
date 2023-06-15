@@ -30,6 +30,7 @@
   list_bars: require("../images/list_bars.png"),
   location: require("../images/location.png"),
   location_disabled: require("../images/location_disabled.png"),
+  map_marker: require("../images/map_marker.png"),
   more_info: require("../images/more_info.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
   pencil: require("../images/pencil.png"),

@@ -8,6 +8,8 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+#import <GoogleMaps/GoogleMaps.h> //5.26 mook
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -16,7 +18,7 @@
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
 
-#import <react/config/ReactNativeConfig.h>
+#import "react/config/ReactNativeConfig.h"
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
@@ -33,6 +35,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  //5.26 mook
+  [GMSServices provideAPIKey:@"AIzaSyDGzlmhKrUA0vLqQs6jrXg1Il77Xmt8lD8"];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
