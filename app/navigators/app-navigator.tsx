@@ -388,14 +388,14 @@ const AllStacks = () => {
         }}
       />
 
-      {/* //* MVP-18 */}
+      {/* CG - 자격증 등록 */}
       <Stack.Screen
         name="cg-certificate-registration-screen"
         component={CgCertificateRegistrationScreen}
         options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
       />
 
-      {/*//? MVP-17 */}
+      {/* CG - 달력 */}
       <Stack.Screen
         name="cg-calendar-screen"
         component={CgCalendarScreen}
