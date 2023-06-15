@@ -23,7 +23,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
   const { user, ratings, createdAt, review, pets } = reviewData
   const userName = user.name
   const profileImg = user.profileImg ? user.profileImg : images.profile_default
-  const images = reviewData.images ? reviewData.images : []
+  const reviewImages = reviewData.images ? reviewData.images : []
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
@@ -84,7 +84,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
         }}
       >
         {/* //? 평점 */}
-        <RatingStars ratings={ratings} />
+        <RatingStars ratings={ratings} key={key} />
         {/* //? vertical divider */}
         <PreReg12 text="|" color={MIDDLE_LINE} style={{ marginHorizontal: 4 }} />
         {/* //? 날짜 */}
@@ -92,11 +92,12 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
       </Row>
 
       {/* //* 리뷰 이미지 */}
-      {images.length > 0 && (
+      {reviewImages.length > 0 && (
         <FlatList
-          data={images}
+          data={reviewImages}
           renderItem={({ item, index }) => (
             <Pressable
+              key={index}
               style={{
                 width: 160,
                 height: 160,
