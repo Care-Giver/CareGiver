@@ -33,6 +33,8 @@
   more_info: require("../images/more_info.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
   pencil: require("../images/pencil.png"),
+  placeholder_image: require("../images/placeholder_image.png"),
+  plus_grey: require("../images/plus_grey.png"),
   profile_default: require("../images/profile_default.png"),
   radio_active: require("../images/radio_active.png"),
   radio_inactive: require("../images/radio_inactive.png"),
