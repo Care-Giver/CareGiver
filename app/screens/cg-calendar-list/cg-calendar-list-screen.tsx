@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { PreBol12, PreBol32, PreReg18, PressableButton, ScreenRootView } from "#components"
+import { PreBol20, PreReg18, PressableButton, ScreenRootView } from "#components"
 import { View } from "react-native"
 import { useStores } from "#models"
 import { delay } from "../../utils/delay"
@@ -56,13 +56,15 @@ export const CgCalendarListScreen: FC<
           navigate("cg-calendar-screen")
         }}
         style={{
+          marginTop: "auto",
+          marginBottom: 20,
           alignSelf: "center",
           backgroundColor: GIVER_CASUAL_NAVY,
           padding: 10,
           borderRadius: 8,
         }}
       >
-        <PreBol32 text="달력 스크린 바로가기" color="white" />
+        <PreBol20 text="달력 스크린 바로가기" color="white" />
       </PressableButton>
     </ScreenRootView>
   )

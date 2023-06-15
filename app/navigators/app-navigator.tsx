@@ -45,6 +45,7 @@ import {
   CgSetAddressScreen,
   ManageBookingScreen,
   CgCalendarListScreen,
+  CgMypageScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -127,6 +128,7 @@ export type NavigatorParamList = {
   "manage-booking-screen": undefined
 
   // CG - 내정보 스택
+  "cg-mypage-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -672,37 +674,41 @@ const CalendarStack = () => {
  * CG - 내정보 스택
  */
 const CgMypageStack = () => {
-  const TempCgMypageScreen = () => {
-    return (
-      <ScreenRootView>
-        <View
-          style={{
-            marginVertical: 200,
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>케어기버 내정보 스크린</PreReg18>
-        </View>
-      </ScreenRootView>
-    )
-  }
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
         animation: "slide_from_right",
       }}
-      //  @ts-ignore
-      initialRouteName="temp-cg-mypage-screen"
+      initialRouteName="cg-mypage-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
         //  @ts-ignore
-        name="temp-cg-mypage-screen"
-        component={MypageScreen}
+        name="cg-mypage-screen"
+        component={CgMypageScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //* 환경설정 스크린 */}
+      <Stack.Screen
+        name="setting-screen"
+        component={SettingScreen}
+        options={{
+          title: "환경설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 고객센터 스크린 */}
+      <Stack.Screen
+        name="service-center-screen"
+        component={ServiceCenterScreen}
+        options={{
+          title: "고객센터",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 

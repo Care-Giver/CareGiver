@@ -27,53 +27,67 @@ import { delay } from "../../../utils/delay"
 import { useShowBottomTab } from "../../../utils/hooks"
 
 const IS_AUTH = true
-// const IS_AUTH = false
 
-const CAREGIVER_INTRO_URL = "https://www.naver.com/"
+// Dummy data
+const pets = [
+  {
+    name: "초코",
+    petType: "중형견",
+    species: "푸들",
+    age: 7,
+    sex: "여",
+  },
+  {
+    name: "구름이",
+    petType: "소형",
+    species: "고양이",
+    age: 15,
+    sex: "남",
+  },
+  {
+    name: "자두",
+    petType: "소형",
+    species: "고양이",
+    age: 3,
+    sex: "남",
+  },
+]
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   function MypageScreen({ navigation, route }) {
     useShowBottomTab(navigation)
 
     const {
-      userStore: { switchType },
+      userStore: { switchType, loggedIn, setLoggedIn },
     } = useStores()
 
     // ? 유저 프로필 정보
-    const [userInfo, setUserInfo] = useState<UserProps | null>()
+    const [userInfo, setUserInfo] = useState<UserProps | null>(user)
 
     // ? 펫 store
     const petStore = PetStoreModel.create()
     // ? 유저의 펫 리스트
-    const [petsList, setPetsList] = useState<Pet[]>([])
-
-    // const api = new Api()
-    // api.setup()
-    // const 슬프다 = async () => {
-    //   const target = await api.getSpeciesNames()
-    //   console.log("target", target)
-    // }
-    // 슬프다()
+    const [petsList, setPetsList] = useState<Pet[]>(pets)
 
     const { speciesStoreModel } = useStores()
     // speciesStoreModel.setSpecies()
     speciesStoreModel.getSpecies
 
-    useLayoutEffect(() => {
-      // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
-      if (IS_AUTH) {
-        setUserInfo(user)
+    // useLayoutEffect(() => {
+    //   // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
+    //   if (IS_AUTH) {
+    //     setUserInfo(user)
 
-        async function fetchData() {
-          await petStore.setMyPets()
-          setPetsList(petStore.pets)
-        }
+    //     async function fetchData() {
+    //       await petStore.setMyPets()
+    //       setPetsList(petStore.pets)
+    //     }
 
-        fetchData()
-      } else {
-        setUserInfo(null)
-      }
-    }, [])
+    //     fetchData()
+    //   } else {
+    //     setUserInfo(null)
+    //   }
+    // }, [])
 
     // TODO: 로그인 화면 연결시키기
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
@@ -83,7 +97,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
     const handleMyPetsPress = () => {
-      navigate("all-pets-screen")
+      navigate("all-pets-screen", { pets })
     }
 
     // * 환경설정 버튼 클릭시 실행되는 함수
@@ -103,7 +117,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     return (
       <ScreenRootView preset="fixed">
         {/* //! 로그인 상태일 때 */}
-        {userInfo ? (
+        {loggedIn ? (
           <>
             {/* //* 유저 프로필 카드  */}
             <Row style={styles.profileCard}>

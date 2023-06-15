@@ -2,7 +2,7 @@ import { View, Text, FlatList } from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   PopSem16,
   PreBol16,
@@ -13,25 +13,23 @@ import {
 } from "#components"
 // import { SUB_HEAD_LINE, HEAD_LINE, WIDTH } from "#theme"
 import { styles } from "./styles"
-import { HEAD_LINE, SUB_HEAD_LINE, WIDTH } from "#theme"
-import { PetStoreModel } from "../../../models/pet-store/pet-store"
-import { Pet } from "../../../models/pet/pet"
+import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
-    const petStore = PetStoreModel.create()
-    const [pets, setPets] = useState<Pet[]>([])
+    // const [pets, setPets] = useState<Pet[]>([])
+    const { pets } = route.params
 
-    useLayoutEffect(() => {
-      async function fetchData() {
-        petStore.setMyPets()
-      }
-      fetchData()
-      setPets(petStore.pets)
-    }, [])
+    // useLayoutEffect(() => {
+    //   async function fetchData() {
+    //     petStore.setMyPets()
+    //   }
+    //   fetchData()
+    //   setPets(petStore.pets)
+    // }, [])
 
     return (
-      <ScreenRootView preset="fixed">
+      <ScreenRootView>
         {/* //* 제목 - 전체 n 마리 */}
         <Row style={styles.title}>
           <PreBol16 text="전체" color={SUB_HEAD_LINE} />
@@ -53,6 +51,9 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                 key={data.item.id}
                 petData={{
                   ...data.item,
+                }}
+                onPress={() => {
+                  navigate("edit-pet-info-screen")
                 }}
               />
               <View style={styles.divisionLine} />
