@@ -120,7 +120,7 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
         />
 
         <Pressable onPress={handlePress} style={{ marginLeft: "auto" }}>
-          <Image source={images.arrow_left} style={styles.image} />
+          <Image source={images.arrow_right} style={styles.image} />
         </Pressable>
       </Row>
 

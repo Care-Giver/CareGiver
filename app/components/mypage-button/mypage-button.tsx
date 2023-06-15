@@ -11,7 +11,7 @@ export const MypageButton = (props: MypageButtonProps) => {
   return (
     <Pressable style={[styles.root, style]} onPress={onPress} disabled={props.disabled}>
       <PreMed16 text={text} color={STRONG_LINE} style={{ opacity: props.opacity }} />
-      <Image source={images.arrow_left} style={styles.arrow} />
+      <Image source={images.arrow_right} style={styles.arrow} />
     </Pressable>
   )
 }

@@ -155,7 +155,7 @@ export const AllBookingsScreen: FC<
           <PreReg16 text="지난 예약" color={DISABLED} />
           <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
             <PreMed16 text="더보기" color={BODY} />
-            <Image source={images.arrow_left} style={{ width: 16, height: 16 }} />
+            <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
           </Pressable>
         </Row>
 
