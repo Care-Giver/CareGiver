@@ -31,13 +31,16 @@ import { BookingStoreModel } from "../../../models"
 // import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { styles } from "./styles"
 import { images } from "#images"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 // * 예약 정보를 읽어올 유저 id
 const USER_ID = 7
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
-> = observer(function AllBookingsScreen() {
+> = observer(function AllBookingsScreen({ navigation }) {
+  useShowBottomTab(navigation)
+
   const windowWidth = useWindowDimensions().width
 
   // ? dotsIndicator의 현재 인덱스를 나타내는 state

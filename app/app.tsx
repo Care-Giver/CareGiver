@@ -65,6 +65,8 @@ function App() {
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ErrorBoundary catchErrors={"always"}>
+            {/* // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android */}
+            {/* // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818 */}
             <GestureHandlerRootView style={{ flex: 1 }}>
               <BottomSheetModalProvider>
                 <AppNavigator

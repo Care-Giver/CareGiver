@@ -20,10 +20,13 @@ import {
   HEADER_AREA,
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
-> = observer(({ navigation, route }) => {
+> = observer(function SearchResultScreen({ navigation, route }) {
+  useShowBottomTab(navigation)
+
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])

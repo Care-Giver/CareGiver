@@ -81,6 +81,10 @@ PODS:
   - GoogleMaps/Base (7.4.0)
   - GoogleMaps/Maps (7.4.0):
     - GoogleMaps/Base
+  - lottie-ios (3.4.4)
+  - lottie-react-native (5.1.6):
+    - lottie-ios (~> 3.4.0)
+    - React-Core
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -445,6 +449,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils (from `https://github.com/Simon-TechForm/google-maps-ios-utils.git`, branch `feat/support-apple-silicon`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -493,6 +498,7 @@ SPEC REPOS:
     - ASN1Decoder
     - fmt
     - GoogleMaps
+    - lottie-ios
 
 EXTERNAL SOURCES:
   boost:
@@ -548,6 +554,8 @@ EXTERNAL SOURCES:
   Google-Maps-iOS-Utils:
     :branch: feat/support-apple-silicon
     :git: https://github.com/Simon-TechForm/google-maps-ios-utils.git
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -666,6 +674,8 @@ SPEC CHECKSUMS:
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   Google-Maps-iOS-Utils: d3fdfd57db799771418f06189e33981597553aa8
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
+  lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
+  lottie-react-native: 8f9d4be452e23f6e5ca0fdc11669dc99ab52be81
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: c8c080849a3670601d5c7056023a2176067a69d8
   RCTTypeSafety: 710aef40f5ae246bc5fff7e873855b17ed11c180
@@ -710,4 +720,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: be5cbcce394b32c7ef3b60a94e7f97505c85212d
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

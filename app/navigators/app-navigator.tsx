@@ -4,7 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { useColorScheme, Image, Pressable, View, ViewStyle, Platform } from "react-native"
 import {
   NavigationContainer,
@@ -43,6 +43,8 @@ import {
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   CgSetAddressScreen,
+  ManageBookingScreen,
+  CgCalendarListScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -56,14 +58,19 @@ import {
   ScreenRootView,
   PreReg18,
   EditPetInfoScreenHeader,
+  CgScreenHeader,
+  Loading,
   CgCertificateRegistrationScreenHeader,
   PreMed16,
   CgsetAddressHeader,
 } from "#components"
 import { images } from "#images"
-import { GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
+import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { Type, useStores } from "#models"
+import { observer } from "mobx-react-lite"
+import { useShowBottomTab } from "../utils/hooks"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -113,6 +120,14 @@ export type NavigatorParamList = {
   "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
   "caregiver-set-additional-price-screen": undefined
 
+  // CG - 달력 스택
+  "cg-calendar-list-screen": undefined
+
+  // CG - 예약관리 스택
+  "manage-booking-screen": undefined
+
+  // CG - 내정보 스택
+
   //* test screens
   "minseon-test": undefined
   "test-map-screen": undefined
@@ -126,10 +141,60 @@ export type NavigatorParamList = {
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
-
 const Tab = createBottomTabNavigator()
 
-const AllStacks = () => {
+/**
+ * 즐겨찾기 스택
+ */
+const FavoritesStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="favorites-screen"
+    >
+      {/* //* 즐겨찾기 메인 */}
+      <Stack.Screen
+        name="favorites-screen"
+        component={FavoritesScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * 예약내역 스택
+ */
+const BookingsStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="all-bookings-screen"
+    >
+      {/* //* 예약내역 메인 */}
+      <Stack.Screen
+        name="all-bookings-screen"
+        component={AllBookingsScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * 검색 스택
+ */
+const SearchingStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -234,15 +299,6 @@ const AllStacks = () => {
         }}
       />
 
-      {/* //* 예약 확인 */}
-      <Stack.Screen
-        name="all-bookings-screen"
-        component={AllBookingsScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //* 결제 - 요청사항 */}
       <Stack.Screen
         name="payment-request-screen"
@@ -253,7 +309,90 @@ const AllStacks = () => {
         }}
       />
 
-      {/* //! 마이페이지 스택 */}
+      {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
+
+      {/* //? 민선 테스트 */}
+      <Stack.Screen
+        name="minseon-test"
+        component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //? 위치(지도) 테스트 화면 */}
+      {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
+      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+
+      {/* //? 푸시알림 테스트 화면 */}
+      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+
+      {/* //? bottom-sheet 테스트 화면 */}
+      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * 채팅 스택 || CG - 채팅 스택
+ */
+const ChatsStack = observer(function ChatsStack() {
+  const {
+    userStore: { type },
+  } = useStores()
+
+  const TempChatScreen = ({ navigation }) => {
+    useShowBottomTab(navigation)
+
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: 200,
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
+  }
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      //  @ts-ignore
+      initialRouteName="temp-chat-screen"
+    >
+      {/* //* 채팅 메인 */}
+      <Stack.Screen
+        //  @ts-ignore
+        name="temp-chat-screen"
+        component={TempChatScreen}
+        options={{
+          header: (props) =>
+            type === Type.CLIENT ? <HomeScreenHeader {...props} /> : <CgScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+})
+
+/**
+ * 내정보 스택
+ */
+const MypageStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="mypage-screen"
+    >
       {/* //* 마이페이지 메인 */}
       <Stack.Screen
         name="mypage-screen"
@@ -322,9 +461,274 @@ const AllStacks = () => {
           //?headerTitle: "",
         })}
       />
+    </Stack.Navigator>
+  )
+}
 
-      {/* //! -------- */}
+/**
+ * 클라이언트(반려인) 전용 탭들
+ */
+const ClientTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: { display: "none" },
+        tabBarLabelStyle: {
+          paddingBottom: Platform.select({
+            android: 8,
+            ios: 0,
+          }),
+        },
+        headerShown: false,
+        headerStyle: { backgroundColor: "white" },
+      }}
+      initialRouteName="Searching"
+    >
+      <Tab.Screen
+        name="Favorites"
+        component={FavoritesStack}
+        options={{
+          tabBarLabel: "즐겨찾기",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="cards-heart"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bookings"
+        component={BookingsStack}
+        options={{
+          tabBarLabel: "예약내역",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="calendar-multiselect"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Searching"
+        component={SearchingStack}
+        options={{
+          tabBarLabel: "검색",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="magnify"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chats"
+        component={ChatsStack}
+        options={{
+          tabBarLabel: "채팅",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="forum"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Mypage"
+        component={MypageStack}
+        options={{
+          tabBarLabel: "내정보",
+          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  )
+}
 
+// ===========================================================================================================
+// ===========================================================================================================
+// ===========================================================================================================
+
+/**
+ * CG - 통계 스택
+ */
+const StatisticsStack = () => {
+  const TempStatisticsScreen = ({ navigation }) => {
+    useShowBottomTab(navigation)
+
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: 200,
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>통계 기능은 곧 추가될 예정입니다 😉</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
+  }
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      //  @ts-ignore
+      initialRouteName="cg-statistics-screen"
+    >
+      {/* //* 통계 메인 */}
+      <Stack.Screen
+        //  @ts-ignore
+        name="cg-statistics-screen"
+        component={TempStatisticsScreen}
+        options={{
+          header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * CG - 예약관리 스택
+ */
+const CgBookingsStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      //  @ts-ignore
+      initialRouteName="manage-booking-screen"
+    >
+      {/* //* 예약관리 메인 */}
+      <Stack.Screen
+        //  @ts-ignore
+        name="manage-booking-screen"
+        component={ManageBookingScreen}
+        options={{
+          header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * CG - 달력 스택
+ */
+const CalendarStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="cg-calendar-list-screen"
+    >
+      <Stack.Screen
+        name="cg-calendar-list-screen"
+        component={CgCalendarListScreen}
+        options={{
+          header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+
+      {/* CG - 달력 */}
+      <Stack.Screen
+        name="cg-calendar-screen"
+        component={CgCalendarScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * CG - 내정보 스택
+ */
+const CgMypageStack = () => {
+  const TempCgMypageScreen = () => {
+    return (
+      <ScreenRootView>
+        <View
+          style={{
+            marginVertical: 200,
+            alignSelf: "center",
+          }}
+        >
+          <PreReg18>케어기버 내정보 스크린</PreReg18>
+        </View>
+      </ScreenRootView>
+    )
+  }
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      //  @ts-ignore
+      initialRouteName="temp-cg-mypage-screen"
+    >
+      {/* //* CG 내정보 메인 */}
+      <Stack.Screen
+        //  @ts-ignore
+        name="temp-cg-mypage-screen"
+        component={MypageScreen}
+        options={{
+          header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+
+      {/* CG - 자격증 등록 */}
+      <Stack.Screen
+        name="cg-certificate-registration-screen"
+        component={CgCertificateRegistrationScreen}
+        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+/**
+ * CG 스크린들 (아직 정리 안 됨)
+ */
+const NOT_ORGANISED_CG_SCREENS = () => {
+  return (
+    <Stack.Navigator
+      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
+      screenOptions={{
+        headerShown: true,
+        animation: "slide_from_right",
+      }}
+      initialRouteName="service-registration-screen"
+    >
       {/* //! 등록 스택 */}
       {/* //* 서비스 등록 스크린 */}
       <Stack.Screen
@@ -367,150 +771,69 @@ const AllStacks = () => {
         }}
       />
       {/* //! ----------- */}
-
-      {/* //* 클라이언트 - 즐겨찾기 */}
-      <Stack.Screen
-        name="favorites-screen"
-        component={FavoritesScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
-      {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
-
-      {/* //? 민선 테스트 */}
-      <Stack.Screen
-        name="minseon-test"
-        component={MinseonTest}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* CG - 자격증 등록 */}
-      <Stack.Screen
-        name="cg-certificate-registration-screen"
-        component={CgCertificateRegistrationScreen}
-        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
-      />
-
-      {/* CG - 달력 */}
-      <Stack.Screen
-        name="cg-calendar-screen"
-        component={CgCalendarScreen}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* //? 위치(지도) 테스트 화면 */}
-      {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
-      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
-
-      {/* //? 푸시알림 테스트 화면 */}
-      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
-
-      {/* //? bottom-sheet 테스트 화면 */}
-      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
     </Stack.Navigator>
   )
 }
 
-const TabStacks = () => {
-  const FavoritesStack = () => {
-    return (
-      <ScreenRootView>
-        <View
-          style={{
-            marginVertical: "auto",
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>즐겨찾기 기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </ScreenRootView>
-    )
-  }
-  const ChatsStack = () => {
-    return (
-      <ScreenRootView>
-        <View
-          style={{
-            marginVertical: "auto",
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </ScreenRootView>
-    )
-  }
-
-  const $tabBarStyleAndroid: ViewStyle = {
-    backgroundColor: "white",
-    borderTopWidth: 0,
-  }
-
-  const $tabBarStyleIOS: ViewStyle = {
-    backgroundColor: "white",
-  }
-
+/**
+ * 케어기버 전용 탭들
+ */
+const CareGiverTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        tabBarStyle: { display: "none" },
+        tabBarLabelStyle: {
+          paddingBottom: Platform.select({
+            android: 8,
+            ios: 0,
+          }),
+        },
         headerShown: false,
-        headerStyle: { backgroundColor: "white" },
-        tabBarStyle: Platform.select({
-          android: $tabBarStyleAndroid,
-          ios: $tabBarStyleIOS,
-        }),
+        headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
+        headerTitleStyle: { color: "white" },
       }}
-      initialRouteName="Searching"
+      initialRouteName="Calendar"
     >
       <Tab.Screen
-        name="favorites-screen"
-        component={FavoritesScreen}
+        name="Statistics"
+        component={StatisticsStack}
         options={{
-          tabBarLabel: "즐겨찾기",
+          tabBarLabel: "통계",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="cards-heart"
+              name="elevation-rise"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          headerTitle: "즐겨찾기(개발중)",
         }}
       />
       <Tab.Screen
-        name="Bookings"
-        component={AllBookingsScreen}
+        name="CgBookings"
+        component={CgBookingsStack}
         options={{
-          tabBarLabel: "예약내역",
+          tabBarLabel: "예약 관리",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="calendar-multiselect"
+              name="pencil"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          headerTitle: "예약내역",
         }}
       />
       <Tab.Screen
-        name="Searching"
-        component={AllStacks}
+        name="Calendar"
+        component={CalendarStack}
         options={{
-          tabBarLabel: "검색",
+          tabBarLabel: "달력",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="search-web"
+              name="calendar-blank"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
@@ -525,18 +848,16 @@ const TabStacks = () => {
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="message"
+              name="forum"
               size={24}
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          headerShown: true,
-          headerTitle: "채팅(개발중)",
         }}
       />
       <Tab.Screen
-        name="Mypage"
-        component={MypageScreen}
+        name="CgMypage"
+        component={CgMypageStack}
         options={{
           tabBarLabel: "내정보",
           tabBarActiveTintColor: GIVER_CASUAL_NAVY,
@@ -547,25 +868,30 @@ const TabStacks = () => {
               color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
             />
           ),
-          header: (props) => <HomeScreenHeader {...props} />,
-          headerShown: true,
-          headerTitle: "",
         }}
       />
     </Tab.Navigator>
   )
 }
 
-const AppStack = () => {
+const AllTabs = observer(function AllTabs() {
+  const {
+    userStore: { type, onSwitchingType },
+  } = useStores()
+
+  // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
+  // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
+  // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
+  // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
+  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   return (
-    // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android
-    // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818
-    //?  <GestureHandlerRootView style={{ flex: 1 }}>
     <>
-      <TabStacks />
+      {type === Type.CLIENT && <ClientTabs />}
+      {type === Type.CARE_GIVER && <CareGiverTabs />}
+      {onSwitchingType && <Loading text={"모드 전환중"} />}
     </>
   )
-}
+})
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
@@ -610,7 +936,7 @@ export const AppNavigator = (props: NavigationProps) => {
       {...props}
       linking={linking}
     >
-      <AppStack />
+      <AllTabs />
     </NavigationContainer>
   )
 }

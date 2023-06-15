@@ -56,31 +56,6 @@ export interface BookingInfoCardProps {
   address: string
 }
 
-//테스트용 더미 데이터
-export const CareGiverReserveDummy: BookingInfoCardProps = {
-  id: "1",
-  name: "강영묵",
-  serviceType: "visit",
-  caregiverType: "trainer",
-  petname: "봉봉이",
-  species: "푸들",
-  petservices: ["산책, 목욕, 미용"],
-  address: "경기도 성남시 판교동",
-}
-
-/* 
-<BookingInfoCard
-  id={CareGiverReserveDummy.id}
-  name={CareGiverReserveDummy.name}
-  serviceType={CareGiverReserveDummy.serviceType}
-  caregiverType={CareGiverReserveDummy.caregiverType}
-  petname={CareGiverReserveDummy.petname}
-  species={CareGiverReserveDummy.species}
-  petservices={CareGiverReserveDummy.petservices}
-  address={CareGiverReserveDummy.address}
-/>
-*/
-
 export const BookingInfoCard = observer(function BookingInfoCard(props: BookingInfoCardProps) {
   const { style } = props
   //테스트용 useState

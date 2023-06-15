@@ -37,6 +37,7 @@ export * from "./screen-headers/goback-and-title-and-button-header/goback-and-ti
 export * from "./screen-headers/edit-pet-info-screen-header/edit-pet-info-screen-header"
 export * from "./screen-headers/cg-certificate-registration-screen-header/cg-certificate-registration-screen-header"
 export * from "./screen-headers/cgset-screen-header/cgset-screen-header"
+export * from "./screen-headers/cg-screen-header/cg-screen-header"
 
 //* others
 export * from "./division-line/division-line"
@@ -79,3 +80,4 @@ export * from "./cg-register-step/cg-register-step"
 export * from "./photo-registration-note/photo-registration-note"
 export * from "./cg-calendar/cg-calendar"
 export * from "./go-back-save-next/go-back-save-next"
+export * from "./loading/loading"

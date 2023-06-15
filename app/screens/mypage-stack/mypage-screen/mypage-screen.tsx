@@ -1,5 +1,5 @@
-import { View, Image, Pressable } from "react-native"
-import React, { FC, useLayoutEffect, useState } from "react"
+import { View, Image, Pressable, Alert } from "react-native"
+import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import {
   MypageButton,
   PetImageCard,
@@ -22,8 +22,9 @@ import { observer } from "mobx-react-lite"
 import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
 import { Api } from "#api"
-import { useStores } from "../../../models"
-import * as Linking from "expo-linking"
+import { Type, useStores } from "#models"
+import { delay } from "../../../utils/delay"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 const IS_AUTH = true
 // const IS_AUTH = false
@@ -31,7 +32,13 @@ const IS_AUTH = true
 const CAREGIVER_INTRO_URL = "https://www.naver.com/"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
-  ({ navigation, route }) => {
+  function MypageScreen({ navigation, route }) {
+    useShowBottomTab(navigation)
+
+    const {
+      userStore: { switchType },
+    } = useStores()
+
     // ? 유저 프로필 정보
     const [userInfo, setUserInfo] = useState<UserProps | null>()
 
@@ -89,8 +96,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       navigate("service-center-screen")
     }
 
-    const handleMode = () => {
-      Linking.openURL(CAREGIVER_INTRO_URL)
+    const handleMode = async () => {
+      switchType()
     }
 
     return (
@@ -114,7 +121,12 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                 </Row>
                 {/* //? 내 프로필 관리 버튼 */}
-                <Pressable style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}>
+                <Pressable
+                  style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}
+                  onPress={() => {
+                    navigate("edit-mypage-screen")
+                  }}
+                >
                   <PreBol14 text="내 프로필 관리" color={BODY} />
                   <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
                 </Pressable>
@@ -168,10 +180,9 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* Care Giver 모드 전환 버튼 */}
-        <Pressable style={styles.modeChangeBtn}>
-          <Pressable onPress={handleMode}>
-            <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
-          </Pressable>
+        <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
+          <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
+
           <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>
 
