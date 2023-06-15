@@ -79,7 +79,7 @@ const PretendardRegular = (props: TextProps) => {
         style,
         {
           fontFamily: PRETENDARD_REGULAR,
-          fontWeight: "normal",
+          //! PretendardRegular 에는 fontWeight 설정하지 말 것 - iOS 에서는 fontWeight 이 우선되어 적용되므로, Wrapper 방식으로 다른 폰트 스타일과 사용시, 제대로 적용되지 않음
           includeFontPadding: false,
           fontSize: size,
           color: color,

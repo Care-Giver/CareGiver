@@ -46,6 +46,7 @@ import {
   ManageBookingScreen,
   CgCalendarListScreen,
   CgMypageScreen,
+  YeBeomTestScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -140,6 +141,7 @@ export type NavigatorParamList = {
   "cg-calendar-screen"
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
+  "ye-beom-test-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -777,6 +779,44 @@ const NOT_ORGANISED_CG_SCREENS = () => {
         }}
       />
       {/* //! ----------- */}
+
+      {/* //* 클라이언트 - 즐겨찾기 */}
+      <Stack.Screen
+        name="favorites-screen"
+        component={FavoritesScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //- 테스트 스크린들은 아래에다가 ================================================================ */}
+
+      {/* //? 민선 테스트 */}
+      <Stack.Screen
+        name="minseon-test"
+        component={MinseonTest}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/*// MVP-20 */}
+      <Stack.Screen
+        name="ye-beom-test-screen"
+        component={YeBeomTestScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //? 위치(지도) 테스트 화면 */}
+      {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
+      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+
+      {/* //? 푸시알림 테스트 화면 */}
+      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+
+      {/* //? bottom-sheet 테스트 화면 */}
+      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
     </Stack.Navigator>
   )
 }
