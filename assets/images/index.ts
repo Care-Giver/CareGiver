@@ -1,17 +1,21 @@
 //! 항상 이미지 파일명은 언더바 (_) 로 작성한다
-export const images = {
+  
+  export const images = {
   //* images
   arrow_change: require("../images/arrow_change.png"),
   arrow_down: require("../images/arrow_down.png"),
-  arrow_left: require("../images/arrow_left.png"),
+  arrow_left_navy: require("../images/arrow_left_navy.png"),
+  arrow_right: require("../images/arrow_right.png"),
+  arrow_right_navy: require("../images/arrow_right_navy.png"),
   arrow_up: require("../images/arrow_up.png"),
   bell: require("../images/bell.png"),
   calendar: require("../images/calendar.png"),
   calender_disabled: require("../images/calender_disabled.png"),
-  care_giver_logo_162x20: require("../images/care_giver_logo_162x20.png"),
-  certificate_badge: require("../images/certificate_badge.png"),
   camera: require("../images/camera.png"),
   camera_white: require("../images/camera_white.png"),
+  care_giver_logo_162x20: require("../images/care_giver_logo_162x20.png"),
+  certificate_badge: require("../images/certificate_badge.png"),
+  cg_favicon: require("../images/cg_favicon.png"),
   default_pet_image_60: require("../images/default_pet_image_60.png"),
   default_profile_image_comment: require("../images/default_profile_image_comment.png"),
   default_profile_image_edit_mypage: require("../images/default_profile_image_edit_mypage.png"),
@@ -36,22 +40,21 @@ export const images = {
   rating_star_empty: require("../images/rating_star_empty.png"),
   rating_star_half: require("../images/rating_star_half.png"),
   right_arrow_grey: require("../images/right_arrow_grey.png"),
-  right_arrow_navy: require("../images/right_arrow_navy.png"),
   search: require("../images/search.png"),
   select_checkbox: require("../images/select_checkbox.png"),
   service_petsitting: require("../images/service_petsitting.png"),
   service_training: require("../images/service_training.png"),
   speech_bubble: require("../images/speech_bubble.png"),
   three_dots: require("../images/three_dots.png"),
-  trashcan: require("../images/trashcan.png"),
   timer: require("../images/timer.png"),
   timer_disabled: require("../images/timer_disabled.png"),
+  trashcan: require("../images/trashcan.png"),
   vertical_3_dots: require("../images/vertical_3_dots.png"),
   write_comment: require("../images/write_comment.png"),
   x_grey: require("../images/x_grey.png"),
   x_in_circle: require("../images/x_in_circle.png"),
   x_white: require("../images/x_white.png"),
-
+  
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
@@ -62,5 +65,5 @@ export const images = {
   schedule_grey: require("../images/bottom-tab-navigator/schedule_grey.png"),
   schedule_navy: require("../images/bottom-tab-navigator/schedule_navy.png"),
   search_grey: require("../images/bottom-tab-navigator/search_grey.png"),
-  search_navy: require("../images/bottom-tab-navigator/search_navy.png"),
+  search_navy: require("../images/bottom-tab-navigator/search_navy.png")
 }

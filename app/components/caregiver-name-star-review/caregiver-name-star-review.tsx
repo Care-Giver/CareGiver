@@ -50,7 +50,7 @@ export const CaregiverNameStarReview = (props) => {
                   color={GIVER_CASUAL_NAVY}
                   // style={{ marginLeft: 4 }}
                 />
-                <Image source={images.right_arrow_navy} style={styles.rightArrow} />
+                <Image source={images.arrow_right_navy} style={styles.rightArrow} />
               </Row>
             </Pressable>
           </Row>

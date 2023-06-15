@@ -25,9 +25,9 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) =>
           direction === "left" ? (
-            <Image source={images.right_arrow_navy} style={[styles.arrow, { marginLeft: 40 }]} />
+            <Image source={images.arrow_left_navy} style={[styles.arrow, { marginLeft: 40 }]} />
           ) : (
-            <Image source={images.right_arrow_navy} style={[styles.arrow, { marginRight: 40 }]} />
+            <Image source={images.arrow_right_navy} style={[styles.arrow, { marginRight: 40 }]} />
           )
         }
         onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}

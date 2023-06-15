@@ -116,7 +116,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 {/* //? 내 프로필 관리 버튼 */}
                 <Pressable style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}>
                   <PreBol14 text="내 프로필 관리" color={BODY} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
                 </Pressable>
               </View>
             </Row>
@@ -132,7 +132,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 {/* //? 전체보기 버튼 */}
                 <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
                   <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
                 </Pressable>
               </Row>
 

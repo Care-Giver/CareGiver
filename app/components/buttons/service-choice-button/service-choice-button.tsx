@@ -13,7 +13,7 @@ export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
-        <Image style={styles.titleImage} source={images.arrow_left} />
+        <Image style={styles.titleImage} source={images.arrow_right} />
       </View>
 
       {/* subtitle */}

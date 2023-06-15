@@ -26,7 +26,7 @@ export const CgServiceChoiceButton = observer(function CgServiceChoiceButton(
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
         <Pressable onPress={onPress}>
-          <Image style={styles.titleImage} source={images.arrow_left} />
+          <Image style={styles.titleImage} source={images.arrow_right} />
         </Pressable>
       </View>
 
