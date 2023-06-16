@@ -23,8 +23,8 @@ export const CgSetAddressScreen: FC<
   }
 
   //스타일 check
-  const BeforeConButton = [styles.ConditionButton, styles.BeforeBackground]
-  const NextConButtion = [styles.ConditionButton, styles.NextBackground]
+  const beforeConButton = [styles.conditionButton, styles.beforeBackground]
+  const nextConButtion = [styles.conditionButton, styles.nextBackground]
 
   //현재 위치를 반환해주는 함수
   const getAddress = async (lat, long) => {
@@ -80,10 +80,10 @@ export const CgSetAddressScreen: FC<
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
-        const pangyoLatitude = "37.387583174794"
-        const pangyoLongitude = "127.0896771665"
-        console.log("Current Location:", latitude, longitude)
-        getAddress(pangyoLatitude, pangyoLongitude)
+        //const pangyoLatitude = "37.387583174794"
+        //const pangyoLongitude = "127.0896771665"
+        //console.log("Current Location:", latitude, longitude)
+        //getAddress(pangyoLatitude, pangyoLongitude)
         setInitialRegion({
           latitude: 37.387583174794, //테스트용 판교
           longitude: 127.0896771665, //테스트용 판교
@@ -112,7 +112,7 @@ export const CgSetAddressScreen: FC<
       title: `Marker ${markers.length + 1}`,
       description: "New marker clicked",
       coordinate,
-      image: require("../../../assets/images/gps.png"),
+      image: require("../../../assets/images/gps.png"), //발바닥 모양으로 변경 필요
     }
 
     //setMarker([...markers, newMarker])
@@ -140,32 +140,32 @@ export const CgSetAddressScreen: FC<
           <>
             <PreBol16
               text={address[0] + " " + address[1] + " " + address[3]}
-              style={styles.Address1}
+              style={styles.address1}
             />
             <Row>
-              <PreReg12 text={"지번"} color={"#767676"} style={styles.Address2} />
+              <PreReg12 text={"지번"} color={"#767676"} style={styles.address2} />
               <PreReg14
                 text={printArrayFromIndex(address, 4)}
                 color={"#454545"}
-                style={styles.Address3}
+                style={styles.address3}
               />
             </Row>
-            <PreMed14 text={"상세 주소"} color={"#767676"} style={styles.AddressDetail1} />
+            <PreMed14 text={"상세 주소"} color={"#767676"} style={styles.addressDetail1} />
 
             <TextInput
-              style={styles.AddressDetail2}
+              style={styles.addressDetail2}
               onChangeText={handleInputAddress}
               value={inputAddress}
               placeholder="ex) 판교원마을 6단지 601동 101호"
               color={"#171717"}
             />
 
-            <View style={styles.HorizonLine} />
+            <View style={styles.horizonLine} />
           </>
         )}
 
         <MapView
-          style={styles.MapviewStyle}
+          style={styles.mapviewStyle}
           region={initialRegion}
           provider={PROVIDER_GOOGLE}
           onPress={(event) => {
@@ -199,7 +199,7 @@ export const CgSetAddressScreen: FC<
 
         <Row>
           <Pressable
-            style={BeforeConButton}
+            style={beforeConButton}
             onPress={() => {
               alert("이전으로 돌아가기")
             }}
@@ -208,7 +208,7 @@ export const CgSetAddressScreen: FC<
           </Pressable>
 
           <Pressable
-            style={NextConButtion}
+            style={nextConButtion}
             onPress={() => {
               alert("이전으로 돌아가기")
             }}
@@ -222,13 +222,13 @@ export const CgSetAddressScreen: FC<
 })
 
 const styles = StyleSheet.create({
-  Address1: {
+  address1: {
     marginTop: 20,
     marginLeft: 16,
     color: "#111111",
   },
 
-  Address2: {
+  address2: {
     marginTop: 12,
     marginLeft: 16,
     color: "#767676",
@@ -243,25 +243,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  Address3: {
+  address3: {
     marginTop: 12,
     marginLeft: 12,
     color: "#454545",
   },
 
-  AddressDetail1: {
+  addressDetail1: {
     marginTop: 20,
     marginLeft: 12,
     color: "#767676",
   },
 
-  AddressDetail2: {
+  addressDetail2: {
     marginTop: 10,
     marginLeft: 12,
     color: "#767676",
   },
 
-  HorizonLine: {
+  horizonLine: {
     marginTop: 4,
     marginLeft: 12,
     width: 334,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     borderBottomColor: MIDDLE_LINE,
   },
 
-  ConditionButton: {
+  conditionButton: {
     marginLeft: 12,
     marginTop: 120,
     height: 56,
@@ -282,11 +282,11 @@ const styles = StyleSheet.create({
     }),
   },
 
-  BeforeBackground: { width: 101, backgroundColor: "#F1F1F4" },
+  beforeBackground: { width: 101, backgroundColor: "#F1F1F4" },
 
-  NextBackground: { width: 225, backgroundColor: GIVER_CASUAL_NAVY },
+  nextBackground: { width: 225, backgroundColor: GIVER_CASUAL_NAVY },
 
-  MapviewStyle: {
+  mapviewStyle: {
     width: 334,
     height: 249,
     marginTop: 48,
