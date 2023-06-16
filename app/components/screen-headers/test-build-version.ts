@@ -1,0 +1,3 @@
+const TEST_BUILD_VERSION = "23.06.16.a"
+
+export default TEST_BUILD_VERSION

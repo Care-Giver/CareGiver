@@ -4,6 +4,8 @@ import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { images } from "#images"
 import { HEADER_ROOT } from "../common-styles"
+import { PopReg12 } from "#components"
+import TEST_BUILD_VERSION from "../test-build-version"
 
 export const CgScreenHeader = observer(function CgScreenHeader(props) {
   return (
@@ -12,6 +14,9 @@ export const CgScreenHeader = observer(function CgScreenHeader(props) {
       <View {...props} style={[_styles.root, SHADOW_1]}>
         {/* //? 케어기버 로고 */}
         <Image style={_styles.careGiverLogo} source={images.care_giver_logo_light_162x20} />
+
+        {/* 테스트빌드 버전 (개발단계에서만 사용) */}
+        <PopReg12 text={TEST_BUILD_VERSION} color="white" />
 
         {/* //? 알람 버튼 */}
         <Pressable
