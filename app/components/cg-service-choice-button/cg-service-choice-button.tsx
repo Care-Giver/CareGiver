@@ -1,16 +1,26 @@
-import * as React from "react"
-import { View, Text, Pressable, Image } from "react-native"
+import React from "react"
+import { View, StyleSheet, Pressable, Image, StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { BODY, SUB_HEAD_LINE, SHADOW_1 } from "#theme"
-import { styles } from "./styles"
+import { BODY, SUB_HEAD_LINE, SHADOW_1, WIDTH } from "#theme"
 import { images } from "#images"
-import { CgServiceChoiceButtonProps } from "./cg-service-choice-button.props"
+
+interface CgServiceChoiceButtonProps {
+  /**
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
+   */
+  style?: StyleProp<ViewStyle>
+
+  title: "펫시터 등록하기" | "훈련사 등록하기"
+  subtitle: string
+  onPress: () => void
+}
 
 export const CgServiceChoiceButton = observer(function CgServiceChoiceButton(
   props: CgServiceChoiceButtonProps,
 ) {
-  const { title, subtitle, onPress } = props
+  const { style, title, subtitle, onPress } = props
+  const allStyles = Object.assign({}, styles.container, SHADOW_1, style)
 
   const imageSelector = () => {
     if (title === "펫시터 등록하기") return images.service_petsitting
@@ -19,15 +29,13 @@ export const CgServiceChoiceButton = observer(function CgServiceChoiceButton(
   }
 
   return (
-    <Pressable style={[styles.container, SHADOW_1]}>
+    <Pressable style={allStyles} onPress={onPress}>
       {/* image */}
       <Image style={styles.image} source={imageSelector()} resizeMode="stretch" />
       {/* title */}
       <View style={styles.titleContainer}>
         <PreBol16 text={title} color={SUB_HEAD_LINE} />
-        <Pressable onPress={onPress}>
-          <Image style={styles.titleImage} source={images.arrow_right} />
-        </Pressable>
+        <Image style={styles.titleImage} source={images.arrow_right} />
       </View>
 
       {/* subtitle */}
@@ -36,4 +44,32 @@ export const CgServiceChoiceButton = observer(function CgServiceChoiceButton(
       </PreReg12>
     </Pressable>
   )
+})
+
+const styles = StyleSheet.create({
+  container: {
+    width: WIDTH * 171,
+    height: 199,
+    borderRadius: 8,
+    backgroundColor: "white",
+  },
+  image: {
+    height: 99,
+    width: 171,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20,
+    marginTop: 16,
+  },
+  titleImage: {
+    width: 16,
+    height: 16,
+  },
+  subtitle: {
+    marginLeft: 20,
+    marginTop: 8,
+    lineHeight: 18,
+  },
 })

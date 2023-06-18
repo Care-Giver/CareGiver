@@ -1,12 +1,12 @@
 import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { ChoiceButtonProps } from "./service-choice-button.props"
+import { ServiceChoiceButtonProps } from "./service-choice-button.props"
 import { PreBol16, PreReg12 } from "../../basics/custom-texts/custom-texts"
 import { BODY, SUB_HEAD_LINE, SHADOW_1 } from "#theme"
 import { images } from "#images"
 
-export const ServiceChoiceButton = (props: ChoiceButtonProps) => {
+export const ServiceChoiceButton = (props: ServiceChoiceButtonProps) => {
   const { title, subtitle, style, onPress } = props
   return (
     <Pressable style={[styles.container, SHADOW_1, style]} onPress={onPress}>

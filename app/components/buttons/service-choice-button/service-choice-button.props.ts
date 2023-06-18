@@ -1,4 +1,5 @@
-export interface ChoiceButtonProps {
-    title: string,
-    subtitle: string,
+export interface ServiceChoiceButtonProps {
+  title: string
+  subtitle: string
+  onPress: () => void
 }

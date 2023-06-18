@@ -1,13 +1,19 @@
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { View, Image, Pressable, StyleSheet } from "react-native"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CgServiceChoiceButton,
   MypageButton,
+  PopReg18,
   PreBol16,
+  PreBol18,
   PreReg16,
   PreReg18,
   Row,
   ScreenRootView,
+  ServiceChoiceButton,
+  ServiceType,
+  ServiceTypeIndicatorHeader,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -25,6 +31,8 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, loggedIn, setLoggedIn },
   } = useStores()
+
+  const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
 
   useEffect(() => {
     setLoggedIn(true)
@@ -61,10 +69,38 @@ export const CgMypageScreen: FC<
         <>
           {/* //* 유저 프로필 카드  */}
           <Row style={styles.profileCard}>
-            <PreReg18>
-              반가워요 유저님! {"\n"}
-              간단하게 Care Giver 가 되어보세요!
+            <PreReg18 style={{ lineHeight: 30 }}>
+              반가워요 <PreBol18>유저</PreBol18>님!
+              {"\n"}
+              간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
             </PreReg18>
+          </Row>
+
+          {/* 펫시터|훈련사 등록하기 버튼 */}
+          <Row
+            style={{
+              marginTop: 28,
+              paddingBottom: 18,
+              width: "100%",
+              justifyContent: "space-between",
+              // backgroundColor: "red",
+            }}
+          >
+            <CgServiceChoiceButton
+              onPress={() => {
+                navigate("cg-certificate-registration-screen")
+              }}
+              title="펫시터 등록하기"
+              subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
+            />
+            <CgServiceChoiceButton
+              onPress={() => {
+                navigate("cg-certificate-registration-screen")
+              }}
+              title="훈련사 등록하기"
+              subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
+              style={{ marginLeft: "auto" }}
+            />
           </Row>
         </>
       ) : (
@@ -127,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   profileCard: {
-    paddingVertical: 20,
+    marginTop: 28,
   },
 
   loginCard: {

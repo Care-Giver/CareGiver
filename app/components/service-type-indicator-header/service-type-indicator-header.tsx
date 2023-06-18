@@ -5,12 +5,14 @@ import { DivisionLine } from "../division-line/division-line"
 import { color, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol18, PreReg18 } from "../basics/custom-texts/custom-texts"
 
+export type ServiceType = "방문" | "위탁"
+
 interface ServiceTypeIndicatorHeaderProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  label: string
+  label: ServiceType
   state: string
   onPress: () => void
 }
