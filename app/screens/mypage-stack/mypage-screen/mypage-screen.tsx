@@ -92,7 +92,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     // TODO: 로그인 화면 연결시키기
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
     const handleLoginPress = () => {
-      alert("로그인 화면으로 이동")
+      // alert("로그인 화면으로 이동")
+      setLoggedIn(true) // 테스트빌드용으로, 임시로 즉시 로그인 처리
     }
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수

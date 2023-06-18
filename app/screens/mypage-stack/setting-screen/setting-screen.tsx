@@ -8,9 +8,14 @@ import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
 import TEST_BUILD_VERSION from "./test-build-version"
 import { images } from "#images"
+import { useStores } from "#models"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
+    const {
+      userStore: { setLoggedIn },
+    } = useStores()
+
     // ? 로그아웃 | 회원탈퇴 모달창 visible
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const [withdrawModalVisible, setWithdrawModalVisible] = useState(false)
@@ -22,7 +27,8 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
 
     // ? 모달창 - 로그아웃 버튼 클릭시 동작하는 함수
     const handleLogoutPress = () => {
-      alert("로그아웃")
+      setLoggedIn(false)
+      setLogoutModalVisible(false)
     }
 
     // ? 회원탈퇴 메뉴 클릭시 동작하는 함수 - 모달창 띄우기
