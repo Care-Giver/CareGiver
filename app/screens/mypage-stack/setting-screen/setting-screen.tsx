@@ -7,6 +7,7 @@ import { MypageButton, PreMed16, PreReg14, ScreenRootView, CustomModal } from "#
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
 import TEST_BUILD_VERSION from "./test-build-version"
+import { images } from "#images"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
@@ -63,6 +64,9 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           noBtnText="취소"
           handleYesPress={handleLogoutPress}
           handleNoPress={() => setLogoutModalVisible(false)}
+          image={images.dog_illustration}
+          imageWidth={151}
+          imageHeight={156}
         />
 
         {/* //* 회원 탈퇴 모달 창 */}
@@ -74,6 +78,9 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           noBtnText="다시 생각해볼게요"
           handleYesPress={handleWithdrawPress}
           handleNoPress={() => setWithdrawModalVisible(false)}
+          image={images.dog_illustration}
+          imageWidth={151}
+          imageHeight={156}
         />
       </ScreenRootView>
     )
