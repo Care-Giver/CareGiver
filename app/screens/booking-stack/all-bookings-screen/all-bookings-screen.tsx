@@ -14,7 +14,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
+import { GIVER_CASUAL_NAVY, DISABLED, BODY, DEVICE_SCREEN_WIDTH, DEVICE_WINDOW_WIDTH } from "#theme"
 import { bookingsDummy } from "./dummy-data"
 import {
   FlatList,
@@ -135,13 +135,17 @@ export const AllBookingsScreen: FC<
         {/* // * 진행중인 예약 리스트 */}
         <FlatList
           style={{ marginTop: 10 }}
+          contentContainerStyle={{
+            // backgroundColor: "teal",
+            paddingVertical: 10,
+          }}
           data={bookings}
           renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+          snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
           viewabilityConfig={{
-            viewAreaCoveragePercentThreshold: 50,
+            viewAreaCoveragePercentThreshold: 51,
           }}
           onViewableItemsChanged={onViewableChange}
           decelerationRate={"fast"}

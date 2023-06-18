@@ -47,6 +47,7 @@ import {
   CgCalendarListScreen,
   CgMypageScreen,
   YeBeomTestScreen,
+  BookingDetailScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -189,6 +190,16 @@ const BookingsStack = () => {
         component={AllBookingsScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //* 예약내역 상세 */}
+      <Stack.Screen
+        name="booking-detail-screen"
+        component={BookingDetailScreen}
+        options={{
+          title: "예약내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
     </Stack.Navigator>
