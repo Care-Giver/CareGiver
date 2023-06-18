@@ -5,7 +5,6 @@ import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
 import { SHADOW_1 } from "#theme"
 import { observer } from "mobx-react-lite"
-import TEST_BUILD_VERSION from "../test-build-version"
 import { PopReg12 } from "#components"
 
 export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
@@ -17,9 +16,6 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
       <View {...props} style={[HEADER_ROOT, SHADOW_1]}>
         {/* //? 케어기버 로고 */}
         <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />
-
-        {/* 테스트빌드 버전 (개발단계에서만 사용) */}
-        <PopReg12 text={TEST_BUILD_VERSION} color="black" />
 
         {/* //? 알람 버튼 */}
         <Pressable
