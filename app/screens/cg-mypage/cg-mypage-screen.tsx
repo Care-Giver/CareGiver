@@ -46,7 +46,7 @@ export const CgMypageScreen: FC<
 
   // * 환경설정 버튼 클릭시 실행되는 함수
   const handleRegisterCertificatation = () => {
-    navigate("cg-certificate-registration-screen")
+    navigate("cg-set-address-screen")
   }
   // * 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
@@ -88,14 +88,14 @@ export const CgMypageScreen: FC<
           >
             <CgServiceChoiceButton
               onPress={() => {
-                navigate("cg-certificate-registration-screen")
+                navigate("cg-set-address-screen")
               }}
               title="펫시터 등록하기"
               subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
             />
             <CgServiceChoiceButton
               onPress={() => {
-                navigate("cg-certificate-registration-screen")
+                navigate("cg-set-address-screen")
               }}
               title="훈련사 등록하기"
               subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}

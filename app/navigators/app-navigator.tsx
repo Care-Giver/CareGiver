@@ -218,16 +218,6 @@ const SearchingStack = () => {
       }}
       initialRouteName="home-screen"
     >
-      {/* //* CG - 지도상에서 위치 설정 */}
-      <Stack.Screen
-        name="cg-set-address-screen"
-        component={CgSetAddressScreen}
-        options={{
-          title: " ",
-          header: (props) => <CgsetAddressHeader {...props} />,
-        }}
-      />
-
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -704,6 +694,22 @@ const CgMypageStack = () => {
           header: (props) => <CgScreenHeader {...props} />,
         }}
       />
+      {/* //* CG - 지도상에서 위치 설정 */}
+      <Stack.Screen
+        name="cg-set-address-screen"
+        component={CgSetAddressScreen}
+        options={{
+          title: " ",
+          header: (props) => <CgsetAddressHeader {...props} />,
+        }}
+      />
+
+      {/* CG - 자격증 등록 */}
+      <Stack.Screen
+        name="cg-certificate-registration-screen"
+        component={CgCertificateRegistrationScreen}
+        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
+      />
 
       {/* //* 환경설정 스크린 */}
       <Stack.Screen
@@ -723,13 +729,6 @@ const CgMypageStack = () => {
           title: "고객센터",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
-
-      {/* CG - 자격증 등록 */}
-      <Stack.Screen
-        name="cg-certificate-registration-screen"
-        component={CgCertificateRegistrationScreen}
-        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
       />
     </Stack.Navigator>
   )
