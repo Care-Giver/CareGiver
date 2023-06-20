@@ -11,4 +11,8 @@
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
 
+# 앱 배포 시, 코드 축소, 난독화, 최적화를 위해 카카오 SDK를 제외
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+-keep class * extends com.google.gson.TypeAdapter
+
 # Add any project specific keep options here:

@@ -42,6 +42,7 @@ import {
   FavoritesScreen,
   EditPetInfoScreen,
   TempHyeriScreen,
+  KakaoLoginTestScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -117,6 +118,7 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
   "temp-hyeri-screen": undefined
+  "kakao-login-test-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -130,16 +132,16 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen" //자격증 등록 사항 표시하기 위해 임시 추가
+      initialRouteName="kakao-login-test-screen" //자격증 등록 사항 표시하기 위해 임시 추가
     >
-      {/* //* 혜리 작업용 임시스크린 */}
+      {/* //* 혜리 작업용 임시스크린
       <Stack.Screen
         name="temp-hyeri-screen"
         component={TempHyeriScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //* 홈 */}
       <Stack.Screen
@@ -380,14 +382,14 @@ const AllStacks = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/*//? MVP-15 */}
+      {/* //? MVP-15
       <Stack.Screen
         name="temp-screen"
         component={TempScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
@@ -398,6 +400,9 @@ const AllStacks = () => {
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* //? 카카오 로그인 테스트 화면 */}
+      <Stack.Screen name="kakao-login-test-screen" component={KakaoLoginTestScreen} />
     </Stack.Navigator>
   )
 }
@@ -581,7 +586,6 @@ export const AppNavigator = (props: NavigationProps) => {
         "all-pets-screen": "/all-pets-screen",
         "setting-screen": "/setting-screen",
         "service-center-screen": "/service-center-screen",
-        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
         "edit-mypage-screen": "/edit-mypage-screen",
         "edit-pet-info-screen": "/edit-pet-info-screen",
       },
