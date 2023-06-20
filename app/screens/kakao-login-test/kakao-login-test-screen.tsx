@@ -11,6 +11,7 @@ import {
   getProfile,
   getAccessToken,
   KakaoOAuthToken,
+  loginWithKakaoAccount,
 } from "@react-native-seoul/kakao-login"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -97,7 +98,7 @@ export const KakaoLoginTestScreen: FC<
 
   return (
     <ScreenRootView testID="KakaoLoginTest">
-      <View style={{ height: 100, width: "100%" }}>
+      <View style={{ height: 300, width: "100%" }}>
         <Text>{result}</Text>
       </View>
       <Pressable
@@ -107,6 +108,30 @@ export const KakaoLoginTestScreen: FC<
         }}
       >
         <Text>로그인</Text>
+      </Pressable>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          getKProfile()
+        }}
+      >
+        <Text>회원정보조회</Text>
+      </Pressable>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          signOutWithKakao()
+        }}
+      >
+        <Text>로그아웃</Text>
+      </Pressable>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          unlinkKakao()
+        }}
+      >
+        <Text>unlink</Text>
       </Pressable>
     </ScreenRootView>
   )
