@@ -1,29 +1,28 @@
-import { View, Text, Pressable, Image } from "react-native"
+import { View, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme"
+import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
-
 import { Row } from "../basics/row/row"
 
 export const PetProfileCard = (props) => {
-  const { petData, style, index } = props
+  const { petData, style, index, onPress } = props
   const { name, petType, species, age, sex } = petData
 
   let _sex = ""
-  if (sex === "male") {
+  if (sex === "male" || sex === "남") {
     _sex = "남"
   } else {
     _sex = "여"
   }
 
-  const onPress = () => {
+  const handleDeleting = () => {
     alert("선택된 펫 삭제")
   }
 
   return (
-    <View style={[styles.root, style]}>
+    <Pressable style={[styles.root, style]} onPress={onPress}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <Row>
         <Image style={styles.image} source={images.default_pet_image_60} />
@@ -48,13 +47,13 @@ export const PetProfileCard = (props) => {
         </View>
 
         {/* //? 삭제 버튼 */}
-        <Pressable onPress={onPress} style={styles.deleteButtonContainer}>
+        <Pressable onPress={handleDeleting} style={styles.deleteButtonContainer}>
           <Image style={styles.deleteButton} source={images.x_grey} />
         </Pressable>
       </Row>
 
       {/* //?  카드 하단, 구분선
       <DivisionLine color={LBG} /> */}
-    </View>
+    </Pressable>
   )
 }

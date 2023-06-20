@@ -1,13 +1,13 @@
-import { ImageBackground, Pressable, View } from "react-native"
+import { Dimensions, ImageBackground, Pressable, StyleSheet } from "react-native"
 import React, { useLayoutEffect, useState } from "react"
-
 import { InProgressBookingProfile } from "./in-progress-booking-profile/in-progress-booking-profile"
 import { DivisionLine } from "../division-line/division-line"
-import { LBG } from "#theme"
+import { DEVICE_WINDOW_WIDTH, LBG } from "#theme"
 import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
-import { styles } from "./styles"
 import { images } from "#images"
 import { InProgressBookingProps } from "./in-progress-booking.props"
+import { navigate } from "#navigators"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../basics/view-component/view-component"
 
 export const InProgressBooking = (props: InProgressBookingProps) => {
   const { reserveData, style } = props
@@ -53,13 +53,14 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
   }, [])
 
   const handlePress = () => {
-    alert("아직 개발중인 기능입니다 😉")
+    navigate("booking-detail-screen")
   }
+  console.log("DEVICE_WINDOW_WIDTH", DEVICE_WINDOW_WIDTH)
 
   return (
     // <Pressable style={styles.root}>
     //   </Pressable>
-    <Pressable style={[{ width: "100%" }, style]} onPress={handlePress}>
+    <Pressable style={{ backgroundColor: "oragne" }} onPress={handlePress}>
       <ImageBackground
         source={images.in_progress_booking_background}
         // resizeMode="stretch"
@@ -81,3 +82,16 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
     </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  background: {
+    // width: 358,
+    width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+    height: 241,
+    // backgroundColor: "yellow",
+
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 25,
+  },
+})

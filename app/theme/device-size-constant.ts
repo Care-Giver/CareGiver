@@ -49,6 +49,9 @@ export const HEIGHT = getHEIGHT()
 // * header 높이
 export const HEADER_HEIGHT = 56
 
+// * 바텀탭네비게이터 높이 - Android 에서만 사용되며, 56 이 적절함
+export const BOTTOM_TAB_NAVIGATOR = 56
+
 // * iOS (12/13 pro기준) 노치, 하단 높이
 export const IOS_NOTCH_STATUS_BAR_HEIGHT = 47
 export const IOS_BOTTOM_HOME_BAR_HEIGHT = 34

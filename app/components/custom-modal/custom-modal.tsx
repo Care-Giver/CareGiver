@@ -4,13 +4,14 @@ import { observer } from "mobx-react-lite"
 import { BASIC_BACKGROUND_PADDING_WIDTH, PreBol14, PreBol20, PreReg14, Row } from "#components"
 import { styles } from "./styles"
 import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, color } from "#theme"
-import { images } from "#images"
 import { CustomModalProps } from "./custom-modal.props"
 
 export const CustomModal = observer(function CustomModal(props: CustomModalProps) {
   const {
     visibleState,
     image,
+    imageWidth,
+    imageHeight,
     title,
     subtitle,
     subtitleStyle,
@@ -29,7 +30,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
         <View
           style={[styles.modalView, { width: modalWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH }]}
         >
-          <Image source={image} style={{ width: 66, height: 66 }} />
+          <Image source={image} style={{ width: imageWidth, height: imageHeight }} />
           <PreBol20 text={title} color={HEAD_LINE} style={{ marginTop: 16 }} />
           {subtitle && <PreReg14 text={subtitle} color={BODY} style={$subtitleStyle} />}
           <Row style={{ marginTop: 48 }}>

@@ -1,5 +1,5 @@
-import { View, Image, Pressable } from "react-native"
-import React, { FC, useLayoutEffect, useState } from "react"
+import { View, Image, Pressable, Alert } from "react-native"
+import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import {
   MypageButton,
   PetImageCard,
@@ -22,61 +22,83 @@ import { observer } from "mobx-react-lite"
 import { PetStoreModel } from "../../../models/pet-store/pet-store"
 import { Pet } from "../../../models/pet/pet"
 import { Api } from "#api"
-import { useStores } from "../../../models"
-import * as Linking from "expo-linking"
+import { Type, useStores } from "#models"
+import { delay } from "../../../utils/delay"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 const IS_AUTH = true
-// const IS_AUTH = false
 
-const CAREGIVER_INTRO_URL = "https://www.naver.com/"
+// Dummy data
+const pets = [
+  {
+    name: "초코",
+    petType: "중형견",
+    species: "푸들",
+    age: 7,
+    sex: "여",
+  },
+  {
+    name: "구름이",
+    petType: "소형",
+    species: "고양이",
+    age: 15,
+    sex: "남",
+  },
+  {
+    name: "자두",
+    petType: "소형",
+    species: "고양이",
+    age: 3,
+    sex: "남",
+  },
+]
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
-  ({ navigation, route }) => {
+  function MypageScreen({ navigation, route }) {
+    useShowBottomTab(navigation)
+
+    const {
+      userStore: { switchType, loggedIn, setLoggedIn },
+    } = useStores()
+
     // ? 유저 프로필 정보
-    const [userInfo, setUserInfo] = useState<UserProps | null>()
+    const [userInfo, setUserInfo] = useState<UserProps | null>(user)
 
     // ? 펫 store
     const petStore = PetStoreModel.create()
     // ? 유저의 펫 리스트
-    const [petsList, setPetsList] = useState<Pet[]>([])
-
-    // const api = new Api()
-    // api.setup()
-    // const 슬프다 = async () => {
-    //   const target = await api.getSpeciesNames()
-    //   console.log("target", target)
-    // }
-    // 슬프다()
+    const [petsList, setPetsList] = useState<Pet[]>(pets)
 
     const { speciesStoreModel } = useStores()
     // speciesStoreModel.setSpecies()
     speciesStoreModel.getSpecies
 
-    useLayoutEffect(() => {
-      // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
-      if (IS_AUTH) {
-        setUserInfo(user)
+    // useLayoutEffect(() => {
+    //   // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
+    //   if (IS_AUTH) {
+    //     setUserInfo(user)
 
-        async function fetchData() {
-          await petStore.setMyPets()
-          setPetsList(petStore.pets)
-        }
+    //     async function fetchData() {
+    //       await petStore.setMyPets()
+    //       setPetsList(petStore.pets)
+    //     }
 
-        fetchData()
-      } else {
-        setUserInfo(null)
-      }
-    }, [])
+    //     fetchData()
+    //   } else {
+    //     setUserInfo(null)
+    //   }
+    // }, [])
 
     // TODO: 로그인 화면 연결시키기
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
     const handleLoginPress = () => {
-      alert("로그인 화면으로 이동")
+      // alert("로그인 화면으로 이동")
+      setLoggedIn(true) // 테스트빌드용으로, 임시로 즉시 로그인 처리
     }
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
     const handleMyPetsPress = () => {
-      navigate("all-pets-screen")
+      navigate("all-pets-screen", { pets })
     }
 
     // * 환경설정 버튼 클릭시 실행되는 함수
@@ -89,14 +111,14 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       navigate("service-center-screen")
     }
 
-    const handleMode = () => {
-      Linking.openURL(CAREGIVER_INTRO_URL)
+    const handleMode = async () => {
+      switchType()
     }
 
     return (
       <ScreenRootView preset="fixed">
         {/* //! 로그인 상태일 때 */}
-        {userInfo ? (
+        {loggedIn ? (
           <>
             {/* //* 유저 프로필 카드  */}
             <Row style={styles.profileCard}>
@@ -114,9 +136,14 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                 </Row>
                 {/* //? 내 프로필 관리 버튼 */}
-                <Pressable style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}>
+                <Pressable
+                  style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}
+                  onPress={() => {
+                    navigate("edit-mypage-screen")
+                  }}
+                >
                   <PreBol14 text="내 프로필 관리" color={BODY} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
                 </Pressable>
               </View>
             </Row>
@@ -132,7 +159,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 {/* //? 전체보기 버튼 */}
                 <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
                   <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_left} />
+                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
                 </Pressable>
               </Row>
 
@@ -168,10 +195,9 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
         {/* //* Care Giver 모드 전환 버튼 */}
-        <Pressable style={styles.modeChangeBtn}>
-          <Pressable onPress={handleMode}>
-            <PreBol16 text="Care Giver 모드 전환" color={GIVER_CASUAL_NAVY} />
-          </Pressable>
+        <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
+          <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
+
           <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>
 

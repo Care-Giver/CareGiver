@@ -6,9 +6,16 @@ import { observer } from "mobx-react-lite"
 import { MypageButton, PreMed16, PreReg14, ScreenRootView, CustomModal } from "#components"
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
+import TEST_BUILD_VERSION from "./test-build-version"
+import { images } from "#images"
+import { useStores } from "#models"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
+    const {
+      userStore: { setLoggedIn },
+    } = useStores()
+
     // ? 로그아웃 | 회원탈퇴 모달창 visible
     const [logoutModalVisible, setLogoutModalVisible] = useState(false)
     const [withdrawModalVisible, setWithdrawModalVisible] = useState(false)
@@ -20,7 +27,8 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
 
     // ? 모달창 - 로그아웃 버튼 클릭시 동작하는 함수
     const handleLogoutPress = () => {
-      alert("로그아웃")
+      setLoggedIn(false)
+      setLogoutModalVisible(false)
     }
 
     // ? 회원탈퇴 메뉴 클릭시 동작하는 함수 - 모달창 띄우기
@@ -38,7 +46,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
           <PreMed16 text="버전 정보" color={HEAD_LINE} />
-          <PreReg14 text="No. 1 beta version" color={BODY} style={{ marginTop: 8 }} />
+          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
         </View>
         {/* //? division line */}
         <View style={styles.divisionLine} />
@@ -62,6 +70,9 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           noBtnText="취소"
           handleYesPress={handleLogoutPress}
           handleNoPress={() => setLogoutModalVisible(false)}
+          image={images.dog_illustration}
+          imageWidth={151}
+          imageHeight={156}
         />
 
         {/* //* 회원 탈퇴 모달 창 */}
@@ -73,6 +84,9 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           noBtnText="다시 생각해볼게요"
           handleYesPress={handleWithdrawPress}
           handleNoPress={() => setWithdrawModalVisible(false)}
+          image={images.dog_illustration}
+          imageWidth={151}
+          imageHeight={156}
         />
       </ScreenRootView>
     )

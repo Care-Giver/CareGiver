@@ -9,7 +9,7 @@ import { HEADER_ROOT } from "../common-styles"
 export const GobackAndTitleHeader = (props) => {
   // console.log("TestHeaderTitle props:", props)
 
-  const title = props.options.title ? props.options.title : props.route.name
+  const title = props.options.title || props.route.name
 
   return (
     <View {...props} style={HEADER_ROOT}>

@@ -12,7 +12,7 @@ interface PressableButtonProps extends PressableProps {
   defaultTextStyle?: StyleProp<TextStyle>
   pressedTextStyle?: StyleProp<TextStyle>
   label?: string
-  isDisabled: boolean
+  isDisabled?: boolean
 }
 
 export const PressableButton = (props: PressableButtonProps) => {
@@ -25,7 +25,7 @@ export const PressableButton = (props: PressableButtonProps) => {
     defaultTextStyle,
     pressedTextStyle,
     label,
-    isDisabled,
+    isDisabled = false,
     children,
     ...rest
   } = props

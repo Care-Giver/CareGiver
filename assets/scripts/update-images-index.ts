@@ -1,6 +1,8 @@
-//? 이 코드는 assets/common-images/index.us 파일을 업데이트 해주는 함수이다.
-//? image import, export deafult 를 만들어준다!
-//? Reference: https://www.freecodecamp.org/news/how-to-structure-your-project-and-manage-static-resources-in-react-native-6f4cfc947d92/
+/**
+ * images 객체를 업데이트 합니다.
+ * `assets/images/` 경로에 새 파일이 추가 될 경우, `node update-images-index.ts` 명령어를 실행해주세요.
+ * Reference: https://www.freecodecamp.org/news/how-to-structure-your-project-and-manage-static-resources-in-react-native-6f4cfc947d92/
+ */
 
 const fs = require("fs")
 
@@ -32,7 +34,7 @@ const imageFileNamesAtBottomTabNavigator = () => {
   return Array.from(new Set(array))
 }
 
-const generate = () => {
+const generateImagesIndex = () => {
   let properties = imageFileNames()
     .map((name) => {
       return `${name}: require("../images/${name}.png")`
@@ -45,18 +47,18 @@ const generate = () => {
     })
     .join(",\n  ")
 
-  const string = `//! 항상 이미지 파일명은 언더바 (_) 로 작성한다
+  const string = `//! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
   
-  export const images = {
+export const images = {
   //* images
   ${properties},
   
   //* bottom-tab-navigator
-  ${properties2}
+  ${properties2},
 }
 `
 
   fs.writeFileSync("../images/index.ts", string, "utf8")
 }
 
-generate()
+generateImagesIndex()

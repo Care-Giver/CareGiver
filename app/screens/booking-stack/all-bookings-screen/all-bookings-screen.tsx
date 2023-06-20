@@ -14,7 +14,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { GIVER_CASUAL_NAVY, DISABLED, BODY } from "#theme"
+import { GIVER_CASUAL_NAVY, DISABLED, BODY, DEVICE_SCREEN_WIDTH, DEVICE_WINDOW_WIDTH } from "#theme"
 import { bookingsDummy } from "./dummy-data"
 import {
   FlatList,
@@ -31,13 +31,16 @@ import { BookingStoreModel } from "../../../models"
 // import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from "@gorhom/bottom-sheet"
 import { styles } from "./styles"
 import { images } from "#images"
+import { useShowBottomTab } from "../../../utils/hooks"
 
 // * 예약 정보를 읽어올 유저 id
 const USER_ID = 7
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
-> = observer(function AllBookingsScreen() {
+> = observer(function AllBookingsScreen({ navigation }) {
+  useShowBottomTab(navigation)
+
   const windowWidth = useWindowDimensions().width
 
   // ? dotsIndicator의 현재 인덱스를 나타내는 state
@@ -132,13 +135,17 @@ export const AllBookingsScreen: FC<
         {/* // * 진행중인 예약 리스트 */}
         <FlatList
           style={{ marginTop: 10 }}
+          contentContainerStyle={{
+            // backgroundColor: "teal",
+            paddingVertical: 10,
+          }}
           data={bookings}
           renderItem={({ index, item }) => <InProgressBooking reserveData={item} />}
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+          snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
           viewabilityConfig={{
-            viewAreaCoveragePercentThreshold: 50,
+            viewAreaCoveragePercentThreshold: 51,
           }}
           onViewableItemsChanged={onViewableChange}
           decelerationRate={"fast"}
@@ -155,7 +162,7 @@ export const AllBookingsScreen: FC<
           <PreReg16 text="지난 예약" color={DISABLED} />
           <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
             <PreMed16 text="더보기" color={BODY} />
-            <Image source={images.arrow_left} style={{ width: 16, height: 16 }} />
+            <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
           </Pressable>
         </Row>
 

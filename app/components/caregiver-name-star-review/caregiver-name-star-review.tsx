@@ -1,7 +1,6 @@
 import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-
 import { PreBol14, PreMed16 } from "../basics/custom-texts/custom-texts"
 import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../basics/row/row"
@@ -50,7 +49,7 @@ export const CaregiverNameStarReview = (props) => {
                   color={GIVER_CASUAL_NAVY}
                   // style={{ marginLeft: 4 }}
                 />
-                <Image source={images.right_arrow_navy} style={styles.rightArrow} />
+                <Image source={images.arrow_right_navy} style={styles.rightArrow} />
               </Row>
             </Pressable>
           </Row>

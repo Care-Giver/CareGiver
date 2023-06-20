@@ -1,4 +1,9 @@
-import { StyleProp, TextProps as TextProperties, TextStyle } from "react-native"
+import {
+  GestureResponderEvent,
+  StyleProp,
+  TextProps as TextProperties,
+  TextStyle,
+} from "react-native"
 import i18n from "i18n-js"
 import { TextPresets } from "./text.presets"
 import { TxKeyPath } from "../../../../i18n"
@@ -71,6 +76,11 @@ export interface CustomTextProps {
    * marginHorizontal (mr, ml 사용시, 무시됩니다)
    */
   mh?: number
+
+  /**
+   * 텍스트 컴포넌트도 onPress prop 을 갖을 수 있습니다.
+   */
+  onPress?: ((event: GestureResponderEvent) => void) | undefined
 }
 
 export interface TextProps extends TextProperties, CustomTextProps {

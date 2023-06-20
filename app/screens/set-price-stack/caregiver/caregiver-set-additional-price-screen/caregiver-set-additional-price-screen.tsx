@@ -51,7 +51,9 @@ export const CaregiverSetAdditionalPriceScreen: FC<
         <PreBol18 color={HEAD_LINE} text={`강아지 크기 별로`} />
         {/* // ? second line */}
         <View style={common_styles.secondTitleContainer}>
-          <UnderlineText text={`추가할 요금`} />
+          <UnderlineText>
+            <PreBol18 text="추가할 요금" />
+          </UnderlineText>
           <PreBol18 color={HEAD_LINE} text="을 설정해주세요!" />
         </View>
       </View>

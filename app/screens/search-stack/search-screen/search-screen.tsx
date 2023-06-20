@@ -21,6 +21,7 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   TimePicker,
+  ServiceType,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import { IOS_BOTTOM_HOME_BAR_HEIGHT, DISABLED, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
@@ -49,7 +50,7 @@ const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     //* 서비스 형태
-    const [serviceType, setServiceType] = useState("방문") //? 방뮨 or 위탁
+    const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
     const [service, setService] = useState(null) //? 팻시팅 or 훈련
 
     //* 달력 - Calendar

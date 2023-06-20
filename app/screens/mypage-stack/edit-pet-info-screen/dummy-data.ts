@@ -45,7 +45,7 @@ export const Pets: Pet[] = [
   {
     id: 3,
     profileImage: null,
-    name: "구름이",
+    name: "자두",
     birthday: "2019-03-01",
     species: "코리안숏헤어",
     sex: "MALE",
