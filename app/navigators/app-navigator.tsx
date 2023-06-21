@@ -48,6 +48,7 @@ import {
   CgMypageScreen,
   YeBeomTestScreen,
   BookingDetailScreen,
+  PaymentScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -143,6 +144,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "payment-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -216,8 +218,15 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="payment-screen"
     >
+      <Stack.Screen
+        name="payment-screen"
+        component={PaymentScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
