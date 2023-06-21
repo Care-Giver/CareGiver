@@ -3,31 +3,27 @@ import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { ProfileCardInfo, getFavorites } from "../../services/axios/favorite"
 
 /**
- * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
+ * 즐겨찾기 목록을 관리하는 MST 모델
  */
 export const FavoriteModel = types
   .model("Favorite")
   .props({
     // error 상황과 구별할 수 있도록 초깃값은 null로 설정
-    favoriteCreches: types.optional(types.frozen<ProfileCardInfo[] | null>(), null),
-    favoriteVisitings: types.optional(types.frozen<ProfileCardInfo[] | null>(), null),
+    favorites: types.optional(types.frozen<ProfileCardInfo[] | null>(), null),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    setCreches(data: ProfileCardInfo[]) {
-      self.favoriteCreches = data
-    },
-    setVisitings(data: ProfileCardInfo[]) {
-      self.favoriteVisitings = data
+    setResponse(data: ProfileCardInfo[]) {
+      self.favorites = data
     },
   }))
   .actions((self) => ({
     async setFavorites() {
       await getFavorites()
         .then((res) => {
-          self.setCreches(res.favoriteCrechesData)
-          self.setVisitings(res.favoriteVisitingsData)
+          const favorites = [...res.favoriteCrechesData, ...res.favoriteVisitingsData]
+          self.setResponse(favorites)
         })
         .catch((err) => console.error(err))
     },

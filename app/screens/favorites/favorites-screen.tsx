@@ -7,7 +7,16 @@ import React, {
   useCallback,
   useLayoutEffect,
 } from "react"
-import { View, Image, Pressable, LayoutAnimation, FlatList, Animated } from "react-native"
+import {
+  View,
+  Image,
+  Pressable,
+  LayoutAnimation,
+  FlatList,
+  Animated,
+  Platform,
+  useWindowDimensions,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -29,11 +38,18 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { images } from "#images"
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet"
+import {
+  BottomSheetBackdrop,
+  BottomSheetFlatList,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet"
 import {
   DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
+  IOS_BOTTOM_HOME_BAR_HEIGHT,
+  IOS_NOTCH_STATUS_BAR_HEIGHT,
   MIDDLE_LINE,
   SUB_HEAD_LINE,
   color,
@@ -42,12 +58,13 @@ import {
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
-import { getCrechePetsitters } from "#axios"
-import { FavoriteModel, useStores } from "../../models"
+import { useStores } from "../../models"
 import { ProfileCardInfo } from "app/services/axios/favorite"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
+
+const BOTTOMSHEET_BOTTOM_INTERVAL = Platform.OS === "ios" ? IOS_BOTTOM_HOME_BAR_HEIGHT : 0
 
 type Service = "visiting" | "creche"
 
@@ -61,8 +78,10 @@ interface FilterCondition {
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
 > = observer(function FavoritesScreen() {
+  const windowHeight = useWindowDimensions().height
+
   const {
-    FavoriteModel: { setFavorites, favoriteCreches, favoriteVisitings },
+    FavoriteModel: { setFavorites, favorites },
   } = useStores()
 
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
@@ -125,7 +144,9 @@ export const FavoritesScreen: FC<
     [],
   )
 
-  const [bottomSheetAnimatedValue] = useState(new Animated.Value(400))
+  const [bottomSheetAnimatedValue] = useState(
+    new Animated.Value(BOTTOMSHEET_BOTTOM_INTERVAL + windowHeight * 0.27),
+  )
 
   const handleSheetChange = useCallback(
     (index: number) => {
@@ -133,15 +154,18 @@ export const FavoritesScreen: FC<
         setIsBottomSheetOpen(true)
         setbottomSheetIndex(index)
         Animated.timing(bottomSheetAnimatedValue, {
-          toValue: index === 0 ? 400 : 600,
-          duration: 300,
+          toValue:
+            index === 0
+              ? BOTTOMSHEET_BOTTOM_INTERVAL + windowHeight * 0.27
+              : BOTTOMSHEET_BOTTOM_INTERVAL + 5,
+          duration: 150,
           useNativeDriver: false,
         }).start()
       } else {
         setIsBottomSheetOpen(false)
         Animated.timing(bottomSheetAnimatedValue, {
           toValue: 0,
-          duration: 300,
+          duration: 150,
           useNativeDriver: false,
         }).start()
       }
@@ -166,14 +190,17 @@ export const FavoritesScreen: FC<
     (date: DateData) => {
       // * startDate와 endDate가 모두 설정된 상태에서 date를 입력한 경우 -> 날짜 초기화(startDate부터 다시)
       if ((startDate && endDate) || (startDate === undefined && endDate === undefined)) {
+        let current_date = new Date(`${date.year}-${date.month}-${date.day}T00:00:00`)
+        console.log(`[CALENDAR] current date: ${current_date}`)
+
         setStartDate(date)
         setEndDate(undefined)
 
         const newMarkedDates = {}
         newMarkedDates[date.dateString] = {
-          selected: true,
-          marked: true,
-          selectedColor: "gray",
+          startingDay: true,
+          color: "gray",
+          textColor: "white",
         }
         setMarkedDates(newMarkedDates)
         return
@@ -185,9 +212,9 @@ export const FavoritesScreen: FC<
 
         const newMarkedDates = {}
         newMarkedDates[date.dateString] = {
-          selected: true,
-          marked: true,
-          selectedColor: "gray",
+          startingDay: true,
+          color: "gray",
+          textColor: "white",
         }
         setMarkedDates(newMarkedDates)
         return
@@ -195,17 +222,40 @@ export const FavoritesScreen: FC<
 
       // * 입력된 date가 endDate로 설정되는 경우
       // ? startDate 정보가 존재하면서 입력받은 date가 startDate보다 나중인 경우
-      if (startDate && date.timestamp > startDate.timestamp) {
+      else if (startDate && date.timestamp > startDate.timestamp) {
+        // ? endDate state값 갱신
         setEndDate(date)
-        setIsCalendarOpen(false)
+        // ? endDate를 Date type으로 변환
+        const last_date = new Date(
+          `${date.year}-${date.month < 10 ? "0" + date.month : date.month}-${
+            date.day < 10 ? "0" + date.day : date.day
+          }T12:00:00`,
+        )
 
+        // ? 기존 startDate 정보 복사
         const newMarkedDates = { ...markedDates }
-        newMarkedDates[date.dateString] = {
-          selected: true,
-          marked: true,
-          selectedColor: "gray",
+
+        // ? newMarkedDates에 추가할 date
+        let current_date = new Date(
+          `${startDate.year}-${startDate.month < 10 ? "0" + startDate.month : startDate.month}-${
+            startDate.day < 10 ? "0" + startDate.day : startDate.day
+          }T12:00:00`,
+        )
+        current_date.setDate(current_date.getDate() + 1)
+
+        // ? endDate까지 추가한다
+        while (current_date.getTime() <= last_date.getTime()) {
+          newMarkedDates[current_date.toISOString().split("T")[0]] = {
+            // ? last_date인 경우에만 true로 설정
+            endingDay: current_date.getTime() === last_date.getTime() ? true : false,
+            color: "gray",
+            textColor: "white",
+          }
+          current_date.setDate(current_date.getDate() + 1)
         }
-        setMarkedDates(newMarkedDates)
+
+        setMarkedDates(newMarkedDates) // Calendar 컴포넌트에 입력될 markedDate 설정
+        setIsCalendarOpen(false) // Calendar 종료
 
         LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
         // eslint-disable-next-line no-useless-return
@@ -229,11 +279,8 @@ export const FavoritesScreen: FC<
   useLayoutEffect(() => {
     setPetsitters(_petsitters)
     setFavorites()
-    console.log("[FAVORITES SCREEN] favoriteCreches:", favoriteCreches)
-    console.log("[FAVORITES SCREEN] favoriteVisitings:", favoriteVisitings)
-    // setPetsitters(favoriteVisitings)
-    // setCreches(favoriteCreches)
-  }, [serviceType])
+    console.log("[FAVORITES SCREEN] favoriteCreches:", favorites)
+  }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수
   const handleCheckButton = useCallback(() => {
@@ -295,10 +342,10 @@ export const FavoritesScreen: FC<
         style={[styles.divisionLine, { marginHorizontal: -1 * BASIC_BACKGROUND_PADDING_WIDTH }]}
       />
 
-      {petsitters.length > 0 ? (
+      {favorites.length > 0 ? (
         //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
         <FlatList
-          data={petsitters}
+          data={favorites}
           renderItem={({ item, index }) => (
             <SitterProfileCard
               key={item.id}
@@ -421,6 +468,7 @@ export const FavoritesScreen: FC<
                   borderRadius: 8,
                 }}
                 markedDates={markedDates}
+                markingType="period"
               />
             ) : (
               <RowRoundedButton
@@ -466,9 +514,23 @@ export const FavoritesScreen: FC<
                   color={SUB_HEAD_LINE}
                   style={{ marginTop: 12, marginLeft: 16 }}
                 />
-                <View style={isPetDropdownOpen ? styles.hidden : styles.shown}>
+                <View
+                  style={[isPetDropdownOpen ? styles.hidden : styles.shown, { height: 78 * 3 }]}
+                >
                   {/*//* 선택된 반려동물 리스트 */}
-                  {filterPet.map((item, index) => (
+                  <BottomSheetFlatList
+                    data={filterPet}
+                    renderItem={({ item, index }) => (
+                      <SelectedPetCard
+                        key={index}
+                        petData={item}
+                        onPress={() => {
+                          setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
+                        }}
+                      />
+                    )}
+                  />
+                  {/* {filterPet.map((item, index) => (
                     <SelectedPetCard
                       key={index}
                       petData={item}
@@ -476,7 +538,7 @@ export const FavoritesScreen: FC<
                         setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
                       }}
                     />
-                  ))}
+                  ))} */}
                 </View>
               </View>
             )}
@@ -487,7 +549,7 @@ export const FavoritesScreen: FC<
           style={[
             styles.btnContainer,
             {
-              top: bottomSheetAnimatedValue,
+              bottom: bottomSheetAnimatedValue,
             },
           ]}
         >

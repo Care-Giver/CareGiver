@@ -7,6 +7,8 @@ export interface ProfileCardInfo {
   userNickname: string
   title: string
   reviewCount: number
+  rating: number
+  desc: string
 }
 
 interface FavoriteResponse extends GeneralResponse {

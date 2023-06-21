@@ -7,43 +7,39 @@ import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
 import { images } from "#images"
 
 import RatingReviewBox from "../rating-review-box/rating-review-box"
+import { ProfileCardInfo } from "app/services/axios/favorite"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
 }
 
 interface ExampleProps {
-  sitterData: {
-    id: string
-    image: string
-    name: string
-    profileImg: string
-    rating: number
-    review: number
-    title: string
-    desc: string
-  }
+  sitterData: ProfileCardInfo
   style?: FlexStyle
   onPress: () => void //! 함수 props 의 type 으로써 적절치 못하나, 임시로 이렇게 처리한다
 }
 
 export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
-  const { id, name, profileImg, rating, review, title, desc } = sitterData
+  const { id, userNickname, image, rating, reviewCount, title, desc } = sitterData
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}
       {/* profile image */}
-      <Image style={styles.profileImg} source={{ uri: profileImg }} />
+      {image ? (
+        <Image style={styles.profileImg} source={{ uri: image }} />
+      ) : (
+        <Image style={styles.profileImg} source={images.default_pet_image_60} />
+      )}
 
       <View style={styles.infoContainer}>
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
           {/* sitter name */}
-          <PreMed16 text={name} color={HEAD_LINE} />
+          <PreMed16 text={userNickname} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={rating} review={review} style={{ marginTop: 4 }} />
+          <RatingReviewBox rating={rating} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />
