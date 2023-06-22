@@ -37,7 +37,7 @@ export const CgSetAddressScreen: FC<
       //mApiKey = "AIzaSyDGzlmhKrUA0vLqQs6jrXg1Il77Xmt8lD8"
       mApiKey = "AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc"
     } else {
-      //mApiKey = "AIzaSyAPziDHnPS4EEAHq1EjWe1KpQ9hUWE0x6M"
+      //mApiKey = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
       mApiKey = "AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc"
     }
     await fetch(
