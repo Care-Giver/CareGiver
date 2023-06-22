@@ -971,7 +971,7 @@ const AllTabs = observer(function AllTabs() {
     <>
       {type === Type.CLIENT && <ClientTabs />}
       {type === Type.CARE_GIVER && <CareGiverTabs />}
-      {onSwitchingType && <Loading text={"모드 전환중"} />}
+      {onSwitchingType && <Loading text={"모드 전환중"} duration={1000} />}
     </>
   )
 })

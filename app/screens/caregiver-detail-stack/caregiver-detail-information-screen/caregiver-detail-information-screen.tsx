@@ -145,8 +145,6 @@ export const CaregiverDetailInformationScreen: FC<
     //! 따라서, ScreenRootView 는 fixed 로 한다
     //! 이에따라, 스크린 엣지 기본 padding 도 컴포넌트마다 각각 적용해야 한다
     <ScreenRootView
-      preset="fixed"
-      testID="testetst"
       style={{
         ...BASIC_BACKGROUND_PADDING,
         paddingHorizontal: 0,
@@ -159,6 +157,7 @@ export const CaregiverDetailInformationScreen: FC<
         onScroll={(event) => {
           const headerOpacity =
             Math.min(Math.max(event.nativeEvent.contentOffset.y / 2, 0) / HEADER_HEIGHT, 1.0) ?? 0.0
+
           navigation.setOptions({
             headerStyle: {
               elevation: headerOpacity,

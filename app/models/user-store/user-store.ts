@@ -93,6 +93,7 @@ export const UserStoreModel = types
         self.type = Type.CARE_GIVER
         this.setOnSwitchingTypeTrue()
         console.log("self.onSwitchingType - CLIENT", self.onSwitchingType)
+        await delay(500)
         await delay(300)
         navigate("Calendar")
         await delay(200)
@@ -102,6 +103,7 @@ export const UserStoreModel = types
         self.type = Type.CLIENT
         this.setOnSwitchingTypeTrue()
         console.log("self.onSwitchingType - CG", self.onSwitchingType)
+        await delay(500)
         await delay(300)
         navigate("Searching")
         await delay(200)

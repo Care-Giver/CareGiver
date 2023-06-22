@@ -55,9 +55,9 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
             source={{ uri: item.profileImg }}
             style={{
               // width: "100%",
-              width: STANDARD_WIDTH,
+              width: DEVICE_SCREEN_WIDTH,
               height: 444,
-              backgroundColor: CARE_NATURAL_BLUE,
+              backgroundColor: "black",
               // margin: 2,
             }}
             key={index} //? Key Warning 에러 해결.
