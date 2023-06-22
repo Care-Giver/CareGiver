@@ -49,6 +49,7 @@ import {
   CgMypageScreen,
   YeBeomTestScreen,
   BookingDetailScreen,
+  LoginScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -109,6 +110,7 @@ export type NavigatorParamList = {
 
   // * mypage stack
   "mypage-screen": undefined
+  "login-screen": undefined
   "all-pets-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
@@ -409,6 +411,16 @@ const MypageStack = () => {
         }}
       />
 
+      {/* 로그인 */}
+      <Stack.Screen
+        name="login-screen"
+        component={LoginScreen}
+        options={{
+          title: "로그인",
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 반려동물 전체보기 */}
       <Stack.Screen
         name="all-pets-screen"
@@ -689,13 +701,23 @@ const CgMypageStack = () => {
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="cg-mypage-screen"
         component={CgMypageScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
         }}
       />
+
+      {/* 로그인 */}
+      <Stack.Screen
+        name="login-screen"
+        component={LoginScreen}
+        options={{
+          title: "로그인",
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* CG - 지도상에서 위치 설정 */}
       <Stack.Screen
         name="cg-set-address-screen"

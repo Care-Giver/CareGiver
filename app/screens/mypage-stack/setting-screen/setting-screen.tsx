@@ -1,7 +1,7 @@
 import { View, Text, Modal, Image, Pressable } from "react-native"
 import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, goBack } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { MypageButton, PreMed16, PreReg14, ScreenRootView, CustomModal } from "#components"
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
@@ -29,6 +29,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     const handleLogoutPress = () => {
       setLoggedIn(false)
       setLogoutModalVisible(false)
+      goBack()
     }
 
     // ? 회원탈퇴 메뉴 클릭시 동작하는 함수 - 모달창 띄우기
@@ -39,6 +40,9 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     // ? 모달창 - 회원 탈퇴 버튼 클릭시 동작하는 함수
     const handleWithdrawPress = () => {
       alert("회원 탈퇴")
+      // TODO
+      //~ 1. unlink kakaotalk && logut
+      //~ 2. 회원탈퇴를 위한 1:1 Q&A 연결
     }
 
     return (

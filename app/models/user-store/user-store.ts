@@ -27,12 +27,11 @@ export enum Type {
   CLIENT = "CLIENT",
 }
 
-enum Provider {
-  GOOGLE = "GOOGLE",
-  APPLE = "APPLE",
-  KAKAO = "KAKAO",
-  NAVER = "NAVER",
-}
+/**
+ * 회원가입/로그인시 사용된 OAuth 제공자 입니다.
+ * 원래 enum 으로 정의하려 했으나, 백엔드팀과의 협의 후, string 값으로 정의하였습니다. - https://care-giver-hq.slack.com/archives/C03E515JKV2/p1686457726838459?thread_ts=1686399709.649689&cid=C03E515JKV2
+ */
+export type AuthProvider = "google" | "apple" | "kakao" | "naver"
 
 enum Sex {
   MALE = "MALE",
@@ -54,7 +53,8 @@ export const UserStoreModel = types
 
     email: types.optional(types.string, ""),
     password: types.optional(types.string, ""),
-    provider: types.optional(types.string, ""), //TODO: To be changed to Provider enum
+    provider: types.optional(types.frozen<AuthProvider>(), null),
+    refreshToken: types.optional(types.string, ""),
 
     name: types.optional(types.string, ""),
     phoneNumber: types.optional(types.string, ""),
@@ -132,8 +132,11 @@ export const UserStoreModel = types
     setPassword(value: string) {
       self.password = value.replace(/ /g, "")
     },
-    setProvider(value: string) {
+    setProvider(value: AuthProvider) {
       self.provider = value
+    },
+    setRefreshToken(value: string) {
+      self.refreshToken = value
     },
 
     async signIn() {
