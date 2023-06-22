@@ -1,4 +1,5 @@
 import React, { FC } from "react"
+import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -20,4 +21,10 @@ export const <%= props.pascalCaseName %>Screen: FC<StackScreenProps<NavigatorPar
       {/* 해피코딩^^ */}
     </ScreenRootView>
   )
+})
+
+const styles = StyleSheet.create({
+  root: {
+    
+  },
 })

@@ -38,11 +38,9 @@ export const CgMypageScreen: FC<
     setLoggedIn(true)
   }, [])
 
-  // TODO: 로그인 화면 연결시키기
   // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
   const handleLoginPress = () => {
-    // alert("로그인 화면으로 이동")
-    setLoggedIn(true) // 테스트빌드용으로, 임시로 즉시 로그인 처리
+    navigate("login-screen")
   }
 
   // * 환경설정 버튼 클릭시 실행되는 함수

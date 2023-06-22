@@ -40,6 +40,7 @@ import {
   TestBottomSheetScreen,
   FavoritesScreen,
   EditPetInfoScreen,
+  KakaoLoginTestScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   CgSetAddressScreen,
@@ -48,6 +49,7 @@ import {
   CgMypageScreen,
   YeBeomTestScreen,
   BookingDetailScreen,
+  LoginScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -108,6 +110,7 @@ export type NavigatorParamList = {
 
   // * mypage stack
   "mypage-screen": undefined
+  "login-screen": undefined
   "all-pets-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
@@ -139,6 +142,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
+  "kakao-login-test-screen": undefined
   "cg-calendar-screen"
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
@@ -403,6 +407,16 @@ const MypageStack = () => {
         name="mypage-screen"
         component={MypageScreen}
         options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* 로그인 */}
+      <Stack.Screen
+        name="login-screen"
+        component={LoginScreen}
+        options={{
+          title: "로그인",
           header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
@@ -687,13 +701,23 @@ const CgMypageStack = () => {
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="cg-mypage-screen"
         component={CgMypageScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
         }}
       />
+
+      {/* 로그인 */}
+      <Stack.Screen
+        name="login-screen"
+        component={LoginScreen}
+        options={{
+          title: "로그인",
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* CG - 지도상에서 위치 설정 */}
       <Stack.Screen
         name="cg-set-address-screen"
@@ -827,6 +851,9 @@ const NOT_ORGANISED_CG_SCREENS = () => {
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* //? 카카오 로그인 테스트 화면 */}
+      <Stack.Screen name="kakao-login-test-screen" component={KakaoLoginTestScreen} />
     </Stack.Navigator>
   )
 }
@@ -978,7 +1005,6 @@ export const AppNavigator = (props: NavigationProps) => {
         "all-pets-screen": "/all-pets-screen",
         "setting-screen": "/setting-screen",
         "service-center-screen": "/service-center-screen",
-        //?우ㅣ의 예를 따라서 아래와 같이 저도 추가해 봤는데 맞는 건가요..?
         "edit-mypage-screen": "/edit-mypage-screen",
         "edit-pet-info-screen": "/edit-pet-info-screen",
       },
