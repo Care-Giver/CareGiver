@@ -1,16 +1,77 @@
 import React, { FC } from "react"
+import {
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  Button,
+  Pressable,
+  TouchableOpacity,
+} from "react-native"
+import { images } from "#images"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { PreBol12, ScreenRootView } from "#components"
+import {
+  GobackAndTitleAndButtonHeader,
+  PetProfileCard,
+  PreBol12,
+  PreBol14,
+  PreBol16,
+  PreBol18,
+  PreMed12,
+  PreMed14,
+  PreMed18,
+  PreReg14,
+  ScreenRootView,
+} from "#components"
+import { ScrollView } from "react-native-gesture-handler"
+
+import { Platform, ViewStyle } from "react-native"
+import { BODY, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
+
+const screenWidth = Dimensions.get("window").width
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
   function PaymentScreen() {
+    const KakaoPay = () => {
+      return (
+        <Pressable style={{ flex: 1, marginRight: 11 }}>
+          <Image style={[styles.paymentImage, { backgroundColor: "yellow" }]} />
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity style={styles.button} />
+            <PreBol14 text="카카오페이" color="#00206c" />
+          </View>
+        </Pressable>
+      )
+    }
+    const NaverPay = () => {
+      return (
+        <Pressable style={{ flex: 1, marginRight: 11 }}>
+          <Image style={[styles.paymentImage, { backgroundColor: "green" }]} />
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity style={styles.button} />
+            <PreBol14 text="네이버페이" color="#797979" />
+          </View>
+        </Pressable>
+      )
+    }
+    const Toss = () => {
+      return (
+        <Pressable style={{ flex: 1 }}>
+          <Image style={[styles.paymentImage, { backgroundColor: "blue" }]} />
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity style={styles.button} />
+            <PreBol14 text="토스" color="#797979" />
+          </View>
+        </Pressable>
+      )
+    }
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
 
@@ -18,8 +79,178 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     // const navigation = useNavigation()
     return (
       <ScreenRootView testID="Payment">
-        <PreBol12 text="Payment Screen Start" />
+        {/* HEADER */}
+        <View style={styles.header}>
+          <Pressable>
+            <Image style={styles.goBackButton} source={images.go_back} />
+          </Pressable>
+          <PreMed18 text="결제 정보" mr={16} />
+        </View>
+        <ScrollView>
+          {/* CONTENT 시작, paddingHorizontal:16 */}
+          <View style={styles.container}>
+            <View style={styles.bookingInfo}>
+              <PreBol14 text="예약 정보" />
+              {/* 방문, 펫시터 Box 컴포넌트 가져오기 */}
+            </View>
+            <View style={styles.borderLine} />
+            <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
+            <PreReg14 text="유혜린 펫시터" mb={24} color={BODY} />
+            {/* 맡길 반려동물 컴포넌트 가져오기 */}
+            <PreMed14 text="방문 장소" mb={8} />
+            <PreReg14 text="경기도 안산시 상록구 한양대로 55" mb={24} color={BODY} />
+            <PreMed14 text="방문 시간" mb={8} />
+            <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
+          </View>
+          <View style={styles.borderView} />
+          {/* paddingHorizontal:16 */}
+          <View style={styles.container}>
+            <PreBol14 text="결제 수단" mb={14} />
+            <View style={styles.borderLine} />
+            {/* 결제 수단 컴포넌트 시작 */}
+            <View
+              style={{
+                marginTop: 16,
+                flexDirection: "row",
+                width: "100%",
+                marginBottom: 24,
+              }}
+            >
+              <KakaoPay />
+              <NaverPay />
+              <Toss />
+            </View>
+            <View style={[styles.borderBox, { marginBottom: 25 }]}>
+              <TouchableOpacity style={styles.button} />
+              <PreReg14 text="신용/체크카드" color={BODY} />
+            </View>
+            <View style={styles.borderLine} />
+            <View style={styles.couponInfo}>
+              <PreMed14 text="쿠폰" />
+              <PreMed14 text="보유 중인 쿠폰 없음" color={BODY} />
+            </View>
+          </View>
+          <View style={styles.borderView} />
+          <View style={styles.priceContainer}>
+            <PreBol14 text="요금 세부 정보" mb={13} />
+            <View style={styles.borderLine} />
+            {/* 가격 테이블  */}
+            <View style={styles.table}>
+              <View style={styles.tableRow}>
+                <PreReg14 text="서비스 이용료" style={{ flex: 3 }} />
+                <PreReg14 text="50,000" style={{ flex: 2 }} />
+                <PreReg14 text="8시간" style={{ flex: 1 }} />
+                <PreReg14 text="400,000원" style={{ flex: 3, textAlign: "right" }} />
+              </View>
+              <View style={styles.tableRow}>
+                <PreReg14 text="수수료" style={{ flex: 3 }} />
+                <PreReg14 text="40,000" style={{ flex: 3 }} />
+                <PreReg14 text="40,000원" style={{ flex: 3, textAlign: "right" }} />
+              </View>
+              <View style={styles.tableRow}>
+                <PreReg14 text="할인 쿠폰" style={{ flex: 5 }} />
+                <PreReg14 text="1" style={{ flex: 1, textAlign: "center" }} />
+                <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} />
+              </View>
+            </View>
+            <View style={styles.borderLine} />
+            <View style={styles.totalPrice}>
+              <PreBol16 text="결제 금액" />
+              <PreBol18 text="430,000원" />
+            </View>
+          </View>
+        </ScrollView>
       </ScreenRootView>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    height: HEADER_HEIGHT,
+  },
+  container: {
+    paddingHorizontal: 16,
+  },
+  bookingInfo: {
+    height: 53,
+    justifyContent: "center",
+  },
+  borderLine: {
+    height: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
+    borderColor: "#F0F0F6",
+  },
+  borderView: {
+    width: "100%",
+    height: 6,
+    backgroundColor: "#F0F0F6",
+    marginBottom: 24,
+  },
+  button: {
+    borderStyle: "solid",
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderColor: "#797979",
+    borderWidth: 1,
+    marginRight: 7,
+  },
+  goBackButton: {
+    width: 28,
+    height: 28,
+    marginLeft: 16,
+    // backgroundColor: "orange",
+  },
+  borderBox: {
+    width: "100%",
+    height: 47,
+    borderStyle: "solid",
+    borderColor: "#797979",
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  couponInfo: {
+    width: "100%",
+    height: 34,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 25,
+    alignItems: "center",
+  },
+  priceContainer: {
+    paddingHorizontal: 16,
+    height: 368,
+  },
+  table: {
+    height: 112,
+    width: "100%",
+  },
+  tableRow: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  tableColumn: {
+    flex: 1,
+  },
+  totalPrice: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    marginTop: 13,
+  },
+  paymentImage: {
+    flex: 1,
+    height: 59,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+})
