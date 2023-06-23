@@ -26,8 +26,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         style={[styles.input, { height: boxheight }]}
         placeholder={placeholdertext}
         multiline
-        maxLength={1000}
-        //1) 요청사항에 따라 maxLength도 따로 예외처리를 해줘야할지 고민이 된다.
+        maxLength={300}
         autoFocus={true}
       />
     </View>
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     borderColor: LBG,
     backgroundColor: LBG,
     color: "black",
-    textAlignVertical: "top",
+    //textAlignVertical: "top",
     fontFamily: PRETENDARD_REGULAR,
     fontSize: 14,
     //lineHeight: 20,
