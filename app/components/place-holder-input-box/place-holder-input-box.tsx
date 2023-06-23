@@ -26,7 +26,8 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         style={[styles.input, { height: boxheight }]}
         placeholder={placeholdertext}
         multiline
-        maxLength={300}
+        maxLength={1000}
+        //1) 요청사항에 따라 maxLength도 따로 예외처리를 해줘야할지 고민이 된다.
         autoFocus={true}
       />
     </View>
