@@ -48,6 +48,7 @@ import {
   CgMypageScreen,
   YeBeomTestScreen,
   BookingDetailScreen,
+  MakeBookingScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -143,6 +144,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "make-booking-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -182,8 +184,16 @@ const BookingsStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="all-bookings-screen"
+      initialRouteName="make-booking-screen"
     >
+      {/*// MVP-23 */}
+      <Stack.Screen
+        name="make-booking-screen"
+        component={MakeBookingScreen}
+        options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
       {/* //* 예약내역 메인 */}
       <Stack.Screen
         name="all-bookings-screen"
@@ -807,14 +817,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
         component={MinseonTest}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/*// MVP-20 */}
-      <Stack.Screen
-        name="ye-beom-test-screen"
-        component={YeBeomTestScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
