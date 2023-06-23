@@ -2,7 +2,8 @@ import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
 export interface ProfileCardInfo {
-  id: number
+  crecheId?: number
+  visitingId?: number
   image: string | null
   userNickname: string
   title: string
@@ -11,24 +12,42 @@ export interface ProfileCardInfo {
   desc: string
 }
 
+export interface SearchOption {
+  startTime: string
+  endTime: string
+  petIds: number[]
+  sortBy: string
+  petSitterType: string
+}
+
+interface CreateBody {
+  visitingId?: number
+  crecheId?: number
+}
+
 interface FavoriteResponse extends GeneralResponse {
-  favoriteCrechesData: ProfileCardInfo[]
-  favoriteVisitingsData: ProfileCardInfo[]
+  favoritePetsitters: ProfileCardInfo[] | null[]
+  // TODO: 훈련사 추가
+}
+
+interface CreateFavoriteResponse extends GeneralResponse {
+  favoriteId: number
 }
 
 /**
  * 현재 유저가 찜한 펫시터 / 훈련사 리스트를 받아온다.
  * @returns {Promise<FavoriteResponse>}
  */
-export const getFavorites = async (): Promise<FavoriteResponse> => {
+export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteResponse> => {
   try {
-    const response = await axios.get<FavoriteResponse>(`${BASE_URL}/user/favorites`, CONFIG)
+    const response = await axios.post<FavoriteResponse>(`${BASE_URL}/user/favorites`, body, CONFIG)
 
     if (!response.data.ok) {
       console.error(response.data.error)
       return null
     }
     // console.info("[getFavorites] response.data: ", response.data)
+    console.log("in Axios response.data >>>", response.data)
     return response.data
   } catch (error) {
     console.error(error)
@@ -37,22 +56,41 @@ export const getFavorites = async (): Promise<FavoriteResponse> => {
 }
 
 /**
- * 현재 유저가 찜한 훈련사 정보 리스트만 받아온다.
- * @returns {Promise<ProfileCardInfo[]>}
+ * 현재 유저의 찜을 새로 생성한다.
+ * @returns {Promise<CreateFavoriteResponse>}
  */
-export const getFavoriteCreches = async (): Promise<ProfileCardInfo[]> => {
+export const createFavorite = async (body: CreateBody): Promise<CreateFavoriteResponse> => {
   try {
-    const response = await axios.get<FavoriteResponse>(`${BASE_URL}/user/favorites`, CONFIG)
+    const response = await axios.post<CreateFavoriteResponse>(
+      `${BASE_URL}/user/favorite`,
+      body,
+      CONFIG,
+    )
     if (!response.data.ok) {
       console.error(response.data.error)
       return null
     }
+    console.info("[createFavorite] response.data: ", response.data)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
 
-    console.info(
-      "[getFavoriteCreches] response.data.favoriteCrechesData: ",
-      response.data.favoriteCrechesData,
-    )
-    return response.data.favoriteCrechesData
+/**
+ * 현재 유저의 찜을 삭제한다.
+ * @returns {Promise<GeneralResponse>}
+ */
+export const deleteFavorite = async (body: CreateBody): Promise<GeneralResponse> => {
+  try {
+    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body, CONFIG)
+    if (!response.data.ok) {
+      console.error(response.data.error)
+      return null
+    }
+    console.info("[deleteFavorite] response.data: ", response.data)
+    return response.data
   } catch (error) {
     console.error(error)
     return null

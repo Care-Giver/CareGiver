@@ -1,6 +1,6 @@
 export const petsDummy = [
   {
-    id: "1",
+    id: 1,
     name: "초코",
     size: "중형견",
     species: "푸들",
@@ -8,7 +8,7 @@ export const petsDummy = [
     sex: "여",
   },
   {
-    id: "2",
+    id: 2,
     name: "우유",
     size: "중형견",
     species: "비숑",
@@ -16,7 +16,7 @@ export const petsDummy = [
     sex: "여",
   },
   {
-    id: "3",
+    id: 3,
     name: "자두",
     size: "소형",
     species: "여섯글자가넘어가",
@@ -24,7 +24,7 @@ export const petsDummy = [
     sex: "남",
   },
   {
-    id: "4",
+    id: 4,
     name: "구름이",
     size: "소형",
     species: "터키쉬앙고라",
@@ -32,7 +32,7 @@ export const petsDummy = [
     sex: "남",
   },
   {
-    id: "5",
+    id: 5,
     name: "상츄",
     size: "중형견",
     species: "시츄",

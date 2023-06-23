@@ -7,16 +7,7 @@ import React, {
   useCallback,
   useLayoutEffect,
 } from "react"
-import {
-  View,
-  Image,
-  Pressable,
-  LayoutAnimation,
-  FlatList,
-  Animated,
-  Platform,
-  useWindowDimensions,
-} from "react-native"
+import { View, Image, Pressable, LayoutAnimation, FlatList, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -43,12 +34,13 @@ import {
   BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetScrollView,
+  BottomSheetFooter,
 } from "@gorhom/bottom-sheet"
 import {
+  DEVICE_SCREEN_HEIGHT,
   DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
-  IOS_BOTTOM_HOME_BAR_HEIGHT,
   IOS_NOTCH_STATUS_BAR_HEIGHT,
   MIDDLE_LINE,
   SUB_HEAD_LINE,
@@ -59,17 +51,16 @@ import { Calendar, DateData } from "react-native-calendars"
 import { Pet } from "app/models"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useStores } from "../../models"
-import { ProfileCardInfo } from "app/services/axios/favorite"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
 
-const BOTTOMSHEET_BOTTOM_INTERVAL = Platform.OS === "ios" ? IOS_BOTTOM_HOME_BAR_HEIGHT : 0
+type FilterInfoText = "" | typeof DEFAULT_FILTER_INFO_TEXT
 
 type Service = "visiting" | "creche"
 
 interface FilterCondition {
-  serviceType: Service
+  serviceType?: Service
   startDate?: string
   endDate?: string
   pets?: Array<Pet>
@@ -78,58 +69,44 @@ interface FilterCondition {
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
 > = observer(function FavoritesScreen() {
-  const windowHeight = useWindowDimensions().height
-
   const {
-    FavoriteModel: { setFavorites, favorites },
+    FavoriteModel: { setFavorites, favoritePetsitters, favoriteTrainers },
   } = useStores()
 
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
 
   // TODO: 백엔드 수정 후 타입 재수정
-  const [petsitters, setPetsitters] = useState<Array<any>>([])
+  const [petsitters, setPetsitters] = useState<any[]>([])
   // const [petsitters, setPetsitters] = useState<ProfileCardInfo[]>([])
-  const [creches, setCreches] = useState<ProfileCardInfo[]>([])
-
-  // // TODO: Type을 CrecheBooking | VisitingBooking 으로 수정
-  // const [reserves, setReserves] = useState<Array<CrecheBooking>>([])
-
-  // useLayoutEffect(() => {
-  //   switch (serviceType) {
-  //     case "펫시터":
-  //       getCrechePetsitters(7).then((res) => setReserves(res))
-  //       break
-
-  //     case "훈련사":
-  //       setReserves([])
-  //       break
-
-  //     default:
-  //       break
-  //   }
-  // }, [serviceType])
 
   // * filter states
-  const [filterServiceType, setFilterServiceType] = useState<Service>()
-  const [startDate, setStartDate] = useState<DateData>()
-  const [endDate, setEndDate] = useState<DateData>()
-  const [filterPet, setFilterPet] = useState<Array<Pet>>([])
+  const [filterServiceType, setFilterServiceType] = useState<Service>(null)
+  const [startDate, setStartDate] = useState<DateData>(null)
+  const [endDate, setEndDate] = useState<DateData>(null)
+  const [filterPet, setFilterPet] = useState<Pet[]>([])
 
   // * filter result
   const [filters, setFilters] = useState<FilterCondition>()
   const [filterText, setFilterText] = useState<string>(DEFAULT_FILTER_TEXT)
-  const [filterInfoText, setFilterInfoText] = useState<string>(DEFAULT_FILTER_INFO_TEXT)
+  const [filterInfoText, setFilterInfoText] = useState<FilterInfoText>(DEFAULT_FILTER_INFO_TEXT)
 
   // * UI 관련 states
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
   const [isPetDropdownOpen, setIsPetDropdownOpen] = useState<boolean>(false)
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false)
-  const [bottomSheetIndex, setbottomSheetIndex] = useState<number>(-1)
   const hasSelectedPetsAndDropdownClosed = filterPet.length > 0 && !isPetDropdownOpen
 
   // * BottomSheet Modal
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const snapPoints = useMemo(() => ["72.9%", "100%"], [])
+  const snapPoints = useMemo(
+    () => [
+      "73%",
+      Platform.select({
+        ios: DEVICE_SCREEN_HEIGHT - IOS_NOTCH_STATUS_BAR_HEIGHT,
+        android: DEVICE_SCREEN_HEIGHT,
+      }),
+    ],
+    [],
+  )
 
   // * bottomSheet backdrop
   const renderBackdrop = useCallback(
@@ -144,40 +121,11 @@ export const FavoritesScreen: FC<
     [],
   )
 
-  const [bottomSheetAnimatedValue] = useState(
-    new Animated.Value(BOTTOMSHEET_BOTTOM_INTERVAL + windowHeight * 0.27),
-  )
-
-  const handleSheetChange = useCallback(
-    (index: number) => {
-      if (index >= 0) {
-        setIsBottomSheetOpen(true)
-        setbottomSheetIndex(index)
-        Animated.timing(bottomSheetAnimatedValue, {
-          toValue:
-            index === 0
-              ? BOTTOMSHEET_BOTTOM_INTERVAL + windowHeight * 0.27
-              : BOTTOMSHEET_BOTTOM_INTERVAL + 5,
-          duration: 150,
-          useNativeDriver: false,
-        }).start()
-      } else {
-        setIsBottomSheetOpen(false)
-        Animated.timing(bottomSheetAnimatedValue, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: false,
-        }).start()
-      }
-    },
-    [bottomSheetAnimatedValue],
-  )
-
   // * filter에서 "초기화" 버튼 클릭시 실행되는 함수
   const handleResetPress = useCallback(() => {
-    setFilterServiceType(undefined)
-    setStartDate(undefined)
-    setEndDate(undefined)
+    setFilterServiceType(null)
+    setStartDate(null)
+    setEndDate(null)
     setFilterPet([])
     setFilterText(DEFAULT_FILTER_TEXT)
     setFilterInfoText(DEFAULT_FILTER_INFO_TEXT)
@@ -186,10 +134,12 @@ export const FavoritesScreen: FC<
   const [markedDates, setMarkedDates] = useState({})
 
   // * Callendar - 날짜 선택시 실행되는 함수
+  // NOTE: 스타일링 코드는 대부분 필요없어질 것  - 호중님 작업분으로 대체
+  // NOTE: 로직 코드는 (시간데이터 조작) 유지될 것으로 보임
   const handleDayPress = useCallback(
     (date: DateData) => {
       // * startDate와 endDate가 모두 설정된 상태에서 date를 입력한 경우 -> 날짜 초기화(startDate부터 다시)
-      if ((startDate && endDate) || (startDate === undefined && endDate === undefined)) {
+      if ((startDate && endDate) || (startDate === null && endDate === null)) {
         let current_date = new Date(`${date.year}-${date.month}-${date.day}T00:00:00`)
         console.log(`[CALENDAR] current date: ${current_date}`)
 
@@ -273,25 +223,51 @@ export const FavoritesScreen: FC<
       endDate: endDate?.dateString,
       pets: filterPet,
     })
+    // console.log("filters >>> :", filters)
+    // console.log("filterServiceType:", filterServiceType)
   }, [filterServiceType, startDate, endDate, filterPet])
 
   // * load petsitters
   useLayoutEffect(() => {
     setPetsitters(_petsitters)
-    setFavorites()
-    console.log("[FAVORITES SCREEN] favoriteCreches:", favorites)
+    setFavorites({})
+    console.log("[FAVORITES SCREEN] favoritePetsitters:", favoritePetsitters)
   }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수
-  const handleCheckButton = useCallback(() => {
+  const handleCheckButton = () => {
+    console.log("in handleCheckButton filters >>>", filters)
+
     // ? 방문 | 위탁은 필수 입력
-    if (filterServiceType === undefined) {
+    if (!filters.serviceType) {
       alert("방문 / 위탁 선택은 필수입니다.")
       return
     }
 
-    // TODO: filters 결과 서버에 요청
-    console.log("press check btn", filters)
+    // * filters 결과 서버에 요청
+    // console.log("press check btn", filters)
+    let postBody = {}
+    if (filters.startDate) {
+      postBody = { ...postBody, startTime: filters.startDate }
+    }
+
+    if (filters.endDate) {
+      postBody = { ...postBody, endTime: filters.endDate }
+    }
+
+    if (filters.pets.length > 0) {
+      postBody = { ...postBody, petIds: filters.pets.map((value) => value.id) }
+    }
+
+    if (filters.serviceType) {
+      postBody = { ...postBody, petSitterType: filters.serviceType }
+    }
+
+    // console.log("in handleCheckButton filterPet >>>", filters)
+    console.log("in handleCheckButton postBody >>>", postBody)
+
+    setFavorites(postBody)
+    // console.log("favoritePetsitters:", favoritePetsitters)
 
     // ? 필터 적용 결과 텍스트 수정
     let text = `${filterServiceType === "creche" ? "위탁" : "방문"}`
@@ -310,7 +286,30 @@ export const FavoritesScreen: FC<
     setFilterInfoText("")
 
     bottomSheetModalRef.current.close()
-  }, [filterServiceType, filters])
+  }
+
+  // * BottomSheet Footer - 확인 버튼
+  const renderFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={24} style={styles.btnContainer}>
+        <PreReg12
+          text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
+          color={DISABLED}
+          style={{
+            backgroundColor: palette.white,
+          }}
+        />
+        <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
+          <PreBol16 text="확인" color={color.palette.white} />
+        </Pressable>
+      </BottomSheetFooter>
+    ),
+    [filters],
+  )
+
+  const isEmptyResult =
+    (serviceType === "펫시터" && favoritePetsitters.length === 0) ||
+    (serviceType === "훈련사" && favoriteTrainers.length === 0)
 
   return (
     <ScreenRootView testID="Favorites">
@@ -342,29 +341,31 @@ export const FavoritesScreen: FC<
         style={[styles.divisionLine, { marginHorizontal: -1 * BASIC_BACKGROUND_PADDING_WIDTH }]}
       />
 
-      {favorites.length > 0 ? (
-        //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
-        <FlatList
-          data={favorites}
-          renderItem={({ item, index }) => (
-            <SitterProfileCard
-              key={item.id}
-              sitterData={item}
-              onPress={() => {
-                //? 상세정보 스크린으로 이동
-                //TODO: params 값 추가해줘야 함
-                navigate("caregiver-detail-information-screen", { sitterData: item })
-              }}
-              style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
-            />
-          )}
-        />
-      ) : (
+      {isEmptyResult ? (
         //* 펫시터 목록이 없는 경우 - 디폴트 화면 띄우기
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
           <PreMed18 text="즐겨찾기 한 케어기버가 없어요 😢" color={SUB_HEAD_LINE} />
         </View>
+      ) : (
+        // TODO: serviceType이 훈련사이면서 훈련사 목록이 존재하는 경우 - 훈련사 목록 띄우기
+        //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
+        <FlatList
+          data={favoritePetsitters}
+          renderItem={({ item, index }) => (
+            <SitterProfileCard
+              key={item.crecheId ? item.crecheId : item.visitingId}
+              sitterData={item}
+              onPress={() => {
+                //? 상세정보 스크린으로 이동
+                navigate("caregiver-detail-information-screen", { sitterData: item })
+              }}
+              style={
+                index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
+              }
+            />
+          )}
+        />
       )}
 
       {/* //* 바텀시트 bottomSheet */}
@@ -373,9 +374,9 @@ export const FavoritesScreen: FC<
         backdropComponent={renderBackdrop}
         index={0}
         snapPoints={snapPoints}
-        onChange={handleSheetChange}
         enablePanDownToClose={false}
         style={styles.bottomSheetContainer}
+        footerComponent={renderFooter}
       >
         <BottomSheetScrollView>
           {/* //? filters container */}
@@ -437,7 +438,9 @@ export const FavoritesScreen: FC<
               <Pressable
                 style={[
                   styles.radioContainer,
-                  { borderColor: filterServiceType === "creche" ? GIVER_CASUAL_NAVY : MIDDLE_LINE },
+                  {
+                    borderColor: filterServiceType === "creche" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                  },
                 ]}
                 onPress={() => setFilterServiceType("creche")}
               >
@@ -530,40 +533,11 @@ export const FavoritesScreen: FC<
                       />
                     )}
                   />
-                  {/* {filterPet.map((item, index) => (
-                    <SelectedPetCard
-                      key={index}
-                      petData={item}
-                      onPress={() => {
-                        setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
-                      }}
-                    />
-                  ))} */}
                 </View>
               </View>
             )}
           </View>
         </BottomSheetScrollView>
-        {/* //* 안내문구 + 확인 버튼 */}
-        <Animated.View
-          style={[
-            styles.btnContainer,
-            {
-              bottom: bottomSheetAnimatedValue,
-            },
-          ]}
-        >
-          <PreReg12
-            text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
-            color={DISABLED}
-            style={{
-              backgroundColor: palette.white,
-            }}
-          />
-          <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
-            <PreBol16 text="확인" color={color.palette.white} />
-          </Pressable>
-        </Animated.View>
       </BottomSheetModal>
     </ScreenRootView>
   )
