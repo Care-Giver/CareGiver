@@ -47,6 +47,7 @@ export const MakeBookingScreen: FC<
       setIs닭고기Active(!is닭고기Active)
     }
   }
+
   useEffect(() => {
     if (is없음Active) {
       setIs치즈Active(false)
@@ -60,41 +61,8 @@ export const MakeBookingScreen: FC<
     }
   }, [is치즈Active, is닭고기Active])
 
-  /* 2번째 버튼 그룹의 예외 처리 */
-  const [is강아지Active, setIs강아지Active] = useState(false)
-  const [is처음엔Active, setIs처음엔Active] = useState(false)
-  const [is되도록Active, setIs되도록Active] = useState(false)
-
-  const secondClick = (click: string) => {
-    if (click === "강아지") {
-      setIs강아지Active(!is강아지Active)
-    } else if (click === "처음엔") {
-      setIs처음엔Active(!is처음엔Active)
-    } else if (click === "되도록") {
-      setIs되도록Active(!is되도록Active)
-    }
-  }
-  // To. 수민님 이부분을 강아지, 처음엔, 되도록 셋다 한번에 useEffect에 넣고 싶었는데, 우선순위 때문에 한 곳에 멈추는 경우가 있어서.. 따로 했습니다..
-  useEffect(() => {
-    if (is강아지Active) {
-      setIs처음엔Active(false)
-      setIs되도록Active(false)
-    }
-  }, [is강아지Active])
-
-  useEffect(() => {
-    if (is처음엔Active) {
-      setIs강아지Active(false)
-      setIs되도록Active(false)
-    }
-  }, [is처음엔Active])
-
-  useEffect(() => {
-    if (is되도록Active) {
-      setIs강아지Active(false)
-      setIs처음엔Active(false)
-    }
-  }, [is되도록Active])
+  /* 2번째 버튼  */
+  const [꿀팁, set꿀팁] = useState<"강아지" | "처음엔" | "되도록">(null)
 
   /* 3번째 버튼 그룹의 예외 처리 */
   const [is모두Active, setIs모두Active] = useState(false)
@@ -185,22 +153,22 @@ export const MakeBookingScreen: FC<
               buttonText={"강아지계의 ENFP! 사람이면 다 좋아해요."}
               buttonHeight={45}
               buttonWidth={358}
-              isActiving={is강아지Active}
-              onPress={() => secondClick("강아지")}
+              isActiving={꿀팁 === "강아지"}
+              onPress={() => set꿀팁("강아지")}
             ></ClickToBlueButton>
             <ClickToBlueButton
               buttonText={"처음엔 낯가릴 수 있어서 조심이 필요해요."}
               buttonHeight={45}
               buttonWidth={358}
-              isActiving={is처음엔Active}
-              onPress={() => secondClick("처음엔")}
+              isActiving={꿀팁 === "처음엔"}
+              onPress={() => set꿀팁("처음엔")}
             ></ClickToBlueButton>
             <ClickToBlueButton
               buttonText={"되도록이면 만지지 말고 간식만 챙겨주세요."}
               buttonHeight={45}
               buttonWidth={358}
-              isActiving={is되도록Active}
-              onPress={() => secondClick("되도록")}
+              isActiving={꿀팁 === "되도록"}
+              onPress={() => set꿀팁("되도록")}
             ></ClickToBlueButton>
           </View>
           <PlaceHolderInputBox placeholdertext="꿀팁을 자유롭게 작성해주세요" boxheight={78} />
