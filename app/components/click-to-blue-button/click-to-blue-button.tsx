@@ -10,14 +10,19 @@ export interface ClickToBlueButtonProps {
    */
   style?: StyleProp<ViewStyle>
 
+  /* 버튼의 활성화 여부 (True -> 파란색 / False -> 회색으로 Border와 Text 색상이 변경) */
   isActiving: boolean
 
+  /* 버튼의 Text를 추가하여 사용할 수 있음 */
   buttonText: string
 
+  /* 버튼의 Height을 사용자 마음대로 설정할 수 있음 */
   buttonHeight: number
 
+  /* 버튼의 Width을 사용자 마음대로 설정할 수 있음 */
   buttonWidth: number
 
+  /* 클릭시 적용되는 함수를 설정, Default 값은 setIsActive(!isActive) */
   onPress?: () => void
 }
 

@@ -10,21 +10,23 @@ export interface PlaceHolderInputBoxProps {
    */
   style?: StyleProp<ViewStyle>
 
-  placeholdertext: string
+  /* 입력하기 전에 연하게 적혀져 있는 텍스트를 props로 추가하여 사용할 수 있습니다. */
+  placeholderText: string
 
-  boxheight: number
+  /* 기본적으로 Width는 100%이며 Height는 값을 추가하여 사용할 수 있습니다. */
+  boxHeight: number
 }
 
 export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   props: PlaceHolderInputBoxProps,
 ) {
-  const { style, placeholdertext = "예시입니다.", boxheight = 78 } = props
+  const { style, placeholderText = "예시입니다.", boxHeight = 78 } = props
   const allStyles = Object.assign({}, styles.root, style)
   return (
     <View style={allStyles}>
       <TextInput
-        style={[styles.input, { height: boxheight }]}
-        placeholder={placeholdertext}
+        style={[styles.input, { height: boxHeight }]}
+        placeholder={placeholderText}
         multiline
         maxLength={300}
         autoFocus={true}
@@ -32,9 +34,6 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
     </View>
   )
 })
-
-// paddingBottom 바텀은 해줄 필요가 없어 보인다. 오히려 방해될 것 같은 기분.
-// width는 기본적으로 100%로해서 Input값을 받을 필요가 없어 보임.
 
 const styles = StyleSheet.create({
   root: {},
@@ -49,9 +48,8 @@ const styles = StyleSheet.create({
     borderColor: LBG,
     backgroundColor: LBG,
     color: "black",
-    //textAlignVertical: "top",
     fontFamily: PRETENDARD_REGULAR,
     fontSize: 14,
-    //lineHeight: 20,
+    //textAlignVertical: "top",
   },
 })
