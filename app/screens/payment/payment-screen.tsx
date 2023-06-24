@@ -8,14 +8,14 @@ import {
   Pressable,
   TouchableOpacity,
   Animated,
+  NativeEventEmitter,
 } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
-  GobackAndTitleAndButtonHeader,
-  PetProfileCard,
+  PaymentTool,
   PreBol12,
   PreBol14,
   PreBol16,
@@ -40,41 +40,6 @@ const screenWidth = Dimensions.get("window").width
 // @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
   function PaymentScreen() {
-    const animationValue = useRef(new Animated.Value(0)).current
-
-    const KakaoPay = () => {
-      return (
-        <Pressable style={{ flex: 1, marginRight: 11 }}>
-          <Image style={[styles.paymentImage, { backgroundColor: "yellow" }]} />
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <TouchableOpacity style={styles.button} />
-            <PreBol14 text="카카오페이" color="#00206c" />
-          </View>
-        </Pressable>
-      )
-    }
-    const NaverPay = () => {
-      return (
-        <Pressable style={{ flex: 1, marginRight: 11 }}>
-          <Image style={[styles.paymentImage, { backgroundColor: "green" }]} />
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <TouchableOpacity style={styles.button} />
-            <PreBol14 text="네이버페이" color="#797979" />
-          </View>
-        </Pressable>
-      )
-    }
-    const Toss = () => {
-      return (
-        <Pressable style={{ flex: 1 }}>
-          <Image style={[styles.paymentImage, { backgroundColor: "blue" }]} />
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <TouchableOpacity style={styles.button} />
-            <PreBol14 text="토스" color="#797979" />
-          </View>
-        </Pressable>
-      )
-    }
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
 
@@ -119,9 +84,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 marginBottom: 24,
               }}
             >
-              <KakaoPay />
-              <NaverPay />
-              <Toss />
+              <PaymentTool tool="카카오페이" />
+              <PaymentTool tool="네이버페이" />
+              <PaymentTool tool="토스" />
             </View>
             <View style={[styles.borderBox, { marginBottom: 25 }]}>
               <TouchableOpacity style={styles.button} />
@@ -200,15 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F0F6",
     marginBottom: 24,
   },
-  button: {
-    borderStyle: "solid",
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderColor: "#797979",
-    borderWidth: 1,
-    marginRight: 7,
-  },
   goBackButton: {
     width: 28,
     height: 28,
@@ -254,12 +210,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     marginTop: 13,
-  },
-  paymentImage: {
-    flex: 1,
-    height: 59,
-    borderRadius: 10,
-    marginBottom: 10,
   },
   paymentButton: {
     bottom: 40,
