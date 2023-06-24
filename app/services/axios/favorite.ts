@@ -20,7 +20,7 @@ export interface SearchOption {
   petSitterType: string
 }
 
-interface CreateBody {
+export interface CreateFavoriteBody {
   visitingId?: number
   crecheId?: number
 }
@@ -59,7 +59,7 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
  * 현재 유저의 찜을 새로 생성한다.
  * @returns {Promise<CreateFavoriteResponse>}
  */
-export const createFavorite = async (body: CreateBody): Promise<CreateFavoriteResponse> => {
+export const createFavorite = async (body: CreateFavoriteBody): Promise<CreateFavoriteResponse> => {
   try {
     const response = await axios.post<CreateFavoriteResponse>(
       `${BASE_URL}/user/favorite`,
@@ -82,9 +82,9 @@ export const createFavorite = async (body: CreateBody): Promise<CreateFavoriteRe
  * 현재 유저의 찜을 삭제한다.
  * @returns {Promise<GeneralResponse>}
  */
-export const deleteFavorite = async (body: CreateBody): Promise<GeneralResponse> => {
+export const deleteFavorite = async (body: CreateFavoriteBody): Promise<GeneralResponse> => {
   try {
-    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body, CONFIG)
+    const response = await axios.put<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body, CONFIG)
     if (!response.data.ok) {
       console.error(response.data.error)
       return null

@@ -1,13 +1,19 @@
-import { View, Text, Pressable, Image, FlexStyle } from "react-native"
-import React from "react"
-import { SitterProfileCardProps } from "./sitter-profile-card.props"
+import { View, Pressable, Image, FlexStyle } from "react-native"
+import React, { createFactory, useCallback, useEffect, useMemo, useState } from "react"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
 import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
 import { images } from "#images"
 
 import RatingReviewBox from "../rating-review-box/rating-review-box"
-import { ProfileCardInfo } from "app/services/axios/favorite"
+import {
+  CreateFavoriteBody,
+  ProfileCardInfo,
+  createFavorite,
+  deleteFavorite,
+  getFavorites,
+} from "../../services/axios/favorite"
+import { useStores } from "app/models"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
@@ -20,7 +26,52 @@ interface ExampleProps {
 }
 
 export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
-  const { id, userNickname, image, rating, reviewCount, title, desc } = sitterData
+  const { crecheId, visitingId, userNickname, image, rating, reviewCount, title, desc } = sitterData
+
+  const [body, setBody] = useState<CreateFavoriteBody>({})
+
+  useEffect(() => {
+    if (crecheId) {
+      setBody({ crecheId })
+      return
+    }
+
+    if (visitingId) {
+      setBody({ visitingId })
+      return
+    }
+  }, [crecheId, visitingId])
+
+  const isFavorite = useMemo(async () => {
+    await getFavorites(body)
+      .then((res) => {
+        let index = -1
+
+        if (crecheId) {
+          index = res.favoritePetsitters.findIndex((value) => value.crecheId === crecheId)
+        } else if (visitingId) {
+          index = res.favoritePetsitters.findIndex((value) => value.visitingId === visitingId)
+        }
+
+        console.info("[isFavorite] favorite index >>> ", index)
+
+        if (index === -1) return false
+        return true
+      })
+      .catch((err) => console.error(err))
+  }, [body, crecheId, visitingId])
+
+  const handlePressLikedButton = useCallback(async () => {
+    if (isFavorite) {
+      await deleteFavorite(body)
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err))
+    } else {
+      await createFavorite(body)
+        .then((res) => console.log("[Favorite Created] new favorite id >>> ", res.favoriteId))
+        .catch((err) => console.error(err))
+    }
+  }, [isFavorite])
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
@@ -54,10 +105,12 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
           />
         </View>
         {/* like button */}
-        {/* // TODO: alert로 변경 */}
-        <Pressable onPress={ONPRESS_LIKED_BTN}>
+        <Pressable onPress={handlePressLikedButton}>
           {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
-          <Image style={styles.likeBtn} source={images.empty_heart} />
+          <Image
+            style={styles.likeBtn}
+            source={isFavorite ? images.filled_heart : images.empty_heart}
+          />
         </Pressable>
       </View>
     </Pressable>
