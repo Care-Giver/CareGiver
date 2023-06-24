@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useRef } from "react"
 import {
   StyleSheet,
   View,
@@ -7,6 +7,7 @@ import {
   Button,
   Pressable,
   TouchableOpacity,
+  Animated,
 } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
@@ -39,6 +40,8 @@ const screenWidth = Dimensions.get("window").width
 // @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
   function PaymentScreen() {
+    const animationValue = useRef(new Animated.Value(0)).current
+
     const KakaoPay = () => {
       return (
         <Pressable style={{ flex: 1, marginRight: 11 }}>
@@ -160,6 +163,11 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             </View>
           </View>
         </ScrollView>
+
+        <TouchableOpacity style={styles.paymentButton}>
+          <PreBol16 text="430,000원" color="white" ml={16} />
+          <PreBol16 text="결제하기" color="white" mr={16} />
+        </TouchableOpacity>
       </ScreenRootView>
     )
   },
@@ -252,5 +260,15 @@ const styles = StyleSheet.create({
     height: 59,
     borderRadius: 10,
     marginBottom: 10,
+  },
+  paymentButton: {
+    bottom: 40,
+    paddingHorizontal: 16,
+    backgroundColor: "#00196C",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 56,
+    borderRadius: 10,
+    alignItems: "center",
   },
 })
