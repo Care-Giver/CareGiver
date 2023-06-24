@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   StyleProp,
   ViewStyle,
@@ -23,12 +23,15 @@ export const PaymentTool = observer(function PaymentTool(props: PaymentToolProps
   const { style, tool } = props
   const allStyles = Object.assign({}, styles.root, style)
 
+  const [selectedTool, setSelectedTool] = useState(null)
+  const onPaymentToolPress = (tool) => setSelectedTool(tool)
+  console.log(selectedTool)
   return (
     <View style={allStyles}>
       <Pressable style={styles.content}>
         <Image style={styles.paymentImage} />
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <TouchableOpacity style={styles.paymentButton} />
+          <TouchableOpacity style={styles.paymentButton} onPress={() => onPaymentToolPress(tool)} />
           <PreBol14 text={tool} color="#797979" />
         </View>
       </Pressable>
