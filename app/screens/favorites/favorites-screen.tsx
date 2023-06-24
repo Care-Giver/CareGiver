@@ -66,18 +66,21 @@ interface FilterCondition {
   pets?: Array<Pet>
 }
 
+interface OnLikePressProp {
+  serviceType: Service
+  id: number
+}
+
 export const FavoritesScreen: FC<
   StackScreenProps<NavigatorParamList, "favorites-screen">
 > = observer(function FavoritesScreen() {
+  // * favorite model
   const {
-    FavoriteModel: { setFavorites, favoritePetsitters, favoriteTrainers },
+    FavoriteModel: { setFavorites, cancelFavorite, favoritePetsitters, favoriteTrainers },
   } = useStores()
 
+  // * 현재 선택된 서비스 유형 - 펫시터 | 훈련사
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
-
-  // TODO: 백엔드 수정 후 타입 재수정
-  const [petsitters, setPetsitters] = useState<any[]>([])
-  // const [petsitters, setPetsitters] = useState<ProfileCardInfo[]>([])
 
   // * filter states
   const [filterServiceType, setFilterServiceType] = useState<Service>(null)
@@ -127,8 +130,10 @@ export const FavoritesScreen: FC<
     setStartDate(null)
     setEndDate(null)
     setFilterPet([])
+    // ? 초기화 버튼 클릭시 필터 초기화 즉시 적용
     setFilterText(DEFAULT_FILTER_TEXT)
     setFilterInfoText(DEFAULT_FILTER_INFO_TEXT)
+    setFavorites({})
   }, [])
 
   const [markedDates, setMarkedDates] = useState({})
@@ -223,29 +228,18 @@ export const FavoritesScreen: FC<
       endDate: endDate?.dateString,
       pets: filterPet,
     })
-    // console.log("filters >>> :", filters)
-    // console.log("filterServiceType:", filterServiceType)
   }, [filterServiceType, startDate, endDate, filterPet])
 
   // * load petsitters
   useLayoutEffect(() => {
-    setPetsitters(_petsitters)
     setFavorites({})
     console.log("[FAVORITES SCREEN] favoritePetsitters:", favoritePetsitters)
   }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수
-  const handleCheckButton = () => {
-    console.log("in handleCheckButton filters >>>", filters)
-
-    // ? 방문 | 위탁은 필수 입력
-    if (!filters.serviceType) {
-      alert("방문 / 위탁 선택은 필수입니다.")
-      return
-    }
-
+  const handleCheckButton = useCallback(() => {
     // * filters 결과 서버에 요청
-    // console.log("press check btn", filters)
+    // ? post body 만들기
     let postBody = {}
     if (filters.startDate) {
       postBody = { ...postBody, startTime: filters.startDate }
@@ -263,30 +257,35 @@ export const FavoritesScreen: FC<
       postBody = { ...postBody, petSitterType: filters.serviceType }
     }
 
-    // console.log("in handleCheckButton filterPet >>>", filters)
-    console.log("in handleCheckButton postBody >>>", postBody)
-
-    setFavorites(postBody)
+    // console.log("in handleCheckButton postBody >>>", postBody)
     // console.log("favoritePetsitters:", favoritePetsitters)
 
-    // ? 필터 적용 결과 텍스트 수정
-    let text = `${filterServiceType === "creche" ? "위탁" : "방문"}`
+    // * 필터 조건이 존재하는 경우에만 텍스트 변경
+    // ? - 필터 조건이 없는 상태는 초기상태 혹은 초기화 버튼을 누른 경우밖에 없으므로, 텍스트를 수정하거나 결과를 수정할 필요가 없음
+    if (Object.keys(postBody).length > 0) {
+      // ? 필터 적용 결과 텍스트 수정
+      let text = ""
+      if (filters.serviceType) {
+        text = `${filterServiceType === "creche" ? "위탁" : "방문"}`
+      }
 
-    if (filters.startDate && filters.endDate) {
-      text += ` | ${filters.startDate
-        .replace("-", ".")
-        .replace("-", ".")} - ${filters.endDate.replace("-", ".").replace("-", ".")}`
+      if (filters.startDate && filters.endDate) {
+        text += ` | ${filters.startDate
+          .replace("-", ".")
+          .replace("-", ".")} - ${filters.endDate.replace("-", ".").replace("-", ".")}`
+      }
+
+      if (filters.pets.length > 0) {
+        text += ` | ${filters.pets.length}마리`
+      }
+
+      setFilterText(text)
+      setFilterInfoText("")
+      // ? 필터 적용하여 favorite 목록 갱신
+      setFavorites(postBody)
     }
-
-    if (filters.pets.length > 0) {
-      text += ` | ${filters.pets.length}마리`
-    }
-
-    setFilterText(text)
-    setFilterInfoText("")
-
     bottomSheetModalRef.current.close()
-  }
+  }, [filters])
 
   // * BottomSheet Footer - 확인 버튼
   const renderFooter = useCallback(
@@ -307,9 +306,15 @@ export const FavoritesScreen: FC<
     [filters],
   )
 
+  // * 펫시터 목록 혹은 훈련사 목록이 empty인지 확인
   const isEmptyResult =
     (serviceType === "펫시터" && favoritePetsitters.length === 0) ||
     (serviceType === "훈련사" && favoriteTrainers.length === 0)
+
+  // * 펫시터 프로필의 찜 버튼을 누를 때 실행되는 함수 - 찜 해제
+  const onLikePress = useCallback((info: OnLikePressProp) => {
+    cancelFavorite(info)
+  }, [])
 
   return (
     <ScreenRootView testID="Favorites">
@@ -352,19 +357,30 @@ export const FavoritesScreen: FC<
         //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
         <FlatList
           data={favoritePetsitters}
-          renderItem={({ item, index }) => (
-            <SitterProfileCard
-              key={item.crecheId ? item.crecheId : item.visitingId}
-              sitterData={item}
-              onPress={() => {
-                //? 상세정보 스크린으로 이동
-                navigate("caregiver-detail-information-screen", { sitterData: item })
-              }}
-              style={
-                index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
-              }
-            />
-          )}
+          renderItem={({ item, index }) => {
+            const serviceType: Service = item.crecheId ? "creche" : "visiting"
+            const id = item.crecheId ? item.crecheId : item.visitingId
+            const info = {
+              serviceType,
+              id,
+            }
+
+            return (
+              <SitterProfileCard
+                key={item.crecheId ? item.crecheId : item.visitingId}
+                sitterData={item}
+                onPress={() => {
+                  //? 상세정보 스크린으로 이동
+                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
+                isFavorite={true}
+                style={
+                  index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
+                }
+                onLikePress={() => onLikePress(info)}
+              />
+            )
+          }}
         />
       )}
 

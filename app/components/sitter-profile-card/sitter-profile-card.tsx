@@ -22,56 +22,19 @@ const ONPRESS_LIKED_BTN = () => {
 interface ExampleProps {
   sitterData: ProfileCardInfo
   style?: FlexStyle
+  isFavorite: boolean
   onPress: () => void //! 함수 props 의 type 으로써 적절치 못하나, 임시로 이렇게 처리한다
+  onLikePress: () => void //! 임시 지정
 }
 
-export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
+export const SitterProfileCard = ({
+  sitterData,
+  style,
+  onPress,
+  isFavorite,
+  onLikePress,
+}: ExampleProps) => {
   const { crecheId, visitingId, userNickname, image, rating, reviewCount, title, desc } = sitterData
-
-  const [body, setBody] = useState<CreateFavoriteBody>({})
-
-  useEffect(() => {
-    if (crecheId) {
-      setBody({ crecheId })
-      return
-    }
-
-    if (visitingId) {
-      setBody({ visitingId })
-      return
-    }
-  }, [crecheId, visitingId])
-
-  const isFavorite = useMemo(async () => {
-    await getFavorites(body)
-      .then((res) => {
-        let index = -1
-
-        if (crecheId) {
-          index = res.favoritePetsitters.findIndex((value) => value.crecheId === crecheId)
-        } else if (visitingId) {
-          index = res.favoritePetsitters.findIndex((value) => value.visitingId === visitingId)
-        }
-
-        console.info("[isFavorite] favorite index >>> ", index)
-
-        if (index === -1) return false
-        return true
-      })
-      .catch((err) => console.error(err))
-  }, [body, crecheId, visitingId])
-
-  const handlePressLikedButton = useCallback(async () => {
-    if (isFavorite) {
-      await deleteFavorite(body)
-        .then((res) => console.log(res))
-        .catch((err) => console.error(err))
-    } else {
-      await createFavorite(body)
-        .then((res) => console.log("[Favorite Created] new favorite id >>> ", res.favoriteId))
-        .catch((err) => console.error(err))
-    }
-  }, [isFavorite])
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
@@ -105,7 +68,7 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
           />
         </View>
         {/* like button */}
-        <Pressable onPress={handlePressLikedButton}>
+        <Pressable onPress={onLikePress}>
           {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
           <Image
             style={styles.likeBtn}

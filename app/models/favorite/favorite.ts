@@ -1,6 +1,16 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { ProfileCardInfo, SearchOption, getFavorites } from "../../services/axios/favorite"
+import {
+  ProfileCardInfo,
+  SearchOption,
+  deleteFavorite,
+  getFavorites,
+} from "../../services/axios/favorite"
+
+interface UpdateInput {
+  serviceType: "creche" | "visiting"
+  id: number
+}
 
 /**
  * 즐겨찾기 목록을 관리하는 MST 모델
@@ -28,21 +38,58 @@ export const FavoriteModel = types
       await getFavorites(option)
         .then((res) => {
           console.log("in MST rest >>>", res)
-          // const favoritePetsitters = [...res.favoritePetsitters]
-          // self.setPetsittersResponse(favoritePetsitters)
 
-          if (res.favoritePetsitters[0]) {
+          if (res && res.favoritePetsitters[0]) {
             const favoritePetsitters = [...res.favoritePetsitters]
             self.setPetsittersResponse(favoritePetsitters)
           } else {
             self.setPetsittersResponse([])
           }
 
-          // const favoriteTrainers = [...res.favoriteTrainers]
-          // self.setTrainersResponse(favoriteTrainers)
+          // TODO: 훈련사 데이터 처리
           self.setTrainersResponse([])
         })
         .catch((err) => console.error(err))
+    },
+  }))
+  .actions((self) => ({
+    async cancelFavorite(info: UpdateInput) {
+      // * 위탁 서비스인 경우
+      if (info.serviceType === "creche") {
+        await deleteFavorite({ crecheId: info.id })
+          .then((res) => {
+            console.info("[delete favorite successfully] delete creche info >>> ", info.id)
+            // ? favoritePetsitter 목록을 새로 갱신한다. - delete한 정보 삭제
+            const newPetsittersData = self.favoritePetsitters.filter(
+              (value) => value.crecheId !== info.id,
+            )
+            // ? favoriteTrainer 목록을 새로 갱신한다. - delete한 정보 삭제
+            const newTrainersData = self.favoriteTrainers.filter(
+              (value) => value.crecheId !== info.id,
+            )
+            self.setPetsittersResponse(newPetsittersData)
+            self.setTrainersResponse(newTrainersData)
+          })
+          .catch((err) => console.error(err))
+      }
+      // * 방문 서비스인 경우
+      else {
+        await deleteFavorite({ visitingId: info.id })
+          .then((res) => {
+            console.info("[delete favorite successfully] delete visiting info >>> ", info.id)
+            // ? favoritePetsitter 목록을 새로 갱신한다. - delete한 정보 삭제
+            const newPetsittersData = self.favoritePetsitters.filter(
+              (value) => value.visitingId !== info.id,
+            )
+            // ? favoriteTrainer 목록을 새로 갱신한다. - delete한 정보 삭제
+            const newTrainersData = self.favoriteTrainers.filter(
+              (value) => value.visitingId !== info.id,
+            )
+            self.setPetsittersResponse(newPetsittersData)
+            self.setTrainersResponse(newTrainersData)
+          })
+          .catch((err) => console.error(err))
+      }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
