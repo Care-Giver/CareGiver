@@ -17,12 +17,20 @@ export enum FamilyType {
   CAT = "CAT",
 }
 
+export interface Species {
+  id: number
+  createAt: string
+  updatedAt: string
+  name: string
+  familyType: FamilyType
+}
+
 export interface Pet {
   id: number
   createAt: string
   updatedAt: string
   name: string
-  speciesId?: number
+  species: Species
   age: number
   sex: Sex
   images: string[]
