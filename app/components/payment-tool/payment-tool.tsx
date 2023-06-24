@@ -24,8 +24,25 @@ export const PaymentTool = observer(function PaymentTool(props: PaymentToolProps
   const allStyles = Object.assign({}, styles.root, style)
 
   const [selectedTool, setSelectedTool] = useState(null)
-  const onPaymentToolPress = (tool) => setSelectedTool(tool)
+  const onPaymentToolPress = (tool) => {
+    // 5~6번까지는 콘솔창에서 클릭된 tool이 잘 반영되는데 그 이후로는 클릭해도 반영이 안돼요(콘솔창에 뜨지 않음)....ㅠㅠ 왜이러는걸까요??
+    // 클릭시, 버튼 안에 작은 원을 만들고 싶은데 이것도 안되네요 ㅠㅠ!!
+    setSelectedTool(tool)
+    if (tool === "카카오페이") {
+      return (
+        <View
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: "orange",
+          }}
+        />
+      )
+    }
+  }
   console.log(selectedTool)
+
   return (
     <View style={allStyles}>
       <Pressable style={styles.content}>
