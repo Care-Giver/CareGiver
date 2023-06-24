@@ -1,6 +1,48 @@
 import { Api, FormattedPetData } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { PetModel } from "../pet/pet"
+
+export enum Sex {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
+
+export enum HandleType {
+  LARGE = "대형",
+  MEDIUM = "중형",
+  SMALL = "소형",
+}
+
+export enum FamilyType {
+  DOG = "DOG",
+  CAT = "CAT",
+}
+
+export interface Pet {
+  id: number
+  createAt: string
+  updatedAt: string
+  name: string
+  speciesId?: number
+  age: number
+  sex: Sex
+  images: string[]
+  weight: number
+  petType: HandleType
+  isNeutralizated: boolean
+  birthday: string
+  desc: string
+}
+
+/* 
+현재 Pet 더미 데이터는 낡았음 (업데이트 필요)
+{
+  "age": 3, 
+  "id": "3", 
+  "name": "자두", 
+  "sex": "남", 
+  "size": "소형", 
+  "species": "여섯글자가넘어가"
+} */
 
 /**
  * Model description here for TypeScript hints.
@@ -8,7 +50,7 @@ import { PetModel } from "../pet/pet"
 export const PetStoreModel = types
   .model("PetStore")
   .props({
-    pets: types.optional(types.array(PetModel), []),
+    pets: types.optional(types.array(types.frozen<Pet>()), []),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({

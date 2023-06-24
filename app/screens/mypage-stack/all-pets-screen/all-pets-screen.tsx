@@ -14,8 +14,7 @@ import {
 // import { SUB_HEAD_LINE, HEAD_LINE, WIDTH } from "#theme"
 import { styles } from "./styles"
 import { HEAD_LINE, SUB_HEAD_LINE, WIDTH } from "#theme"
-import { PetStoreModel } from "../../../models/pet-store/pet-store"
-import { Pet } from "../../../models/pet/pet"
+import { Pet, PetStoreModel } from "../../../models/pet-store/pet-store"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
