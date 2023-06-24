@@ -7,7 +7,7 @@ import { BODY, HEAD_LINE, LBG } from "#theme"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
-import { petsDummy } from "../../../screens/search-stack/search-screen/dummy-data"
+import { petsDummy } from "../../../../assets/dummyData/pets-dummy"
 import { SelectPetDropdownBoxProps } from "./select-pet-dropdown-box.props"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
