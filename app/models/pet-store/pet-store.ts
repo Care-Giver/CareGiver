@@ -19,16 +19,16 @@ export enum FamilyType {
 
 export interface Species {
   id: number
-  createAt: string
-  updatedAt: string
+  createAt: Date
+  updatedAt: Date
   name: string
   familyType: FamilyType
 }
 
 export interface Pet {
   id: number
-  createAt: string
-  updatedAt: string
+  createAt: Date
+  updatedAt: Date
   name: string
   species: Species
   age: number
@@ -37,7 +37,7 @@ export interface Pet {
   weight: number
   petType: HandleType
   isNeutralizated: boolean
-  birthday: string
+  birthday: Date
   desc: string
 }
 
