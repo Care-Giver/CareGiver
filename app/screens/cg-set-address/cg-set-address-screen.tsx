@@ -8,6 +8,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import Geolocation from "react-native-geolocation-service"
 import { IOS_BOTTOM_HOME_BAR_HEIGHT, MIDDLE_LINE, GIVER_CASUAL_NAVY, palette } from "#theme"
 import { check, PERMISSIONS, RESULTS, request } from "react-native-permissions"
+import { images } from "#images"
 
 export const CgSetAddressScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-screen">
