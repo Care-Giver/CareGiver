@@ -72,15 +72,14 @@ export const CgSetAddressScreen: FC<
   //현재 위치를 반환해주는 함수
   const getAddress = async (lat, long) => {
     // Initialize Geocoder library with your API key
-    // let mApiKey = "" //API 키 이슈가 있음, 유료로 결제해야함 추후(90일 체험판임)
-    // 안드로이드와 아이폰도 API 키를 분기해야함
-
+    let mApiKey = ""
     // Request GPS permission
+
+    //TODO:  안드로이드와 아이폰도 API 키를 분기해야함
     if (Platform.OS === "ios") {
-      //mApiKey = "AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc"
+      mApiKey = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
     } else {
-      //mApiKey = "AIzaSyAPziDHnPS4EEAHq1EjWe1KpQ9hUWE0x6M"
-      //mApiKey = "AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc"
+      mApiKey = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
     }
     await fetch(
       "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
