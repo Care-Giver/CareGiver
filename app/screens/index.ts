@@ -47,3 +47,4 @@ export * from "./set-price-stack/caregiver/caregiver-set-additional-price-screen
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./temp/temp-screen"
 export * from "./cg-set-address/cg-set-address-screen"
+export * from "./cg-search-address/cg-search-address-screen"

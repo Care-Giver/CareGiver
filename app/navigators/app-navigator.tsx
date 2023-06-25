@@ -42,6 +42,7 @@ import {
   FavoritesScreen,
   EditPetInfoScreen,
   CgSetAddressScreen,
+  CgSearchAddressScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -119,6 +120,7 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
   "cgSetAddress-screen": undefined
+  "cgSearchAddress-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -133,8 +135,18 @@ const AllStacks = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="cgSetAddress-screen"
+      initialRouteName="cgSearchAddress-screen"
     >
+      {/* //* MVP-21 */}
+      <Stack.Screen
+        name="cgSearchAddress-screen"
+        component={CgSearchAddressScreen}
+        options={{
+          title: " ",
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* MVP-13 */}
       <Stack.Screen
         name="cgSetAddress-screen"
