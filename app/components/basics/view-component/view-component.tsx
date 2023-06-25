@@ -1,7 +1,7 @@
 import { ViewStyle, FlexStyle, Platform } from "react-native"
 import React from "react"
 import { Screen } from "../ignite-basics/screen/screen"
-import { ScreenProps } from "react-native-screens"
+import { ScreenProps } from "../ignite-basics/screen/screen.props"
 
 export const BASIC_BACKGROUND_PADDING_WIDTH = 16
 
