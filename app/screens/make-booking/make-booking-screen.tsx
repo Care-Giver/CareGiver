@@ -10,7 +10,9 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import { View, ScrollView, Pressable, Alert, StyleSheet } from "react-native"
+import { View, ScrollView, Pressable, Alert, StyleSheet, Keyboard, Platform } from "react-native"
+import { useKeyboard } from "@react-native-community/hooks"
+
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -31,7 +33,33 @@ export const MakeBookingScreen: FC<
     Alert.alert("확인 버튼이 눌렸습니다.")
   }
 
-  /* 1번째 버튼 그룹의 예외 처리 */
+  /**
+   * 키보드 관련
+   * 안드로이드 일 경우에 useKeyboard의 keyboardshown 사용 (단, 에뮬레이터 상으로 버튼이 늦게 사라지고 생성됨..)
+   * ios 일 경우에 useKeyboard도 사용 가능해 보이지만, keyboardWillshow, keyboardWillHide사용
+   */
+  const keyboard = useKeyboard()
+
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
+  useEffect(() => {
+    const keyboardUp = Keyboard.addListener("keyboardWillShow", () => {
+      //*console.log("keyboardUp!")
+      setKeyboardStatus(true)
+    })
+    const keyboardDown = Keyboard.addListener("keyboardWillHide", () => {
+      //*console.log("keboardDown!")
+      setKeyboardStatus(false)
+    })
+
+    return () => {
+      keyboardUp.remove()
+      keyboardDown.remove()
+    }
+  }, [])
+
+  /**
+   *  1번째 버튼 그룹의 예외 처리
+   */
   const [is없음Active, setIs없음Active] = useState(false)
   const [is치즈Active, setIs치즈Active] = useState(false)
   const [is닭고기Active, setIs닭고기Active] = useState(false)
@@ -59,10 +87,14 @@ export const MakeBookingScreen: FC<
     }
   }, [is치즈Active, is닭고기Active])
 
-  /* 2번째 버튼 그룹의 예외 처리 */
+  /**
+   * 2번째 버튼 그룹의 예외 처리
+   */
   const [꿀팁, set꿀팁] = useState<"강아지" | "처음엔" | "되도록">(null)
 
-  /* 3번째 버튼 그룹의 예외 처리 */
+  /**
+   * 3번째 버튼 그룹의 예외 처리
+   */
   const [is모두Active, setIs모두Active] = useState(false)
   const [is엉덩이Active, setIs엉덩이Active] = useState(false)
   const [is다리Active, setIs다리Active] = useState(false)
@@ -202,9 +234,16 @@ export const MakeBookingScreen: FC<
           boxHeight={161}
         />
       </ScrollView>
-      <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
-        <PreBol16 text={"확인"} color="white" />
-      </Pressable>
+      {Platform.OS === "android" && !keyboard.keyboardShown && (
+        <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
+          <PreBol16 text={"확인"} color="white" />
+        </Pressable>
+      )}
+      {Platform.OS === "ios" && !keyboardStatus && (
+        <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
+          <PreBol16 text={"확인"} color="white" />
+        </Pressable>
+      )}
     </ScreenRootView>
   )
 })
