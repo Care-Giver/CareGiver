@@ -29,7 +29,14 @@ export interface ClickToBlueButtonProps {
 export const ClickToBlueButton = observer(function ClickToBlueButton(
   props: ClickToBlueButtonProps,
 ) {
-  const { style, buttonText, buttonHeight, buttonWidth, isActiving, onPress } = props
+  const {
+    style,
+    buttonText = "예시",
+    buttonHeight,
+    buttonWidth,
+    isActiving = false,
+    onPress,
+  } = props
   const allStyles = Object.assign({}, style)
 
   const [isActive, setIsActive] = useState(isActiving)
@@ -43,7 +50,7 @@ export const ClickToBlueButton = observer(function ClickToBlueButton(
     }
   }
 
-  const buttonStyle = {
+  const buttonStyle: ViewStyle = {
     borderColor: isActiving ? GIVER_CASUAL_NAVY : DISABLED,
   }
 

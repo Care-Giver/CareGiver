@@ -10,7 +10,7 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import { View, ScrollView, Pressable, Alert } from "react-native"
+import { View, ScrollView, Pressable, Alert, StyleSheet } from "react-native"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -31,7 +31,7 @@ export const MakeBookingScreen: FC<
     Alert.alert("확인 버튼이 눌렸습니다.")
   }
 
-  /* 1번째 버튼 그룹의 예외처리*/
+  /* 1번째 버튼 그룹의 예외 처리 */
   const [is없음Active, setIs없음Active] = useState(false)
   const [is치즈Active, setIs치즈Active] = useState(false)
   const [is닭고기Active, setIs닭고기Active] = useState(false)
@@ -59,7 +59,7 @@ export const MakeBookingScreen: FC<
     }
   }, [is치즈Active, is닭고기Active])
 
-  /* 2번째 버튼  */
+  /* 2번째 버튼 그룹의 예외 처리 */
   const [꿀팁, set꿀팁] = useState<"강아지" | "처음엔" | "되도록">(null)
 
   /* 3번째 버튼 그룹의 예외 처리 */
@@ -202,22 +202,23 @@ export const MakeBookingScreen: FC<
           boxHeight={161}
         />
       </ScrollView>
-      <Pressable
-        style={{
-          width: "100%",
-          height: 56,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: GIVER_CASUAL_NAVY,
-          backgroundColor: GIVER_CASUAL_NAVY,
-          alignItems: "center",
-          justifyContent: "center",
-          bottom: BOTTOM_HEIGHT,
-        }}
-        onPress={checkbuttonPress}
-      >
+      <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
         <PreBol16 text={"확인"} color="white" />
       </Pressable>
     </ScreenRootView>
   )
+})
+
+const styles = StyleSheet.create({
+  pressableContainer: {
+    width: "100%",
+    height: 56,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: GIVER_CASUAL_NAVY,
+    backgroundColor: GIVER_CASUAL_NAVY,
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: BOTTOM_HEIGHT,
+  },
 })
