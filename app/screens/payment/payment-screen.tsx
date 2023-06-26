@@ -5,6 +5,8 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  DivisionLine,
   PaymentTool,
   PreBol14,
   PreBol16,
@@ -14,7 +16,7 @@ import {
   ScreenRootView,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -35,15 +37,16 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
     return (
-      <ScreenRootView testID="Payment">
-        <ScrollView>
+      <ScreenRootView testID="Payment" style={{ paddingHorizontal: 0 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {/* CONTENT 시작, paddingHorizontal:16 */}
-          <View style={styles.container}>
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <View style={styles.bookingInfo}>
               <PreBol14 text="예약 정보" />
               {/* 방문, 펫시터 Box 컴포넌트 가져오기 */}
             </View>
-            <View style={styles.borderLine} />
+
+            <DivisionLine mt={12} />
             <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
             <PreReg14 text="유혜린 펫시터" mb={24} color={BODY} />
             {/* 맡길 반려동물 컴포넌트 가져오기 */}
@@ -52,11 +55,13 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             <PreMed14 text="방문 시간" mb={8} />
             <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
           </View>
-          <View style={styles.borderView} />
+
+          <DivisionLine height={6} mb={24} />
+
           {/* paddingHorizontal:16 */}
-          <View style={styles.container}>
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <PreBol14 text="결제 수단" mb={14} />
-            <View style={styles.borderLine} />
+            <DivisionLine />
             {/* 결제 수단 컴포넌트 시작 */}
             <View
               style={{
@@ -105,16 +110,18 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 <PreReg14 text="신용/체크카드" color={BODY} />
               )}
             </Pressable>
-            <View style={styles.borderLine} />
+
             <View style={styles.couponInfo}>
               <PreMed14 text="쿠폰" />
-              <PreMed14 text="보유 중인 쿠폰 없음" color={BODY} />
+              <PreReg14 text="보유 중인 쿠폰 없음" color={BODY} />
             </View>
           </View>
-          <View style={styles.borderView} />
+
+          <DivisionLine height={6} mv={24} />
+
           <View style={styles.priceContainer}>
             <PreBol14 text="요금 세부 정보" mb={13} />
-            <View style={styles.borderLine} />
+            <DivisionLine />
             {/* 가격 테이블  */}
             <View style={styles.table}>
               <View style={styles.tableRow}>
@@ -134,7 +141,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} />
               </View>
             </View>
-            <View style={styles.borderLine} />
+            <DivisionLine />
             <View style={styles.totalPrice}>
               <PreBol16 text="결제 금액" />
               <PreBol18 text="430,000원" />
@@ -152,42 +159,21 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 )
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-  },
   bookingInfo: {
-    height: 53,
+    marginTop: 22,
     justifyContent: "center",
-  },
-  borderLine: {
-    height: 2,
-    borderWidth: 2,
-    borderStyle: "solid",
-    borderColor: "#F0F0F6",
-  },
-  borderView: {
-    width: "100%",
-    height: 6,
-    backgroundColor: "#F0F0F6",
-    marginBottom: 24,
-  },
-  goBackButton: {
-    width: 28,
-    height: 28,
-    marginLeft: 16,
-    // backgroundColor: "orange",
   },
 
   borderBox: {
     width: "100%",
     height: 47,
     borderStyle: "solid",
-    borderColor: "#797979",
+    borderColor: MIDDLE_LINE,
     borderRadius: 10,
     borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
     marginBottom: 25,
   },
 
@@ -204,15 +190,14 @@ const styles = StyleSheet.create({
 
   couponInfo: {
     width: "100%",
-    height: 34,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 25,
     alignItems: "center",
   },
   priceContainer: {
-    paddingHorizontal: 16,
-    height: 368,
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+    height: 300,
   },
   table: {
     height: 112,
@@ -233,8 +218,8 @@ const styles = StyleSheet.create({
   },
   paymentButton: {
     bottom: 40,
-    paddingHorizontal: 16,
-    backgroundColor: "#00196C",
+    marginHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+    backgroundColor: GIVER_CASUAL_NAVY,
     flexDirection: "row",
     justifyContent: "space-between",
     height: 56,

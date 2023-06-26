@@ -1,6 +1,7 @@
 import { View, ViewStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
+import { LIGHT_LINE } from "#theme"
 
 interface DivisionLineProps {
   color?: string
@@ -24,7 +25,7 @@ interface DivisionLineProps {
 }
 
 export const DivisionLine = ({
-  color = "#F0F0F6",
+  color = LIGHT_LINE,
   height = 2,
   style = undefined,
   mt,
@@ -32,7 +33,7 @@ export const DivisionLine = ({
   mv,
 }: DivisionLineProps) => {
   const $style = Object.assign({}, { marginVertical: mv, marginTop: mt, marginBottom: mb })
-  const COLOR_AND_HEIGHT = {
+  const COLOR_AND_HEIGHT: ViewStyle = {
     backgroundColor: color,
     height: height,
   }
