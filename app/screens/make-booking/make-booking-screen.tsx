@@ -10,10 +10,23 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import { View, ScrollView, Pressable, Alert, StyleSheet, Keyboard, Platform } from "react-native"
+import {
+  View,
+  ScrollView,
+  Pressable,
+  Alert,
+  StyleSheet,
+  Keyboard,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native"
 import { useKeyboard } from "@react-native-community/hooks"
 
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
+import {
+  offsets,
+  presets,
+} from "/Users/iyebeom/CareGiver/app/components/basics/ignite-basics/screen/screen.presets"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -137,6 +150,7 @@ export const MakeBookingScreen: FC<
           placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
           boxHeight={78}
         />
+
         <PreBol14
           style={{ marginTop: 16, marginBottom: 14 }}
           text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
@@ -229,10 +243,16 @@ export const MakeBookingScreen: FC<
           />
         </View>
         <PreBol14 style={{ marginTop: 72, marginBottom: 8 }} text={"자유 요청 사항"} />
-        <PlaceHolderInputBox
-          placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
-          boxHeight={161}
-        />
+        <KeyboardAvoidingView
+          style={presets.fixed.outer}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={40}
+        >
+          <PlaceHolderInputBox
+            placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
+            boxHeight={161}
+          />
+        </KeyboardAvoidingView>
       </ScrollView>
       {Platform.OS === "android" && !keyboard.keyboardShown && (
         <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>

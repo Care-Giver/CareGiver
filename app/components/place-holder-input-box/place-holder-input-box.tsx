@@ -44,7 +44,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         multiline
         maxLength={300}
         autoFocus={true}
-        scrollEnabled={false}
+        //*scrollEnabled={false}
       />
     </View>
   )
