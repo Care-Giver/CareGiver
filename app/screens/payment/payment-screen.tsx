@@ -1,33 +1,21 @@
-import React, { FC, useRef, useState } from "react"
-import {
-  StyleSheet,
-  View,
-  Image,
-  Dimensions,
-  Button,
-  Pressable,
-  TouchableOpacity,
-  Animated,
-  NativeEventEmitter,
-} from "react-native"
+import React, { FC, useState } from "react"
+import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
   PaymentTool,
-  PreBol12,
   PreBol14,
   PreBol16,
   PreBol18,
-  PreMed12,
   PreMed14,
   PreMed18,
   PreReg14,
   ScreenRootView,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, HEADER_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 

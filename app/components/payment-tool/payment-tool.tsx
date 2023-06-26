@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   StyleProp,
   ViewStyle,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Pressable,
   Image,
-  TouchableOpacity,
+  ImageSourcePropType,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol14, PreReg14 } from "../basics/custom-texts/custom-texts"
@@ -24,13 +24,13 @@ export interface PaymentToolProps {
    * 결제 모듈의 종류입니다.
    * "카카오페이" | "네이버페이" | "토스"
    */
-  tool: Omit<PaymentModuleType, "신용/체크카드">
+  tool: Exclude<PaymentModuleType, "신용/체크카드">
 
   /**
    * 선택된 결제 모듈입니다. (스타일링을 위해 추가됨)
    * "카카오페이" | "네이버페이" | "토스"
    */
-  selectedTool: Omit<PaymentModuleType, "신용/체크카드">
+  selectedTool: Exclude<PaymentModuleType, "신용/체크카드">
 
   setSelectedTool: () => void
 }
@@ -43,27 +43,23 @@ export const PaymentTool = observer(function PaymentTool(props: PaymentToolProps
 
   const ToolText = isSelected ? PreBol14 : PreReg14
 
-  const onPaymentToolPress = (tool) => {
-    // 5~6번까지는 콘솔창에서 클릭된 tool이 잘 반영되는데 그 이후로는 클릭해도 반영이 안돼요(콘솔창에 뜨지 않음)....ㅠㅠ 왜이러는걸까요??
-    // 클릭시, 버튼 안에 작은 원을 만들고 싶은데 이것도 안되네요 ㅠㅠ!!
-
-    if (tool === "카카오페이") {
-      return (
-        <View
-          style={{
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            backgroundColor: "orange",
-          }}
-        />
-      )
+  const imageSourceHandler = (): ImageSourcePropType => {
+    switch (tool) {
+      case "카카오페이":
+        return images.payment_kakao
+      case "네이버페이":
+        return images.payment_naver
+      case "토스":
+        return images.payment_toss
     }
   }
 
   return (
     <Pressable style={allStyles} onPress={setSelectedTool}>
-      <Image style={[styles.paymentImage, isSelected && styles.selectedImage]} />
+      <Image
+        style={[styles.paymentImage, isSelected && styles.selectedImage]}
+        source={imageSourceHandler()}
+      />
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Image
           style={styles.radio}
@@ -77,9 +73,7 @@ export const PaymentTool = observer(function PaymentTool(props: PaymentToolProps
 
 const styles = StyleSheet.create({
   root: {
-    // width: 112 * WIDTH,
-    width: 100 * WIDTH,
-    backgroundColor: "red",
+    width: 112 * WIDTH,
   },
 
   paymentImage: {
@@ -88,7 +82,7 @@ const styles = StyleSheet.create({
     height: 59,
     borderRadius: 10,
     marginBottom: 10,
-    backgroundColor: "grey",
+    backgroundColor: "black",
   },
 
   selectedImage: {

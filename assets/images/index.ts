@@ -1,5 +1,5 @@
 //! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
-
+  
 export const images = {
   //* images
   arrow_change: require("../images/arrow_change.png"),
@@ -35,6 +35,9 @@ export const images = {
   map_marker: require("../images/map_marker.png"),
   more_info: require("../images/more_info.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
+  payment_kakao: require("../images/payment_kakao.png"),
+  payment_naver: require("../images/payment_naver.png"),
+  payment_toss: require("../images/payment_toss.png"),
   pencil: require("../images/pencil.png"),
   placeholder_image: require("../images/placeholder_image.png"),
   plus_grey: require("../images/plus_grey.png"),
@@ -59,7 +62,7 @@ export const images = {
   x_grey: require("../images/x_grey.png"),
   x_in_circle: require("../images/x_in_circle.png"),
   x_white: require("../images/x_white.png"),
-
+  
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
