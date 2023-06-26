@@ -139,7 +139,7 @@ export type NavigatorParamList = {
   TestWebView: undefined
   testPushNotification: undefined
   "temp-screen": undefined
-  "cg-calendar-screen"
+  "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
@@ -220,8 +220,8 @@ const SearchingStack = () => {
     >
       {/* //* 홈 */}
       <Stack.Screen
-        name="home-screen"
-        component={HomeScreen}
+        name="manage-booking-screen"
+        component={ManageBookingScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
@@ -817,7 +817,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
           header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
-
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
