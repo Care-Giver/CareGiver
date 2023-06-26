@@ -218,15 +218,8 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="payment-screen"
+      initialRouteName="home-screen"
     >
-      <Stack.Screen
-        name="payment-screen"
-        component={PaymentScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -272,6 +265,16 @@ const SearchingStack = () => {
           ),
           // title: null,
           headerTitle: "",
+        }}
+      />
+
+      {/* 결제 정보 */}
+      <Stack.Screen
+        name="payment-screen"
+        component={PaymentScreen}
+        options={{
+          title: "결제 정보",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 

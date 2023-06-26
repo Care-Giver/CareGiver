@@ -10,12 +10,11 @@ import {
   PreBol16,
   PreBol18,
   PreMed14,
-  PreMed18,
   PreReg14,
   ScreenRootView,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY, HEADER_HEIGHT } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -37,13 +36,6 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     // const navigation = useNavigation()
     return (
       <ScreenRootView testID="Payment">
-        {/* HEADER */}
-        <View style={styles.header}>
-          <Pressable>
-            <Image style={styles.goBackButton} source={images.go_back} />
-          </Pressable>
-          <PreMed18 text="결제 정보" mr={16} />
-        </View>
         <ScrollView>
           {/* CONTENT 시작, paddingHorizontal:16 */}
           <View style={styles.container}>
@@ -160,13 +152,6 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 )
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-    height: HEADER_HEIGHT,
-  },
   container: {
     paddingHorizontal: 16,
   },

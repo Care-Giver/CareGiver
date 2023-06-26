@@ -131,15 +131,6 @@ export const CaregiverDetailInformationScreen: FC<
   const { profileImg, name, rating } = sitterData
   console.log(sitterData)
 
-  const [modalState, setmodalState] = useState(true)
-  const handleModal = () => {
-    if (modalState == true) {
-      setmodalState(false)
-    } else {
-      setmodalState(true)
-    }
-  }
-
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
     //! 따라서, ScreenRootView 는 fixed 로 한다
@@ -280,11 +271,9 @@ export const CaregiverDetailInformationScreen: FC<
           <MakeBookingButton
             pricePerHour={50000}
             isActivated={true}
-            /*onPress={() => {
-            // 원본
-            alert("결제하기 화면으로 이동")
-          }}*/
-            onPress={handleModal}
+            onPress={() => {
+              navigate("payment-screen")
+            }}
           />
         </Animated.View>
       )}
