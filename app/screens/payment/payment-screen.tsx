@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react"
+import React, { FC, useRef, useState } from "react"
 import {
   StyleSheet,
   View,
@@ -27,13 +27,11 @@ import {
   ScreenRootView,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-
-import { Platform, ViewStyle } from "react-native"
-import { BODY, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
-const screenWidth = Dimensions.get("window").width
+export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스" | "신용/체크카드"
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
@@ -42,6 +40,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
   function PaymentScreen() {
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
+
+    const [selectedTool, setSelectedTool] = useState<PaymentModuleType>(null)
+
+    const is신용체크카드 = selectedTool === "신용/체크카드"
 
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
@@ -80,18 +82,49 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               style={{
                 marginTop: 16,
                 flexDirection: "row",
+                justifyContent: "space-between",
                 width: "100%",
                 marginBottom: 24,
               }}
             >
-              <PaymentTool tool="카카오페이" />
-              <PaymentTool tool="네이버페이" />
-              <PaymentTool tool="토스" />
+              <PaymentTool
+                tool="카카오페이"
+                selectedTool={selectedTool}
+                setSelectedTool={() => {
+                  setSelectedTool("카카오페이")
+                }}
+              />
+              <PaymentTool
+                tool="네이버페이"
+                selectedTool={selectedTool}
+                setSelectedTool={() => {
+                  setSelectedTool("네이버페이")
+                }}
+              />
+              <PaymentTool
+                tool="토스"
+                selectedTool={selectedTool}
+                setSelectedTool={() => {
+                  setSelectedTool("토스")
+                }}
+              />
             </View>
-            <View style={[styles.borderBox, { marginBottom: 25 }]}>
-              <TouchableOpacity style={styles.button} />
-              <PreReg14 text="신용/체크카드" color={BODY} />
-            </View>
+            <Pressable
+              style={[styles.borderBox, is신용체크카드 && styles.selectedBorderBox]}
+              onPress={() => {
+                setSelectedTool("신용/체크카드")
+              }}
+            >
+              <Image
+                style={styles.radio}
+                source={is신용체크카드 ? images.radio_active : images.radio_inactive}
+              />
+              {is신용체크카드 ? (
+                <PreBol14 text="신용/체크카드" color={GIVER_CASUAL_NAVY} />
+              ) : (
+                <PreReg14 text="신용/체크카드" color={BODY} />
+              )}
+            </Pressable>
             <View style={styles.borderLine} />
             <View style={styles.couponInfo}>
               <PreMed14 text="쿠폰" />
@@ -171,6 +204,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     // backgroundColor: "orange",
   },
+
   borderBox: {
     width: "100%",
     height: 47,
@@ -181,7 +215,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
+    marginBottom: 25,
   },
+
+  selectedBorderBox: {
+    borderWidth: 1,
+    borderColor: GIVER_CASUAL_NAVY,
+  },
+
+  radio: {
+    width: 16,
+    height: 16,
+    marginRight: 7,
+  },
+
   couponInfo: {
     width: "100%",
     height: 34,
