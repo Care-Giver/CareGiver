@@ -9,15 +9,11 @@ import {
   PreBol20,
   UnderlineText,
   CertificateRegistrationNote,
-  CgCertificateRegistrationScreenHeader,
-  PreReg16,
-  Icon,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CustomImagePicker,
 } from "#components"
-import { Pressable, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
-import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
-import { LIGHT_LINE, HEAD_LINE, BODY, GIVER_CASUAL_NAVY } from "#theme"
-import { images } from "#images"
+import { View, StyleSheet } from "react-native"
+import { HEAD_LINE } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -34,28 +30,6 @@ export const CgCertificateRegistrationScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
   const [selectedImages, setSelectedImages] = useState<string[]>([])
-  const removeImage = (index) => {
-    const updatedImages = [...selectedImages]
-    updatedImages.splice(index, 1)
-    setSelectedImages(updatedImages)
-  }
-  const options: ImageLibraryOptions = {
-    mediaType: "photo",
-    maxHeight: 128,
-    maxWidth: 128,
-    //includeBase64: true -> 큰 이미지 피함
-    selectionLimit: 10, // 최대 등록할 수 있는 이미지 개수 / 10 정도면 괜찮을까요 ?
-  }
-  const openGallery = () => {
-    launchImageLibrary(options, (response) => {
-      if (!response.didCancel) {
-        const newImages = response.assets.map((current) => current.uri)
-        setSelectedImages((Images) => [...Images, ...newImages]) //새로운 이미지를 앞으로 할 것인가? 뒤로할 것인가.
-      }
-    })
-  }
-
-  const isEmpty = selectedImages.length === 0
 
   return (
     <ScreenRootView testID="CgCertificateRegistration">
@@ -80,39 +54,13 @@ export const CgCertificateRegistrationScreen: FC<
       {/* 컴포넌트 : 자격 증 등록 전, 잠깐! */}
       <CertificateRegistrationNote style={styles.cgRegistrationNote} />
 
-      {/* 이미지 추가 View */}
-      <View style={styles.imageView}>
-        <ScrollView
-          contentContainerStyle={{ flexDirection: "row" }}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {selectedImages.map((imageUri, index) => (
-            <View key={index} style={styles.imageContainer}>
-              <Image
-                source={{ uri: imageUri }}
-                style={{ width: 128, height: 128, borderRadius: 8 }}
-              />
-              <TouchableOpacity
-                style={styles.deleteButtonWrapper}
-                onPress={() => removeImage(index)}
-              >
-                <Image source={images.x_in_circle} style={styles.deleteButton} />
-              </TouchableOpacity>
-            </View>
-          ))}
-          {isEmpty && (
-            <Image
-              source={images.placeholder_image}
-              style={{ width: 128, height: 128, borderRadius: 8 }}
-            />
-          )}
-        </ScrollView>
-        <Pressable style={styles.button} onPress={openGallery}>
-          <Image source={images.plus_grey} style={styles.plusButton} />
-          <PreReg16 text={"자격증 추가하기"} color={BODY}></PreReg16>
-        </Pressable>
-      </View>
+      {/* 컴포넌트: 이미지 추가 */}
+      <CustomImagePicker
+        selectedImages={selectedImages}
+        setSelectedImages={setSelectedImages}
+        submitButtonText="자격증 추가하기"
+        style={{ marginTop: 28 }}
+      />
 
       {/* 하단 버튼 GoBackSaveNext 컴포넌트 */}
       <View style={styles.bottomButton}>
@@ -138,44 +86,6 @@ const styles = StyleSheet.create({
   },
   cgRegistrationNote: {
     marginTop: 16,
-  },
-  imageView: {
-    height: "auto",
-    width: "100%",
-    marginTop: 28,
-  },
-  button: {
-    flexDirection: "row",
-    width: "100%",
-    height: 48,
-    borderRadius: 8,
-    borderColor: LIGHT_LINE,
-    borderWidth: 2,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 12,
-  },
-  imageContainer: {
-    position: "relative",
-    marginRight: 10,
-  },
-  deleteButtonWrapper: {
-    position: "absolute",
-    top: 3.5,
-    right: 3.5,
-  },
-  deleteButton: {
-    position: "absolute",
-    right: 0,
-    width: 17,
-    height: 17,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  plusButton: {
-    width: 16,
-    height: 16,
-    marginRight: 10,
   },
   bottomButton: {
     position: "absolute",
