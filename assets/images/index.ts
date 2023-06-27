@@ -1,5 +1,5 @@
 //! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
-
+  
 export const images = {
   //* images
   arrow_change: require("../images/arrow_change.png"),
@@ -50,6 +50,8 @@ export const images = {
   service_petsitting: require("../images/service_petsitting.png"),
   service_training: require("../images/service_training.png"),
   speech_bubble: require("../images/speech_bubble.png"),
+  star_empty: require("../images/star_empty.png"),
+  star_filled: require("../images/star_filled.png"),
   three_dots: require("../images/three_dots.png"),
   timer: require("../images/timer.png"),
   timer_disabled: require("../images/timer_disabled.png"),
@@ -59,7 +61,7 @@ export const images = {
   x_grey: require("../images/x_grey.png"),
   x_in_circle: require("../images/x_in_circle.png"),
   x_white: require("../images/x_white.png"),
-
+  
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),
