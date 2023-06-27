@@ -76,6 +76,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
+import { WriteReviewScreen } from "#screens"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -134,6 +135,8 @@ export type NavigatorParamList = {
 
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
+
+  "write-review-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -203,6 +206,16 @@ const BookingsStack = () => {
         component={BookingDetailScreen}
         options={{
           title: "예약내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 리뷰 작성 페이지 */}
+      <Stack.Screen
+        name="write-review-screen"
+        component={WriteReviewScreen}
+        options={{
+          title: "후기 작성",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

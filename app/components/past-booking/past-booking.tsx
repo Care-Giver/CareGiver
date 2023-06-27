@@ -9,6 +9,7 @@ import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { pastBooking } from "./dummy-data"
 import { CaregiverTypeButton } from "#components"
+import { navigate } from "#navigators"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
@@ -19,7 +20,7 @@ const handleAgainPress = () => {
 }
 
 const handleReviewPress = () => {
-  console.log("후기 작성하기 클릭")
+  navigate("write-review-screen")
 }
 
 const handlePress = () => {
