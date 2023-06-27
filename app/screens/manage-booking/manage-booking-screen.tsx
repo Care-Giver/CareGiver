@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingInfoCard, BookingList, ScreenRootView } from "#components"
+import { BookingCheckButton, BookingInfoCard, BookingList, ScreenRootView } from "#components"
 import { View, StyleSheet, Text } from "react-native"
 import { Agenda, Calendar } from "react-native-calendars"
 // import { useNavigation } from "@react-navigation/native"
@@ -22,6 +22,7 @@ export const ManageBookingScreen: FC<
 
   return (
     <ScreenRootView testID="ManageBooking">
+      <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2}></BookingCheckButton>
       <View style={{ flex: 1 }}>
         <BookingList />
       </View>

@@ -220,7 +220,7 @@ const SearchingStack = () => {
     >
       {/* //* 홈 */}
       <Stack.Screen
-        name="manage-booking-screen"
+        name="home-screen"
         component={ManageBookingScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,

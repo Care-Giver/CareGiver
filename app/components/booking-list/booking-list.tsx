@@ -1,16 +1,11 @@
 import * as React from "react"
-import { StyleProp, ViewStyle, View, StyleSheet, TouchableOpacity, Text, Image } from "react-native"
+import { StyleProp, ViewStyle, View, Text, Image, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { images } from "#images"
-
-import {
-  CalendarProvider,
-  AgendaList,
-  ExpandableCalendar,
-  WeekCalendar,
-} from "react-native-calendars"
-import CalendarHeader from "react-native-calendars/src/calendar/header"
-import { color } from "react-native-reanimated"
+import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
+import { GIVER_CASUAL_NAVY, SHADOW_1, WIDTH } from "#theme"
+import { BookingInfoCard } from "../booking-info-card/booking-info-card"
+import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
 
 export interface BookingListProps {
   /**
@@ -19,48 +14,67 @@ export interface BookingListProps {
   style?: StyleProp<ViewStyle>
 }
 
-import { Platform } from "react-native"
-export const themeColor = "#00AAAF"
-export const lightThemeColor = "#f2f7f7"
-export function getTheme() {
-  const disabledColor = "grey"
+export const CustomDayComponent = ({ date, state, selected }) => {
+  const translateWeekText = ({ date }) => {
+    const week = ["일", "월", "화", "수", "목", "금", "토"]
 
-  return {
-    // arrows
-    arrowColor: "black",
-    arrowStyle: { padding: 0 },
-    // knob
-    expandableKnobColor: themeColor,
-    // month
-    monthTextColor: "black",
-    textMonthFontSize: 16,
-    textMonthFontFamily: "HelveticaNeue",
-    textMonthFontWeight: "bold" as const,
-    // day names
-    textSectionTitleColor: "black",
-    textDayHeaderFontSize: 12,
-    textDayHeaderFontFamily: "HelveticaNeue",
-    textDayHeaderFontWeight: "normal" as const,
-    // dates
-    dayTextColor: themeColor,
-    todayTextColor: "#af0078",
-    textDayFontSize: 15,
-    textDayFontFamily: "HelveticaNeue",
-    textDayFontWeight: "500" as const,
-
-    //textDayStyle: { marginTop: Platform.OS === "android" ? 2 : 4, },
-    // selected date
-    selectedDayBackgroundColor: themeColor,
-    selectedDayTextColor: "white",
-    // disabled date
-    textDisabledColor: disabledColor,
-    // dot (marked date)
-    dotColor: themeColor,
-    selectedDotColor: "white",
-    disabledDotColor: disabledColor,
-    dotStyle: { marginTop: -2 },
+    return week[new Date(date.timestamp).getDay()]
   }
+  const textBgBdSelectior = ({ date, state }) => {
+    if (date.dateString == selected) {
+      return GIVER_CASUAL_NAVY
+    }
+    if (state === "today") {
+      return "#F8F8FA"
+    }
+    return "white"
+  }
+
+  const textColorSelectior = ({ date, state }) => {
+    if (date.dateString == selected) {
+      return GIVER_CASUAL_NAVY
+    }
+
+    return "#999999"
+  }
+
+  return (
+    <View
+      style={{
+        width: 48,
+        height: 48,
+        marginRight: 80,
+        borderColor: textBgBdSelectior({ date, state }),
+        backgroundColor: state === "today" ? "#F8F8FA" : "white",
+        borderRadius: 8,
+        borderWidth: 2,
+        borderStyle: "solid",
+      }}
+    >
+      <PreReg14
+        style={{
+          height: 20,
+          alignSelf: "center",
+          marginTop: 5,
+          fontWeight: "600",
+        }}
+        color={textColorSelectior({ date, state })}
+      >
+        {date.day}
+      </PreReg14>
+      <PreReg12
+        style={{
+          alignSelf: "center",
+          fontWeight: "600",
+        }}
+        color={textColorSelectior({ date, state })}
+      >
+        {translateWeekText({ date })}
+      </PreReg12>
+    </View>
+  )
 }
+
 export const BookingList = observer(function BookingList(props: BookingListProps) {
   const { style } = props
 
@@ -74,71 +88,55 @@ export const BookingList = observer(function BookingList(props: BookingListProps
       data: [{ name: "Lunch", time: "1:00 PM", height: 50, day: "2023-06-26" }],
     },
     {
-      title: "2023-06-27",
-      data: [{ name: "Gym", time: "5:30 PM", height: 50, day: "2023-06-27" }],
+      title: "2023-06-26",
+      data: [{ name: "Lunch", time: "1:00 PM", height: 50, day: "2023-06-26" }],
     },
   ]
 
   const renderItem = ({ item }) => {
     return (
-      <View>
-        <Text>{item.name}</Text>
-        <Text>{item.time}</Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <View
+          style={{
+            marginVertical: 16,
+            marginRight: 8,
+            paddingRight: 5,
+            justifyContent: "space-between",
+            borderRightWidth: 2,
+            borderColor: "#F8F8FA",
+          }}
+        >
+          <PreBol16 color={GIVER_CASUAL_NAVY}>08:00</PreBol16>
+          <PreBol16 color={GIVER_CASUAL_NAVY}>10:00</PreBol16>
+        </View>
+        <BookingInfoCard style={{ marginVertical: 8, marginHorizontal: 6 }} />
       </View>
     )
   }
 
   const [currentDate, setCurrentDate] = React.useState(new Date().toISOString().split("T")[0]) // 현재 날짜를 문자열로 변환
-  const [month, setMonth] = React.useState(new Date().getMonth())
-  const onPressArrowLeft = () => {
-    console.log(new Date().getMonth())
-
-    console.log(currentDate[5])
-    console.log(currentDate[6])
-
-    const newMonth = [...currentDate]
-    newMonth[6] = String(Number(newMonth[6]) - 1)
-
-    setCurrentDate(String(newMonth))
-    setMonth(month - 1)
-
-    //setCurrentDate(newMonth)
-  }
-  const onPressArrowRight = () => {
-    console.log(new Date())
-    console.log(currentDate[5])
-    console.log(currentDate[6])
-
-    const newMonth = [...currentDate]
-    newMonth[6] = String(Number(newMonth[6]) + 1)
-
-    setCurrentDate(String(newMonth))
-    setMonth(month + 1)
-    //setCurrentDate(newMonth)
-  }
-  const CustomDayComponent = ({ date, state }) => (
-    <View style={{ width: 48, height: 48 }}>
-      <Text style={{ fontSize: 10 }}>{new Date(date.timestamp).getDay()}</Text>
-      <Text style={{ fontSize: 20 }}>{date.day}</Text>
-    </View>
-  )
-  const onMonthChange = () => {
-    setCurrentDate("2023-" + month + "-01")
-    console.log(currentDate)
+  const [selected, setSelected] = React.useState("")
+  const onDayPress = (date) => {
+    setSelected(date.date.dateString)
+    console.log(date.date.dateString)
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginTop: -20 }}>
       <CalendarProvider
+        numberOfDays={5}
         date={currentDate}
         // onDateChanged={onDateChanged}
         // onMonthChange={onMonthChange}
-        showTodayButton
-
         // disabledOpacity={0.6}
         //theme={todayBtnTheme.current}
         // todayBottomMargin={16}
       >
-        <View style={{ backgroundColor: "red" }}>
+        <View style={{ display: "flex", alignItems: "flex-end" }}>
           <ExpandableCalendar
             //testID={testIDs.expandableCalendar.CONTAINER}
             // horizontal={false}
@@ -150,36 +148,41 @@ export const BookingList = observer(function BookingList(props: BookingListProps
             // headerStyle={styles.header} // for horizontal only
             // disableWeekScroll
             //theme={React.useRef(getTheme()).current}
+            monthFormat={"MMMM"}
             theme={{
-              textDayFontWeight: "600",
-              textDayHeaderFontWeight: "600",
-              dayTextColor: "white",
-              textDayStyle: {
-                backgroundColor: "blue",
-                width: 20,
-                height: 20,
-                textAlign: "center",
-              },
+              monthTextColor: GIVER_CASUAL_NAVY,
+              textMonthFontSize: 20,
+              textMonthFontWeight: "bold",
             }}
-            scrollToOverflowEnabled={false}
-            scrollEnabled={false}
+            dayComponent={({ date, state }) => (
+              <Pressable onPress={(e) => onDayPress({ date })}>
+                <CustomDayComponent date={date} state={state} selected={selected} />
+              </Pressable>
+            )}
+            onDayPress={onDayPress}
+            headerStyle={{
+              marginTop: 25, // default headertitle(week)을 지우기 위함
+            }}
+            calendarStyle={{
+              paddingBottom: 8,
+              borderStyle: "solid",
+              borderBottomWidth: 2,
+              borderBottomColor: "#F8F8FA",
+            }}
             style={{
               alignSelf: "center",
               width: "109%",
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderColor: "red",
             }}
             renderArrow={(direction) =>
               direction === "left" ? (
                 <Image
                   source={images.arrow_left_navy}
-                  style={{ width: 18, height: 18, marginLeft: 40 }}
+                  style={{ width: 18, height: 18, marginLeft: 90 }}
                 />
               ) : (
                 <Image
                   source={images.arrow_right_navy}
-                  style={{ width: 18, height: 18, marginRight: 40 }}
+                  style={{ width: 18, height: 18, marginRight: 90 }}
                 />
               )
             } //disableAllTouchEventsForDisabledDays
@@ -190,11 +193,15 @@ export const BookingList = observer(function BookingList(props: BookingListProps
           />
 
           <AgendaList
+            sectionStyle={{ display: "none" }}
+            style={{
+              marginTop: 32,
+              marginHorizontal: -6,
+            }}
             sections={sections}
             renderItem={renderItem}
-            // scrollToNextEvent
+            scrollToNextEvent={true}
             //sectionStyle={styles.section}
-            // dayFormat={'yyyy-MM-d'}
           />
         </View>
       </CalendarProvider>

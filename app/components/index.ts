@@ -22,6 +22,7 @@ export * from "./buttons/registration-button/registration-button"
 export * from "./buttons/register-submit-button/register-submit-button"
 export * from "./buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 export * from "./buttons/cancel-button/cancel-button"
+export * from "./buttons/booking-check-button/booking-check-button"
 
 //* inputs
 export * from "./custom-inputs/user-text-input/user-text-input"
