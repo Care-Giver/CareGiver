@@ -18,6 +18,8 @@ import {
 } from "#components"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { MapCallout } from "react-native-maps"
+import starFilled from "assets/images/star_filled.png"
+import starEmpty from "assets/images/star_empty.png"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -29,12 +31,10 @@ export const WriteReviewScreen: FC<
 > = observer(function WriteReviewScreen() {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
 
+  //별점
   const [rating, setRating] = useState(0)
   // const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
   const maxRating = [1, 2, 3, 4, 5]
-
-  const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png"
-  const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png"
 
   const CustomRaitingBar = () => {
     return (
@@ -42,10 +42,7 @@ export const WriteReviewScreen: FC<
         {maxRating.map((item, index) => {
           return (
             <TouchableOpacity activeOpacity={0.7} key={item} onPress={() => setRating(item)}>
-              <Image
-                style={styles.starImg}
-                source={item <= rating ? { uri: starImgFilled } : { uri: starImgCorner }}
-              />
+              <Image style={styles.starImg} source={item <= rating ? starFilled : starEmpty} />
             </TouchableOpacity>
           )
         })}
