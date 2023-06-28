@@ -12,13 +12,14 @@ export interface CustomImagePickerProps {
   selectedImages: string[]
   setSelectedImages: React.Dispatch<React.SetStateAction<string[]>>
   submitButtonText: string
+  selectionLimit?: number
   style?: StyleProp<ViewStyle>
 }
 
 export const CustomImagePicker = observer(function CustomImagePicker(
   props: CustomImagePickerProps,
 ) {
-  const { selectedImages, setSelectedImages, submitButtonText, style } = props
+  const { selectedImages, setSelectedImages, submitButtonText, selectionLimit, style } = props
   const allStyles = Object.assign({}, styles.root, style)
 
   const removeImage = (index: number) => {
@@ -32,7 +33,7 @@ export const CustomImagePicker = observer(function CustomImagePicker(
     maxHeight: 128,
     maxWidth: 128,
     //includeBase64: true -> 큰 이미지 피함
-    selectionLimit: 10, // 최대 등록할 수 있는 이미지 개수 / 10 정도면 괜찮을까요 ?
+    selectionLimit: selectionLimit ? selectionLimit : 10, // 최대 등록할 수 있는 이미지 개수 / 10 정도면 괜찮을까요 ?
   }
 
   const openGallery = () => {

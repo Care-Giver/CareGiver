@@ -39,15 +39,15 @@ const maxRating = [1, 2, 3, 4, 5]
 export const WriteReviewScreen: FC<
   StackScreenProps<NavigatorParamList, "write-review-screen">
 > = observer(function WriteReviewScreen() {
-  // * 업로드할 이미지 리스트
+  // * 업로드 이미지 리스트
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   // * 리뷰 텍스트
   const [reviewText, setReviewText] = useState<string>("")
-
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false)
-
   // * 별점
   const [rating, setRating] = useState(0)
+
+  // * 키보드 open 여부
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false)
 
   // * 별점 선택 컴포넌트
   // TODO: 리렌더링으로 인한 깜빡임 문제 해결
@@ -89,6 +89,8 @@ export const WriteReviewScreen: FC<
       hideInputs.remove()
     }
   }, [])
+
+  console.log("[Selected Images] >>> ", selectedImages)
 
   return (
     <ScreenRootView testID="WriteReview">
@@ -132,11 +134,13 @@ export const WriteReviewScreen: FC<
               selectedImages={selectedImages}
               setSelectedImages={setSelectedImages}
               submitButtonText="사진 추가하기"
+              selectionLimit={5}
               style={{ marginTop: 20 }}
             />
           </View>
         )}
 
+        {/* // TODO: keyboard avoiding view - 줄넘김 많을 때 텍스트 가리는 문제 생길 수 있음 */}
         {/* //* 리뷰 텍스트 input */}
         <TextInput
           maxLength={300}
@@ -144,7 +148,7 @@ export const WriteReviewScreen: FC<
           placeholderTextColor={DISABLED}
           multiline
           onChangeText={setReviewText}
-          onSubmitEditing={Keyboard.dismiss}
+          // onSubmitEditing={Keyboard.dismiss}
           style={[
             {
               marginTop: 20,
