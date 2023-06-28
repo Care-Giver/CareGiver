@@ -264,16 +264,10 @@ export const MakeBookingScreen: FC<
           />
         </View>
         <PreBol14 style={{ marginTop: 72, marginBottom: 8 }} text={"자유 요청 사항"} />
-        <KeyboardAvoidingView
-          style={presets.fixed.outer}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={40}
-        >
-          <PlaceHolderInputBox
-            placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
-            boxHeight={161}
-          />
-        </KeyboardAvoidingView>
+        <PlaceHolderInputBox
+          placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
+          boxHeight={161}
+        />
       </ScrollView>
       {Platform.OS === "android" && !keyboard.keyboardShown && (
         <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
