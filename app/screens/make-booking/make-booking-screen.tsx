@@ -134,6 +134,19 @@ export const MakeBookingScreen: FC<
     }
   }, [is엉덩이Active, is다리Active])
 
+  /**
+   *  선택하는 버튼이 함께 있는 TextInput박스를 눌렀을 때, onPressIn을 사용하여 눌려있는 버튼을 취소할 수 있게됨
+   */
+  const textboxClick = (click: "먹으면안되는음식" | "꿀팁") => {
+    if (click === "먹으면안되는음식") {
+      setIs없음Active(false)
+      setIs치즈Active(false)
+      setIs닭고기Active(false)
+    } else if (click === "꿀팁") {
+      set꿀팁(null)
+    }
+  }
+
   return (
     <ScreenRootView testID="MakeBooking">
       <ScrollView>
@@ -178,7 +191,11 @@ export const MakeBookingScreen: FC<
             onPress={() => firstClick("닭고기")}
           />
         </View>
-        <PlaceHolderInputBox placeholderText="주의할 음식을 직접 작성해주세요!" boxHeight={78} />
+        <PlaceHolderInputBox
+          placeholderText="주의할 음식을 직접 작성해주세요!"
+          boxHeight={78}
+          onPressIn={() => textboxClick("먹으면안되는음식")}
+        />
         <PreBol14
           style={{ marginTop: 16, marginBottom: 14 }}
           text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
@@ -206,7 +223,11 @@ export const MakeBookingScreen: FC<
             onPress={() => set꿀팁("되도록")}
           />
         </View>
-        <PlaceHolderInputBox placeholderText="꿀팁을 자유롭게 작성해주세요" boxHeight={78} />
+        <PlaceHolderInputBox
+          placeholderText="꿀팁을 자유롭게 작성해주세요"
+          boxHeight={78}
+          onPressIn={() => textboxClick("꿀팁")}
+        />
         <PreBol14
           style={{ marginTop: 16, marginBottom: 11 }}
           text={"배변 처리 방법을 알려주세요"}

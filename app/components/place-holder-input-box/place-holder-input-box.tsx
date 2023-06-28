@@ -29,13 +29,24 @@ export interface PlaceHolderInputBoxProps {
    * 기본적으로 Width는 100%이며 Height는 값을 추가하여 사용할 수 있습니다.
    */
   boxHeight: number
+
+  /**
+   * 기본적으로 Width는 100%이며 Height는 값을 추가하여 사용할 수 있습니다.
+   */
+  onPressIn?: () => void
 }
 
 export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   props: PlaceHolderInputBoxProps,
 ) {
-  const { style, placeholderText = "예시입니다.", boxHeight = 78 } = props
+  const { style, placeholderText = "예시입니다.", boxHeight = 78, onPressIn } = props
   const allStyles = Object.assign({}, styles.root, style)
+
+  const handleFocus = () => {
+    if (onPressIn) {
+      onPressIn()
+    }
+  }
   return (
     <View style={allStyles}>
       <TextInput
@@ -44,6 +55,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         multiline
         maxLength={300}
         autoFocus={true}
+        onPressIn={handleFocus}
         //*scrollEnabled={false}
       />
     </View>
