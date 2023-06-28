@@ -18,8 +18,7 @@ import {
 } from "#components"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { MapCallout } from "react-native-maps"
-import starFilled from "assets/images/star_filled.png"
-import starEmpty from "assets/images/star_empty.png"
+import { images } from "#images"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -31,10 +30,12 @@ export const WriteReviewScreen: FC<
 > = observer(function WriteReviewScreen() {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
 
-  //별점
+  //별점 시작
   const [rating, setRating] = useState(0)
   // const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
   const maxRating = [1, 2, 3, 4, 5]
+  const starFilled = images.star_filled
+  const starEmpty = images.star_empty
 
   const CustomRaitingBar = () => {
     return (
