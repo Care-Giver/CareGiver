@@ -50,6 +50,7 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  TestStreamChatScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -147,6 +148,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "test-stream-chat-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -220,8 +222,17 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="test-stream-chat-screen"
     >
+      {/* //* MVP-27 */}
+      <Stack.Screen
+        name="test-stream-chat-screen"
+        component={TestStreamChatScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
