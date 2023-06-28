@@ -1,23 +1,32 @@
-import React, { FC, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { HEAD_LINE } from "#theme"
-import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native"
+import { BODY, DISABLED, HEAD_LINE, LBG } from "#theme"
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  Keyboard,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CustomImagePicker,
   PreBol20,
   CaregiverTypeButton,
-  PreBol12,
-  PreMed14,
   PreMed18,
   PreReg14,
   ScreenRootView,
   Row,
   UnderlineText,
+  RegisterSubmitButton,
+  PreBol14,
 } from "#components"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
-import { MapCallout } from "react-native-maps"
 import { images } from "#images"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -25,86 +34,138 @@ import { images } from "#images"
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
+const maxRating = [1, 2, 3, 4, 5]
+
 export const WriteReviewScreen: FC<
   StackScreenProps<NavigatorParamList, "write-review-screen">
 > = observer(function WriteReviewScreen() {
+  // * 업로드할 이미지 리스트
   const [selectedImages, setSelectedImages] = useState<string[]>([])
+  // * 리뷰 텍스트
+  const [reviewText, setReviewText] = useState<string>("")
 
-  //별점 시작
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false)
+
+  // * 별점
   const [rating, setRating] = useState(0)
-  // const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
-  const maxRating = [1, 2, 3, 4, 5]
-  const starFilled = images.star_filled
-  const starEmpty = images.star_empty
 
-  const CustomRaitingBar = () => {
+  // * 별점 선택 컴포넌트
+  // TODO: 리렌더링으로 인한 깜빡임 문제 해결
+  const CustomRaitingBar = useCallback(() => {
     return (
       <View style={styles.customRaitingBar}>
         {maxRating.map((item, index) => {
           return (
             <TouchableOpacity activeOpacity={0.7} key={item} onPress={() => setRating(item)}>
-              <Image style={styles.starImg} source={item <= rating ? starFilled : starEmpty} />
+              <Image
+                style={styles.starImg}
+                source={item <= rating ? images.star_filled : images.star_empty}
+              />
             </TouchableOpacity>
           )
         })}
       </View>
     )
-  }
+  }, [rating])
+
+  // * keyboard 노출시 프로필, 별점, 사진 입력 숨기기
+  useEffect(() => {
+    const showInputs = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow", // android는 keyboardWillShow를 지원하지 않는다.
+      () => {
+        setIsKeyboardOpen(true)
+      },
+    )
+
+    const hideInputs = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide", // android는 keyboardWillHide를 지원하지 않는다.
+      () => {
+        setIsKeyboardOpen(false)
+      },
+    )
+
+    return () => {
+      showInputs.remove()
+      hideInputs.remove()
+    }
+  }, [])
 
   return (
     <ScreenRootView testID="WriteReview">
-      {/* // * profile card */}
-      {/* ...혜리님 작업... */}
-      <View style={styles.profileCard}>
-        <Image style={styles.profileImage} />
-        <View style={styles.profileInfo}>
-          <View style={styles.name}>
-            <PreMed18 text="유혜린" mr={8} />
-            {/* CaregiverTypeButton import시 text가 가운데정렬하지 않음. 따라서 새로 스타일 부여함 */}
-            {/* <CaregiverTypeButton text="방문" style={{ marginRight: 4 }} /> */}
-            <View style={styles.typeBtnNavy}>
-              <PreBol12 text="방문" color={palette.white} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {!isKeyboardOpen && (
+          <View>
+            {/* // * profile card */}
+            {/* ...혜리님 작업... */}
+            <View style={styles.profileCard}>
+              <Image source={images.profile_default} style={styles.profileImage} />
+              <View style={styles.profileInfo}>
+                <View style={styles.name}>
+                  <PreMed18 text="유혜린" mr={8} />
+                  <CaregiverTypeButton text="방문" style={{ marginRight: 4 }} />
+                  <CaregiverTypeButton
+                    text="펫시터"
+                    textColor={GIVER_CASUAL_NAVY}
+                    style={styles.petsitterTypeBtn}
+                  />
+                </View>
+
+                <PreReg14 text="어느덧 펫시터 3년차 입니다!" />
+              </View>
             </View>
-            <View style={styles.typeBtnWhite}>
-              <PreBol12 text="펫시터" color={GIVER_CASUAL_NAVY} />
-            </View>
+
+            {/* // * title text */}
+            <PreBol20 text="이용은 어떠셨나요?" color={HEAD_LINE} style={{ marginTop: 16 }} />
+            <Row style={{ marginTop: 6 }}>
+              <PreBol20 text="해당 케어기버에 대한 " color={HEAD_LINE} />
+              <UnderlineText>
+                <PreBol20 text="후기를 남겨주세요!" color={HEAD_LINE} />
+              </UnderlineText>
+            </Row>
+
+            {/* //* 별점 선택 */}
+            {/* ...혜리님 작업... */}
+            <CustomRaitingBar />
+
+            {/* //* 사진 선택 */}
+            <CustomImagePicker
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              submitButtonText="사진 추가하기"
+              style={{ marginTop: 20 }}
+            />
           </View>
+        )}
 
-          <PreReg14 text="어느덧 펫시터 3년차 입니다!" />
+        {/* //* 리뷰 텍스트 input */}
+        <TextInput
+          maxLength={300}
+          placeholder={`후기 작성 시 주의사항\n1. 욕설, 비방, 음란성 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다. \n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다. \n3. 후기에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다.`}
+          placeholderTextColor={DISABLED}
+          multiline
+          onChangeText={setReviewText}
+          onSubmitEditing={Keyboard.dismiss}
+          style={[
+            {
+              marginTop: 20,
+            },
+            styles.textInput,
+          ]}
+        />
+
+        {/* //* 입력 글자 수 */}
+        <View style={[{ marginTop: 10 }, styles.textCountContainer]}>
+          <PreBol14 text={`${reviewText.length} `} color={BODY} />
+          <PreReg14 text="/ 300" color={BODY} />
         </View>
-      </View>
-
-      {/* // * title text */}
-      <PreBol20 text="이용은 어떠셨나요?" color={HEAD_LINE} style={{ marginTop: 16 }} />
-      <Row style={{ marginTop: 6 }}>
-        <PreBol20 text="해당 케어기버에 대한 " color={HEAD_LINE} />
-        <UnderlineText>
-          <PreBol20 text="후기를 남겨주세요!" color={HEAD_LINE} />
-        </UnderlineText>
-      </Row>
-
-      {/* //* 별점 선택 */}
-      {/* ...혜리님 작업... */}
-      <CustomRaitingBar />
-
-      {/* //* 사진 선택 */}
-      <CustomImagePicker
-        selectedImages={selectedImages}
-        setSelectedImages={setSelectedImages}
-        submitButtonText="사진 추가하기"
-        style={{ marginTop: 20 }}
-      />
-
-      {/* //* 리뷰 텍스트 input */}
-
+      </ScrollView>
       {/* //* 확인 버튼 */}
+      <RegisterSubmitButton text="확인" style={{ position: "absolute", bottom: 0 }} />
     </ScreenRootView>
   )
 })
 
 const styles = StyleSheet.create({
-  root: {},
-
   profileCard: {
     width: 358,
     borderRadius: 8,
@@ -112,6 +173,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 14,
     marginTop: 16,
@@ -121,7 +183,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
-    backgroundColor: LIGHT_LINE,
     marginRight: 10,
   },
 
@@ -134,23 +195,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  typeBtnNavy: {
-    borderRadius: 4,
-    backgroundColor: GIVER_CASUAL_NAVY,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
+  petsitterTypeBtn: {
     borderColor: GIVER_CASUAL_NAVY,
     borderWidth: 2,
-    marginRight: 4,
-  },
-
-  typeBtnWhite: {
-    borderRadius: 4,
-    backgroundColor: "white",
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderColor: GIVER_CASUAL_NAVY,
-    borderWidth: 2,
+    backgroundColor: palette.white,
   },
 
   customRaitingBar: {
@@ -162,7 +210,23 @@ const styles = StyleSheet.create({
   starImg: {
     width: 28,
     height: 28,
-    resizeMode: "cover",
+    resizeMode: "contain",
     marginRight: 10,
+  },
+
+  textInput: {
+    padding: 20,
+    paddingTop: 20,
+    borderRadius: 8,
+    backgroundColor: LBG,
+    lineHeight: 20,
+  },
+
+  textCountContainer: {
+    marginBottom: 38,
+    marginLeft: "auto",
+
+    flexDirection: "row",
+    alignItems: "center",
   },
 })

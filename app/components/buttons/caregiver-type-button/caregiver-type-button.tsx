@@ -1,13 +1,21 @@
-import { View, Text } from "react-native"
+import { View, Text, ViewStyle, TextStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol12 } from "../../basics/custom-texts/custom-texts"
 import { palette } from "#theme"
 
-export const CaregiverTypeButton = ({ text, style }: { text: string; style?: Object }) => {
+export const CaregiverTypeButton = ({
+  text,
+  textColor,
+  style,
+}: {
+  text: string
+  textColor?: string
+  style?: ViewStyle
+}) => {
   return (
     <View style={[styles.typeBtn, style]}>
-      <PreBol12 text={text} color={palette.white} />
+      <PreBol12 text={text} color={textColor ? textColor : palette.white} />
     </View>
   )
 }
