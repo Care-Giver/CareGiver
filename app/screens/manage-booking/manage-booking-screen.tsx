@@ -1,10 +1,10 @@
-import React, { FC } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingCheckButton, BookingInfoCard, BookingList, ScreenRootView } from "#components"
-import { View, StyleSheet, Text } from "react-native"
-import { Agenda, Calendar } from "react-native-calendars"
+import { BookingCheckButton, BookingList, ScreenRootView } from "#components"
+import { useStores } from "../../models"
+
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -19,13 +19,19 @@ export const ManageBookingScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-
+  const [bookings, setBookins] = useState([])
+  const {
+    ConfirmedBookingsModel: { setAllconfirmedBookings, confirmedBookings },
+  } = useStores()
+  useLayoutEffect(() => {
+    setAllconfirmedBookings()
+    setBookins(confirmedBookings)
+    //console.log(bookings[0])
+  }, [])
   return (
     <ScreenRootView testID="ManageBooking">
       <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2}></BookingCheckButton>
-      <View style={{ flex: 1 }}>
-        <BookingList />
-      </View>
+      <BookingList bookings={bookings} />
     </ScreenRootView>
   )
 })

@@ -6,11 +6,13 @@ import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-c
 import { GIVER_CASUAL_NAVY, SHADOW_1, WIDTH } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
 import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { confirmedBookings } from "../../services/axios/confirmed-bookings"
 
 export interface BookingListProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
+  bookings?: confirmedBookings[]
   style?: StyleProp<ViewStyle>
 }
 
@@ -80,43 +82,77 @@ export const BookingList = observer(function BookingList(props: BookingListProps
 
   const sections = [
     {
+      /**default */
       title: "2023-06-25",
-      data: [{ name: "Meeting", time: "10:00 AM", height: 50, day: "2023-06-25" }],
-    },
-    {
-      title: "2023-06-26",
-      data: [{ name: "Lunch", time: "1:00 PM", height: 50, day: "2023-06-26" }],
-    },
-    {
-      title: "2023-06-26",
-      data: [{ name: "Lunch", time: "1:00 PM", height: 50, day: "2023-06-26" }],
+      data: [
+        {
+          name: "Meeting",
+          serviceType: "",
+          petname: "",
+          species: "",
+          petservices: ["?"],
+          address: "",
+          time: "10:00 AM",
+          height: 50,
+          day: "2023-06-26",
+        },
+      ],
     },
   ]
 
+  props.bookings.map((item, idx) => {
+    console.log(item.services)
+    const dataprop = {
+      name: item.name,
+      serviceType: "creche",
+      petname: item.pets[0].name,
+      species: item.pets[0].species.name,
+      petservices: item.services,
+      address: item.address,
+      time: item.startTime,
+      height: 50,
+      day: item.startTime.substring(0, 10),
+    }
+    const newData = { title: String(idx), data: [dataprop] }
+    sections.push(newData)
+  })
+
   const renderItem = ({ item }) => {
-    return (
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
+    //console.log(item.petservices)
+    if (item.day === selected) {
+      return (
         <View
           style={{
-            marginVertical: 16,
-            marginRight: 8,
-            paddingRight: 5,
-            justifyContent: "space-between",
-            borderRightWidth: 2,
-            borderColor: "#F8F8FA",
+            display: "flex",
+            flexDirection: "row",
           }}
         >
-          <PreBol16 color={GIVER_CASUAL_NAVY}>08:00</PreBol16>
-          <PreBol16 color={GIVER_CASUAL_NAVY}>10:00</PreBol16>
+          <View
+            style={{
+              marginVertical: 16,
+              marginRight: 8,
+              paddingRight: 5,
+              justifyContent: "space-between",
+              borderRightWidth: 2,
+              borderColor: "#F8F8FA",
+            }}
+          >
+            <PreBol16 color={GIVER_CASUAL_NAVY}>08:00</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>10:00</PreBol16>
+          </View>
+          <BookingInfoCard
+            style={{ marginVertical: 8, marginHorizontal: 6 }}
+            name={item.name}
+            petname={item.petname}
+            species={item.species}
+            serviceType={item.serviceType}
+            petservices={item.petservices}
+            address={item.address}
+            caregiverType="petsitter"
+          />
         </View>
-        <BookingInfoCard style={{ marginVertical: 8, marginHorizontal: 6 }} />
-      </View>
-    )
+      )
+    }
   }
 
   const [currentDate, setCurrentDate] = React.useState(new Date().toISOString().split("T")[0]) // 현재 날짜를 문자열로 변환

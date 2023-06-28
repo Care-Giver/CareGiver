@@ -4,6 +4,7 @@ import { SpeciesStoreModel } from "../species-store/species-store"
 import { VisitingAvailableTimesModel } from "../visiting-available-times/visiting-available-times"
 import { CrecheDayModel } from "../creche-day/creche-day"
 import { UserStoreModel } from "../user-store/user-store"
+import { ConfirmedBookingsModel } from "../confirmed-bookings/confirmed-bookings"
 
 /**
  * A RootStore model.
@@ -13,6 +14,7 @@ export const RootStoreModel = types.model("RootStore").props({
   characterStore: types.optional(CharacterStoreModel, {} as any),
   speciesStoreModel: types.optional(SpeciesStoreModel, {} as any),
   visitingAvailableTimesModel: types.optional(VisitingAvailableTimesModel, {} as any),
+  ConfirmedBookingsModel: types.optional(ConfirmedBookingsModel, {} as any),
   CrecheDayModel: types.optional(CrecheDayModel, {} as any),
   userStore: types.optional(UserStoreModel, {} as any),
 })
