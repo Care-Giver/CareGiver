@@ -51,6 +51,7 @@ import {
   BookingDetailScreen,
   LoginScreen,
 } from "#screens"
+import { PushNotificationScreen } from "../../push-notification-screen"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
@@ -147,6 +148,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "push-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -222,6 +224,15 @@ const SearchingStack = () => {
       }}
       initialRouteName="home-screen"
     >
+      {/* //! 푸시 알림 (테스트) 스크린 */}
+      <Stack.Screen
+        name="push-screen"
+        component={PushNotificationScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"

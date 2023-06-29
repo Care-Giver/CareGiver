@@ -4,6 +4,17 @@ module.exports = {
     production: {},
   },
   plugins: [
+    // [
+    //   "expo-notifications",
+    //   // {
+    //   //   icon: "./local/assets/notification-icon.png",
+    //   //   color: "#ffffff",
+    //   //   sounds: [
+    //   //     "./local/assets/notification-sound.wav",
+    //   //     "./local/assets/notification-sound-other.wav",
+    //   //   ],
+    //   // },
+    // ],
     [
       "module-resolver",
       {
