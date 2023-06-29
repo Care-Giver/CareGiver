@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, Platform, StatusBar, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScreenProps } from "./screen.props"
 import { offsets, presets } from "./screen.presets"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 const isIos = Platform.OS === "ios"
 
@@ -13,14 +14,10 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
 
   return (
-    <KeyboardAvoidingView
-      style={preset.outer}
-      behavior={isIos ? "padding" : undefined}
-      keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
-    >
+    <KeyboardAwareScrollView style={preset.outer}>
       <StatusBar barStyle={props.statusBar || "light-content"} />
       <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   )
 }
 
