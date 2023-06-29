@@ -50,6 +50,9 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  TestIamportScreen,
+  TestIamportPaymentScreen,
+  TestIamportPaymentResultScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -147,6 +150,9 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "test-iamport-screen": undefined
+  "test-iamport-payment-screen": undefined
+  "test-iamport-payment-result-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -220,8 +226,35 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="test-iamport-screen"
     >
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-screen"
+        component={TestIamportScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-screen"
+        component={TestIamportPaymentScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-result-screen"
+        component={TestIamportPaymentResultScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
