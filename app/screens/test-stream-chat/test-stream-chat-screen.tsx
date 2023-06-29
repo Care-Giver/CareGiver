@@ -48,6 +48,7 @@ export const TestStreamChatScreen: FC<
 
   /**
    * 발행된 토큰과 userId 를 사용하여, 유저를 연결함
+   * response 정보 (ConnectionOpen) 속에 채팅에 필요한 유저정보가 담겨있음
    * */
   const connectAndSetUSer = async () => {
     // Connect user to chat. This establishes a websocket connection between client and server.
