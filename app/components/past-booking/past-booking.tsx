@@ -6,10 +6,12 @@ import { Row } from "../basics/row/row"
 import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
-import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { pastBooking } from "./dummy-data"
 import { CaregiverTypeButton } from "#components"
 import { navigate } from "#navigators"
+import { PastBookingProps } from "./past-booking.props"
+
+type ServiceType = "visiting" | "creche"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
@@ -27,24 +29,43 @@ const handlePress = () => {
   alert("아직 개발중인 기능입니다 😉")
 }
 
-export const PastBooking = (props) => {
-  const { style } = props
+const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
+  const month = dateTime.getMonth() + 1
+  const day = dateTime.getDate()
+
+  if (serviceType === "creche") {
+    return `${month}월 ${day}일`
+  } else {
+    const hours = dateTime.getHours()
+    const minutes = dateTime.getMinutes() === 0 ? "00" : dateTime.getMinutes()
+    return `${month}월 ${day}일 ${hours}:${minutes}`
+  }
+}
+
+export const PastBooking = (props: PastBookingProps) => {
+  const { profileImage, serviceType, petSitterName, startDate, endDate, isCanceled, style } = props
   return (
     <Pressable style={[styles.root, style]} onPress={handlePress}>
       {/* //* 케어기버 프로필 사진 */}
+      {/* // TODO default profile image 수정 */}
       <ImageBackground
-        source={{
-          uri:
-            "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
-        }}
+        source={
+          profileImage
+            ? {
+                uri:
+                  // "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
+                  profileImage,
+              }
+            : images.default_pet_image_60
+        }
         style={styles.profileImg}
       >
         <Row style={{ backgroundColor: null }}>
-          <CaregiverTypeButton text={pastBooking.serviceType} style={styles.typeBtn} />
           <CaregiverTypeButton
-            text={pastBooking.caregiverType}
-            style={[styles.typeBtn, { marginLeft: 6 }]}
+            text={serviceType === "creche" ? "위탁" : "방문"}
+            style={styles.typeBtn}
           />
+          <CaregiverTypeButton text={"펫시터"} style={[styles.typeBtn, { marginLeft: 6 }]} />
         </Row>
       </ImageBackground>
 
@@ -52,7 +73,7 @@ export const PastBooking = (props) => {
       <View style={styles.bookingInfo}>
         {/* //? 케어기버 이름 (*** 펫시터) */}
         <Row style={{ justifyContent: "space-between" }}>
-          <PreReg14 text="유혜린 펫시터" color={DISABLED} />
+          <PreReg14 text={`${petSitterName} 펫시터`} color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={ONPRESS_LIKED_BTN}>
             <Image style={styles.likeBtn} source={images.empty_heart} />
@@ -64,7 +85,12 @@ export const PastBooking = (props) => {
           {/* //? 체크인 */}
           <View>
             <PreReg10 text={"체크인"} color={DISABLED} />
-            <PreReg12 text={pastBooking.checkIn} color={DISABLED} style={{ marginTop: 4 }} />
+            {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
+            <PreReg12
+              text={setDateText(new Date(startDate), serviceType)}
+              color={DISABLED}
+              style={{ marginTop: 4 }}
+            />
           </View>
 
           {/* //? division line */}
@@ -73,7 +99,12 @@ export const PastBooking = (props) => {
           {/* //? 체크아웃 */}
           <View>
             <PreReg10 text={"체크아웃"} color={DISABLED} />
-            <PreReg12 text={pastBooking.checkOut} color={DISABLED} style={{ marginTop: 4 }} />
+            {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
+            <PreReg12
+              text={setDateText(new Date(endDate), serviceType)}
+              color={DISABLED}
+              style={{ marginTop: 4 }}
+            />
           </View>
         </Row>
 
@@ -88,7 +119,7 @@ export const PastBooking = (props) => {
           <PreReg12 text={"|"} color={MIDDLE_LINE} style={styles.divisionLine} />
 
           {/* //? 후기 작성하기 버튼 */}
-          {pastBooking.reviewStatus === "Possible" ? (
+          {!isCanceled ? (
             <Pressable onPress={handleReviewPress}>
               <PreMed14 text={"후기 작성하기"} color={GIVER_CASUAL_NAVY} />
             </Pressable>

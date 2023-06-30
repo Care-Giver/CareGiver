@@ -1,4 +1,4 @@
-import { View, Text, ViewStyle, TextStyle } from "react-native"
+import { View, ViewStyle, StyleProp } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol12 } from "../../basics/custom-texts/custom-texts"
@@ -11,7 +11,7 @@ export const CaregiverTypeButton = ({
 }: {
   text: string
   textColor?: string
-  style?: ViewStyle
+  style?: StyleProp<ViewStyle>
 }) => {
   return (
     <View style={[styles.typeBtn, style]}>

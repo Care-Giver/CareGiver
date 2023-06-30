@@ -23,12 +23,59 @@ interface VisitingBooking {
   request: string
 }
 
+export interface CurrentBooking {
+  visitingBookingId?: number
+  crecheBookingId?: number
+  visitingId?: number
+  crecheId?: number
+
+  // ? visiting인 경우 time
+  startTime?: string
+  endTime?: string
+  // ? creche인 경우 date
+  startDate?: string
+  endDate?: string
+
+  petSitterName: string
+  ratings: number
+  reviewCount: number
+  desc: string
+  profileImage: string | null
+}
+
+export interface PreviousBooking {
+  visitingBookingId?: number
+  crecheBookingId?: number
+  visitingId?: number
+  crecheId?: number
+
+  // ? visiting인 경우 time
+  startTime?: string
+  endTime?: string
+  // ? creche인 경우 date
+  startDate?: string
+  endDate?: string
+
+  petSitterName: string
+  desc: string
+  profileImage: string | null
+  isCanceled: boolean
+}
+
 interface CrecheBookingsResponse extends GeneralResponse {
   crecheBookings: CrecheBooking[]
 }
 
 interface VisitingBookingResponse extends GeneralResponse {
   visitingBookings: VisitingBooking[]
+}
+
+interface CurrentBookingResponse extends GeneralResponse {
+  currentBookings: CurrentBooking[]
+}
+
+interface PreviousBookingResponse extends GeneralResponse {
+  previousBookings: PreviousBooking[]
 }
 
 /**
@@ -85,6 +132,55 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
 }
 
 /**
- * 로그인한 유저의 모든 예약(위탁|방문)을 읽어온다.
+ * 로그인한 유저의 진행중인 예약 내역을 읽어온다.
+ * @return {Promise<CurrentBooking[]>}
  */
-// export const getPetsitters = async (): Promise<
+export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
+  try {
+    const response = await axios.get<CurrentBookingResponse>(
+      `${BASE_URL}/user/my-current-bookings`,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("[getCurrentBookings] error >>>", error)
+      // @ts-ignore
+      return error
+    }
+
+    console.log("[getCurrentBookings] response.data >>> ", response.data)
+
+    return response.data.currentBookings
+  } catch (error) {
+    console.error("[getCurrentBookings] catch error >>>", error)
+    return []
+  }
+}
+
+/**
+ * 로그인한 유저의 지난 예약 내역을 읽어온다.
+ * @return {Promise<PreviousBooking[]>}
+ */
+export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
+  try {
+    const response = await axios.get<PreviousBookingResponse>(
+      `${BASE_URL}/user/my-previous-bookings`,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("[getPreviousBookings] error >>>", error)
+      // @ts-ignore
+      return error
+    }
+
+    console.log("[getPreviousBookings] response.data >>> ", response.data)
+
+    return response.data.previousBookings
+  } catch (error) {
+    console.error("[getPreviousBookings] catch error >>>", error)
+    return []
+  }
+}

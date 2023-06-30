@@ -1,14 +1,11 @@
 export interface CaregiverDataProps {
-  id: number
-  name: string
+  visitingId?: number
+  crecheId?: number
+  petSitterName: string
   ratings: number
-  reviews: number
-  introduce: string
-  profileImg: string
-  // ? 방문 / 위탁
-  serviceType: string
-  // ? 펫시터 / 훈련사
-  caregiverType: string
+  reviewCount: number
+  desc: string
+  profileImage: string
 }
 
 export interface InProgressBookingProfileProps {
