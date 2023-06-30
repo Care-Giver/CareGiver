@@ -6,7 +6,6 @@ import { Row } from "../basics/row/row"
 import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
-import { pastBooking } from "./dummy-data"
 import { CaregiverTypeButton } from "#components"
 import { navigate } from "#navigators"
 import { PastBookingProps } from "./past-booking.props"
@@ -22,7 +21,7 @@ const handleAgainPress = () => {
 }
 
 const handleReviewPress = () => {
-  navigate("write-review-screen")
+  navigate("write-review-screen", {})
 }
 
 const handlePress = () => {
@@ -43,7 +42,18 @@ const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
 }
 
 export const PastBooking = (props: PastBookingProps) => {
-  const { profileImage, serviceType, petSitterName, startDate, endDate, isCanceled, style } = props
+  const {
+    profileImage,
+    serviceType,
+    petsitterType,
+    petsitterId,
+    petsitterName,
+    desc,
+    startDate,
+    endDate,
+    isCanceled,
+    style,
+  } = props
   return (
     <Pressable style={[styles.root, style]} onPress={handlePress}>
       {/* //* 케어기버 프로필 사진 */}
@@ -73,7 +83,7 @@ export const PastBooking = (props: PastBookingProps) => {
       <View style={styles.bookingInfo}>
         {/* //? 케어기버 이름 (*** 펫시터) */}
         <Row style={{ justifyContent: "space-between" }}>
-          <PreReg14 text={`${petSitterName} 펫시터`} color={DISABLED} />
+          <PreReg14 text={`${petsitterName} 펫시터`} color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={ONPRESS_LIKED_BTN}>
             <Image style={styles.likeBtn} source={images.empty_heart} />
@@ -120,7 +130,18 @@ export const PastBooking = (props: PastBookingProps) => {
 
           {/* //? 후기 작성하기 버튼 */}
           {!isCanceled ? (
-            <Pressable onPress={handleReviewPress}>
+            <Pressable
+              onPress={() =>
+                navigate("write-review-screen", {
+                  profileImage,
+                  petsitterName,
+                  petsitterType,
+                  petsitterId,
+                  serviceType,
+                  desc,
+                })
+              }
+            >
               <PreMed14 text={"후기 작성하기"} color={GIVER_CASUAL_NAVY} />
             </Pressable>
           ) : (

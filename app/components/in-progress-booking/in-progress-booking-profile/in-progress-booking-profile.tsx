@@ -18,7 +18,7 @@ export const InProgressBookingProfile = ({
       <Image
         // source={require(caregiverData.profileImg)}
         source={{
-          uri: caregiverData.profileImg,
+          uri: caregiverData.profileImage,
         }}
         style={styles.profileImg}
       />

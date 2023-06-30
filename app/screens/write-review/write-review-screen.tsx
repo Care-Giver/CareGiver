@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { BODY, DISABLED, HEAD_LINE, LBG } from "#theme"
@@ -28,23 +28,70 @@ import {
 } from "#components"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { images } from "#images"
+import { Rating, ReviewContent, useStores } from "#models"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
-const maxRating = [1, 2, 3, 4, 5]
+const maxRating: Rating[] = [1, 2, 3, 4, 5]
 
 export const WriteReviewScreen: FC<
   StackScreenProps<NavigatorParamList, "write-review-screen">
-> = observer(function WriteReviewScreen() {
+> = observer(function WriteReviewScreen({ route, navigation }) {
+  // * all bookings screen에서 전달받은 params(후기 작성 스크린에 필요한 값들)을 불러온다.
+  const {
+    profileImage,
+    petsitterName,
+    petsitterType,
+    petsitterId,
+    serviceType,
+    desc,
+  } = route.params
+
+  // * review store model
+  const {
+    reviewStoreModel: { reviews, getReviewId, removeReview, setReview },
+  } = useStores()
+
+  // * 현재의 review model 객체의 id값
+  const [reviewId, setReviewId] = useState<number>(0)
+
+  // ? 첫 렌더링시 - 현재 작성중인 리뷰 객체의 id를 가져오고, 만약 유저가 해당 펫시터 리뷰를 작성한 내역이 있으면 가져온다.
+  useLayoutEffect(() => {
+    // console.info("[write review screen] petsitterId >>>", petsitterId)
+    // ? 현재 리뷰 객체의 모델 id값 설정
+    const currentReviewId = getReviewId(petsitterType, serviceType, petsitterId)
+    setReviewId(currentReviewId)
+
+    // ? 이전에 작성된 기록을 가져온다.
+    const currentReview = reviews.find((review) => review.id === currentReviewId)
+    console.info("[write review screen] current review >>>", currentReview)
+    setSelectedImages(currentReview.images)
+    setReviewText(currentReview.description)
+    setRating(currentReview.rating)
+  }, [])
+
   // * 업로드 이미지 리스트
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   // * 리뷰 텍스트
   const [reviewText, setReviewText] = useState<string>("")
   // * 별점
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState<Rating>(0)
+
+  // ? 유저가 리뷰 내용을 수정할 때마다, 리뷰 model 객체 내용도 수정한다.
+  useEffect(() => {
+    // ? 첫 렌더링 무시 조건
+    if (reviewId !== 0) {
+      const reviewContent: ReviewContent = {
+        rating,
+        description: reviewText,
+        images: selectedImages,
+      }
+      setReview(reviewId, reviewContent)
+    }
+  }, [selectedImages, reviewText, rating])
 
   // * 키보드 open 여부
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false)
@@ -100,11 +147,17 @@ export const WriteReviewScreen: FC<
             {/* // * profile card */}
             {/* ...혜리님 작업... */}
             <View style={styles.profileCard}>
-              <Image source={images.profile_default} style={styles.profileImage} />
+              <Image
+                source={profileImage ? profileImage : images.profile_default}
+                style={styles.profileImage}
+              />
               <View style={styles.profileInfo}>
                 <View style={styles.name}>
-                  <PreMed18 text="유혜린" mr={8} />
-                  <CaregiverTypeButton text="방문" style={{ marginRight: 4 }} />
+                  <PreMed18 text={petsitterName} mr={8} />
+                  <CaregiverTypeButton
+                    text={serviceType === "creche" ? "위탁" : "방문"}
+                    style={{ marginRight: 4 }}
+                  />
                   <CaregiverTypeButton
                     text="펫시터"
                     textColor={GIVER_CASUAL_NAVY}
@@ -112,7 +165,7 @@ export const WriteReviewScreen: FC<
                   />
                 </View>
 
-                <PreReg14 text="어느덧 펫시터 3년차 입니다!" />
+                <PreReg14 text={desc} />
               </View>
             </View>
 
@@ -148,6 +201,7 @@ export const WriteReviewScreen: FC<
           placeholderTextColor={DISABLED}
           multiline
           onChangeText={setReviewText}
+          value={reviewText}
           // onSubmitEditing={Keyboard.dismiss}
           style={[
             {

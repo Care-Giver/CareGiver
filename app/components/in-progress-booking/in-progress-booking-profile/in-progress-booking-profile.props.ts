@@ -5,7 +5,7 @@ export interface CaregiverDataProps {
   ratings: number
   reviewCount: number
   desc: string
-  profileImage: string
+  profileImage: string | null
 }
 
 export interface InProgressBookingProfileProps {

@@ -73,7 +73,7 @@ import { images } from "#images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { Type, useStores } from "#models"
+import { PetsitterType, ServiceType, Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
 import { WriteReviewScreen } from "#screens"
@@ -136,7 +136,14 @@ export type NavigatorParamList = {
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
 
-  "write-review-screen": undefined
+  "write-review-screen": {
+    profileImage: string | null
+    petsitterName: string
+    petsitterType: PetsitterType
+    petsitterId: number
+    serviceType: ServiceType
+    desc: string
+  }
 
   //* test screens
   "minseon-test": undefined

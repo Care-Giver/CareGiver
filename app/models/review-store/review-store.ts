@@ -17,9 +17,10 @@ interface ReviewData {
   images: string[]
 }
 
+// TODO: interface로 어떻게 ..? type으로 하면 모델로 입력받아야 해서 코드가 복잡해짐
 // type ReviewData = Omit<Review, "id">
 
-interface ReviewContent {
+export interface ReviewContent {
   // ? 리뷰 평점
   rating: Rating
   // ? 리뷰 내용
@@ -90,6 +91,8 @@ export const ReviewStoreModel = types
       const petsitterId = findReview.petsitterId
       const serviceType = findReview.serviceType
 
+      console.info("[review store] petsitterId >>>", petsitterId)
+
       self.removeReview(id) // ! 이거 actions 분리 안 하면 안되더라구요
       const newReview = ReviewModel.create({
         id,
@@ -140,8 +143,6 @@ export const ReviewStoreModel = types
       return findResult.id
     },
   }))
-  .actions((self) => ({}))
-  .actions((self) => ({}))
 
 type ReviewStoreType = Instance<typeof ReviewStoreModel>
 export interface ReviewStore extends ReviewStoreType {}

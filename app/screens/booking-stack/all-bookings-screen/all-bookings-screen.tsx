@@ -137,7 +137,14 @@ export const AllBookingsScreen: FC<
           <PastBooking
             style={{ marginTop: 13 }}
             profileImage={previousBookings[0].profileImage}
-            petSitterName={previousBookings[0].petSitterName}
+            petsitterName={previousBookings[0].petSitterName}
+            desc={previousBookings[0].desc}
+            petsitterId={
+              previousBookings[0].crecheId
+                ? previousBookings[0].crecheId
+                : previousBookings[0].visitingId
+            }
+            petsitterType={previousBookings[0].crecheBookingId ? "creche" : "visiting"}
             serviceType={previousBookings[0].crecheId ? "creche" : "visiting"}
             startDate={
               previousBookings[0].crecheId
