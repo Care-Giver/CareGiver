@@ -1488,7 +1488,7 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
-"@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1", "@expo/config-plugins@~5.0.3":
+"@expo/config-plugins@^5.0.1", "@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1", "@expo/config-plugins@~5.0.3":
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-5.0.4.tgz#216fea6558fe66615af1370de55193f4181cb23e"
   integrity sha512-vzUcVpqOMs3h+hyRdhGwk+eGIOhXa5xYdd92yO17RMNHav3v/+ekMbs7XA2c3lepMO8Yd4/5hqmRw9ZTL6jGzg==
@@ -2792,6 +2792,15 @@
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/hooks/-/hooks-2.8.1.tgz#6e785431db49318048fdd14b601998437b6cc200"
   integrity sha512-DCmCIC0Gn9m6K0Mlg2MwNmTxMEpBu5lTLsI6b/XUAv/vLGa6o+X7RhCai4FWeqkjCU36+ZOwaLzDo4NBWMXaoQ==
+
+"@react-native-firebase/app@~15.4.0":
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-15.4.0.tgz#616a6d13956fbed1ee010ca05b9e62969d19b5c5"
+  integrity sha512-1Xf1Q0x6x6dZamRjIpDLCvj4CUwozr1mvH3sc3A4J1avjGUwgqD0RR58DGd7r9akU+JmEXLHB84EZ9Aa68AHDg==
+  dependencies:
+    "@expo/config-plugins" "^5.0.1"
+    opencollective-postinstall "^2.0.1"
+    superstruct "^0.6.2"
 
 "@react-native-picker/picker@2.4.2":
   version "2.4.2"
@@ -6306,6 +6315,16 @@ clone-deep@^1.0.0:
     kind-of "^5.0.0"
     shallow-clone "^1.0.0"
 
+clone-deep@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-2.0.2.tgz#00db3a1e173656730d1188c3d6aced6d7ea97713"
+  integrity sha512-SZegPTKjCgpQH63E+eN6mVEEPdQBOUzjyJm5Pora4lrwWRFS8I0QAxV/KD6vV/i0WuijHZWQC1fMsPEdxfdVCQ==
+  dependencies:
+    for-own "^1.0.0"
+    is-plain-object "^2.0.4"
+    kind-of "^6.0.0"
+    shallow-clone "^1.0.0"
+
 clone-deep@^4.0.0, clone-deep@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-4.0.1.tgz#c19fd9bdbbf85942b4fd979c84dcf7d5f07c2387"
@@ -8419,6 +8438,42 @@ expo-detox-hook@1.0.10:
     child-process-promise "^2.2.1"
     commander "^2.19.0"
     fs-extra "^7.0.0"
+
+expo-dev-client@~1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-1.3.1.tgz#bcaf46bd4646354d8c6fd3b2270d5802d221ac8b"
+  integrity sha512-GGMaLwc3FNdcGB2UsEj252CV9DmWJWMblqX0h5AtiEnmKyVBRn3/yiQyWdPFDkLletYGvDeILfMHUo/PRdOGIA==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+    expo-dev-launcher "1.3.1"
+    expo-dev-menu "1.3.1"
+    expo-dev-menu-interface "0.7.2"
+    expo-manifests "~0.3.0"
+    expo-updates-interface "~0.7.0"
+
+expo-dev-launcher@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-1.3.1.tgz#6e1f117f10443ac26f63a080f0c0c1cd649c9a14"
+  integrity sha512-yZLJZBEnU10suJg1j3HcX2be7ri1qfDek4axbwb4JG5g5T4+wHHvqfTVNlpitg/wfylI8zj2EzZ0jH6A6NtkNQ==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+    expo-dev-menu "1.3.1"
+    resolve-from "^5.0.0"
+    semver "^7.3.5"
+
+expo-dev-menu-interface@0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu-interface/-/expo-dev-menu-interface-0.7.2.tgz#2198d014bcbe11335225cc3f100226195b441bc4"
+  integrity sha512-Ym0IFsgBj9bdInjRcxv6xfczdTCKfPKUAsLZ1sD5twpOs7oBViMnTC0+KTGkkYHG4EapWbu9yApPmbV3N10Zcg==
+
+expo-dev-menu@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu/-/expo-dev-menu-1.3.1.tgz#9df51bdc8a29b7f662399a7d678950fc4cbbad46"
+  integrity sha512-D3g4JgmxBl1AFmd4MvZfTjzCBDRBqe/wepcsjOlIPunZ9ad87+ACABgQMi1rQ7S2MzlNk+q9OtntVGXfwfoxMQ==
+  dependencies:
+    "@expo/config-plugins" "~5.0.0"
+    expo-dev-menu-interface "0.7.2"
+    semver "^7.3.5"
 
 expo-device@~4.3.0:
   version "4.3.0"
@@ -12232,7 +12287,7 @@ kind-of@^5.0.0, kind-of@^5.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-5.1.0.tgz#729c91e2d857b7a419a1f9aa65685c4c33f5845d"
   integrity sha512-NGEErnH6F2vUuXDh+OlbcKW7/wOcfdRHaZ7VWtqCztfHri/++YKmP51OdWeGPuqCOba6kk2OTe5d02VmTB80Pw==
 
-kind-of@^6.0.0, kind-of@^6.0.2:
+kind-of@^6.0.0, kind-of@^6.0.1, kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
@@ -14184,6 +14239,11 @@ open@^8.0.4, open@^8.3.0:
     define-lazy-prop "^2.0.0"
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
+
+opencollective-postinstall@^2.0.1:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
+  integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
 
 opn@^4.0.2:
   version "4.0.2"
@@ -18454,6 +18514,14 @@ superagent@^3.5.0:
     mime "^1.4.1"
     qs "^6.5.1"
     readable-stream "^2.3.5"
+
+superstruct@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.6.2.tgz#c5eb034806a17ff98d036674169ef85e4c7f6a1c"
+  integrity sha512-lvA97MFAJng3rfjcafT/zGTSWm6Tbpk++DP6It4Qg7oNaeM+2tdJMuVgGje21/bIpBEs6iQql1PJH6dKTjl4Ig==
+  dependencies:
+    clone-deep "^2.0.1"
+    kind-of "^6.0.1"
 
 supports-color@^2.0.0:
   version "2.0.0"
