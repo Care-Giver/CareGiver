@@ -144,6 +144,11 @@ export const AllBookingsScreen: FC<
                 ? previousBookings[0].crecheId
                 : previousBookings[0].visitingId
             }
+            bookingId={
+              previousBookings[0].crecheId
+                ? previousBookings[0].crecheBookingId
+                : previousBookings[0].visitingBookingId
+            }
             petsitterType={previousBookings[0].crecheBookingId ? "creche" : "visiting"}
             serviceType={previousBookings[0].crecheId ? "creche" : "visiting"}
             startDate={

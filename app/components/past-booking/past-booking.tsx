@@ -47,6 +47,7 @@ export const PastBooking = (props: PastBookingProps) => {
     serviceType,
     petsitterType,
     petsitterId,
+    bookingId,
     petsitterName,
     desc,
     startDate,
@@ -137,6 +138,7 @@ export const PastBooking = (props: PastBookingProps) => {
                   petsitterName,
                   petsitterType,
                   petsitterId,
+                  bookingId,
                   serviceType,
                   desc,
                 })

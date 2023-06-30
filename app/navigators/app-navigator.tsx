@@ -141,6 +141,7 @@ export type NavigatorParamList = {
     petsitterName: string
     petsitterType: PetsitterType
     petsitterId: number
+    bookingId: number
     serviceType: ServiceType
     desc: string
   }

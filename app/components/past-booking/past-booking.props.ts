@@ -6,6 +6,7 @@ export interface PastBookingProps {
   serviceType: ServiceType
   petsitterType: PetsitterType
   petsitterId: number
+  bookingId: number
   petsitterName: string
   desc: string
   // ? 여기서는 creche | visiting 모두 Date로 통일한다.

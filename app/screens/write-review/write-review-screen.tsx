@@ -29,6 +29,7 @@ import {
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { images } from "#images"
 import { Rating, ReviewContent, useStores } from "#models"
+import { postVisitingReview } from "../../services/axios/review"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -46,6 +47,7 @@ export const WriteReviewScreen: FC<
     petsitterName,
     petsitterType,
     petsitterId,
+    bookingId,
     serviceType,
     desc,
   } = route.params
@@ -137,7 +139,26 @@ export const WriteReviewScreen: FC<
     }
   }, [])
 
-  console.log("[Selected Images] >>> ", selectedImages)
+  const handleSubmit = useCallback(() => {
+    switch (serviceType) {
+      case "creche":
+        // TODO: 스웨거 스키마 없음
+        break
+
+      case "visiting":
+        postVisitingReview({
+          visitingId: petsitterId,
+          bookingId,
+          desc: reviewText,
+          star: rating,
+          images: selectedImages,
+        })
+        removeReview(reviewId)
+        break
+      default:
+        break
+    }
+  }, [selectedImages, reviewText, rating])
 
   return (
     <ScreenRootView testID="WriteReview">
@@ -218,7 +239,11 @@ export const WriteReviewScreen: FC<
         </View>
       </ScrollView>
       {/* //* 확인 버튼 */}
-      <RegisterSubmitButton text="확인" style={{ position: "absolute", bottom: 0 }} />
+      <RegisterSubmitButton
+        text="확인"
+        style={{ position: "absolute", bottom: 0 }}
+        onPress={handleSubmit}
+      />
     </ScreenRootView>
   )
 })
