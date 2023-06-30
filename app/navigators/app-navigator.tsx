@@ -139,14 +139,14 @@ export type NavigatorParamList = {
   "minseon-test": undefined
   "test-map-screen": undefined
   "test-bottom-sheet": undefined
-  TestWebView: undefined
-  testPushNotification: undefined
+  "test-web-view-screen": undefined
   "temp-screen": undefined
   "kakao-login-test-screen": undefined
   "cg-calendar-screen"
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "test-push-notification-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -334,7 +334,7 @@ const SearchingStack = () => {
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
 
       {/* //? 푸시알림 테스트 화면 */}
-      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+      <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />

@@ -6,6 +6,7 @@ import { HEADER_ROOT } from "../common-styles"
 import { SHADOW_1 } from "#theme"
 import { observer } from "mobx-react-lite"
 import { PopReg12 } from "#components"
+import { navigate } from "#navigators"
 
 export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
   // console.log("HomeScreenHeader props:", props)
@@ -20,7 +21,7 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            alert("알림 기능은 준비중입니다.")
+            navigate("test-push-notification-screen")
           }}
           style={{
             marginLeft: "auto",
