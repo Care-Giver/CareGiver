@@ -2,6 +2,8 @@ import React from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { KeyboardOffsets, ScreenPresets } from "./screen.presets"
 
+type Type = "KeyboardAvoidingView" | "View"
+
 export interface ScreenProps {
   /**
    * Children components.
@@ -43,4 +45,6 @@ export interface ScreenProps {
    * Only applies to scroll preset.
    */
   keyboardShouldPersistTaps?: "handled" | "always" | "never"
+
+  type?: Type
 }
