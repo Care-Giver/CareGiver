@@ -6,9 +6,9 @@
     "slug": "CareGiver",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/application/logo_icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/application/splash1.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,10 +19,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "pet.caregiver",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "pet.caregiver",
+      "versionCode": 1
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/cg_favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6f1b8f47-f5f7-4066-99d1-26e1f066cb6f"
+      }
     }
   }
 }

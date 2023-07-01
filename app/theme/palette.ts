@@ -33,8 +33,22 @@ export const DBG = "#E5E5EC"
 
 export const LBG = "#F8F8FA"
 
+export const KAKAO_YELLOW = "#FCEC4F"
+
+export const NAVER_GREEN = "#07DB68"
+
+export const TOSS_BLUE = "#204FF5"
+
 // * Brand colors
 export const GIVER_CASUAL_NAVY = "#00206C"
+
+export const GIVER_CASUAL_NAVY_80 = "#324C89"
+
+export const GIVER_CASUAL_NAVY_60 = "#6578A6"
+
+export const GIVER_CASUAL_NAVY_40 = "#98A5C3"
+
+export const GIVER_CASUAL_NAVY_20 = "#CBD1E1"
 
 export const GIVER_ROMANTIC_GRAY = "#E8E7E5"
 

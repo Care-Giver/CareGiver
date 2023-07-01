@@ -1,36 +1,27 @@
-import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import React from "react"
+import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
-import { Text } from "../text/text"
-
-const CONTAINER: ViewStyle = {
-  justifyContent: "center",
-}
-
-const TEXT: TextStyle = {
-  fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
-}
 
 export interface <%= props.pascalCaseName %>Props {
   /**
-   * An optional style override useful for padding & margin.
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
 }
 
-/**
- * Describe your component here
- */
 export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
   const { style } = props
-  const styles = Object.assign({}, CONTAINER, style)
+  const allStyles = Object.assign({}, styles.root, style)
 
   return (
-    <View style={styles}>
-      <Text style={TEXT}>Hello</Text>
+    <View style={allStyles}>
+      {/* 해피코딩^^ */}
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  root: {
+    
+  },
 })

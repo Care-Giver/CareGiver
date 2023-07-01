@@ -1,5 +1,22 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "#components": ["./app/components/index"],
+      "#models": ["./app/models/index"],
+      "#navigators": ["./app/navigators/index"],
+      "#screens": ["./app/screens/index"],
+      "#theme": ["./app/theme/index"],
+      "#api": ["./app/services/api/index"],
+      "#axios": ["./app/services/axios/index"],
+      "#images": ["./assets/images/index"],
+      "#fonts": ["./assets/fonts/index"],
+
+      "react": ["./node_modules/@types/react"]
+
+      //* 예외들
+      //! storybook 은 절대로 절대경로 설정하지 말것!
+    },
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -12,21 +29,11 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "target": "esnext",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "App.js",
-    "app",
-    "test",
-    "storybook"
-  ],
+  "exclude": ["node_modules", "babel.config.js"],
+  "include": ["App.js", "app", "test", "storybook", "assets/dummyData/pets-dummy.ts"],
   "extends": "expo/tsconfig.base"
 }
