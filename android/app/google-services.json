@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "688881083690",
+    "project_id": "boreal-logic-389913",
+    "storage_bucket": "boreal-logic-389913.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688881083690:android:01afc9e74b7575014eaa53",
+        "android_client_info": {
+          "package_name": "pet.caregiver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688881083690-tnes3r6h2iq1qpis3pcsj3hubn1itle0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALaNq3mP64I2qwxq_jem4imZuWdGWDCOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688881083690-tnes3r6h2iq1qpis3pcsj3hubn1itle0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
