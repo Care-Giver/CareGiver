@@ -10,7 +10,7 @@ import {
   PastBooking,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, DISABLED, BODY, DEVICE_WINDOW_WIDTH } from "#theme"
 import { FlatList, Pressable, View, Image, ScrollView } from "react-native"
@@ -126,7 +126,10 @@ export const AllBookingsScreen: FC<
         <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
           <PreReg16 text="지난 예약" color={DISABLED} />
           {previousBookings.length > 0 && (
-            <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+            <Pressable
+              style={{ flexDirection: "row", alignItems: "center" }}
+              onPress={() => navigate("past-bookings-screen", { pastBookings: previousBookings })}
+            >
               <PreMed16 text="더보기" color={BODY} />
               <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
             </Pressable>

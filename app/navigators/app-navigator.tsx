@@ -50,6 +50,7 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  PastBookingsScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -77,6 +78,7 @@ import { PetsitterType, ServiceType, Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
 import { WriteReviewScreen } from "#screens"
+import { PreviousBooking } from "#axios"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -136,6 +138,7 @@ export type NavigatorParamList = {
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
 
+  // ? 리뷰 작성 스크린
   "write-review-screen": {
     profileImage: string | null
     petsitterName: string
@@ -144,6 +147,10 @@ export type NavigatorParamList = {
     bookingId: number
     serviceType: ServiceType
     desc: string
+  }
+  // ? 지난 예약 내역 스크린
+  "past-bookings-screen": {
+    pastBookings: PreviousBooking[]
   }
 
   //* test screens
@@ -214,6 +221,16 @@ const BookingsStack = () => {
         component={BookingDetailScreen}
         options={{
           title: "예약내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 지난 예약 내역 스크린 */}
+      <Stack.Screen
+        name="past-bookings-screen"
+        component={PastBookingsScreen}
+        options={{
+          title: "지난 예약",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
