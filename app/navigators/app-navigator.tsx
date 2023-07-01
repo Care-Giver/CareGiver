@@ -144,7 +144,7 @@ export type NavigatorParamList = {
   "test-web-view-screen": undefined
   "temp-screen": undefined
   "kakao-login-test-screen": undefined
-  "cg-calendar-screen"
+  "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
@@ -668,7 +668,6 @@ const CgBookingsStack = () => {
     >
       {/* //* 예약관리 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="manage-booking-screen"
         component={ManageBookingScreen}
         options={{
@@ -857,7 +856,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
