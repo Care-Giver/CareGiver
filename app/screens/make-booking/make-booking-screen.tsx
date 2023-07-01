@@ -13,6 +13,8 @@ import {
 import { View, ScrollView, Pressable, StyleSheet, Keyboard, Platform } from "react-native"
 import { useKeyboard } from "@react-native-community/hooks"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -135,8 +137,8 @@ export const MakeBookingScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="MakeBooking">
-      <ScrollView>
+    <ScreenRootView testID="MakeBooking" type="View">
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <PreReg12
           style={{ textAlign: "right" }}
           color={DISABLED}
@@ -255,8 +257,7 @@ export const MakeBookingScreen: FC<
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
         />
-      </ScrollView>
-
+      </KeyboardAwareScrollView>
       {isButtonShown && (
         <Pressable style={styles.pressableContainer} onPress={onPress}>
           <PreBol16 text={"예약하기"} color="white" />
