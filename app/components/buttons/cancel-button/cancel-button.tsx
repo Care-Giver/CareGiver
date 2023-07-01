@@ -21,7 +21,7 @@ export const CancelButton = observer(function CancelButton(props: CancelButtonPr
       <PreMed12
         text={title}
         color={textcolor}
-        style={{ width: 42, height: 25, paddingVertical: 4 }}
+        style={{ width: 58, height: 23, paddingVertical: 4, textAlign: "center" }}
       />
     </Pressable>
   )
