@@ -27,6 +27,7 @@ import {
   offsets,
   presets,
 } from "/Users/iyebeom/CareGiver/app/components/basics/ignite-basics/screen/screen.presets"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -69,6 +70,10 @@ export const MakeBookingScreen: FC<
       keyboardDown.remove()
     }
   }, [])
+
+  const isButtonShown =
+    (Platform.OS === "android" && !keyboard.keyboardShown) ||
+    (Platform.OS === "ios" && !keyboardStatus)
 
   /**
    *  1번째 버튼 그룹의 예외 처리
@@ -148,8 +153,8 @@ export const MakeBookingScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="MakeBooking">
-      <ScrollView>
+    <ScreenRootView testID="MakeBooking" type="View">
+      <KeyboardAwareScrollView>
         <PreReg12
           style={{ textAlign: "right" }}
           color={DISABLED}
@@ -268,15 +273,10 @@ export const MakeBookingScreen: FC<
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
         />
-      </ScrollView>
-      {Platform.OS === "android" && !keyboard.keyboardShown && (
+      </KeyboardAwareScrollView>
+      {isButtonShown && (
         <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
-          <PreBol16 text={"확인"} color="white" />
-        </Pressable>
-      )}
-      {Platform.OS === "ios" && !keyboardStatus && (
-        <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
-          <PreBol16 text={"확인"} color="white" />
+          <PreBol16 text={"예약하기"} color="white" />
         </Pressable>
       )}
     </ScreenRootView>
