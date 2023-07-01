@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { PickerImage } from "#components"
 
 export type PetsitterType = "creche" | "visiting"
 export type ServiceType = "creche" | "visiting"
@@ -26,7 +27,7 @@ export const ReviewModel = types
     // ? 리뷰 내용
     description: types.string,
     // ? 리뷰 첨부 사진
-    images: types.optional(types.frozen<string[]>(), null),
+    images: types.optional(types.frozen<PickerImage[]>(), null),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

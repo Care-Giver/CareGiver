@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types, destroy } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { ReviewModel, ServiceType, Rating } from "../review/review"
+import { PickerImage } from "#components"
 
 interface ReviewData {
   // ? 예약 진행자가 crecheId를 갖는지(위탁) | visitingId를 갖는지(방문)
@@ -14,7 +15,7 @@ interface ReviewData {
   // ? 리뷰 내용
   description: string
   // ? 리뷰 첨부 사진
-  images: string[]
+  images: PickerImage[]
 }
 
 // TODO: interface로 어떻게 ..? type으로 하면 모델로 입력받아야 해서 코드가 복잡해짐
@@ -26,7 +27,7 @@ export interface ReviewContent {
   // ? 리뷰 내용
   description: string
   // ? 리뷰 첨부 사진
-  images: string[]
+  images: PickerImage[]
 }
 
 /**

@@ -19,7 +19,7 @@ export const InProgressBooking = (props: InProgressBookingProps) => {
     <Pressable style={style} onPress={handlePress}>
       <ImageBackground
         source={images.in_progress_booking_background}
-        // resizeMode="stretch"
+        resizeMode="stretch"
         style={styles.background}
       >
         <InProgressBookingProfile caregiverData={currentBooking} />

@@ -25,6 +25,7 @@ import {
   UnderlineText,
   RegisterSubmitButton,
   PreBol14,
+  PickerImage,
 } from "#components"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
 import { images } from "#images"
@@ -76,7 +77,7 @@ export const WriteReviewScreen: FC<
   }, [])
 
   // * 업로드 이미지 리스트
-  const [selectedImages, setSelectedImages] = useState<string[]>([])
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>([])
   // * 리뷰 텍스트
   const [reviewText, setReviewText] = useState<string>("")
   // * 별점
@@ -145,6 +146,7 @@ export const WriteReviewScreen: FC<
         // TODO: 스웨거 스키마 없음
         break
 
+      // ? 방문 서비스의 경우, visiting-review api에 POST 요청을 보낸다.
       case "visiting":
         postVisitingReview({
           visitingId: petsitterId,
@@ -153,7 +155,15 @@ export const WriteReviewScreen: FC<
           star: rating,
           images: selectedImages,
         })
-        removeReview(reviewId)
+          .then((success) => {
+            if (success) removeReview(reviewId)
+            else throw new Error("")
+          })
+          .catch((err) => {
+            // ! 임시 문구로 넣음
+            alert("처리 중에 문제가 발생했습니다.\n다시 시도해주세요.")
+            console.error("[write-review-screen] 리뷰 post 에러 >>>", err)
+          })
         break
       default:
         break
@@ -223,7 +233,7 @@ export const WriteReviewScreen: FC<
           multiline
           onChangeText={setReviewText}
           value={reviewText}
-          // onSubmitEditing={Keyboard.dismiss}
+          // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료
           style={[
             {
               marginTop: 20,
