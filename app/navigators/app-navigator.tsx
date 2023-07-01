@@ -51,6 +51,7 @@ import {
   BookingDetailScreen,
   LoginScreen,
   MakeBookingScreen,
+  PaymentScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -149,6 +150,7 @@ export type NavigatorParamList = {
   "ye-beom-test-screen": undefined
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
+  "payment-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -269,6 +271,16 @@ const SearchingStack = () => {
           ),
           // title: null,
           headerTitle: "",
+        }}
+      />
+
+      {/* 결제 정보 */}
+      <Stack.Screen
+        name="payment-screen"
+        component={PaymentScreen}
+        options={{
+          title: "결제 정보",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 

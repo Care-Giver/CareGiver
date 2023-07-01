@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   ScreenRootView,
   PlaceHolderInputBox,
@@ -10,16 +10,7 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import {
-  View,
-  ScrollView,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Keyboard,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native"
+import { View, ScrollView, Pressable, StyleSheet, Keyboard, Platform } from "react-native"
 import { useKeyboard } from "@react-native-community/hooks"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
@@ -34,8 +25,8 @@ export const MakeBookingScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
 
-  const checkbuttonPress = () => {
-    Alert.alert("확인 버튼이 눌렸습니다.")
+  const onPress = () => {
+    navigate("payment-screen")
   }
 
   /**
@@ -267,7 +258,7 @@ export const MakeBookingScreen: FC<
       </ScrollView>
 
       {isButtonShown && (
-        <Pressable style={styles.pressableContainer} onPress={checkbuttonPress}>
+        <Pressable style={styles.pressableContainer} onPress={onPress}>
           <PreBol16 text={"예약하기"} color="white" />
         </Pressable>
       )}
