@@ -10,23 +10,10 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import {
-  View,
-  ScrollView,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Keyboard,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native"
+import { View, Pressable, Alert, StyleSheet, Keyboard, Platform } from "react-native"
 import { useKeyboard } from "@react-native-community/hooks"
 
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
-import {
-  offsets,
-  presets,
-} from "/Users/iyebeom/CareGiver/app/components/basics/ignite-basics/screen/screen.presets"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 // import { useNavigation } from "@react-navigation/native"
