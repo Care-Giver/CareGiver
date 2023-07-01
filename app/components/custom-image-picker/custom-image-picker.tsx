@@ -2,7 +2,6 @@ import React, { useCallback } from "react"
 import { StyleProp, ViewStyle, View, StyleSheet, Pressable, Image, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
 import { ScrollView } from "react-native-gesture-handler"
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import { PreReg16 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
@@ -29,11 +28,14 @@ export const CustomImagePicker = observer(function CustomImagePicker(
   const { selectedImages, setSelectedImages, submitButtonText, selectionLimit, style } = props
   const allStyles = Object.assign({}, styles.root, style)
 
-  const removeImage = (index: number) => {
-    const updatedImages = [...selectedImages]
-    updatedImages.splice(index, 1)
-    setSelectedImages(updatedImages)
-  }
+  const removeImage = useCallback(
+    (index: number) => {
+      const updatedImages = [...selectedImages]
+      updatedImages.splice(index, 1)
+      setSelectedImages(updatedImages)
+    },
+    [selectedImages],
+  )
 
   const options: ImageLibraryOptions = {
     mediaType: "photo",
@@ -47,7 +49,6 @@ export const CustomImagePicker = observer(function CustomImagePicker(
     launchImageLibrary(options, (response) => {
       if (!response.didCancel) {
         const newImages: PickerImage[] = response.assets.map((current) => {
-          current.uri
           return {
             name: current.fileName,
             type: current.type,
@@ -69,7 +70,7 @@ export const CustomImagePicker = observer(function CustomImagePicker(
   }, [selectedImages])
 
   const disableAlert = useCallback(() => {
-    alert(`이미지는 최대 ${selectionLimit}장까지 선택 가능합니다.`)
+    alert(`사진은 최대 ${selectionLimit}장까지 선택 가능합니다.`)
   }, [])
 
   const isEmpty = selectedImages.length === 0
@@ -94,12 +95,9 @@ export const CustomImagePicker = observer(function CustomImagePicker(
                 source={{ uri: image.uri }}
                 style={{ width: 128, height: 128, borderRadius: 8 }}
               />
-              <TouchableOpacity
-                style={styles.deleteButtonWrapper}
-                onPress={() => removeImage(index)}
-              >
+              <Pressable style={styles.deleteButtonWrapper} onPress={() => removeImage(index)}>
                 <Image source={images.x_in_circle} style={styles.deleteButton} />
-              </TouchableOpacity>
+              </Pressable>
             </View>
           ))
         )}
