@@ -129,15 +129,9 @@ export const CaregiverDetailInformationScreen: FC<
 
   const { sitterData } = route.params
   const { profileImg, name, rating } = sitterData
-  console.log(sitterData)
 
-  const [modalState, setmodalState] = useState(true)
-  const handleModal = () => {
-    if (modalState == true) {
-      setmodalState(false)
-    } else {
-      setmodalState(true)
-    }
+  const onPressMakeBookingButton = () => {
+    navigate("make-booking-screen")
   }
 
   return (
@@ -283,7 +277,7 @@ export const CaregiverDetailInformationScreen: FC<
             // 원본
             alert("결제하기 화면으로 이동")
           }}*/
-            onPress={handleModal}
+            onPress={onPressMakeBookingButton}
           />
         </Animated.View>
       )}

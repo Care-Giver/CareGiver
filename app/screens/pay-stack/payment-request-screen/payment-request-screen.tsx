@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions } from "react-native"
+import { View, Text, useWindowDimensions, ScrollView } from "react-native"
 import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -197,147 +197,152 @@ export const PaymentRequestScreen: FC<
 
   return (
     <ScreenRootView>
-      {/* //* 안내 문구 */}
-      <PreReg12
-        style={{ marginLeft: "auto" }}
-        text={"상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다 :)"}
-        color={DISABLED}
-      />
+      <ScrollView>
+        {/* //* 안내 문구 */}
+        <PreReg12
+          style={{ marginLeft: "auto" }}
+          text={"상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다 :)"}
+          color={DISABLED}
+        />
+        {/* //* 첫 번째 요청사항 - 도구, 사료 위치 */}
+        <PreBol14
+          style={{ marginTop: 24 }}
+          text={"펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"}
+          color={STRONG_LINE}
+        />
+        <UserTextInput
+          style={{ marginTop: 8 }}
+          placeholder={"Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"}
+          placeholderColor={DISABLED}
+          value={toolsLocation}
+          handleChange={settoolsLocation}
+        />
+        {/* //* ---------------- */}
 
-      {/* //* 첫 번째 요청사항 - 도구, 사료 위치 */}
-      <PreBol14
-        style={{ marginTop: 24 }}
-        text={"펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"}
-        color={STRONG_LINE}
-      />
-      <UserTextInput
-        style={{ marginTop: 8 }}
-        placeholder={"Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"}
-        placeholderColor={DISABLED}
-        value={toolsLocation}
-        handleChange={settoolsLocation}
-      />
-      {/* //* ---------------- */}
+        {/* //* 두 번재 요청사항 - 먹으면 안되는 음식 */}
+        <PreBol14
+          style={{ marginTop: 16 }}
+          text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
+          color={STRONG_LINE}
+        />
+        {/* //? 버튼 입력 */}
+        <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
+          {ALLERGYS.map((allergy, index) => (
+            <BorderRadioButton
+              key={index}
+              style={{
+                width: getButtonWidth(
+                  windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                  ALLERGYS.length,
+                  6,
+                ),
+              }}
+              active={allergy.value}
+              onPress={() => handleAllergyPress(allergy.name)}
+            >
+              <PreMed14>{allergy.name}</PreMed14>
+            </BorderRadioButton>
+          ))}
+        </View>
 
-      {/* //* 두 번재 요청사항 - 먹으면 안되는 음식 */}
-      <PreBol14
-        style={{ marginTop: 16 }}
-        text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
-        color={STRONG_LINE}
-      />
-      {/* //? 버튼 입력 */}
-      <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
-        {ALLERGYS.map((allergy, index) => (
-          <BorderRadioButton
-            key={index}
-            style={{
-              width: getButtonWidth(
-                windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-                ALLERGYS.length,
-                6,
-              ),
-            }}
-            active={allergy.value}
-            onPress={() => handleAllergyPress(allergy.name)}
-          >
-            <PreMed14>{allergy.name}</PreMed14>
-          </BorderRadioButton>
-        ))}
-      </View>
+        {/* //? 텍스트 입력 */}
+        <UserTextInput
+          style={{ marginTop: 11 }}
+          placeholder={"주의할 음식을 직접 작성해주세요!"}
+          placeholderColor={DISABLED}
+          value={allergyText}
+          handleChange={setAllergyText}
+        />
+        {/* //* ---------------- */}
 
-      {/* //? 텍스트 입력 */}
-      <UserTextInput
-        style={{ marginTop: 11 }}
-        placeholder={"주의할 음식을 직접 작성해주세요!"}
-        placeholderColor={DISABLED}
-        value={allergyText}
-        handleChange={setAllergyText}
-      />
-      {/* //* ---------------- */}
+        {/* //* 세 번째 요청사항 - 반려동물과 친해지는 팁 */}
+        <PreBol14
+          style={{ marginTop: 16 }}
+          text="반려동물과 친해질 수 있는 꿀팁을 알려주세요."
+          color={STRONG_LINE}
+        />
+        {/* //? 버튼 입력 */}
+        <View
+          style={{
+            marginTop: 14,
+            alignItems: "stretch",
+          }}
+        >
+          {TIPS.map((tip, index) => (
+            <BorderRadioButton
+              key={index}
+              style={{ marginTop: index === 0 ? 0 : 8 }}
+              active={tip.value}
+              onPress={() => handleTipPress(tip.name)}
+            >
+              <PreMed14 text={tip.name} />
+            </BorderRadioButton>
+          ))}
+        </View>
 
-      {/* //* 세 번째 요청사항 - 반려동물과 친해지는 팁 */}
-      <PreBol14
-        style={{ marginTop: 16 }}
-        text="반려동물과 친해질 수 있는 꿀팁을 알려주세요."
-        color={STRONG_LINE}
-      />
-      {/* //? 버튼 입력 */}
-      <View
-        style={{
-          marginTop: 14,
-          alignItems: "stretch",
-        }}
-      >
-        {TIPS.map((tip, index) => (
-          <BorderRadioButton
-            key={index}
-            style={{ marginTop: index === 0 ? 0 : 8 }}
-            active={tip.value}
-            onPress={() => handleTipPress(tip.name)}
-          >
-            <PreMed14 text={tip.name} />
-          </BorderRadioButton>
-        ))}
-      </View>
+        {/* //? 텍스트 입력 */}
+        <UserTextInput
+          style={{ marginTop: 8 }}
+          placeholder="꿀팁을 자유롭게 작성해주세요"
+          placeholderColor={DISABLED}
+          value={tipText}
+          handleChange={setTipText}
+        />
 
-      {/* //? 텍스트 입력 */}
-      <UserTextInput
-        style={{ marginTop: 8 }}
-        placeholder="꿀팁을 자유롭게 작성해주세요"
-        placeholderColor={DISABLED}
-        value={tipText}
-        handleChange={setTipText}
-      />
+        {/* //* 네 번째 요청사항 - 배변 처리 방법 */}
+        <PreBol14
+          style={{ marginTop: 16 }}
+          text="배변 처리 방법을 알려주세요"
+          color={STRONG_LINE}
+        />
+        {/* //? 텍스트 입력 */}
+        <UserTextInput
+          style={{ marginTop: 8 }}
+          placeholder="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
+          placeholderColor={DISABLED}
+          value={howTreatPoop}
+          handleChange={setHowTreatPoop}
+        />
 
-      {/* //* 네 번째 요청사항 - 배변 처리 방법 */}
-      <PreBol14 style={{ marginTop: 16 }} text="배변 처리 방법을 알려주세요" color={STRONG_LINE} />
-      {/* //? 텍스트 입력 */}
-      <UserTextInput
-        style={{ marginTop: 8 }}
-        placeholder="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
-        placeholderColor={DISABLED}
-        value={howTreatPoop}
-        handleChange={setHowTreatPoop}
-      />
+        {/* //* 다섯 번째 요청사항 - 스킨십 싫어하는 부위 */}
+        <PreBol14
+          style={{ marginTop: 16 }}
+          text="스킨십할 때 싫어하는 부위를 말씀해주세요"
+          color={STRONG_LINE}
+        />
+        {/* //? 버튼 입력 */}
+        <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
+          {DISLIKED_PARTS.map((part, index) => (
+            <BorderRadioButton
+              key={index}
+              style={{
+                width: getButtonWidth(
+                  windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                  DISLIKED_PARTS.length,
+                  6,
+                ),
+              }}
+              active={part.value}
+              onPress={() => handleDislikePress(part.name)}
+            >
+              <PreMed14>{part.name}</PreMed14>
+            </BorderRadioButton>
+          ))}
+        </View>
 
-      {/* //* 다섯 번째 요청사항 - 스킨십 싫어하는 부위 */}
-      <PreBol14
-        style={{ marginTop: 16 }}
-        text="스킨십할 때 싫어하는 부위를 말씀해주세요"
-        color={STRONG_LINE}
-      />
-      {/* //? 버튼 입력 */}
-      <View style={{ marginTop: 14, flexDirection: "row", justifyContent: "space-between" }}>
-        {DISLIKED_PARTS.map((part, index) => (
-          <BorderRadioButton
-            key={index}
-            style={{
-              width: getButtonWidth(
-                windowWidth - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-                DISLIKED_PARTS.length,
-                6,
-              ),
-            }}
-            active={part.value}
-            onPress={() => handleDislikePress(part.name)}
-          >
-            <PreMed14>{part.name}</PreMed14>
-          </BorderRadioButton>
-        ))}
-      </View>
-
-      {/* //* 여섯 번째 요청사항 - 자율 작성 */}
-      <PreBol14 style={{ marginTop: 72 }} text="자유 요청 사항" color={STRONG_LINE} />
-      {/* //? 텍스트 입력 */}
-      <UserTextInput
-        style={{ marginTop: 8, height: 161 }}
-        placeholder="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
-        placeholderColor={DISABLED}
-        value={freeRequest}
-        handleChange={setFreeRequest}
-      />
-      {/* //? 마진 */}
-      <View style={{ height: 290 }} />
+        {/* //* 여섯 번째 요청사항 - 자율 작성 */}
+        <PreBol14 style={{ marginTop: 72 }} text="자유 요청 사항" color={STRONG_LINE} />
+        {/* //? 텍스트 입력 */}
+        <UserTextInput
+          style={{ marginTop: 8, height: 161 }}
+          placeholder="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
+          placeholderColor={DISABLED}
+          value={freeRequest}
+          handleChange={setFreeRequest}
+        />
+        {/* //? 마진 */}
+        <View style={{ height: 290 }} />
+      </ScrollView>
     </ScreenRootView>
   )
 })

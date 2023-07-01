@@ -59,3 +59,9 @@ export const IOS_BOTTOM_HOME_BAR_HEIGHT = 34
 // * 안드로이드 상단 status bar, 하단 네비게이션 높이
 export const ADNROID_STATUS_BAR_HEIGHT = 21.25
 export const ADNROID_BOTTOM_NAVIGATION_HEIGHT = 26.75
+
+// (공통) 하단 높이
+export const BOTTOM_HEIGHT = Platform.select({
+  ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
+  android: ADNROID_BOTTOM_NAVIGATION_HEIGHT,
+})

@@ -50,6 +50,7 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  MakeBookingScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -147,6 +148,7 @@ export type NavigatorParamList = {
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "test-push-notification-screen": undefined
+  "make-booking-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -308,13 +310,23 @@ const SearchingStack = () => {
         }}
       />
 
-      {/* //* 결제 - 요청사항 */}
-      <Stack.Screen
+      {/* //* (구)요청사항 */}
+      {/* <Stack.Screen
         name="payment-request-screen"
         component={PaymentRequestScreen}
         options={{
           title: "요청사항",
           header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
+        }}
+      /> */}
+
+      {/*// 요청 사항 (결제 직전 스크린 입니다. 이 스크린에서 결제스크린으로 넘어갑니다. )  */}
+      <Stack.Screen
+        name="make-booking-screen"
+        component={MakeBookingScreen}
+        options={{
+          title: "요청 사항",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
@@ -831,14 +843,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
         component={MinseonTest}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/*// MVP-20 */}
-      <Stack.Screen
-        name="ye-beom-test-screen"
-        component={YeBeomTestScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
