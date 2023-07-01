@@ -50,6 +50,7 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  CancelReservationScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -158,6 +159,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "cancel-reservation-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -241,8 +243,16 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      // initialRouteName="home-screen"
+      initialRouteName="cancel-reservation-screen"
     >
+      <Stack.Screen
+        name="cancel-reservation-screen"
+        component={CancelReservationScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
