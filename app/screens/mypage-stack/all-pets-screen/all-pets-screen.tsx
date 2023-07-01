@@ -14,9 +14,13 @@ import {
 // import { SUB_HEAD_LINE, HEAD_LINE, WIDTH } from "#theme"
 import { styles } from "./styles"
 import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import { useStores } from "#models"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
+    // MST store 를 가져옵니다.
+    const { petStore } = useStores()
+
     // const [pets, setPets] = useState<Pet[]>([])
     const { pets } = route.params
 

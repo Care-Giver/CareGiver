@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Pressable, Image, View, ViewStyle } from "react-native"
+import { Pressable, Image, ViewStyle, ImageStyle } from "react-native"
 import { images } from "#images"
 import { BlueCheckboxProps } from "./blue-checkbox.props"
 
@@ -8,7 +8,7 @@ const ROOT: ViewStyle = {
   // backgroundColor: "red",
 }
 
-const IMAGE: ViewStyle = {
+const IMAGE: ImageStyle = {
   width: 20,
   height: 20,
 }

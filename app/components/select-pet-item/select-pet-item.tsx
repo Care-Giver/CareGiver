@@ -5,8 +5,26 @@ import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { BODY } from "#theme"
 import { Row } from "../basics/row/row"
 import { BlueCheckbox } from "../blue-checkbox/blue-checkbox"
+import { HandleType, Pet, Sex } from "#models"
 
-export const SelectPetItem = (props) => {
+interface PetWithSize extends Pet {
+  size: HandleType
+}
+
+type PetData = Pick<PetWithSize, "id" | "name" | "species" | "age" | "sex" | "size">
+
+interface SelectPetItemProps {
+  petData: PetData
+
+  // TODO : 아래에 있는 type들 수정하기
+  style: any
+  onPress: any
+  index: any
+  selectedPets: any
+  setSelectedPets: any
+}
+
+export const SelectPetItem = (props: SelectPetItemProps) => {
   const { petData, style, onPress, index, selectedPets, setSelectedPets } = props
   const { id, name, size, species, age, sex } = petData
 
@@ -48,11 +66,11 @@ export const SelectPetItem = (props) => {
     }
   }
 
-  let _sex = ""
-  if (sex === "male") {
-    _sex = "남"
-  } else {
-    _sex = "여"
+  let sexText = ""
+  if (sex === Sex.MALE) {
+    sexText = "남"
+  } else if (sex === Sex.FEMALE) {
+    sexText = "여"
   }
 
   return (
@@ -70,9 +88,11 @@ export const SelectPetItem = (props) => {
       {/* //? 종 */}
       <View style={styles.speciesContainer}>
         <PreReg14
-          text={species.length <= 3 ? `${species}` : `${species.substring(0, 2)}..`} //? 4글자 부터는 2글자까지만 표기하고 점 두개. ex) 사모예드 -> 사모..
+          text={species.name}
           color={BODY}
           style={{ textAlign: "center" }}
+          //@ts-ignore
+          numberOfLines={1}
         />
       </View>
 
@@ -83,7 +103,7 @@ export const SelectPetItem = (props) => {
 
       {/* //? 성별 */}
       <View style={styles.sexContainer}>
-        <PreReg14 text={sex} color={BODY} style={{ textAlign: "center" }} />
+        <PreReg14 text={sexText} color={BODY} style={{ textAlign: "center" }} />
       </View>
 
       {/* //? 추가/삭제 체크박스 버튼 */}

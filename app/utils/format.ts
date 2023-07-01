@@ -46,3 +46,20 @@ export const korCgType = (caregiverType: "petsitter" | "trainer") => {
   else if (caregiverType === "trainer") return "훈련사"
   else return null
 }
+
+/**
+ *
+ * @param millisecond UTC millisecond 값. 예) 1686787200000
+ * @return YYYY-MM-DDTHH:MM:SS 문자열. 예) 2023-06-15T00:00:00
+ */
+export function msToTimestamp(millisecond: number): string {
+  const date = new Date(millisecond)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  const hours = String(date.getHours()).padStart(2, "0")
+  const minutes = String(date.getMinutes()).padStart(2, "0")
+  const seconds = String(date.getSeconds()).padStart(2, "0")
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+}

@@ -1,16 +1,32 @@
-import { View, Text, Pressable, Image } from "react-native"
+import { View, Pressable, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
-import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { BODY, DBG, HEAD_LINE, LBG, SUB_HEAD_LINE } from "#theme"
+import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { BODY, DBG, LBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { DivisionLine } from "../division-line/division-line"
-
 import { Row } from "../basics/row/row"
+import { HandleType, Pet } from "#models"
 
-export const SelectedPetCard = (props) => {
+interface PetWithSize extends Pet {
+  size: HandleType
+}
+
+type PetData = Pick<PetWithSize, "id" | "name" | "species" | "age" | "sex" | "size">
+
+interface SelectedPetCardProps {
+  petData: PetData
+  deletable: boolean
+
+  // TODO : 아래에 있는 type들 수정하기
+  style: any
+  onPress: any
+  index: any
+}
+
+export const SelectedPetCard = (props: SelectedPetCardProps) => {
   const { petData, style, onPress, index, deletable = true } = props
-  const { name, size, species, age, sex } = petData
+  const { id, name, size, species, age, sex } = petData
 
   return (
     <View style={[styles.root, style]}>
@@ -26,9 +42,11 @@ export const SelectedPetCard = (props) => {
             <PreReg14 text={size} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14
-              text={species.length <= 6 ? `${species}` : `${species.substring(0, 5)}..`} //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
+              text={species.name}
               color={BODY}
               style={{ marginLeft: 8 }}
+              //@ts-ignore
+              numberOfLines={1}
             />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
