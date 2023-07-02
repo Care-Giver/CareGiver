@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { confirmedBookings, getconfirmedBookings } from "../../services/axios/confirmed-bookings"
+import { ConfirmedBookings, getconfirmedBookings } from "../../services/axios/confirmed-bookings"
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -8,12 +8,12 @@ import { confirmedBookings, getconfirmedBookings } from "../../services/axios/co
 export const ConfirmedBookingsModel = types
   .model("ConfirmedBookings")
   .props({
-    confirmedBookings: types.optional(types.frozen<confirmedBookings[] | null>(), null),
+    confirmedBookings: types.optional(types.frozen<ConfirmedBookings[] | null>(), null),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    setResponse(response: confirmedBookings[]) {
+    setResponse(response: ConfirmedBookings[]) {
       self.confirmedBookings = response
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

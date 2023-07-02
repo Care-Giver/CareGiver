@@ -6,13 +6,13 @@ import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-c
 import { GIVER_CASUAL_NAVY, SHADOW_1, WIDTH } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
 import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { confirmedBookings } from "../../services/axios/confirmed-bookings"
+import { ConfirmedBookings } from "../../services/axios/confirmed-bookings"
 
 export interface BookingListProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
-  bookings?: confirmedBookings[]
+  bookings?: ConfirmedBookings[]
   style?: StyleProp<ViewStyle>
 }
 
@@ -99,23 +99,28 @@ export const BookingList = observer(function BookingList(props: BookingListProps
       ],
     },
   ]
-
-  props.bookings.map((item, idx) => {
-    console.log(item.services)
-    const dataprop = {
-      name: item.name,
-      serviceType: "creche",
-      petname: item.pets[0].name,
-      species: item.pets[0].species.name,
-      petservices: item.services,
-      address: item.address,
-      time: item.startTime,
-      height: 50,
-      day: item.startTime.substring(0, 10),
+  React.useLayoutEffect(() => {
+    if (props.bookings.length > 0) {
+      props.bookings.map((item, idx) => {
+        console.log(item.services)
+        const dataprop = {
+          name: item.name,
+          serviceType: "creche",
+          petname: item.pets[0].name,
+          species: item.pets[0].species.name,
+          petservices: item.services,
+          address: item.address,
+          time: item.startTime,
+          height: 50,
+          day: item.startTime.substring(0, 10),
+        }
+        const newData = { title: String(idx), data: [dataprop] }
+        sections.push(newData)
+      })
+    } else {
+      console.log("nothing")
     }
-    const newData = { title: String(idx), data: [dataprop] }
-    sections.push(newData)
-  })
+  }, [])
 
   const renderItem = ({ item }) => {
     //console.log(item.petservices)
