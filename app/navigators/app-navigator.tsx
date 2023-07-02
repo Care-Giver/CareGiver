@@ -52,6 +52,9 @@ import {
   LoginScreen,
   MakeBookingScreen,
   PaymentScreen,
+  TestIamportScreen,
+  TestIamportPaymentScreen,
+  TestIamportPaymentResultScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -151,6 +154,10 @@ export type NavigatorParamList = {
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
   "payment-screen": undefined
+  // iamport 테스트
+  "test-iamport-screen": undefined
+  "test-iamport-payment-screen": undefined
+  "test-iamport-payment-result-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -362,6 +369,36 @@ const SearchingStack = () => {
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-screen"
+        component={TestIamportScreen}
+        options={{
+          title: "결제테스트 세팅",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-screen"
+        component={TestIamportPaymentScreen}
+        options={{
+          title: "결제 진행중",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-result-screen"
+        component={TestIamportPaymentResultScreen}
+        options={{
+          title: "결제 결과",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
