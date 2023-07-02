@@ -81,6 +81,8 @@ PODS:
   - GoogleMaps/Base (7.4.0)
   - GoogleMaps/Maps (7.4.0):
     - GoogleMaps/Base
+  - Permission-AppTrackingTransparency (3.8.0):
+    - RNPermissions
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -386,6 +388,8 @@ PODS:
     - React-Core
   - RNKeychain (6.2.0):
     - React
+  - RNPermissions (3.8.0):
+    - React-Core
   - RNReanimated (2.9.1):
     - DoubleConversion
     - FBLazyVector
@@ -445,6 +449,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils (from `https://github.com/Simon-TechForm/google-maps-ios-utils.git`, branch `feat/support-apple-silicon`)
+  - Permission-AppTrackingTransparency (from `../node_modules/react-native-permissions/ios/AppTrackingTransparency`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -484,6 +489,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -548,6 +554,8 @@ EXTERNAL SOURCES:
   Google-Maps-iOS-Utils:
     :branch: feat/support-apple-silicon
     :git: https://github.com/Simon-TechForm/google-maps-ios-utils.git
+  Permission-AppTrackingTransparency:
+    :path: "../node_modules/react-native-permissions/ios/AppTrackingTransparency"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -624,6 +632,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -666,6 +676,7 @@ SPEC CHECKSUMS:
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   Google-Maps-iOS-Utils: d3fdfd57db799771418f06189e33981597553aa8
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
+  Permission-AppTrackingTransparency: 7a48e816f801d10f2402c5b4edbe620ad8a412d9
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: c8c080849a3670601d5c7056023a2176067a69d8
   RCTTypeSafety: 710aef40f5ae246bc5fff7e873855b17ed11c180
@@ -704,10 +715,11 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 30e6733efc179d1e49d6008ea5fce42cdc9aeeca
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
+  RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
   RNReanimated: 2cf7451318bb9cc430abeec8d67693f9cf4e039c
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   Yoga: 75bf4b0131cfb46a659cd0c13309b79a6fcff66d
 
-PODFILE CHECKSUM: be5cbcce394b32c7ef3b60a94e7f97505c85212d
+PODFILE CHECKSUM: 036345fbb5fc8a5d594078cacb053e1b1443bda6
 
 COCOAPODS: 1.12.1
