@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from "reac
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { PreBol18, PreMed16, ScreenRootView } from "#components"
+import { PreBol16, PreBol18, PreMed16, ScreenRootView } from "#components"
 import { useShowBottomTab } from "app/utils/hooks"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { images } from "#images"
-import { LIGHT_LINE } from "#theme"
+import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -22,9 +22,26 @@ export const CancelReservationScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-  // 선택된 이유
+
+  // reason 선택시 selected에 저장.
   const [selected, setSelected] = useState("")
-  console.log(selected)
+  // reason에서 기타 선택시, inputText 입력값 저장
+  const [input, setInput] = useState("")
+  // 최종적으로 선택한 reason finalReason에 저장.
+  const [finalReason, setFinalReason] = useState("")
+
+  const onSubmit = () => {
+    if (input === "") {
+      setFinalReason(selected)
+    } else {
+      setFinalReason(input)
+    }
+  }
+  console.log("selected", selected)
+  console.log(input)
+  console.log("finalReason", finalReason)
+
+  // reason list
   const reason = [
     "예약이 필요없어졌어요.",
     "실수로 예약했어요.",
@@ -55,7 +72,7 @@ export const CancelReservationScreen: FC<
   // ref
   const bottomSheetModalRef = useRef(null)
   // vaiables
-  const snapPoints = useMemo(() => ["45%"], [])
+  const snapPoints = useMemo(() => ["60%"], [])
   // callbacks
   const handleBottomSheet = useCallback(() => {
     bottomSheetModalRef.current?.present()
@@ -71,6 +88,7 @@ export const CancelReservationScreen: FC<
         index={0}
         snapPoints={snapPoints}
         backgroundStyle={{ borderRadius: 20 }}
+        style={{ flex: 1 }}
       >
         <View style={styles.bottomSheetContainer}>
           <PreBol18
@@ -80,28 +98,22 @@ export const CancelReservationScreen: FC<
             mb={32}
           />
           <SelectReason />
-          {/* <View style={styles.selectReasonContainer}>
-            {reason.map((item, index) => {
-              return (
-                <TouchableOpacity style={styles.reason} key={index}>
-                  <Image
-                    style={styles.radio}
-                    source={selected ? images.radio_active : images.radio_inactive}
-                  />
-                  <PreMed16 text={item} />
-                </TouchableOpacity>
-              )
-            })}
-          </View> */}
+
           {/* 기타 입력시 TextInput 표시 */}
           {selected === "기타(직접 입력 / 최대 30자)" ? (
             <TextInput
               style={styles.textInput}
               placeholder="예약 취소 사유를 직접 입력해주세요."
+              value={input}
+              onChangeText={(text) => setInput(text)}
               multiline
               maxLength={30}
             />
           ) : null}
+
+          <TouchableOpacity style={styles.submit} onPress={onSubmit}>
+            <PreBol16 text="확인" color="white" />
+          </TouchableOpacity>
         </View>
       </BottomSheetModal>
     </ScreenRootView>
@@ -141,5 +153,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderStyle: "solid",
     width: 310,
+  },
+  submit: {
+    paddingHorizontal: 16,
+    height: 56,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 16,
+    backgroundColor: GIVER_CASUAL_NAVY,
+    marginTop: 54,
+    borderRadius: 10,
   },
 })
