@@ -150,6 +150,7 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  // iamport 테스트
   "test-iamport-screen": undefined
   "test-iamport-payment-screen": undefined
   "test-iamport-payment-result-screen": undefined
@@ -226,35 +227,8 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="test-iamport-screen"
+      initialRouteName="home-screen"
     >
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-screen"
-        component={TestIamportScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-payment-screen"
-        component={TestIamportPaymentScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-payment-result-screen"
-        component={TestIamportPaymentResultScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -371,6 +345,36 @@ const SearchingStack = () => {
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-screen"
+        component={TestIamportScreen}
+        options={{
+          title: "결제테스트 세팅",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-screen"
+        component={TestIamportPaymentScreen}
+        options={{
+          title: "결제 진행중",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-result-screen"
+        component={TestIamportPaymentResultScreen}
+        options={{
+          title: "결제 결과",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
