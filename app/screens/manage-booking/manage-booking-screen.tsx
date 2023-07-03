@@ -2,7 +2,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingCheckButton, BookingList, ScreenRootView } from "#components"
+import { BookingCheckButton, BookingList, PreReg12, ScreenRootView } from "#components"
 import { useStores } from "../../models"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -28,10 +28,15 @@ export const ManageBookingScreen: FC<
     setBookins(confirmedBookings)
     //console.log(bookings[0])
   }, [])
+  const hasBookings = bookings.length > 0
   return (
     <ScreenRootView testID="ManageBooking">
       <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2}></BookingCheckButton>
-      <BookingList bookings={bookings} />
+      {hasBookings ? (
+        <BookingList bookings={bookings} />
+      ) : (
+        <PreReg12 text="예약이 존재하지 않습니다" />
+      )}
     </ScreenRootView>
   )
 })

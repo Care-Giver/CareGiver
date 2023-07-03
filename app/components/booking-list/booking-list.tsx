@@ -12,7 +12,12 @@ export interface BookingListProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
-  bookings?: ConfirmedBookings[]
+
+  /**
+   * 예약 객체 배열
+   */
+  bookings: ConfirmedBookings[]
+
   style?: StyleProp<ViewStyle>
 }
 
@@ -99,28 +104,22 @@ export const BookingList = observer(function BookingList(props: BookingListProps
       ],
     },
   ]
-  React.useLayoutEffect(() => {
-    if (props.bookings.length > 0) {
-      props.bookings.map((item, idx) => {
-        console.log(item.services)
-        const dataprop = {
-          name: item.name,
-          serviceType: "creche",
-          petname: item.pets[0].name,
-          species: item.pets[0].species.name,
-          petservices: item.services,
-          address: item.address,
-          time: item.startTime,
-          height: 50,
-          day: item.startTime.substring(0, 10),
-        }
-        const newData = { title: String(idx), data: [dataprop] }
-        sections.push(newData)
-      })
-    } else {
-      console.log("nothing")
+  props.bookings.map((item, idx) => {
+    console.log(item.services)
+    const dataprop = {
+      name: item.name,
+      serviceType: "creche",
+      petname: item.pets[0].name,
+      species: item.pets[0].species.name,
+      petservices: item.services,
+      address: item.address,
+      time: item.startTime,
+      height: 50,
+      day: item.startTime.substring(0, 10),
     }
-  }, [])
+    const newData = { title: String(idx), data: [dataprop] }
+    sections.push(newData)
+  })
 
   const renderItem = ({ item }) => {
     //console.log(item.petservices)
@@ -142,8 +141,8 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>08:00</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>10:00</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
@@ -168,27 +167,9 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   }
   return (
     <View style={{ flex: 1, marginTop: -20 }}>
-      <CalendarProvider
-        numberOfDays={5}
-        date={currentDate}
-        // onDateChanged={onDateChanged}
-        // onMonthChange={onMonthChange}
-        // disabledOpacity={0.6}
-        //theme={todayBtnTheme.current}
-        // todayBottomMargin={16}
-      >
+      <CalendarProvider numberOfDays={5} date={currentDate}>
         <View style={{ display: "flex", alignItems: "flex-end" }}>
           <ExpandableCalendar
-            //testID={testIDs.expandableCalendar.CONTAINER}
-            // horizontal={false}
-            // hideArrows
-            // disablePan
-            // hideKnob
-            // initialPosition={ExpandableCalendar.positions.OPEN}
-            // calendarStyle={styles.calendar}
-            // headerStyle={styles.header} // for horizontal only
-            // disableWeekScroll
-            //theme={React.useRef(getTheme()).current}
             monthFormat={"MMMM"}
             theme={{
               monthTextColor: GIVER_CASUAL_NAVY,
@@ -226,11 +207,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
                   style={{ width: 18, height: 18, marginRight: 90 }}
                 />
               )
-            } //disableAllTouchEventsForDisabledDays
-            //markedDates={marked.current}
-            //leftArrowImageSource={leftArrowIcon}
-            //rightArrowImageSource={rightArrowIcon}
-            // animateScroll
+            }
           />
 
           <AgendaList
@@ -242,7 +219,6 @@ export const BookingList = observer(function BookingList(props: BookingListProps
             sections={sections}
             renderItem={renderItem}
             scrollToNextEvent={true}
-            //sectionStyle={styles.section}
           />
         </View>
       </CalendarProvider>
