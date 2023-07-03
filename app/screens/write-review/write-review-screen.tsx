@@ -141,6 +141,12 @@ export const WriteReviewScreen: FC<
   }, [])
 
   const handleSubmit = useCallback(() => {
+    if (rating === 0) {
+      // ! 문구 임시로 지정
+      alert("별점은 필수로 입력하셔야 합니다.")
+      return
+    }
+
     switch (serviceType) {
       case "creche":
         // TODO: 스웨거 스키마 없음
