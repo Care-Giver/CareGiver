@@ -156,7 +156,14 @@ export const WriteReviewScreen: FC<
           images: selectedImages,
         })
           .then((success) => {
-            if (success) removeReview(reviewId)
+            // ? 리뷰 post를 성공한 경우
+            if (success) {
+              // ? 해당 리뷰 모델을 삭제한 후, 예약 내역 페이지로 돌아감
+              // TODO 리렌더링 (리뷰 작성 가능 상태 변경)
+              removeReview(reviewId)
+              navigation.goBack()
+            }
+            // ? 실패한 경우 catch에서 처리
             else throw new Error("")
           })
           .catch((err) => {
