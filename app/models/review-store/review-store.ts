@@ -92,7 +92,7 @@ export const ReviewStoreModel = types
       const petsitterId = findReview.petsitterId
       const serviceType = findReview.serviceType
 
-      console.info("[review store] petsitterId >>>", petsitterId)
+      // console.info("[review store] petsitterId >>>", petsitterId)
 
       self.removeReview(id) // ! 이거 actions 분리 안 하면 안되더라구요
       const newReview = ReviewModel.create({

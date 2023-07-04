@@ -65,7 +65,7 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[]> => {
     })
 
     if (response.data.ok) {
-      console.info("[uploads response.data] >>>", response.data)
+      //   console.info("[uploads response.data] >>>", response.data)
       return response.data.urls
     } else {
       throw new Error("")
@@ -104,7 +104,7 @@ export const postVisitingReview = async (params: PostVisitingReviewParams): Prom
           CONFIG,
         )
 
-        console.log("_response.data", _response.data)
+        // console.log("_response.data", _response.data)
 
         // ! 응답 성공 / 실패 여부 ...? (스웨거에 확인 과정 없음)
         if (_response.data.ok) {

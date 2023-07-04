@@ -149,7 +149,7 @@ export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
       return error
     }
 
-    console.log("[getCurrentBookings] response.data >>> ", response.data)
+    // console.log("[getCurrentBookings] response.data >>> ", response.data)
 
     return response.data.currentBookings
   } catch (error) {
@@ -176,7 +176,7 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
       return error
     }
 
-    console.log("[getPreviousBookings] response.data >>> ", response.data)
+    // console.log("[getPreviousBookings] response.data >>> ", response.data)
 
     return response.data.previousBookings
   } catch (error) {
