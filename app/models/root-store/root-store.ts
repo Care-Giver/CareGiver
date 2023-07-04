@@ -7,7 +7,8 @@ import { UserStoreModel } from "../user-store/user-store"
 import { FavoriteModel } from "../favorite/favorite"
 import { PetStoreModel } from "../pet-store/pet-store"
 import { ConfirmedBookingsModel } from "../confirmed-bookings/confirmed-bookings"
-
+import { UserModel } from "../user/user"
+import { PaymentModel } from "../payment/payment"
 /**
  * A RootStore model.
  */
@@ -21,6 +22,8 @@ export const RootStoreModel = types.model("RootStore").props({
   userStore: types.optional(UserStoreModel, {} as any),
   petStore: types.optional(PetStoreModel, {} as any),
   FavoriteModel: types.optional(FavoriteModel, {} as any),
+  UserModel: types.optional(UserModel, {} as any),
+  PaymentModel: types.optional(PaymentModel, {} as any),
 })
 
 /**

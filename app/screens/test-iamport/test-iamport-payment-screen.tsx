@@ -6,10 +6,27 @@ import { NavigatorParamList } from "#navigators"
 import { Loading, ScreenRootView } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
-
+import { useStores } from "#models"
 export const TestIamportPaymentScreen: FC<
   StackScreenProps<NavigatorParamList, "test-iamport-payment-screen">
 > = observer(function TestIamportPaymentScreen({ route, navigation }) {
+  {
+    /**test payment */
+  }
+  const {
+    PaymentModel: { setPayment },
+  } = useStores()
+
+  React.useLayoutEffect(() => {
+    setPayment({
+      imp_uid: "route.params.customer_uid",
+      merchant_uid: "route.params.merchant_uid",
+      imp_success: true,
+      isRefunded: true,
+      totalFee: 1000,
+      //route.params.amount,
+    })
+  }, [])
   const data = route.params
   console.log("data >>>", data)
 
