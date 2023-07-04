@@ -252,7 +252,8 @@ const SearchingStack = () => {
         name="set-visiting-service-day-screen"
         component={SetVisitingServiceDayScreen}
         options={{
-          header: (props) => <HomeScreenHeader {...props} />,
+          title: "날짜 별 서비스 수정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
       {/* //* 홈 */}
