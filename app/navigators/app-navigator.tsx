@@ -51,6 +51,7 @@ import {
   BookingDetailScreen,
   LoginScreen,
   CancelReservationScreen,
+  SetVisitingServiceDayScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -160,6 +161,7 @@ export type NavigatorParamList = {
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "cancel-reservation-screen": undefined
+  "set-visiting-service-day-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -244,11 +246,11 @@ const SearchingStack = () => {
         animation: "slide_from_right",
       }}
       // initialRouteName="home-screen"
-      initialRouteName="cancel-reservation-screen"
+      initialRouteName="set-visiting-service-day-screen"
     >
       <Stack.Screen
-        name="cancel-reservation-screen"
-        component={CancelReservationScreen}
+        name="set-visiting-service-day-screen"
+        component={SetVisitingServiceDayScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
