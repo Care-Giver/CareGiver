@@ -52,6 +52,7 @@ import {
   LoginScreen,
   CancelReservationScreen,
   SetVisitingServiceDayScreen,
+  SetCrecheServiceDayScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -162,6 +163,7 @@ export type NavigatorParamList = {
   "ye-beom-test-screen": undefined
   "cancel-reservation-screen": undefined
   "set-visiting-service-day-screen": undefined
+  "set-creche-service-day-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -246,16 +248,25 @@ const SearchingStack = () => {
         animation: "slide_from_right",
       }}
       // initialRouteName="home-screen"
-      initialRouteName="set-visiting-service-day-screen"
+      // initialRouteName="set-visiting-service-day-screen"
+      initialRouteName="set-creche-service-day-screen"
     >
       <Stack.Screen
+        name="set-creche-service-day-screen"
+        component={SetCrecheServiceDayScreen}
+        options={{
+          title: "날짜 별 서비스 수정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* <Stack.Screen
         name="set-visiting-service-day-screen"
         component={SetVisitingServiceDayScreen}
         options={{
           title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
-      />
+      /> */}
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
