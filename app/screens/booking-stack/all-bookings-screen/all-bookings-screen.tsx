@@ -8,6 +8,7 @@ import {
   Row,
   ScreenRootView,
   PastBooking,
+  PreReg14,
 } from "#components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -99,28 +100,46 @@ export const AllBookingsScreen: FC<
         <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
 
         {/* // * 진행중인 예약 리스트 */}
-        <FlatList
-          style={{ marginTop: 10 }}
-          contentContainerStyle={{
-            paddingVertical: 10,
-          }}
-          data={currentBookings}
-          renderItem={({ index, item }) => <InProgressBooking currentBooking={item} key={index} />}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
-          viewabilityConfig={{
-            viewAreaCoveragePercentThreshold: 51,
-          }}
-          onViewableItemsChanged={onViewableChange}
-          decelerationRate={"fast"}
-        />
-
-        <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
-          {currentBookings.map((item, index) => (
-            <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
-          ))}
-        </Row>
+        {currentBookings.length > 0 ? (
+          <View>
+            <FlatList
+              style={{ marginTop: 10 }}
+              contentContainerStyle={{
+                paddingVertical: 10,
+              }}
+              data={currentBookings}
+              renderItem={({ index, item }) => (
+                <InProgressBooking currentBooking={item} key={index} />
+              )}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+              viewabilityConfig={{
+                viewAreaCoveragePercentThreshold: 51,
+              }}
+              onViewableItemsChanged={onViewableChange}
+              decelerationRate={"fast"}
+            />
+            <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
+              {currentBookings.map((item, index) => (
+                <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+              ))}
+            </Row>
+          </View>
+        ) : (
+          // ! 임시 empty view
+          // TODO : empty view 디자인 요청 후 수정
+          <View
+            style={{
+              height: 241,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <PreReg14 text="현재 진행중인 예약이 없습니다." />
+          </View>
+        )}
 
         {/* // * 지난 예약 */}
         <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
@@ -136,7 +155,7 @@ export const AllBookingsScreen: FC<
           )}
         </Row>
 
-        {previousBookings.length > 0 && (
+        {previousBookings.length > 0 ? (
           <PastBooking
             style={{ marginTop: 13 }}
             profileImage={previousBookings[0].profileImage}
@@ -166,6 +185,19 @@ export const AllBookingsScreen: FC<
             }
             isCanceled={previousBookings[0].isCanceled}
           />
+        ) : (
+          // ! 임시 empty view
+          // TODO : empty view 디자인 요청 후 수정
+          <View
+            style={{
+              height: 358,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <PreReg14 text="지난 예약이 없습니다." />
+          </View>
         )}
       </ScrollView>
     </ScreenRootView>
