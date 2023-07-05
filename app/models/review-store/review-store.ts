@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types, destroy } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { ReviewModel, ServiceType, Rating } from "../review/review"
-import { PickerImage } from "#components"
+import { PickerImage } from "../../components"
 
 interface ReviewData {
   // ? 예약 진행자가 crecheId를 갖는지(위탁) | visitingId를 갖는지(방문)

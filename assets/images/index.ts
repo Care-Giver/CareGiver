@@ -26,6 +26,7 @@ export const images = {
   dog_question: require("../images/dog_question.png"),
   empty_12: require("../images/empty_12.png"),
   empty_heart: require("../images/empty_heart.png"),
+  filled_heart: require("../images/filled_heart.png"),
   go_back: require("../images/go_back.png"),
   gps: require("../images/gps.png"),
   in_progress_booking_background: require("../images/in_progress_booking_background.png"),

@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import { BODY, DISABLED, HEAD_LINE, LBG } from "#theme"
+import { NavigatorParamList } from "../../navigators"
+import { BODY, DISABLED, HEAD_LINE, LBG, GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "../../theme"
 import {
   StyleSheet,
   View,
@@ -26,11 +26,10 @@ import {
   RegisterSubmitButton,
   PreBol14,
   PickerImage,
-} from "#components"
-import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
-import { images } from "#images"
-import { Rating, ReviewContent, useStores } from "#models"
-import { postVisitingReview } from "../../services/axios/review"
+} from "../../components"
+import { images } from "../../../assets/images"
+import { Rating, ReviewContent, useStores } from "../../models"
+import { postCrecheReview, postVisitingReview } from "../../services/axios/review"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -70,10 +69,12 @@ export const WriteReviewScreen: FC<
 
     // ? 이전에 작성된 기록을 가져온다.
     const currentReview = reviews.find((review) => review.id === currentReviewId)
-    console.info("[write review screen] current review >>>", currentReview)
-    setSelectedImages(currentReview.images)
-    setReviewText(currentReview.description)
-    setRating(currentReview.rating)
+    // console.info("[write review screen] current review >>>", currentReview)
+    if (currentReview) {
+      setSelectedImages(currentReview.images)
+      setReviewText(currentReview.description)
+      setRating(currentReview.rating)
+    }
   }, [])
 
   // * 업로드 이미지 리스트
@@ -143,13 +144,31 @@ export const WriteReviewScreen: FC<
   const handleSubmit = useCallback(() => {
     if (rating === 0) {
       // ! 문구 임시로 지정
-      alert("별점은 필수로 입력하셔야 합니다.")
+      alert("별점은 필수 입력 항목입니다.")
       return
     }
 
     switch (serviceType) {
       case "creche":
-        // TODO: 스웨거 스키마 없음
+        postCrecheReview({
+          crecheId: petsitterId,
+          bookingId,
+          desc: reviewText,
+          star: rating,
+          images: selectedImages,
+        })
+          .then((success) => {
+            console.log("success >>>", success)
+            if (success) {
+              // TODO 리렌더링 (리뷰 작성 가능 상태 변경)
+              removeReview(reviewId)
+              navigation.goBack()
+            } else throw new Error("")
+          })
+          .catch((err) => {
+            alert("처리 중에 문제가 발생했습니다.\n다시 시도해주세요.")
+            console.error("[write-review-screen] 리뷰 post 에러 >>>", err)
+          })
         break
 
       // ? 방문 서비스의 경우, visiting-review api에 POST 요청을 보낸다.
@@ -162,6 +181,7 @@ export const WriteReviewScreen: FC<
           images: selectedImages,
         })
           .then((success) => {
+            console.log("success >>>", success)
             // ? 리뷰 post를 성공한 경우
             if (success) {
               // ? 해당 리뷰 모델을 삭제한 후, 예약 내역 페이지로 돌아감
@@ -170,7 +190,7 @@ export const WriteReviewScreen: FC<
               navigation.goBack()
             }
             // ? 실패한 경우 catch에서 처리
-            else throw new Error("")
+            else throw new Error("review post 과정에서 에러")
           })
           .catch((err) => {
             // ! 임시 문구로 넣음

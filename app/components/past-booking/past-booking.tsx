@@ -1,13 +1,19 @@
-import { View, Text, Pressable, Image, ImageBackground } from "react-native"
-import React from "react"
+import { View, Pressable, Image, ImageBackground } from "react-native"
+import React, { useCallback } from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
 
-import { PreMed14, PreReg10, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { images } from "#images"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
-import { CaregiverTypeButton } from "#components"
-import { navigate } from "#navigators"
+import {
+  PreBol14,
+  PreMed14,
+  PreReg10,
+  PreReg12,
+  PreReg14,
+} from "../basics/custom-texts/custom-texts"
+import { images } from "../../../assets/images"
+import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "../../theme"
+import { CaregiverTypeButton } from "../../components"
+import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 
 type ServiceType = "visiting" | "creche"
@@ -18,10 +24,6 @@ const ONPRESS_LIKED_BTN = () => {
 
 const handleAgainPress = () => {
   console.log("다시 예약하기 클릭")
-}
-
-const handleReviewPress = () => {
-  navigate("write-review-screen", {})
 }
 
 const handlePress = () => {
@@ -53,8 +55,54 @@ export const PastBooking = (props: PastBookingProps) => {
     startDate,
     endDate,
     isCanceled,
+    isFavorite,
+    reviewStatus,
     style,
   } = props
+
+  // * 찜 버튼 handler
+  const handleLikeButton = useCallback(() => {}, [])
+
+  // * 리뷰 작성 버튼
+  const ReviewButton = useCallback(() => {
+    // ? 취소된 예약인 경우 - 리뷰 작성 불가능
+    if (isCanceled) {
+      return (
+        <Pressable disabled>
+          <PreMed14 text={"후기 작성하기"} color={DISABLED} />
+        </Pressable>
+      )
+    }
+
+    // ? 이미 작성 완료된 경우 - 후기 보기 페이지로
+    if (reviewStatus === "Complete") {
+      return (
+        <Pressable>
+          <PreBol14 text={"나의 후기 보기"} color={HEAD_LINE} />
+        </Pressable>
+      )
+    }
+
+    // ? 완료된 예약이면서 후기를 아직 작성하지 않은 경우
+    return (
+      <Pressable
+        onPress={() =>
+          navigate("write-review-screen", {
+            profileImage,
+            petsitterName,
+            petsitterType,
+            petsitterId,
+            bookingId,
+            serviceType,
+            desc,
+          })
+        }
+      >
+        <PreBol14 text={"후기 작성하기"} color={GIVER_CASUAL_NAVY} />
+      </Pressable>
+    )
+  }, [])
+
   return (
     <Pressable style={[styles.root, style]} onPress={handlePress}>
       {/* //* 케어기버 프로필 사진 */}
@@ -71,7 +119,7 @@ export const PastBooking = (props: PastBookingProps) => {
         }
         style={styles.profileImg}
       >
-        <Row style={{ backgroundColor: null }}>
+        <Row style={{ backgroundColor: "" }}>
           <CaregiverTypeButton
             text={serviceType === "creche" ? "위탁" : "방문"}
             style={styles.typeBtn}
@@ -87,7 +135,10 @@ export const PastBooking = (props: PastBookingProps) => {
           <PreReg14 text={`${petsitterName} 펫시터`} color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={ONPRESS_LIKED_BTN}>
-            <Image style={styles.likeBtn} source={images.empty_heart} />
+            <Image
+              style={styles.likeBtn}
+              source={isFavorite ? images.filled_heart : images.empty_heart}
+            />
           </Pressable>
         </Row>
 
@@ -130,27 +181,7 @@ export const PastBooking = (props: PastBookingProps) => {
           <PreReg12 text={"|"} color={MIDDLE_LINE} style={styles.divisionLine} />
 
           {/* //? 후기 작성하기 버튼 */}
-          {!isCanceled ? (
-            <Pressable
-              onPress={() =>
-                navigate("write-review-screen", {
-                  profileImage,
-                  petsitterName,
-                  petsitterType,
-                  petsitterId,
-                  bookingId,
-                  serviceType,
-                  desc,
-                })
-              }
-            >
-              <PreMed14 text={"후기 작성하기"} color={GIVER_CASUAL_NAVY} />
-            </Pressable>
-          ) : (
-            <Pressable disabled>
-              <PreMed14 text={"후기 작성하기"} color={DISABLED} />
-            </Pressable>
-          )}
+          <ReviewButton />
         </Row>
       </View>
     </Pressable>

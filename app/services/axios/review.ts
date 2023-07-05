@@ -1,7 +1,7 @@
-import { Rating } from "#models"
+import { Rating } from "../../models"
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
-import { PickerImage } from "#components"
+import { PickerImage } from "../../components"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
@@ -10,8 +10,9 @@ const USER_ID = 7
  * postVisitingReview 함수의 인자 파라미터
  * :: 이미지 업로드를 위해 images는 PickerImage[] 형태를 갖는다.
  */
-interface PostVisitingReviewParams {
-  visitingId: number
+interface PostReviewParams {
+  visitingId?: number
+  crecheId?: number
   bookingId: number
   desc: string
   star: Rating
@@ -22,8 +23,10 @@ interface PostVisitingReviewParams {
  * [POST] visiting-review/visiting api의 request params
  * :: postVisitingReview 함수 내부에서 사용된다.
  */
-interface PostVisitingReviewServerParams {
-  visitingId: number
+interface PostReviewToServerParams {
+  userId: number
+  visitingId?: number
+  crecheId?: number
   bookingId: number
   desc: string
   star: Rating
@@ -40,7 +43,7 @@ interface URLsResponse extends GeneralResponse {
 /**
  * [POST] visiting-review/visiting api의 응답 형식
  */
-interface PostVisitingReviewResponse extends GeneralResponse {
+interface PostReviewResponse extends GeneralResponse {
   id: number
   createAt: string
   updatedAt: string
@@ -51,7 +54,7 @@ interface PostVisitingReviewResponse extends GeneralResponse {
  * @param images 서버에 업로드할 이미지 주소 배열
  * @returns 서버에 업로드된 Urls
  */
-export const uploadURIS = async (images: PickerImage[]): Promise<string[]> => {
+export const uploadURIS = async (images: PickerImage[]): Promise<string[] | null> => {
   try {
     const formData = new FormData()
 
@@ -81,45 +84,64 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[]> => {
  * @param params 방문 리뷰를 post하기 위해 필요한 params
  * @returns post 성공 | 실패 여부
  */
-export const postVisitingReview = async (params: PostVisitingReviewParams): Promise<boolean> => {
+export const postVisitingReview = async (params: PostReviewParams): Promise<boolean> => {
+  // ! undefined 추가 안할 시 에러 뜸 ... 왜?
   try {
     // * 서버에 이미지를 upload 하는 과정
-    const uploadParams: PostVisitingReviewServerParams = {
+    const postParams: PostReviewToServerParams = {
+      userId: USER_ID,
       ...params,
       images: [],
     }
-    uploadURIS(params.images).then(async (res) => {
-      // ? 서버에서 정상적으로 Uri를 반환한 경우
-      if (res) {
-        uploadParams.images = [...res]
-        // * 방문 리뷰를 서버에 post하는 과정
-        const postParams = {
-          id: USER_ID,
-          ...uploadParams,
-        }
-        console.debug("postParmas:", postParams)
-        const _response = await axios.post<PostVisitingReviewResponse>(
-          `${BASE_URL}/visiting-review/visiting`,
-          postParams,
-          CONFIG,
-        )
 
-        // console.log("_response.data", _response.data)
+    const AwsUris = await uploadURIS(params.images)
 
-        // ! 응답 성공 / 실패 여부 ...? (스웨거에 확인 과정 없음)
-        if (_response.data.ok) {
-          return true
-        } else {
-          throw new Error("")
-        }
+    if (AwsUris) {
+      postParams.images = [...AwsUris]
+
+      const response = await axios.post<PostReviewResponse>(
+        `${BASE_URL}/visiting-review/visiting`,
+        postParams,
+        CONFIG,
+      )
+
+      if (response.data.ok) {
+        return true
       }
-      // ? 서버에서 uri를 정상적으로 반환하지 못 한 경우
-      else {
-        throw new Error("")
-      }
-    })
+    }
+    throw new Error("[PostVisitingReview] image upload | review post 과정 오류")
   } catch (error) {
     console.error("[review axios] >>>", error)
+    return false
+  }
+}
+
+export const postCrecheReview = async (params: PostReviewParams): Promise<boolean | undefined> => {
+  try {
+    const postParams: PostReviewToServerParams = {
+      userId: USER_ID,
+      ...params,
+      images: [],
+    }
+
+    const AwsUris = await uploadURIS(params.images)
+
+    if (AwsUris) {
+      postParams.images = [...AwsUris]
+
+      const response = await axios.post<PostReviewResponse>(
+        `${BASE_URL}/creche-review/creche`,
+        postParams,
+        CONFIG,
+      )
+
+      if (response.data.ok) {
+        return true
+      }
+    }
+    throw new Error("[PostVisitingReview] image upload | review post 과정 오류")
+  } catch (error) {
+    console.error("[creche review axios] >>>", error)
     return false
   }
 }

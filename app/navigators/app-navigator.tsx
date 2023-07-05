@@ -78,7 +78,7 @@ import { PetsitterType, ServiceType, Type, useStores } from "#models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
 import { WriteReviewScreen } from "#screens"
-import { PreviousBooking } from "#axios"
+import { PreviousBookingParams } from "../services/axios"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -150,7 +150,7 @@ export type NavigatorParamList = {
   }
   // ? 지난 예약 내역 스크린
   "past-bookings-screen": {
-    pastBookings: PreviousBooking[]
+    pastBookings: PreviousBookingParams[]
   }
 
   //* test screens

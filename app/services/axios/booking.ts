@@ -1,5 +1,6 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { PetsitterType, ServiceType } from "../../models"
 
 interface CrecheBooking {
   status: string
@@ -43,7 +44,12 @@ export interface CurrentBooking {
   profileImage: string | null
 }
 
-export interface PreviousBooking {
+export type ReviewStatus = "Waiting" | "Possible" | "Complete" | "Expired"
+
+/**
+ * API에서 사용되는 지난 예약 내역 Props
+ * */
+interface PreviousBooking {
   visitingBookingId?: number
   crecheBookingId?: number
   visitingId?: number
@@ -60,6 +66,27 @@ export interface PreviousBooking {
   desc: string
   profileImage: string | null
   isCanceled: boolean
+  isFavorite: boolean
+  reviewStatus: ReviewStatus
+}
+
+/**
+ * 스크린에서 사용되는 지난 예약 내역 props
+ * */
+export interface PreviousBookingParams {
+  profileImage: string | null
+  serviceType: ServiceType
+  petsitterType: PetsitterType
+  petsitterId: number
+  bookingId: number
+  petsitterName: string
+  desc: string
+  // ? 여기서는 creche | visiting 모두 Date로 통일한다.
+  startDate: string
+  endDate: string
+  isCanceled: boolean
+  isFavorite: boolean
+  reviewStatus: ReviewStatus
 }
 
 interface CrecheBookingsResponse extends GeneralResponse {
@@ -120,6 +147,7 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
     if (!response.data.ok) {
       const error = response.data.error
       console.error("[getVisitingPetsitters]", error)
+      //@ts-ignore
       return null
     }
 
@@ -127,6 +155,7 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
     return response.data.visitingBookings
   } catch (error) {
     console.error("[getVisitingPetsitters]", error)
+    //@ts-ignore
     return null
   }
 }
@@ -168,6 +197,8 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
       `${BASE_URL}/user/my-previous-bookings`,
       CONFIG,
     )
+
+    console.debug("[test] >>>", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error

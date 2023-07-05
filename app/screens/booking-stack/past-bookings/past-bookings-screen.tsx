@@ -2,8 +2,8 @@ import React, { FC } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import { PastBooking, ScreenRootView } from "#components"
+import { NavigatorParamList } from "../../../navigators"
+import { PastBooking, ScreenRootView } from "../../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -23,16 +23,17 @@ export const PastBookingsScreen: FC<
         renderItem={({ item }) => (
           <PastBooking
             style={{ marginTop: 13 }}
-            profileImage={item.profileImage}
-            petsitterName={item.petSitterName}
-            desc={item.desc}
-            petsitterId={item.crecheId ? item.crecheId : item.visitingId}
-            bookingId={item.crecheId ? item.crecheBookingId : item.visitingBookingId}
-            petsitterType={item.crecheBookingId ? "creche" : "visiting"}
-            serviceType={item.crecheId ? "creche" : "visiting"}
-            startDate={item.crecheId ? item.startDate : item.startTime}
-            endDate={item.crecheId ? item.endDate : item.endTime}
-            isCanceled={item.isCanceled}
+            {...item}
+            // profileImage={item.profileImage}
+            // petsitterName={item.petSitterName}
+            // desc={item.desc}
+            // petsitterId={item.crecheId ? item.crecheId : item.visitingId}
+            // bookingId={item.crecheId ? item.crecheBookingId : item.visitingBookingId}
+            // petsitterType={item.crecheBookingId ? "creche" : "visiting"}
+            // serviceType={item.crecheId ? "creche" : "visiting"}
+            // startDate={item.crecheId ? item.startDate : item.startTime}
+            // endDate={item.crecheId ? item.endDate : item.endTime}
+            // isCanceled={item.isCanceled}
           />
         )}
       />
