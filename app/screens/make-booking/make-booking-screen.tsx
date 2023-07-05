@@ -154,7 +154,7 @@ export const MakeBookingScreen: FC<
         />
 
         <PreBol14
-          style={{ marginTop: 16, marginBottom: 14 }}
+          style={{ marginTop: 24, marginBottom: 14 }}
           text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
         />
         {/** 
@@ -188,7 +188,7 @@ export const MakeBookingScreen: FC<
           onPressIn={() => textboxClick("먹으면안되는음식")}
         />
         <PreBol14
-          style={{ marginTop: 16, marginBottom: 14 }}
+          style={{ marginTop: 24, marginBottom: 14 }}
           text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
         />
         {/** 
@@ -260,7 +260,7 @@ export const MakeBookingScreen: FC<
           />
         </View>
         */}
-        <PreBol14 style={{ marginTop: 72, marginBottom: 8 }} text={"자유 요청 사항"} />
+        <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
         <PlaceHolderInputBox
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
