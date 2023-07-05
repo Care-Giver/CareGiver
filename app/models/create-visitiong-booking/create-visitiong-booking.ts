@@ -1,6 +1,9 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { CreateVisitingBookingInput, postVisitingBooking } from "#axios"
+import { getPetsitterCreches, getPetsitterVisitings } from "../..//services/axios/petsitter"
+import { number } from "mobx-state-tree/dist/internal"
+
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
  */
@@ -37,6 +40,12 @@ export const CreateVisitiongBookingModel = types
       self.postVisitingBooking.endTime = endTime
       self.postVisitingBooking.petIds = pets
     },
+    setPetsitter(visitingId: number) {
+      self.postVisitingBooking.visitingId = visitingId
+    },
+    setTotalFee(totalFee: number) {
+      //self.postVisitingBooking.totalFee = totalFee
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     async setVisitingBooking(paymentInput: CreateVisitingBookingInput) {
@@ -51,7 +60,12 @@ export const CreateVisitiongBookingModel = types
     },
   }))
   .actions((self) => ({
-    setVisitingPetsitter() {},
+    async setVisitingPetsitter(visitingId: number) {
+      if (self.postVisitingBooking == null) {
+        self.init()
+      }
+      await self.setPetsitter(visitingId)
+    },
   }))
   .actions((self) => ({
     async setVisitingDatePets(startTime: string[], endTime: string[], pets: number[]) {
@@ -65,10 +79,23 @@ export const CreateVisitiongBookingModel = types
     setVisitingRequest() {},
   }))
   .actions((self) => ({
-    setVisitingFee() {},
+    async setVisitingFeeServices(visitingId: number) {
+      {
+        /*
+      //TODO api 수정되면 fee, services추가
+      const totalFee: number =
+        Number((await getPetsitterVisitings(visitingId)).defaultFee) *
+        (Number(self.postVisitingBooking.endDate.substring(8, 10)) -
+          Number(self.postVisitingBooking.startDate.substring(8, 10))) // + extrafee
+      if (self.postVisitingBooking == null) {
+        self.init()
+      }
+    await self.setTotalFee(totalFee)*/
+      }
+    },
   }))
   .actions((self) => ({
-    setVisitingFee() {},
+    set() {},
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type CreateVisitiongBookingType = Instance<typeof CreateVisitiongBookingModel>

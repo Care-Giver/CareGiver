@@ -21,7 +21,7 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-
+import { useStores } from "#models"
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(function SearchResultScreen({ navigation, route }) {
@@ -34,6 +34,12 @@ export const SearchResultScreen: FC<
   useLayoutEffect(() => {
     setPetsitters(_petsitters)
   }, [])
+
+  //* 예약 생성을 위한 모델
+  const {
+    CreateCrecheBookingModel: { postCrecheBooking, setCrechePetsitter },
+    CreateVisitiongBookingModel: { postVisitingBooking, setVisitingPetsitter },
+  } = useStores()
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -227,6 +233,12 @@ export const SearchResultScreen: FC<
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
                   navigate("caregiver-detail-information-screen", { sitterData: item })
+                  //? 예약 생성 model update
+                  if (route.params.serviceType == "위탁") {
+                    setCrechePetsitter(item.crecheId)
+                  } else if (route.params.serviceType == "방문") {
+                    setVisitingPetsitter(item.visitingId)
+                  }
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
               />

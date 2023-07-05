@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { CreateCrecheBookingInput, postCrecheBooking } from "#axios"
+import { getPetsitterCreches, getPetsitterVisitings } from "../../services/axios/petsitter"
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
  */
@@ -34,9 +35,15 @@ export const CreateCrecheBookingModel = types
       }
     },
     setDatePets(startTime: string, endTime: string, pets: number[]) {
-      self.postCrecheBooking.startTime = startTime
-      self.postCrecheBooking.endTime = endTime
+      self.postCrecheBooking.startDate = startTime
+      self.postCrecheBooking.endDate = endTime
       self.postCrecheBooking.petIds = pets
+    },
+    setPetsitter(crecheId: number) {
+      self.postCrecheBooking.crecheId = crecheId
+    },
+    setTotalFee(totalFee: number) {
+      self.postCrecheBooking.totalFee = totalFee
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -52,7 +59,12 @@ export const CreateCrecheBookingModel = types
     },
   }))
   .actions((self) => ({
-    async setCrechePetsitter(crecheId: number) {},
+    async setCrechePetsitter(crecheId: number) {
+      if (self.postCrecheBooking == null) {
+        self.init()
+      }
+      await self.setPetsitter(crecheId)
+    },
   }))
   .actions((self) => ({
     async setCrecheDatePets(startDate: string, endDate: string, pets: number[]) {
@@ -66,10 +78,20 @@ export const CreateCrecheBookingModel = types
     async setCrecheRequest() {},
   }))
   .actions((self) => ({
-    async setCrecheFee() {},
+    async setCrecheFeeServices(crecheId) {
+      //TODO api 수정되면 services추가
+      const totalFee: number =
+        (await getPetsitterCreches(crecheId)).defaultFee *
+        (Number(self.postCrecheBooking.endDate.substring(8, 10)) -
+          Number(self.postCrecheBooking.startDate.substring(8, 10))) // + extrafee
+      if (self.postCrecheBooking == null) {
+        self.init()
+      }
+      await self.setTotalFee(totalFee)
+    },
   }))
   .actions((self) => ({
-    async setCrecheFee() {},
+    async set() {},
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type CreateCrecheBookingType = Instance<typeof CreateCrecheBookingModel>

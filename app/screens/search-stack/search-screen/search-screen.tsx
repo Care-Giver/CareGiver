@@ -29,7 +29,6 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar, DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
-import { CreateVisitingBookingInput as VisitingBookingInputType } from "#axios"
 import { useStores } from "#models"
 // Calculate the number of minutes passed since the start of the hour
 const now = new Date()

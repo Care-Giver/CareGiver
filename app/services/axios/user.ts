@@ -41,7 +41,8 @@ export const getUsers = async (): Promise<User> => {
     console.log("response.data.Users", response.data.Users)
     return response.data.Users
   } catch (error) {
-    console.error("catch 에러!!!", error)
+    //console.error("catchㅁㅁ 에러!!!", error.toJSON())
+    console.dir(error)
     return null
   }
 }
