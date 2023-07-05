@@ -1,10 +1,23 @@
 import React, { FC, useState } from "react"
-import { ScrollView, StyleSheet, View, Switch } from "react-native"
+import { ScrollView, StyleSheet, View, Switch, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { DivisionLine, PreBol20, PreMed18, ScreenRootView } from "#components"
-import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
+import {
+  DivisionLine,
+  PreBol16,
+  PreBol20,
+  PreMed14,
+  PreMed16,
+  PreMed18,
+  PreReg14,
+  PreReg16,
+  ScreenRootView,
+} from "#components"
+import { BODY, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import { Image } from "react-native"
+import { images } from "#images"
+import { POPPINS_SEMIBOLD } from "#fonts"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -39,6 +52,54 @@ export const SetCrecheServiceDayScreen: FC<
             style={styles.switch}
           />
         </View>
+        <View style={styles.line} />
+        <View style={[styles.rowText, { marginTop: 20 }]}>
+          <PreMed18 text="서비스 요금 설정" />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <PreMed14 text="평균 요금 알아보기" mr={5} />
+            <Image style={styles.image} source={images.more_info_bigger} />
+          </View>
+        </View>
+        <View style={[styles.rowText, { marginTop: 25 }]}>
+          <PreReg16 text="1박 당" color={SUB_HEAD_LINE} />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <PreBol16 text="90,000 원" mr={4} />
+            <Image style={styles.image} source={images.arrow_right} />
+          </View>
+        </View>
+        <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
+          <PreReg16 text="강아지 크기 별 추가 요금" color={SUB_HEAD_LINE} />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <PreMed16 text="설정하기" mr={4} />
+            <Image style={styles.image} source={images.arrow_right} />
+          </View>
+        </View>
+        <View style={styles.dogSizeBox}>
+          <View>
+            <PreReg14 text="소형견" mb={8} />
+            <PreMed14 text="+0원" />
+          </View>
+          <View style={styles.verticalLine} />
+          <View>
+            <PreReg14 text="중형견" mb={8} />
+            <PreMed14 text="+0원" />
+          </View>
+          <View style={styles.verticalLine} />
+          <View>
+            <PreReg14 text="대형견" mb={8} />
+            <PreMed14 text="+0원" />
+          </View>
+        </View>
+        <View style={styles.totalPriceBox}>
+          <View>
+            <PreBol16 text="내가 1박 당 받는 총 금액" mb={4} />
+            <PreReg16 text="(수수료 포함)" color={BODY} />
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={styles.totalPrice}>84,600</Text>
+            <PreBol16 text="원" ml={2} />
+          </View>
+        </View>
       </ScrollView>
     </ScreenRootView>
   )
@@ -59,5 +120,51 @@ const styles = StyleSheet.create({
   switch: {
     width: 51,
     height: 31,
+  },
+  rowText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  image: {
+    width: 16,
+    height: 16,
+  },
+  line: {
+    height: 2,
+    backgroundColor: LBG,
+    marginHorizontal: 16,
+  },
+  dogSizeBox: {
+    flexDirection: "row",
+    borderWidth: 2,
+    borderStyle: "solid",
+    borderColor: LIGHT_LINE,
+    borderRadius: 10,
+    justifyContent: "space-between",
+    paddingVertical: 18,
+    marginHorizontal: 16,
+    paddingHorizontal: 42,
+  },
+  verticalLine: {
+    width: 2,
+    backgroundColor: LIGHT_LINE,
+    height: "100%",
+  },
+  totalPriceBox: {
+    marginHorizontal: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    backgroundColor: LBG,
+    marginTop: 20,
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  totalPrice: {
+    fontFamily: POPPINS_SEMIBOLD,
+    fontSize: 24,
+    color: GIVER_CASUAL_NAVY,
   },
 })
