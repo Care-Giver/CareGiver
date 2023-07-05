@@ -9,6 +9,8 @@ import { PetStoreModel } from "../pet-store/pet-store"
 import { ConfirmedBookingsModel } from "../confirmed-bookings/confirmed-bookings"
 import { UserModel } from "../user/user"
 import { PaymentModel } from "../payment/payment"
+import { CreateVisitiongBookingModel } from "../create-visitiong-booking/create-visitiong-booking"
+import { CreateCrecheBookingModel } from "../create-creche-booking/create-creche-booking"
 /**
  * A RootStore model.
  */
@@ -24,6 +26,9 @@ export const RootStoreModel = types.model("RootStore").props({
   FavoriteModel: types.optional(FavoriteModel, {} as any),
   UserModel: types.optional(UserModel, {} as any),
   PaymentModel: types.optional(PaymentModel, {} as any),
+  CreateVisitiongBookingModel: types.optional(CreateVisitiongBookingModel, {} as any),
+  CreateCrecheBookingModel: types.optional(CreateCrecheBookingModel, {} as any),
+
 })
 
 /**

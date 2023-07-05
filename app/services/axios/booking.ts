@@ -1,6 +1,101 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
+//* 위탁 얘약 생성
+export interface CreateCrecheBookingInput {
+  crecheId: number
+  userId: number
+  request: string
+  services: string[]
+  startDate: string
+  endDate: string
+  totalFee: number
+  defalutFee: number
+  petIds: number[]
+  paymentId: number
+}
+interface CreateCrecheBookingInputResponse extends GeneralResponse {
+  CreateCrecheBookingInput: CreateCrecheBookingInput
+}
+/**
+ * @returns {Promise<CreateCrecheBookingInput>}
+ */
+export const postCrecheBooking = async (
+  post: CreateCrecheBookingInput,
+): Promise<CreateCrecheBookingInput> => {
+  try {
+    const response = await axios.post<CreateCrecheBookingInputResponse>(
+      `${BASE_URL}/booking/creche`,
+      post,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
+    }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log("response.data.CreateCrecheBookingInputs", response.data.CreateCrecheBookingInput)
+    return response.data.CreateCrecheBookingInput
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return null
+  }
+}
+
+//* 방문 얘약 생성
+export interface CreateVisitingBookingInput {
+  visitingId: number
+  userId: number
+  request: string
+  services: string[]
+  destination: string
+  startTime: string[]
+  endTime: string[]
+  petIds: number[]
+  paymentId: number
+}
+
+interface CreateVisitingBookingInputResponse extends GeneralResponse {
+  CreateVisitingBookingInput: CreateVisitingBookingInput
+}
+/**
+ * @returns {Promise<CreateVisitingBookingInput>}
+ */
+export const postVisitingBooking = async (
+  post: CreateVisitingBookingInput,
+): Promise<CreateVisitingBookingInput> => {
+  try {
+    const response = await axios.post<CreateVisitingBookingInputResponse>(
+      `${BASE_URL}/booking/Visiting`,
+      post,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
+    }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log(
+      "response.data.CreateVisitingBookingInputs",
+      response.data.CreateVisitingBookingInput,
+    )
+    return response.data.CreateVisitingBookingInput
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return null
+  }
+}
+
 interface CrecheBooking {
   status: string
   services: string
