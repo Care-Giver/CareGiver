@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-//* 위탁 얘약 생성
+//* 위탁예얘약 생성
 export interface CreateCrecheBookingInput {
   crecheId: number
   userId: number
@@ -13,6 +13,9 @@ export interface CreateCrecheBookingInput {
   defalutFee: number
   petIds: number[]
   paymentId: number
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
 }
 interface CreateCrecheBookingInputResponse extends GeneralResponse {
   CreateCrecheBookingInput: CreateCrecheBookingInput
@@ -47,7 +50,7 @@ export const postCrecheBooking = async (
   }
 }
 
-//* 방문 얘약 생성
+//* 방문 예약 생성
 export interface CreateVisitingBookingInput {
   visitingId: number
   userId: number
@@ -58,6 +61,9 @@ export interface CreateVisitingBookingInput {
   endTime: string[]
   petIds: number[]
   paymentId: number
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
 }
 
 interface CreateVisitingBookingInputResponse extends GeneralResponse {

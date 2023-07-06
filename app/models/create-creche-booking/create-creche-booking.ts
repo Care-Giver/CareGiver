@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { CreateCrecheBookingInput, postCrecheBooking } from "#axios"
-import { getPetsitterCreches, getPetsitterVisitings } from "../../services/axios/petsitter"
+import { getPetsitterCreches } from "../../services/axios/petsitter"
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
  */
@@ -32,6 +32,9 @@ export const CreateCrecheBookingModel = types
         defalutFee: null,
         petIds: [],
         paymentId: null,
+        petToolsLocInfo: "",
+        avoidFoodInfo: "",
+        bondingTipsInfo: "",
       }
     },
     setDatePets(startTime: string, endTime: string, pets: number[]) {
@@ -44,6 +47,9 @@ export const CreateCrecheBookingModel = types
     },
     setTotalFee(totalFee: number) {
       self.postCrecheBooking.totalFee = totalFee
+    },
+    setServices(services: string) {
+      self.postCrecheBooking.services.push(services)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -61,7 +67,7 @@ export const CreateCrecheBookingModel = types
   .actions((self) => ({
     async setCrechePetsitter(crecheId: number) {
       if (self.postCrecheBooking == null) {
-        self.init()
+        // self.init()
       }
       await self.setPetsitter(crecheId)
     },
@@ -79,19 +85,23 @@ export const CreateCrecheBookingModel = types
   }))
   .actions((self) => ({
     async setCrecheFeeServices(crecheId) {
-      //TODO api 수정되면 services추가
-      const totalFee: number =
-        (await getPetsitterCreches(crecheId)).defaultFee *
-        (Number(self.postCrecheBooking.endDate.substring(8, 10)) -
-          Number(self.postCrecheBooking.startDate.substring(8, 10))) // + extrafee
+      const creche = await getPetsitterCreches(crecheId)
+      //TODO api 수정되면 fee관련 삭제해야합니다.
       if (self.postCrecheBooking == null) {
         self.init()
       }
-      await self.setTotalFee(totalFee)
+      await self.setTotalFee(creche.defaultFee)
+
+      //* sevices 객체중 serviceName만 모델에 update
+      await creche.serviceCreche.map((item) => {
+        console.log(item)
+        self.setServices(item.name)
+      })
+      //await self.setServices(creche.serviceCreche)
     },
   }))
   .actions((self) => ({
-    async set() {},
+    async setUser() {},
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type CreateCrecheBookingType = Instance<typeof CreateCrecheBookingModel>

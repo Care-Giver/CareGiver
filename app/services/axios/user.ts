@@ -1,20 +1,30 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
+export enum Sex {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
 export interface User {
   id: number
   createAt: string
-  upstringdAt: string
+  updatedAt: string
   email: string
-  password: string
   role: string
   nickname: string
+  kakaoIdToken: string
+  naverIdToken: string
   phoneNumber: string
-  sex: string
+  sex: Sex
   birthday: string
   provider: string
   address: string
   desc: string
+  profileImage: string
+  isCertified: boolean
+  pushToken: string
+  clientStreamToken: string
+  maxDistance: number
 }
 
 interface UsersResponse extends GeneralResponse {
@@ -29,9 +39,9 @@ export const getUsers = async (): Promise<User> => {
   try {
     const response = await axios.get<UsersResponse>(`${BASE_URL}/user/me`, CONFIG)
 
-    if (!response.data.ok) {
+    if (!response.data) {
       const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
+      console.error("response.data.error 에러!!!", response.data.ok)
       // @ts-ignore
       return error
     }
@@ -39,10 +49,10 @@ export const getUsers = async (): Promise<User> => {
     // console.log("response", response)
     console.log("response.data", response.data)
     console.log("response.data.Users", response.data.Users)
-    return response.data.Users
+    return response.data
   } catch (error) {
-    //console.error("catchㅁㅁ 에러!!!", error.toJSON())
-    console.dir(error)
+    console.error("catchㅁㅁ 에러!!!", error.toJSON())
+    //console.dir(error)
     return null
   }
 }

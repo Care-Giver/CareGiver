@@ -127,11 +127,11 @@ export const CaregiverDetailInformationScreen: FC<
 
   // console.log("post", post)
 
-  const { sitterData } = route.params
+  const { sitterData, serviceType } = route.params
   const { profileImg, name, rating } = sitterData
 
   const onPressMakeBookingButton = () => {
-    navigate("make-booking-screen")
+    navigate("make-booking-screen", { serviceType: serviceType })
   }
 
   return (

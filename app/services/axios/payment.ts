@@ -31,8 +31,7 @@ export const postPayment = async (post: CreatePaymentInput): Promise<CreatePayme
     }
 
     // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.CreatePaymentInputs", response.data.CreatePaymentInput)
+    console.log("response.data", response)
     return response.data.CreatePaymentInput
   } catch (error) {
     console.error("catchㅁ 에러!!!", error)

@@ -1,6 +1,16 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
+export interface Item {
+  id: number
+  createAt: string
+  updatedAt: string
+  name: string
+}
+interface Location {
+  type: string
+  coordinates: number[]
+}
 export interface PetsitterVisiting {
   id: number
   createAt: string
@@ -8,17 +18,19 @@ export interface PetsitterVisiting {
   title: string
   desc: string
   address: string
-  defaultFee: string
+  defaultFee: number
   hiredNumber: number
   star: number
-  location: string
+  location: Location
   maxUnit: number
-  handleType: string
+  handleType: string[]
   images: string[]
   extraSizeFee: string
   promoted: boolean
   responseRate: number[]
   acceptRate: number[]
+  serviceVisiting: Item[]
+  visitingAmenities: Item[]
 }
 
 interface PetsitterVisitingResponse extends GeneralResponse {
@@ -46,31 +58,38 @@ export const getPetsitterVisitings = async (visitingId: number): Promise<Petsitt
     // console.log("response", response)
     console.log("response.data", response.data)
     console.log("response.data.PetsitterVisitings", response.data.PetsitterVisiting)
-    return response.data.PetsitterVisiting
+    return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
     return null
   }
 }
 
+interface ExtraFee {
+  Small: number
+  Medium: number
+  Large: number
+}
 export interface PetsitterCreche {
   id: number
   createAt: string
   updatedAt: string
   title: string
   address: string
-  location: string
+  location: Location
   desc: string
   maxUnit: number
-  handleType: string
+  handleType: string[]
   images: string[]
   hiredNumber: number
   star: number
   defaultFee: number
-  extraSizeFee: string
+  extraSizeFee: ExtraFee
   promoted: boolean
   responseRate: number[]
   acceptRate: number[]
+  serviceCreche: Item[]
+  crecheAmenities: Item[]
 }
 
 interface PetsitterCrecheResponse extends GeneralResponse {
@@ -98,7 +117,7 @@ export const getPetsitterCreches = async (crecheId: number): Promise<PetsitterCr
     // console.log("response", response)
     console.log("response.data", response.data)
     console.log("response.data.PetsitterCreches", response.data.PetsitterCreche)
-    return response.data.PetsitterCreche
+    return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
     return null

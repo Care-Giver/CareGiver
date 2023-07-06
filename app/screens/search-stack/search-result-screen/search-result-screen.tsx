@@ -37,8 +37,12 @@ export const SearchResultScreen: FC<
 
   //* 예약 생성을 위한 모델
   const {
-    CreateCrecheBookingModel: { postCrecheBooking, setCrechePetsitter },
-    CreateVisitiongBookingModel: { postVisitingBooking, setVisitingPetsitter },
+    CreateCrecheBookingModel: { postCrecheBooking, setCrechePetsitter, setCrecheFeeServices },
+    CreateVisitiongBookingModel: {
+      postVisitingBooking,
+      setVisitingPetsitter,
+      setVisitingFeeServices,
+    },
   } = useStores()
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
@@ -232,12 +236,17 @@ export const SearchResultScreen: FC<
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                  navigate("caregiver-detail-information-screen", {
+                    sitterData: item,
+                    serviceType: route.params.serviceType,
+                  })
                   //? 예약 생성 model update
                   if (route.params.serviceType == "위탁") {
-                    setCrechePetsitter(item.crecheId)
+                    setCrechePetsitter(item.id)
+                    setCrecheFeeServices(item.id)
                   } else if (route.params.serviceType == "방문") {
-                    setVisitingPetsitter(item.visitingId)
+                    setVisitingPetsitter(item.id)
+                    setVisitingFeeServices(item.id)
                   }
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}

@@ -20,13 +20,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 export const MakeBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "make-booking-screen">
-> = observer(function MakeBookingScreen() {
+> = observer(function MakeBookingScreen(route) {
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-
+  const { serviceType } = route.route.params
   const onPress = () => {
     navigate("payment-screen")
   }

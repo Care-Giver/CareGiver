@@ -63,16 +63,16 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
     React.useLayoutEffect(() => {
       setUser()
-      //setUserMe(user)
-
+      setUserMe(user)
+      if (user != null) {
+        setBuyerName(userMe?.nickname)
+        //TODO 현재 caregiver api에서 data가 undefined이기 때문에 잠시 주석처리.
+        //setBuyerEmail(userMe.email)
+        //setBuyerTel(userMe.phoneNumber)
+      }
       //dummy test
-      setUserMe(userinfo[0])
+      //setUserMe(userinfo[0])
     }, [])
-    if (user != null) {
-      setBuyerName(userMe.nickname)
-      setBuyerEmail(userMe.email)
-      setBuyerTel(userMe.phoneNumber)
-    }
 
     //* 결제 정보에 따른 data update 및 결제스크린 이동
     const onPress = () => {
@@ -179,10 +179,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <DivisionLine mt={12} />
             <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text="유혜린 펫시터" mb={24} color={BODY} />
+            <PreReg14 text={user.nickname} mb={24} color={BODY} />
             {/* 맡길 반려동물 컴포넌트 가져오기 */}
             <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text={userMe?.address} mb={24} color={BODY} />
+            <PreReg14 text={user.address} mb={24} color={BODY} />
             <PreMed14 text="방문 시간" mb={8} />
             <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
           </View>

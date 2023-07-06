@@ -1,8 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { CreateVisitingBookingInput, postVisitingBooking } from "#axios"
-import { getPetsitterCreches, getPetsitterVisitings } from "../..//services/axios/petsitter"
-import { number } from "mobx-state-tree/dist/internal"
+import { PetsitterVisiting, getPetsitterVisitings } from "../..//services/axios/petsitter"
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -14,8 +13,8 @@ export const CreateVisitiongBookingModel = types
   })
   .actions(withSetPropAction)
   .views((self) => ({
-    getItem() {
-      console.log(self.postVisitingBooking)
+    getItem(item: PetsitterVisiting) {
+      console.log("item", item)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -33,6 +32,9 @@ export const CreateVisitiongBookingModel = types
         endTime: [""],
         petIds: [],
         paymentId: null,
+        petToolsLocInfo: "",
+        avoidFoodInfo: "",
+        bondingTipsInfo: "",
       }
     },
     setDatePets(startTime: string[], endTime: string[], pets: number[]) {
@@ -44,7 +46,11 @@ export const CreateVisitiongBookingModel = types
       self.postVisitingBooking.visitingId = visitingId
     },
     setTotalFee(totalFee: number) {
+      //? totalFee가 빠질예정입니다.
       //self.postVisitingBooking.totalFee = totalFee
+    },
+    setServices(services: string) {
+      self.postVisitingBooking.services.push(services)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -81,16 +87,26 @@ export const CreateVisitiongBookingModel = types
   .actions((self) => ({
     async setVisitingFeeServices(visitingId: number) {
       {
-        /*
-      //TODO api 수정되면 fee, services추가
-      const totalFee: number =
-        Number((await getPetsitterVisitings(visitingId)).defaultFee) *
-        (Number(self.postVisitingBooking.endDate.substring(8, 10)) -
-          Number(self.postVisitingBooking.startDate.substring(8, 10))) // + extrafee
-      if (self.postVisitingBooking == null) {
-        self.init()
-      }
-    await self.setTotalFee(totalFee)*/
+        const visiting: PetsitterVisiting = await getPetsitterVisitings(visitingId)
+        self.getItem(visiting)
+        //TODO api 수정되면 fee관련 삭제해야합니다.
+        {
+          /*const totalFee: number =
+          Number((await getPetsitterVisitings(visitingId)).defaultFee) *
+          (Number(self.postVisitingBooking.endTime[0].substring(8, 10)) -
+      Number(self.postVisitingBooking.startTime[0].substring(8, 10)))*/
+        } // + extrafee
+        if (self.postVisitingBooking == null) {
+          self.init()
+        }
+        //await self.setTotalFee(totalFee)
+        //* sevices 객체중 serviceName만 모델에 update
+        //* ???왜 undefinde 뜨지?
+        const arr = visiting.serviceVisiting.map((item) => {
+          console.log(item)
+          self.setServices(item.name)
+        })
+        console.log(arr)
       }
     },
   }))
