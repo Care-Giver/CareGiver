@@ -37,19 +37,64 @@ export const CreateCrecheBookingModel = types
         bondingTipsInfo: "",
       }
     },
-    setDatePets(startTime: string, endTime: string, pets: number[]) {
-      self.postCrecheBooking.startDate = startTime
-      self.postCrecheBooking.endDate = endTime
-      self.postCrecheBooking.petIds = pets
+
+    setDatePets(startDate: string, endDate: string, pets: number[]) {
+      const updatedpostCrecheBooking: CreateCrecheBookingInput = {
+        startDate: startDate,
+        endDate: endDate,
+        petIds: pets,
+        crecheId: self.postCrecheBooking.crecheId,
+        userId: self.postCrecheBooking.userId,
+        request: self.postCrecheBooking.request,
+        services: self.postCrecheBooking.services,
+        paymentId: self.postCrecheBooking.paymentId,
+        petToolsLocInfo: self.postCrecheBooking.petToolsLocInfo,
+        avoidFoodInfo: self.postCrecheBooking.avoidFoodInfo,
+        bondingTipsInfo: self.postCrecheBooking.bondingTipsInfo,
+        totalFee: null,
+        defalutFee: null,
+      }
+      self.postCrecheBooking = updatedpostCrecheBooking
     },
     setPetsitter(crecheId: number) {
-      self.postCrecheBooking.crecheId = crecheId
+      const updatedpostCrecheBooking: CreateCrecheBookingInput = {
+        crecheId: crecheId,
+        userId: self.postCrecheBooking.userId,
+        request: self.postCrecheBooking.request,
+        services: self.postCrecheBooking.services,
+        startDate: self.postCrecheBooking.startDate,
+        endDate: self.postCrecheBooking.endDate,
+        petIds: self.postCrecheBooking.petIds,
+        paymentId: self.postCrecheBooking.paymentId,
+        petToolsLocInfo: self.postCrecheBooking.petToolsLocInfo,
+        avoidFoodInfo: self.postCrecheBooking.avoidFoodInfo,
+        bondingTipsInfo: self.postCrecheBooking.bondingTipsInfo,
+        totalFee: null,
+        defalutFee: null,
+      }
+      self.postCrecheBooking = updatedpostCrecheBooking
     },
     setTotalFee(totalFee: number) {
-      self.postCrecheBooking.totalFee = totalFee
+      //? totalFee가 빠질예정입니다.
+      //self.postCrecheBooking.totalFee = totalFee
     },
-    setServices(services: string) {
-      self.postCrecheBooking.services.push(services)
+    setServices(services: string[]) {
+      const updatedpostCrecheBooking: CreateCrecheBookingInput = {
+        crecheId: self.postCrecheBooking.crecheId,
+        userId: self.postCrecheBooking.userId,
+        request: self.postCrecheBooking.request,
+        services: services,
+        startDate: self.postCrecheBooking.startDate,
+        endDate: self.postCrecheBooking.endDate,
+        petIds: self.postCrecheBooking.petIds,
+        paymentId: self.postCrecheBooking.paymentId,
+        petToolsLocInfo: self.postCrecheBooking.petToolsLocInfo,
+        avoidFoodInfo: self.postCrecheBooking.avoidFoodInfo,
+        bondingTipsInfo: self.postCrecheBooking.bondingTipsInfo,
+        totalFee: null,
+        defalutFee: null,
+      }
+      self.postCrecheBooking = updatedpostCrecheBooking
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -93,10 +138,12 @@ export const CreateCrecheBookingModel = types
       await self.setTotalFee(creche.defaultFee)
 
       //* sevices 객체중 serviceName만 모델에 update
-      await creche.serviceCreche.map((item) => {
+      //TODO 아직까지 undefined error 해결하지 못했습니다,,
+      const services: string[] = creche.serviceCreche?.map((item) => {
         console.log(item)
-        self.setServices(item.name)
+        return item.name
       })
+      self.setServices(services)
       //await self.setServices(creche.serviceCreche)
     },
   }))

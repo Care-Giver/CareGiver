@@ -7,7 +7,7 @@ import { NavigatorParamList } from "#navigators"
 import { Button, PreReg18, ScreenRootView } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
-
+import { useStores } from "#models"
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
   if (typeof value === "string") return value === "true"
@@ -39,6 +39,24 @@ export const TestIamportPaymentResultScreen: FC<
   const isSuccess =
     getBoolean(imp_success) ?? getBoolean(success) ?? (error_code == null && code == null)
 
+  const {
+    PaymentModel: { setPayment },
+  } = useStores()
+
+  React.useLayoutEffect(() => {
+    if (isSuccess) {
+      setPayment({
+        imp_uid: imp_uid,
+        merchant_uid: merchant_uid,
+        imp_success: imp_success,
+        isRefunded: true,
+        //TODO 백엔드측에서 totalFee 관련 api 생성한다고 합니다. 현재는 예시로 10000원 설정.
+        totalFee: 10000,
+        //route.params.amount,
+      })
+      //TODO 결제가 완료되었으니 예약생성도 해야합니다. 어제 일어났던 model관련 이슈로 아직 예약생성 model이 완성되지 못했습니다,,
+    }
+  }, [])
   return (
     <ScreenRootView testID="TestIamportPaymentResult">
       {isSuccess ? (

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { StyleProp, ViewStyle, TextInput, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { DISABLED, LBG } from "#theme"
@@ -36,6 +36,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
     if (onPressIn) {
       onPressIn()
     }
+    console.log("focus")
   }
   return (
     <View style={allStyles}>
