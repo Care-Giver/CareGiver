@@ -4,23 +4,18 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
-  BookingCancelReasons,
+  bookingCancelReasons,
   PreBol16,
   PreBol18,
-  PreMed16,
   ReasonType,
   ScreenRootView,
   SelectReason,
 } from "#components"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { images } from "#images"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
 export const CancelReservationScreen: FC<
   StackScreenProps<NavigatorParamList, "cancel-reservation-screen">
 > = observer(function CancelReservationScreen() {
@@ -30,20 +25,17 @@ export const CancelReservationScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
 
-  // reason 선택시 selected에 저장.
+  // "기타" 사유를 제외한 객관식 사유 - reason 선택시 selected 에 저장.
   const [selected, setSelected] = useState<ReasonType>(null)
-  // reason에서 기타 선택시, inputText 입력값 저장
+  // reason 에서 "기타" 선택시, inputText 입력값 저장
   const [input, setInput] = useState("")
   // 최종적으로 선택한 reason finalReason에 저장.
   const [finalReason, setFinalReason] = useState("")
 
   const onSubmit = () => {
-    if (input === "") {
-      setFinalReason(selected)
-    } else {
-      setFinalReason(input)
-    }
+    setFinalReason(input === "" ? selected : input)
   }
+
   console.log("selected", selected)
   console.log(input)
   console.log("finalReason", finalReason)
@@ -79,7 +71,7 @@ export const CancelReservationScreen: FC<
           />
 
           {/* 취소 사유들 표시 */}
-          {BookingCancelReasons.map((item, index) => (
+          {bookingCancelReasons.map((item, index) => (
             <SelectReason key={index} reason={item} selected={selected} setSelected={setSelected} />
           ))}
 

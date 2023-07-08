@@ -4,14 +4,14 @@ import { observer } from "mobx-react-lite"
 import { images } from "#images"
 import { PreMed16 } from "../basics/custom-texts/custom-texts"
 
-export const BookingCancelReasons = [
+export const bookingCancelReasons = [
   "예약이 필요없어졌어요.",
   "실수로 예약했어요.",
   "펫시터가 마음에 들지 않아요.",
   "기타(직접 입력 / 최대 30자)",
 ]
 
-export type ReasonType = typeof BookingCancelReasons[number]
+export type ReasonType = typeof bookingCancelReasons[number]
 
 export interface SelectReasonProps {
   /**
