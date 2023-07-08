@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { Platform } from "react-native"
+import { CharacterApi } from "../api/character-api"
+import { Api } from "../api/api"
 
 interface ExtraSizeFee {
   SMALL: number
@@ -62,26 +64,31 @@ interface NewCrecheResponse extends GeneralResponse {
  * @returns {Promise<Creche>}
  */
 export const getCreche = async (crecheId: number): Promise<Creche> => {
-  // try {
-  //   const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
-  //   if (!response.data.ok) {
-  //     const error = response.data.error
-  //     console.error("response.data.error 에러!!!", error)
-  //     // @ts-ignore
-  //     return null
-  //   }
-  //   console.log("response", response)
-  //   console.log("response.data", response.data)
-  //   console.log("response.data.creche", response.data.creche)
-  //   return response.data.creche
-  // } catch (error) {
-  //   console.error("Evoked on", Platform.OS)
-  //   console.error("ERROR MSG", error.message)
-  //   console.error("catch 에러!!!", error.toJSON())
-  //   return null
-  // }
-  axios
-    .get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
+  try {
+    const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error 에러!!!", error)
+      // @ts-ignore
+      return null
+    }
+    console.log("response", response)
+    console.log("response.data", response.data)
+    console.log("response.data.creche", response.data.creche)
+    return response.data.creche
+  } catch (error) {
+    console.error("Evoked on", Platform.OS)
+    console.error("ERROR MSG", error.message)
+    console.error("catch 에러!!!", error.toJSON())
+    return null
+  }
+
+  // axios - ver2
+  /*   axios
+    .get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, {
+      headers: { "x-jwt": USER_TOKEN, Accept: "Application/json" },
+      data: undefined,
+    })
     .then((response: AxiosResponse) => {
       console.log("Evoked on", Platform.OS)
       console.log("RESPONSE DATA", response.data)
@@ -92,7 +99,36 @@ export const getCreche = async (crecheId: number): Promise<Creche> => {
       console.error("ERROR CAUSE", error.cause)
       console.error("ERROR MSG", error.message)
       console.error("ERROR MSG", error.toJSON())
+    }) */
+
+  // fetch
+  /*  const headers = {
+    "x-jwt": "USER_TOKEN",
+    Accept: "Application/json",
+  }
+
+  fetch(`${BASE_URL}/creche/${crecheId}`, { headers })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      return response.json()
     })
+    .then((data) => {
+      console.log("fetch | Evoked on", Platform.OS)
+      console.log("RESPONSE DATA", data)
+      return data.creche
+    })
+    .catch((error) => {
+      console.error("fetch | Evoked on", Platform.OS)
+      console.error("ERROR CAUSE", error)
+      console.error("ERROR MSG", error.message)
+    }) */
+
+  // apisauce
+  /*  const api = new Api()
+  api.setup()
+  api.getCreche(crecheId) */
 }
 
 /**
