@@ -3,8 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from "reac
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { PreBol16, PreBol18, PreMed16, ScreenRootView } from "#components"
-import { useShowBottomTab } from "app/utils/hooks"
+import {
+  BookingCancelReasons,
+  PreBol16,
+  PreBol18,
+  PreMed16,
+  ReasonType,
+  ScreenRootView,
+  SelectReason,
+} from "#components"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
@@ -24,7 +31,7 @@ export const CancelReservationScreen: FC<
   // const navigation = useNavigation()
 
   // reason 선택시 selected에 저장.
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState<ReasonType>(null)
   // reason에서 기타 선택시, inputText 입력값 저장
   const [input, setInput] = useState("")
   // 최종적으로 선택한 reason finalReason에 저장.
@@ -40,33 +47,6 @@ export const CancelReservationScreen: FC<
   console.log("selected", selected)
   console.log(input)
   console.log("finalReason", finalReason)
-
-  // reason list
-  const reason = [
-    "예약이 필요없어졌어요.",
-    "실수로 예약했어요.",
-    "펫시터가 마음에 들지 않아요.",
-    "기타(직접 입력 / 최대 30자)",
-  ]
-  // 이유 선택 시, 버튼의 색깔이 바뀜. 라디오버튼으로 구현.
-  const SelectReason = () => {
-    return (
-      <View style={styles.selectReasonContainer}>
-        {reason.map((item, index) => {
-          return (
-            <TouchableOpacity style={styles.reason} key={index} onPress={() => setSelected(item)}>
-              <Image
-                key={item}
-                style={styles.radio}
-                source={selected === item ? images.radio_active : images.radio_inactive}
-              />
-              <PreMed16 text={item} />
-            </TouchableOpacity>
-          )
-        })}
-      </View>
-    )
-  }
 
   // * BottomSheet Modal
   // ref
@@ -97,10 +77,14 @@ export const CancelReservationScreen: FC<
             ml={16}
             mb={32}
           />
-          <SelectReason />
 
-          {/* 기타 입력시 TextInput 표시 */}
-          {selected === "기타(직접 입력 / 최대 30자)" ? (
+          {/* 취소 사유들 표시 */}
+          {BookingCancelReasons.map((item, index) => (
+            <SelectReason key={index} reason={item} selected={selected} setSelected={setSelected} />
+          ))}
+
+          {/* "기타" 사유 선택시 TextInput 표시 */}
+          {selected === "기타(직접 입력 / 최대 30자)" && (
             <TextInput
               style={styles.textInput}
               placeholder="예약 취소 사유를 직접 입력해주세요."
@@ -109,7 +93,7 @@ export const CancelReservationScreen: FC<
               multiline
               maxLength={30}
             />
-          ) : null}
+          )}
 
           <TouchableOpacity style={styles.submit} onPress={onSubmit}>
             <PreBol16 text="확인" color="white" />
@@ -133,19 +117,6 @@ const styles = StyleSheet.create({
   bottomSheetContainer: {
     flex: 1,
     backgroundColor: "white",
-  },
-  selectReasonContainer: {
-    paddingLeft: 16,
-  },
-  reason: {
-    flexDirection: "row",
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  radio: {
-    width: 16,
-    height: 16,
-    marginRight: 8,
   },
   textInput: {
     marginLeft: 40,
