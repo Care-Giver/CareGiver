@@ -1,5 +1,5 @@
 import { View, Pressable, Image, ImageBackground } from "react-native"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
 
@@ -55,6 +55,7 @@ export const PastBooking = (props: PastBookingProps) => {
     isFavorite,
     reviewStatus,
     style,
+    forceUpdate,
   } = props
 
   const [isFavoriteState, setIsFavoriteState] = useState<boolean>(isFavorite)
@@ -80,6 +81,7 @@ export const PastBooking = (props: PastBookingProps) => {
       const response = await deleteFavorite(updateFavoriteBody)
       if (response.ok) {
         setIsFavoriteState(false)
+        forceUpdate && forceUpdate()
       }
     }
     // ? 찜을 하지 않은 펫시터인 경우 - 찜 설정
@@ -87,6 +89,7 @@ export const PastBooking = (props: PastBookingProps) => {
       const response = await createFavorite(updateFavoriteBody)
       if (response.ok) {
         setIsFavoriteState(true)
+        forceUpdate && forceUpdate()
       }
     }
   }, [isFavoriteState])
@@ -166,7 +169,13 @@ export const PastBooking = (props: PastBookingProps) => {
           <Pressable onPress={handleLikeButton}>
             <Image
               style={styles.likeBtn}
-              source={isFavoriteState ? images.filled_heart : images.empty_heart}
+              source={
+                // ! force update 함수가 있는 경우, isFavorite param 값으로 (서버에 저장된 값으로) 직접 판별하고
+                // ! force update 함수가 없는 경우, isFavoriteState 값으로 간접적으로 판별한다.
+                (forceUpdate && isFavorite) || (!forceUpdate && isFavoriteState)
+                  ? images.filled_heart
+                  : images.empty_heart
+              }
             />
           </Pressable>
         </Row>

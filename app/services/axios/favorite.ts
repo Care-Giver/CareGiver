@@ -48,7 +48,7 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
       return null
     }
     // console.info("[getFavorites] response.data: ", response.data)
-    console.log("in Axios response.data >>>", response.data)
+    // console.log("in Axios response.data >>>", response.data)
     return response.data
   } catch (error) {
     console.error(error)
@@ -73,7 +73,7 @@ export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFa
       //@ts-ignore
       return null
     }
-    console.info("[createFavorite] response.data: ", response.data)
+    // console.info("[createFavorite] response.data: ", response.data)
     return response.data
   } catch (error) {
     console.error(error)
@@ -94,7 +94,7 @@ export const deleteFavorite = async (body: UpdateFavoriteBody): Promise<GeneralR
       //@ts-ignore
       return null
     }
-    console.info("[deleteFavorite] response.data: ", response.data)
+    // console.info("[deleteFavorite] response.data: ", response.data)
     return response.data
   } catch (error) {
     console.error(error)

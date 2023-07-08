@@ -4,4 +4,5 @@ import { PreviousBookingParams, ReviewStatus } from "../../services/axios"
 
 export interface PastBookingProps extends PreviousBookingParams {
   style?: StyleProp<ViewStyle>
+  forceUpdate?: () => any
 }

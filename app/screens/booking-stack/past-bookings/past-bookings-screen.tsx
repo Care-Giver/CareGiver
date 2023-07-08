@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -14,10 +14,12 @@ import { PreviousBookingParams, getPreviousBookings } from "../../../services/ax
 export const PastBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "past-bookings-screen">
 > = observer(function PastBookingsScreen({ route, navigation }) {
-  // const { pastBookings } = route.params
-  // console.log(pastBookings)
-
   const [previousBookings, setPreviousBookings] = useState<PreviousBookingParams[]>([])
+
+  // * 찜 버튼을 누를 시 강제로 화면 전체를 리렌더링하기 위한 함수
+  const forceUpdate = useCallback(() => {
+    navigation.setParams(undefined)
+  }, [])
 
   useLayoutEffect(() => {
     getPreviousBookings()
@@ -48,29 +50,14 @@ export const PastBookingsScreen: FC<
         setPreviousBookings(previousBookings)
       })
       .catch((err) => console.log("[past bookings screen] get previous bookings error >>>", err))
-  }, [])
+  }, [route.params])
 
   return (
     <ScreenRootView testID="PastBookings">
       <View style={{ paddingVertical: 20 }}>
         <FlatList
-          // style={{ paddingTop: 20, marginBottom: 20 }}
           data={previousBookings}
-          renderItem={({ item }) => (
-            <PastBooking
-              {...item}
-              // profileImage={item.profileImage}
-              // petsitterName={item.petSitterName}
-              // desc={item.desc}
-              // petsitterId={item.crecheId ? item.crecheId : item.visitingId}
-              // bookingId={item.crecheId ? item.crecheBookingId : item.visitingBookingId}
-              // petsitterType={item.crecheBookingId ? "creche" : "visiting"}
-              // serviceType={item.crecheId ? "creche" : "visiting"}
-              // startDate={item.crecheId ? item.startDate : item.startTime}
-              // endDate={item.crecheId ? item.endDate : item.endTime}
-              // isCanceled={item.isCanceled}
-            />
-          )}
+          renderItem={({ item }) => <PastBooking {...item} forceUpdate={forceUpdate} />}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
         />
