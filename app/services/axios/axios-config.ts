@@ -7,7 +7,6 @@ const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg
 // TODO: 따라서, 이후에는 로그인시 UserStoreModel 에서  관리하는 값이 될 예정임.
 export const CONFIG = {
   headers: { "x-jwt": USER_TOKEN, Accept: "Application/json" },
-  data: undefined,
 }
 
 export interface GeneralResponse {
