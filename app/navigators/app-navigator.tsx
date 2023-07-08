@@ -55,6 +55,7 @@ import {
   TestIamportScreen,
   TestIamportPaymentScreen,
   TestIamportPaymentResultScreen,
+  TestNetworkErrorScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -154,6 +155,7 @@ export type NavigatorParamList = {
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
   "payment-screen": undefined
+  "test-network-error-screen": undefined
   // iamport 테스트
   "test-iamport-screen": undefined
   "test-iamport-payment-screen": undefined
@@ -362,7 +364,7 @@ const SearchingStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
-      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+      <Stack.Screen name="test-web-view-screen" component={TestWebViewScreen} />
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
@@ -397,6 +399,15 @@ const SearchingStack = () => {
         options={{
           title: "결제 결과",
           header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* hotfix/network-error */}
+      <Stack.Screen
+        name="test-network-error-screen"
+        component={TestNetworkErrorScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
     </Stack.Navigator>
