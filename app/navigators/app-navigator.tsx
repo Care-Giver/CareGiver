@@ -48,6 +48,7 @@ import {
   CgMypageScreen,
   YeBeomTestScreen,
   BookingDetailScreen,
+  TestNetworkErrorScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -143,6 +144,8 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+
+  "test-network-error-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -327,13 +330,22 @@ const SearchingStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
-      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+      <Stack.Screen name="test-web-view-screen" component={TestWebViewScreen} />
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* hotfix/network-error */}
+      <Stack.Screen
+        name="test-network-error-screen"
+        component={TestNetworkErrorScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }

@@ -20,6 +20,8 @@ export class CharacterApi {
         { amount: API_PAGE_SIZE },
       )
 
+      console.log("response on getCharacters >>> ", response)
+
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
