@@ -55,6 +55,7 @@ import {
   TestIamportScreen,
   TestIamportPaymentScreen,
   TestIamportPaymentResultScreen,
+  TestNetworkErrorScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -154,6 +155,7 @@ export type NavigatorParamList = {
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
   "payment-screen": undefined
+  "test-network-error-screen": undefined
   // iamport 테스트
   "test-iamport-screen": undefined
   "test-iamport-payment-screen": undefined
@@ -231,8 +233,17 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="test-network-error-screen"
     >
+      {/* hotfix/network-error */}
+      <Stack.Screen
+        name="test-network-error-screen"
+        component={TestNetworkErrorScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
+        }}
+      />
+
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
