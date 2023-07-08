@@ -7,7 +7,7 @@ import { BODY, HEAD_LINE, LBG } from "#theme"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
-import { petsDummy } from "../../../screens/search-stack/search-screen/dummy-data"
+import { petsDummy } from "../../../../assets/dummyData/pets-dummy"
 import { SelectPetDropdownBoxProps } from "./select-pet-dropdown-box.props"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 
@@ -21,7 +21,6 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const selectedPets = props.selectedPets
   const setSelectedPets = props.setSelectedPets
   const inBottomSheet = props.inBottomSheet ? props.inBottomSheet : false
-  console.log("inBottomSheet", inBottomSheet)
   const placeholder = props.placeholder || "맡기실 반려동물을 선택해주세요"
 
   return (
@@ -41,14 +40,29 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
           }}
         >
           {/* //? 반려동물 리스트 */}
-          {petsDummy.map((item, index) => (
-            <SelectPetItem
-              petData={item}
-              selectedPets={selectedPets}
-              setSelectedPets={setSelectedPets}
-              key={index}
+          {inBottomSheet ? (
+            <BottomSheetFlatList
+              data={petsDummy}
+              renderItem={({ item, index }) => (
+                <SelectPetItem
+                  petData={item}
+                  selectedPets={selectedPets}
+                  setSelectedPets={setSelectedPets}
+                  key={index}
+                />
+              )}
+              style={{ height: 156 }}
             />
-          ))}
+          ) : (
+            petsDummy.map((item, index) => (
+              <SelectPetItem
+                petData={item}
+                selectedPets={selectedPets}
+                setSelectedPets={setSelectedPets}
+                key={index}
+              />
+            ))
+          )}
 
           {/* //? 추가 등록하기 버튼 */}
           <RowRoundedBox

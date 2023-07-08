@@ -11,17 +11,28 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const preset = presets.fixed
   const style = props.style || {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  const type = props?.type || "KeyboardAvoidingView"
 
-  return (
-    <KeyboardAvoidingView
-      style={preset.outer}
-      behavior={isIos ? "padding" : undefined}
-      keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
-    >
-      <StatusBar barStyle={props.statusBar || "light-content"} />
-      <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
-    </KeyboardAvoidingView>
-  )
+  // 기본값 - KeyboardAvoidingView
+  if (type === "KeyboardAvoidingView")
+    return (
+      <KeyboardAvoidingView
+        style={preset.outer}
+        behavior={isIos ? "padding" : undefined}
+        keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
+      >
+        <StatusBar barStyle={props.statusBar || "light-content"} />
+        <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
+      </KeyboardAvoidingView>
+    )
+  // View 사용 시
+  else if (type === "View")
+    return (
+      <View style={preset.outer}>
+        <StatusBar barStyle={props.statusBar || "light-content"} />
+        <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
+      </View>
+    )
 }
 
 /**

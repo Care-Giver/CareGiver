@@ -3,9 +3,10 @@ import { View, Image, Pressable, StatusBar } from "react-native"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
-import { SHADOW_1 } from "#theme"
+import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { observer } from "mobx-react-lite"
-import { PopReg12 } from "#components"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { navigate } from "#navigators"
 
 export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
   // console.log("HomeScreenHeader props:", props)
@@ -20,7 +21,7 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            alert("알림 기능은 준비중입니다.")
+            navigate("test-push-notification-screen")
           }}
           style={{
             marginLeft: "auto",
@@ -29,6 +30,17 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         >
           <Image style={styles.bell} source={images.bell} />
         </Pressable>
+
+        {/* // iamport 테스트 바로가기 */}
+        <MaterialCommunityIcons
+          name="credit-card-settings-outline"
+          size={24}
+          style={{ marginRight: 16 }}
+          color={GIVER_CASUAL_NAVY}
+          onPress={() => {
+            navigate("test-iamport-screen")
+          }}
+        />
       </View>
     </>
   )

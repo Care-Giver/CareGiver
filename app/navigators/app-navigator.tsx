@@ -51,6 +51,11 @@ import {
   BookingDetailScreen,
   LoginScreen,
   PastBookingsScreen,
+  MakeBookingScreen,
+  PaymentScreen,
+  TestIamportScreen,
+  TestIamportPaymentScreen,
+  TestIamportPaymentResultScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -157,14 +162,20 @@ export type NavigatorParamList = {
   "minseon-test": undefined
   "test-map-screen": undefined
   "test-bottom-sheet": undefined
-  TestWebView: undefined
-  testPushNotification: undefined
+  "test-web-view-screen": undefined
   "temp-screen": undefined
   "kakao-login-test-screen": undefined
-  "cg-calendar-screen"
+  "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
+  "test-push-notification-screen": undefined
+  "make-booking-screen": undefined
+  "payment-screen": undefined
+  // iamport 테스트
+  "test-iamport-screen": undefined
+  "test-iamport-payment-screen": undefined
+  "test-iamport-payment-result-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -308,6 +319,16 @@ const SearchingStack = () => {
         }}
       />
 
+      {/* 결제 정보 */}
+      <Stack.Screen
+        name="payment-screen"
+        component={PaymentScreen}
+        options={{
+          title: "결제 정보",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
       {/* //* 리뷰 전체보기 */}
       <Stack.Screen
         name="all-reviews-screen"
@@ -346,13 +367,23 @@ const SearchingStack = () => {
         }}
       />
 
-      {/* //* 결제 - 요청사항 */}
-      <Stack.Screen
+      {/* //* (구)요청사항 */}
+      {/* <Stack.Screen
         name="payment-request-screen"
         component={PaymentRequestScreen}
         options={{
           title: "요청사항",
           header: (props) => <GobackAndTitleSpacebetweenHeader {...props} />,
+        }}
+      /> */}
+
+      {/*// 요청 사항 (결제 직전 스크린 입니다. 이 스크린에서 결제스크린으로 넘어갑니다. )  */}
+      <Stack.Screen
+        name="make-booking-screen"
+        component={MakeBookingScreen}
+        options={{
+          title: "요청 사항",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
@@ -372,10 +403,40 @@ const SearchingStack = () => {
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
 
       {/* //? 푸시알림 테스트 화면 */}
-      <Stack.Screen name="testPushNotification" component={TestPushNotificationScreen} />
+      <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-screen"
+        component={TestIamportScreen}
+        options={{
+          title: "결제테스트 세팅",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-screen"
+        component={TestIamportPaymentScreen}
+        options={{
+          title: "결제 진행중",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* iamport test */}
+      <Stack.Screen
+        name="test-iamport-payment-result-screen"
+        component={TestIamportPaymentResultScreen}
+        options={{
+          title: "결제 결과",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
     </Stack.Navigator>
   )
 }
@@ -682,7 +743,6 @@ const CgBookingsStack = () => {
     >
       {/* //* 예약관리 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="manage-booking-screen"
         component={ManageBookingScreen}
         options={{
@@ -871,15 +931,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/*// MVP-20 */}
-      <Stack.Screen
-        name="ye-beom-test-screen"
-        component={YeBeomTestScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
       <Stack.Screen name="TestWebView" component={TestWebViewScreen} />

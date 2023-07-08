@@ -5,7 +5,7 @@ import { DivisionLine } from "../division-line/division-line"
 import { color, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { PreBol18, PreReg18 } from "../basics/custom-texts/custom-texts"
 
-export type ServiceType = "방문" | "위탁"
+export type ServiceType = "방문" | "위탁" | "펫시터" | "훈련사"
 
 interface ServiceTypeIndicatorHeaderProps {
   /**

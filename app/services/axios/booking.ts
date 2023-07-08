@@ -198,7 +198,7 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
       CONFIG,
     )
 
-    console.debug("[test] >>>", response.data)
+    // console.debug("[test] >>>", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error
@@ -213,5 +213,49 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
   } catch (error) {
     console.error("[getPreviousBookings] catch error >>>", error)
     return []
+  }
+}
+
+export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams | null> => {
+  try {
+    const response = await axios.get<PreviousBookingResponse>(
+      `${BASE_URL}/user/my-previous-bookings`,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("[getFirstPreviousBooking] error >>>", error)
+      return null
+    }
+
+    if (response.data.previousBookings.length === 0) return null
+
+    const bookingData: PreviousBooking = response.data.previousBookings[0]
+    const serviceType: ServiceType = bookingData.crecheId ? "creche" : "visiting"
+
+    return {
+      profileImage: bookingData.profileImage,
+      serviceType: serviceType,
+      petsitterType: serviceType,
+      // @ts-ignore
+      petsitterId: serviceType === "creche" ? bookingData.crecheId : bookingData.visitingId,
+      // @ts-ignore
+      bookingId:
+        serviceType === "creche" ? bookingData.crecheBookingId : bookingData.visitingBookingId,
+      petsitterName: bookingData.petSitterName,
+      desc: bookingData.desc,
+      // ? 여기서는 creche | visiting 모두 Date로 통일한다.
+      // @ts-ignore
+      startDate: serviceType === "creche" ? bookingData.startDate : bookingData.startTime,
+      // @ts-ignore
+      endDate: serviceType === "creche" ? bookingData.endDate : bookingData.endTime,
+      isCanceled: bookingData.isCanceled,
+      isFavorite: bookingData.isFavorite,
+      reviewStatus: bookingData.reviewStatus,
+    }
+  } catch (error) {
+    console.error("[getFirstPreviousBooking] catch error >>>", error)
+    return null
   }
 }

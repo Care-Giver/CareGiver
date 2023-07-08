@@ -9,50 +9,50 @@ import { Api } from "#api"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 
-export const TestWebViewScreen: FC<StackScreenProps<NavigatorParamList, "TestWebView">> = observer(
-  function TestWebViewScreen() {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
+export const TestWebViewScreen: FC<
+  StackScreenProps<NavigatorParamList, "test-web-view-screen">
+> = observer(function TestWebViewScreen() {
+  // Pull in one of our MST stores
+  // const { someStore, anotherStore } = useStores()
 
-    // Pull in navigation via hook
-    // const navigation = useNavigation()
-    const [html, setHtml] = useState(null)
+  // Pull in navigation via hook
+  // const navigation = useNavigation()
+  const [html, setHtml] = useState(null)
 
-    const api = new Api()
-    useEffect(() => {
-      const set = async () => {
-        api.setup()
-        const data = await api.getAuthGoogle()
-        setHtml(data)
-      }
+  const api = new Api()
+  useEffect(() => {
+    const set = async () => {
+      api.setup()
+      const data = await api.getAuthGoogle()
+      setHtml(data)
+    }
 
-      set()
-    }, [])
+    set()
+  }, [])
 
-    console.log("html", html)
+  console.log("html", html)
 
-    // const url = "https://reactnative.dev/"
-    const url =
-      "https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount%2Finfo#login"
-    return (
-      <ScreenRootView testID="TestWebView" preset="fixed">
-        {/* //* Kakao 로그인 웹페이지 -> Worked! */}
-        <WebView
-          source={{
-            uri:
-              "https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount%2Finfo#login",
-          }}
-        />
+  // const url = "https://reactnative.dev/"
+  const url =
+    "https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount%2Finfo#login"
+  return (
+    <ScreenRootView testID="TestWebView" preset="fixed">
+      {/* //* Kakao 로그인 웹페이지 -> Worked! */}
+      <WebView
+        source={{
+          uri:
+            "https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount%2Finfo#login",
+        }}
+      />
 
-        {/* //* Google 로그인 html -> Worked */}
-        {/* {html && (
+      {/* //* Google 로그인 html -> Worked */}
+      {/* {html && (
           <WebView
             source={{
               html: html,
             }}
           />
         )} */}
-      </ScreenRootView>
-    )
-  },
-)
+    </ScreenRootView>
+  )
+})

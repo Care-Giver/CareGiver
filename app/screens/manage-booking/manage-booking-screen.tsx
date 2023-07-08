@@ -1,12 +1,17 @@
-import React, { FC } from "react"
+import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingInfoCard, BookingInfoCardProps, PreReg18, ScreenRootView } from "#components"
-import { View } from "react-native"
+import {
+  BookingCheckButton,
+  BookingInfoCard,
+  BookingInfoCardProps,
+  BookingList,
+  PreBol16,
+  ScreenRootView,
+} from "#components"
+import { useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -26,20 +31,28 @@ export const ManageBookingScreen: FC<
   useShowBottomTab(navigation)
 
   // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
+  const {
+    ConfirmedBookingsModel: { setAllconfirmedBookings, confirmedBookings },
+  } = useStores()
 
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
+  const [bookings, setBookins] = useState([])
+
+  const hasBooking = bookings.length > 0
+
+  useLayoutEffect(() => {
+    setAllconfirmedBookings()
+    setBookins(confirmedBookings)
+    //console.log(bookings[0])
+  }, [])
   return (
     <ScreenRootView testID="ManageBooking">
-      <View
-        style={{
-          marginVertical: 40,
-          alignSelf: "center",
-        }}
-      >
-        <PreReg18>예약 관리</PreReg18>
-      </View>
+      <BookingCheckButton style={{ zIndex: 1, marginTop: 16 }} bookingCount={2} />
+
+      {hasBooking ? (
+        <BookingList bookings={bookings} />
+      ) : (
+        <PreBol16 text="예약 내역이 없습니다" mv={10} />
+      )}
 
       <BookingInfoCard
         id={CareGiverReserveDummy.id}

@@ -1,5 +1,5 @@
 import { View, Pressable, Image, ImageBackground } from "react-native"
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
 
@@ -15,12 +15,9 @@ import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "../../theme
 import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
+import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/axios/favorite"
 
 type ServiceType = "visiting" | "creche"
-
-const ONPRESS_LIKED_BTN = () => {
-  alert("준비중인 서비스입니다.")
-}
 
 const handleAgainPress = () => {
   console.log("다시 예약하기 클릭")
@@ -60,8 +57,39 @@ export const PastBooking = (props: PastBookingProps) => {
     style,
   } = props
 
+  const [isFavoriteState, setIsFavoriteState] = useState<boolean>(isFavorite)
+
   // * 찜 버튼 handler
-  const handleLikeButton = useCallback(() => {}, [])
+  const handleLikeButton = useCallback(async () => {
+    // ? 서비스 타입에 따른 api body 생성 - 위탁("crecheId"), 방문("visitingId")
+    const updateFavoriteBody: UpdateFavoriteBody = {}
+    switch (serviceType) {
+      case "creche":
+        updateFavoriteBody["crecheId"] = petsitterId
+        break
+      case "visiting":
+        updateFavoriteBody["visitingId"] = petsitterId
+        break
+      default:
+        console.debug("[handleLikeButton] >>> 잘못된 serviceType")
+        return
+    }
+
+    // ? 이미 찜한 펫시터인 경우 - 찜 해제
+    if (isFavoriteState) {
+      const response = await deleteFavorite(updateFavoriteBody)
+      if (response.ok) {
+        setIsFavoriteState(false)
+      }
+    }
+    // ? 찜을 하지 않은 펫시터인 경우 - 찜 설정
+    else {
+      const response = await createFavorite(updateFavoriteBody)
+      if (response.ok) {
+        setIsFavoriteState(true)
+      }
+    }
+  }, [isFavoriteState])
 
   // * 리뷰 작성 버튼
   const ReviewButton = useCallback(() => {
@@ -118,6 +146,7 @@ export const PastBooking = (props: PastBookingProps) => {
             : images.default_pet_image_60
         }
         style={styles.profileImg}
+        imageStyle={{ borderRadius: 9 }}
       >
         <Row style={{ backgroundColor: "" }}>
           <CaregiverTypeButton
@@ -134,10 +163,10 @@ export const PastBooking = (props: PastBookingProps) => {
         <Row style={{ justifyContent: "space-between" }}>
           <PreReg14 text={`${petsitterName} 펫시터`} color={DISABLED} />
           {/* //? 찜 버튼 */}
-          <Pressable onPress={ONPRESS_LIKED_BTN}>
+          <Pressable onPress={handleLikeButton}>
             <Image
               style={styles.likeBtn}
-              source={isFavorite ? images.filled_heart : images.empty_heart}
+              source={isFavoriteState ? images.filled_heart : images.empty_heart}
             />
           </Pressable>
         </Row>

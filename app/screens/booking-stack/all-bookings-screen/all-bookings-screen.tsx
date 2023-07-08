@@ -21,11 +21,9 @@ import { useShowBottomTab } from "../../../utils/hooks"
 import {
   CurrentBooking,
   PreviousBookingParams,
-  ReviewStatus,
   getCurrentBookings,
-  getPreviousBookings,
+  getFirstPreviousBooking,
 } from "../../../services/axios"
-import { PetsitterType, ServiceType } from "../../../models"
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -46,39 +44,18 @@ export const AllBookingsScreen: FC<
   // * 진행중인 예약 내역
   const [currentBookings, setCurrentBookings] = useState<CurrentBooking[]>([])
   // * 지난 예약 내역
-  const [previousBookings, setPreviousBookings] = useState<PreviousBookingParams[]>([])
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
+    null,
+  )
 
   useLayoutEffect(() => {
     getCurrentBookings()
       .then((res) => setCurrentBookings(res))
       .catch((err) => console.log("[all bookings screen] get current bookings error >>>", err))
 
-    getPreviousBookings()
+    getFirstPreviousBooking()
       .then((res) => {
-        const previousBookings: PreviousBookingParams[] = []
-        res.forEach((booking, index) => {
-          const type = booking.crecheId ? "creche" : "visiting"
-          previousBookings.push({
-            profileImage: booking.profileImage,
-            serviceType: type,
-            petsitterType: type,
-            // @ts-ignore
-            petsitterId: type === "creche" ? booking.crecheId : booking.visitingId,
-            // @ts-ignore
-            bookingId: type === "creche" ? booking.crecheBookingId : booking.visitingBookingId,
-            petsitterName: booking.petSitterName,
-            desc: booking.desc,
-            // ? 여기서는 creche | visiting 모두 Date로 통일한다.
-            // @ts-ignore
-            startDate: type === "creche" ? booking.startDate : booking.startTime,
-            // @ts-ignore
-            endDate: type === "creche" ? booking.endDate : booking.endTime,
-            isCanceled: booking.isCanceled,
-            isFavorite: booking.isFavorite,
-            reviewStatus: booking.reviewStatus,
-          })
-        })
-        setPreviousBookings(previousBookings)
+        setFirstPreviousBooking(res)
       })
       .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
   }, [])
@@ -134,10 +111,10 @@ export const AllBookingsScreen: FC<
         {/* // * 지난 예약 */}
         <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
           <PreReg16 text="지난 예약" color={DISABLED} />
-          {previousBookings.length > 0 && (
+          {firstPreviousBooking && (
             <Pressable
               style={{ flexDirection: "row", alignItems: "center" }}
-              onPress={() => navigate("past-bookings-screen", { pastBookings: previousBookings })}
+              onPress={() => navigate("past-bookings-screen")}
             >
               <PreMed16 text="더보기" color={BODY} />
               <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
@@ -145,8 +122,8 @@ export const AllBookingsScreen: FC<
           )}
         </Row>
 
-        {previousBookings.length > 0 ? (
-          <PastBooking style={{ marginTop: 13 }} {...previousBookings[0]} />
+        {firstPreviousBooking ? (
+          <PastBooking style={{ marginTop: 13 }} {...firstPreviousBooking} />
         ) : (
           // ! 임시 empty view
           // TODO : empty view 디자인 요청 후 수정

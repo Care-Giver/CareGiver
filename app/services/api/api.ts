@@ -2,7 +2,7 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-import { Species, useStores } from "../../models"
+import { ISpecies, useStores } from "../../models"
 
 // * id = 7인 유저 토큰
 const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjY4NDUzMTAzfQ.Px0I5t4fzhfyEHGHZxjEFyP8g4P6-kw08FMZ2Iqe0d0`
@@ -217,7 +217,7 @@ export class Api {
     }
   }
 
-  async getSpeciesNames(): Promise<Species[]> {
+  async getSpeciesNames(): Promise<ISpecies[]> {
     this.apisauce.setHeaders({
       ...this.apisauce.headers,
       "x-jwt": USER_TOKEN,

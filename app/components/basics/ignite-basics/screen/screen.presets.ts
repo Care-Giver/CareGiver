@@ -6,6 +6,8 @@ import { CARE_SOFT_YELLOW, color, GIVER_ROMANTIC_GRAY, STANDARD_WIDTH } from "#t
  */
 export const offsets = {
   none: 0,
+  small: 100,
+  large: 500,
 }
 
 /**
