@@ -5,6 +5,8 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { Button, ScreenRootView } from "#components"
 import { getTestJsonPlaceHolder } from "./axios-test-api"
+import { getFavorites } from "../../services/axios/favorite"
+import { getCreche } from "#axios"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -17,6 +19,8 @@ export const TestNetworkErrorScreen: FC<
   return (
     <ScreenRootView>
       <Button text="getTestJsonPlaceHolder" onPress={getTestJsonPlaceHolder} />
+
+      <Button text="getCreche" onPress={() => getCreche(1)} />
     </ScreenRootView>
   )
 })

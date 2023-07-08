@@ -1,5 +1,6 @@
-import axios from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { Platform } from "react-native"
 
 interface ExtraSizeFee {
   SMALL: number
@@ -61,24 +62,37 @@ interface NewCrecheResponse extends GeneralResponse {
  * @returns {Promise<Creche>}
  */
 export const getCreche = async (crecheId: number): Promise<Creche> => {
-  try {
-    const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
-
-    if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
-      return null
-    }
-
-    console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.creche", response.data.creche)
-    return response.data.creche
-  } catch (error) {
-    console.error("catch 에러!!!", error)
-    return null
-  }
+  // try {
+  //   const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
+  //   if (!response.data.ok) {
+  //     const error = response.data.error
+  //     console.error("response.data.error 에러!!!", error)
+  //     // @ts-ignore
+  //     return null
+  //   }
+  //   console.log("response", response)
+  //   console.log("response.data", response.data)
+  //   console.log("response.data.creche", response.data.creche)
+  //   return response.data.creche
+  // } catch (error) {
+  //   console.error("Evoked on", Platform.OS)
+  //   console.error("ERROR MSG", error.message)
+  //   console.error("catch 에러!!!", error.toJSON())
+  //   return null
+  // }
+  axios
+    .get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
+    .then((response: AxiosResponse) => {
+      console.log("Evoked on", Platform.OS)
+      console.log("RESPONSE DATA", response.data)
+      return response.data.creche
+    })
+    .catch((error: AxiosError) => {
+      console.error("Evoked on", Platform.OS)
+      console.error("ERROR CAUSE", error.cause)
+      console.error("ERROR MSG", error.message)
+      console.error("ERROR MSG", error.toJSON())
+    })
 }
 
 /**
