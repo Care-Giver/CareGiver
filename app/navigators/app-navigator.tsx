@@ -233,17 +233,8 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="test-network-error-screen"
+      initialRouteName="home-screen"
     >
-      {/* hotfix/network-error */}
-      <Stack.Screen
-        name="test-network-error-screen"
-        component={TestNetworkErrorScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -373,7 +364,7 @@ const SearchingStack = () => {
 
       {/* //? 위치(지도) 테스트 화면 */}
       {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
-      <Stack.Screen name="TestWebView" component={TestWebViewScreen} />
+      <Stack.Screen name="test-web-view-screen" component={TestWebViewScreen} />
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
@@ -408,6 +399,15 @@ const SearchingStack = () => {
         options={{
           title: "결제 결과",
           header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* hotfix/network-error */}
+      <Stack.Screen
+        name="test-network-error-screen"
+        component={TestNetworkErrorScreen}
+        options={{
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
     </Stack.Navigator>
