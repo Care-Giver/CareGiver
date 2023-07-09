@@ -1,5 +1,5 @@
-import React, { FC, useRef, useState, useMemo, useCallback } from "react"
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from "react-native"
+import React, { FC, useRef, useState, useMemo, useCallback, useEffect } from "react"
+import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -32,6 +32,8 @@ export const CancelReservationScreen: FC<
   // 최종적으로 선택한 reason finalReason에 저장.
   const [finalReason, setFinalReason] = useState("")
 
+  const [keyboardDidHide, setkeyboardDidHide] = useState(false)
+
   const onSubmit = () => {
     setFinalReason(input === "" ? selected : input)
   }
@@ -42,13 +44,33 @@ export const CancelReservationScreen: FC<
 
   // * BottomSheet Modal
   // ref
-  const bottomSheetModalRef = useRef(null)
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   // vaiables
   const snapPoints = useMemo(() => ["60%"], [])
   // callbacks
   const handleBottomSheet = useCallback(() => {
     bottomSheetModalRef.current?.present()
   }, [])
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardDidHide(false)
+    })
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardDidHide(true)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (keyboardDidHide) {
+      bottomSheetModalRef.current?.collapse()
+    }
+  }, [keyboardDidHide])
 
   return (
     <ScreenRootView testID="CancelReservation" style={styles.root}>
@@ -78,7 +100,7 @@ export const CancelReservationScreen: FC<
 
           {/* "기타" 사유 선택시 TextInput 표시 */}
           {selected === "기타(직접 입력 / 최대 30자)" && (
-            <TextInput
+            <BottomSheetTextInput
               style={styles.textInput}
               placeholder="예약 취소 사유를 직접 입력해주세요."
               value={input}
