@@ -164,7 +164,6 @@ export type NavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
-  "cancel-reservation-screen": undefined
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
   "payment-screen": undefined
@@ -259,13 +258,6 @@ const SearchingStack = () => {
       }}
       initialRouteName="home-screen"
     >
-      <Stack.Screen
-        name="cancel-reservation-screen"
-        component={CancelReservationScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"

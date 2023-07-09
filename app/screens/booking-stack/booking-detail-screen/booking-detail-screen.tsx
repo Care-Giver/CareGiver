@@ -1,5 +1,14 @@
-import React, { FC } from "react"
-import { Pressable, View, StyleSheet, Image, ViewStyle, ScrollView } from "react-native"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  Pressable,
+  View,
+  StyleSheet,
+  Image,
+  ViewStyle,
+  ScrollView,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -11,12 +20,16 @@ import {
   DivisionLineVertical,
   PreBol14,
   PreBol16,
+  PreBol18,
   PreMed16,
   PreReg12,
   PreReg14,
+  ReasonType,
   Row,
   ScreenRootView,
+  SelectReason,
   SelectedPetCard,
+  bookingCancelReasons,
 } from "#components"
 import {
   SHADOW_1,
@@ -28,10 +41,12 @@ import {
   DEVICE_SCREEN_WIDTH,
   DISABLED,
   MIDDLE_LINE,
+  BOTTOM_HEIGHT,
 } from "#theme"
 import { korCgType, korSvcType, won } from "../../../utils/format"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 
@@ -91,6 +106,66 @@ export const BookingDetailScreen: FC<
   const { serviceType, caregiverType, name, ratings, numberOfReviews } = caregiverData
   const { location, time, selectedPets } = bookingData
   const { price, discount, totalPrice } = paymentData
+
+  // "기타" 사유를 제외한 객관식 사유 - reason 선택시 selected 에 저장.
+  const [selected, setSelected] = useState<ReasonType>(null)
+  // reason 에서 "기타" 선택시, inputText 입력값 저장
+  const [input, setInput] = useState("")
+  // 최종적으로 선택한 reason finalReason에 저장.
+  const [finalReason, setFinalReason] = useState("")
+
+  // 키보드가 가려졌는지 여부 확인
+  const [keyboardDidHide, setkeyboardDidHide] = useState(false)
+
+  const onSubmit = () => {
+    setFinalReason(input === "" ? selected : input)
+    alert("예약 취소 API 아직 연결 안 함")
+  }
+
+  // * BottomSheet Modal
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  // vaiables
+  const snapPoints = useMemo(() => ["60%"], [])
+  // callbacks
+  const handleBottomSheet = useCallback(() => {
+    bottomSheetModalRef.current?.present()
+  }, [])
+
+  // * bottomSheet backdrop
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+        pressBehavior={"close"}
+      />
+    ),
+    [],
+  )
+
+  // 키보드 가려짐 여부 갱신
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setkeyboardDidHide(false)
+    })
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setkeyboardDidHide(true)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
+
+  // 키보드가 가려지면, 바텀시트 크기 최소화 - BottomSheetTextInput 와 관련있음
+  useEffect(() => {
+    if (keyboardDidHide) {
+      bottomSheetModalRef.current?.collapse()
+    }
+  }, [keyboardDidHide])
 
   return (
     <ScreenRootView testID="BookingDetail" style={{ paddingHorizontal: 0 }}>
@@ -232,6 +307,7 @@ export const BookingDetailScreen: FC<
           paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           justifyContent: "space-between",
           backgroundColor: "transparent",
+          marginBottom: BOTTOM_HEIGHT,
         }}
       >
         <ConditionalButton label="케어 완료" style={$bottomButtonDisabled} textColor={DISABLED} />
@@ -241,8 +317,48 @@ export const BookingDetailScreen: FC<
           isActivated
           style={$bottomButton}
           textColor={GIVER_CASUAL_NAVY}
+          onPress={handleBottomSheet}
         />
       </View>
+
+      {/* 예약 취소 사유 바텀시트 */}
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={snapPoints}
+        backgroundStyle={{ borderRadius: 20 }}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.bottomSheetContainer}>
+          <PreBol18
+            text="케어기버에게 전달할 거절 메시지를 선택해주세요."
+            mt={20}
+            ml={16}
+            mb={32}
+          />
+
+          {/* 취소 사유들 표시 */}
+          {bookingCancelReasons.map((item, index) => (
+            <SelectReason key={index} reason={item} selected={selected} setSelected={setSelected} />
+          ))}
+
+          {/* "기타" 사유 선택시 TextInput 표시 */}
+          {selected === "기타(직접 입력 / 최대 30자)" && (
+            <BottomSheetTextInput
+              style={styles.textInput}
+              placeholder="예약 취소 사유를 직접 입력해주세요."
+              value={input}
+              onChangeText={(text) => setInput(text)}
+              maxLength={30}
+            />
+          )}
+
+          <TouchableOpacity style={styles.submit} onPress={onSubmit}>
+            <PreBol16 text="예약 취소하기" color="white" />
+          </TouchableOpacity>
+        </View>
+      </BottomSheetModal>
     </ScreenRootView>
   )
 })
@@ -295,4 +411,26 @@ const styles = StyleSheet.create({
   },
 
   rightArrow: { width: 16, height: 16 },
+
+  bottomSheetContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  textInput: {
+    alignSelf: "center",
+    borderBottomColor: LIGHT_LINE,
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    width: 310,
+  },
+  submit: {
+    paddingHorizontal: 16,
+    height: 56,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 16,
+    backgroundColor: GIVER_CASUAL_NAVY,
+    marginTop: 54,
+    borderRadius: 10,
+  },
 })
