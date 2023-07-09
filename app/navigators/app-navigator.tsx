@@ -212,7 +212,8 @@ const BookingsStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="all-bookings-screen"
+      // initialRouteName="all-bookings-screen"
+      initialRouteName="booking-detail-screen"
     >
       {/* //* 예약내역 메인 */}
       <Stack.Screen
@@ -228,7 +229,7 @@ const BookingsStack = () => {
         name="booking-detail-screen"
         component={BookingDetailScreen}
         options={{
-          title: "예약내역 상세",
+          title: "예약 내역 상세",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
@@ -256,8 +257,7 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="home-screen"
-      initialRouteName="cancel-reservation-screen"
+      initialRouteName="home-screen"
     >
       <Stack.Screen
         name="cancel-reservation-screen"

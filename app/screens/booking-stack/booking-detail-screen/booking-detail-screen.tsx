@@ -1,9 +1,10 @@
 import React, { FC } from "react"
-import { FlatList, Pressable, View, StyleSheet, Image, ViewStyle } from "react-native"
+import { Pressable, View, StyleSheet, Image, ViewStyle, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
   CaregiverTypeButton,
   DivisionLine,
   DivisionLineVertical,
@@ -16,7 +17,15 @@ import {
   ScreenRootView,
   SelectedPetCard,
 } from "#components"
-import { SHADOW_1, DBG, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  SHADOW_1,
+  DBG,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+  DEVICE_SCREEN_WIDTH,
+} from "#theme"
 import { korCgType, korSvcType, won } from "../../../utils/format"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -68,6 +77,8 @@ const paymentData = {
   totalPrice: 34000,
 }
 
+const PROFILE_IMAGE_WIDTH = 84
+
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
 > = observer(function BookingDetailScreen() {
@@ -79,121 +90,138 @@ export const BookingDetailScreen: FC<
   const { price, discount, totalPrice } = paymentData
 
   return (
-    <ScreenRootView testID="BookingDetail">
-      <Row>
-        <Image style={styles.profileImage} source={images.default_pet_image_60} />
-
+    <ScreenRootView testID="BookingDetail" style={{ paddingHorizontal: 0 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
         <View
           style={{
-            height: "100%",
-            width: "74%",
-            marginLeft: 12,
+            flexDirection: "row",
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
-          <Row>
-            <PreMed16 text={name} color={HEAD_LINE} />
-            <Row
-              style={{
-                width: "auto",
-                marginLeft: "auto",
-              }}
-            >
-              {/* //TODO: 방문or위탁 / 펫시터or훈련사 데이터 구분 어떻게 할건지 */}
-              <CaregiverTypeButton text={korSvcType(serviceType)} />
-              <CaregiverTypeButton text={korCgType(caregiverType)} style={{ marginLeft: 4 }} />
+          <Image style={styles.profileImage} source={images.default_pet_image_60} />
+
+          <View
+            style={{
+              height: "auto",
+              width: DEVICE_SCREEN_WIDTH - PROFILE_IMAGE_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+              paddingLeft: 12,
+            }}
+          >
+            {/* 케어기버 닉네임 | 방문/위탁 | 펫시터/훈련사 */}
+            <Row>
+              <PreMed16 text={name} color={HEAD_LINE} />
+              <Row
+                style={{
+                  width: "auto",
+                  marginLeft: "auto",
+                }}
+              >
+                {/* //TODO: 방문or위탁 / 펫시터or훈련사 데이터 구분 어떻게 할건지 */}
+                <CaregiverTypeButton text={korSvcType(serviceType)} />
+                <CaregiverTypeButton text={korCgType(caregiverType)} style={{ marginLeft: 4 }} />
+              </Row>
             </Row>
+
+            {/* 별점 | 후기 00 개 */}
+            <Row mt={4}>
+              <Image style={styles.star} source={images.rating_star} />
+
+              <PreReg12 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
+
+              <DivisionLineVertical
+                color={DBG}
+                width={1}
+                height={14}
+                style={{ marginLeft: 8, marginRight: 8 }}
+              />
+
+              <PreReg12
+                text={`후기 ${numberOfReviews}개`}
+                color={GIVER_CASUAL_NAVY}
+                style={{ marginLeft: 4 }}
+              />
+            </Row>
+
+            {/* 전화하기 | 메시지 보내기 | 신고하기 */}
+            <Row
+              mt={12}
+              style={{
+                justifyContent: "space-between",
+              }}
+            >
+              <Pressable
+                style={[$pressableBox, SHADOW_1]}
+                onPress={() => {
+                  alert("전화 기능은 준비중입니다.")
+                }}
+              >
+                <PreReg14 text={"전화하기"} color={HEAD_LINE} />
+              </Pressable>
+              <Pressable
+                style={[$pressableBox, SHADOW_1]}
+                onPress={() => {
+                  alert("메시지 보내기 기능은 준비중입니다.")
+                }}
+              >
+                <PreReg14 text={"메시지 보내기"} color={HEAD_LINE} />
+              </Pressable>
+
+              <Pressable
+                style={[$pressableAlarmBox, SHADOW_1]}
+                onPress={() => {
+                  alert("신고 기능은 준비중입니다.")
+                }}
+              >
+                <MaterialCommunityIcons name="alarm-light-outline" size={24} color={"#707070"} />
+              </Pressable>
+            </Row>
+          </View>
+        </View>
+
+        <DivisionLine mt={16} />
+
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          <PreBol14 text={"방문 장소"} color={SUB_HEAD_LINE} mt={16} />
+          <PreReg14 text={location} color={SUB_HEAD_LINE} mt={8} />
+
+          <PreBol14 text={"방문 시간"} color={SUB_HEAD_LINE} mt={36} />
+          <PreReg14 text={time} color={SUB_HEAD_LINE} mt={8} />
+
+          <PreBol14 text={"맡길 반려동물"} color={SUB_HEAD_LINE} mt={36} mb={12} />
+          {selectedPets.map((item, index) => (
+            <SelectedPetCard
+              key={index}
+              petData={item}
+              deletable={false}
+              // onPress={() => {
+              //   setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+              // }}
+            />
+          ))}
+
+          <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={36} />
+
+          <Row style={{ justifyContent: "space-between" }} mt={16}>
+            <PreReg14
+              text={`상품합계(${korSvcType(serviceType)}-${korCgType(caregiverType)})`}
+              color={SUB_HEAD_LINE}
+            />
+            <PreReg14 text={won(price)} color={SUB_HEAD_LINE} />
           </Row>
 
-          <Row mt={4}>
-            <Image style={styles.star} source={images.rating_star} />
-
-            <PreReg12 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
-
-            <DivisionLineVertical
-              color={DBG}
-              width={1}
-              height={14}
-              style={{ marginLeft: 8, marginRight: 8 }}
-            />
-
-            <PreReg12
-              text={`후기 ${numberOfReviews}개`}
-              color={GIVER_CASUAL_NAVY}
-              // style={{ marginLeft: 4 }}
-            />
+          <Row style={{ justifyContent: "space-between" }} mt={10}>
+            <PreReg14 text={"할인 합계"} color={SUB_HEAD_LINE} />
+            <PreReg14 text={won(discount)} color={SUB_HEAD_LINE} />
           </Row>
 
-          <Row mt={12} style={{ justifyContent: "space-between" }}>
-            <Pressable
-              style={[$pressableBox, SHADOW_1]}
-              onPress={() => {
-                alert("전화 기능은 준비중입니다.")
-              }}
-            >
-              <PreReg14 text={"전화하기"} color={HEAD_LINE} />
-            </Pressable>
-            <Pressable
-              style={[$pressableBox, SHADOW_1]}
-              onPress={() => {
-                alert("메시지 보내기 기능은 준비중입니다.")
-              }}
-            >
-              <PreReg14 text={"메시지 보내기"} color={HEAD_LINE} />
-            </Pressable>
+          <DivisionLine mv={12} />
 
-            <Pressable
-              style={[$pressableAlarmBox, SHADOW_1]}
-              onPress={() => {
-                alert("신고 기능은 준비중입니다.")
-              }}
-            >
-              <MaterialCommunityIcons name="alarm-light-outline" size={24} color={"#707070"} />
-            </Pressable>
+          <Row style={{ justifyContent: "space-between" }}>
+            <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
+            <PreBol16 text={won(totalPrice)} color={SUB_HEAD_LINE} />
           </Row>
         </View>
-      </Row>
-
-      <DivisionLine mt={16} />
-
-      <PreBol14 text={"방문 장소"} color={SUB_HEAD_LINE} mt={16} />
-      <PreReg14 text={location} color={SUB_HEAD_LINE} mt={8} />
-
-      <PreBol14 text={"방문 시간"} color={SUB_HEAD_LINE} mt={36} />
-      <PreReg14 text={time} color={SUB_HEAD_LINE} mt={8} />
-
-      <PreBol14 text={"맡길 반려동물"} color={SUB_HEAD_LINE} mt={36} mb={12} />
-      {selectedPets.map((item, index) => (
-        <SelectedPetCard
-          key={index}
-          petData={item}
-          deletable={false}
-          // onPress={() => {
-          //   setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-          // }}
-        />
-      ))}
-
-      <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={36} />
-
-      <Row style={{ justifyContent: "space-between" }} mt={16}>
-        <PreReg14
-          text={`상품합계(${korSvcType(serviceType)}-${korCgType(caregiverType)})`}
-          color={SUB_HEAD_LINE}
-        />
-        <PreReg14 text={won(price)} color={SUB_HEAD_LINE} />
-      </Row>
-
-      <Row style={{ justifyContent: "space-between" }} mt={10}>
-        <PreReg14 text={"할인 합계"} color={SUB_HEAD_LINE} />
-        <PreReg14 text={won(discount)} color={SUB_HEAD_LINE} />
-      </Row>
-
-      <DivisionLine mv={12} />
-
-      <Row style={{ justifyContent: "space-between" }}>
-        <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
-        <PreBol16 text={won(totalPrice)} color={SUB_HEAD_LINE} />
-      </Row>
+      </ScrollView>
     </ScreenRootView>
   )
 })
@@ -222,9 +250,9 @@ const styles = StyleSheet.create({
     height: 60,
   },
   profileImage: {
-    width: 84,
-    height: 84,
-    borderRadius: 84,
+    width: PROFILE_IMAGE_WIDTH,
+    height: PROFILE_IMAGE_WIDTH,
+    borderRadius: PROFILE_IMAGE_WIDTH,
     borderWidth: 2,
     borderColor: LIGHT_LINE,
     resizeMode: "cover",
