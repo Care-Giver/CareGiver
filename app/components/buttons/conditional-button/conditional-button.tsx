@@ -1,32 +1,53 @@
-import * as React from "react"
-import { Pressable, StyleProp, ViewStyle } from "react-native"
-import { palette } from "#theme"
+import React from "react"
+import { Pressable, StyleProp, ViewStyle, StyleSheet } from "react-native"
+import { GIVER_CASUAL_NAVY, palette } from "#theme"
 import { PreBol16 } from "../../basics/custom-texts/custom-texts"
-import { styles } from "./styles"
 
 interface ConditionalButtonProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  isActivated: boolean
+  isActivated?: boolean
   label: string
-  onPress: () => void
+  onPress?: () => void
+
+  textColor?: string
 }
 
 export const ConditionalButton = (props: ConditionalButtonProps) => {
-  const { style, isActivated = false, onPress, label } = props
+  const { style, isActivated = false, onPress, label, textColor } = props
 
-  const activatedViewStyle = [styles.root, styles.activatedViewStyle]
-  const disabledViewStyle = [styles.root, styles.disabledViewStyle]
-
-  const viewStyle = isActivated ? activatedViewStyle : disabledViewStyle
   // const textStyle = isActivated ? pressedTextStyle : defaultTextStyle
   // const content = children || <Text style={textStyle}>{label} </Text>
 
+  const allStyles = Object.assign(
+    {},
+    styles.root,
+    isActivated ? styles.activatedViewStyle : styles.disabledViewStyle,
+    style,
+  )
+
   return (
-    <Pressable style={[style, viewStyle]} disabled={!isActivated} onPress={onPress}>
-      <PreBol16 text={label} color={palette.white} />
+    <Pressable style={allStyles} disabled={!isActivated} onPress={onPress}>
+      <PreBol16 text={label} color={textColor || palette.white} />
     </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  root: {
+    width: "100%",
+    height: 56,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+  },
+  activatedViewStyle: {
+    backgroundColor: GIVER_CASUAL_NAVY,
+  },
+  disabledViewStyle: {
+    backgroundColor: "#F1F1F4",
+  },
+})

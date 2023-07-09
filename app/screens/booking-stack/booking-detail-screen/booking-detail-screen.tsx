@@ -6,6 +6,7 @@ import { NavigatorParamList } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   CaregiverTypeButton,
+  ConditionalButton,
   DivisionLine,
   DivisionLineVertical,
   PreBol14,
@@ -25,6 +26,8 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   DEVICE_SCREEN_WIDTH,
+  DISABLED,
+  MIDDLE_LINE,
 } from "#theme"
 import { korCgType, korSvcType, won } from "../../../utils/format"
 import { images } from "#images"
@@ -222,6 +225,24 @@ export const BookingDetailScreen: FC<
           </Row>
         </View>
       </ScrollView>
+
+      <View
+        style={{
+          height: 200,
+          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+          justifyContent: "space-between",
+          backgroundColor: "transparent",
+        }}
+      >
+        <ConditionalButton label="케어 완료" style={$bottomButtonDisabled} textColor={DISABLED} />
+        <ConditionalButton label="케어 진행중" style={$bottomButtonDisabled} textColor={DISABLED} />
+        <ConditionalButton
+          label="예약 취소하기"
+          isActivated
+          style={$bottomButton}
+          textColor={GIVER_CASUAL_NAVY}
+        />
+      </View>
     </ScreenRootView>
   )
 })
@@ -236,12 +257,21 @@ const $pressableBox: ViewStyle = {
 }
 
 const $pressableAlarmBox: ViewStyle = {
-  width: "auto",
-  height: "auto",
+  ...$pressableBox,
   paddingHorizontal: 6,
   paddingVertical: 6,
   borderRadius: 6,
+}
+
+const $bottomButton: ViewStyle = {
   backgroundColor: "white",
+  borderWidth: 2,
+  borderColor: GIVER_CASUAL_NAVY,
+}
+
+const $bottomButtonDisabled: ViewStyle = {
+  ...$bottomButton,
+  borderColor: MIDDLE_LINE,
 }
 
 const styles = StyleSheet.create({
@@ -249,6 +279,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
   },
+
   profileImage: {
     width: PROFILE_IMAGE_WIDTH,
     height: PROFILE_IMAGE_WIDTH,
@@ -257,9 +288,11 @@ const styles = StyleSheet.create({
     borderColor: LIGHT_LINE,
     resizeMode: "cover",
   },
+
   star: {
     width: 13.12,
     height: 12,
   },
+
   rightArrow: { width: 16, height: 16 },
 })
