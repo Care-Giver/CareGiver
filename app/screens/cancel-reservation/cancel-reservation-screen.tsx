@@ -32,10 +32,12 @@ export const CancelReservationScreen: FC<
   // 최종적으로 선택한 reason finalReason에 저장.
   const [finalReason, setFinalReason] = useState("")
 
+  // 키보드가 가려졌는지 여부 확인
   const [keyboardDidHide, setkeyboardDidHide] = useState(false)
 
   const onSubmit = () => {
     setFinalReason(input === "" ? selected : input)
+    alert("예약 취소 API 아직 연결 안 함")
   }
 
   console.log("selected", selected)
@@ -52,6 +54,7 @@ export const CancelReservationScreen: FC<
     bottomSheetModalRef.current?.present()
   }, [])
 
+  // 키보드 가려짐 여부 갱신
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setkeyboardDidHide(false)
@@ -66,6 +69,7 @@ export const CancelReservationScreen: FC<
     }
   }, [])
 
+  // 키보드가 가려지면, 바텀시트 크기 최소화 - BottomSheetTextInput 와 관련있음
   useEffect(() => {
     if (keyboardDidHide) {
       bottomSheetModalRef.current?.collapse()
@@ -110,7 +114,7 @@ export const CancelReservationScreen: FC<
           )}
 
           <TouchableOpacity style={styles.submit} onPress={onSubmit}>
-            <PreBol16 text="확인" color="white" />
+            <PreBol16 text="예약 취소하기" color="white" />
           </TouchableOpacity>
         </View>
       </BottomSheetModal>
