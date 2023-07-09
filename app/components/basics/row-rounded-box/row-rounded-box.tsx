@@ -4,7 +4,7 @@ import { Pressable, View, ViewStyle } from "react-native"
 import { palette, LIGHT_LINE } from "#theme"
 
 interface RowRoundedBoxProps {
-  preset: "Pressable" | "View"
+  preset?: "Pressable" | "View"
   style?: ViewStyle
   onPress?: () => void
   children: ReactNode

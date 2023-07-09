@@ -18,7 +18,7 @@ Notifications.setNotificationHandler({
 })
 
 export const TestPushNotificationScreen: FC<
-  StackScreenProps<NavigatorParamList, "testPushNotification">
+  StackScreenProps<NavigatorParamList, "test-push-notification-screen">
 > = observer(function TestPushNotificationScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
@@ -89,7 +89,7 @@ export const TestPushNotificationScreen: FC<
       token = (await Notifications.getExpoPushTokenAsync()).data
       console.log(token)
     } else {
-      alert("Must use physical device for Push Notifications")
+      alert("Push Notifications 을 테스트 하기위해서는, 반드시 실제 기기를 사용해주세요!")
     }
 
     return token

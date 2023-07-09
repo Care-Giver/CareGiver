@@ -24,7 +24,7 @@ import { withSetPropAction } from "../extensions/with-set-prop-action"
  *   user.setProp("age", "30")    // type error -- must be number
  */
 
-export interface Species {
+export interface ISpecies {
   speciesId: number
   name: string
   familyId: number
@@ -37,7 +37,7 @@ export interface Species {
 export const SpeciesStoreModel = types
   .model("SpeciesStore")
   .props({
-    species: types.frozen<Species[]>(),
+    species: types.frozen<ISpecies[]>(),
   })
   .actions(withSetPropAction)
   .views((self) => ({

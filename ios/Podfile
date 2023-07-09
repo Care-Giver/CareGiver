@@ -13,9 +13,18 @@ install! 'cocoapods',
 
 target 'CareGiver' do
   use_expo_modules!
+
+  # npx expo install @react-native-firebase/app 이후, 발생한 pod install 오류를 해결하기 위해 추가함 - 참고: https://stackoverflow.com/a/72705219/16673541
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  $RNFirebaseAsStaticFramework = true
+  
   ####5.28 묵추가
   pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 

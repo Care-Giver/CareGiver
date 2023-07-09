@@ -5,6 +5,7 @@ import { NavigatorParamList } from "#navigators"
 import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView, Text } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
+import { crecheDays as _crecheDays } from "./dummy-data"
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -43,7 +44,7 @@ export const CgCalendarScreen: FC<
       setDates(visitingAvailableTimes)
     } else {
       setAllCrecheDays(userId)
-      setDates(crecheDays)
+      setDates(_crecheDays)
     }
   }, [version])
 

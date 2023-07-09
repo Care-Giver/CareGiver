@@ -2,6 +2,12 @@ import React from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { KeyboardOffsets, ScreenPresets } from "./screen.presets"
 
+/**
+ * KeyboardAvoidingView가 포함된 ScreenRootView를 사용
+ * 포함되지 않고, View만 사용되는 ScreenRootView 사용
+ */
+type Type = "KeyboardAvoidingView" | "View"
+
 export interface ScreenProps {
   /**
    * Children components.
@@ -43,4 +49,9 @@ export interface ScreenProps {
    * Only applies to scroll preset.
    */
   keyboardShouldPersistTaps?: "handled" | "always" | "never"
+  /**
+   * Do you want to include KeyboardAvoidingView or View in ScreenRootView ?
+   * Defaults to KeyboardAvoidingView.
+   */
+  type?: Type
 }
