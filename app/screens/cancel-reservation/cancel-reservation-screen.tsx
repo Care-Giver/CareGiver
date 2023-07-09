@@ -11,7 +11,7 @@ import {
   ScreenRootView,
   SelectReason,
 } from "#components"
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -55,6 +55,7 @@ export const CancelReservationScreen: FC<
       <TouchableOpacity onPress={handleBottomSheet} style={styles.container}>
         <Text>Click</Text>
       </TouchableOpacity>
+
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -82,7 +83,6 @@ export const CancelReservationScreen: FC<
               placeholder="예약 취소 사유를 직접 입력해주세요."
               value={input}
               onChangeText={(text) => setInput(text)}
-              multiline
               maxLength={30}
             />
           )}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   textInput: {
-    marginLeft: 40,
+    alignSelf: "center",
     borderBottomColor: LIGHT_LINE,
     borderBottomWidth: 1,
     borderStyle: "solid",
