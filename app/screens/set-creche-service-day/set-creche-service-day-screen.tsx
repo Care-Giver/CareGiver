@@ -4,6 +4,8 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  ConditionalButton,
   DivisionLine,
   PreBol16,
   PreBol20,
@@ -18,6 +20,7 @@ import { BODY, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 import { Image } from "react-native"
 import { images } from "#images"
 import { POPPINS_SEMIBOLD } from "#fonts"
+import { postCrecheDay } from "#axios"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -26,7 +29,7 @@ import { POPPINS_SEMIBOLD } from "#fonts"
 // @ts-ignore
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
-> = observer(function SetCrecheServiceDayScreen() {
+> = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => {
     setIsEnabled((prev) => !prev)
@@ -36,6 +39,18 @@ export const SetCrecheServiceDayScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
+
+  const onPress = () => {
+    console.log("저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다")
+
+    // TOOD: crechId 를 가져와서 ()
+    // 그 crechId 를 data 에 넣고
+    // postCrecheDay 에 담을 것
+
+    // TODO: 제대로된 데이터 넣을 것
+    // postCrecheDay({})
+  }
+
   return (
     <ScreenRootView testID="SetCrecheServiceDay" style={styles.root}>
       <ScrollView>
@@ -101,6 +116,14 @@ export const SetCrecheServiceDayScreen: FC<
           </View>
         </View>
       </ScrollView>
+
+      {/* <TouchableOpacity style={styles.submit} onPress={onSubmit}>
+            <PreBol16 text="저장하기" color="white" />
+          </TouchableOpacity> */}
+
+      <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+        <ConditionalButton label="저장하기" isActivated onPress={onPress} />
+      </View>
     </ScreenRootView>
   )
 })
