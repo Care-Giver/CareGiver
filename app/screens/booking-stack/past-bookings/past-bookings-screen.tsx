@@ -5,6 +5,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { PastBooking, ScreenRootView } from "../../../components"
 import { PreviousBookingParams, getPreviousBookings } from "../../../services/axios"
+import { useFocusEffect } from "@react-navigation/native"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -21,7 +22,7 @@ export const PastBookingsScreen: FC<
     navigation.setParams(undefined)
   }, [])
 
-  useLayoutEffect(() => {
+  const fetchBookings = useCallback(async () => {
     getPreviousBookings()
       .then((res) => {
         const previousBookings: PreviousBookingParams[] = []
@@ -50,6 +51,10 @@ export const PastBookingsScreen: FC<
         setPreviousBookings(previousBookings)
       })
       .catch((err) => console.log("[past bookings screen] get previous bookings error >>>", err))
+  }, [])
+
+  useLayoutEffect(() => {
+    fetchBookings()
   }, [route.params])
 
   return (

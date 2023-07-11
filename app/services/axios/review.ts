@@ -33,6 +33,15 @@ interface PostReviewToServerParams {
   images: string[]
 }
 
+export interface Review {
+  id: number
+  createAt: string
+  updatedAt: string
+  desc: string
+  star: number
+  images: string[]
+  hasReply: boolean
+}
 /**
  * [POST] uploads/multiple api의 응답 형식
  */
@@ -47,6 +56,14 @@ interface PostReviewResponse extends GeneralResponse {
   id: number
   createAt: string
   updatedAt: string
+}
+
+interface GetVisitingReviewResponse extends GeneralResponse {
+  visitingReview: Review | null
+}
+
+interface GetCrecheReviewResponse extends GeneralResponse {
+  crecheReview: Review | null
 }
 
 /**
@@ -143,5 +160,57 @@ export const postCrecheReview = async (params: PostReviewParams): Promise<boolea
   } catch (error) {
     console.error("[creche review axios] >>>", error)
     return false
+  }
+}
+
+/**
+ * (방문) bookingId에 해당하는 예약에 대해 현재 유저가 작성한 리뷰 객체를 가져온다.
+ * @param bookingId 원하는 방문 서비스 리뷰의 예약 id (= visitingBookingId)
+ * @returns 리뷰 객체. 만약 null을 리턴하면 잘못된 접근이므로 스크린에서 별도로 처리한다.
+ */
+export const getVisitingReview = async (bookingId: number): Promise<Review | null> => {
+  try {
+    const response = await axios.get<GetVisitingReviewResponse>(
+      `${BASE_URL}/visiting-review/visiting-booking/${bookingId}`,
+      CONFIG,
+    )
+
+    // console.debug("response.data", response.data)
+
+    if (!response.data.ok) {
+      console.error("[getVisitingReview] response error >>>", response.data.error)
+      return null
+    }
+
+    return response.data.visitingReview
+  } catch (error) {
+    console.error("[getVisitingReview] catch error >>>", error)
+    return null
+  }
+}
+
+/**
+ * (위탁) bookingId에 해당하는 예약에 대해 현재 유저가 작성한 리뷰 객체를 가져온다.
+ * @param bookingId 원하는 위탁 서비스 리뷰의 예약 id (= crecheBookingId)
+ * @returns 리뷰 객체. 만약 null을 리턴하면 잘못된 접근이므로 스크린에서 별도로 처리한다.
+ */
+export const getCrecheReview = async (bookingId: number): Promise<Review | null> => {
+  try {
+    const response = await axios.get<GetCrecheReviewResponse>(
+      `${BASE_URL}/creche-review/creche-booking/${bookingId}`,
+      CONFIG,
+    )
+
+    // console.debug("response.data", response.data)
+
+    if (!response.data.ok) {
+      console.error("[getCrecheReview] response error >>>", response.data.error)
+      return null
+    }
+
+    return response.data.crecheReview
+  } catch (error) {
+    console.error("[getCrecheReview] catch error >>>", error)
+    return null
   }
 }

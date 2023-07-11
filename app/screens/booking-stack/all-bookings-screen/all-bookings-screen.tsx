@@ -44,9 +44,7 @@ export const AllBookingsScreen: FC<
   // * 진행중인 예약 내역
   const [currentBookings, setCurrentBookings] = useState<CurrentBooking[]>([])
   // * 지난 예약 내역
-  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
-    null,
-  )
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>()
 
   useLayoutEffect(() => {
     getCurrentBookings()

@@ -1,7 +1,15 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "../../navigators"
-import { BODY, DISABLED, HEAD_LINE, LBG, GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "../../theme"
+import { NavigatorParamList } from "../../../navigators"
+import {
+  BODY,
+  DISABLED,
+  HEAD_LINE,
+  LBG,
+  GIVER_CASUAL_NAVY,
+  LIGHT_LINE,
+  palette,
+} from "../../../theme"
 import {
   StyleSheet,
   View,
@@ -26,10 +34,10 @@ import {
   RegisterSubmitButton,
   PreBol14,
   PickerImage,
-} from "../../components"
-import { images } from "../../../assets/images"
-import { Rating, ReviewContent, useStores } from "../../models"
-import { postCrecheReview, postVisitingReview } from "../../services/axios/review"
+} from "../../../components"
+import { images } from "../../../../assets/images"
+import { Rating, ReviewContent, useStores } from "../../../models"
+import { postCrecheReview, postVisitingReview } from "../../../services/axios/review"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -343,6 +351,9 @@ const styles = StyleSheet.create({
   textInput: {
     padding: 20,
     paddingTop: 20,
+
+    minHeight: 277,
+
     borderRadius: 8,
     backgroundColor: LBG,
     lineHeight: 20,

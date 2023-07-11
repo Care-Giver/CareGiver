@@ -57,6 +57,8 @@ import {
   TestIamportPaymentScreen,
   TestIamportPaymentResultScreen,
   TestNetworkErrorScreen,
+  WriteReviewScreen,
+  ViewReviewScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -76,15 +78,13 @@ import {
   PreMed16,
   CgsetAddressHeader,
 } from "#components"
-import { images } from "#images"
-import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
+import { images } from "../../assets/images"
+import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { PetsitterType, ServiceType, Type, useStores } from "#models"
+import { PetsitterType, ServiceType, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
-import { WriteReviewScreen } from "#screens"
-import { PreviousBookingParams } from "../services/axios"
 //import { Row } from "../basics/row/row"
 
 /**
@@ -144,7 +144,7 @@ export type NavigatorParamList = {
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
 
-  // ? 리뷰 작성 스크린
+  // * review stack
   "write-review-screen": {
     profileImage: string | null
     petsitterName: string
@@ -154,6 +154,14 @@ export type NavigatorParamList = {
     serviceType: ServiceType
     desc: string
   }
+  "view-review-screen": {
+    serviceType: ServiceType
+    bookingId: number
+    profileImage?: string
+    petsitterName: string
+    desc: string
+  }
+
   // ? 지난 예약 내역 스크린
   "past-bookings-screen": undefined
 
@@ -252,6 +260,16 @@ const BookingsStack = () => {
         component={WriteReviewScreen}
         options={{
           title: "후기 작성",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 작성 리뷰 확인 페이지 */}
+      <Stack.Screen
+        name="view-review-screen"
+        component={ViewReviewScreen}
+        options={{
+          title: "나의 후기",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

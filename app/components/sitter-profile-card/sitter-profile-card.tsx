@@ -2,18 +2,18 @@ import { View, Pressable, Image, FlexStyle } from "react-native"
 import React, { createFactory, useCallback, useEffect, useMemo, useState } from "react"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
-import { images } from "#images"
+import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
+import { images } from "../../../assets/images"
 
 import RatingReviewBox from "../rating-review-box/rating-review-box"
 import {
-  CreateFavoriteBody,
   ProfileCardInfo,
   createFavorite,
   deleteFavorite,
   getFavorites,
 } from "../../services/axios/favorite"
-import { useStores } from "app/models"
+import { useStores } from "../../models"
+import { ratingRound } from "../../utils/format"
 
 const ONPRESS_LIKED_BTN = () => {
   alert("준비중인 서비스입니다.")
@@ -35,6 +35,7 @@ export const SitterProfileCard = ({
   onLikePress,
 }: ExampleProps) => {
   const { crecheId, visitingId, userNickname, image, rating, reviewCount, title, desc } = sitterData
+  const roundedRating = ratingRound(rating)
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
@@ -53,7 +54,7 @@ export const SitterProfileCard = ({
           <PreMed16 text={userNickname} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={rating} review={reviewCount} style={{ marginTop: 4 }} />
+          <RatingReviewBox rating={roundedRating} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />

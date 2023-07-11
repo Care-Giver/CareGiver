@@ -108,7 +108,17 @@ export const PastBooking = (props: PastBookingProps) => {
     // ? 이미 작성 완료된 경우 - 후기 보기 페이지로
     if (reviewStatus === "Complete") {
       return (
-        <Pressable>
+        <Pressable
+          onPress={() =>
+            navigate("view-review-screen", {
+              serviceType,
+              bookingId,
+              profileImage,
+              petsitterName,
+              desc,
+            })
+          }
+        >
           <PreBol14 text={"나의 후기 보기"} color={HEAD_LINE} />
         </Pressable>
       )
