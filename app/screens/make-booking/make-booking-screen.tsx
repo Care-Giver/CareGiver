@@ -170,9 +170,10 @@ export const MakeBookingScreen: FC<
         />
 
         <PreBol14
-          style={{ marginTop: 16, marginBottom: 14 }}
+          style={{ marginTop: 24, marginBottom: 14 }}
           text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
         />
+        {/** 
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
           <ClickToBlueButton
             buttonText={"없음"}
@@ -196,15 +197,17 @@ export const MakeBookingScreen: FC<
             onPress={() => firstClick("닭고기")}
           />
         </View>
+        */}
         <PlaceHolderInputBox
           placeholderText="주의할 음식을 직접 작성해주세요!"
           boxHeight={78}
           onPressIn={() => textboxClick("먹으면안되는음식")}
         />
         <PreBol14
-          style={{ marginTop: 16, marginBottom: 14 }}
+          style={{ marginTop: 24, marginBottom: 14 }}
           text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
         />
+        {/** 
         <View style={{ justifyContent: "space-between", marginBottom: 11, height: 151 }}>
           <ClickToBlueButton
             buttonText={"강아지계의 ENFP! 사람이면 다 좋아해요."}
@@ -228,11 +231,13 @@ export const MakeBookingScreen: FC<
             onPress={() => set꿀팁("되도록")}
           />
         </View>
+        */}
         <PlaceHolderInputBox
           placeholderText="꿀팁을 자유롭게 작성해주세요"
           boxHeight={78}
           onPressIn={() => textboxClick("꿀팁")}
         />
+        {/**
         <PreBol14
           style={{ marginTop: 16, marginBottom: 11 }}
           text={"배변 처리 방법을 알려주세요"}
@@ -241,6 +246,8 @@ export const MakeBookingScreen: FC<
           placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
           boxHeight={78}
         />
+         */}
+        {/** 
         <PreBol14
           style={{ marginTop: 16, marginBottom: 17 }}
           text={"스킨십할 때 좋아하는 부위를 말씀해주세요"}
@@ -268,7 +275,8 @@ export const MakeBookingScreen: FC<
             onPress={() => thirdClick("다리")}
           />
         </View>
-        <PreBol14 style={{ marginTop: 72, marginBottom: 8 }} text={"자유 요청 사항"} />
+        */}
+        <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
         <PlaceHolderInputBox
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
