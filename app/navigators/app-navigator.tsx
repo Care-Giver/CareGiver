@@ -157,13 +157,13 @@ export type NavigatorParamList = {
   testPushNotification: undefined
   "temp-screen": undefined
   "kakao-login-test-screen": undefined
-  "cg-calendar-screen"
+  "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "cancel-reservation-screen": undefined
   "set-visiting-service-day-screen": undefined
-  "set-creche-service-day-screen": undefined
+  "set-creche-service-day-screen": { dateParam: string }
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -247,26 +247,8 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="home-screen"
-      // initialRouteName="set-visiting-service-day-screen"
-      initialRouteName="set-creche-service-day-screen"
+      initialRouteName="home-screen"
     >
-      <Stack.Screen
-        name="set-creche-service-day-screen"
-        component={SetCrecheServiceDayScreen}
-        options={{
-          title: "날짜 별 서비스 수정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/* <Stack.Screen
-        name="set-visiting-service-day-screen"
-        component={SetVisitingServiceDayScreen}
-        options={{
-          title: "날짜 별 서비스 수정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      /> */}
       {/* //* 홈 */}
       <Stack.Screen
         name="home-screen"
@@ -725,6 +707,22 @@ const CalendarStack = () => {
         name="cg-calendar-screen"
         component={CgCalendarScreen}
         options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="set-creche-service-day-screen"
+        component={SetCrecheServiceDayScreen}
+        options={{
+          title: "날짜 별 서비스 수정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="set-visiting-service-day-screen"
+        component={SetVisitingServiceDayScreen}
+        options={{
+          title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

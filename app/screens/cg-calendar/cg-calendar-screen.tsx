@@ -2,9 +2,18 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView, Text } from "#components"
+import {
+  Button,
+  CancelButton,
+  CgCalendar,
+  CgCalendarEditButton,
+  PreBol16,
+  ScreenRootView,
+  Text,
+} from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
+import { GIVER_CASUAL_NAVY } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -13,7 +22,7 @@ import { Pressable, View } from "react-native"
 // @ts-ignore
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
-> = observer(({ navigation, route }) => {
+> = observer(({ navigation }) => {
   // MST store 를 가져옵니다.
   const {
     visitingAvailableTimesModel: {
@@ -49,6 +58,8 @@ export const CgCalendarScreen: FC<
 
   console.log("dates:", dates)
 
+  const dateParam = "2023-07-12"
+
   return (
     <ScreenRootView testID="CgCalendar">
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
@@ -59,10 +70,34 @@ export const CgCalendarScreen: FC<
         <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
       </View>
       <CgCalendar dates={dates}></CgCalendar>
-      <CgCalendarEditButton
+      {/* CgCalendarEditButton onPress 적용이 안돼서 수정 버튼 새로 생성함*/}
+      {/* <CgCalendarEditButton
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-      />
+        
+      /> */}
+      {/* 수정 버튼 새로 생성 */}
+      <Pressable
+        style={{
+          position: "absolute",
+          bottom: 10,
+          paddingVertical: 18,
+          alignSelf: "center",
+          backgroundColor: "white",
+          borderColor: GIVER_CASUAL_NAVY,
+          borderWidth: 2,
+          borderStyle: "solid",
+          borderRadius: 10,
+          width: 358,
+        }}
+        onPress={() => {
+          navigation.navigate("set-creche-service-day-screen", {
+            dateParam: dateParam,
+          })
+        }}
+      >
+        <PreBol16 text="수정" color={GIVER_CASUAL_NAVY} style={{ alignSelf: "center" }} />
+      </Pressable>
     </ScreenRootView>
   )
 })

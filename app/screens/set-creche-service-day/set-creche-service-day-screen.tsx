@@ -21,6 +21,8 @@ import { Image } from "react-native"
 import { images } from "#images"
 import { POPPINS_SEMIBOLD } from "#fonts"
 import { postCrecheDay } from "#axios"
+import axios from "axios"
+import { BASE_URL, CONFIG } from "../../services/axios/axios-config"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -30,6 +32,9 @@ import { postCrecheDay } from "#axios"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
+  const { dateParam } = route.params
+  console.log(dateParam)
+
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => {
     setIsEnabled((prev) => !prev)
@@ -39,11 +44,15 @@ export const SetCrecheServiceDayScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
+  // const response = axios.get(`${BASE_URL}/booking/creche`, CONFIG)
+  // console.log(response)
 
   const onPress = () => {
     console.log("저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다")
+    // const response = axios.get(`${BASE_URL}/booking/creche`, CONFIG)
+    // console.log(response)
 
-    // TOOD: crechId 를 가져와서 ()
+    // TOOD: crechId 를 가져와서
     // 그 crechId 를 data 에 넣고
     // postCrecheDay 에 담을 것
 
