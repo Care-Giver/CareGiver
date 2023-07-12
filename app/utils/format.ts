@@ -63,3 +63,12 @@ export function msToTimestamp(millisecond: number): string {
 
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
 }
+
+/**
+ *
+ * @param rating 별점을 나타내는 실수
+ * @return 소숫점 아래 둘째 자리에서 반올림한 결과. 예) 2.5712 -> 2.6
+ */
+export function ratingRound(rating: number): number {
+  return Number.parseFloat(rating.toFixed(1))
+}

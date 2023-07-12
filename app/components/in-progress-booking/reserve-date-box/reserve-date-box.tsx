@@ -5,29 +5,18 @@ import { PreBol14, PreReg12 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
 
-const setStartDateText = (startDateTime: Date, serviceType: string): string => {
-  const startMonth = startDateTime.getMonth() + 1
-  const startDay = startDateTime.getDate()
+type ServiceType = "creche" | "visiting"
+
+const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
+  const month = dateTime.getMonth() + 1
+  const day = dateTime.getDate()
 
   if (serviceType === "creche") {
-    return `${startMonth}월 ${startDay}일`
+    return `${month}월 ${day}일`
   } else {
-    const startHours = startDateTime.getHours()
-    const startMinutes = startDateTime.getMinutes() === 0 ? "00" : startDateTime.getMinutes()
-    return `${startMonth}월 ${startDay}일 ${startHours}:${startMinutes}`
-  }
-}
-
-const setEndDateText = (endDateTime: Date, serviceType: string): string => {
-  const endMonth = endDateTime.getMonth() + 1
-  const endDay = endDateTime.getDate()
-
-  if (serviceType === "creche") {
-    return `${endMonth}월 ${endDay}일`
-  } else {
-    const endHours = endDateTime.getHours()
-    const endMinutes = endDateTime.getMinutes() === 0 ? "00" : endDateTime.getMinutes()
-    return `${endMonth}월 ${endDay}일 ${endHours}:${endMinutes}`
+    const hours = dateTime.getHours()
+    const minutes = dateTime.getMinutes() === 0 ? "00" : dateTime.getMinutes()
+    return `${month}월 ${day}일 ${hours}:${minutes}`
   }
 }
 
@@ -39,11 +28,11 @@ export const ReserveDateBox = ({
 }: {
   startDateTime: Date
   endDateTime: Date
-  serviceType: string
+  serviceType: "creche" | "visiting"
   style?: Object
 }) => {
-  let startDateText = setStartDateText(startDateTime, serviceType)
-  let endDateText = setEndDateText(endDateTime, serviceType)
+  const startDateText = setDateText(startDateTime, serviceType)
+  const endDateText = setDateText(endDateTime, serviceType)
 
   return (
     <Row

@@ -8,7 +8,9 @@ import i18n from "i18n-js"
 import { TextPresets } from "./text.presets"
 import { TxKeyPath } from "../../../../i18n"
 
-export interface CustomTextProps {
+type TargetTextProperties = "numberOfLines" | "ellipsizeMode"
+
+export interface CustomTextProps extends Pick<TextProperties, TargetTextProperties> {
   /**
    * 텍스트 입력 시에는 이 prop 대신, text prop 을 사용해주세요
    * Children components.
@@ -92,6 +94,5 @@ export interface TextProps extends TextProperties, CustomTextProps {
   /**
    * One of the different types of text presets.
    */
-
   preset?: TextPresets
 }

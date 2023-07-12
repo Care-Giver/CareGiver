@@ -1,4 +1,4 @@
-import { View,  Image } from "react-native"
+import { View, Image } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
@@ -18,7 +18,7 @@ export const InProgressBookingProfile = ({
       <Image
         // source={require(caregiverData.profileImg)}
         source={{
-          uri: caregiverData.profileImg,
+          uri: caregiverData.profileImage,
         }}
         style={styles.profileImg}
       />
@@ -27,41 +27,23 @@ export const InProgressBookingProfile = ({
       <View style={{ marginLeft: 18 }}>
         {/* //* 예약 유형 - 방문or위탁 / 펫시터or훈련사 */}
         <Row>
-          {/* //TODO: 방문or위탁 / 펫시터or훈련사 데이터 구분 어떻게 할건지 */}
-          <CaregiverTypeButton
-            text={
-              caregiverData.serviceType === "visit"
-                ? "방문"
-                : caregiverData.serviceType === "creche"
-                ? "위탁"
-                : ""
-            }
-          />
-          <CaregiverTypeButton
-            text={
-              caregiverData.caregiverType === "petsitter"
-                ? "펫시터"
-                : caregiverData.caregiverType === "trainer"
-                ? "훈련사"
-                : ""
-            }
-            style={{ marginLeft: 4 }}
-          />
+          <CaregiverTypeButton text={caregiverData.visitingId ? "방문" : "위탁"} />
+          <CaregiverTypeButton text={"펫시터"} style={{ marginLeft: 4 }} />
         </Row>
 
         {/* //? 케어기버 정보 박스 - 이름, 별점, 후기, 자기소개 */}
         <View style={[styles.infoBox, { marginTop: 10 }]}>
           {/* //* 케어기버 이름 */}
-          <PreReg14 text={caregiverData.name} />
+          <PreReg14 text={caregiverData.petSitterName} />
           {/* //* 별점 & 리뷰 박스 */}
           <RatingReviewBox
             rating={caregiverData.ratings}
-            review={caregiverData.reviews}
+            review={caregiverData.reviewCount}
             style={{ marginVertical: 8 }}
           />
           {/* //* 케어기버 자기소개 */}
           <PreReg12
-            text={caregiverData.introduce}
+            text={caregiverData.desc}
             numberOfLines={1}
             ellipsizeMode="tail"
             // TODO: width(글 길이 제한) 몇으로 할 건지?

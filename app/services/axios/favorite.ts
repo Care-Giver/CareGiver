@@ -20,7 +20,7 @@ export interface SearchOption {
   petSitterType: string
 }
 
-export interface CreateFavoriteBody {
+export interface UpdateFavoriteBody {
   visitingId?: number
   crecheId?: number
 }
@@ -44,13 +44,15 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
 
     if (!response.data.ok) {
       console.error(response.data.error)
+      //@ts-ignore
       return null
     }
     // console.info("[getFavorites] response.data: ", response.data)
-    console.log("in Axios response.data >>>", response.data)
+    // console.log("in Axios response.data >>>", response.data)
     return response.data
   } catch (error) {
     console.error(error)
+    //@ts-ignore
     return null
   }
 }
@@ -59,7 +61,7 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
  * 현재 유저의 찜을 새로 생성한다.
  * @returns {Promise<CreateFavoriteResponse>}
  */
-export const createFavorite = async (body: CreateFavoriteBody): Promise<CreateFavoriteResponse> => {
+export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFavoriteResponse> => {
   try {
     const response = await axios.post<CreateFavoriteResponse>(
       `${BASE_URL}/user/favorite`,
@@ -68,12 +70,14 @@ export const createFavorite = async (body: CreateFavoriteBody): Promise<CreateFa
     )
     if (!response.data.ok) {
       console.error(response.data.error)
+      //@ts-ignore
       return null
     }
-    console.info("[createFavorite] response.data: ", response.data)
+    // console.info("[createFavorite] response.data: ", response.data)
     return response.data
   } catch (error) {
     console.error(error)
+    //@ts-ignore
     return null
   }
 }
@@ -82,17 +86,19 @@ export const createFavorite = async (body: CreateFavoriteBody): Promise<CreateFa
  * 현재 유저의 찜을 삭제한다.
  * @returns {Promise<GeneralResponse>}
  */
-export const deleteFavorite = async (body: CreateFavoriteBody): Promise<GeneralResponse> => {
+export const deleteFavorite = async (body: UpdateFavoriteBody): Promise<GeneralResponse> => {
   try {
     const response = await axios.put<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body, CONFIG)
     if (!response.data.ok) {
       console.error(response.data.error)
+      //@ts-ignore
       return null
     }
-    console.info("[deleteFavorite] response.data: ", response.data)
+    // console.info("[deleteFavorite] response.data: ", response.data)
     return response.data
   } catch (error) {
     console.error(error)
+    //@ts-ignore
     return null
   }
 }

@@ -1,4 +1,4 @@
-import { View, Pressable, Image } from "react-native"
+import { View, Pressable, Image, StyleProp, ViewStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
@@ -16,12 +16,12 @@ type PetData = Pick<PetWithSize, "id" | "name" | "species" | "age" | "sex" | "si
 
 interface SelectedPetCardProps {
   petData: PetData
-  deletable: boolean
+  deletable?: boolean
 
+  style?: StyleProp<ViewStyle>
   // TODO : 아래에 있는 type들 수정하기
-  style: any
-  onPress: any
-  index: any
+  onPress: () => void
+  index?: any
 }
 
 export const SelectedPetCard = (props: SelectedPetCardProps) => {

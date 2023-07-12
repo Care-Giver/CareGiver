@@ -10,7 +10,7 @@ import React, {
 import { View, Image, Pressable, LayoutAnimation, FlatList, Platform, Alert } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList, navigate } from "../../navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   PreBol14,
@@ -26,9 +26,9 @@ import {
   SelectedPetCard,
   ServiceTypeIndicatorHeader,
   SitterProfileCard,
-} from "#components"
+} from "../../components"
 import { styles } from "./styles"
-import { images } from "#images"
+import { images } from "../../../assets/images"
 import {
   BottomSheetBackdrop,
   BottomSheetFlatList,
@@ -46,12 +46,11 @@ import {
   SUB_HEAD_LINE,
   color,
   palette,
-} from "#theme"
+} from "../../theme"
 import { Calendar, DateData } from "react-native-calendars"
-import { Pet } from "app/models"
+import { Pet, useStores } from "../../models"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../utils/hooks"
-import { useStores } from "../../models"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -61,10 +60,10 @@ type FilterInfoText = "" | typeof DEFAULT_FILTER_INFO_TEXT
 type Service = "visiting" | "creche"
 
 interface FilterCondition {
-  serviceType?: Service
+  serviceType?: Service | null
   startDate?: string
   endDate?: string
-  pets?: Array<Pet>
+  pets?: Pet[]
 }
 
 interface OnLikePressProp {
@@ -78,20 +77,27 @@ export const FavoritesScreen: FC<
   useShowBottomTab(navigation)
   // * favorite model
   const {
-    FavoriteModel: { setFavorites, cancelFavorite, favoritePetsitters, favoriteTrainers },
+    FavoriteModel: {
+      setFavorites,
+      cancelFavorite,
+      favoritePetsitters,
+      favoriteTrainers,
+      isEmptyFavoritePetsitters,
+      isEmptyFavoriteTrainers,
+    },
   } = useStores()
 
   // * 현재 선택된 서비스 유형 - 펫시터 | 훈련사
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
 
   // * filter states
-  const [filterServiceType, setFilterServiceType] = useState<Service>(null)
-  const [startDate, setStartDate] = useState<DateData>(null)
-  const [endDate, setEndDate] = useState<DateData>(null)
+  const [filterServiceType, setFilterServiceType] = useState<Service | null>(null)
+  const [startDate, setStartDate] = useState<DateData | null>(null)
+  const [endDate, setEndDate] = useState<DateData | null>(null)
   const [filterPet, setFilterPet] = useState<Pet[]>([])
 
   // * filter result
-  const [filters, setFilters] = useState<FilterCondition>()
+  const [filters, setFilters] = useState<FilterCondition>({})
   const [filterText, setFilterText] = useState<string>(DEFAULT_FILTER_TEXT)
   const [filterInfoText, setFilterInfoText] = useState<FilterInfoText>(DEFAULT_FILTER_INFO_TEXT)
 
@@ -146,12 +152,12 @@ export const FavoritesScreen: FC<
   const handleDayPress = useCallback(
     (date: DateData) => {
       // * startDate와 endDate가 모두 설정된 상태에서 date를 입력한 경우 -> 날짜 초기화(startDate부터 다시)
-      if ((startDate && endDate) || (startDate === null && endDate === null)) {
-        let currentDate = new Date(`${date.year}-${date.month}-${date.day}T00:00:00`)
+      if ((startDate && endDate) || (!startDate && !endDate)) {
+        const currentDate = new Date(`${date.year}-${date.month}-${date.day}T00:00:00`)
         console.log(`[CALENDAR] current date: ${currentDate}`)
 
         setStartDate(date)
-        setEndDate(undefined)
+        setEndDate(null)
 
         const newMarkedDates = {}
         newMarkedDates[date.dateString] = {
@@ -163,8 +169,8 @@ export const FavoritesScreen: FC<
         return
       }
 
-      // ? 입력한 날짜가 startDate보다 앞서는 경우
-      else if (date.timestamp <= startDate.timestamp) {
+      // ? startDate가 아직 입력 전이거나, startDate가 존재하지만 현재 입력한 날짜가 startDate보다 앞서는 경우
+      else if (!startDate || date.timestamp <= startDate.timestamp) {
         setStartDate(date)
 
         const newMarkedDates = {}
@@ -193,7 +199,7 @@ export const FavoritesScreen: FC<
         const newMarkedDates = { ...markedDates }
 
         // ? newMarkedDates에 추가할 date
-        let currentDate = new Date(
+        const currentDate = new Date(
           `${startDate.year}-${startDate.month < 10 ? "0" + startDate.month : startDate.month}-${
             startDate.day < 10 ? "0" + startDate.day : startDate.day
           }T12:00:00`,
@@ -251,7 +257,7 @@ export const FavoritesScreen: FC<
       postBody = { ...postBody, endTime: filters.endDate }
     }
 
-    if (filters.pets.length > 0) {
+    if (filters.pets && filters.pets.length > 0) {
       postBody = { ...postBody, petIds: filters.pets.map((value) => value.id) }
     }
 
@@ -277,7 +283,7 @@ export const FavoritesScreen: FC<
           .replace("-", ".")} - ${filters.endDate.replace("-", ".").replace("-", ".")}`
       }
 
-      if (filters.pets.length > 0) {
+      if (filters.pets && filters.pets.length > 0) {
         text += ` | ${filters.pets.length}마리`
       }
 
@@ -286,7 +292,7 @@ export const FavoritesScreen: FC<
       // ? 필터 적용하여 favorite 목록 갱신
       setFavorites(postBody)
     }
-    bottomSheetModalRef.current.close()
+    bottomSheetModalRef.current?.close()
   }, [filters])
 
   // * BottomSheet Footer - 확인 버튼
@@ -310,8 +316,8 @@ export const FavoritesScreen: FC<
 
   // * 펫시터 목록 혹은 훈련사 목록이 empty인지 확인
   const isEmptyResult =
-    (serviceType === "펫시터" && favoritePetsitters.length === 0) ||
-    (serviceType === "훈련사" && favoriteTrainers.length === 0)
+    (serviceType === "펫시터" && isEmptyFavoritePetsitters) ||
+    (serviceType === "훈련사" && isEmptyFavoriteTrainers)
 
   // * 펫시터 프로필의 찜 버튼을 누를 때 실행되는 함수 - 찜 해제
   const onLikePress = useCallback((info: OnLikePressProp) => {
@@ -365,7 +371,8 @@ export const FavoritesScreen: FC<
           renderItem={({ item, index }) => {
             const serviceType: Service = item.crecheId ? "creche" : "visiting"
             const id = item.crecheId ? item.crecheId : item.visitingId
-            const info = {
+
+            const info: OnLikePressProp = {
               serviceType,
               id,
             }
@@ -547,7 +554,14 @@ export const FavoritesScreen: FC<
                     renderItem={({ item, index }) => (
                       <SelectedPetCard
                         key={index}
-                        petData={item}
+                        petData={{
+                          id: item.id,
+                          name: item.name,
+                          species: item.species,
+                          age: item.age,
+                          sex: item.sex,
+                          size: item.petType,
+                        }}
                         onPress={() => {
                           setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
                         }}

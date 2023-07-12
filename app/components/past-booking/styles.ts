@@ -1,4 +1,4 @@
-import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "#theme"
+import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "../../theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -33,9 +33,6 @@ export const styles = StyleSheet.create({
     height: 108,
 
     padding: 8,
-
-    borderRadius: 9,
-    backgroundColor: "black",
   },
 
   typeBtn: {

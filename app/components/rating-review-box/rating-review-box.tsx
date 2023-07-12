@@ -1,15 +1,14 @@
-import { View, Text, Image } from "react-native"
+import { View, Image, StyleProp, ViewStyle } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
 import { MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
-
 import { images } from "#images"
 
 interface RatingReviewBoxProps {
   rating: number
   review: number
-  style?: Object
+  style?: StyleProp<ViewStyle>
 }
 
 const RatingReviewBox = ({ rating, review, style }: RatingReviewBoxProps) => {

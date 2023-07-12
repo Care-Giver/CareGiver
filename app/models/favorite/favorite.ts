@@ -24,7 +24,15 @@ export const FavoriteModel = types
     favoriteTrainers: types.optional(types.frozen<ProfileCardInfo[]>(), []),
   })
   .actions(withSetPropAction)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get isEmptyFavoritePetsitters() {
+      return self.favoritePetsitters.length === 0
+    },
+
+    get isEmptyFavoriteTrainers() {
+      return self.favoriteTrainers.length === 0
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setPetsittersResponse(data: ProfileCardInfo[]) {
       self.favoritePetsitters = data

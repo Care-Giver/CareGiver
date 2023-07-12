@@ -50,12 +50,15 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+  PastBookingsScreen,
   MakeBookingScreen,
   PaymentScreen,
   TestIamportScreen,
   TestIamportPaymentScreen,
   TestIamportPaymentResultScreen,
   TestNetworkErrorScreen,
+  WriteReviewScreen,
+  ViewReviewScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -75,11 +78,11 @@ import {
   PreMed16,
   CgsetAddressHeader,
 } from "#components"
-import { images } from "#images"
-import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "#theme"
+import { images } from "../../assets/images"
+import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { Type, useStores } from "#models"
+import { PetsitterType, ServiceType, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
 //import { Row } from "../basics/row/row"
@@ -140,6 +143,27 @@ export type NavigatorParamList = {
 
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
+
+  // * review stack
+  "write-review-screen": {
+    profileImage: string | null
+    petsitterName: string
+    petsitterType: PetsitterType
+    petsitterId: number
+    bookingId: number
+    serviceType: ServiceType
+    desc: string
+  }
+  "view-review-screen": {
+    serviceType: ServiceType
+    bookingId: number
+    profileImage?: string
+    petsitterName: string
+    desc: string
+  }
+
+  // ? 지난 예약 내역 스크린
+  "past-bookings-screen": undefined
 
   //* test screens
   "minseon-test": undefined
@@ -216,6 +240,36 @@ const BookingsStack = () => {
         component={BookingDetailScreen}
         options={{
           title: "예약내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 지난 예약 내역 스크린 */}
+      <Stack.Screen
+        name="past-bookings-screen"
+        component={PastBookingsScreen}
+        options={{
+          title: "지난 예약",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 리뷰 작성 페이지 */}
+      <Stack.Screen
+        name="write-review-screen"
+        component={WriteReviewScreen}
+        options={{
+          title: "후기 작성",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 작성 리뷰 확인 페이지 */}
+      <Stack.Screen
+        name="view-review-screen"
+        component={ViewReviewScreen}
+        options={{
+          title: "나의 후기",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
