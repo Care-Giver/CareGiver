@@ -13,13 +13,13 @@ import {
   PreBol20,
   PreBol18,
   BASIC_BACKGROUND_PADDING_WIDTH,
-} from "#components"
-import { navigate, NavigatorParamList } from "#navigators"
-import { BODY, SUB_HEAD_LINE } from "#theme"
+} from "../../../components"
+import { navigate, NavigatorParamList } from "../../../navigators"
+import { BODY, SUB_HEAD_LINE } from "../../../theme"
 import { petsittersDummy, trainersDummy } from "./dummy-data"
-import { images } from "#images"
-import { getCreche, getCrechePetsitters, getPosts, createCreche } from "#axios"
-import { useStores } from "#models"
+import { images } from "../../../../assets/images"
+import { getCreche, getCrechePetsitters, getPosts, createCreche } from "../../../services/axios"
+import { useStores } from "../../../models"
 import { delay } from "../../../utils/delay"
 import { consoleInfoAsync } from "../../../utils/console-async"
 import { useFocusEffect } from "@react-navigation/native"

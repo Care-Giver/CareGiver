@@ -5,9 +5,11 @@ import { styles } from "./styles"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, SHADOW_1 } from "#theme"
 import { images } from "#images"
+import { ratingRound } from "../../../utils/format"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props
+  const roundedRating = ratingRound(rating)
 
   return (
     <Pressable style={[styles.container, SHADOW_1, style]} onPress={onPress}>
@@ -33,7 +35,7 @@ export const SitterProfileButton = (props: ProfileButtonProps) => {
           ))} */}
         <Image style={styles.star} source={images.rating_star} />
         <PreReg12 style={{ marginLeft: 4 }} color={SUB_HEAD_LINE}>
-          ({rating})
+          ({roundedRating})
         </PreReg12>
       </View>
 
