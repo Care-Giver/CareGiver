@@ -2,8 +2,11 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BookingCheckButton, BookingList, PreReg12, ScreenRootView } from "#components"
-import { useStores } from "../../models"
+import { BookingCheckButton, BookingList, PreReg14, ScreenRootView } from "#components"
+import { getconfirmedBookings, ConfirmedBookings } from "../../services/axios/confirmed-bookings"
+import { images } from "#images"
+import { Image, View } from "react-native"
+import { BODY } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -20,13 +23,10 @@ export const ManageBookingScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
   const [bookings, setBookins] = useState([])
-  const {
-    ConfirmedBookingsModel: { setAllconfirmedBookings, confirmedBookings },
-  } = useStores()
+
   useLayoutEffect(() => {
-    setAllconfirmedBookings()
-    setBookins(confirmedBookings)
-    //console.log(bookings[0])
+    //* axios 사용하여 바로 bookings 초기화.
+    getconfirmedBookings().then((res) => setBookins(res))
   }, [])
   const hasBookings = bookings.length > 0
   return (
@@ -35,7 +35,17 @@ export const ManageBookingScreen: FC<
       {hasBookings ? (
         <BookingList bookings={bookings} />
       ) : (
-        <PreReg12 text="예약이 존재하지 않습니다" />
+        <View style={{ alignItems: "center", bottom: "-25%" }}>
+          <Image
+            source={images.dog_illustration}
+            style={{
+              width: 151,
+              height: 156,
+              opacity: 0.5,
+            }}
+          />
+          <PreReg14 text="예약이 존재하지 않습니다" color={BODY} />
+        </View>
       )}
     </ScreenRootView>
   )
