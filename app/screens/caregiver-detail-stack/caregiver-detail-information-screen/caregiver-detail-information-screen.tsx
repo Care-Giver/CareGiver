@@ -20,9 +20,9 @@ import {
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
   CustomModal, // modal test
-} from "#components"
+} from "../../../components"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigate, NavigatorParamList } from "#navigators"
+import { navigate, NavigatorParamList } from "../../../navigators"
 import {
   HEADER_HEIGHT,
   HEIGHT,
@@ -34,9 +34,8 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   STANDARD_WIDTH,
-} from "#theme"
+} from "../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
-import { images } from "#images"
 import { delay } from "../../../utils/delay"
 
 const servicesDummy = [

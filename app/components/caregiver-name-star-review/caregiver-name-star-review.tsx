@@ -7,10 +7,12 @@ import { Row } from "../basics/row/row"
 import { images } from "#images"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { navigate } from "#navigators"
+import { ratingRound } from "../../utils/format"
 
 export const CaregiverNameStarReview = (props) => {
   const { style: viewStyle, caregiverData } = props
   const { name, ratings, numberOfReviews } = caregiverData
+  const roundedRating = ratingRound(ratings)
 
   return (
     <View style={[styles.root, viewStyle]}>
@@ -27,7 +29,7 @@ export const CaregiverNameStarReview = (props) => {
           <PreMed16 text={name} color={HEAD_LINE} style={{ marginLeft: 4 }} />
           <Row>
             <Image style={styles.star} source={images.rating_star} />
-            <PreMed16 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
+            <PreMed16 text={`(${roundedRating})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
 
             <DivisionLineVertical
               color={DBG}
