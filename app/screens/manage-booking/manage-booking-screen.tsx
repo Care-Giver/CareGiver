@@ -1,17 +1,19 @@
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
   BookingCheckButton,
-  BookingInfoCard,
   BookingInfoCardProps,
   BookingList,
-  PreBol16,
+  PreReg14,
   ScreenRootView,
 } from "#components"
-import { useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
+import { getconfirmedBookings } from "#axios"
+import { images } from "#images"
+import { Image, View } from "react-native"
+import { BODY } from "#theme"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -30,40 +32,35 @@ export const ManageBookingScreen: FC<
 > = observer(function ManageBookingScreen({ navigation }) {
   useShowBottomTab(navigation)
 
-  // MST store 를 가져옵니다.
-  const {
-    ConfirmedBookingsModel: { setAllconfirmedBookings, confirmedBookings },
-  } = useStores()
-
+  // 필요시, useNavigation 훅을 사용할 수 있습니다.
+  // const navigation = useNavigation()
   const [bookings, setBookins] = useState([])
 
   const hasBookings = bookings?.length > 0
 
-  useLayoutEffect(() => {
-    setAllconfirmedBookings()
-    setBookins(confirmedBookings)
-    //console.log(bookings[0])
+  useEffect(() => {
+    //* axios 사용하여 바로 bookings 초기화.
+    getconfirmedBookings().then((res) => setBookins(res))
   }, [])
+
   return (
     <ScreenRootView testID="ManageBooking">
-      <BookingCheckButton style={{ zIndex: 1, marginTop: 16 }} bookingCount={2} />
-
+      <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2} />
       {hasBookings ? (
         <BookingList bookings={bookings} />
       ) : (
-        <PreBol16 text="예약 내역이 없습니다" mv={10} />
+        <View style={{ alignItems: "center", top: "25%" }}>
+          <Image
+            source={images.dog_illustration}
+            style={{
+              width: 151,
+              height: 156,
+              opacity: 0.5,
+            }}
+          />
+          <PreReg14 text="예약이 존재하지 않습니다" color={BODY} />
+        </View>
       )}
-
-      <BookingInfoCard
-        id={CareGiverReserveDummy.id}
-        name={CareGiverReserveDummy.name}
-        serviceType={CareGiverReserveDummy.serviceType}
-        caregiverType={CareGiverReserveDummy.caregiverType}
-        petname={CareGiverReserveDummy.petname}
-        species={CareGiverReserveDummy.species}
-        petservices={CareGiverReserveDummy.petservices}
-        address={CareGiverReserveDummy.address}
-      />
     </ScreenRootView>
   )
 })

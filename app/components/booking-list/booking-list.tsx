@@ -1,18 +1,23 @@
-import * as React from "react"
-import { StyleProp, ViewStyle, View, Text, Image, Pressable } from "react-native"
+import React from "react"
+import { StyleProp, ViewStyle, View, Image, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { images } from "#images"
 import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
-import { GIVER_CASUAL_NAVY, SHADOW_1, WIDTH } from "#theme"
+import { GIVER_CASUAL_NAVY } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
 import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
-import { confirmedBookings } from "../../services/axios/confirmed-bookings"
+import { ConfirmedBookings } from "../../services/axios/confirmed-bookings"
 
 export interface BookingListProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
-  bookings?: confirmedBookings[]
+
+  /**
+   * 예약 객체 배열
+   */
+  bookings: ConfirmedBookings[]
+
   style?: StyleProp<ViewStyle>
 }
 
@@ -100,7 +105,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     },
   ]
 
-  bookings.map((item, idx) => {
+  bookings.forEach((item, idx) => {
     console.log(item.services)
     const dataprop = {
       name: item.name,
@@ -137,8 +142,8 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>08:00</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>10:00</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
@@ -163,27 +168,9 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   }
   return (
     <View style={{ flex: 1, marginTop: -20 }}>
-      <CalendarProvider
-        numberOfDays={5}
-        date={currentDate}
-        // onDateChanged={onDateChanged}
-        // onMonthChange={onMonthChange}
-        // disabledOpacity={0.6}
-        //theme={todayBtnTheme.current}
-        // todayBottomMargin={16}
-      >
+      <CalendarProvider numberOfDays={5} date={currentDate}>
         <View style={{ display: "flex", alignItems: "flex-end" }}>
           <ExpandableCalendar
-            //testID={testIDs.expandableCalendar.CONTAINER}
-            // horizontal={false}
-            // hideArrows
-            // disablePan
-            // hideKnob
-            // initialPosition={ExpandableCalendar.positions.OPEN}
-            // calendarStyle={styles.calendar}
-            // headerStyle={styles.header} // for horizontal only
-            // disableWeekScroll
-            //theme={React.useRef(getTheme()).current}
             monthFormat={"MMMM"}
             theme={{
               monthTextColor: GIVER_CASUAL_NAVY,
@@ -221,11 +208,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
                   style={{ width: 18, height: 18, marginRight: 90 }}
                 />
               )
-            } //disableAllTouchEventsForDisabledDays
-            //markedDates={marked.current}
-            //leftArrowImageSource={leftArrowIcon}
-            //rightArrowImageSource={rightArrowIcon}
-            // animateScroll
+            }
           />
 
           <AgendaList
@@ -237,7 +220,6 @@ export const BookingList = observer(function BookingList(props: BookingListProps
             sections={sections}
             renderItem={renderItem}
             scrollToNextEvent={true}
-            //sectionStyle={styles.section}
           />
         </View>
       </CalendarProvider>
