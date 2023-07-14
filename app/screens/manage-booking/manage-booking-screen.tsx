@@ -37,7 +37,7 @@ export const ManageBookingScreen: FC<
 
   const [bookings, setBookins] = useState([])
 
-  const hasBooking = bookings.length > 0
+  const hasBookings = bookings?.length > 0
 
   useLayoutEffect(() => {
     setAllconfirmedBookings()
@@ -48,7 +48,7 @@ export const ManageBookingScreen: FC<
     <ScreenRootView testID="ManageBooking">
       <BookingCheckButton style={{ zIndex: 1, marginTop: 16 }} bookingCount={2} />
 
-      {hasBooking ? (
+      {hasBookings ? (
         <BookingList bookings={bookings} />
       ) : (
         <PreBol16 text="예약 내역이 없습니다" mv={10} />
