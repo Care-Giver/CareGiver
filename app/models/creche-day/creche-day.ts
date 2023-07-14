@@ -1,16 +1,16 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { getCrecheDays, crecheDay } from "../../services/axios/creche-day"
+import { getCrecheDays, crecheAvailableDates } from "../../services/axios/creche-day"
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
  */
 export const CrecheDayModel = types
   .model("CrecheDay")
-  .props({ crecheDays: types.optional(types.frozen<crecheDay[] | null>(), null) })
+  .props({ crecheDays: types.optional(types.frozen<crecheAvailableDates[] | null>(), null) })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    setResponse(response: crecheDay[]) {
+    setResponse(response: crecheAvailableDates[]) {
       self.crecheDays = response
     },
   }))

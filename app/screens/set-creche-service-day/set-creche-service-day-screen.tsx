@@ -129,10 +129,7 @@ export const SetCrecheServiceDayScreen: FC<
         {/* 강아지 크기별 추가요금 설정 */}
         <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
           <PreReg16 text="강아지 크기 별 추가 요금" color={SUB_HEAD_LINE} />
-          <Pressable
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={handleBottomSheet}
-          >
+          <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
             <PreMed16 text="설정하기" mr={4} />
             <Image style={styles.image} source={images.arrow_right} />
           </Pressable>
@@ -267,5 +264,4 @@ const styles = StyleSheet.create({
     // shadowRadius: 4,
     // elevation: 5,
   },
-  bottomSheet: {},
 })

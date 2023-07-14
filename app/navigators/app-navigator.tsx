@@ -50,9 +50,19 @@ import {
   YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
+<<<<<<< HEAD
   CancelReservationScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
+=======
+  PastBookingsScreen,
+  MakeBookingScreen,
+  PaymentScreen,
+  TestIamportScreen,
+  TestIamportPaymentScreen,
+  TestIamportPaymentResultScreen,
+  TestNetworkErrorScreen,
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {

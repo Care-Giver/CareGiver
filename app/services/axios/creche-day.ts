@@ -1,24 +1,34 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-export interface crecheDay {
+export interface crecheAvailableDates {
   id: number
   createAt: string
   updatedAt: string
   startTime: string
   endTime: string
   fee: number
+  totalFee: number
 }
 
+<<<<<<< HEAD
 interface CrecheDaysResponse extends GeneralResponse {
   crecheAvailableDates: crecheDay[]
+=======
+interface crecheDaysResponse extends GeneralResponse {
+  crecheAvailableDates: crecheAvailableDates[]
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
 }
 
 /**
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
+<<<<<<< HEAD
  * @returns {Promise<crecheDay>}
+=======
+ * @returns {Promise<crecheAvailableDates>}
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
  */
-export const getCrecheDays = async (crecheId: number): Promise<crecheDay[]> => {
+export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDates[]> => {
   try {
     const response = await axios.get<CrecheDaysResponse>(
       `${BASE_URL}/creche-day/${crecheId}`,
@@ -33,7 +43,12 @@ export const getCrecheDays = async (crecheId: number): Promise<crecheDay[]> => {
     }
 
     // console.log("response", response)
+<<<<<<< HEAD
     // console.log("response.data", response.data)
+=======
+    //console.log("response.data", response.data)
+    // console.log("response.data.CrecheDays", response.data.CrecheDays)
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
     return response.data.crecheAvailableDates
   } catch (error) {
     console.error("catch 에러!!!", error)

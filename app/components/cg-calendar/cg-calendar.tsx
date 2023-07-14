@@ -12,11 +12,11 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates } = props
+  const { dates, serviceType } = props
   const [selected, setSelected] = React.useState("")
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
-    console.log(currentMonth)
+    console.log(date.dateString)
   }
   const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
@@ -46,6 +46,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
               selected={selected}
               dates={dates}
               month={currentMonth}
+              serviceType={serviceType}
             />
           </Pressable>
         )}

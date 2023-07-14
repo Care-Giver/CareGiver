@@ -13,13 +13,20 @@ import {
 } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
+<<<<<<< HEAD
 import { GIVER_CASUAL_NAVY } from "#theme"
+=======
+import { crecheDays as _crecheDays } from "./dummy-data"
+import { string } from "mobx-state-tree/dist/internal"
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
 
 // import { useNavigation } from "@react-navigation/native"
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
+export type ServiceType = "방문" | "위탁"
+
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
 > = observer(({ navigation }) => {
@@ -40,23 +47,27 @@ export const CgCalendarScreen: FC<
   // const navigation = useNavigation()
 
   const [dates, setDates] = useState([])
-  const [userId, setUserId] = useState(4)
-  const [version, setVersion] = useState(true)
+  const [userId, setUserId] = useState(1)
+  const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
-    setVersion(!version)
+    if (serviceType == "방문") {
+      setServiceType("위탁")
+    } else {
+      setServiceType("방문")
+    }
   }
 
   useLayoutEffect(() => {
-    if (version) {
+    if (serviceType == "방문") {
       setAllVisitingAvailableTimes(userId)
       setDates(visitingAvailableTimes)
     } else {
       setAllCrecheDays(userId)
       setDates(crecheDays)
     }
-  }, [version])
+  }, [serviceType])
 
-  console.log("dates:", dates)
+  console.log("dates", serviceType, ":", dates)
 
   const dateParam = "2023-07-12"
 
@@ -65,13 +76,18 @@ export const CgCalendarScreen: FC<
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         {/*이 전 스크린 제작 전, 위탁 방문을 구분하기 위한 버튼*/}
         <Pressable style={{ borderColor: "black", borderWidth: 2 }} onPress={onTestPress}>
-          <Text style={{ color: "black" }}>{version ? "방문" : "위탁"}</Text>
+          <Text style={{ color: "black" }}>{serviceType == "방문" ? "방문" : "위탁"}</Text>
         </Pressable>
         <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
       </View>
+<<<<<<< HEAD
       <CgCalendar dates={dates}></CgCalendar>
       {/* CgCalendarEditButton onPress 적용이 안돼서 수정 버튼 새로 생성함*/}
       {/* <CgCalendarEditButton
+=======
+      <CgCalendar dates={dates} serviceType={serviceType}></CgCalendar>
+      <CgCalendarEditButton
+>>>>>>> 1ea0b333 (cg-calendar 오류수정)
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
         
