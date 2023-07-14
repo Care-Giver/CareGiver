@@ -9,6 +9,13 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
   const { date, state, selected, dates, month, serviceType } = props
   const [fee, setFee] = React.useState(null)
   const [availableTime, setAvailableTime] = React.useState(false)
+
+  React.useEffect(() => {
+    setFee(null)
+    //setAvailableTime(false)
+    checkDate()
+  }, [date, dates])
+
   const textBgBdSelectior = ({ date, state }) => {
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
@@ -51,39 +58,32 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     }
     return SUB_HEAD_LINE
   }
-  React.useEffect(() => {
-    setFee(null)
-    //setAvailableTime(false)
-    const checkDate = ({ date, dates }) => {
-      if (dates == undefined) {
-        return null
+
+  const checkDate = () => {
+    // console.log("dates in checkDate >>>", dates)
+    // console.log("serviceType in checkDate >>>", serviceType)
+
+    if (serviceType == "방문") {
+      for (let i = 0; i < dates.length; i++) {
+        if (date.dateString == dates[i].date.substring(0, 10)) {
+          setFee(dates[i].fee)
+          setAvailableTime(true)
+          return true
+        } else continue
       }
-      if (serviceType == "방문") {
-        //console.log(dates.length)
-        for (let i = 0; i < dates.length; i++) {
-          if (dates[i].date == undefined) {
-            continue
-          } else if (date.dateString == dates[i].date.substring(0, 10)) {
-            setFee(dates[i].fee)
-            setAvailableTime(true)
-            return true
-          } else continue
-        }
-      } else if (serviceType == "위탁") {
-        for (let i = 0; i < dates.length; i++) {
-          if (dates[i].startDate == undefined) {
-            continue
-          } else if (date.dateString == dates[i].startDate.substring(0, 10)) {
-            setFee(dates[i].fee)
-            setAvailableTime(true)
-            return true
-          } else continue
-        }
+    } else if (serviceType == "위탁") {
+      for (let i = 0; i < dates.length; i++) {
+        if (date.dateString == dates[i].startDate.substring(0, 10)) {
+          setFee(dates[i].fee)
+          setAvailableTime(true)
+          return true
+        } else continue
       }
-      return null
     }
-    checkDate({ date, dates })
-  }, [])
+    return null
+  }
+
+  // console.log("dates in calendar-day >>>", dates)
 
   return (
     <View

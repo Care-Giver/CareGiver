@@ -14,10 +14,17 @@ import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-cale
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const { dates, serviceType } = props
   const [selected, setSelected] = React.useState("")
+  const hasDates = dates.length !== 0
+
+  console.log("serviceType in CgCalendar >>>", serviceType)
+  console.log("dates in CgCalendar >>>", dates)
+  console.log("♦️")
+
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
     console.log(date.dateString)
   }
+
   const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
     <View>
@@ -40,18 +47,20 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }}
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
-            <CgCalendarDay
-              date={date}
-              state={state}
-              selected={selected}
-              dates={dates}
-              month={currentMonth}
-              serviceType={serviceType}
-            />
+            {hasDates && (
+              <CgCalendarDay
+                date={date}
+                state={state}
+                selected={selected}
+                dates={dates}
+                month={currentMonth}
+                serviceType={serviceType}
+              />
+            )}
           </Pressable>
         )}
         style={[styles.calendar, SHADOW_1]}
-      ></Calendar>
+      />
     </View>
   )
 })
