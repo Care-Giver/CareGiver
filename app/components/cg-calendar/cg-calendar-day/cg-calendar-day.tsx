@@ -6,9 +6,16 @@ import { CgCalendarDayProps } from "./cg-calendar-day.props"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month } = props
+  const { date, state, selected, dates, month, serviceType } = props
   const [fee, setFee] = React.useState(null)
   const [availableTime, setAvailableTime] = React.useState(false)
+
+  React.useEffect(() => {
+    setFee(null)
+    //setAvailableTime(false)
+    checkDate()
+  }, [date, dates])
+
   const textBgBdSelectior = ({ date, state }) => {
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
@@ -51,27 +58,32 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     }
     return SUB_HEAD_LINE
   }
-  React.useEffect(() => {
-    setFee(null)
-    //setAvailableTime(false)
-    const checkDate = ({ date, dates }) => {
-      {
-        /**현재 위탁에 Data가 없음 */
-      }
-      if (dates == undefined) {
-        return null
-      }
+
+  const checkDate = () => {
+    // console.log("dates in checkDate >>>", dates)
+    // console.log("serviceType in checkDate >>>", serviceType)
+
+    if (serviceType == "방문") {
       for (let i = 0; i < dates.length; i++) {
-        if (date.dateString == dates[i].startTime.substring(0, 10)) {
+        if (date.dateString == dates[i].date.substring(0, 10)) {
           setFee(dates[i].fee)
           setAvailableTime(true)
           return true
         } else continue
       }
-      return null
+    } else if (serviceType == "위탁") {
+      for (let i = 0; i < dates.length; i++) {
+        if (date.dateString == dates[i].startDate.substring(0, 10)) {
+          setFee(dates[i].fee)
+          setAvailableTime(true)
+          return true
+        } else continue
+      }
     }
-    checkDate({ date, dates })
-  }, [])
+    return null
+  }
+
+  // console.log("dates in calendar-day >>>", dates)
 
   return (
     <View
