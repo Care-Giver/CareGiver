@@ -71,7 +71,7 @@ export const CgCalendarScreen: FC<
         <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
       </View>
       <CgCalendar
-        dates={serviceType === "방문" ? visitingDates : crecheDates}
+        dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
       />
       <CgCalendarEditButton

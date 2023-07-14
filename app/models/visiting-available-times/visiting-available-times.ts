@@ -12,8 +12,8 @@ export const VisitingAvailableTimesModel = types
   .model("VisitingAvailableTimes")
   .props({
     visitingAvailableTimes: types.optional(
-      types.frozen<groupedVisitingAvailableTimesByDate[] | null>(),
-      null,
+      types.frozen<groupedVisitingAvailableTimesByDate[]>(),
+      [],
     ),
   })
   .actions(withSetPropAction)

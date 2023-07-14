@@ -6,7 +6,7 @@ import { getCrecheDays, crecheAvailableDates } from "../../services/axios/creche
  */
 export const CrecheDayModel = types
   .model("CrecheDay")
-  .props({ crecheDays: types.optional(types.frozen<crecheAvailableDates[] | null>(), null) })
+  .props({ crecheDays: types.optional(types.frozen<crecheAvailableDates[]>(), []) })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
