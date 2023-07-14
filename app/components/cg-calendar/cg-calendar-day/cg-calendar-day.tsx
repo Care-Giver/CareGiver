@@ -6,7 +6,7 @@ import { CgCalendarDayProps } from "./cg-calendar-day.props"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month } = props
+  const { date, state, selected, dates, month, serviceType } = props
   const [fee, setFee] = React.useState(null)
   const [availableTime, setAvailableTime] = React.useState(false)
   const textBgBdSelectior = ({ date, state }) => {
@@ -55,18 +55,30 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     setFee(null)
     //setAvailableTime(false)
     const checkDate = ({ date, dates }) => {
-      {
-        /**현재 위탁에 Data가 없음 */
-      }
       if (dates == undefined) {
         return null
       }
-      for (let i = 0; i < dates.length; i++) {
-        if (date.dateString == dates[i].startTime.substring(0, 10)) {
-          setFee(dates[i].fee)
-          setAvailableTime(true)
-          return true
-        } else continue
+      if (serviceType == "방문") {
+        //console.log(dates.length)
+        for (let i = 0; i < dates.length; i++) {
+          if (dates[i].date == undefined) {
+            continue
+          } else if (date.dateString == dates[i].date.substring(0, 10)) {
+            setFee(dates[i].fee)
+            setAvailableTime(true)
+            return true
+          } else continue
+        }
+      } else if (serviceType == "위탁") {
+        for (let i = 0; i < dates.length; i++) {
+          if (dates[i].startDate == undefined) {
+            continue
+          } else if (date.dateString == dates[i].startDate.substring(0, 10)) {
+            setFee(dates[i].fee)
+            setAvailableTime(true)
+            return true
+          } else continue
+        }
       }
       return null
     }

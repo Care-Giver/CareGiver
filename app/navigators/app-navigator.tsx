@@ -57,8 +57,6 @@ import {
   TestIamportPaymentScreen,
   TestIamportPaymentResultScreen,
   TestNetworkErrorScreen,
-  WriteReviewScreen,
-  ViewReviewScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
