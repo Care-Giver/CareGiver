@@ -80,10 +80,10 @@ export const CgCalendarScreen: FC<
       </View>
 
       <CgCalendar dates={dates} serviceType={serviceType}></CgCalendar>
-      <CgCalendarEditButton
+      {/* <CgCalendarEditButton
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-      />
+      /> */}
       {/* 수정 버튼 새로 생성 */}
       <Pressable
         style={{
@@ -99,9 +99,11 @@ export const CgCalendarScreen: FC<
           width: 358,
         }}
         onPress={() => {
-          navigation.navigate("set-creche-service-day-screen", {
-            dateParam: dateParam,
-          })
+          {
+            serviceType === "방문"
+              ? navigation.navigate("set-visiting-service-day-screen")
+              : navigation.navigate("set-creche-service-day-screen")
+          }
         }}
       >
         <PreBol16 text="수정" color={GIVER_CASUAL_NAVY} style={{ alignSelf: "center" }} />
