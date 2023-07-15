@@ -1,9 +1,9 @@
 import React from "react"
-import { View, Image, Pressable, StatusBar } from "react-native"
+import { View, Image, Pressable, StatusBar, Platform } from "react-native"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
-import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
+import { CARE_SOFT_YELLOW, GIVER_CASUAL_NAVY, SHADOW_1, palette } from "#theme"
 import { observer } from "mobx-react-lite"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { navigate } from "#navigators"
@@ -13,7 +13,14 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
 
   return (
     <>
-      <StatusBar backgroundColor={"white"} barStyle="dark-content" animated />
+      <StatusBar
+        backgroundColor={palette.black}
+        barStyle={Platform.select({
+          ios: "dark-content",
+          android: "light-content",
+        })}
+        animated
+      />
       <View {...props} style={[HEADER_ROOT, SHADOW_1]}>
         {/* //? 케어기버 로고 */}
         <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />

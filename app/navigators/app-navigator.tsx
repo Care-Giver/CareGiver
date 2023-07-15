@@ -47,7 +47,6 @@ import {
   ManageBookingScreen,
   CgCalendarListScreen,
   CgMypageScreen,
-  YeBeomTestScreen,
   BookingDetailScreen,
   LoginScreen,
   PastBookingsScreen,
