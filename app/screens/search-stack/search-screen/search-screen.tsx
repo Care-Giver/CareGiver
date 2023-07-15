@@ -29,7 +29,6 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar, DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
-import { useStores } from "#models"
 // Calculate the number of minutes passed since the start of the hour
 const now = new Date()
 const minutesPassed = now.getMinutes()
@@ -65,12 +64,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
     const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
     const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
-
-    //* 예약 생성을 위한 모델
-    const {
-      CreateCrecheBookingModel: { postCrecheBooking, setCrecheDatePets },
-      CreateVisitiongBookingModel: { postVisitingBooking, setVisitingDatePets },
-    } = useStores()
 
     // 시간선택 BottomSheet - ref
     const bottomSheetRef = useRef<BottomSheet>(null)
@@ -288,13 +281,16 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             }}
             onPress={() => {
               //? 펫시터 검색결과 스크린으로 이동
-              navigate("search-result", { service: service, serviceType: serviceType })
-              //? 예약 생성 model update
-              if (serviceType == "위탁") {
-                setCrecheDatePets(beginDate.toString(), endDate.toString(), selectedPets)
-              } else if (serviceType == "방문") {
-                setVisitingDatePets([beginDate.toString()], [endDate.toString()], selectedPets)
-              }
+              navigate("search-result", {
+                service: service,
+                serviceType: serviceType,
+                selectedDate: date,
+                selectedPets: selectedPets.map((item) => {
+                  return item.id
+                }),
+                beginDate: serviceType == "방문" ? beginDate.toISOString().substring(0, 19) : null,
+                endDate: serviceType == "방문" ? endDate.toISOString().substring(0, 19) : null,
+              })
             }}
           />
         </ScrollView>

@@ -14,6 +14,7 @@ export interface User {
   nickname: string
   kakaoIdToken: string
   naverIdToken: string
+  appleIdToken: string
   phoneNumber: string
   sex: Sex
   birthday: string
@@ -25,6 +26,10 @@ export interface User {
   pushToken: string
   clientStreamToken: string
   maxDistance: number
+  privacyPolicyConsent: number
+  termsOfServiceConsent: number
+  marketingConsent: number
+  locationBasedServiceConsent: number
 }
 
 interface UsersResponse extends GeneralResponse {
@@ -33,7 +38,7 @@ interface UsersResponse extends GeneralResponse {
 
 /**
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
- * @returns {Promise<User>}
+ * @returns {Promise<Users>}
  */
 export const getUsers = async (): Promise<User> => {
   try {

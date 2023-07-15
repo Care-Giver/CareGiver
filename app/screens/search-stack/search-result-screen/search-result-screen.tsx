@@ -21,12 +21,14 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { useStores } from "#models"
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
+  const { service, serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
+  console.log(beginDate, endDate)
+  console.log(selectedPets)
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])
@@ -34,16 +36,6 @@ export const SearchResultScreen: FC<
   useLayoutEffect(() => {
     setPetsitters(_petsitters)
   }, [])
-
-  //* 예약 생성을 위한 모델
-  const {
-    CreateCrecheBookingModel: { postCrecheBooking, setCrechePetsitter, setCrecheFeeServices },
-    CreateVisitiongBookingModel: {
-      postVisitingBooking,
-      setVisitingPetsitter,
-      setVisitingFeeServices,
-    },
-  } = useStores()
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -119,8 +111,8 @@ export const SearchResultScreen: FC<
     //? case2. 서치스크린 이후 넘어오는 경우
     else {
       //? service 할당
-      var _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
-      var _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+      var _service = service
+      var _serviceType = serviceType
     }
 
     //? Header, 이름 설정
@@ -238,16 +230,13 @@ export const SearchResultScreen: FC<
                   //TODO: params 값 추가해줘야 함
                   navigate("caregiver-detail-information-screen", {
                     sitterData: item,
-                    serviceType: route.params.serviceType,
+                    service: service,
+                    serviceType: serviceType,
+                    selectedDate: selectedDate,
+                    selectedPets: selectedPets,
+                    beginDate: serviceType == "방문" ? beginDate : null,
+                    endDate: serviceType == "방문" ? endDate : null,
                   })
-                  //? 예약 생성 model update
-                  if (route.params.serviceType == "위탁") {
-                    setCrechePetsitter(item.id)
-                    setCrecheFeeServices(item.id)
-                  } else if (route.params.serviceType == "방문") {
-                    setVisitingPetsitter(item.id)
-                    setVisitingFeeServices(item.id)
-                  }
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
               />

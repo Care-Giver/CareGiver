@@ -18,9 +18,13 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
-import { useStores } from "../../models"
-import { User as UserType } from "../../services/axios/user"
 import { userinfo } from "./dummy-data"
+import { getUsers, User } from "../../services/axios/user"
+import {
+  postCrecheTotalFee,
+  postVisitingTotalFee,
+  CalculateVisitingTotalFeeInput,
+} from "../../services/axios/payment-calculate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -35,16 +39,9 @@ export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스"
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
-  function PaymentScreen() {
+  function PaymentScreen({ route }) {
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
-    const {
-      UserModel: { setUser, user },
-    } = useStores()
-
-    //* 로그인된 유저 정보
-    const [userMe, setUserMe] = React.useState<UserType>()
-
     //* 결제 정보 관련
     const [pg, setPg] = React.useState("html5_inicis")
     const [tierCode, setTierCode] = React.useState(undefined)
@@ -60,18 +57,31 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [bizNum, setBizNum] = React.useState("")
     const [escrow, setEscrow] = React.useState(false)
     const [digital, setDigital] = React.useState(false)
+    const {
+      sitterData,
+      service,
+      serviceType,
+      selectedDate,
+      selectedPets,
+      beginDate,
+      endDate,
+    } = route.params
 
+    //* 로그인된 유저 정보
+    const [userMe, setUserMe] = React.useState<User>()
+
+    //* axios 사용하여 유저정보 초기화
     React.useLayoutEffect(() => {
-      setUser()
-      setUserMe(user)
-      if (user != null) {
-        setBuyerName(userMe?.nickname)
-        //TODO 현재 caregiver api에서 data가 undefined이기 때문에 잠시 주석처리.
-        //setBuyerEmail(userMe.email)
-        //setBuyerTel(userMe.phoneNumber)
+      getUsers().then((res) => setUserMe(res))
+      const VisitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
+        //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.
+        visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
+        startTime: beginDate,
+        endTime: endDate,
+        petIds: selectedPets,
       }
-      //dummy test
-      //setUserMe(userinfo[0])
+      console.log(VisitingTotalFeeInput)
+      postVisitingTotalFee(VisitingTotalFeeInput).then((res) => setAmount(res.totalFee.toString()))
     }, [])
 
     //* 결제 정보에 따른 data update 및 결제스크린 이동
@@ -179,10 +189,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <DivisionLine mt={12} />
             <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text={user.nickname} mb={24} color={BODY} />
+            <PreReg14 text={userMe?.nickname} mb={24} color={BODY} />
             {/* 맡길 반려동물 컴포넌트 가져오기 */}
             <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text={user.address} mb={24} color={BODY} />
+            <PreReg14 text={userMe?.address} mb={24} color={BODY} />
             <PreMed14 text="방문 시간" mb={8} />
             <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
           </View>
@@ -285,7 +295,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
         </ScrollView>
 
         <TouchableOpacity style={styles.paymentButton} onPress={onPress}>
-          <PreBol16 text="430,000원" color="white" ml={16} />
+          <PreBol16 text={amount + "원"} color="white" ml={16} />
           <PreBol16 text="결제하기" color="white" mr={16} />
         </TouchableOpacity>
       </ScreenRootView>

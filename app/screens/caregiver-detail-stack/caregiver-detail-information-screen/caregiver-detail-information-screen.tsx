@@ -82,6 +82,16 @@ const desc =
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
 > = observer(({ navigation, route }) => {
+  const {
+    sitterData,
+    service,
+    serviceType,
+    selectedDate,
+    selectedPets,
+    beginDate,
+    endDate,
+  } = route.params
+
   const [post, setPost] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -127,11 +137,18 @@ export const CaregiverDetailInformationScreen: FC<
 
   // console.log("post", post)
 
-  const { sitterData, serviceType } = route.params
   const { profileImg, name, rating } = sitterData
 
   const onPressMakeBookingButton = () => {
-    navigate("make-booking-screen", { serviceType: serviceType })
+    navigate("make-booking-screen", {
+      sitterData: sitterData,
+      service: service,
+      serviceType: serviceType,
+      selectedDate: selectedDate,
+      selectedPets: selectedPets,
+      beginDate: serviceType == "방문" ? beginDate : null,
+      endDate: serviceType == "방문" ? endDate : null,
+    })
   }
 
   return (
