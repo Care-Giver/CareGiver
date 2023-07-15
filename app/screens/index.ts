@@ -1,7 +1,4 @@
 //* ignite-basics
-export * from "./ignite-basics/welcome/welcome-screen"
-export * from "./ignite-basics/demo/demo-screen"
-export * from "./ignite-basics/demo/demo-list-screen"
 export * from "./ignite-basics/error/error-boundary"
 
 //* caregiver-detail-stack
@@ -57,7 +54,6 @@ export * from "./cg-set-address/cg-set-address-screen"
 export * from "./manage-booking/manage-booking-screen"
 export * from "./cg-calendar-list/cg-calendar-list-screen"
 export * from "./cg-mypage/cg-mypage-screen"
-export * from "./ye-beom-test/ye-beom-test-screen"
 export * from "./login/login-screen"
 export * from "./booking-stack/past-bookings/past-bookings-screen"
 export * from "./make-booking/make-booking-screen"
