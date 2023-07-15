@@ -13,12 +13,10 @@ import {
 } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
-<<<<<<< HEAD
+
 import { GIVER_CASUAL_NAVY } from "#theme"
-=======
 import { crecheDays as _crecheDays } from "./dummy-data"
 import { string } from "mobx-state-tree/dist/internal"
->>>>>>> 1ea0b333 (cg-calendar 오류수정)
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -80,18 +78,12 @@ export const CgCalendarScreen: FC<
         </Pressable>
         <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
       </View>
-<<<<<<< HEAD
-      <CgCalendar dates={dates}></CgCalendar>
-      {/* CgCalendarEditButton onPress 적용이 안돼서 수정 버튼 새로 생성함*/}
-      {/* <CgCalendarEditButton
-=======
+
       <CgCalendar dates={dates} serviceType={serviceType}></CgCalendar>
       <CgCalendarEditButton
->>>>>>> 1ea0b333 (cg-calendar 오류수정)
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-        
-      /> */}
+      />
       {/* 수정 버튼 새로 생성 */}
       <Pressable
         style={{

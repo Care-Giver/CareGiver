@@ -11,26 +11,18 @@ export interface crecheAvailableDates {
   totalFee: number
 }
 
-<<<<<<< HEAD
-interface CrecheDaysResponse extends GeneralResponse {
-  crecheAvailableDates: crecheDay[]
-=======
 interface crecheDaysResponse extends GeneralResponse {
   crecheAvailableDates: crecheAvailableDates[]
->>>>>>> 1ea0b333 (cg-calendar 오류수정)
 }
 
 /**
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
-<<<<<<< HEAD
- * @returns {Promise<crecheDay>}
 =======
  * @returns {Promise<crecheAvailableDates>}
->>>>>>> 1ea0b333 (cg-calendar 오류수정)
  */
 export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDates[]> => {
   try {
-    const response = await axios.get<CrecheDaysResponse>(
+    const response = await axios.get<crecheDaysResponse>(
       `${BASE_URL}/creche-day/${crecheId}`,
       CONFIG,
     )
@@ -43,12 +35,9 @@ export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDa
     }
 
     // console.log("response", response)
-<<<<<<< HEAD
-    // console.log("response.data", response.data)
-=======
+
     //console.log("response.data", response.data)
     // console.log("response.data.CrecheDays", response.data.CrecheDays)
->>>>>>> 1ea0b333 (cg-calendar 오류수정)
     return response.data.crecheAvailableDates
   } catch (error) {
     console.error("catch 에러!!!", error)
