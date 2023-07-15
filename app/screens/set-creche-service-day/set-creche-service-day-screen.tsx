@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react"
-import { ScrollView, StyleSheet, View, Switch, Text } from "react-native"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import { ScrollView, StyleSheet, View, Switch, Text, Modal, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -8,6 +8,7 @@ import {
   ConditionalButton,
   DivisionLine,
   PreBol16,
+  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -15,8 +16,16 @@ import {
   PreReg14,
   PreReg16,
   ScreenRootView,
+  WeightModal,
 } from "#components"
-import { BODY, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  BODY,
+  DEVICE_SCREEN_WIDTH,
+  GIVER_CASUAL_NAVY,
+  LBG,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
 import { Image } from "react-native"
 import { images } from "#images"
 import { POPPINS_SEMIBOLD } from "#fonts"
@@ -32,20 +41,32 @@ import { BASE_URL, CONFIG } from "../../services/axios/axios-config"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
-  const { dateParam } = route.params
-  console.log(dateParam)
+  // const { dateParam } = route.params
+  // console.log(dateParam)
 
+  // isEnabled가 true인 경우 서비스 가능 toggle on
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => {
     setIsEnabled((prev) => !prev)
   }
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
 
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
-  // const response = axios.get(`${BASE_URL}/booking/creche`, CONFIG)
-  // console.log(response)
+  // 시간당 가격 설정하는 modal 관련 state
+  // 1박당 가격 설정하기 누르면 모달창 뜨게 관리
+  const [priceModalOpen, setPricemodalOpen] = useState(false)
+  // 모달창에서 price 입력 후 저장하기 버튼 클릭하면 price에 값 저장.
+  const [price, setPrice] = useState("")
+
+  //*가격 모달창에서 모달 창 닫을때 넣어주는 함수
+  const handlepriceModalHide = () => {
+    setPricemodalOpen(false)
+  }
+
+  //*모달창에서 가격 변경시 사용 함수
+  const handlePriceInput = (newPrice) => {
+    setPrice(newPrice)
+    // isChangeMade()
+  }
+  console.log(price)
 
   const onPress = () => {
     console.log("저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다")
@@ -65,6 +86,7 @@ export const SetCrecheServiceDayScreen: FC<
       <ScrollView>
         <PreBol20 text="9월 15일" mb={10} ml={16} />
         <DivisionLine height={8} />
+        {/* 서비스 가능 여부 토글 버튼 */}
         <View style={styles.servicePossible}>
           <PreMed18 text="서비스 가능" />
           <Switch
@@ -77,26 +99,43 @@ export const SetCrecheServiceDayScreen: FC<
           />
         </View>
         <View style={styles.line} />
+
+        {/* 서비스 요금 설정 , 평균 요금 알아보기 클릭시 bottom sheet 오픈*/}
         <View style={[styles.rowText, { marginTop: 20 }]}>
           <PreMed18 text="서비스 요금 설정" />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PreMed14 text="평균 요금 알아보기" mr={5} />
-            <Image style={styles.image} source={images.more_info_bigger} />
-          </View>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => {
+              setPricemodalOpen(true)
+            }}
+          >
+            <PreMed14 text="평균 요금 알아보기" />
+            <Image style={styles.image} source={images.question_mark} />
+          </Pressable>
         </View>
+
+        {/* 1박당 가격 설정 */}
         <View style={[styles.rowText, { marginTop: 25 }]}>
           <PreReg16 text="1박 당" color={SUB_HEAD_LINE} />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => setPricemodalOpen(true)}
+          >
             <PreBol16 text="90,000 원" mr={4} />
             <Image style={styles.image} source={images.arrow_right} />
-          </View>
+          </Pressable>
         </View>
+
+        {/* 강아지 크기별 추가요금 설정 */}
         <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
           <PreReg16 text="강아지 크기 별 추가 요금" color={SUB_HEAD_LINE} />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={handleBottomSheet}
+          >
             <PreMed16 text="설정하기" mr={4} />
             <Image style={styles.image} source={images.arrow_right} />
-          </View>
+          </Pressable>
         </View>
         <View style={styles.dogSizeBox}>
           <View>
@@ -114,6 +153,8 @@ export const SetCrecheServiceDayScreen: FC<
             <PreMed14 text="+0원" />
           </View>
         </View>
+
+        {/* 1박당 받는 총 금액 */}
         <View style={styles.totalPriceBox}>
           <View>
             <PreBol16 text="내가 1박 당 받는 총 금액" mb={4} />
@@ -126,13 +167,23 @@ export const SetCrecheServiceDayScreen: FC<
         </View>
       </ScrollView>
 
-      {/* <TouchableOpacity style={styles.submit} onPress={onSubmit}>
-            <PreBol16 text="저장하기" color="white" />
-          </TouchableOpacity> */}
-
-      <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+      {/* 저장하기 버튼 클릭시 데이터 POST */}
+      <View
+        style={{
+          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+        }}
+      >
         <ConditionalButton label="저장하기" isActivated onPress={onPress} />
       </View>
+
+      {/* Modal */}
+      {/* //*1박당 가격 설정  모달 창 */}
+      <WeightModal
+        visibleState={priceModalOpen}
+        handleModalHide={handlepriceModalHide}
+        title="1박당 받을 요금을 입력해주세요(원)"
+        handleInput={handlePriceInput}
+      />
     </ScreenRootView>
   )
 })
@@ -160,8 +211,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   image: {
-    width: 16,
-    height: 16,
+    width: 28,
+    height: 28,
   },
   line: {
     height: 2,
@@ -199,4 +250,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: GIVER_CASUAL_NAVY,
   },
+  modalContent: {
+    width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+    height: 226,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    alignSelf: "center",
+    borderStyle: "solid",
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
+  },
+  bottomSheet: {},
 })
