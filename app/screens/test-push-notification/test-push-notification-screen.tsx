@@ -3,7 +3,7 @@ import { Button, Platform, View, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView } from "#components"
+import { Screen } from "#components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import * as Device from "expo-device"
@@ -96,7 +96,7 @@ export const TestPushNotificationScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="TestPushNotification" preset="fixed">
+    <Screen testID="TestPushNotification" preset="fixed">
       <View
         style={{
           flex: 1,
@@ -121,6 +121,6 @@ export const TestPushNotificationScreen: FC<
           }}
         />
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })

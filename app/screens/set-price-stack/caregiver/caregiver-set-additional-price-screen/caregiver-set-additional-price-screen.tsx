@@ -10,7 +10,7 @@ import {
   PreMed14,
   PreReg12,
   RegisterSubmitButton,
-  ScreenRootView,
+  Screen,
   UnderlineText,
 } from "#components"
 import { KeyboardAvoidingView, Text, View } from "react-native"
@@ -44,7 +44,7 @@ export const CaregiverSetAdditionalPriceScreen: FC<
   }, [smallPrice, mediumPrice, largePrice])
 
   return (
-    <ScreenRootView>
+    <Screen>
       {/* // * title container */}
       <View style={common_styles.titleContainer}>
         {/* // ? first line */}
@@ -135,6 +135,6 @@ export const CaregiverSetAdditionalPriceScreen: FC<
       {/* // TODO: onPress */}
       {/* // ! 키보드가 올라올 때 안드로이드 -> 다음 버튼도 같이 올라옴, ios -> 키보드만 올라와서 다음 버튼은 가려짐 */}
       <RegisterSubmitButton text="다음" isActive={isSubmitActive} onPress={handlePress} />
-    </ScreenRootView>
+    </Screen>
   )
 })

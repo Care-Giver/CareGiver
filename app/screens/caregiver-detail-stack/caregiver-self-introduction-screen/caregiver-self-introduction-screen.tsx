@@ -4,7 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 
 import { NavigatorParamList } from "#navigators"
-import { PreReg14, ScreenRootView } from "#components"
+import { PreReg14, Screen } from "#components"
 import { SUB_HEAD_LINE } from "#theme"
 
 export const CaregiverSelfIntroductionScreen: FC<
@@ -15,8 +15,8 @@ export const CaregiverSelfIntroductionScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="CaregiverSelfIntroductionScreen" preset="fixed">
+    <Screen testID="CaregiverSelfIntroductionScreen" preset="fixed">
       <PreReg14 text={route.params} color={SUB_HEAD_LINE} style={{ marginTop: 20 }} />
-    </ScreenRootView>
+    </Screen>
   )
 })

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView } from "#components"
+import { Screen } from "#components"
 import { WebView } from "react-native-webview"
 import { Api } from "#api"
 
@@ -36,7 +36,7 @@ export const TestWebViewScreen: FC<
   const url =
     "https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount%2Finfo#login"
   return (
-    <ScreenRootView testID="TestWebView" preset="fixed">
+    <Screen testID="TestWebView" preset="fixed">
       {/* //* Kakao 로그인 웹페이지 -> Worked! */}
       <WebView
         source={{
@@ -53,6 +53,6 @@ export const TestWebViewScreen: FC<
             }}
           />
         )} */}
-    </ScreenRootView>
+    </Screen>
   )
 })

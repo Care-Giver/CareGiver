@@ -2,7 +2,7 @@ import React, { useCallback, useLayoutEffect, FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { ScreenRootView, RegisterButtonsContainer, RegisterSubmitButton } from "#components"
+import { Screen, RegisterButtonsContainer, RegisterSubmitButton } from "#components"
 // * 화면에 띄울 서비스 배열
 import { services } from "./service-data"
 
@@ -43,7 +43,7 @@ export const ServiceRegistrationScreen: FC<
   }
 
   return (
-    <ScreenRootView>
+    <Screen>
       <RegisterButtonsContainer
         services={services}
         selectedOptions={selectedOptions}
@@ -56,6 +56,6 @@ export const ServiceRegistrationScreen: FC<
         text={submitText}
         onPress={handleSubmitPress}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })

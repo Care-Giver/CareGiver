@@ -10,7 +10,7 @@ import {
   PreMed14,
   PreReg12,
   RegisterSubmitButton,
-  ScreenRootView,
+  Screen,
   UnderlineText,
 } from "#components"
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
@@ -72,7 +72,7 @@ export const CaregiverSetPriceScreen: FC<
   }, [inputCost])
 
   return (
-    <ScreenRootView>
+    <Screen>
       {/* // * title container */}
       <View style={common_styles.titleContainer}>
         {/* // ? first line */}
@@ -134,6 +134,6 @@ export const CaregiverSetPriceScreen: FC<
       {/* // * 다음 button */}
       {/* // TODO: onPress */}
       <RegisterSubmitButton text="다음" isActive={isSubmitActive} />
-    </ScreenRootView>
+    </Screen>
   )
 })

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView, TimePicker } from "#components"
+import { Screen, TimePicker } from "#components"
 import BottomSheet from "@gorhom/bottom-sheet"
 
 export const TestBottomSheetScreen: FC<
@@ -24,11 +24,7 @@ export const TestBottomSheetScreen: FC<
   }, [])
 
   return (
-    <ScreenRootView
-      testID="TestBottomSheet"
-      preset="fixed"
-      style={{ backgroundColor: "lightgrey" }}
-    >
+    <Screen testID="TestBottomSheet" preset="fixed" style={{ backgroundColor: "lightgrey" }}>
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
@@ -43,7 +39,7 @@ export const TestBottomSheetScreen: FC<
           setEndDate={setEndDate}
         />
       </BottomSheet>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

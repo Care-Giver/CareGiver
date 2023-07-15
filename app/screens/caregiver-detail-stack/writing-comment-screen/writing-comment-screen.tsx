@@ -11,7 +11,7 @@ import {
   ADNROID_STATUS_BAR_HEIGHT,
   ADNROID_BOTTOM_NAVIGATION_HEIGHT,
 } from "#theme"
-import { PublicPrivateSwitchButton, ScreenRootView, PopSem14, PopReg14, Row } from "#components"
+import { PublicPrivateSwitchButton, Screen, PopSem14, PopReg14, Row } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "#fonts"
 
@@ -114,7 +114,7 @@ export const WritingCommentScreen: FC<
   }
 
   return (
-    <ScreenRootView preset="fixed">
+    <Screen preset="fixed">
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
         style={{
@@ -160,6 +160,6 @@ export const WritingCommentScreen: FC<
         {/*//* max 단어수 (여기선 300) */}
         <PopReg14 color={BODY} text={`/300`} />
       </Row>
-    </ScreenRootView>
+    </Screen>
   )
 })

@@ -2,7 +2,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CancelButton, CgCalendar, CgCalendarEditButton, ScreenRootView, Text } from "#components"
+import { CancelButton, CgCalendar, CgCalendarEditButton, Screen, Text } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
@@ -51,7 +51,7 @@ export const CgCalendarScreen: FC<
   console.log("dates:", dates)
 
   return (
-    <ScreenRootView testID="CgCalendar">
+    <Screen testID="CgCalendar">
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         {/*이 전 스크린 제작 전, 위탁 방문을 구분하기 위한 버튼*/}
         <Pressable style={{ borderColor: "black", borderWidth: 2 }} onPress={onTestPress}>
@@ -64,6 +64,6 @@ export const CgCalendarScreen: FC<
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })

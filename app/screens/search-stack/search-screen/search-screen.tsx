@@ -11,7 +11,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
-  ScreenRootView,
+  Screen,
   Row,
   PreReg14,
   SelectedPetCard,
@@ -132,7 +132,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const isActivated = hadleIsActivated()
 
     return (
-      <ScreenRootView testID="SearchScreen" preset="fixed">
+      <Screen testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <Row style={{ marginTop: 12 }}>
@@ -307,7 +307,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
           </View>
         </BottomSheet>
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

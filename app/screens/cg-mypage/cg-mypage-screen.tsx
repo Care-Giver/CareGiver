@@ -10,7 +10,7 @@ import {
   PreReg16,
   PreReg18,
   Row,
-  ScreenRootView,
+  Screen,
   ServiceChoiceButton,
   ServiceType,
   ServiceTypeIndicatorHeader,
@@ -62,7 +62,7 @@ export const CgMypageScreen: FC<
   }
 
   return (
-    <ScreenRootView>
+    <Screen>
       {/* //! 로그인 상태일 때 */}
       {loggedIn ? (
         <>
@@ -150,7 +150,7 @@ export const CgMypageScreen: FC<
 
       {/* //? divider */}
       <View style={[styles.divisionLine]} />
-    </ScreenRootView>
+    </Screen>
   )
 })
 

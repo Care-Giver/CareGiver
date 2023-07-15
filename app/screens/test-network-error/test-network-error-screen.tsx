@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, ScreenRootView } from "#components"
+import { Button, Screen } from "#components"
 import { getTestJsonPlaceHolder } from "./axios-test-api"
 import { getFavorites } from "../../services/axios/favorite"
 import { getCreche } from "#axios"
@@ -17,11 +17,11 @@ export const TestNetworkErrorScreen: FC<
   // const { someStore, anotherStore } = useStores()
 
   return (
-    <ScreenRootView>
+    <Screen>
       <Button text="getTestJsonPlaceHolder" onPress={getTestJsonPlaceHolder} />
 
       <Button text="getCreche" onPress={() => getCreche(1)} />
-    </ScreenRootView>
+    </Screen>
   )
 })
 

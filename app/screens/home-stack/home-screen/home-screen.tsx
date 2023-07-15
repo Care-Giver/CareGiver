@@ -3,7 +3,7 @@ import { FlatList, ScrollView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
-  ScreenRootView,
+  Screen,
   Row,
   ServiceChoiceButton,
   SitterProfileButton,
@@ -96,7 +96,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
     }, [])
 
     return (
-      <ScreenRootView testID="HomeScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
+      <Screen testID="HomeScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{
@@ -301,7 +301,7 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
             }}
           />
         </ScrollView>
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

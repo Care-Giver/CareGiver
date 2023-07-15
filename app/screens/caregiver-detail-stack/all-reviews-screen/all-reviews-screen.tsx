@@ -3,7 +3,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../navigators"
 import { observer } from "mobx-react-lite"
-import { DivisionLine, ScreenRootView, ReviewBox, FilterHeader } from "../../../components"
+import { DivisionLine, Screen, ReviewBox, FilterHeader } from "../../../components"
 import { reviews as _reviews } from "./dummy-data"
 
 import { LBG } from "../../../theme"
@@ -27,7 +27,7 @@ export const AllReviewsScreen: FC<
     })
   }, [])
   return (
-    <ScreenRootView preset={"fixed"} showsVerticalScrollIndicator={false}>
+    <Screen preset={"fixed"} showsVerticalScrollIndicator={false}>
       {/* //? 필터 헤더 박스 */}
       <FilterHeader
         title={"전체"}
@@ -61,6 +61,6 @@ export const AllReviewsScreen: FC<
           </>
         )}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })

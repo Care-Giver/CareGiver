@@ -6,7 +6,7 @@ import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { images } from "#images"
 import { InProgressBookingProps } from "./in-progress-booking.props"
 import { navigate } from "#navigators"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../basics/view-component/view-component"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../screen/screen"
 
 export const InProgressBooking = (props: InProgressBookingProps) => {
   const { currentBooking, style } = props

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Loading, ScreenRootView } from "#components"
+import { Loading, Screen } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
 
@@ -25,7 +25,7 @@ export const TestIamportPaymentScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="TestIamportPayment">
+    <Screen testID="TestIamportPayment">
       <IMP.Payment
         userCode={userCode}
         tierCode={tierCode}
@@ -33,7 +33,7 @@ export const TestIamportPaymentScreen: FC<
         data={params!}
         callback={callback}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })
 

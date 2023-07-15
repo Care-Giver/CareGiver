@@ -2,7 +2,7 @@ import React, { FC, useCallback, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { ScreenRootView, RegisterButtonsContainer, RegisterSubmitButton } from "#components"
+import { Screen, RegisterButtonsContainer, RegisterSubmitButton } from "#components"
 import { facilities } from "./facility-data"
 
 export const FacilityRegistrationScreen: FC<
@@ -39,7 +39,7 @@ export const FacilityRegistrationScreen: FC<
   }
 
   return (
-    <ScreenRootView>
+    <Screen>
       <RegisterButtonsContainer
         services={facilities}
         selectedOptions={selectedOptions}
@@ -48,6 +48,6 @@ export const FacilityRegistrationScreen: FC<
       />
 
       <RegisterSubmitButton text={submitText} onPress={handleSubmitPress} />
-    </ScreenRootView>
+    </Screen>
   )
 })

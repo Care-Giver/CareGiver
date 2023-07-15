@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, PreReg18, ScreenRootView } from "#components"
+import { Button, PreReg18, Screen } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
 
@@ -40,7 +40,7 @@ export const TestIamportPaymentResultScreen: FC<
     getBoolean(imp_success) ?? getBoolean(success) ?? (error_code == null && code == null)
 
   return (
-    <ScreenRootView testID="TestIamportPaymentResult">
+    <Screen testID="TestIamportPaymentResult">
       {isSuccess ? (
         <FontAwesome name={"check-circle"} size={20} color={"#52c41a"} />
       ) : (
@@ -72,7 +72,7 @@ export const TestIamportPaymentResultScreen: FC<
       >
         <PreReg18 text="결제하기" />
       </Button>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

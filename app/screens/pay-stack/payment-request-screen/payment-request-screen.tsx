@@ -4,7 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList } from "#navigators"
 import {
-  ScreenRootView,
+  Screen,
   PreReg12,
   PreBol14,
   UserTextInput,
@@ -196,7 +196,7 @@ export const PaymentRequestScreen: FC<
   // ? ------------
 
   return (
-    <ScreenRootView>
+    <Screen>
       <ScrollView>
         {/* //* 안내 문구 */}
         <PreReg12
@@ -343,6 +343,6 @@ export const PaymentRequestScreen: FC<
         {/* //? 마진 */}
         <View style={{ height: 290 }} />
       </ScrollView>
-    </ScreenRootView>
+    </Screen>
   )
 })

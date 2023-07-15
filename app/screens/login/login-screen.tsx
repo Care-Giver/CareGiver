@@ -3,7 +3,7 @@ import { Alert, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
-import { Button, ConditionalButton, PreBol16, ScreenRootView } from "#components"
+import { Button, ConditionalButton, PreBol16, Screen } from "#components"
 import {
   login,
   logout,
@@ -160,7 +160,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     console.log("loggedIn OUTSIDE >>>", loggedIn)
 
     return (
-      <ScreenRootView testID="Login">
+      <Screen testID="Login">
         <View style={styles.buttonBox}>
           <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
             <PreBol16 text="카카오 로그인" color={palette.black} />
@@ -181,7 +181,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             <PreBol16 text="테스트용 로그아웃" color={palette.white} />
           </Button>
         )}
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

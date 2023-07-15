@@ -3,7 +3,7 @@ import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { MypageButton, PreMed16, PreReg14, ScreenRootView, CustomModal } from "#components"
+import { MypageButton, PreMed16, PreReg14, Screen, CustomModal } from "#components"
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
 import TEST_BUILD_VERSION from "./test-build-version"
@@ -46,7 +46,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     }
 
     return (
-      <ScreenRootView>
+      <Screen>
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
           <PreMed16 text="버전 정보" color={HEAD_LINE} />
@@ -92,7 +92,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           imageWidth={151}
           imageHeight={156}
         />
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

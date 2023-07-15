@@ -13,7 +13,7 @@ import {
   PreBol18,
   PreMed14,
   PreReg14,
-  ScreenRootView,
+  Screen,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
 import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
@@ -37,7 +37,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
     return (
-      <ScreenRootView testID="Payment" style={{ paddingHorizontal: 0 }}>
+      <Screen testID="Payment" style={{ paddingHorizontal: 0 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* CONTENT 시작, paddingHorizontal:16 */}
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
@@ -153,7 +153,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           <PreBol16 text="430,000원" color="white" ml={16} />
           <PreBol16 text="결제하기" color="white" mr={16} />
         </TouchableOpacity>
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

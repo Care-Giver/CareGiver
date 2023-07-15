@@ -5,7 +5,7 @@ import { navigationRef, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED } from "#theme"
 import {
-  ScreenRootView,
+  Screen,
   Row,
   PreMed14,
   PreMed16,
@@ -79,7 +79,7 @@ export const EditMypageScreen: FC<
   }
 
   return (
-    <ScreenRootView preset={"fixed"}>
+    <Screen preset={"fixed"}>
       {/* //*프사 부분 */}
       <ImageBackground
         style={styles.profileImage}
@@ -217,6 +217,6 @@ export const EditMypageScreen: FC<
         handleInput={handleNicknameInput}
         placeholderInput="user"
       />
-    </ScreenRootView>
+    </Screen>
   )
 })

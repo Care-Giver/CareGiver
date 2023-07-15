@@ -7,7 +7,7 @@ import {
   BookingInfoCardProps,
   BookingList,
   PreReg14,
-  ScreenRootView,
+  Screen,
 } from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
 import { getconfirmedBookings } from "#axios"
@@ -44,7 +44,7 @@ export const ManageBookingScreen: FC<
   }, [])
 
   return (
-    <ScreenRootView testID="ManageBooking">
+    <Screen testID="ManageBooking">
       <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2} />
       {hasBookings ? (
         <BookingList bookings={bookings} />
@@ -61,6 +61,6 @@ export const ManageBookingScreen: FC<
           <PreReg14 text="예약이 존재하지 않습니다" color={BODY} />
         </View>
       )}
-    </ScreenRootView>
+    </Screen>
   )
 })

@@ -13,7 +13,7 @@ import {
   PreReg12,
   PreReg14,
   Row,
-  ScreenRootView,
+  Screen,
   SelectedPetCard,
 } from "#components"
 import { SHADOW_1, DBG, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
@@ -79,7 +79,7 @@ export const BookingDetailScreen: FC<
   const { price, discount, totalPrice } = paymentData
 
   return (
-    <ScreenRootView testID="BookingDetail">
+    <Screen testID="BookingDetail">
       <Row>
         <Image style={styles.profileImage} source={images.default_pet_image_60} />
 
@@ -194,7 +194,7 @@ export const BookingDetailScreen: FC<
         <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
         <PreBol16 text={won(totalPrice)} color={SUB_HEAD_LINE} />
       </Row>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

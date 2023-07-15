@@ -3,7 +3,6 @@ export * from "./basics/ignite-basics"
 export * from "./basics/custom-texts/custom-texts"
 export * from "./basics/row/row"
 export * from "./basics/row-rounded-box/row-rounded-box"
-export * from "./basics/view-component/view-component"
 
 //* buttons
 export * from "./buttons/caregiver-type-button/caregiver-type-button"
@@ -41,6 +40,7 @@ export * from "./screen-headers/cgset-screen-header/cgset-screen-header"
 export * from "./screen-headers/cg-screen-header/cg-screen-header"
 
 //* others
+export * from "./screen/screen"
 export * from "./division-line/division-line"
 export * from "./division-line-vertical/division-line-vertical"
 export * from "./dots-indicator/dots-indicator"

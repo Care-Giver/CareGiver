@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgServiceChoiceButton, ScreenRootView, Row, CustomModal, PreReg12 } from "#components"
+import { CgServiceChoiceButton, Screen, Row, CustomModal, PreReg12 } from "#components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 
@@ -20,7 +20,7 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
       alert("클릭됨")
     }
     return (
-      <ScreenRootView testID="TempScreen">
+      <Screen testID="TempScreen">
         <CgServiceChoiceButton
           title="펫시터 등록하기"
           subtitle={`산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다.`}
@@ -31,8 +31,7 @@ export const TempScreen: FC<StackScreenProps<NavigatorParamList, "temp-screen">>
           subtitle={`손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다.`}
           onPress={onPress}
         />
-     
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

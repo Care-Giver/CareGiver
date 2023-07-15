@@ -69,7 +69,7 @@ import {
   EditMypageScreenHeader,
   GobackAndTitleSpacebetweenHeader,
   GobackAndTitleAndButtonHeader,
-  ScreenRootView,
+  Screen,
   PreReg18,
   EditPetInfoScreenHeader,
   CgScreenHeader,
@@ -480,7 +480,7 @@ const ChatsStack = observer(function ChatsStack() {
     useShowBottomTab(navigation)
 
     return (
-      <ScreenRootView>
+      <Screen>
         <View
           style={{
             marginVertical: 200,
@@ -489,7 +489,7 @@ const ChatsStack = observer(function ChatsStack() {
         >
           <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
         </View>
-      </ScreenRootView>
+      </Screen>
     )
   }
 
@@ -720,7 +720,7 @@ const StatisticsStack = () => {
     useShowBottomTab(navigation)
 
     return (
-      <ScreenRootView>
+      <Screen>
         <View
           style={{
             marginVertical: 200,
@@ -729,7 +729,7 @@ const StatisticsStack = () => {
         >
           <PreReg18>통계 기능은 곧 추가될 예정입니다 😉</PreReg18>
         </View>
-      </ScreenRootView>
+      </Screen>
     )
   }
 

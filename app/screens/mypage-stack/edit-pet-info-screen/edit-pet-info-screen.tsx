@@ -18,7 +18,7 @@ import {
   ConditionalButton,
   DotsIndicator,
   PreMed14,
-  ScreenRootView,
+  Screen,
   UserOrPetProfileInfo,
   CustomInputModal,
   WeightModal,
@@ -244,7 +244,7 @@ export const EditPetInfoScreen: FC<
 
   //* 본문 코드 :
   return (
-    <ScreenRootView testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
+    <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
       <ScrollView>
         <View>
           {/* //*이미지  */}
@@ -476,6 +476,6 @@ export const EditPetInfoScreen: FC<
           />
         </View>
       )}
-    </ScreenRootView>
+    </Screen>
   )
 })

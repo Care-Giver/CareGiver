@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
-  ScreenRootView,
+  Screen,
   GoBackSaveNext,
   CgRegisterStep,
   PreBol20,
@@ -33,7 +33,7 @@ export const CgCertificateRegistrationScreen: FC<
   const [selectedImages, setSelectedImages] = useState<PickerImage[]>([])
 
   return (
-    <ScreenRootView testID="CgCertificateRegistration">
+    <Screen testID="CgCertificateRegistration">
       {/* Screen header 컴포넌트 -> app.navigator로 이동 */}
       {/*<CgCertificateRegistrationScreenHeader options={{ title: "저장 후 나가기" }} />*/}
       {/* 단계별 컴포넌트 */}
@@ -67,7 +67,7 @@ export const CgCertificateRegistrationScreen: FC<
       <View style={styles.bottomButton}>
         <GoBackSaveNext />
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

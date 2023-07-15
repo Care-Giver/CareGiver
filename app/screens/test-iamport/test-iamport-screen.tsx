@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View, Text, Switch, TextInput } from "react-nat
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { Button, Loading, PreReg18, ScreenRootView } from "#components"
+import { Button, Loading, PreReg18, Screen } from "#components"
 import { Picker } from "@react-native-picker/picker"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { getMethods, getQuotas } from "./utils"
@@ -33,7 +33,7 @@ export const TestIamportScreen: FC<
   const [digital, setDigital] = useState(false)
 
   return (
-    <ScreenRootView testID="TestIamport">
+    <Screen testID="TestIamport">
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.formControl}>
@@ -240,7 +240,7 @@ export const TestIamportScreen: FC<
       >
         <PreReg18 text="결제하기" />
       </Button>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

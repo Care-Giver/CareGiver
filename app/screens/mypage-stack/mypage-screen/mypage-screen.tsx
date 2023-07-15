@@ -9,7 +9,7 @@ import {
   PreMed20,
   PreReg16,
   Row,
-  ScreenRootView,
+  Screen,
 } from "#components"
 import { styles } from "./styles"
 import { user } from "./dummy-data"
@@ -113,7 +113,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     }
 
     return (
-      <ScreenRootView preset="fixed">
+      <Screen preset="fixed">
         {/* //! 로그인 상태일 때 */}
         {loggedIn ? (
           <>
@@ -220,7 +220,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
         {/* //? divider */}
         <View style={[styles.divisionLine]} />
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

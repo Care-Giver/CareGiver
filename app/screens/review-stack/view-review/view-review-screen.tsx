@@ -9,7 +9,7 @@ import {
   PreReg14,
   RegisterSubmitButton,
   Row,
-  ScreenRootView,
+  Screen,
 } from "../../../components"
 import { Review, getCrecheReview, getVisitingReview } from "../../../services/axios/review"
 import { reviewStyles } from "../styles"
@@ -80,7 +80,7 @@ export const ViewReviewScreen: FC<
   console.log("bottom:", editButtonBottom)
 
   return (
-    <ScreenRootView testID="ViewReview">
+    <Screen testID="ViewReview">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* // * 펫시터 프로필 */}
         <View style={reviewStyles.profileCard}>
@@ -139,7 +139,7 @@ export const ViewReviewScreen: FC<
         style={{ position: "absolute", bottom: editButtonBottom }}
         onPress={() => navigation.goBack()}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })
 

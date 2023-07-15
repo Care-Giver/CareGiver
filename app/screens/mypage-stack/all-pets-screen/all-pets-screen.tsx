@@ -7,7 +7,7 @@ import {
   PopSem16,
   PreBol16,
   Row,
-  ScreenRootView,
+  Screen,
   PetProfileCard,
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
@@ -33,7 +33,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     // }, [])
 
     return (
-      <ScreenRootView>
+      <Screen>
         {/* //* 제목 - 전체 n 마리 */}
         <Row style={styles.title}>
           <PreBol16 text="전체" color={SUB_HEAD_LINE} />
@@ -64,7 +64,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
             </>
           )}
         />
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

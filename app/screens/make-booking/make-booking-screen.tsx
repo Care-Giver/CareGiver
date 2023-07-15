@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
-  ScreenRootView,
+  Screen,
   PlaceHolderInputBox,
   ClickToBlueButton,
   PreReg12,
@@ -137,7 +137,7 @@ export const MakeBookingScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="MakeBooking" type="View">
+    <Screen testID="MakeBooking" type="View">
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <PreReg12
           style={{ textAlign: "right" }}
@@ -271,7 +271,7 @@ export const MakeBookingScreen: FC<
           <PreBol16 text={"예약하기"} color="white" />
         </Pressable>
       )}
-    </ScreenRootView>
+    </Screen>
   )
 })
 

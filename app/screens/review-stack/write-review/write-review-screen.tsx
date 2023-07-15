@@ -28,7 +28,7 @@ import {
   CaregiverTypeButton,
   PreMed18,
   PreReg14,
-  ScreenRootView,
+  Screen,
   Row,
   UnderlineText,
   RegisterSubmitButton,
@@ -212,7 +212,7 @@ export const WriteReviewScreen: FC<
   }, [selectedImages, reviewText, rating])
 
   return (
-    <ScreenRootView testID="WriteReview">
+    <Screen testID="WriteReview">
       <ScrollView showsVerticalScrollIndicator={false}>
         {!isKeyboardOpen && (
           <View>
@@ -295,7 +295,7 @@ export const WriteReviewScreen: FC<
         style={{ position: "absolute", bottom: 0 }}
         onPress={handleSubmit}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })
 

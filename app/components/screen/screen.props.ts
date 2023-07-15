@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { KeyboardOffsets, ScreenPresets } from "./screen.presets"
+import { color } from "#theme"
 
 /**
  * KeyboardAvoidingView가 포함된 ScreenRootView를 사용
@@ -55,3 +55,64 @@ export interface ScreenProps {
    */
   type?: Type
 }
+
+/**
+ * All screen keyboard offsets.
+ */
+export const offsets = {
+  none: 0,
+  small: 100,
+  large: 500,
+}
+
+/**
+ * The variations of keyboard offsets.
+ */
+type KeyboardOffsets = keyof typeof offsets
+
+/**
+ * All the variations of screens.
+ */
+export const presets = {
+  /**
+   * No scrolling. Suitable for full-screen carousels and components
+   * which have built-in scrolling like FlatList.
+   */
+  fixed: {
+    outer: {
+      backgroundColor: color.background,
+      flex: 1,
+      height: "100%",
+    } as ViewStyle,
+    inner: {
+      justifyContent: "flex-start",
+      alignItems: "stretch",
+      height: "100%",
+      width: "100%",
+      backgroundColor: "white",
+    } as ViewStyle,
+  },
+
+  /**
+   * Scrolls. Suitable for forms or other things requiring a keyboard.
+   *
+   * Pick this one if you don't know which one you want yet.
+   */
+  scroll: {
+    outer: {
+      backgroundColor: color.background,
+      flex: 1,
+      height: "100%",
+    } as ViewStyle,
+    inner: {
+      justifyContent: "flex-start",
+      alignItems: "stretch",
+      height: "100%",
+    } as ViewStyle,
+  },
+}
+
+/**
+ * The variations of screens.
+ */
+type ScreenPresets = keyof typeof presets

@@ -3,7 +3,7 @@ import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { Comment, DivisionLine, ScreenRootView, FilterHeader } from "#components"
+import { Comment, DivisionLine, Screen, FilterHeader } from "#components"
 import { commentsDummy } from "./dummy-data"
 import { DEVICE_SCREEN_WIDTH, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "#theme"
 
@@ -11,7 +11,7 @@ export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
 > = observer(({ navigation, route }) => {
   return (
-    <ScreenRootView preset={"fixed"}>
+    <Screen preset={"fixed"}>
       <FilterHeader
         title={"전체"}
         number={commentsDummy.length < 1000 ? `${commentsDummy.length}` : "999+"}
@@ -39,6 +39,6 @@ export const AllCommentsScreen: FC<
           }),
         }}
       />
-    </ScreenRootView>
+    </Screen>
   )
 })

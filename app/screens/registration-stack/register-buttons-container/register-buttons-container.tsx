@@ -3,7 +3,7 @@ import React, { useLayoutEffect, useState } from "react"
 import { RegisterButtonsContainerProps } from "./register-buttons-container.props"
 import { RegistrationButton } from "../../../components/buttons/registration-button/registration-button"
 import { NUM_OF_COLS, WIDTH_INTERVAL } from "../style-const"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../../../components/basics/view-component/view-component"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../../../components/screen/screen"
 
 export const RegisterButtonsContainer = (props: RegisterButtonsContainerProps) => {
   const { services, selectedOptions, handleOptionPress, handleXPress } = props

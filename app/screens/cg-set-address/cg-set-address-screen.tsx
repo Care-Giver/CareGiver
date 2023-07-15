@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView, PreBol16, PreReg12, PreReg14, PreMed14, Row } from "#components"
+import { Screen, PreBol16, PreReg12, PreReg14, PreMed14, Row } from "#components"
 import { Platform, View, ScrollView, StyleSheet, TextInput, Pressable } from "react-native"
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import Geolocation from "react-native-geolocation-service"
@@ -133,7 +133,7 @@ export const CgSetAddressScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="" preset="fixed">
+    <Screen testID="" preset="fixed">
       <View style={{ flex: 1 }}>
         {/*To resolve the issue of address[0] being null when the app is initially executed, you can add a conditional rendering in your component to check if the address state is null or not before accessing its elements
         필요한 값이 안들어왔을 때 다시 랜더링 시 활용*/}
@@ -218,7 +218,7 @@ export const CgSetAddressScreen: FC<
           </Pressable>
         </Row>
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

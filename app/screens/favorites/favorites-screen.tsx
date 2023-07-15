@@ -21,7 +21,7 @@ import {
   PreReg12,
   Row,
   RowRoundedButton,
-  ScreenRootView,
+  Screen,
   SelectPetDropdownBox,
   SelectedPetCard,
   ServiceTypeIndicatorHeader,
@@ -325,7 +325,7 @@ export const FavoritesScreen: FC<
   }, [])
 
   return (
-    <ScreenRootView testID="Favorites">
+    <Screen testID="Favorites">
       {/* //* 펫시터 | 훈련사 토글 */}
       <Row style={{ marginTop: 24, justifyContent: "space-between" }}>
         <ServiceTypeIndicatorHeader
@@ -574,6 +574,6 @@ export const FavoritesScreen: FC<
           </View>
         </BottomSheetScrollView>
       </BottomSheetModal>
-    </ScreenRootView>
+    </Screen>
   )
 })
