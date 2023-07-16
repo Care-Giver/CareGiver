@@ -24,25 +24,24 @@ export const SitterProfileCard = ({
   onLikePress,
 }: SitterProfileCardProps) => {
   const { crecheId, visitingId, userNickname, image, rating, reviewCount, title, desc } = sitterData
-  const roundedRating = ratingRound(rating)
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}
-      {/* profile image */}
-      <Image
-        style={styles.profileImg}
-        source={image ? { uri: image } : images.default_pet_image_60}
-      />
 
       <View style={styles.infoContainer}>
+        {/* profile image */}
+        <Image
+          style={styles.profileImg}
+          source={image ? { uri: image } : images.default_pet_image_60}
+        />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
           {/* sitter name */}
           <PreMed16 text={userNickname} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={roundedRating} review={reviewCount} style={{ marginTop: 4 }} />
+          <RatingReviewBox rating={rating} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />
@@ -56,7 +55,9 @@ export const SitterProfileCard = ({
             ellipsizeMode="tail"
           />
         </View>
-        {/* like button */}
+      </View>
+      {/* like button */}
+      <View style={styles.likeContainer}>
         <Pressable onPress={onLikePress}>
           {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
           <Image
