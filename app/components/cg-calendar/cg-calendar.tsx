@@ -12,8 +12,7 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType } = props
-  const [selected, setSelected] = React.useState("")
+  const { dates, serviceType, selected, setSelected } = props
   const hasDates = dates.length !== 0
 
   console.log("serviceType in CgCalendar >>>", serviceType)

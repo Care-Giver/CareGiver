@@ -5,7 +5,7 @@ import { ServiceType } from "#screens"
 export interface CgCalendarDayProps {
   date: string & DateData
   state: DayState
-  selected: string
+  selected: Date
   dates: visitingAvailableTime[]
   month: Date
   serviceType: ServiceType

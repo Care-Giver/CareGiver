@@ -41,8 +41,8 @@ import { BASE_URL, CONFIG } from "../../services/axios/axios-config"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
-  // const { dateParam } = route.params
-  // console.log(dateParam)
+  const { date } = route.params
+  console.log(date)
 
   // isEnabled가 true인 경우 서비스 가능 toggle on
   const [isEnabled, setIsEnabled] = useState(false)
@@ -69,9 +69,19 @@ export const SetCrecheServiceDayScreen: FC<
   console.log(price)
 
   const onPress = () => {
-    console.log("저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다")
+    console.log(
+      "저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다",
+      date,
+      price,
+    )
+    postCrecheDay({
+      startDates: [date],
+      endDates: [date],
+      crecheId: 1871090,
+      fee: 10000,
+    })
     // const response = axios.get(`${BASE_URL}/booking/creche`, CONFIG)
-    // console.log(response)
+    // console.log("response?", response)
 
     // TOOD: crechId 를 가져와서
     // 그 crechId 를 data 에 넣고

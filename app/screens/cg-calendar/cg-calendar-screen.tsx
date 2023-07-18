@@ -48,7 +48,7 @@ export const CgCalendarScreen: FC<
 
   const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
-
+  const [selected, setSelected] = useState<Date>(null)
   const [userId, setUserId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
@@ -71,8 +71,6 @@ export const CgCalendarScreen: FC<
 
   console.log("serviceType in CgCalendarScreen >>>", serviceType)
 
-  const dateParam = "2023-07-12"
-
   return (
     <ScreenRootView testID="CgCalendar">
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
@@ -86,11 +84,13 @@ export const CgCalendarScreen: FC<
       <CgCalendar
         dates={serviceType === "방문" ? visitingDates : crecheDates}
         serviceType={serviceType}
+        selected={selected}
+        setSelected={setSelected}
       />
-      <CgCalendarEditButton
+      {/* <CgCalendarEditButton
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-      />
+      /> */}
 
       {/* 수정 버튼 새로 생성 */}
       <Pressable
@@ -107,10 +107,12 @@ export const CgCalendarScreen: FC<
           width: 358,
         }}
         onPress={() => {
+          console.log("우리의 목표 selected >>>", selected)
+
           {
             serviceType === "방문"
-              ? navigation.navigate("set-visiting-service-day-screen")
-              : navigation.navigate("set-creche-service-day-screen")
+              ? navigation.navigate("set-visiting-service-day-screen", { date: selected })
+              : navigation.navigate("set-creche-service-day-screen", { date: selected })
           }
         }}
       >

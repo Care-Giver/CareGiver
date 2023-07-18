@@ -87,7 +87,7 @@ export const postCrecheDay = async (data: PostCrecheDayBody) => {
 
     // 정확한 데이터가 왔음 response.data
     // return 있어야하는가? 는 혜리님이 결정하실 것
-    return
+    // return
   } catch (error) {
     console.error("postCrecheDay | catch 에러!!!", error)
   }
