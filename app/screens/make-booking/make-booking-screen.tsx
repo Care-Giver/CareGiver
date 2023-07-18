@@ -14,9 +14,16 @@ import { View, ScrollView, Pressable, StyleSheet, Keyboard, Platform } from "rea
 import { useKeyboard } from "@react-native-community/hooks"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { Type } from "#models"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
+type Requests = {
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+  request: string
+}
 
 export const MakeBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "make-booking-screen">
@@ -35,17 +42,6 @@ export const MakeBookingScreen: FC<
     beginDate,
     endDate,
   } = route.params
-  const onPress = () => {
-    navigate("payment-screen", {
-      sitterData: sitterData,
-      service: service,
-      serviceType: serviceType,
-      selectedDate: selectedDate,
-      selectedPets: selectedPets,
-      beginDate: serviceType == "방문" ? beginDate : null,
-      endDate: serviceType == "방문" ? endDate : null,
-    })
-  }
 
   /**
    * 키보드 관련
@@ -152,6 +148,33 @@ export const MakeBookingScreen: FC<
     }
   }
 
+  /**
+   * 4가지 requestText
+   */
+  const [petToolsLocInfo, setPetToolsLocInfo] = useState("")
+  const [avoidFoodInfo, setAvoidFoodInfo] = useState("")
+  const [bondingTipsInfo, setBondingTipsInfo] = useState("")
+  const [request, setRequest] = useState("")
+  const Requests: Requests = {
+    petToolsLocInfo: petToolsLocInfo,
+    avoidFoodInfo: avoidFoodInfo,
+    bondingTipsInfo: bondingTipsInfo,
+    request: request,
+  }
+  const onPress = () => {
+    console.log("petToolsLocInfo: ", petToolsLocInfo)
+    navigate("payment-screen", {
+      sitterData: sitterData,
+      service: service,
+      serviceType: serviceType,
+      selectedDate: selectedDate,
+      selectedPets: selectedPets,
+      beginDate: serviceType == "방문" ? beginDate : null,
+      endDate: serviceType == "방문" ? endDate : null,
+      Requests: Requests,
+    })
+  }
+
   return (
     <ScreenRootView testID="MakeBooking" type="View">
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -167,6 +190,8 @@ export const MakeBookingScreen: FC<
         <PlaceHolderInputBox
           placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
           boxHeight={78}
+          text={petToolsLocInfo}
+          setText={setPetToolsLocInfo}
         />
 
         <PreBol14
@@ -202,6 +227,8 @@ export const MakeBookingScreen: FC<
           placeholderText="주의할 음식을 직접 작성해주세요!"
           boxHeight={78}
           onPressIn={() => textboxClick("먹으면안되는음식")}
+          text={avoidFoodInfo}
+          setText={setAvoidFoodInfo}
         />
         <PreBol14
           style={{ marginTop: 24, marginBottom: 14 }}
@@ -236,6 +263,8 @@ export const MakeBookingScreen: FC<
           placeholderText="꿀팁을 자유롭게 작성해주세요"
           boxHeight={78}
           onPressIn={() => textboxClick("꿀팁")}
+          text={bondingTipsInfo}
+          setText={setBondingTipsInfo}
         />
         {/**
         <PreBol14
@@ -280,6 +309,8 @@ export const MakeBookingScreen: FC<
         <PlaceHolderInputBox
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
+          text={request}
+          setText={setRequest}
         />
       </KeyboardAwareScrollView>
       {isButtonShown && (

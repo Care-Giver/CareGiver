@@ -31,6 +31,8 @@ import {
 export interface PaymentParams {
   params: IMPData.PaymentData
   tierCode?: string
+  serviceType: string
+  amount: string
 }
 
 export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스" | "신용/체크카드"
@@ -65,12 +67,13 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       selectedPets,
       beginDate,
       endDate,
+      Requests,
     } = route.params
 
     //* 로그인된 유저 정보
     const [userMe, setUserMe] = React.useState<User>()
 
-    //* axios 사용하여 유저정보 초기화
+    //* axios 사용하여 유저정보, totalFee 초기화
     React.useLayoutEffect(() => {
       getUsers().then((res) => setUserMe(res))
       const VisitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
@@ -117,6 +120,8 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           escrow,
         },
         tierCode,
+        serviceType: serviceType,
+        amount: amount,
       }
 
       // 신용카드의 경우, 할부기한 추가

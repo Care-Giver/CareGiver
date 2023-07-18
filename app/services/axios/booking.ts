@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-//* 위탁예얘약 생성
+//* 위탁예약 생성
 export interface CreateCrecheBookingInput {
   crecheId: number
   userId: number
@@ -35,6 +35,7 @@ export const postCrecheBooking = async (
 
     if (!response.data.ok) {
       const error = response.data.error
+      console.log(response.data)
       console.error("response.data.error 에러!!!", error)
       // @ts-ignore
       return error
@@ -51,6 +52,8 @@ export const postCrecheBooking = async (
 }
 
 //* 방문 예약 생성
+
+//? requestBody
 export interface CreateVisitingBookingInput {
   visitingId: number
   userId: number
@@ -65,18 +68,31 @@ export interface CreateVisitingBookingInput {
   avoidFoodInfo: string
   bondingTipsInfo: string
 }
-
-interface CreateVisitingBookingInputResponse extends GeneralResponse {
-  CreateVisitingBookingInput: CreateVisitingBookingInput
+//? responseBody
+export interface CreateVisitingBookingRes {
+  id: number
+  createAt: Date
+  updatedAt: Date
+  status: string
+  reviewStatus: string
+  destination: string
+  visitingId: string
+  request: string
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+}
+interface CreateVisitingBookingResponse extends GeneralResponse {
+  CreateVisitingBookingResponse: CreateVisitingBookingRes
 }
 /**
- * @returns {Promise<CreateVisitingBookingInput>}
+ * @returns {Promise<CreateVisitingBookingResponse>}
  */
 export const postVisitingBooking = async (
   post: CreateVisitingBookingInput,
-): Promise<CreateVisitingBookingInput> => {
+): Promise<CreateVisitingBookingResponse> => {
   try {
-    const response = await axios.post<CreateVisitingBookingInputResponse>(
+    const response = await axios.post<CreateVisitingBookingResponse>(
       `${BASE_URL}/booking/Visiting`,
       post,
       CONFIG,
@@ -93,9 +109,9 @@ export const postVisitingBooking = async (
     console.log("response.data", response.data)
     console.log(
       "response.data.CreateVisitingBookingInputs",
-      response.data.CreateVisitingBookingInput,
+      response.data.CreateVisitingBookingResponse,
     )
-    return response.data.CreateVisitingBookingInput
+    return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
     return null
