@@ -49,7 +49,7 @@ export const CgCalendarScreen: FC<
   const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
   const [selected, setSelected] = useState<Date>(null)
-  const [userId, setUserId] = useState(1)
+  const [crecheId, setCrecheId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
     if (serviceType == "방문") {
@@ -61,10 +61,10 @@ export const CgCalendarScreen: FC<
 
   useEffect(() => {
     if (serviceType == "방문") {
-      setAllVisitingAvailableTimes(userId)
+      setAllVisitingAvailableTimes(crecheId)
       setVisitingDates(visitingAvailableTimes)
     } else {
-      setAllCrecheDays(userId)
+      setAllCrecheDays(crecheId)
       setCrecheDates(crecheDays)
     }
   }, [serviceType])
@@ -111,8 +111,14 @@ export const CgCalendarScreen: FC<
 
           {
             serviceType === "방문"
-              ? navigation.navigate("set-visiting-service-day-screen", { date: selected })
-              : navigation.navigate("set-creche-service-day-screen", { date: selected })
+              ? navigation.navigate("set-visiting-service-day-screen", {
+                  date: selected,
+                  crecheId: crecheId,
+                })
+              : navigation.navigate("set-creche-service-day-screen", {
+                  date: selected,
+                  crecheId: crecheId,
+                })
           }
         }}
       >

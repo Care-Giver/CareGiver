@@ -169,8 +169,8 @@ export type NavigatorParamList = {
   "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "cancel-reservation-screen": undefined
-  "set-visiting-service-day-screen": { date: Date }
-  "set-creche-service-day-screen": { date: Date }
+  "set-visiting-service-day-screen": { date: Date; crecheId: number }
+  "set-creche-service-day-screen": { date: Date; crecheId: number }
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()

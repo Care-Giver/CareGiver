@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import React, { FC, useState } from "react"
 import { ScrollView, StyleSheet, View, Switch, Text, Modal, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -8,7 +8,6 @@ import {
   ConditionalButton,
   DivisionLine,
   PreBol16,
-  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -30,8 +29,6 @@ import { Image } from "react-native"
 import { images } from "#images"
 import { POPPINS_SEMIBOLD } from "#fonts"
 import { postCrecheDay } from "#axios"
-import axios from "axios"
-import { BASE_URL, CONFIG } from "../../services/axios/axios-config"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -41,8 +38,8 @@ import { BASE_URL, CONFIG } from "../../services/axios/axios-config"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
-  const { date } = route.params
-  console.log(date)
+  const { date, crecheId } = route.params
+  console.log(date, crecheId)
 
   // isEnabled가 true인 경우 서비스 가능 toggle on
   const [isEnabled, setIsEnabled] = useState(false)
@@ -54,7 +51,7 @@ export const SetCrecheServiceDayScreen: FC<
   // 1박당 가격 설정하기 누르면 모달창 뜨게 관리
   const [priceModalOpen, setPricemodalOpen] = useState(false)
   // 모달창에서 price 입력 후 저장하기 버튼 클릭하면 price에 값 저장.
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState(null)
 
   //*가격 모달창에서 모달 창 닫을때 넣어주는 함수
   const handlepriceModalHide = () => {
@@ -73,22 +70,15 @@ export const SetCrecheServiceDayScreen: FC<
       "저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다",
       date,
       price,
+      crecheId,
     )
+    // fee는 WeightModal창에서 입력 받은 값이나 현재 4자리까지밖에 입력이 안됨...
     postCrecheDay({
       startDates: [date],
       endDates: [date],
-      crecheId: 1871090,
-      fee: 10000,
+      crecheId: crecheId,
+      fee: price,
     })
-    // const response = axios.get(`${BASE_URL}/booking/creche`, CONFIG)
-    // console.log("response?", response)
-
-    // TOOD: crechId 를 가져와서
-    // 그 crechId 를 data 에 넣고
-    // postCrecheDay 에 담을 것
-
-    // TODO: 제대로된 데이터 넣을 것
-    // postCrecheDay({})
   }
 
   return (
@@ -256,22 +246,5 @@ const styles = StyleSheet.create({
     fontFamily: POPPINS_SEMIBOLD,
     fontSize: 24,
     color: GIVER_CASUAL_NAVY,
-  },
-  modalContent: {
-    width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-    height: 226,
-    backgroundColor: "white",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    alignSelf: "center",
-    borderStyle: "solid",
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4,
-    // elevation: 5,
   },
 })
