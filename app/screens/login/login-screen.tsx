@@ -13,9 +13,14 @@ import {
   KakaoOAuthToken,
   KakaoProfile,
 } from "@react-native-seoul/kakao-login"
+import appleAuth, {
+  AppleRequestOperation,
+  AppleRequestScope,
+} from "@invertase/react-native-apple-authentication"
 import { GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
+import { AppleLoginOutput, appleServerLogin } from "#axios"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -41,6 +46,53 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       } catch (err) {
         console.error("login err", err)
         alertModal("카카오 로그인 실패", err?.message)
+      }
+    }
+
+    /**
+     * [테스트 결과]
+     * login:
+     * - 로그인 진행
+     * - 현재 기기에 등록되어있는 AppleID를 가지고 와 로그인 진행
+     * - 해당 아이디에 비밀번호 입력 후, 로그인 완료 처리됨
+     * - 유저 토큰을 setRefreshToken에 일단 등록하나, 명칭 변경이 필요해보임.
+     */
+    const signInWithApple = async (): Promise<void> => {
+      try {
+        // 1. 로그인 요청을 애플 서버에 보낸다.
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+          requestedOperation: appleAuth.Operation.LOGIN,
+          requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        })
+
+        // 2. 만약 유저가 로그인을 취소했다면 response를 null로 처리한다.
+        if (!appleAuthRequestResponse) {
+          console.log("로그인 취소함.")
+          return
+        }
+
+        // 3. 서버에 IdentityToken을 전송하여 로그인을 진행한다.
+        const { identityToken, user, email, fullName } = appleAuthRequestResponse
+
+        // Call your own server API
+        const userToken = await appleServerLogin(identityToken)
+
+        console.log(userToken)
+
+        // 4. state를 업데이트한다.
+        setLoggedIn(true)
+        setRefreshToken(userToken)
+
+        // setResult 함수 용도를 알 수 없음. 일단 여기 jwtToken 저장함.
+        setResult(userToken)
+      } catch (error) {
+        if (error.code === "1001") {
+          console.log("Apple sign-in was cancelled by the user.")
+          alertModal("애플 로그인 실패", "Apple sign-in was cancelled by the user.")
+        } else {
+          console.error("Apple sign-in error", error)
+          alertModal("애플 로그인 실패", error?.message)
+        }
       }
     }
 
@@ -106,7 +158,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const appleLogin = async () => {
       //
-      alertModal("애플 로그인", "개발중")
+      await signInWithApple()
+      goBack()
     }
 
     const noAuthLogin = async () => {
@@ -168,8 +221,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           <Button onPress={naverLogin} style={styles.naverLogin}>
             <PreBol16 text="네이버 로그인" color={palette.white} />
           </Button>
-          <Button onPress={googleLogin} style={styles.appleGoogleLogin}>
-            <PreBol16 text="구글/애플 로그인" color={palette.white} />
+          <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
+            <PreBol16 text="애플 로그인" color={palette.white} />
           </Button>
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreBol16 text="테스트용 로그인 (Auth 없음)" color={palette.white} />
