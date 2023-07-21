@@ -6,7 +6,7 @@ import { CgCalendarDayProps } from "./cg-calendar-day.props"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month, serviceType } = props
+  const { date, state, selected, dates, month, serviceType, startDate, endDate } = props
   const [fee, setFee] = React.useState(null)
   const [availableTime, setAvailableTime] = React.useState(false)
 
@@ -16,7 +16,22 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     checkDate()
   }, [date, dates])
 
+  //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
+  const checkMiddleDate = ({ date }) => {
+    //console.log("s: ", startDate, "e: ", endDate)
+
+    const confirmedDate = new Date(date?.dateString)
+    if (startDate <= confirmedDate && confirmedDate <= endDate) {
+      console.log("check!")
+      return true
+    }
+    //console.log("no!!!!!!!!")
+    return false
+  }
   const textBgBdSelectior = ({ date, state }) => {
+    if (checkMiddleDate({ date })) {
+      return GIVER_CASUAL_NAVY
+    }
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
     }
@@ -26,6 +41,9 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return "white"
   }
   const textColorSelector = ({ date, state }) => {
+    if (checkMiddleDate(date)) {
+      return "white"
+    }
     if (availableTime) {
       if (date.dateString == selected) {
         return "white"
@@ -47,6 +65,9 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return DISABLED
   }
   const feeTextColorSelector = ({ date, state }) => {
+    if (checkMiddleDate(date)) {
+      return "#324C89"
+    }
     if (date.dateString == selected) {
       return "#324C89"
     }

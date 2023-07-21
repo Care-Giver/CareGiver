@@ -14,15 +14,49 @@ import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-cale
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const { dates, serviceType } = props
   const [selected, setSelected] = React.useState("")
+
+  //* serviceType == "위탁"일 때 startDate와 endDate 관리
+  const [crecheStartToggle, setCrecheStartToggle] = React.useState(false)
+  const [crecheEndToggle, setCrecheEndToggle] = React.useState(false)
+  const [startDate, setStartDate] = React.useState(null)
+  const [endDate, setEndDate] = React.useState(null)
+
+  React.useEffect(() => {
+    if (serviceType == "위탁") {
+      if (crecheStartToggle == true && crecheEndToggle == false) {
+        const newStartDate = new Date(selected)
+        //? 다른 주기를 선택해야할 때 endDate가 남아있어서 null처리
+        if (endDate != null) {
+          setEndDate(null)
+        }
+        setStartDate(newStartDate)
+      }
+      if (crecheStartToggle == false && crecheEndToggle == true) {
+        const newEndDate = new Date(selected)
+        setEndDate(newEndDate)
+      }
+    }
+  }, [crecheStartToggle, crecheEndToggle])
+
   const hasDates = dates.length !== 0
 
-  console.log("serviceType in CgCalendar >>>", serviceType)
-  console.log("dates in CgCalendar >>>", dates)
-  console.log("♦️")
+  //console.log("serviceType in CgCalendar >>>", serviceType)
+  //console.log("dates in CgCalendar >>>", dates)
+  //console.log("♦️")
 
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
-    console.log(currentMonth)
+    if (crecheStartToggle == false) {
+      setCrecheStartToggle(!crecheStartToggle)
+      if (crecheEndToggle == true) {
+        setCrecheEndToggle(false)
+      }
+    } else {
+      setCrecheEndToggle(!crecheEndToggle)
+      setCrecheStartToggle(!crecheStartToggle)
+    }
+
+    //console.log(currentMonth)
   }
 
   const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
@@ -55,6 +89,8 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
                 dates={dates}
                 month={currentMonth}
                 serviceType={serviceType}
+                startDate={startDate}
+                endDate={endDate}
               />
             )}
           </Pressable>

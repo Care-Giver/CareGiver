@@ -10,4 +10,7 @@ export interface CgCalendarDayProps {
   dates: groupedVisitingAvailableTimesByDate[]
   month: Date
   serviceType: ServiceType
+
+  startDate: Date
+  endDate: Date
 }
