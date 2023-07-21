@@ -22,6 +22,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
 
     const confirmedDate = new Date(date?.dateString)
     if (startDate <= confirmedDate && confirmedDate <= endDate) {
+      console.log(confirmedDate)
       console.log("check!")
       return true
     }
@@ -41,7 +42,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return "white"
   }
   const textColorSelector = ({ date, state }) => {
-    if (checkMiddleDate(date)) {
+    if (checkMiddleDate({ date })) {
       return "white"
     }
     if (availableTime) {
@@ -65,7 +66,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return DISABLED
   }
   const feeTextColorSelector = ({ date, state }) => {
-    if (checkMiddleDate(date)) {
+    if (checkMiddleDate({ date })) {
       return "#324C89"
     }
     if (date.dateString == selected) {
