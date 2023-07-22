@@ -135,7 +135,7 @@ export const CaregiverDetailInformationScreen: FC<
 
   return (
     //! FullWidthSizeImagesBoxWithIndicator 컴포넌트와 MakeBookingButton 컴포넌트 때문에, ScrollView 를 내부에 사용한다
-    //! 따라서, ScreenRootView 는 fixed 로 한다
+    //! 따라서, Screen 는 fixed 로 한다
     //! 이에따라, 스크린 엣지 기본 padding 도 컴포넌트마다 각각 적용해야 한다
     <Screen
       style={{

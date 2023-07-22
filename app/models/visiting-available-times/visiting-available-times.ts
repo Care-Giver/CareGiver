@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import {
   getVisitingAvailableTimes,
-  visitingAvailableTime,
+  groupedVisitingAvailableTimesByDate,
 } from "../../services/axios/visiting-available-time"
 
 /**
@@ -11,7 +11,10 @@ import {
 export const VisitingAvailableTimesModel = types
   .model("VisitingAvailableTimes")
   .props({
-    visitingAvailableTimes: types.optional(types.frozen<visitingAvailableTime[] | null>(), null),
+    visitingAvailableTimes: types.optional(
+      types.frozen<groupedVisitingAvailableTimesByDate[] | null>(),
+      null,
+    ),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -20,7 +23,7 @@ export const VisitingAvailableTimesModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    setResponse(response: visitingAvailableTime[]) {
+    setResponse(response: groupedVisitingAvailableTimesByDate[]) {
       self.visitingAvailableTimes = response
     },
   }))
@@ -29,7 +32,10 @@ export const VisitingAvailableTimesModel = types
       // const visitingAvailableTimes = await getvisitingAvailableTimes(visitingId)
       // self.visitingAvailableTimes = visitingAvailableTimes
       await getVisitingAvailableTimes(visitingId)
-        .then((res) => self.setResponse(res))
+        .then((res) => {
+          self.setResponse(res)
+          console.log("model: ", res)
+        })
         .catch((res) => console.error(res))
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

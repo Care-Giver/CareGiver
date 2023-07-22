@@ -3,8 +3,8 @@ import { StyleProp, ViewStyle } from "react-native"
 import { color } from "#theme"
 
 /**
- * KeyboardAvoidingView가 포함된 ScreenRootView를 사용
- * 포함되지 않고, View만 사용되는 ScreenRootView 사용
+ * KeyboardAvoidingView가 포함된 Screen를 사용
+ * 포함되지 않고, View만 사용되는 Screen 사용
  */
 type Type = "KeyboardAvoidingView" | "View"
 
@@ -50,7 +50,7 @@ export interface ScreenProps {
    */
   keyboardShouldPersistTaps?: "handled" | "always" | "never"
   /**
-   * Do you want to include KeyboardAvoidingView or View in ScreenRootView ?
+   * Do you want to include KeyboardAvoidingView or View in Screen ?
    * Defaults to KeyboardAvoidingView.
    */
   type?: Type

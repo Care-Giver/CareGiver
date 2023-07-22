@@ -6,7 +6,7 @@
 // import {
 //   PopReg28,
 //   PreBol18,
-//   ScreenRootView,
+//   Screen,
 //   SitterProfileCard,
 //   RowRoundedButton,
 // } from "#components"
@@ -63,7 +63,7 @@
 //     // }, [third]);
 
 //     return (
-//       <ScreenRootView>
+//       <Screen>
 //         <MapView
 //           style={styles.map}
 //           provider={PROVIDER_GOOGLE} //! iOS 도 구글지도 사용
@@ -88,7 +88,7 @@
 //           latitude: {location.latitude} {"\n"}
 //           longitude: {location.longitude}
 //         </PopReg28>
-//       </ScreenRootView>
+//       </Screen>
 //     )
 //   },
 // )

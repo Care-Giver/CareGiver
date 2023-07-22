@@ -682,7 +682,6 @@ const PoppinsSemiBold = (props: TextProps) => {
         style,
         {
           fontFamily: POPPINS_SEMIBOLD,
-          fontWeight: "bold",
           includeFontPadding: false,
           fontSize: size,
           color: color,

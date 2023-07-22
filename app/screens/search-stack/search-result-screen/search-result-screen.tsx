@@ -120,7 +120,7 @@ export const SearchResultScreen: FC<
   }, [])
 
   return (
-    // <ScreenRootView statusBar="dark-content">
+    // <Screen statusBar="dark-content">
     <Screen>
       <Animated.View
         style={{

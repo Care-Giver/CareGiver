@@ -49,6 +49,9 @@ import {
   CgMypageScreen,
   BookingDetailScreen,
   LoginScreen,
+  CancelReservationScreen,
+  SetVisitingServiceDayScreen,
+  SetCrecheServiceDayScreen,
   PastBookingsScreen,
   MakeBookingScreen,
   PaymentScreen,
@@ -136,6 +139,8 @@ export type NavigatorParamList = {
 
   // CG - 달력 스택
   "cg-calendar-list-screen": undefined
+  "set-visiting-service-day-screen": { date: Date; crecheId: number }
+  "set-creche-service-day-screen": { date: Date; crecheId: number }
 
   // CG - 예약관리 스택
   "manage-booking-screen": undefined
@@ -183,6 +188,7 @@ export type NavigatorParamList = {
   "test-iamport-screen": undefined
   "test-iamport-payment-screen": undefined
   "test-iamport-payment-result-screen": undefined
+  "cancel-reservation-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -804,6 +810,26 @@ const CalendarStack = () => {
         name="cg-calendar-screen"
         component={CgCalendarScreen}
         options={{
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* CG - 위탁, 날짜 별 서비스 수정 */}
+      <Stack.Screen
+        name="set-creche-service-day-screen"
+        component={SetCrecheServiceDayScreen}
+        options={{
+          title: "날짜 별 서비스 수정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* CG - 방문, 날짜 별 서비스 수정 */}
+      <Stack.Screen
+        name="set-visiting-service-day-screen"
+        component={SetVisitingServiceDayScreen}
+        options={{
+          title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

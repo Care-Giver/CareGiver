@@ -43,6 +43,7 @@ export const images = {
   placeholder_image: require("../images/placeholder_image.png"),
   plus_grey: require("../images/plus_grey.png"),
   profile_default: require("../images/profile_default.png"),
+  question_mark: require("../images/question_mark.png"),
   radio_active: require("../images/radio_active.png"),
   radio_inactive: require("../images/radio_inactive.png"),
   rating_star: require("../images/rating_star.png"),
