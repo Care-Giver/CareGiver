@@ -13,7 +13,7 @@ import {
   useNavigation,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
   WritingCommentScreen,
   HomeScreen,
@@ -58,6 +58,7 @@ import {
   TestNetworkErrorScreen,
   WriteReviewScreen,
   ViewReviewScreen,
+  TempChatScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -76,6 +77,7 @@ import {
   CgCertificateRegistrationScreenHeader,
   PreMed16,
   CgsetAddressHeader,
+  CustomTabBar,
 } from "#components"
 import { images } from "../../assets/images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
@@ -112,6 +114,7 @@ export type NavigatorParamList = {
   "all-bookings-screen": undefined
   "booking-detail-screen": undefined
   "favorites-screen": undefined
+  "temp-chat-screen": undefined
 
   // * pay stack
   "payment-request-screen": undefined
@@ -475,35 +478,16 @@ const ChatsStack = observer(function ChatsStack() {
     userStore: { type },
   } = useStores()
 
-  const TempChatScreen = ({ navigation }) => {
-    useShowBottomTab(navigation)
-
-    return (
-      <Screen>
-        <View
-          style={{
-            marginVertical: 200,
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </Screen>
-    )
-  }
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
         animation: "slide_from_right",
       }}
-      //  @ts-ignore
       initialRouteName="temp-chat-screen"
     >
       {/* //* 채팅 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="temp-chat-screen"
         component={TempChatScreen}
         options={{
@@ -627,80 +611,86 @@ const ClientTabs = () => {
         headerStyle: { backgroundColor: "white" },
       }}
       initialRouteName="Searching"
+      tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
         name="Favorites"
         component={FavoritesStack}
         options={{
-          tabBarLabel: "즐겨찾기",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="cards-heart"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
+          // tabBarLabel: "즐겨찾기",
+          tabBarLabel: "cards-heart",
+          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          // tabBarIcon: ({ focused }) => (
+          // <MaterialCommunityIcons
+          // name="cards-heart"
+          // size={24}
+          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+          // />
+          // ),
         }}
       />
       <Tab.Screen
         name="Bookings"
         component={BookingsStack}
         options={{
-          tabBarLabel: "예약내역",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="calendar-multiselect"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
+          // tabBarLabel: "예약내역",
+          tabBarLabel: "calendar-multiselect",
+          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          // tabBarIcon: ({ focused }) => (
+          // <MaterialCommunityIcons
+          // name="calendar-multiselect"
+          // size={24}
+          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+          // />
+          // ),
         }}
       />
       <Tab.Screen
         name="Searching"
         component={SearchingStack}
         options={{
-          tabBarLabel: "검색",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="magnify"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
+          // tabBarLabel: "검색",
+          tabBarLabel: "magnify",
+          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          // tabBarIcon: ({ focused }) => (
+          // <MaterialCommunityIcons
+          // name="magnify"
+          // size={24}
+          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+          // />
+          // ),
         }}
       />
       <Tab.Screen
         name="Chats"
         component={ChatsStack}
         options={{
-          tabBarLabel: "채팅",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="forum"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
+          // tabBarLabel: "채팅",
+          tabBarLabel: "forum",
+          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          // tabBarIcon: ({ focused }) => (
+          // <MaterialCommunityIcons
+          // name="forum"
+          // size={24}
+          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+          // />
+          // ),
         }}
       />
       <Tab.Screen
         name="Mypage"
         component={MypageStack}
         options={{
-          tabBarLabel: "내정보",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
+          // tabBarLabel: "내정보",r
+          tabBarLabel: "account",
+          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
+          // tabBarIcon: ({ focused }) => (
+          // <MaterialCommunityIcons
+          // name="account"
+          // size={24}
+          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
+          // />
+          // ),
         }}
       />
     </Tab.Navigator>
