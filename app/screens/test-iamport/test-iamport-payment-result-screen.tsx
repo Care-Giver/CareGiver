@@ -8,7 +8,7 @@ import { Button, PreReg18, ScreenRootView } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
 import { postPayment } from "../../services/axios/payment"
-import { postVisitingBooking } from "../../services/axios/booking"
+import { postCrecheBooking, postVisitingBooking } from "../../services/axios/booking"
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
   if (typeof value === "string") return value === "true"
@@ -37,6 +37,20 @@ export const TestIamportPaymentResultScreen: FC<
   const error_msg = response?.error_msg
   const amount = route.params.amount
   const serviceType = route.params.serviceType
+
+  //? 예약 생성 api를 위한 값들
+  const visitingId = route.params.visitingId
+  const userId = route.params.userId
+  const request = route.params.request
+  const services = route.params.services
+  const destination = route.params.destination
+  const selectedDate = route.params.selectedDate
+  const startTime = route.params.startTime
+  const endTime = route.params.endTime
+  const petIds = route.params.petIds
+  const petToolsLocInfo = route.params.petToolsLocInfo
+  const avoidFoodInfo = route.params.avoidFoodInfo
+  const bondingTipsInfo = route.params.bondingTipsInfo
   // [WARNING: 이해를 돕기 위한 것일 뿐, imp_success 또는 success 파라미터로 결제 성공 여부를 장담할 수 없습니다.]
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
   const isSuccess =
@@ -49,29 +63,53 @@ export const TestIamportPaymentResultScreen: FC<
         imp_success: imp_success,
         isRefunded: true,
         totalFee: amount,
+
         //route.params.amount,
       }).then((res) => {
         if (res.ok) {
           //? 결제생성 api가 정상적으로 작동했다면 "방문" or "위탁"에따른 예약생성
           if (serviceType == "방문") {
+            console.log(
+              userId,
+              startTime,
+              endTime,
+              destination,
+              request,
+              petToolsLocInfo,
+              avoidFoodInfo,
+              bondingTipsInfo,
+            )
             postVisitingBooking({
               //? dummy
-              visitingId: 16,
-              userId: 2,
-              request: "꼭 준비된 사료를 먹여주세요.",
-              services: ["사료 및 물 급여", "실내 놀이", "배변처리 및 환경정리"],
-              destination: "경기도 안산시 한양대학로 55",
-              startTime: ["2022-09-14T22:00:00"],
-              endTime: ["2022-09-14T22:00:00"],
-              petIds: [1, 2],
-              paymentId: 111,
-              petToolsLocInfo: "사료는 주방 싱크대 밑에 있는 장에 있어요.",
-              avoidFoodInfo: "우리 아이는 닭고기에 알러지가 있어서 급여를 자제해주세요.",
-              bondingTipsInfo:
-                "터그놀이를 해주면 금방 친해져요. 다만 흥분했을 때 물리지 않게 주의해주세요!",
+              visitingId: 2,
+              userId: userId,
+              request: request,
+              services: services,
+              destination: "경기도 안산시 한양대학로 55", //destination, //? admin상 null로 되어있어서 잠깐 testdata
+              startTime: startTime,
+              endTime: endTime,
+              petIds: petIds,
+              paymentId: res.paymentId,
+              petToolsLocInfo: petToolsLocInfo,
+              avoidFoodInfo: avoidFoodInfo,
+              bondingTipsInfo: bondingTipsInfo,
             })
           } else if (serviceType == "위탁") {
-            //TODO 위탁예약 api의 requestbody 문제 해결되면 추가작업
+            postCrecheBooking({
+              crecheId: 2,
+              userId: userId,
+              request: request,
+              services: services,
+              startDate: selectedDate.dateString,
+              endDate: selectedDate.dateString,
+              petIds: petIds,
+              paymentId: res.paymentId,
+              avoidFoodInfo: avoidFoodInfo,
+              bondingTipsInfo: bondingTipsInfo,
+              //TODO 백엔드측에서 해당 값 제거한다면 제거해야할 값(totalFee, defalutFee)
+              totalFee: 10000,
+              defalutFee: 5000,
+            })
           }
         }
       })

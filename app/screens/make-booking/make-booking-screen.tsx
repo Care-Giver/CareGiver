@@ -35,7 +35,7 @@ export const MakeBookingScreen: FC<
   // const navigation = useNavigation()
   const {
     sitterData,
-    service,
+    services,
     serviceType,
     selectedDate,
     selectedPets,
@@ -155,7 +155,7 @@ export const MakeBookingScreen: FC<
   const [avoidFoodInfo, setAvoidFoodInfo] = useState("")
   const [bondingTipsInfo, setBondingTipsInfo] = useState("")
   const [request, setRequest] = useState("")
-  const Requests: Requests = {
+  const requests: Requests = {
     petToolsLocInfo: petToolsLocInfo,
     avoidFoodInfo: avoidFoodInfo,
     bondingTipsInfo: bondingTipsInfo,
@@ -165,13 +165,13 @@ export const MakeBookingScreen: FC<
     console.log("petToolsLocInfo: ", petToolsLocInfo)
     navigate("payment-screen", {
       sitterData: sitterData,
-      service: service,
+      services: services,
       serviceType: serviceType,
       selectedDate: selectedDate,
       selectedPets: selectedPets,
       beginDate: serviceType == "방문" ? beginDate : null,
       endDate: serviceType == "방문" ? endDate : null,
-      Requests: Requests,
+      requests: requests,
     })
   }
 
@@ -183,16 +183,20 @@ export const MakeBookingScreen: FC<
           color={DISABLED}
           text={"상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다 :)"}
         />
-        <PreBol14
-          style={{ marginTop: 24, marginBottom: 8 }}
-          text={"펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"}
-        />
-        <PlaceHolderInputBox
-          placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
-          boxHeight={78}
-          text={petToolsLocInfo}
-          setText={setPetToolsLocInfo}
-        />
+        {serviceType == "방문" ? (
+          <View>
+            <PreBol14
+              style={{ marginTop: 24, marginBottom: 8 }}
+              text="펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"
+            />
+            <PlaceHolderInputBox
+              placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
+              boxHeight={78}
+              text={petToolsLocInfo}
+              setText={setPetToolsLocInfo}
+            />
+          </View>
+        ) : null}
 
         <PreBol14
           style={{ marginTop: 24, marginBottom: 14 }}

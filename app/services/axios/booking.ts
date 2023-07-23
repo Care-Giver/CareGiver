@@ -9,13 +9,12 @@ export interface CreateCrecheBookingInput {
   services: string[]
   startDate: string
   endDate: string
-  totalFee: number
-  defalutFee: number
   petIds: number[]
   paymentId: number
-  petToolsLocInfo: string
   avoidFoodInfo: string
   bondingTipsInfo: string
+  totalFee: number
+  defalutFee: number
 }
 interface CreateCrecheBookingInputResponse extends GeneralResponse {
   CreateCrecheBookingInput: CreateCrecheBookingInput
@@ -36,7 +35,7 @@ export const postCrecheBooking = async (
     if (!response.data.ok) {
       const error = response.data.error
       console.log(response.data)
-      console.error("response.data.error 에러!!!", error)
+      console.error("postCrecheBooking response.data.error 에러!!!", error)
       // @ts-ignore
       return error
     }
@@ -92,15 +91,17 @@ export const postVisitingBooking = async (
   post: CreateVisitingBookingInput,
 ): Promise<CreateVisitingBookingResponse> => {
   try {
+    console.log(post)
     const response = await axios.post<CreateVisitingBookingResponse>(
-      `${BASE_URL}/booking/Visiting`,
+      `${BASE_URL}/booking/visiting`,
       post,
       CONFIG,
     )
 
     if (!response.data.ok) {
       const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
+      console.error("postVisitingBooking response.data.error 에러!!!", error)
+      console.log(response.data)
       // @ts-ignore
       return error
     }

@@ -24,6 +24,7 @@ import {
   postCrecheTotalFee,
   postVisitingTotalFee,
   CalculateVisitingTotalFeeInput,
+  CalculateCrecheTotalFeeInput,
 } from "../../services/axios/payment-calculate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -32,7 +33,18 @@ export interface PaymentParams {
   params: IMPData.PaymentData
   tierCode?: string
   serviceType: string
-  amount: string
+  visitingId: number
+  userId: number
+  request: string
+  services: string[]
+  destination: string
+  selectedDate: string
+  startTime: string[]
+  endTime: string[]
+  petIds: number[]
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
 }
 
 export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스" | "신용/체크카드"
@@ -61,30 +73,44 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [digital, setDigital] = React.useState(false)
     const {
       sitterData,
-      service,
+      services,
       serviceType,
       selectedDate,
       selectedPets,
       beginDate,
       endDate,
-      Requests,
+      requests,
     } = route.params
-
+    console.log(requests)
     //* 로그인된 유저 정보
     const [userMe, setUserMe] = React.useState<User>()
 
     //* axios 사용하여 유저정보, totalFee 초기화
     React.useLayoutEffect(() => {
       getUsers().then((res) => setUserMe(res))
-      const VisitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
-        //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.
-        visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
-        startTime: beginDate,
-        endTime: endDate,
-        petIds: selectedPets,
+      if (serviceType == "방문") {
+        const visitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
+          //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.
+          visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
+          startTime: beginDate,
+          endTime: endDate,
+          petIds: selectedPets,
+        }
+        console.log(visitingTotalFeeInput)
+        postVisitingTotalFee(visitingTotalFeeInput).then((res) =>
+          setAmount(res.totalFee.toString()),
+        )
+      } else if (serviceType == "위탁") {
+        const crecheTotalFeeInput: CalculateCrecheTotalFeeInput = {
+          crecheId: sitterData.id,
+          startDate: selectedDate.dateString,
+          endDate: selectedDate.dateString,
+          petIds: selectedPets,
+        }
+        console.log("crecheTotalFeeInput: ", crecheTotalFeeInput)
+        postCrecheTotalFee(crecheTotalFeeInput).then((res) => setAmount("10000"))
+        //res.totalFee.toString()))
       }
-      console.log(VisitingTotalFeeInput)
-      postVisitingTotalFee(VisitingTotalFeeInput).then((res) => setAmount(res.totalFee.toString()))
     }, [])
 
     //* 결제 정보에 따른 data update 및 결제스크린 이동
@@ -121,7 +147,20 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
         },
         tierCode,
         serviceType: serviceType,
-        amount: amount,
+
+        //? 예약 생성 api를 위한 값들
+        visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
+        userId: userMe.id,
+        request: requests?.request,
+        services: services,
+        destination: userMe.address,
+        selectedDate: selectedDate,
+        startTime: beginDate,
+        endTime: endDate,
+        petIds: selectedPets,
+        petToolsLocInfo: requests?.petToolsLocInfo,
+        avoidFoodInfo: requests?.avoidFoodInfo,
+        bondingTipsInfo: requests?.bondingTipsInfo,
       }
 
       // 신용카드의 경우, 할부기한 추가

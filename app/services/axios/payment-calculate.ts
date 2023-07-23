@@ -49,10 +49,10 @@ export const postVisitingTotalFee = async (post: CalculateVisitingTotalFeeInput)
 
 //* 위탁 totalFee
 export interface CalculateCrecheTotalFeeInput {
-  visitingId: number
+  crecheId: number
   startDate: string
   endDate: string
-  petId: number[]
+  petIds: number[]
 }
 
 interface CalculateCrecheTotalFeeInputResponse extends GeneralResponse {
@@ -61,9 +61,7 @@ interface CalculateCrecheTotalFeeInputResponse extends GeneralResponse {
 /**
  * @returns {Promise<CalculateCrecheTotalFeeInput>}
  */
-export const postCrecheTotalFee = async (
-  post: CalculateCrecheTotalFeeInput,
-): Promise<CalculateCrecheTotalFeeInput> => {
+export const postCrecheTotalFee = async (post: CalculateCrecheTotalFeeInput): Promise<Fee> => {
   try {
     const response = await axios.post<CalculateCrecheTotalFeeInputResponse>(
       `${BASE_URL}/payment/creche-booking/calculate`,
@@ -73,7 +71,8 @@ export const postCrecheTotalFee = async (
 
     if (!response.data.ok) {
       const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
+      console.log("response.data", response.data)
+      console.error("postCrecheTotalFee response.data.error 에러!!!", error)
       // @ts-ignore
       return error
     }
@@ -81,7 +80,7 @@ export const postCrecheTotalFee = async (
     // console.log("response", response)
     console.log("response.data", response.data)
     console.log("response.data.CalculateCrecheTotalFeeInputs", response.data.totalFee)
-    return response.data.totalFee
+    return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
     return null

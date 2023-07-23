@@ -26,7 +26,7 @@ export const SearchResultScreen: FC<
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
-  const { service, serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
+  const { serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
   console.log(beginDate, endDate)
   console.log(selectedPets)
   //? drop down 클릭 여부
@@ -111,7 +111,7 @@ export const SearchResultScreen: FC<
     //? case2. 서치스크린 이후 넘어오는 경우
     else {
       //? service 할당
-      var _service = service
+      var _service = "펫시팅"
       var _serviceType = serviceType
     }
 
@@ -230,7 +230,6 @@ export const SearchResultScreen: FC<
                   //TODO: params 값 추가해줘야 함
                   navigate("caregiver-detail-information-screen", {
                     sitterData: item,
-                    service: service,
                     serviceType: serviceType,
                     selectedDate: selectedDate,
                     selectedPets: selectedPets,

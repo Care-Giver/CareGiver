@@ -23,8 +23,22 @@ export const TestIamportPaymentScreen: FC<
     console.log("params >>>", params.amount, data.serviceType)
     navigate("test-iamport-payment-result-screen", {
       response: response,
-      serviceType: data.serviceType,
       amount: params.amount,
+      serviceType: data.serviceType,
+
+      //? 예약 생성 api를 위한 값들
+      visitingId: data.visitingId,
+      userId: data.userId,
+      request: data?.request,
+      services: data.services,
+      destination: data.destination,
+      selectedDate: data.selectedDate,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      petIds: data.petIds,
+      petToolsLocInfo: data?.petToolsLocInfo,
+      avoidFoodInfo: data?.avoidFoodInfo,
+      bondingTipsInfo: data?.bondingTipsInfo,
     })
   }
 
