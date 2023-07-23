@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useCallback, useRef, useState } from "react"
 import {
   StyleSheet,
   View,
@@ -13,7 +13,10 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  ConditionalButton,
   DivisionLine,
+  PopSem16,
   PopSem24,
   PreBol14,
   PreBol16,
@@ -25,12 +28,31 @@ import {
   PreReg14,
   PreReg16,
   Screen,
+  TimePicker,
 } from "#components"
 import { BODY, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
 import { POPPINS_SEMIBOLD } from "#fonts"
 import { images } from "#images"
+import BottomSheet from "@gorhom/bottom-sheet"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
+
+// Calculate the number of minutes passed since the start of the hour
+const now = new Date()
+const minutesPassed = now.getMinutes()
+
+// Calculate how many minutes remain to reach the nearest multiple of 5
+const remainder = minutesPassed % 5
+
+// Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
+const nearestPastTime = new Date(now)
+
+// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
+nearestPastTime.setMinutes(minutesPassed - remainder)
+// console.log(nearestPastTime)
+
+// "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
+const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
@@ -42,6 +64,75 @@ export const SetVisitingServiceDayScreen: FC<
   const toggleSwitch = () => {
     setIsEnabled((prev) => !prev)
   }
+
+  //* 시간선택 - TimePicker
+  const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
+  const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+  const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
+
+  // 시간 선택 BottomSheet -> search-screen 참고!
+  const bottomSheetRef = useRef<BottomSheet>(null)
+
+  // 시간선택 BottomSheet - callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log("handleSheetChanges", index)
+  }, [])
+
+  const handleBottomSheet = (isOpen) => {
+    if (isOpen) {
+      bottomSheetRef.current?.expand()
+    } else {
+      bottomSheetRef.current?.collapse()
+    }
+  }
+
+  const timeText = (time: Date) => {
+    const hours = time.getHours()
+    const minute = time.getMinutes()
+    return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
+  }
+
+  const closeBottomSheet = () => {
+    const beginDateText = timeText(beginDate)
+    const endDateText = timeText(endDate)
+    selectedSetTimeText(`${beginDateText} - ${endDateText}`)
+
+    bottomSheetRef.current?.close()
+  }
+
+  console.log(selectedTimeText.length)
+
+  // 서비스 시간 : 오전(오후) 08:00 ~ 오전(오후) 03:00
+  const ServiceTime = (props) => {
+    return (
+      <View style={[styles.box, { marginBottom: 12 }]}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <PreReg16 text="오전" mr={4} />
+          <PopSem16 text={props.startTime} />
+          <PreReg16 text="~" mr={10} />
+          <PreReg16 text="오후" mr={4} />
+          <PopSem16 text={props.endTime} />
+        </View>
+        <Image style={styles.image} source={images.x_grey} />
+      </View>
+    )
+  }
+
+  // 강아지크기별 가격
+  const PricePerSize = (props) => {
+    return (
+      <View>
+        <PreReg14 text={props.size} mb={8} color={BODY} style={{ textAlign: "center" }} />
+        <PreMed14 text={`+${props.price}원`} style={{ textAlign: "center" }} />
+      </View>
+    )
+  }
+
+  // 저장하기 버튼 클릭시 데이터 POST
+  const onPress = () => {
+    console.log("데이터 POST")
+  }
+
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 
@@ -65,29 +156,11 @@ export const SetVisitingServiceDayScreen: FC<
         </View>
         <View style={styles.line} />
         <PreMed18 text="서비스 시간대" mt={16} ml={16} mb={12} />
-        <View style={[styles.box, { marginBottom: 12 }]}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PreReg16 text="오전" mr={4} />
-            <Text style={styles.text}>08:00</Text>
-            <PreReg16 text="~" mr={10} />
-            <PreReg16 text="오후" mr={4} />
-            <Text style={styles.text}>03:00</Text>
-          </View>
-          <Image style={styles.image} source={images.x_grey} />
-        </View>
-        <View style={styles.box}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PreReg16 text="오후" mr={4} />
-            <Text style={styles.text}>03:30</Text>
-            <PreReg16 text="~" mr={10} />
-            <PreReg16 text="오후" mr={4} />
-            <Text style={styles.text}>05:00</Text>
-          </View>
-          <Image style={styles.image} source={images.x_grey} />
-        </View>
-        <Pressable style={styles.boxTwo}>
+        <ServiceTime startTime="08:00" endTime="04:00" style={{ marginBottom: 12 }} />
+        <ServiceTime startTime="03:00" endTime="05:00" />
+        <Pressable style={styles.boxTwo} onPress={() => handleBottomSheet(true)}>
           <Image style={styles.image} source={images.plus_grey} />
-          <PreReg16 text="가능한 시간 추가하기" ml={12} />
+          <PreReg16 text="가능한 시간 추가하기" ml={12} color={BODY} />
         </Pressable>
         <View style={styles.line} />
         <View style={[styles.rowText, { marginTop: 20 }]}>
@@ -112,20 +185,11 @@ export const SetVisitingServiceDayScreen: FC<
           </View>
         </View>
         <View style={styles.dogSizeBox}>
-          <View>
-            <PreReg14 text="소형견" mb={8} />
-            <PreMed14 text="+0원" />
-          </View>
+          <PricePerSize size="소형견" price="0" />
           <View style={styles.verticalLine} />
-          <View>
-            <PreReg14 text="중형견" mb={8} />
-            <PreMed14 text="+0원" />
-          </View>
+          <PricePerSize size="중형견" price="1000" />
           <View style={styles.verticalLine} />
-          <View>
-            <PreReg14 text="대형견" mb={8} />
-            <PreMed14 text="+0원" />
-          </View>
+          <PricePerSize size="대형견" price="2000" />
         </View>
         <View style={styles.totalPriceBox}>
           <View>
@@ -134,14 +198,56 @@ export const SetVisitingServiceDayScreen: FC<
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {/* <Text style={styles.totalPrice}>9,400</Text> */}
-            <PopSem24>9,400</PopSem24>
+            <PopSem24 text="9400" color={GIVER_CASUAL_NAVY} />
             <PreBol16 text="원" ml={2} />
           </View>
+        </View>
+
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={["80%"]}
+          onChange={handleSheetChanges}
+          backgroundStyle={$bottomSheetBackgroundStyleForShadow}
+          enablePanDownToClose
+        >
+          <TimePicker
+            beginDate={beginDate}
+            setBeginDate={setBeginDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
+
+          <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
+            <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
+          </View>
+        </BottomSheet>
+
+        {/* 저장하기 버튼 클릭시 데이터 POST */}
+        <View
+          style={{
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+          }}
+        >
+          <ConditionalButton label="저장하기" isActivated onPress={onPress} />
         </View>
       </ScrollView>
     </Screen>
   )
 })
+
+const $bottomSheetBackgroundStyleForShadow: ViewStyle = {
+  backgroundColor: "white",
+  borderRadius: 32,
+  elevation: 8,
+  shadowColor: "black",
+  shadowOffset: {
+    width: 2,
+    height: 2,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 20,
+}
 
 const styles = StyleSheet.create({
   root: {
