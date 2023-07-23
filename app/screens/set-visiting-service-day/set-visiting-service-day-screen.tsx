@@ -29,6 +29,7 @@ import {
   PreReg16,
   Screen,
   TimePicker,
+  WeightModal,
 } from "#components"
 import { BODY, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
 import { POPPINS_SEMIBOLD } from "#fonts"
@@ -69,6 +70,22 @@ export const SetVisitingServiceDayScreen: FC<
   const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
   const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
   const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
+  const [newTime, setNewTime] = useState(false)
+
+  // 시간당 가격 설정 모달 관련 state
+  const [priceModalOpen, setPricemodalOpen] = useState(false)
+  const [price, setPrice] = useState(null)
+
+  // 시간당 가격 설정 모달 관련 함수
+  const handlepriceModalHide = () => {
+    setPricemodalOpen(false)
+  }
+
+  const handlePriceInput = (newPrice) => {
+    setPrice(newPrice)
+    // isChangeMade()
+  }
+  console.log(price)
 
   // 시간 선택 BottomSheet -> search-screen 참고!
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -97,10 +114,12 @@ export const SetVisitingServiceDayScreen: FC<
     const endDateText = timeText(endDate)
     selectedSetTimeText(`${beginDateText} - ${endDateText}`)
 
+    setNewTime(true)
     bottomSheetRef.current?.close()
   }
 
-  console.log(selectedTimeText.length)
+  console.log(newTime)
+  console.log(selectedTimeText)
 
   // 서비스 시간 : 오전(오후) 08:00 ~ 오전(오후) 03:00
   const ServiceTime = (props) => {
@@ -129,20 +148,17 @@ export const SetVisitingServiceDayScreen: FC<
   }
 
   // 저장하기 버튼 클릭시 데이터 POST
-  const onPress = () => {
-    console.log("데이터 POST")
-  }
+  // const onPress = () => {
+  //   console.log("데이터 POST")
+  // }
 
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
-
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
   return (
     <Screen testID="SetVisitingServiceDay" style={styles.root}>
       <ScrollView>
         <PreBol20 text="날짜 5개" mb={10} ml={16} />
         <DivisionLine height={8} />
+
+        {/* 서비스 가능 토글 영역 */}
         <View style={styles.servicePossible}>
           <PreMed18 text="서비스 가능" />
           <Switch
@@ -154,15 +170,27 @@ export const SetVisitingServiceDayScreen: FC<
             style={styles.switch}
           />
         </View>
+
         <View style={styles.line} />
+
+        {/* 가능한 서비스 시간대 & 시간 추가하기 */}
         <PreMed18 text="서비스 시간대" mt={16} ml={16} mb={12} />
         <ServiceTime startTime="08:00" endTime="04:00" style={{ marginBottom: 12 }} />
         <ServiceTime startTime="03:00" endTime="05:00" />
+        {newTime && (
+          <ServiceTime
+            startTime={selectedTimeText.slice(0, 5)}
+            endTime={selectedTimeText.slice(8, 13)}
+          />
+        )}
         <Pressable style={styles.boxTwo} onPress={() => handleBottomSheet(true)}>
           <Image style={styles.image} source={images.plus_grey} />
           <PreReg16 text="가능한 시간 추가하기" ml={12} color={BODY} />
         </Pressable>
+
         <View style={styles.line} />
+
+        {/* 서비스 요금 설정 시작 */}
         <View style={[styles.rowText, { marginTop: 20 }]}>
           <PreMed18 text="서비스 요금 설정" />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -170,13 +198,20 @@ export const SetVisitingServiceDayScreen: FC<
             <Image style={styles.image} source={images.more_info_bigger} />
           </View>
         </View>
+
+        {/* 서비스 요금 설정 - 시간당 요금 설정 */}
         <View style={[styles.rowText, { marginTop: 25 }]}>
           <PreReg16 text="시간 당" />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => setPricemodalOpen(true)}
+          >
             <PreBol16 text="10,000 원" mr={4} />
             <Image style={styles.image} source={images.arrow_right} />
-          </View>
+          </Pressable>
         </View>
+
+        {/* 서비스 요금 설정 - 강아지별 크기 추가 요금 설정 */}
         <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
           <PreReg16 text="강아지 크기 별 추가 요금" />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -191,17 +226,26 @@ export const SetVisitingServiceDayScreen: FC<
           <View style={styles.verticalLine} />
           <PricePerSize size="대형견" price="2000" />
         </View>
+
+        {/* 시간당 받는 총 금액 */}
         <View style={styles.totalPriceBox}>
           <View>
             <PreBol16 text="내가 시간당 받는 총 금액" mb={4} />
             <PreReg16 text="(수수료 포함)" color={BODY} />
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Text style={styles.totalPrice}>9,400</Text> */}
             <PopSem24 text="9400" color={GIVER_CASUAL_NAVY} />
             <PreBol16 text="원" ml={2} />
           </View>
         </View>
+
+        {/* //시간당 가격 설정  모달 */}
+        <WeightModal
+          visibleState={priceModalOpen}
+          handleModalHide={handlepriceModalHide}
+          title="시간당 받을 요금을 입력해주세요(원)"
+          handleInput={handlePriceInput}
+        />
 
         <BottomSheet
           ref={bottomSheetRef}
@@ -224,13 +268,13 @@ export const SetVisitingServiceDayScreen: FC<
         </BottomSheet>
 
         {/* 저장하기 버튼 클릭시 데이터 POST */}
-        <View
+        {/* <View
           style={{
             paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
           <ConditionalButton label="저장하기" isActivated onPress={onPress} />
-        </View>
+        </View> */}
       </ScrollView>
     </Screen>
   )
@@ -300,7 +344,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: LIGHT_LINE,
     borderRadius: 10,
-    marginTop: 12,
     marginBottom: 28,
     flexDirection: "row",
   },
@@ -335,11 +378,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  totalPrice: {
-    fontFamily: POPPINS_SEMIBOLD,
-    fontSize: 24,
-    color: GIVER_CASUAL_NAVY,
   },
   image: {
     width: 16,
