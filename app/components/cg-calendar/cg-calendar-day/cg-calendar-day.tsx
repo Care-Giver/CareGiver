@@ -22,8 +22,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
 
     const confirmedDate = new Date(date?.dateString)
     if (startDate <= confirmedDate && confirmedDate <= endDate) {
-      console.log(confirmedDate)
-      console.log("check!")
+      // console.log(confirmedDate)
+      // console.log("check!")
       return true
     }
     //console.log("no!!!!!!!!")
@@ -86,7 +86,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     // console.log("serviceType in checkDate >>>", serviceType)
 
     if (serviceType == "방문") {
-      for (let i = 0; i < dates.length; i++) {
+      for (let i = 0; i < dates?.length; i++) {
         if (date.dateString == dates[i].date.substring(0, 10)) {
           setFee(dates[i].fee)
           setAvailableTime(true)
@@ -94,7 +94,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
         } else continue
       }
     } else if (serviceType == "위탁") {
-      for (let i = 0; i < dates.length; i++) {
+      for (let i = 0; i < dates?.length; i++) {
         if (date.dateString == dates[i].startDate.substring(0, 10)) {
           setFee(dates[i].fee)
           setAvailableTime(true)

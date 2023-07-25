@@ -13,6 +13,8 @@ import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-cale
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const { dates, serviceType } = props
+  const hasDates = dates?.length !== 0
+
   const [selected, setSelected] = useState("")
 
   //* serviceType == "위탁"일 때 startDate와 endDate 관리
@@ -20,6 +22,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const [crecheEndToggle, setCrecheEndToggle] = useState(false)
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
+  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
 
   useEffect(() => {
     if (serviceType == "위탁") {
@@ -37,8 +40,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
       }
     }
   }, [crecheStartToggle, crecheEndToggle])
-
-  const hasDates = dates.length !== 0
 
   //console.log("serviceType in CgCalendar >>>", serviceType)
   //console.log("dates in CgCalendar >>>", dates)
@@ -59,7 +60,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
     //console.log(currentMonth)
   }
 
-  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
     <View>
       <Calendar
