@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -9,6 +9,7 @@ import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
 import { postPayment } from "../../services/axios/payment"
 import { postCrecheBooking, postVisitingBooking } from "../../services/axios/booking"
+
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
   if (typeof value === "string") return value === "true"
@@ -55,7 +56,8 @@ export const TestIamportPaymentResultScreen: FC<
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
   const isSuccess =
     getBoolean(imp_success) ?? getBoolean(success) ?? (error_code == null && code == null)
-  React.useLayoutEffect(() => {
+
+  useEffect(() => {
     if (!isSuccess) {
       postPayment({
         imp_uid: imp_uid,

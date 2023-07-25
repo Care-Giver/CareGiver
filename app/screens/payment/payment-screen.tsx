@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
@@ -57,20 +57,20 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
     //* 결제 정보 관련
-    const [pg, setPg] = React.useState("html5_inicis")
-    const [tierCode, setTierCode] = React.useState(undefined)
-    const [method, setMethod] = React.useState("card")
-    const [cardQuota, setCardQuota] = React.useState(0)
-    const [merchantUid, setMerchantUid] = React.useState(`mid_${new Date().getTime()}`)
-    const [name, setName] = React.useState("아임포트 결제데이터분석")
-    const [amount, setAmount] = React.useState("39000")
-    const [buyerName, setBuyerName] = React.useState("홍길동")
-    const [buyerTel, setBuyerTel] = React.useState("01012341234")
-    const [buyerEmail, setBuyerEmail] = React.useState("example@example.com")
-    const [vbankDue, setVbankDue] = React.useState("")
-    const [bizNum, setBizNum] = React.useState("")
-    const [escrow, setEscrow] = React.useState(false)
-    const [digital, setDigital] = React.useState(false)
+    const [pg, setPg] = useState("html5_inicis")
+    const [tierCode, setTierCode] = useState(undefined)
+    const [method, setMethod] = useState("card")
+    const [cardQuota, setCardQuota] = useState(0)
+    const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`)
+    const [name, setName] = useState("아임포트 결제데이터분석")
+    const [amount, setAmount] = useState("39000")
+    const [buyerName, setBuyerName] = useState("홍길동")
+    const [buyerTel, setBuyerTel] = useState("01012341234")
+    const [buyerEmail, setBuyerEmail] = useState("example@example.com")
+    const [vbankDue, setVbankDue] = useState("")
+    const [bizNum, setBizNum] = useState("")
+    const [escrow, setEscrow] = useState(false)
+    const [digital, setDigital] = useState(false)
     const {
       sitterData,
       services,
@@ -83,10 +83,12 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     } = route.params
     console.log(requests)
     //* 로그인된 유저 정보
-    const [userMe, setUserMe] = React.useState<User>()
+    const [userMe, setUserMe] = useState<User>()
+    const [selectedTool, setSelectedTool] = useState<PaymentModuleType>(null)
+    const is신용체크카드 = selectedTool === "신용/체크카드"
 
     //* axios 사용하여 유저정보, totalFee 초기화
-    React.useLayoutEffect(() => {
+    useEffect(() => {
       getUsers().then((res) => setUserMe(res))
       if (serviceType == "방문") {
         const visitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
@@ -215,12 +217,6 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       navigate("test-iamport-payment-screen", data)
     }
 
-    const [selectedTool, setSelectedTool] = React.useState<PaymentModuleType>(null)
-
-    const is신용체크카드 = selectedTool === "신용/체크카드"
-
-    // 필요시, useNavigation 훅을 사용할 수 있습니다.
-    // const navigation = useNavigation()
     return (
       <Screen testID="Payment" style={{ paddingHorizontal: 0 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
