@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { Loading, ScreenRootView } from "#components"
+import { Loading, Screen } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
 export const TestIamportPaymentScreen: FC<
   StackScreenProps<NavigatorParamList, "test-iamport-payment-screen">
-> = observer(function TestIamportPaymentScreen({ route }) {
+> = observer(function TestIamportPaymentScreen({ navigation, route }) {
   const data = route.params
   console.log("data >>>", data)
 
@@ -21,7 +21,7 @@ export const TestIamportPaymentScreen: FC<
   function callback(response) {
     console.log("response >>>", response)
     console.log("params >>>", params.amount, data.serviceType)
-    navigate("test-iamport-payment-result-screen", {
+    navigation.replace("test-iamport-payment-result-screen", {
       response: response,
       amount: params.amount,
       serviceType: data.serviceType,

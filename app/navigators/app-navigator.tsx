@@ -187,7 +187,7 @@ export type NavigatorParamList = {
   // iamport 테스트
   "test-iamport-screen": undefined
   "test-iamport-payment-screen": undefined
-  "test-iamport-payment-result-screen": undefined
+  "test-iamport-payment-result-screen": any
   "cancel-reservation-screen": undefined
 }
 
