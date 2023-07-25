@@ -34,7 +34,6 @@ export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDa
     }
 
     // console.log("response", response)
-
     //console.log("response.data", response.data)
     // console.log("response.data.CrecheDays", response.data.CrecheDays)
     return response.data.crecheAvailableDates

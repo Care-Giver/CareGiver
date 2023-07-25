@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react"
+import * as React from "react"
 import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   DivisionLine,
@@ -17,8 +17,35 @@ import {
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
 import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
+import IMP, { IMPData, IMPConst } from "iamport-react-native"
+import { userinfo } from "./dummy-data"
+import { getUsers, User } from "../../services/axios/user"
+import {
+  postCrecheTotalFee,
+  postVisitingTotalFee,
+  CalculateVisitingTotalFeeInput,
+  CalculateCrecheTotalFeeInput,
+} from "../../services/axios/payment-calculate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
+
+export interface PaymentParams {
+  params: IMPData.PaymentData
+  tierCode?: string
+  serviceType: string
+  visitingId: number
+  userId: number
+  request: string
+  services: string[]
+  destination: string
+  selectedDate: string
+  startTime: string[]
+  endTime: string[]
+  petIds: number[]
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+}
 
 export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스" | "신용/체크카드"
 
@@ -26,11 +53,169 @@ export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스"
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
-  function PaymentScreen() {
+  function PaymentScreen({ route }) {
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
+    //* 결제 정보 관련
+    const [pg, setPg] = React.useState("html5_inicis")
+    const [tierCode, setTierCode] = React.useState(undefined)
+    const [method, setMethod] = React.useState("card")
+    const [cardQuota, setCardQuota] = React.useState(0)
+    const [merchantUid, setMerchantUid] = React.useState(`mid_${new Date().getTime()}`)
+    const [name, setName] = React.useState("아임포트 결제데이터분석")
+    const [amount, setAmount] = React.useState("39000")
+    const [buyerName, setBuyerName] = React.useState("홍길동")
+    const [buyerTel, setBuyerTel] = React.useState("01012341234")
+    const [buyerEmail, setBuyerEmail] = React.useState("example@example.com")
+    const [vbankDue, setVbankDue] = React.useState("")
+    const [bizNum, setBizNum] = React.useState("")
+    const [escrow, setEscrow] = React.useState(false)
+    const [digital, setDigital] = React.useState(false)
+    const {
+      sitterData,
+      services,
+      serviceType,
+      selectedDate,
+      selectedPets,
+      beginDate,
+      endDate,
+      requests,
+    } = route.params
+    console.log(requests)
+    //* 로그인된 유저 정보
+    const [userMe, setUserMe] = React.useState<User>()
 
-    const [selectedTool, setSelectedTool] = useState<PaymentModuleType>(null)
+    //* axios 사용하여 유저정보, totalFee 초기화
+    React.useLayoutEffect(() => {
+      getUsers().then((res) => setUserMe(res))
+      if (serviceType == "방문") {
+        const visitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
+          //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.
+          visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
+          startTime: beginDate,
+          endTime: endDate,
+          petIds: selectedPets,
+        }
+        console.log(visitingTotalFeeInput)
+        postVisitingTotalFee(visitingTotalFeeInput).then((res) =>
+          setAmount(res.totalFee.toString()),
+        )
+      } else if (serviceType == "위탁") {
+        const crecheTotalFeeInput: CalculateCrecheTotalFeeInput = {
+          crecheId: sitterData.id,
+          startDate: selectedDate.dateString,
+          endDate: selectedDate.dateString,
+          petIds: selectedPets,
+        }
+        console.log("crecheTotalFeeInput: ", crecheTotalFeeInput)
+        postCrecheTotalFee(crecheTotalFeeInput).then((res) => setAmount("10000"))
+        //res.totalFee.toString()))
+      }
+    }, [])
+
+    //* 결제 정보에 따른 data update 및 결제스크린 이동
+    const onPress = () => {
+      const data: PaymentParams = {
+        params: {
+          pg,
+          pay_method: method,
+          currency: undefined,
+          notice_url: undefined,
+          display: undefined,
+          merchant_uid: merchantUid,
+          name,
+          amount,
+          app_scheme: "exampleforrn",
+          tax_free: undefined,
+          buyer_name: buyerName,
+          buyer_tel: buyerTel,
+          buyer_email: buyerEmail,
+          buyer_addr: undefined,
+          buyer_postcode: undefined,
+          custom_data: undefined,
+          vbank_due: undefined,
+          digital: undefined,
+          language: undefined,
+          biz_num: undefined,
+          customer_uid: undefined,
+          naverPopupMode: undefined,
+          naverUseCfm: undefined,
+          naverProducts: undefined,
+          m_redirect_url: IMPConst.M_REDIRECT_URL,
+          niceMobileV2: true,
+          escrow,
+        },
+        tierCode,
+        serviceType: serviceType,
+
+        //? 예약 생성 api를 위한 값들
+        visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
+        userId: userMe.id,
+        request: requests?.request,
+        services: services,
+        destination: userMe.address,
+        selectedDate: selectedDate,
+        startTime: beginDate,
+        endTime: endDate,
+        petIds: selectedPets,
+        petToolsLocInfo: requests?.petToolsLocInfo,
+        avoidFoodInfo: requests?.avoidFoodInfo,
+        bondingTipsInfo: requests?.bondingTipsInfo,
+      }
+
+      // 신용카드의 경우, 할부기한 추가
+      if (method === "card" && cardQuota !== 0) {
+        data.params.display = {
+          card_quota: cardQuota === 1 ? [] : [cardQuota],
+        }
+      }
+
+      /*     // 가상계좌의 경우, 입금기한 추가
+      if (method === "vbank" && vbankDue) {
+        data.params.vbank_due = vbankDue
+      }
+
+      // 다날 && 가상계좌의 경우, 사업자 등록번호 10자리 추가
+      if (method === "vbank" && pg === "danal_tpay") {
+        data.params.biz_num = bizNum
+      }
+
+      // 휴대폰 소액결제의 경우, 실물 컨텐츠 여부 추가
+      if (method === "phone") {
+        data.params.digital = digital
+      }
+
+      // 정기결제의 경우, customer_uid 추가
+      if (pg === "kcp_billing") {
+        data.params.customer_uid = `cuid_${new Date().getTime()}`
+      } */
+
+      if (pg === "naverpay") {
+        const today = new Date()
+        const oneMonthLater = new Date(today.setMonth(today.getMonth() + 1))
+        const dd = String(oneMonthLater.getDate()).padStart(2, "0")
+        const mm = String(oneMonthLater.getMonth() + 1).padStart(2, "0") // January is 0!
+        const yyyy = oneMonthLater.getFullYear()
+
+        data.params.naverPopupMode = false
+        data.params.naverUseCfm = `${yyyy}${mm}${dd}`
+        data.params.naverProducts = [
+          {
+            categoryType: "BOOK",
+            categoryId: "GENERAL",
+            uid: "107922211",
+            name: "한국사",
+            payReferrer: "NAVER_BOOK",
+            count: 10,
+          },
+        ]
+      }
+
+      console.log("Payment data >>>", data)
+      navigate("test-iamport-payment-screen", data)
+    }
+
+    const [selectedTool, setSelectedTool] = React.useState<PaymentModuleType>(null)
 
     const is신용체크카드 = selectedTool === "신용/체크카드"
 
@@ -48,10 +233,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <DivisionLine mt={12} />
             <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text="유혜린 펫시터" mb={24} color={BODY} />
+            <PreReg14 text={userMe?.nickname} mb={24} color={BODY} />
             {/* 맡길 반려동물 컴포넌트 가져오기 */}
             <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text="경기도 안산시 상록구 한양대로 55" mb={24} color={BODY} />
+            <PreReg14 text={userMe?.address} mb={24} color={BODY} />
             <PreMed14 text="방문 시간" mb={8} />
             <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
           </View>
@@ -77,6 +262,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("카카오페이")
+                  setPg("kakaopay")
                 }}
               />
               <PaymentTool
@@ -84,6 +270,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("네이버페이")
+                  setPg("naverpay")
                 }}
               />
               <PaymentTool
@@ -91,6 +278,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("토스")
+                  setPg("tosspay")
                 }}
               />
             </View>
@@ -98,6 +286,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               style={[styles.borderBox, is신용체크카드 && styles.selectedBorderBox]}
               onPress={() => {
                 setSelectedTool("신용/체크카드")
+                setPg("html5_inicis")
               }}
             >
               <Image
@@ -149,8 +338,8 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           </View>
         </ScrollView>
 
-        <TouchableOpacity style={styles.paymentButton}>
-          <PreBol16 text="430,000원" color="white" ml={16} />
+        <TouchableOpacity style={styles.paymentButton} onPress={onPress}>
+          <PreBol16 text={amount + "원"} color="white" ml={16} />
           <PreBol16 text="결제하기" color="white" mr={16} />
         </TouchableOpacity>
       </Screen>

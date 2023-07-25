@@ -81,6 +81,8 @@ const desc =
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
 > = observer(({ navigation, route }) => {
+  const { sitterData, serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
+
   const [post, setPost] = useState(null)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -126,11 +128,19 @@ export const CaregiverDetailInformationScreen: FC<
 
   // console.log("post", post)
 
-  const { sitterData } = route.params
   const { profileImg, name, rating } = sitterData
 
   const onPressMakeBookingButton = () => {
-    navigate("make-booking-screen")
+    navigate("make-booking-screen", {
+      sitterData: sitterData,
+      //TODO sitterData에 있어야 할 것 같다. 왜 여기 Dummydata로 빠져있는지??
+      services: ["사료 및 물 급여", "실내 놀이", "배변처리 및 환경정리"],
+      serviceType: serviceType,
+      selectedDate: selectedDate,
+      selectedPets: selectedPets,
+      beginDate: serviceType == "방문" ? beginDate : null,
+      endDate: serviceType == "방문" ? endDate : null,
+    })
   }
 
   return (

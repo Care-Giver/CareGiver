@@ -1,4 +1,4 @@
-import React, { FC, useState, useLayoutEffect, useRef, useCallback } from "react"
+import React, { FC, useState, useLayoutEffect, useRef, useCallback, useEffect } from "react"
 import {
   Image,
   View,
@@ -29,7 +29,6 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar, DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
-
 // Calculate the number of minutes passed since the start of the hour
 const now = new Date()
 const minutesPassed = now.getMinutes()
@@ -282,7 +281,18 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             }}
             onPress={() => {
               //? 펫시터 검색결과 스크린으로 이동
-              navigate("search-result", { service: service, serviceType: serviceType })
+              navigate("search-result", {
+                service: service,
+                serviceType: serviceType,
+                //TODO "위탁"인 경우 사용될 값입니다. cg-calendar로 바뀌면 startDate, endDate로 나눠져 들어가야합니다. 우선 한 값만 선택할 수 있기 때문에 selectedDate로만 넘깁니다.
+                selectedDate: date,
+                selectedPets: selectedPets.map((item) => {
+                  return item.id
+                }),
+                //? "방문"인 경우 사용될 값
+                beginDate: serviceType == "방문" ? beginDate.toISOString().substring(0, 19) : null,
+                endDate: serviceType == "방문" ? endDate.toISOString().substring(0, 19) : null,
+              })
             }}
           />
         </ScrollView>

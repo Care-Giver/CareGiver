@@ -2,14 +2,13 @@ import React, { FC } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import { Loading, Screen } from "#components"
+import { NavigatorParamList, navigate } from "#navigators"
+import { Loading, ScreenRootView } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
-
 export const TestIamportPaymentScreen: FC<
   StackScreenProps<NavigatorParamList, "test-iamport-payment-screen">
-> = observer(function TestIamportPaymentScreen({ route, navigation }) {
+> = observer(function TestIamportPaymentScreen({ route }) {
   const data = route.params
   console.log("data >>>", data)
 
@@ -21,7 +20,26 @@ export const TestIamportPaymentScreen: FC<
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
   function callback(response) {
     console.log("response >>>", response)
-    navigation.replace("test-iamport-payment-result-screen", response)
+    console.log("params >>>", params.amount, data.serviceType)
+    navigate("test-iamport-payment-result-screen", {
+      response: response,
+      amount: params.amount,
+      serviceType: data.serviceType,
+
+      //? 예약 생성 api를 위한 값들
+      visitingId: data.visitingId,
+      userId: data.userId,
+      request: data?.request,
+      services: data.services,
+      destination: data.destination,
+      selectedDate: data.selectedDate,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      petIds: data.petIds,
+      petToolsLocInfo: data?.petToolsLocInfo,
+      avoidFoodInfo: data?.avoidFoodInfo,
+      bondingTipsInfo: data?.bondingTipsInfo,
+    })
   }
 
   return (

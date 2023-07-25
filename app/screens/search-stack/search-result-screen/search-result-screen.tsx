@@ -21,12 +21,14 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result">
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
+  const { serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
+  console.log(beginDate, endDate)
+  console.log(selectedPets)
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])
@@ -109,8 +111,8 @@ export const SearchResultScreen: FC<
     //? case2. 서치스크린 이후 넘어오는 경우
     else {
       //? service 할당
-      var _service = route.params.service === "펫시팅" ? "펫시팅" : "훈련"
-      var _serviceType = route.params.serviceType === "방문" ? "방문" : "위탁"
+      var _service = "펫시팅"
+      var _serviceType = serviceType
     }
 
     //? Header, 이름 설정
@@ -226,7 +228,14 @@ export const SearchResultScreen: FC<
                 onPress={() => {
                   //? 상세정보 스크린으로 이동
                   //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", { sitterData: item })
+                  navigate("caregiver-detail-information-screen", {
+                    sitterData: item,
+                    serviceType: serviceType,
+                    selectedDate: selectedDate,
+                    selectedPets: selectedPets,
+                    beginDate: serviceType == "방문" ? beginDate : null,
+                    endDate: serviceType == "방문" ? endDate : null,
+                  })
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
               />

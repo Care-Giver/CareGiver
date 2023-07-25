@@ -2,6 +2,124 @@ import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 
+//* 위탁예약 생성
+export interface CreateCrecheBookingInput {
+  crecheId: number
+  userId: number
+  request: string
+  services: string[]
+  startDate: string
+  endDate: string
+  petIds: number[]
+  paymentId: number
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+  totalFee: number
+  defalutFee: number
+}
+interface CreateCrecheBookingInputResponse extends GeneralResponse {
+  CreateCrecheBookingInput: CreateCrecheBookingInput
+}
+/**
+ * @returns {Promise<CreateCrecheBookingInput>}
+ */
+export const postCrecheBooking = async (
+  post: CreateCrecheBookingInput,
+): Promise<CreateCrecheBookingInput> => {
+  try {
+    const response = await axios.post<CreateCrecheBookingInputResponse>(
+      `${BASE_URL}/booking/creche`,
+      post,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.log(response.data)
+      console.error("postCrecheBooking response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
+    }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log("response.data.CreateCrecheBookingInputs", response.data.CreateCrecheBookingInput)
+    return response.data.CreateCrecheBookingInput
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return null
+  }
+}
+
+//* 방문 예약 생성
+
+//? requestBody
+export interface CreateVisitingBookingInput {
+  visitingId: number
+  userId: number
+  request: string
+  services: string[]
+  destination: string
+  startTime: string[]
+  endTime: string[]
+  petIds: number[]
+  paymentId: number
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+}
+//? responseBody
+export interface CreateVisitingBookingRes {
+  id: number
+  createAt: Date
+  updatedAt: Date
+  status: string
+  reviewStatus: string
+  destination: string
+  visitingId: string
+  request: string
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+}
+interface CreateVisitingBookingResponse extends GeneralResponse {
+  CreateVisitingBookingResponse: CreateVisitingBookingRes
+}
+/**
+ * @returns {Promise<CreateVisitingBookingResponse>}
+ */
+export const postVisitingBooking = async (
+  post: CreateVisitingBookingInput,
+): Promise<CreateVisitingBookingResponse> => {
+  try {
+    console.log(post)
+    const response = await axios.post<CreateVisitingBookingResponse>(
+      `${BASE_URL}/booking/visiting`,
+      post,
+      CONFIG,
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("postVisitingBooking response.data.error 에러!!!", error)
+      console.log(response.data)
+      // @ts-ignore
+      return error
+    }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log(
+      "response.data.CreateVisitingBookingInputs",
+      response.data.CreateVisitingBookingResponse,
+    )
+    return response.data
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return null
+  }
+}
+
 interface CrecheBooking {
   status: string
   services: string
