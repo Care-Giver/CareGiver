@@ -4,6 +4,4 @@ import { ServiceType } from "#screens"
 export interface CgCalendarProps {
   dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]
   serviceType: ServiceType
-  selected: Date
-  setSelected: (selected: Date) => void
 }

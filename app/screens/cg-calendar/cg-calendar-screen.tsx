@@ -15,7 +15,6 @@ import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
 import { GIVER_CASUAL_NAVY } from "#theme"
-import { string } from "mobx-state-tree/dist/internal"
 import { groupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
 import { crecheAvailableDates } from "../../services/axios/creche-day"
 
@@ -47,8 +46,8 @@ export const CgCalendarScreen: FC<
 
   const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
-  const [selected, setSelected] = useState<Date>(null)
-  const [crecheId, setCrecheId] = useState(1)
+
+  const [userId, setUserId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
     if (serviceType == "방문") {
@@ -60,10 +59,10 @@ export const CgCalendarScreen: FC<
 
   useEffect(() => {
     if (serviceType == "방문") {
-      setAllVisitingAvailableTimes(crecheId)
+      setAllVisitingAvailableTimes(userId)
       setVisitingDates(visitingAvailableTimes)
     } else {
-      setAllCrecheDays(crecheId)
+      setAllCrecheDays(userId)
       setCrecheDates(crecheDays)
     }
   }, [serviceType])
@@ -81,15 +80,13 @@ export const CgCalendarScreen: FC<
       </View>
 
       <CgCalendar
-        dates={serviceType === "방문" ? visitingDates : crecheDates}
+        dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
-        selected={selected}
-        setSelected={setSelected}
       />
-      {/* <CgCalendarEditButton
+      <CgCalendarEditButton
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-      /> */}
+      />
 
       {/* 수정 버튼 새로 생성 */}
       <Pressable

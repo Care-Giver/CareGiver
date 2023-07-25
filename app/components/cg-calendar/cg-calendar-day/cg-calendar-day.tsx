@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import { View, Pressable, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
@@ -6,17 +6,33 @@ import { CgCalendarDayProps } from "./cg-calendar-day.props"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month, serviceType } = props
-  const [fee, setFee] = React.useState(null)
-  const [availableTime, setAvailableTime] = React.useState(false)
+  const { date, state, selected, dates, month, serviceType, startDate, endDate } = props
+  const [fee, setFee] = useState(null)
+  const [availableTime, setAvailableTime] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFee(null)
     //setAvailableTime(false)
     checkDate()
   }, [date, dates])
 
+  //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
+  const checkMiddleDate = ({ date }) => {
+    //console.log("s: ", startDate, "e: ", endDate)
+
+    const confirmedDate = new Date(date?.dateString)
+    if (startDate <= confirmedDate && confirmedDate <= endDate) {
+      console.log(confirmedDate)
+      console.log("check!")
+      return true
+    }
+    //console.log("no!!!!!!!!")
+    return false
+  }
   const textBgBdSelectior = ({ date, state }) => {
+    if (checkMiddleDate({ date })) {
+      return GIVER_CASUAL_NAVY
+    }
     if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
     }
@@ -26,6 +42,9 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return "white"
   }
   const textColorSelector = ({ date, state }) => {
+    if (checkMiddleDate({ date })) {
+      return "white"
+    }
     if (availableTime) {
       if (date.dateString == selected) {
         return "white"
@@ -47,6 +66,9 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return DISABLED
   }
   const feeTextColorSelector = ({ date, state }) => {
+    if (checkMiddleDate({ date })) {
+      return "#324C89"
+    }
     if (date.dateString == selected) {
       return "#324C89"
     }
@@ -64,7 +86,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     // console.log("serviceType in checkDate >>>", serviceType)
 
     if (serviceType == "방문") {
-      for (let i = 0; i < dates?.length; i++) {
+      for (let i = 0; i < dates.length; i++) {
         if (date.dateString == dates[i].date.substring(0, 10)) {
           setFee(dates[i].fee)
           setAvailableTime(true)
@@ -72,7 +94,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
         } else continue
       }
     } else if (serviceType == "위탁") {
-      for (let i = 0; i < dates?.length; i++) {
+      for (let i = 0; i < dates.length; i++) {
         if (date.dateString == dates[i].startDate.substring(0, 10)) {
           setFee(dates[i].fee)
           setAvailableTime(true)

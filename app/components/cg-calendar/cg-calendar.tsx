@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import { StyleProp, View, Image, Text, ViewStyle, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars"
@@ -12,19 +12,54 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType, selected, setSelected } = props
-  const hasDates = dates?.length !== 0
+  const { dates, serviceType } = props
+  const [selected, setSelected] = useState("")
 
-  console.log("serviceType in CgCalendar >>>", serviceType)
-  console.log("dates in CgCalendar >>>", dates)
-  console.log("♦️")
+  //* serviceType == "위탁"일 때 startDate와 endDate 관리
+  const [crecheStartToggle, setCrecheStartToggle] = useState(false)
+  const [crecheEndToggle, setCrecheEndToggle] = useState(false)
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+
+  useEffect(() => {
+    if (serviceType == "위탁") {
+      if (crecheStartToggle == true && crecheEndToggle == false) {
+        const newStartDate = new Date(selected)
+        //? 다른 주기를 선택해야할 때 endDate가 남아있어서 null처리
+        if (endDate != null) {
+          setEndDate(null)
+        }
+        setStartDate(newStartDate)
+      }
+      if (crecheStartToggle == false && crecheEndToggle == true) {
+        const newEndDate = new Date(selected)
+        setEndDate(newEndDate)
+      }
+    }
+  }, [crecheStartToggle, crecheEndToggle])
+
+  const hasDates = dates.length !== 0
+
+  //console.log("serviceType in CgCalendar >>>", serviceType)
+  //console.log("dates in CgCalendar >>>", dates)
+  //console.log("♦️")
 
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
-    console.log(date.dateString)
+    if (crecheStartToggle == false) {
+      setCrecheStartToggle(!crecheStartToggle)
+      if (crecheEndToggle == true) {
+        setCrecheEndToggle(false)
+      }
+    } else {
+      setCrecheEndToggle(!crecheEndToggle)
+      setCrecheStartToggle(!crecheStartToggle)
+    }
+
+    //console.log(currentMonth)
   }
 
-  const [currentMonth, setCurrentMonth] = React.useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
+  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 pram
   return (
     <View>
       <Calendar
@@ -54,6 +89,8 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
                 dates={dates}
                 month={currentMonth}
                 serviceType={serviceType}
+                startDate={startDate}
+                endDate={endDate}
               />
             )}
           </Pressable>
