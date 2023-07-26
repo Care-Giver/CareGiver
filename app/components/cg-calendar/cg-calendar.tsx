@@ -12,10 +12,8 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType } = props
+  const { dates, serviceType, selected, setSelected } = props
   const hasDates = dates?.length !== 0
-
-  const [selected, setSelected] = useState("")
 
   //* serviceType == "위탁"일 때 startDate와 endDate 관리
   const [crecheStartToggle, setCrecheStartToggle] = useState(false)

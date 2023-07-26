@@ -35,8 +35,6 @@ export const CgCalendarScreen: FC<
       visitingAvailableTimes,
       showAllVisitingAvailableTimes,
     },
-  } = useStores()
-  const {
     CrecheDayModel: { setAllCrecheDays, crecheDays },
   } = useStores()
   // const 데이터가져오기 = visitingAvailableTimesModel.setAllVisitingAvailableTimes
@@ -46,8 +44,8 @@ export const CgCalendarScreen: FC<
 
   const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
-
-  const [userId, setUserId] = useState(1)
+  const [selected, setSelected] = useState("") // TODO - 타입 제발 정해주세요
+  const [crecheId, setCrecheId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
     if (serviceType == "방문") {
@@ -59,15 +57,16 @@ export const CgCalendarScreen: FC<
 
   useEffect(() => {
     if (serviceType == "방문") {
-      setAllVisitingAvailableTimes(userId)
+      setAllVisitingAvailableTimes(crecheId)
       setVisitingDates(visitingAvailableTimes)
     } else {
-      setAllCrecheDays(userId)
+      setAllCrecheDays(crecheId)
       setCrecheDates(crecheDays)
     }
   }, [serviceType])
 
   console.log("serviceType in CgCalendarScreen >>>", serviceType)
+  console.log("selected >>>", selected)
 
   return (
     <Screen testID="CgCalendar">
@@ -82,11 +81,13 @@ export const CgCalendarScreen: FC<
       <CgCalendar
         dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
+        selected={selected}
+        setSelected={setSelected}
       />
-      <CgCalendarEditButton
+      {/* <CgCalendarEditButton
         style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
         title={"수정"}
-      />
+      /> */}
 
       {/* 수정 버튼 새로 생성 */}
       <Pressable
@@ -103,16 +104,15 @@ export const CgCalendarScreen: FC<
           width: 358,
         }}
         onPress={() => {
-          console.log("우리의 목표 selected >>>", selected)
-
           serviceType === "방문"
             ? navigation.navigate("set-visiting-service-day-screen", {
+                // TODO - 여러개의 selected 가 넘겨질 경우 처리
                 date: selected,
-                crecheId: crecheId,
+                crecheId,
               })
             : navigation.navigate("set-creche-service-day-screen", {
                 date: selected,
-                crecheId: crecheId,
+                crecheId,
               })
         }}
       >
