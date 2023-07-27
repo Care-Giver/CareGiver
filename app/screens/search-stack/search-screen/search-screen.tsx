@@ -1,4 +1,4 @@
-import React, { FC, useState, useLayoutEffect, useRef, useCallback, useEffect } from "react"
+import React, { FC, useState, useEffect, useRef, useCallback } from "react"
 import {
   Image,
   View,
@@ -7,6 +7,7 @@ import {
   UIManager,
   ViewStyle,
   ScrollView,
+  TextInput,
 } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -21,7 +22,6 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   TimePicker,
-  ServiceType,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import { IOS_BOTTOM_HOME_BAR_HEIGHT, DISABLED, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
@@ -46,6 +46,13 @@ nearestPastTime.setMinutes(minutesPassed - remainder)
 // "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
 const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
+type ServiceType = "방문" | "위탁"
+
+interface Location {
+  lat: number
+  lng: number
+}
+
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     //* 서비스 형태
@@ -55,15 +62,19 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     //* 달력 - Calendar
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
     const [date, setDate] = useState<DateData>() //? 선택된 날짜
+    const [tempDate, setTempDate] = useState<string>(new Date().toISOString())
 
     //* 선택된 반려동물
     const [selectedPets, setSelectedPets] = useState([])
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     //* 시간선택 - TimePicker
-    const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
-    const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+    const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
+    const [endTime, setEndTime] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
     const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
+
+    //* 위치선택
+    const [location, setLocation] = useState<Location>({ lat: 38, lng: 127 })
 
     // 시간선택 BottomSheet - ref
     const bottomSheetRef = useRef<BottomSheet>(null)
@@ -88,15 +99,14 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     }
 
     const closeBottomSheet = () => {
-      const beginDateText = timeText(beginDate)
-      const endDateText = timeText(endDate)
+      const beginDateText = timeText(startTime)
+      const endDateText = timeText(endTime)
       selectedSetTimeText(`${beginDateText} - ${endDateText}`)
 
       bottomSheetRef.current?.close()
     }
 
-    //! useLayoutEffect 과 useEffect 의 차이: https://merrily-code.tistory.com/46
-    useLayoutEffect(() => {
+    useEffect(() => {
       if (!route.params) {
         console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
         if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
@@ -111,7 +121,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     //? 펫시터 찾기 버튼 활성화 여부 결정
     const hadleIsActivated = () => {
-      if (!date) return false
+      // 임시로 주석처리함 - 캘린더 도입시 주석해제 해야 함
+      // if (!date) return false
 
       if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
@@ -165,8 +176,15 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           </Row>
 
           {/* //* 날짜 선택 */}
-          {!isCalendarOpen ? (
-            <RowRoundedButton
+          <TextInput
+            value={tempDate.toString()}
+            onChangeText={setTempDate}
+            placeholder="날짜입력"
+            style={{ color: "black", borderWidth: 1 }}
+          />
+
+          {/* {!isCalendarOpen ? (
+            <RowRoundedButton 
               onPress={() => {
                 setIsCalendarOpen(true)
                 LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
@@ -203,7 +221,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                 }
               }
             />
-          )}
+          )} */}
 
           {/* //* 시간 선택 */}
           {serviceType === "방문" && (
@@ -282,16 +300,19 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             onPress={() => {
               //? 펫시터 검색결과 스크린으로 이동
               navigate("search-result", {
-                service: service,
-                serviceType: serviceType,
+                service,
+                serviceType,
                 //TODO "위탁"인 경우 사용될 값입니다. cg-calendar로 바뀌면 startDate, endDate로 나눠져 들어가야합니다. 우선 한 값만 선택할 수 있기 때문에 selectedDate로만 넘깁니다.
                 selectedDate: date,
+                // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
                 selectedPets: selectedPets.map((item) => {
                   return item.id
                 }),
                 //? "방문"인 경우 사용될 값
-                beginDate: serviceType == "방문" ? beginDate.toISOString().substring(0, 19) : null,
-                endDate: serviceType == "방문" ? endDate.toISOString().substring(0, 19) : null,
+                beginDate: serviceType === "방문" ? startTime.toISOString().substring(0, 19) : null,
+                endDate: serviceType === "방문" ? endTime.toISOString().substring(0, 19) : null,
+                // 위치 값
+                ...location,
               })
             }}
           />
@@ -307,10 +328,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           enablePanDownToClose
         >
           <TimePicker
-            beginDate={beginDate}
-            setBeginDate={setBeginDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
+            beginDate={startTime}
+            setBeginDate={setStartTime}
+            endDate={endTime}
+            setEndDate={setEndTime}
           />
 
           <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>

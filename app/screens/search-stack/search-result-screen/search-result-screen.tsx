@@ -22,13 +22,23 @@ import {
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
 export const SearchResultScreen: FC<
-  StackScreenProps<NavigatorParamList, "search-result">
+  StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
-  const { serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
-  console.log(beginDate, endDate)
-  console.log(selectedPets)
+  console.log("route.params", route.params)
+  const {
+    // API REQUEST BODY 관련
+    lat,
+    lng,
+    startTime,
+    endDate,
+    petIds,
+
+    // 그외
+    serviceType,
+  } = route.params
+
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])
@@ -231,10 +241,9 @@ export const SearchResultScreen: FC<
                   navigate("caregiver-detail-information-screen", {
                     sitterData: item,
                     serviceType: serviceType,
-                    selectedDate: selectedDate,
-                    selectedPets: selectedPets,
-                    beginDate: serviceType == "방문" ? beginDate : null,
-                    endDate: serviceType == "방문" ? endDate : null,
+                    selectedPets: petIds,
+                    beginDate: serviceType === "방문" ? startTime : null,
+                    endDate: serviceType === "방문" ? endTime : null,
                   })
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}

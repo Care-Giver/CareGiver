@@ -106,7 +106,18 @@ export type NavigatorParamList = {
   //* general screens
   "home-screen": undefined
   "search-screen": undefined
-  "search-result": undefined
+  "search-result-screen": {
+    // API REQUEST BODY 관련
+    lat: number
+    lng: number
+    startTime: string // "2023-07-27T10:40:59"
+    endDate: string //"2023-07-27T11:40:59"
+    petIds: number[]
+
+    // 그외
+    serviceType: "방문" | "위탁"
+  }
+
   "caregiver-detail-information-screen": undefined
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
