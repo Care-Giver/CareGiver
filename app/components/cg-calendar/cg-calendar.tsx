@@ -15,44 +15,19 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const { dates, serviceType, selected, setSelected } = props
   const hasDates = dates?.length !== 0
 
-  //* serviceType == "위탁"일 때 startDate와 endDate 관리
-  const [crecheStartToggle, setCrecheStartToggle] = useState(false)
-  const [crecheEndToggle, setCrecheEndToggle] = useState(false)
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
   const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
-
-  useEffect(() => {
-    if (serviceType == "위탁") {
-      if (crecheStartToggle == true && crecheEndToggle == false) {
-        const newStartDate = new Date(selected)
-        //? 다른 주기를 선택해야할 때 endDate가 남아있어서 null처리
-        if (endDate != null) {
-          setEndDate(null)
-        }
-        setStartDate(newStartDate)
-      }
-      if (crecheStartToggle == false && crecheEndToggle == true) {
-        const newEndDate = new Date(selected)
-        setEndDate(newEndDate)
-      }
-    }
-  }, [crecheStartToggle, crecheEndToggle])
 
   //console.log("serviceType in CgCalendar >>>", serviceType)
   //console.log("dates in CgCalendar >>>", dates)
   //console.log("♦️")
 
   const onDayPress = ({ date }) => {
-    setSelected(date.dateString)
-    if (crecheStartToggle == false) {
-      setCrecheStartToggle(!crecheStartToggle)
-      if (crecheEndToggle == true) {
-        setCrecheEndToggle(false)
-      }
+    if (selected.includes(date.dateString)) {
+      setSelected(selected.filter((selected) => selected !== date.dateString))
     } else {
-      setCrecheEndToggle(!crecheEndToggle)
-      setCrecheStartToggle(!crecheStartToggle)
+      const newSelected = [...selected]
+      newSelected.push(date.dateString)
+      setSelected(newSelected)
     }
 
     //console.log(currentMonth)
@@ -87,8 +62,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
                 dates={dates}
                 month={currentMonth}
                 serviceType={serviceType}
-                startDate={startDate}
-                endDate={endDate}
               />
             )}
           </Pressable>
