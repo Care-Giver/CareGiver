@@ -139,8 +139,8 @@ export type NavigatorParamList = {
 
   // CG - 달력 스택
   "cg-calendar-list-screen": undefined
-  "set-visiting-service-day-screen": { date: Date; crecheId: number }
-  "set-creche-service-day-screen": { date: Date; crecheId: number }
+  "set-visiting-service-day-screen": { date: string[]; crecheId: number }
+  "set-creche-service-day-screen": { date: string[]; crecheId: number }
 
   // CG - 예약관리 스택
   "manage-booking-screen": undefined

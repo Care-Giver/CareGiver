@@ -83,7 +83,17 @@ export const SetCrecheServiceDayScreen: FC<
   return (
     <Screen testID="SetCrecheServiceDay" style={styles.root}>
       <ScrollView>
-        <PreBol20 text="9월 15일" mb={10} ml={16} />
+        {/* 날짜 개수에 따라 다르게 표시 */}
+        {date.length > 1 ? (
+          <PreBol20 text={`날짜 ${date.length}개`} mb={10} ml={16} />
+        ) : date[0].slice(5, 7) === "12" ||
+          date[0].slice(5, 7) === "11" ||
+          date[0].slice(5, 7) === "10" ? (
+          <PreBol20 text={`${date[0].slice(5, 7)}월 ${date[0].slice(8, 10)}일`} mb={10} ml={16} />
+        ) : (
+          <PreBol20 text={`${date[0].slice(6, 7)}월 ${date[0].slice(8, 10)}일`} mb={10} ml={16} />
+        )}
+
         <DivisionLine height={8} />
         {/* 서비스 가능 여부 토글 버튼 */}
         <View style={styles.servicePossible}>
