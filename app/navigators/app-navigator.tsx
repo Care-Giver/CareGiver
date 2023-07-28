@@ -87,6 +87,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { PetsitterType, ServiceType, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
+import { IMPData } from "iamport-react-native"
+
 //import { Row } from "../basics/row/row"
 
 /**
@@ -186,7 +188,23 @@ export type NavigatorParamList = {
   "test-network-error-screen": undefined
   // iamport 테스트
   "test-iamport-screen": undefined
-  "test-iamport-payment-screen": undefined
+  "test-iamport-payment-screen": {
+    params: IMPData.PaymentData
+    tierCode?: string
+    serviceType: string
+    visitingId: number
+    userId: number
+    request: string
+    services: string[]
+    destination: string
+    selectedDate: string
+    startTime: string[]
+    endTime: string[]
+    petIds: number[]
+    petToolsLocInfo: string
+    avoidFoodInfo: string
+    bondingTipsInfo: string
+  }
   "test-iamport-payment-result-screen": any
   "cancel-reservation-screen": undefined
 }

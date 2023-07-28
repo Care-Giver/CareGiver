@@ -9,7 +9,7 @@ import { getUserCode } from "./utils"
 
 export interface Response {
   response: JSON
-  amount: string
+  amount: string | number
   serviceType: string
 
   //? 예약 생성 api를 위한 값들
@@ -35,7 +35,7 @@ export const TestIamportPaymentScreen: FC<
 
   //@ts-ignore
   const params = data?.params
-  const tierCode = params?.tierCode
+  const tierCode = data?.tierCode
   const userCode = getUserCode(params!.pg, tierCode) // pg 데이터는 필수임
 
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
