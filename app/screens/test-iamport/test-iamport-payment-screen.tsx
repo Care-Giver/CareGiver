@@ -6,6 +6,27 @@ import { NavigatorParamList, navigate } from "#navigators"
 import { Loading, Screen } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
+
+export interface Response {
+  response: JSON
+  amount: string
+  serviceType: string
+
+  //? 예약 생성 api를 위한 값들
+  visitingId: number
+  userId: number
+  request: string
+  services: string[]
+  destination: string
+  selectedDate: string
+  startTime: string[]
+  endTime: string[]
+  petIds: number[]
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
+}
+
 export const TestIamportPaymentScreen: FC<
   StackScreenProps<NavigatorParamList, "test-iamport-payment-screen">
 > = observer(function TestIamportPaymentScreen({ navigation, route }) {
@@ -21,7 +42,7 @@ export const TestIamportPaymentScreen: FC<
   function callback(response) {
     console.log("response >>>", response)
     console.log("params >>>", params.amount, data.serviceType)
-    navigation.replace("test-iamport-payment-result-screen", {
+    const responseData: Response = {
       response: response,
       amount: params.amount,
       serviceType: data.serviceType,
@@ -39,7 +60,8 @@ export const TestIamportPaymentScreen: FC<
       petToolsLocInfo: data?.petToolsLocInfo,
       avoidFoodInfo: data?.avoidFoodInfo,
       bondingTipsInfo: data?.bondingTipsInfo,
-    })
+    }
+    navigation.replace("test-iamport-payment-result-screen", responseData)
   }
 
   return (
