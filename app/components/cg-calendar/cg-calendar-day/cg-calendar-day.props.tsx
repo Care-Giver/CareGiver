@@ -6,11 +6,8 @@ import { ServiceType } from "#screens"
 export interface CgCalendarDayProps {
   date: string & DateData
   state: DayState
-  selected: string
-  dates: groupedVisitingAvailableTimesByDate[]
+  selected: string[]
+  dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]
   month: Date
   serviceType: ServiceType
-
-  startDate: Date
-  endDate: Date
 }

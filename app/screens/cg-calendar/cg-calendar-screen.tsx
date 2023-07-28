@@ -44,7 +44,7 @@ export const CgCalendarScreen: FC<
 
   const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
-  const [selected, setSelected] = useState("") // TODO - 타입 제발 정해주세요
+  const [selected, setSelected] = useState<string[]>([]) // TODO - 타입 제발 정해주세요
   const [crecheId, setCrecheId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
