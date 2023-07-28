@@ -82,15 +82,16 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
             {hasDates && (
-              <CgCalendarDay
+              <CgCalendarDay //? 왜 안되는지,
                 date={date}
                 state={state}
                 selected={selected}
-                dates={dates}
                 month={currentMonth}
-                serviceType={serviceType}
+                serviceType="방문"
                 startDate={startDate}
                 endDate={endDate}
+                visitingAvailableDates={dates}
+                //crecheAvailableDates={serviceType == "위탁" ? dates : null}
               />
             )}
           </Pressable>

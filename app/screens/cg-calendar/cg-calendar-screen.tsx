@@ -83,10 +83,6 @@ export const CgCalendarScreen: FC<
         dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
       />
-      <CgCalendarEditButton
-        style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
-        title={"수정"}
-      />
 
       {/* 수정 버튼 새로 생성 */}
       <Pressable

@@ -3,10 +3,26 @@ import { View, Pressable, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
 import { CgCalendarDayProps } from "./cg-calendar-day.props"
-import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  GIVER_CASUAL_NAVY_80,
+  LBG,
+  MIDDLE_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month, serviceType, startDate, endDate } = props
+  const {
+    date,
+    state,
+    selected,
+    visitingAvailableDates,
+    crecheAvailableDates,
+    serviceType,
+    startDate,
+    endDate,
+  } = props
   const [fee, setFee] = useState(null)
   const [availableTime, setAvailableTime] = useState(false)
 
@@ -14,7 +30,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     setFee(null)
     //setAvailableTime(false)
     checkDate()
-  }, [date, dates])
+  }, [date, visitingAvailableDates, crecheAvailableDates])
 
   //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
   const checkMiddleDate = ({ date }) => {
@@ -67,10 +83,10 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
   }
   const feeTextColorSelector = ({ date, state }) => {
     if (checkMiddleDate({ date })) {
-      return "#324C89"
+      return GIVER_CASUAL_NAVY_80
     }
     if (date.dateString == selected) {
-      return "#324C89"
+      return GIVER_CASUAL_NAVY_80
     }
     if (state == "today") {
       return GIVER_CASUAL_NAVY
@@ -86,17 +102,17 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     // console.log("serviceType in checkDate >>>", serviceType)
 
     if (serviceType == "방문") {
-      for (let i = 0; i < dates?.length; i++) {
-        if (date.dateString == dates[i].date.substring(0, 10)) {
-          setFee(dates[i].fee)
+      for (let i = 0; i < visitingAvailableDates?.length; i++) {
+        if (date.dateString == visitingAvailableDates[i]?.date.substring(0, 10)) {
+          setFee(visitingAvailableDates[i].fee)
           setAvailableTime(true)
           return true
         } else continue
       }
     } else if (serviceType == "위탁") {
-      for (let i = 0; i < dates?.length; i++) {
-        if (date.dateString == dates[i].startDate.substring(0, 10)) {
-          setFee(dates[i].fee)
+      for (let i = 0; i < crecheAvailableDates?.length; i++) {
+        if (date.dateString == crecheAvailableDates[i]?.startTime.substring(0, 10)) {
+          setFee(crecheAvailableDates[i].fee)
           setAvailableTime(true)
           return true
         } else continue
