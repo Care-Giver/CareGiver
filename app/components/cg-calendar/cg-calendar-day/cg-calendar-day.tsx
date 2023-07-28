@@ -13,16 +13,7 @@ import {
 } from "#theme"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const {
-    date,
-    state,
-    selected,
-    visitingAvailableDates,
-    crecheAvailableDates,
-    serviceType,
-    startDate,
-    endDate,
-  } = props
+  const { date, state, selected, availableDates, serviceType, startDate, endDate } = props
   const [fee, setFee] = useState(null)
   const [availableTime, setAvailableTime] = useState(false)
 
@@ -30,7 +21,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     setFee(null)
     //setAvailableTime(false)
     checkDate()
-  }, [date, visitingAvailableDates, crecheAvailableDates])
+  }, [date, availableDates])
 
   //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
   const checkMiddleDate = ({ date }) => {
@@ -102,17 +93,17 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     // console.log("serviceType in checkDate >>>", serviceType)
 
     if (serviceType == "방문") {
-      for (let i = 0; i < visitingAvailableDates?.length; i++) {
-        if (date.dateString == visitingAvailableDates[i]?.date.substring(0, 10)) {
-          setFee(visitingAvailableDates[i].fee)
+      for (let i = 0; i < availableDates?.length; i++) {
+        if (date.dateString == availableDates[i]?.date.substring(0, 10)) {
+          setFee(availableDates[i].fee)
           setAvailableTime(true)
           return true
         } else continue
       }
     } else if (serviceType == "위탁") {
-      for (let i = 0; i < crecheAvailableDates?.length; i++) {
-        if (date.dateString == crecheAvailableDates[i]?.startTime.substring(0, 10)) {
-          setFee(crecheAvailableDates[i].fee)
+      for (let i = 0; i < availableDates?.length; i++) {
+        if (date.dateString == availableDates[i]?.startTime.substring(0, 10)) {
+          setFee(availableDates[i].fee)
           setAvailableTime(true)
           return true
         } else continue

@@ -87,10 +87,10 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
                 state={state}
                 selected={selected}
                 month={currentMonth}
-                serviceType="방문"
+                serviceType={serviceType}
                 startDate={startDate}
                 endDate={endDate}
-                visitingAvailableDates={dates}
+                availableDates={dates}
                 //crecheAvailableDates={serviceType == "위탁" ? dates : null}
               />
             )}

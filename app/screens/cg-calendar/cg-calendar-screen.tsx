@@ -15,8 +15,8 @@ import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
 import { GIVER_CASUAL_NAVY } from "#theme"
-import { groupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
-import { crecheAvailableDates } from "../../services/axios/creche-day"
+import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
+import { CrecheAvailableDates } from "../../services/axios/creche-day"
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -44,8 +44,8 @@ export const CgCalendarScreen: FC<
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
 
-  const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
-  const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
+  const [visitingDates, setVisitingDates] = useState<GroupedVisitingAvailableTimesByDate[]>([])
+  const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
 
   const [userId, setUserId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
