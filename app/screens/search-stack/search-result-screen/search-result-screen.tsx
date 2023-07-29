@@ -1,4 +1,4 @@
-import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
+import React, { FC, useRef, useEffect, useCallback, useState } from "react"
 import { View, Animated, ScrollView, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -21,6 +21,7 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
+import { Sex, getVisitingsSearch } from "#axios"
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
@@ -32,7 +33,7 @@ export const SearchResultScreen: FC<
     lat,
     lng,
     startTime,
-    endDate,
+    endTime,
     petIds,
 
     // 그외
@@ -42,10 +43,6 @@ export const SearchResultScreen: FC<
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])
-
-  useLayoutEffect(() => {
-    setPetsitters(_petsitters)
-  }, [])
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -107,7 +104,43 @@ export const SearchResultScreen: FC<
     extrapolate: "clamp",
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const req = {
+      page: 1,
+      lat,
+      lng,
+      startTime,
+      endTime,
+      petIds: [1, 2],
+      radius: 10, //10
+      sortBy: "distance", // "distance"
+      sortOrder: "ASC", // "ASC"
+      gender: Sex.FEMALE, // "FEMALE"
+      services: [1, 2], //[1, 2]
+      amenities: [1, 2], // [1, 2]
+      certifiedOnly: false, //true
+    }
+    console.log("req", req)
+    getVisitingsSearch(req)
+    // getVisitingsSearch({
+    //   page: 1,
+    //   lat: 38,
+    //   lng: 127,
+    //   startTime: "2022-09-14T12:00:00",
+    //   endTime: "2022-09-14T15:00:00",
+    //   petIds: [1, 2, 3],
+    //   radius: 10,
+    //   sortBy: "distance",
+    //   sortOrder: "ASC",
+    //   gender: "MALE",
+    //   services: [1, 2],
+    //   amenities: [1, 2],
+    //   certifiedOnly: false,
+    // })
+    setPetsitters(_petsitters)
+  }, [])
+
+  useEffect(() => {
     //? case1. 바텀탭으로 넘어오는경우
     if (!route.params) {
       // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
@@ -243,7 +276,7 @@ export const SearchResultScreen: FC<
                     serviceType: serviceType,
                     selectedPets: petIds,
                     beginDate: serviceType === "방문" ? startTime : null,
-                    endDate: serviceType === "방문" ? endTime : null,
+                    endTime: serviceType === "방문" ? endTime : null,
                   })
                 }}
                 style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}

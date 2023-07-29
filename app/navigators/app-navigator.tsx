@@ -111,7 +111,7 @@ export type NavigatorParamList = {
     lat: number
     lng: number
     startTime: string // "2023-07-27T10:40:59"
-    endDate: string //"2023-07-27T11:40:59"
+    endTime: string //"2023-07-27T11:40:59"
     petIds: number[]
 
     // 그외
@@ -325,7 +325,7 @@ const SearchingStack = () => {
 
       {/* //* 검색결과 */}
       <Stack.Screen
-        name="search-result"
+        name="search-result-screen"
         component={SearchResultScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,

@@ -299,7 +299,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             }}
             onPress={() => {
               //? 펫시터 검색결과 스크린으로 이동
-              navigate("search-result", {
+              navigate("search-result-screen", {
                 service,
                 serviceType,
                 //TODO "위탁"인 경우 사용될 값입니다. cg-calendar로 바뀌면 startDate, endDate로 나눠져 들어가야합니다. 우선 한 값만 선택할 수 있기 때문에 selectedDate로만 넘깁니다.
@@ -309,8 +309,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                   return item.id
                 }),
                 //? "방문"인 경우 사용될 값
-                beginDate: serviceType === "방문" ? startTime.toISOString().substring(0, 19) : null,
-                endDate: serviceType === "방문" ? endTime.toISOString().substring(0, 19) : null,
+                startTime: serviceType === "방문" ? startTime.toISOString().substring(0, 19) : null,
+                endTime: serviceType === "방문" ? endTime.toISOString().substring(0, 19) : null,
                 // 위치 값
                 ...location,
               })
