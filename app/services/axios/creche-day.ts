@@ -5,8 +5,8 @@ export interface CrecheAvailableDates {
   id: number
   createAt: string
   updatedAt: string
-  startTime: string
-  endTime: string
+  startDate?: string
+  endDate: string
   fee: number
   totalFee: number
 }

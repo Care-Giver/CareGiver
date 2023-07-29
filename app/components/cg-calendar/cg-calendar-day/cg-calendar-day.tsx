@@ -93,23 +93,22 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     // console.log("serviceType in checkDate >>>", serviceType)
 
     if (serviceType == "방문") {
-      for (let i = 0; i < availableDates?.length; i++) {
-        if (date.dateString == availableDates[i]?.date.substring(0, 10)) {
-          setFee(availableDates[i].fee)
+      availableDates.map((availableDate) => {
+        if (date.dateString == availableDate?.date.substring(0, 10)) {
+          setFee(availableDate.fee)
           setAvailableTime(true)
           return true
-        } else continue
-      }
+        } else return null
+      })
     } else if (serviceType == "위탁") {
-      for (let i = 0; i < availableDates?.length; i++) {
-        if (date.dateString == availableDates[i]?.startTime.substring(0, 10)) {
-          setFee(availableDates[i].fee)
+      availableDates.map((availableDate) => {
+        if (date.dateString == availableDate?.startDate.substring(0, 10)) {
+          setFee(availableDate.fee)
           setAvailableTime(true)
           return true
-        } else continue
-      }
+        } else return null
+      })
     }
-    return null
   }
 
   // console.log("dates in calendar-day >>>", dates)
