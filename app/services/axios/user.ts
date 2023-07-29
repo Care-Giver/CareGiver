@@ -5,6 +5,7 @@ export enum Sex {
   MALE = "MALE",
   FEMALE = "FEMALE",
 }
+
 export interface User {
   id: number
   createAt: string
