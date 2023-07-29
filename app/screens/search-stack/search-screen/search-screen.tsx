@@ -53,6 +53,11 @@ interface Location {
   lng: number
 }
 
+const 한양대에리카제5공학관 = {
+  lng: 37.29761156398638,
+  lat: 126.83717702329602,
+}
+
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     //* 서비스 형태
@@ -74,7 +79,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
 
     //* 위치선택
-    const [location, setLocation] = useState<Location>({ lat: 38, lng: 127 })
+    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
 
     // 시간선택 BottomSheet - ref
     const bottomSheetRef = useRef<BottomSheet>(null)

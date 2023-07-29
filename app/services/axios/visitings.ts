@@ -1,6 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from "axios"
+import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { Sex } from "./user"
+
+export enum SearchResultSortOrder {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 
 interface VisitingsSearchRequest {
   page: number
@@ -11,47 +16,61 @@ interface VisitingsSearchRequest {
   petIds: number[] //[1, 2, 3]
   radius: number //10
   sortBy: string // "distance"
-  sortOrder: string // "ASC"
+  sortOrder: SearchResultSortOrder
   gender: Sex // "FEMALE"
   services: number[] //[1, 2]
   amenities: number[] // [1, 2]
   certifiedOnly: boolean //true
 }
 
+enum VisitingHandleType {
+  SMALL = "소형",
+  MEDIUM = "중형",
+  LARGE = "대형",
+}
+
+type ExtraSizeFee = {
+  SMALL: number
+  MEDIUM: number
+  LARGE: number
+}
+
+type VisitingService = {
+  id: number
+  createAt: string
+  updatedAt: string
+  name: string
+
+  /* {
+    id: 1
+    createAt: "2023-01-01T11:00:00"
+    updatedAt: "2023-01-01T11:00:00"
+    name: "산책하기"
+    }, */
+}
+
+type VisitingAmenity = VisitingService
+
 interface Visiting {
-  id: 1
-  createAt: "2023-01-01T11:00:00"
-  updatedAt: "2023-01-01T11:00:00"
-  title: "ENFP의 친화력"
-  desc: "강아지 3년 기른 경력으로 보살핍니다."
-  address: "경기도 안산시 사동 한양대학로 55"
-  defaultFee: "5,000"
-  hiredNumber: 132
-  star: 5
-  location: "(127, 38)"
-  maxUnit: 3
-  handleType: "대형, 중형, 소형"
-  images: ["이미지 주소"]
-  extraSizeFee: "{SMALL:0, MEDIUM:0, LARGE:0}"
+  id: number //1
+  createAt: string //"2023-01-01T11:00:00"
+  updatedAt: string // "2023-01-01T11:00:00"
+  title: string // "ENFP의 친화력"
+  desc: string //"강아지 3년 기른 경력으로 보살핍니다."
+  address: string // "경기도 안산시 사동 한양대학로 55"
+  defaultFee: string //"5,000"
+  hiredNumber: number //132
+  star: number //5
+  location: string // "(127, 38)"
+  maxUnit: number //3
+  handleType: VisitingHandleType //"대형, 중형, 소형"
+  images: string[] // ["이미지 주소"]
+  extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"
   promoted: false
-  responseRate: [0.25, 1, 4]
-  acceptRate: [0.25, 1, 4]
-  serviceVisiting: [
-    {
-      id: 1
-      createAt: "2023-01-01T11:00:00"
-      updatedAt: "2023-01-01T11:00:00"
-      name: "산책하기"
-    },
-  ]
-  visitingAmenities: [
-    {
-      id: 1
-      createAt: "2023-01-01T11:00:00"
-      updatedAt: "2023-01-01T11:00:00"
-      name: "노견 케어"
-    },
-  ]
+  responseRate: number[] // [0.25, 1, 4]
+  acceptRate: number[] //[0.25, 1, 4]
+  serviceVisiting: VisitingService[]
+  visitingAmenities: VisitingAmenity[]
 }
 
 interface VisitingsSearchRequestResponse extends GeneralResponse {
@@ -62,7 +81,9 @@ interface VisitingsSearchRequestResponse extends GeneralResponse {
  * 조건에 맞는 방문 펫시터를 검색한다
  * @returns {Promise<number>} 생성된 위탁장소의 id (crecheId) 를 리턴한다.
  */
-export const getVisitingsSearch = async (requestBody: VisitingsSearchRequest): Promise<number> => {
+export const getVisitingsSearch = async (
+  requestBody: VisitingsSearchRequest,
+): Promise<Visiting[]> => {
   try {
     // console.log("creche", creche)
     const response = await axios.post<VisitingsSearchRequestResponse>(
@@ -77,13 +98,12 @@ export const getVisitingsSearch = async (requestBody: VisitingsSearchRequest): P
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
       // @ts-ignore
-      return null
+      return []
     }
 
-    console.log("response.data", response.data)
-    return response.data.crecheId
+    return response.data.visitings
   } catch (error) {
     console.error("catch 에러!!!", error)
-    return null
+    return []
   }
 }

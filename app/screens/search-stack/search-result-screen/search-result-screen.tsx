@@ -21,7 +21,8 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { Sex, getVisitingsSearch } from "#axios"
+import { Sex, SearchResultSortOrder, getVisitingsSearch } from "#axios"
+
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
@@ -114,29 +115,14 @@ export const SearchResultScreen: FC<
       petIds: [1, 2],
       radius: 10, //10
       sortBy: "distance", // "distance"
-      sortOrder: "ASC", // "ASC"
-      gender: Sex.FEMALE, // "FEMALE"
-      services: [1, 2], //[1, 2]
-      amenities: [1, 2], // [1, 2]
-      certifiedOnly: false, //true
+      sortOrder: SearchResultSortOrder.ASC, // "ASC"
+      gender: Sex.MALE,
+      services: [], //[1, 2]
+      amenities: [], // [1, 2]
+      certifiedOnly: true, //false
     }
     console.log("req", req)
     getVisitingsSearch(req)
-    // getVisitingsSearch({
-    //   page: 1,
-    //   lat: 38,
-    //   lng: 127,
-    //   startTime: "2022-09-14T12:00:00",
-    //   endTime: "2022-09-14T15:00:00",
-    //   petIds: [1, 2, 3],
-    //   radius: 10,
-    //   sortBy: "distance",
-    //   sortOrder: "ASC",
-    //   gender: "MALE",
-    //   services: [1, 2],
-    //   amenities: [1, 2],
-    //   certifiedOnly: false,
-    // })
     setPetsitters(_petsitters)
   }, [])
 
