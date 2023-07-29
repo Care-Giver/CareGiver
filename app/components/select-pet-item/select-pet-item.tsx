@@ -5,7 +5,7 @@ import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { BODY } from "#theme"
 import { Row } from "../basics/row/row"
 import { BlueCheckbox } from "../blue-checkbox/blue-checkbox"
-import { HandleType, Pet, Sex } from "#models"
+import { HandleType, Pet, PetSex } from "#models"
 
 interface PetWithSize extends Pet {
   size: HandleType
@@ -67,9 +67,9 @@ export const SelectPetItem = (props: SelectPetItemProps) => {
   }
 
   let sexText = ""
-  if (sex === Sex.MALE) {
+  if (sex === PetSex.MALE) {
     sexText = "남"
-  } else if (sex === Sex.FEMALE) {
+  } else if (sex === PetSex.FEMALE) {
     sexText = "여"
   }
 
