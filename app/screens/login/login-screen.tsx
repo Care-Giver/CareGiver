@@ -18,7 +18,7 @@ import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-nativ
 import { GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
-import { AppleLoginOutput, appleServerLogin, naverServiceLogin } from "#axios"
+import { AppleLoginOutput, appleServerLogin, naverServiceLogin, kakaoServerLogin } from "#axios"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -35,12 +35,18 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      * - 딥링크를 통해, 카카오톡을 실행하며, 카카오톡에 로그인되어있다면
      * - 개인정보 이용동의 후, 로그인 완료 처리됨
      * - 만약, 카카오톡 접근이 불가하다면, loginWithKakaoAccount 를 호출하여 웹브라우저를 실행함
+     * - 이후 accessToken을 케어기버 서버로 보내 로그인 진행
      */
     const signInWithKakao = async (): Promise<void> => {
       try {
-        const token: KakaoOAuthToken = await login()
-        setRefreshToken(token.refreshToken)
-        // setResult(JSON.stringify(token))
+        const kakaoLoginResponse: KakaoOAuthToken = await login()
+
+        const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
+
+        setLoggedIn(true)
+        setRefreshToken(userToken)
+
+        setResult(userToken)
       } catch (err) {
         console.error("login err", err)
         alertModal("카카오 로그인 실패", err?.message)
@@ -182,7 +188,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const kakaoLogin = async () => {
       await signInWithKakao()
-      await getKProfile()
+      goBack()
     }
 
     const naverLogin = async () => {

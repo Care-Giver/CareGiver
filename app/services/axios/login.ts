@@ -9,11 +9,19 @@ interface NaverLoginInput {
   idToken: string
 }
 
+interface KakaoLoginInput {
+  idToken: string
+}
+
 export interface AppleLoginOutput extends GeneralResponse {
   token?: string
 }
 
 export interface NaverLoginOutput extends GeneralResponse {
+  token?: string
+}
+
+export interface KakaoLoginOutput extends GeneralResponse {
   token?: string
 }
 
@@ -50,6 +58,30 @@ export const naverServiceLogin = async (idToken: string): Promise<string> => {
     const response = await axios.post<NaverLoginOutput>(`${BASE_URL}/user/login/naver`, {
       idToken,
     } as NaverLoginInput)
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
+    }
+
+    return response.data.token
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return ""
+  }
+}
+
+/**
+ * 카카오 로그인 요청을 서버에 보낸다.
+ * @returns {Promise<string>} token
+ */
+export const kakaoServerLogin = async (idToken: string): Promise<string> => {
+  try {
+    const response = await axios.post<KakaoLoginOutput>(`${BASE_URL}/user/login/kakao`, {
+      idToken,
+    } as KakaoLoginInput)
 
     if (!response.data.ok) {
       const error = response.data.error
