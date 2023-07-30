@@ -5,7 +5,15 @@ interface AppleLoginInput {
   idToken: string
 }
 
+interface NaverLoginInput {
+  idToken: string
+}
+
 export interface AppleLoginOutput extends GeneralResponse {
+  token?: string
+}
+
+export interface NaverLoginOutput extends GeneralResponse {
   token?: string
 }
 
@@ -18,6 +26,30 @@ export const appleServerLogin = async (idToken: string): Promise<string> => {
     const response = await axios.post<AppleLoginOutput>(`${BASE_URL}/user/login/apple`, {
       idToken,
     } as AppleLoginInput)
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
+    }
+
+    return response.data.token
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return ""
+  }
+}
+
+/**
+ * 네이버 로그인 요청을 서버에 보낸다.
+ * @returns {Promise<string>} token
+ */
+export const naverServiceLogin = async (idToken: string): Promise<string> => {
+  try {
+    const response = await axios.post<NaverLoginOutput>(`${BASE_URL}/user/login/naver`, {
+      idToken,
+    } as NaverLoginInput)
 
     if (!response.data.ok) {
       const error = response.data.error
