@@ -9,8 +9,8 @@ export enum SearchResultSortOrder {
 
 interface VisitingsSearchRequest {
   page: number
-  lat: number
-  lng: number
+  lat: number // 위도
+  lng: number // 경도
   startTime: string // "2023-07-27T10:40:59"
   endTime: string //"2023-07-27T11:40:59"
   petIds: number[] //[1, 2, 3]
@@ -51,17 +51,25 @@ type VisitingService = {
 
 type VisitingAmenity = VisitingService
 
-interface Visiting {
+type Coordinates = [number, number] //[126.834393833, 37.298004735]
+
+interface LocationResponse {
+  coordinates: Coordinates
+  type: "Point"
+}
+
+export interface Visiting {
   id: number //1
   createAt: string //"2023-01-01T11:00:00"
   updatedAt: string // "2023-01-01T11:00:00"
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
   address: string // "경기도 안산시 사동 한양대학로 55"
-  defaultFee: string //"5,000"
+  defaultFee: number //10000
   hiredNumber: number //132
   star: number //5
-  location: string // "(127, 38)"
+  /* location: string // "(127, 38)" */
+  location: LocationResponse
   maxUnit: number //3
   handleType: VisitingHandleType //"대형, 중형, 소형"
   images: string[] // ["이미지 주소"]
@@ -92,7 +100,7 @@ export const getVisitingsSearch = async (
       CONFIG,
     )
     // console.log("response >>>", response)
-    console.log("response.data >>>", response.data)
+    // console.log("response.data >>>", response.data.visitings)
 
     if (!response.data.ok) {
       const error = response.data.error

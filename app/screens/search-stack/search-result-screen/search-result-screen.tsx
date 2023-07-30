@@ -21,7 +21,7 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { Sex, SearchResultSortOrder, getVisitingsSearch } from "#axios"
+import { Sex, SearchResultSortOrder, getVisitingsSearch, Visiting } from "#axios"
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
@@ -44,6 +44,12 @@ export const SearchResultScreen: FC<
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState([])
+  const [visitings, setVisitings] = useState<Visiting>(null)
+
+  if (visitings) {
+    console.log("visitings \n", visitings)
+    console.log("visitings[0]?.location \n", visitings[0]?.location)
+  }
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -119,10 +125,10 @@ export const SearchResultScreen: FC<
       gender: Sex.MALE,
       services: [], //[1, 2]
       amenities: [], // [1, 2]
-      certifiedOnly: true, //false
+      certifiedOnly: false,
     }
     console.log("req", req)
-    getVisitingsSearch(req)
+    getVisitingsSearch(req).then(setVisitings)
     setPetsitters(_petsitters)
   }, [])
 
