@@ -16,11 +16,8 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
   DivisionLine,
-  PopSem16,
   PopSem24,
-  PreBol14,
   PreBol16,
-  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -28,6 +25,7 @@ import {
   PreReg14,
   PreReg16,
   Screen,
+  ServiceTime,
   TimePicker,
   WeightModal,
 } from "#components"
@@ -124,22 +122,6 @@ export const SetVisitingServiceDayScreen: FC<
   console.log(newTime)
   console.log(selectedTimeText)
 
-  // 서비스 시간 : 오전(오후) 08:00 ~ 오전(오후) 03:00
-  const ServiceTime = (props) => {
-    return (
-      <View style={[styles.box, { marginBottom: 12 }]}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <PreReg16 text="오전" mr={4} />
-          <PopSem16 text={props.startTime} />
-          <PreReg16 text="~" mr={10} />
-          <PreReg16 text="오후" mr={4} />
-          <PopSem16 text={props.endTime} />
-        </View>
-        <Image style={styles.image} source={images.x_grey} />
-      </View>
-    )
-  }
-
   // 강아지크기별 가격
   const PricePerSize = (props) => {
     return (
@@ -189,7 +171,7 @@ export const SetVisitingServiceDayScreen: FC<
         {/* 가능한 서비스 시간대 & 시간 추가하기 */}
         <PreMed18 text="서비스 시간대" mt={16} ml={16} mb={12} />
         <ServiceTime startTime="08:00" endTime="04:00" style={{ marginBottom: 12 }} />
-        <ServiceTime startTime="03:00" endTime="05:00" />
+        <ServiceTime startTime="02:00" endTime="06:00" />
         {newTime && (
           <ServiceTime
             startTime={selectedTimeText.slice(0, 5)}
@@ -327,21 +309,7 @@ const styles = StyleSheet.create({
     backgroundColor: LBG,
     marginHorizontal: 16,
   },
-  box: {
-    paddingHorizontal: 16,
-    paddingVertical: 18,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: LIGHT_LINE,
-    marginHorizontal: 16,
-    borderRadius: 10,
-    backgroundColor: "white",
-    //안드로이드 경우 box-shadow
-    elevation: 2,
-    alignItems: "center",
-  },
+
   text: {
     fontFamily: POPPINS_SEMIBOLD,
     fontSize: 16,
