@@ -54,8 +54,8 @@ interface Location {
 }
 
 const 한양대에리카제5공학관 = {
-  lng: 37.29761156398638,
-  lat: 126.83717702329602,
+  lat: 37.29761156398638, // 위도
+  lng: 126.83717702329602, // 경도
 }
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
