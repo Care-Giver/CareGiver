@@ -7,6 +7,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
   DivisionLine,
+  FindConsecutiveDays,
   PreBol16,
   PreBol20,
   PreMed14,
@@ -38,6 +39,7 @@ export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
   const { date, crecheId } = route.params
+
   console.log(date, crecheId)
 
   // isEnabled가 true인 경우 서비스 가능 toggle on
@@ -63,7 +65,6 @@ export const SetCrecheServiceDayScreen: FC<
     // isChangeMade()
   }
   console.log(price)
-
   const onPress = () => {
     console.log(
       "저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다",

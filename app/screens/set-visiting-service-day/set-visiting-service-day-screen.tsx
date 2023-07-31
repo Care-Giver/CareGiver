@@ -170,7 +170,7 @@ export const SetVisitingServiceDayScreen: FC<
 
         {/* 가능한 서비스 시간대 & 시간 추가하기 */}
         <PreMed18 text="서비스 시간대" mt={16} ml={16} mb={12} />
-        <ServiceTime startTime="08:00" endTime="04:00" style={{ marginBottom: 12 }} />
+        <ServiceTime startTime="08:00" endTime="04:00" />
         <ServiceTime startTime="02:00" endTime="06:00" />
         {newTime && (
           <ServiceTime
