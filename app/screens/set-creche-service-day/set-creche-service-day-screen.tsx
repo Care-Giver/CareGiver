@@ -42,6 +42,9 @@ export const SetCrecheServiceDayScreen: FC<
 
   console.log(date, crecheId)
 
+  const consecutiveDays = FindConsecutiveDays(date)
+  console.log(consecutiveDays)
+
   // isEnabled가 true인 경우 서비스 가능 toggle on
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => {

@@ -7,20 +7,18 @@ export interface FindConsecutiveDaysProps {
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
-  date: string[]
+  selectedDates: string[]
 }
 
-export const FindConsecutiveDays = observer(function FindConsecutiveDays(
-  props: FindConsecutiveDaysProps,
-) {
-  const { style, date } = props
-  const allStyles = Object.assign({}, styles.root, style)
+export const FindConsecutiveDays = (selectedDates: string[]): string[] | [] => {
+  // const { style, selectedDates } = props
+  // const allStyles = Object.assign({}, styles.root, style)
 
-  if (date.length <= 1) {
+  if (selectedDates.length <= 1) {
     return []
   }
 
-  const sortedDates = date.slice().sort()
+  const sortedDates = selectedDates.slice().sort()
   const consecutiveDays = []
   let currentConsecutive = [sortedDates[0]]
 
@@ -40,8 +38,8 @@ export const FindConsecutiveDays = observer(function FindConsecutiveDays(
   consecutiveDays.push(currentConsecutive)
 
   return consecutiveDays.filter((arr) => arr.length > 1)
-})
+}
 
-const styles = StyleSheet.create({
-  root: {},
-})
+// const styles = StyleSheet.create({
+//   root: {},
+// })
