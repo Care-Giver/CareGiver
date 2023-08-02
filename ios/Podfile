@@ -13,8 +13,7 @@ install! 'cocoapods',
 
 target 'CareGiver' do
   use_expo_modules!
-  use_modular_headers! # [!] The following Swift pods cannot yet be integrated as static libraries: The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
-  
+  # use_modular_headers! # [!] The following Swift pods cannot yet be integrated as static libraries: The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
 
   # npx expo install @react-native-firebase/app 이후, 발생한 pod install 오류를 해결하기 위해 추가함 - 참고: https://stackoverflow.com/a/72705219/16673541
   pod 'FirebaseCore', :modular_headers => true

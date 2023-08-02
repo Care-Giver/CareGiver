@@ -190,7 +190,7 @@ PODS:
   - hermes-engine/Pre-built (0.72.3)
   - iamport-react-native (2.0.5):
     - React-Core
-  - kakao-login (5.2.6):
+  - kakao-login (5.3.0):
     - KakaoSDKAuth (= 2.11.1)
     - KakaoSDKCommon (= 2.11.1)
     - KakaoSDKUser (= 2.11.1)
@@ -527,7 +527,7 @@ PODS:
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-image-picker (5.4.2):
+  - react-native-image-picker (5.6.0):
     - React-Core
   - react-native-maps (1.7.1):
     - React-Core
@@ -660,7 +660,7 @@ PODS:
   - RNFBApp (15.4.0):
     - Firebase/CoreOnly (= 9.5.0)
     - React-Core
-  - RNGestureHandler (2.12.0):
+  - RNGestureHandler (2.12.1):
     - React-Core
   - RNKeychain (6.2.0):
     - React
@@ -1023,7 +1023,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: c63691989bf362ba0505507da00eeb326192e83e
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   iamport-react-native: f6b2ad6b089ff7fb23be33bb61db61b0e577eee2
-  kakao-login: 2fbe3c549915276a44f7777036ee316e720f4738
+  kakao-login: 3d7afeb8d49d4fa9a3ee579edb1b68c65bf20dac
   KakaoSDKAuth: bb2dfa7be30daa8403c9cfc8001aa6fde7a5b779
   KakaoSDKCommon: 555e1bb46595b842ded01cf7888cc17bbae4e113
   KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
@@ -1052,7 +1052,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-google-maps: dd12cdd86b8e3fedbbb671676aedaa2f656e2ccd
-  react-native-image-picker: 77f552291e993f3fdcdf48cc3c280ef7f11789c8
+  react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   react-native-webview: b8ec89966713985111a14d6e4bf98d8b54bced0d
@@ -1078,7 +1078,7 @@ SPEC CHECKSUMS:
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNDateTimePicker: 3942382593f104af226ad9c56e16166960c7ae30
   RNFBApp: a6fca2cd8f392b5efc1f2ab7bd4b3b64a6039abf
-  RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
+  RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNNaverLogin: 01ca478665ea024e4ddaa02be38396845fcac0b6
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
@@ -1086,6 +1086,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 8796b55dba14d7004f980b54bcc9833ee45b28ce
 
-PODFILE CHECKSUM: b982f0f482731174a1d190f10669040637735a2b
+PODFILE CHECKSUM: 474764dafef98860f25ab89efd061d439ff73a44
 
 COCOAPODS: 1.12.1
