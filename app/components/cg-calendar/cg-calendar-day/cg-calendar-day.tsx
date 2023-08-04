@@ -9,7 +9,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
   const { date, state, selected, dates, month, serviceType, startDate, endDate } = props
   const [fee, setFee] = useState(null)
   const [availableTime, setAvailableTime] = useState(false)
-
+  const today = new Date()
   useEffect(() => {
     setFee(null)
     //setAvailableTime(false)
@@ -133,6 +133,11 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
               fontWeight: availableTime ? "600" : "400",
               backgroundColor: textBgBdSelectior({ date, state }),
               color: textColorSelector({ date, state }),
+              textDecorationLine: availableTime
+                ? "none"
+                : new Date(date.dateString) >= today
+                ? "line-through"
+                : "none",
             },
           ]}
         >
