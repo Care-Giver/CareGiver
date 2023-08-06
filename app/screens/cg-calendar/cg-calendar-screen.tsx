@@ -6,6 +6,7 @@ import { CancelButton, CgCalendar, CgCalendarEditButton, Screen, Text } from "#c
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
+import { BOTTOM_HEIGHT } from "#theme"
 
 // import { useNavigation } from "@react-navigation/native"
 
@@ -61,7 +62,7 @@ export const CgCalendarScreen: FC<
       </View>
       <CgCalendar dates={dates}></CgCalendar>
       <CgCalendarEditButton
-        style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
+        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         title={"수정"}
       />
     </Screen>
