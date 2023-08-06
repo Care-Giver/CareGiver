@@ -6,14 +6,16 @@ import { ServiceType } from "#screens"
 
 interface Solution1 extends GroupedVisitingAvailableTimesByDate, CrecheAvailableDates {}
 
-export type CgCalendarDayProps = {
+export type ClientCalendarDayProps = {
   date: string & DateData
   state: DayState
-  month: Date
-  serviceType: ServiceType
-  selected: string[]
+  selected: string
   // dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]
+  serviceType: ServiceType
   availableDates: Solution1[]
+  month: Date
+  startDate: Date
+  endDate: Date
 }
 
 {

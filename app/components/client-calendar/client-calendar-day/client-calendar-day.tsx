@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { View, Pressable, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
-import { CgCalendarDayProps } from "./cg-calendar-day.props"
+import { ClientCalendarDayProps } from "./client-calendar-day.props"
 import {
   DISABLED,
   GIVER_CASUAL_NAVY,
@@ -12,19 +12,35 @@ import {
   SUB_HEAD_LINE,
 } from "#theme"
 
-export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, availableDates, serviceType } = props
+export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCalendarDayProps) {
+  const { date, state, selected, availableDates, serviceType, startDate, endDate } = props
   const [fee, setFee] = useState(null)
   const [availableTime, setAvailableTime] = useState(false)
-  const today = new Date()
+
   useEffect(() => {
     setFee(null)
     //setAvailableTime(false)
     checkDate()
-  }, [date, availableDates, selected])
+  }, [date, availableDates])
 
+  //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
+  const checkMiddleDate = ({ date }) => {
+    //console.log("s: ", startDate, "e: ", endDate)
+
+    const confirmedDate = new Date(date?.dateString)
+    if (startDate <= confirmedDate && confirmedDate <= endDate) {
+      // console.log(confirmedDate)
+      // console.log("check!")
+      return true
+    }
+    //console.log("no!!!!!!!!")
+    return false
+  }
   const textBgBdSelectior = ({ date, state }) => {
-    if (selected.includes(date.dateString)) {
+    if (checkMiddleDate({ date })) {
+      return GIVER_CASUAL_NAVY
+    }
+    if (date.dateString == selected) {
       return GIVER_CASUAL_NAVY
     }
     if (state == "today") {
@@ -33,8 +49,11 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return "white"
   }
   const textColorSelector = ({ date, state }) => {
+    if (checkMiddleDate({ date })) {
+      return "white"
+    }
     if (availableTime) {
-      if (selected.includes(date.dateString)) {
+      if (date.dateString == selected) {
         return "white"
       }
       if (state == "disabled") {
@@ -42,7 +61,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
       }
       return "black"
     }
-    if (selected.includes(date.dateString)) {
+    if (date.dateString == selected) {
       return "white"
     }
     if (state == "today") {
@@ -54,8 +73,11 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     return DISABLED
   }
   const feeTextColorSelector = ({ date, state }) => {
-    if (selected.includes(date.dateString)) {
-      return "#324C89"
+    if (checkMiddleDate({ date })) {
+      return GIVER_CASUAL_NAVY_80
+    }
+    if (date.dateString == selected) {
+      return GIVER_CASUAL_NAVY_80
     }
     if (state == "today") {
       return GIVER_CASUAL_NAVY
@@ -117,11 +139,6 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
               fontWeight: availableTime ? "600" : "400",
               backgroundColor: textBgBdSelectior({ date, state }),
               color: textColorSelector({ date, state }),
-              textDecorationLine: availableTime
-                ? "none"
-                : new Date(date.dateString) >= today
-                ? "line-through"
-                : "none",
             },
           ]}
         >
@@ -134,7 +151,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
             styles.feeText,
             {
               color: feeTextColorSelector({ date, state }),
-              fontWeight: selected.includes(date.dateString) ? "600" : "400",
+              fontWeight: date.dateString == selected ? "600" : "400",
             },
           ]}
         >
