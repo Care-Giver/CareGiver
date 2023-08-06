@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react"
 import {
   StyleProp,
   ViewStyle,
-  View,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -11,15 +10,19 @@ import {
 import { observer } from "mobx-react-lite"
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { BOTTOM_TAB_NAVIGATOR, DEVICE_SCREEN_WIDTH, IOS_BOTTOM_HOME_BAR_HEIGHT } from "#theme"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { useStores } from "#models"
+import { images } from "#images"
+import { BottomMenuItem } from "../bottom-menu-item/bottom-menu-item"
+import { tabLabel } from "#navigators"
 
 const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
   android: BOTTOM_TAB_NAVIGATOR,
-  ios: BOTTOM_TAB_NAVIGATOR + IOS_BOTTOM_HOME_BAR_HEIGHT,
+  ios: 52 + IOS_BOTTOM_HOME_BAR_HEIGHT,
 })
 
-const IOS_BOTTOM_PADDING = 0
+const BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT = 28
+
+const IOS_BOTTOM_PADDING = IOS_BOTTOM_HOME_BAR_HEIGHT
 
 export interface CustomTabBarProps extends BottomTabBarProps {
   /**
@@ -34,28 +37,46 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
   const {
     uiStore: { showingBottomTab },
   } = useStores()
-  // console.log("showingBottomTab >>>", showingBottomTab)
 
-  const animHeight = useRef(new Animated.Value(BOTTOM_TAB_BAR_HEIGHT)).current
+  const animatedBottomTabBarHeight = useRef(new Animated.Value(BOTTOM_TAB_BAR_HEIGHT)).current
+  const animatedBottomTabBarItemImageHeight = useRef(
+    new Animated.Value(BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT),
+  ).current
 
   useEffect(() => {
     handleBottomTabVisiblity()
   }, [showingBottomTab])
 
   const handleBottomTabVisiblity = () => {
-    Animated.timing(animHeight, {
+    Animated.timing(animatedBottomTabBarHeight, {
       toValue: showingBottomTab ? BOTTOM_TAB_BAR_HEIGHT : 0,
+      duration: 300,
+      useNativeDriver: false, // Use `false` for Android support
+    }).start()
+
+    Animated.timing(animatedBottomTabBarItemImageHeight, {
+      toValue: showingBottomTab ? BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT : 0,
       duration: 300,
       useNativeDriver: false, // Use `false` for Android support
     }).start()
   }
 
+  // 그림자 효과 - 바텀탭이 보여질 때만 그림자 효과를 줍니다.
+  const shadowStyle = {
+    shadowOffset: {
+      width: 0,
+      height: -1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4.0,
+    elevation: 10,
+  }
+
   const allStyles = Object.assign(
     {},
     styles.root,
-    {
-      height: animHeight,
-    },
+    { height: animatedBottomTabBarHeight },
+    showingBottomTab && shadowStyle,
     style,
   )
 
@@ -64,14 +85,48 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
 
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name
-
+        const label = options.tabBarLabel
         const isFocused = state.index === index
+
+        let activeImage = ""
+        let inactiveImage = ""
+        switch (label) {
+          //  CL
+          case tabLabel.favortie:
+            activeImage = images.favorite_navy
+            inactiveImage = images.favorite_grey
+            break
+          case tabLabel.schedule:
+            activeImage = images.schedule_navy
+            inactiveImage = images.schedule_grey
+            break
+          case tabLabel.search:
+            activeImage = images.search_navy
+            inactiveImage = images.search_grey
+            break
+          case tabLabel.chatting:
+            activeImage = images.chatting_navy
+            inactiveImage = images.chatting_grey
+            break
+          case tabLabel.myinfo:
+            activeImage = images.myinfo_navy
+            inactiveImage = images.myinfo_grey
+            break
+
+          // CG
+          case tabLabel.statistics:
+            activeImage = images.statistics_navy
+            inactiveImage = images.statistics_grey
+            break
+          case tabLabel.manage_booking:
+            activeImage = images.schedule_navy // DO NOT CHANGE THIS
+            inactiveImage = images.schedule_grey // DO NOT CHANGE THIS
+            break
+          case tabLabel.manage_schedule:
+            activeImage = images.manage_schedule_navy
+            inactiveImage = images.manage_schedule_grey
+            break
+        }
 
         const onPress = () => {
           const event = navigation.emit({
@@ -89,20 +144,35 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
             type: "tabLongPress",
             target: route.key,
           })
+
+          //  LongPress 기획 있을 경우, 아래에 로직 작성
+          // console.log("LONG PRESS DETECTED")
         }
 
         return (
           <TouchableOpacity
             accessibilityRole="button"
+            //@ts-ignore
             accessibilityStates={isFocused ? ["selected"] : []}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
+            accessibilityLabel={options?.tabBarAccessibilityLabel}
+            testID={options?.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
             style={{ flex: 1 }}
             key={index}
           >
-            <BottomMenuItem isFocused={isFocused} image={label.toString()} />
+            {/* <BottomMenuItem  image={label.toString()} /> */}
+            {showingBottomTab && (
+              <BottomMenuItem
+                //@ts-ignore
+                image={isFocused ? activeImage : inactiveImage}
+                //@ts-ignore
+                label={label}
+                isFocused={isFocused}
+                showingBottomTab={showingBottomTab}
+                imageHeight={animatedBottomTabBarItemImageHeight}
+              />
+            )}
           </TouchableOpacity>
         )
       })}
@@ -121,41 +191,7 @@ const styles = StyleSheet.create({
     }),
 
     backgroundColor: "white",
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
     position: "absolute",
     bottom: 0,
-
-    // 그림자 효과
-    shadowOffset: {
-      width: 0,
-      height: -1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4.0,
-    elevation: 10,
   },
 })
-
-type Props = {
-  image: string
-  isFocused?: boolean
-}
-
-export const BottomMenuItem = ({ image, isFocused }: Props) => {
-  return (
-    <View
-      style={{
-        height: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <MaterialCommunityIcons
-        name={image}
-        size={24}
-        style={{ color: isFocused ? "blue" : "grey" }}
-      />
-    </View>
-  )
-}

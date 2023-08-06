@@ -188,6 +188,25 @@ export type NavigatorParamList = {
   "test-iamport-payment-result-screen": undefined
 }
 
+const clBottomTabLabel = {
+  favortie: "즐겨찾기",
+  schedule: "예약 내역",
+  search: "검색",
+  chatting: "채팅",
+  myinfo: "내정보",
+}
+
+const cgBottomTabLabel = {
+  statistics: "통계",
+  manage_booking: "예약 관리",
+  manage_schedule: "일정 관리",
+}
+
+export const tabLabel = {
+  ...clBottomTabLabel,
+  ...cgBottomTabLabel,
+}
+
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 const Tab = createBottomTabNavigator()
 
@@ -600,13 +619,6 @@ const ClientTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { display: "none" },
-        tabBarLabelStyle: {
-          paddingBottom: Platform.select({
-            android: 8,
-            ios: 0,
-          }),
-        },
         headerShown: false,
         headerStyle: { backgroundColor: "white" },
       }}
@@ -616,87 +628,31 @@ const ClientTabs = () => {
       <Tab.Screen
         name="Favorites"
         component={FavoritesStack}
-        options={{
-          // tabBarLabel: "즐겨찾기",
-          tabBarLabel: "cards-heart",
-          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          // tabBarIcon: ({ focused }) => (
-          // <MaterialCommunityIcons
-          // name="cards-heart"
-          // size={24}
-          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-          // />
-          // ),
-        }}
+        options={{ tabBarLabel: tabLabel.favortie }}
       />
       <Tab.Screen
         name="Bookings"
         component={BookingsStack}
-        options={{
-          // tabBarLabel: "예약내역",
-          tabBarLabel: "calendar-multiselect",
-          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          // tabBarIcon: ({ focused }) => (
-          // <MaterialCommunityIcons
-          // name="calendar-multiselect"
-          // size={24}
-          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-          // />
-          // ),
-        }}
+        options={{ tabBarLabel: tabLabel.schedule }}
       />
       <Tab.Screen
         name="Searching"
         component={SearchingStack}
-        options={{
-          // tabBarLabel: "검색",
-          tabBarLabel: "magnify",
-          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          // tabBarIcon: ({ focused }) => (
-          // <MaterialCommunityIcons
-          // name="magnify"
-          // size={24}
-          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-          // />
-          // ),
-        }}
+        options={{ tabBarLabel: tabLabel.search }}
       />
       <Tab.Screen
         name="Chats"
         component={ChatsStack}
-        options={{
-          // tabBarLabel: "채팅",
-          tabBarLabel: "forum",
-          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          // tabBarIcon: ({ focused }) => (
-          // <MaterialCommunityIcons
-          // name="forum"
-          // size={24}
-          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-          // />
-          // ),
-        }}
+        options={{ tabBarLabel: tabLabel.chatting }}
       />
       <Tab.Screen
         name="Mypage"
         component={MypageStack}
-        options={{
-          // tabBarLabel: "내정보",r
-          tabBarLabel: "account",
-          // tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          // tabBarIcon: ({ focused }) => (
-          // <MaterialCommunityIcons
-          // name="account"
-          // size={24}
-          // color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-          // />
-          // ),
-        }}
+        options={{ tabBarLabel: tabLabel.myinfo }}
       />
     </Tab.Navigator>
   )
 }
-
 // ===========================================================================================================
 // ===========================================================================================================
 // ===========================================================================================================
@@ -970,93 +926,37 @@ const CareGiverTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { display: "none" },
-        tabBarLabelStyle: {
-          paddingBottom: Platform.select({
-            android: 8,
-            ios: 0,
-          }),
-        },
         headerShown: false,
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
       initialRouteName="Calendar"
+      tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
         name="Statistics"
         component={StatisticsStack}
-        options={{
-          tabBarLabel: "통계",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="elevation-rise"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.statistics }}
       />
       <Tab.Screen
         name="CgBookings"
         component={CgBookingsStack}
-        options={{
-          tabBarLabel: "예약 관리",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="pencil"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.manage_booking }}
       />
       <Tab.Screen
         name="Calendar"
         component={CalendarStack}
-        options={{
-          tabBarLabel: "달력",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="calendar-blank"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.manage_schedule }}
       />
       <Tab.Screen
         name="Chats"
         component={ChatsStack}
-        options={{
-          tabBarLabel: "채팅",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="forum"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.chatting }}
       />
       <Tab.Screen
         name="CgMypage"
         component={CgMypageStack}
-        options={{
-          tabBarLabel: "내정보",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.myinfo }}
       />
     </Tab.Navigator>
   )
@@ -1066,7 +966,6 @@ const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType },
   } = useStores()
-
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
@@ -1080,7 +979,6 @@ const AllTabs = observer(function AllTabs() {
     </>
   )
 })
-
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = (props: NavigationProps) => {
