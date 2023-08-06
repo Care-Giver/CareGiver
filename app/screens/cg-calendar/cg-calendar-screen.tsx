@@ -14,7 +14,7 @@ import {
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
-import { GIVER_CASUAL_NAVY } from "#theme"
+import { GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
 import { groupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
 import { crecheAvailableDates } from "../../services/axios/creche-day"
 
@@ -85,7 +85,7 @@ export const CgCalendarScreen: FC<
         setSelected={setSelected}
       />
       {/* <CgCalendarEditButton
-        style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
+        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         title={"수정"}
       /> */}
 
@@ -93,7 +93,7 @@ export const CgCalendarScreen: FC<
       <Pressable
         style={{
           position: "absolute",
-          bottom: 10,
+          bottom: BOTTOM_HEIGHT,
           paddingVertical: 18,
           alignSelf: "center",
           backgroundColor: "white",
