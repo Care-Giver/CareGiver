@@ -39,3 +39,35 @@ export const getVisitingAvailableTimes = async (
     return []
   }
 }
+
+interface PostVisitingTimeBody {
+  startTimes: string[]
+  endTimes: string[]
+  visitingId: number
+  fee: number
+}
+
+interface PostVistingTimeResponse extends GeneralResponse {
+  id: number
+  createAt: Date
+  updatedAt: Date
+  startTime: Date
+  endTime: Date
+  fee: number
+  TotalFee: number
+}
+
+export const postVisitingAvailableTime = (data: PostVisitingTimeBody) => {
+  try {
+    const response = axios.post<PostVistingTimeResponse>(
+      `${BASE_URL}/visiting-available-time`,
+      data,
+      CONFIG,
+    )
+    // if(response.data.ok) {
+
+    // }
+  } catch (error) {
+    console.error("postVisitingAvailvalTime | catch 에러!!!", error)
+  }
+}
