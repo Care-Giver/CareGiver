@@ -12,7 +12,7 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { BOTTOM_TAB_NAVIGATOR, DEVICE_SCREEN_WIDTH, IOS_BOTTOM_HOME_BAR_HEIGHT } from "#theme"
 import { useStores } from "#models"
 import { images } from "#images"
-import { BottomMenuItem } from "../bottom-menu-item/bottom-menu-item"
+import { TabBarItem } from "../tab-bar-item/tab-bar-item"
 import { tabLabel } from "#navigators"
 
 const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
@@ -163,7 +163,7 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
           >
             {/* <BottomMenuItem  image={label.toString()} /> */}
             {showingBottomTab && (
-              <BottomMenuItem
+              <TabBarItem
                 //@ts-ignore
                 image={isFocused ? activeImage : inactiveImage}
                 //@ts-ignore

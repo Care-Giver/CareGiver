@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { PreReg10 } from "#components"
 import { GIVER_CASUAL_NAVY } from "#theme"
 
-export interface BottomMenuItemProps {
+export interface TabBarItemProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
@@ -16,7 +16,7 @@ export interface BottomMenuItemProps {
   imageHeight: Animated.Value
 }
 
-export const BottomMenuItem = observer(function BottomMenuItem(props: BottomMenuItemProps) {
+export const TabBarItem = observer(function TabBarItem(props: TabBarItemProps) {
   const { style, image, label, isFocused, imageHeight } = props
   const allStyles = Object.assign({}, styles.root, style)
 

@@ -39,6 +39,10 @@ export * from "./screen-headers/cg-certificate-registration-screen-header/cg-cer
 export * from "./screen-headers/cgset-screen-header/cgset-screen-header"
 export * from "./screen-headers/cg-screen-header/cg-screen-header"
 
+//* bottom-tab-bar
+export * from "./custom-bottom-tab-bar/custom-tab-bar/custom-tab-bar"
+export * from "./custom-bottom-tab-bar/tab-bar-item/tab-bar-item"
+
 //* others
 export * from "./screen/screen"
 export * from "./division-line/division-line"
@@ -88,5 +92,3 @@ export * from "./place-holder-input-box/place-holder-input-box"
 export * from "./click-to-blue-button/click-to-blue-button"
 export * from "./payment-tool/payment-tool"
 export * from "./booking-list/booking-list"
-export * from "./tab-bars/custom-tab-bar/custom-tab-bar"
-export * from "./tab-bars/bottom-menu-item/bottom-menu-item"
