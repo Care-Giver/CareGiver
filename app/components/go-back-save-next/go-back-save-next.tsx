@@ -14,36 +14,30 @@ export interface GoBackSaveNextProps {
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
+
+  onPressGoback?: () => void
+  onPressSaveNext?: () => void
 }
 
 export const GoBackSaveNext = observer(function GoBackSaveNext(props: GoBackSaveNextProps) {
-  const { style } = props
-  const styles = Object.assign({}, ROOT, style)
+  const { style, onPressGoback, onPressSaveNext } = props
+  const allStyles = Object.assign({}, ROOT, style)
 
   return (
-    <View style={styles}>
+    <View style={allStyles}>
       {/* 이전 버튼 */}
-      <Pressable
-        style={_styles.prebutton}
-        onPress={() => {
-          alert("이전 버튼이 눌렸습니다.")
-        }}
-      >
+      <Pressable style={styles.prebutton} onPress={onPressGoback}>
         <PreBol16 text={"이전"} color={"white"} />
       </Pressable>
       {/* 저장 후 다음단계 버튼 */}
-      <Pressable
-        style={_styles.nextbutton}
-        onPress={() => {
-          alert("저장 후 다음단계 버튼이 눌렸습니다.")
-        }}
-      >
+      <Pressable style={styles.nextbutton} onPress={onPressSaveNext}>
         <PreBol16 text={"저장 후 다음단계"} color={"white"} />
       </Pressable>
     </View>
   )
 })
-const _styles = StyleSheet.create({
+
+const styles = StyleSheet.create({
   prebutton: {
     flex: 1,
     height: 56,

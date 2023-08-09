@@ -904,6 +904,27 @@ const CgMypageStack = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
+
+      {/* //! 요금 설정 BEGIN ================ */}
+      {/* //* 케어기버 요금 설정 스크린 */}
+      <Stack.Screen
+        name="caregiver-set-price-screen"
+        component={CaregiverSetPriceScreen}
+        options={{
+          title: "요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      <Stack.Screen
+        name="caregiver-set-additional-price-screen"
+        component={CaregiverSetAdditionalPriceScreen}
+        options={{
+          title: "강아지 크기 별 추가 요금 설정",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //! 요금 설정 ENDED ================ */}
     </Stack.Navigator>
   )
 }
@@ -942,27 +963,6 @@ const NOT_ORGANISED_CG_SCREENS = () => {
         }}
       />
       {/* //! ------- */}
-
-      {/* //! 요금 설정 스택 */}
-      {/* //* 케어기버 요금 설정 스크린 */}
-      <Stack.Screen
-        name="caregiver-set-price-screen"
-        component={CaregiverSetPriceScreen}
-        options={{
-          title: "요금 설정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      <Stack.Screen
-        name="caregiver-set-additional-price-screen"
-        component={CaregiverSetAdditionalPriceScreen}
-        options={{
-          title: "강아지 크기 별 추가 요금 설정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/* //! ----------- */}
 
       {/* //* 클라이언트 - 즐겨찾기 */}
       <Stack.Screen

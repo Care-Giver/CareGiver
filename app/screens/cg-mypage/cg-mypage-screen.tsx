@@ -63,6 +63,16 @@ export const CgMypageScreen: FC<
 
   return (
     <Screen>
+      {/* 임시 버튼 - caregiver-set-price-screen 스크린 이동용  */}
+      <Row style={styles.loginCard}>
+        <Pressable
+          style={{ flexDirection: "row" }}
+          onPress={() => navigate("caregiver-set-price-screen")}
+        >
+          <PreBol16 text="caregiver-set-price-screen 으로 이동하기" color={GIVER_CASUAL_NAVY} />
+        </Pressable>
+      </Row>
+
       {/* //! 로그인 상태일 때 */}
       {loggedIn ? (
         <>

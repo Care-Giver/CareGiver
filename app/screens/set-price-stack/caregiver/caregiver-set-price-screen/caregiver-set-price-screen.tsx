@@ -1,9 +1,10 @@
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import { observer } from "mobx-react-lite"
 import {
   DivisionLine,
+  GoBackSaveNext,
   PreBol12,
   PreBol14,
   PreBol18,
@@ -14,7 +15,7 @@ import {
   UnderlineText,
 } from "#components"
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
-import { TextInput, View } from "react-native"
+import { Pressable, TextInput, View } from "react-native"
 import { standardCosts } from "./dummy-data"
 import { price } from "../../../../utils/format"
 import { common_styles } from "../../common_styles"
@@ -48,7 +49,7 @@ export const CaregiverSetPriceScreen: FC<
 
   // * 평균 요금 하한가, 상한가 설정
   // TODO: 백엔드 팀한테 데이터 테이블 추가 요청 (1000원 쉼표 단위 문자열로 저장)
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (serviceType === "CRECHE") {
       setStandard({
         min: standardCosts.creche.min,
@@ -63,13 +64,22 @@ export const CaregiverSetPriceScreen: FC<
   }, [standardCosts, serviceType])
 
   // * 사용자가 값을 입력하면 다음 버튼 활성화
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (inputCost.length > 0) {
       setIsSubmitActive(true)
     } else {
       setIsSubmitActive(false)
     }
   }, [inputCost])
+
+  const onPressGoback = () => {
+    alert("이전 버튼 클릭")
+    // 이전버튼 클릭시, 이전 컴포넌트로 스크롤 이동
+  }
+  const onPressSaveNext = () => {
+    alert("저장 후 다음 버튼 클릭")
+    // 저장후 다음버튼 클릭시, 다음 컴포넌트로 스크롤 이동
+  }
 
   return (
     <Screen>
@@ -133,7 +143,23 @@ export const CaregiverSetPriceScreen: FC<
 
       {/* // * 다음 button */}
       {/* // TODO: onPress */}
-      <RegisterSubmitButton text="다음" isActive={isSubmitActive} />
+      {/* <RegisterSubmitButton
+        text="다음"
+        isActive={isSubmitActive}
+      /> */}
+
+      {/* 임시버튼 */}
+
+      <GoBackSaveNext onPressGoback={onPressGoback} onPressSaveNext={onPressSaveNext} />
+
+      <Pressable
+        style={{ width: "100%", height: 50, backgroundColor: "red", alignSelf: "center" }}
+        onPress={() => {
+          navigate("caregiver-set-additional-price-screen")
+        }}
+      >
+        <PreReg12 text="caregiver-set-additional-price-screen 으로 이동" />
+      </Pressable>
     </Screen>
   )
 })
