@@ -9,7 +9,6 @@ interface Solution1 extends GroupedVisitingAvailableTimesByDate, CrecheAvailable
 export type CgCalendarDayProps = {
   date: string & DateData
   state: DayState
-  month: Date
   serviceType: ServiceType
   selected: string[]
   // dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]

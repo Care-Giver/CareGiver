@@ -80,7 +80,7 @@ export const CgCalendarScreen: FC<
       </View>
 
       <CgCalendar
-        dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
+        availableDates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
         selected={selected}
         setSelected={setSelected}

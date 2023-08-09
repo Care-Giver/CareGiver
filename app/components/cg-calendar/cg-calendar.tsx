@@ -12,22 +12,52 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType, selected, setSelected } = props
-  const hasDates = dates?.length !== 0
-
-  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
+  const { availableDates, serviceType, selected, setSelected } = props
+  //? 가장 최근에 선택한 날짜가 이용가능한 날짜인지 판단하기 위한 state
+  const [availableCheck, setAvailableCheck] = useState<boolean>(true)
+  const hasDates = availableDates?.length !== 0
 
   //console.log("serviceType in CgCalendar >>>", serviceType)
   //console.log("dates in CgCalendar >>>", dates)
   //console.log("♦️")
-
+  const checkDate = ({ date }) => {
+    // console.log("dates in checkDate >>>", dates)
+    // console.log("serviceType in checkDate >>>", serviceType)
+    console.log("date.dateString>>>", date?.dateString)
+    let isAvailableDate: boolean = false
+    if (serviceType == "방문") {
+      availableDates.forEach((availableDate) => {
+        if (date?.dateString == availableDate?.date.substring(0, 10)) {
+          isAvailableDate = true
+        }
+      })
+    } else if (serviceType == "위탁") {
+      availableDates.forEach((availableDate) => {
+        if (date?.dateString == availableDate?.startDate.substring(0, 10)) {
+          isAvailableDate = true
+        }
+      })
+    }
+    return isAvailableDate
+  }
   const onDayPress = ({ date }) => {
+    console.log(selected)
+    //? 중복클릭 선택해제
     if (selected.includes(date.dateString)) {
       setSelected(selected.filter((selected) => selected !== date.dateString))
     } else {
-      const newSelected = [...selected]
-      newSelected.push(date.dateString)
-      setSelected(newSelected)
+      //? 클린한 날짜가 이용 가능한 날짜라면
+      if (checkDate({ date })) {
+        //? 복수선택이 불가능하기 때문에 해당 날짜만 선택
+        setSelected([date.dateString])
+        setAvailableCheck(true)
+      } else {
+        //? 선택한 날짜가 이용가능한 날짜가 아닐 때, 직전에 선택한 날짜에 따라서 동작 판단
+        const newSelected = availableCheck ? [] : [...selected]
+        newSelected.push(date.dateString)
+        setSelected(newSelected)
+        setAvailableCheck(false)
+      }
     }
 
     //console.log(currentMonth)
@@ -44,7 +74,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
             <Image source={images.arrow_right_navy} style={[styles.arrow, { marginRight: 40 }]} />
           )
         }
-        onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
@@ -59,8 +88,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
                 date={date}
                 state={state}
                 selected={selected}
-                month={currentMonth}
-                availableDates={dates}
+                availableDates={availableDates}
                 serviceType={serviceType}
               />
             )}
