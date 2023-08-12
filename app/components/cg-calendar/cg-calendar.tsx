@@ -12,47 +12,52 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType, selected, setSelected } = props
-  const hasDates = dates?.length !== 0
-
-  //* serviceType == "위탁"일 때 startDate와 endDate 관리
-  const [crecheStartToggle, setCrecheStartToggle] = useState(false)
-  const [crecheEndToggle, setCrecheEndToggle] = useState(false)
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
-  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
-
-  useEffect(() => {
-    if (serviceType == "위탁") {
-      if (crecheStartToggle == true && crecheEndToggle == false) {
-        const newStartDate = new Date(selected)
-        //? 다른 주기를 선택해야할 때 endDate가 남아있어서 null처리
-        if (endDate != null) {
-          setEndDate(null)
-        }
-        setStartDate(newStartDate)
-      }
-      if (crecheStartToggle == false && crecheEndToggle == true) {
-        const newEndDate = new Date(selected)
-        setEndDate(newEndDate)
-      }
-    }
-  }, [crecheStartToggle, crecheEndToggle])
+  const { availableDates, serviceType, selected, setSelected } = props
+  //? 가장 최근에 선택한 날짜가 이용가능한 날짜인지 판단하기 위한 state
+  const [availableCheck, setAvailableCheck] = useState<boolean>(true)
+  const hasDates = availableDates?.length !== 0
 
   //console.log("serviceType in CgCalendar >>>", serviceType)
   //console.log("dates in CgCalendar >>>", dates)
   //console.log("♦️")
-
+  const checkDate = ({ date }) => {
+    // console.log("dates in checkDate >>>", dates)
+    // console.log("serviceType in checkDate >>>", serviceType)
+    console.log("date.dateString>>>", date?.dateString)
+    let isAvailableDate: boolean = false
+    if (serviceType == "방문") {
+      availableDates.forEach((availableDate) => {
+        if (date?.dateString == availableDate?.date.substring(0, 10)) {
+          isAvailableDate = true
+        }
+      })
+    } else if (serviceType == "위탁") {
+      availableDates.forEach((availableDate) => {
+        if (date?.dateString == availableDate?.startDate.substring(0, 10)) {
+          isAvailableDate = true
+        }
+      })
+    }
+    return isAvailableDate
+  }
   const onDayPress = ({ date }) => {
-    setSelected(date.dateString)
-    if (crecheStartToggle == false) {
-      setCrecheStartToggle(!crecheStartToggle)
-      if (crecheEndToggle == true) {
-        setCrecheEndToggle(false)
-      }
+    console.log(selected)
+    //? 중복클릭 선택해제
+    if (selected.includes(date.dateString)) {
+      setSelected(selected.filter((selected) => selected !== date.dateString))
     } else {
-      setCrecheEndToggle(!crecheEndToggle)
-      setCrecheStartToggle(!crecheStartToggle)
+      //? 클린한 날짜가 이용 가능한 날짜라면
+      if (checkDate({ date })) {
+        //? 복수선택이 불가능하기 때문에 해당 날짜만 선택
+        setSelected([date.dateString])
+        setAvailableCheck(true)
+      } else {
+        //? 선택한 날짜가 이용가능한 날짜가 아닐 때, 직전에 선택한 날짜에 따라서 동작 판단
+        const newSelected = availableCheck ? [] : [...selected]
+        newSelected.push(date.dateString)
+        setSelected(newSelected)
+        setAvailableCheck(false)
+      }
     }
 
     //console.log(currentMonth)
@@ -69,7 +74,6 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
             <Image source={images.arrow_right_navy} style={[styles.arrow, { marginRight: 40 }]} />
           )
         }
-        onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
@@ -80,15 +84,12 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
             {hasDates && (
-              <CgCalendarDay
+              <CgCalendarDay //? 왜 안되는지,
                 date={date}
                 state={state}
                 selected={selected}
-                dates={dates}
-                month={currentMonth}
+                availableDates={availableDates}
                 serviceType={serviceType}
-                startDate={startDate}
-                endDate={endDate}
               />
             )}
           </Pressable>

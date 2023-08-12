@@ -189,6 +189,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				74EC035B08A4614EC7FD4F66 /* [CP] Copy Pods Resources */,
 				0E0ADBDF4F589ED378353CF2 /* [CP-User] [RNFB] Core Configuration */,
+				834D0CE8CE5C7640480A2434 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -305,6 +306,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CareGiver/Pods-CareGiver-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		834D0CE8CE5C7640480A2434 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CareGiver/Pods-CareGiver-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/naveridlogin-sdk-ios/NaverThirdPartyLogin.framework/NaverThirdPartyLogin",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NaverThirdPartyLogin.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CareGiver/Pods-CareGiver-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DCA0ACD03A97AABF952E8D45 /* [CP] Check Pods Manifest.lock */ = {

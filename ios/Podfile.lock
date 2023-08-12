@@ -208,6 +208,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - naveridlogin-sdk-ios (4.1.6)
   - PromisesObjC (2.2.0)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -519,6 +520,9 @@ PODS:
     - React-Core
   - RNKeychain (6.2.0):
     - React
+  - RNNaverLogin (3.0.0-rc.2):
+    - naveridlogin-sdk-ios (~> 4.1.5)
+    - React
   - RNReanimated (2.9.1):
     - DoubleConversion
     - FBLazyVector
@@ -626,6 +630,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - "RNNaverLogin (from `../node_modules/@react-native-seoul/naver-login`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -650,6 +655,7 @@ SPEC REPOS:
     - KakaoSDKUser
     - lottie-ios
     - nanopb
+    - naveridlogin-sdk-ios
     - PromisesObjC
 
 EXTERNAL SOURCES:
@@ -792,6 +798,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNNaverLogin:
+    :path: "../node_modules/@react-native-seoul/naver-login"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -852,6 +860,7 @@ SPEC CHECKSUMS:
   lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
   lottie-react-native: 8f9d4be452e23f6e5ca0fdc11669dc99ab52be81
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  naveridlogin-sdk-ios: cdd34e3585a3d5aaf37c1d84c1f41faba4a25d1a
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: c8c080849a3670601d5c7056023a2176067a69d8
@@ -893,6 +902,7 @@ SPEC CHECKSUMS:
   RNFBApp: a6fca2cd8f392b5efc1f2ab7bd4b3b64a6039abf
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
+  RNNaverLogin: 01ca478665ea024e4ddaa02be38396845fcac0b6
   RNReanimated: 2cf7451318bb9cc430abeec8d67693f9cf4e039c
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   Yoga: 75bf4b0131cfb46a659cd0c13309b79a6fcff66d

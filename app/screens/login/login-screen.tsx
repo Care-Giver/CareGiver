@@ -13,14 +13,12 @@ import {
   KakaoOAuthToken,
   KakaoProfile,
 } from "@react-native-seoul/kakao-login"
-import appleAuth, {
-  AppleRequestOperation,
-  AppleRequestScope,
-} from "@invertase/react-native-apple-authentication"
+import appleAuth from "@invertase/react-native-apple-authentication"
+import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
 import { GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
-import { AppleLoginOutput, appleServerLogin } from "#axios"
+import { AppleLoginOutput, appleServerLogin, naverServiceLogin, kakaoServerLogin } from "#axios"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -37,15 +35,64 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      * - 딥링크를 통해, 카카오톡을 실행하며, 카카오톡에 로그인되어있다면
      * - 개인정보 이용동의 후, 로그인 완료 처리됨
      * - 만약, 카카오톡 접근이 불가하다면, loginWithKakaoAccount 를 호출하여 웹브라우저를 실행함
+     * - 이후 accessToken을 케어기버 서버로 보내 로그인 진행
      */
     const signInWithKakao = async (): Promise<void> => {
       try {
-        const token: KakaoOAuthToken = await login()
-        setRefreshToken(token.refreshToken)
-        // setResult(JSON.stringify(token))
+        const kakaoLoginResponse: KakaoOAuthToken = await login()
+
+        const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
+
+        setLoggedIn(true)
+        setRefreshToken(userToken)
+
+        setResult(userToken)
       } catch (err) {
         console.error("login err", err)
         alertModal("카카오 로그인 실패", err?.message)
+      }
+    }
+
+    /**
+     * [테스트 결과]
+     * login:
+     * - 로그인 진행
+     * - 웹 뷰를 통해 네이버 로그인을 진행하고, accessToken을 받아옴.
+     * - accessToken을 백엔드 서버에 전달하여 로그인된 유저 토큰을 받아옴.
+     */
+    async function signInWithNaver() {
+      try {
+        const consumerKey = "jqWkGdkKVZ3RwlfExH0O"
+        const consumerSecret = "Xi6mBF88oM"
+        const appName = "Care Giver"
+        const serviceUrlScheme = "caregivernaverlogin"
+        const { failureResponse, successResponse } = await NaverLogin.login({
+          appName,
+          consumerKey,
+          consumerSecret,
+          serviceUrlScheme,
+        })
+
+        if (failureResponse) {
+          console.error("naverLogin Error: ", failureResponse.message)
+          alertModal("네이버 로그인 실패", failureResponse.message)
+          return
+        }
+
+        if (successResponse) {
+          console.log(successResponse)
+          // TODO: Send the accessToken to your server for verification and sign-in
+          const userToken = await naverServiceLogin(successResponse.accessToken)
+
+          setLoggedIn(true)
+          setRefreshToken(userToken)
+
+          setResult(userToken)
+        }
+        return successResponse.accessToken
+      } catch (error) {
+        console.error("Naver sign-in error", error)
+        alertModal("네이버 로그인 실패", error?.message)
       }
     }
 
@@ -76,8 +123,6 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
         // Call your own server API
         const userToken = await appleServerLogin(identityToken)
-
-        console.log(userToken)
 
         // 4. state를 업데이트한다.
         setLoggedIn(true)
@@ -143,12 +188,13 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const kakaoLogin = async () => {
       await signInWithKakao()
-      await getKProfile()
+      goBack()
     }
 
     const naverLogin = async () => {
       //
-      alertModal("네이버 로그인", "개발중")
+      await signInWithNaver()
+      goBack()
     }
 
     const googleLogin = async () => {
@@ -174,6 +220,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           break
 
         case "naver":
+          naverLogOut()
           break
 
         case "apple":
@@ -206,8 +253,26 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       }
     }
 
+    /**
+     * [테스트 결과]
+     * - 로그인 캐시를 삭제하여 다른 네이버 아이디로도 로그인 가능하도록 함.
+     * - 해당 함수 호출하지 않을 시 이전에 캐싱된 네이버 아이디로 로그인 됨.
+     */
+    const signOutWithNaver = async (): Promise<void> => {
+      try {
+        await NaverLogin.logout()
+        setLoggedIn(false)
+      } catch (err) {
+        console.error("signOut error", err)
+      }
+    }
+
     const kakaoLogOut = async () => {
       await signOutWithKakao()
+    }
+
+    const naverLogOut = async () => {
+      await signOutWithNaver()
     }
 
     console.log("loggedIn OUTSIDE >>>", loggedIn)

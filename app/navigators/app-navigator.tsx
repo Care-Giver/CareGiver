@@ -13,7 +13,7 @@ import {
   useNavigation,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {
   WritingCommentScreen,
   HomeScreen,
@@ -61,6 +61,7 @@ import {
   TestNetworkErrorScreen,
   WriteReviewScreen,
   ViewReviewScreen,
+  TempChatScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -79,6 +80,7 @@ import {
   CgCertificateRegistrationScreenHeader,
   PreMed16,
   CgsetAddressHeader,
+  CustomTabBar,
 } from "#components"
 import { images } from "../../assets/images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
@@ -87,6 +89,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { PetsitterType, ServiceType, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useShowBottomTab } from "../utils/hooks"
+import { IMPData } from "iamport-react-native"
+
 //import { Row } from "../basics/row/row"
 
 /**
@@ -126,6 +130,7 @@ export type NavigatorParamList = {
   "all-bookings-screen": undefined
   "booking-detail-screen": undefined
   "favorites-screen": undefined
+  "temp-chat-screen": undefined
 
   // * pay stack
   "payment-request-screen": undefined
@@ -197,9 +202,44 @@ export type NavigatorParamList = {
   "test-network-error-screen": undefined
   // iamport 테스트
   "test-iamport-screen": undefined
-  "test-iamport-payment-screen": undefined
+  "test-iamport-payment-screen": {
+    params: IMPData.PaymentData
+    tierCode?: string
+    serviceType: string
+    visitingId: number
+    userId: number
+    request: string
+    services: string[]
+    destination: string
+    selectedDate: string
+    startTime: string[]
+    endTime: string[]
+    petIds: number[]
+    petToolsLocInfo: string
+    avoidFoodInfo: string
+    bondingTipsInfo: string
+  }
   "test-iamport-payment-result-screen": any
   "cancel-reservation-screen": undefined
+}
+
+const clBottomTabLabel = {
+  favortie: "즐겨찾기",
+  schedule: "예약 내역",
+  search: "검색",
+  chatting: "채팅",
+  myinfo: "내정보",
+}
+
+const cgBottomTabLabel = {
+  statistics: "통계",
+  manage_booking: "예약 관리",
+  manage_schedule: "일정 관리",
+}
+
+export const tabLabel = {
+  ...clBottomTabLabel,
+  ...cgBottomTabLabel,
 }
 
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -492,35 +532,16 @@ const ChatsStack = observer(function ChatsStack() {
     userStore: { type },
   } = useStores()
 
-  const TempChatScreen = ({ navigation }) => {
-    useShowBottomTab(navigation)
-
-    return (
-      <Screen>
-        <View
-          style={{
-            marginVertical: 200,
-            alignSelf: "center",
-          }}
-        >
-          <PreReg18>채팅기능은 곧 추가될 예정입니다 😉</PreReg18>
-        </View>
-      </Screen>
-    )
-  }
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
         animation: "slide_from_right",
       }}
-      //  @ts-ignore
       initialRouteName="temp-chat-screen"
     >
       {/* //* 채팅 메인 */}
       <Stack.Screen
-        //  @ts-ignore
         name="temp-chat-screen"
         component={TempChatScreen}
         options={{
@@ -633,97 +654,40 @@ const ClientTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { display: "none" },
-        tabBarLabelStyle: {
-          paddingBottom: Platform.select({
-            android: 8,
-            ios: 0,
-          }),
-        },
         headerShown: false,
         headerStyle: { backgroundColor: "white" },
       }}
       initialRouteName="Searching"
+      tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
         name="Favorites"
         component={FavoritesStack}
-        options={{
-          tabBarLabel: "즐겨찾기",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="cards-heart"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.favortie }}
       />
       <Tab.Screen
         name="Bookings"
         component={BookingsStack}
-        options={{
-          tabBarLabel: "예약내역",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="calendar-multiselect"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.schedule }}
       />
       <Tab.Screen
         name="Searching"
         component={SearchingStack}
-        options={{
-          tabBarLabel: "검색",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="magnify"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.search }}
       />
       <Tab.Screen
         name="Chats"
         component={ChatsStack}
-        options={{
-          tabBarLabel: "채팅",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="forum"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.chatting }}
       />
       <Tab.Screen
         name="Mypage"
         component={MypageStack}
-        options={{
-          tabBarLabel: "내정보",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.myinfo }}
       />
     </Tab.Navigator>
   )
 }
-
 // ===========================================================================================================
 // ===========================================================================================================
 // ===========================================================================================================
@@ -1017,93 +981,37 @@ const CareGiverTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { display: "none" },
-        tabBarLabelStyle: {
-          paddingBottom: Platform.select({
-            android: 8,
-            ios: 0,
-          }),
-        },
         headerShown: false,
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
       initialRouteName="Calendar"
+      tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
         name="Statistics"
         component={StatisticsStack}
-        options={{
-          tabBarLabel: "통계",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="elevation-rise"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.statistics }}
       />
       <Tab.Screen
         name="CgBookings"
         component={CgBookingsStack}
-        options={{
-          tabBarLabel: "예약 관리",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="pencil"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.manage_booking }}
       />
       <Tab.Screen
         name="Calendar"
         component={CalendarStack}
-        options={{
-          tabBarLabel: "달력",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="calendar-blank"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.manage_schedule }}
       />
       <Tab.Screen
         name="Chats"
         component={ChatsStack}
-        options={{
-          tabBarLabel: "채팅",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="forum"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.chatting }}
       />
       <Tab.Screen
         name="CgMypage"
         component={CgMypageStack}
-        options={{
-          tabBarLabel: "내정보",
-          tabBarActiveTintColor: GIVER_CASUAL_NAVY,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? GIVER_CASUAL_NAVY : GIVER_ROMANTIC_GRAY}
-            />
-          ),
-        }}
+        options={{ tabBarLabel: tabLabel.myinfo }}
       />
     </Tab.Navigator>
   )
@@ -1113,7 +1021,6 @@ const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType },
   } = useStores()
-
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
@@ -1127,7 +1034,6 @@ const AllTabs = observer(function AllTabs() {
     </>
   )
 })
-
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = (props: NavigationProps) => {
