@@ -1,27 +1,27 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-export interface crecheAvailableDates {
+export interface CrecheAvailableDates {
   id: number
   createAt: string
   updatedAt: string
-  startTime: string
-  endTime: string
+  startDate?: string
+  endDate: string
   fee: number
   totalFee: number
 }
 
-interface crecheDaysResponse extends GeneralResponse {
-  crecheAvailableDates: crecheAvailableDates[]
+interface CrecheDaysResponse extends GeneralResponse {
+  crecheAvailableDates: CrecheAvailableDates[]
 }
 
 /**
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<crecheAvailableDates>}
  */
-export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDates[]> => {
+export const getCrecheDays = async (crecheId: number): Promise<CrecheAvailableDates[]> => {
   try {
-    const response = await axios.get<crecheDaysResponse>(
+    const response = await axios.get<CrecheDaysResponse>(
       `${BASE_URL}/creche-day/${crecheId}`,
       CONFIG,
     )

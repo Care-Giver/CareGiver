@@ -14,15 +14,10 @@ import {
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
-import { GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
-import { groupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
-import { crecheAvailableDates } from "../../services/axios/creche-day"
+import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY } from "#theme"
+import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
+import { CrecheAvailableDates } from "../../services/axios/creche-day"
 
-// import { useNavigation } from "@react-navigation/native"
-
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
 export type ServiceType = "방문" | "위탁"
 
 export const CgCalendarScreen: FC<
@@ -37,14 +32,10 @@ export const CgCalendarScreen: FC<
     },
     CrecheDayModel: { setAllCrecheDays, crecheDays },
   } = useStores()
-  // const 데이터가져오기 = visitingAvailableTimesModel.setAllVisitingAvailableTimes
 
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
-
-  const [visitingDates, setVisitingDates] = useState<groupedVisitingAvailableTimesByDate[]>([])
-  const [crecheDates, setCrecheDates] = useState<crecheAvailableDates[]>([])
-  const [selected, setSelected] = useState("") // TODO - 타입 제발 정해주세요
+  const [visitingDates, setVisitingDates] = useState<GroupedVisitingAvailableTimesByDate[]>([])
+  const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
+  const [selected, setSelected] = useState<string[]>([]) // TODO - 타입 제발 정해주세요
   const [crecheId, setCrecheId] = useState(1)
   const [serviceType, setServiceType] = useState<ServiceType>("방문")
   const onTestPress = () => {
@@ -79,15 +70,11 @@ export const CgCalendarScreen: FC<
       </View>
 
       <CgCalendar
-        dates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
+        availableDates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
         serviceType={serviceType}
         selected={selected}
         setSelected={setSelected}
       />
-      {/* <CgCalendarEditButton
-        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-        title={"수정"}
-      /> */}
 
       {/* 수정 버튼 새로 생성 */}
       <Pressable

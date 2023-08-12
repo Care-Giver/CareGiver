@@ -1,16 +1,15 @@
 import { DateData } from "react-native-calendars"
 import { DayState } from "react-native-calendars/src/types"
-import { groupedVisitingAvailableTimesByDate } from "../../../services/axios/visiting-available-time"
-import { crecheAvailableDates } from "../../../services/axios/creche-day"
+import { GroupedVisitingAvailableTimesByDate } from "../../../services/axios/visiting-available-time"
+import { CrecheAvailableDates } from "../../../services/axios/creche-day"
 import { ServiceType } from "#screens"
-export interface CgCalendarDayProps {
+
+interface AvailableDate extends GroupedVisitingAvailableTimesByDate, CrecheAvailableDates {}
+
+export type CgCalendarDayProps = {
   date: string & DateData
   state: DayState
-  selected: string
-  dates: groupedVisitingAvailableTimesByDate[]
-  month: Date
   serviceType: ServiceType
-
-  startDate: Date
-  endDate: Date
+  availableDates: AvailableDate[]
+  selected: string[]
 }
