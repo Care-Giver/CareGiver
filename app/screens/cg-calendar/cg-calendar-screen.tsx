@@ -80,7 +80,7 @@ export const CgCalendarScreen: FC<
       <Pressable
         style={{
           position: "absolute",
-          bottom: 10,
+          bottom: BOTTOM_HEIGHT,
           paddingVertical: 18,
           alignSelf: "center",
           backgroundColor: "white",

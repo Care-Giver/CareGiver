@@ -56,8 +56,6 @@ export const CgCalendarListScreen: FC<
           navigate("cg-calendar-screen")
         }}
         style={{
-          marginTop: "auto",
-          marginBottom: 20,
           alignSelf: "center",
           backgroundColor: GIVER_CASUAL_NAVY,
           padding: 10,
