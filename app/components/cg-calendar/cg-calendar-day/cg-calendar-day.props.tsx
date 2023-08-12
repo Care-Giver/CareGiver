@@ -4,27 +4,12 @@ import { GroupedVisitingAvailableTimesByDate } from "../../../services/axios/vis
 import { CrecheAvailableDates } from "../../../services/axios/creche-day"
 import { ServiceType } from "#screens"
 
-interface Solution1 extends GroupedVisitingAvailableTimesByDate, CrecheAvailableDates {}
+interface AvailableDate extends GroupedVisitingAvailableTimesByDate, CrecheAvailableDates {}
 
 export type CgCalendarDayProps = {
   date: string & DateData
   state: DayState
   serviceType: ServiceType
+  availableDates: AvailableDate[]
   selected: string[]
-  // dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]
-  availableDates: Solution1[]
-}
-
-{
-  /**
-interface CrecheProp {
-  serviceType: "위탁"
-  crecheAvailableDates?: crecheAvailableDates[]
-}
-
-interface VisitingProp {
-  serviceType: "방문"
-  visitingAvailableDates?: groupedVisitingAvailableTimesByDate[]
-}
- */
 }

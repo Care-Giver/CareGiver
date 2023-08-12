@@ -11,6 +11,7 @@ import {
   MIDDLE_LINE,
   SUB_HEAD_LINE,
 } from "#theme"
+import { CrecheAvailableDates, GroupedVisitingAvailableTimesByDate } from "#axios"
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
   const { date, state, selected, availableDates, serviceType } = props
@@ -67,29 +68,26 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
   }
 
   const checkDate = () => {
-    // console.log("dates in checkDate >>>", dates)
-    // console.log("serviceType in checkDate >>>", serviceType)
-
-    if (serviceType == "방문") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.date.substring(0, 10)) {
-          setFee(availableDate.fee)
+    availableDates?.forEach((availableDate) => {
+      if (serviceType === "방문") {
+        const visitingAvailableDate = availableDate as GroupedVisitingAvailableTimesByDate
+        if (date.dateString === visitingAvailableDate?.date.substring(0, 10)) {
+          setFee(visitingAvailableDate.fee)
           setAvailableTime(true)
-          return true
-        } else return null
-      })
-    } else if (serviceType == "위탁") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.startDate.substring(0, 10)) {
-          setFee(availableDate.fee)
+        }
+      } else if (serviceType === "위탁") {
+        const crecheAvailableDate = availableDate as CrecheAvailableDates
+        if (date.dateString === crecheAvailableDate?.startDate.substring(0, 10)) {
+          setFee(crecheAvailableDate.fee)
           setAvailableTime(true)
-          return true
-        } else return null
-      })
-    }
+        }
+      }
+    })
   }
 
   // console.log("dates in calendar-day >>>", dates)
+  console.log("fee >>>", fee)
+  console.log("availableTime", availableTime)
 
   return (
     <View

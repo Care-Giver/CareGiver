@@ -10,7 +10,6 @@ import {
   Text,
   Button,
   PreBol16,
-  ClientCalendar,
 } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View } from "react-native"
@@ -19,11 +18,6 @@ import { GIVER_CASUAL_NAVY } from "#theme"
 import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
 import { CrecheAvailableDates } from "../../services/axios/creche-day"
 
-// import { useNavigation } from "@react-navigation/native"
-
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
 export type ServiceType = "방문" | "위탁"
 
 export const CgCalendarScreen: FC<
@@ -38,10 +32,6 @@ export const CgCalendarScreen: FC<
     },
     CrecheDayModel: { setAllCrecheDays, crecheDays },
   } = useStores()
-  // const 데이터가져오기 = visitingAvailableTimesModel.setAllVisitingAvailableTimes
-
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
 
   const [visitingDates, setVisitingDates] = useState<GroupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
