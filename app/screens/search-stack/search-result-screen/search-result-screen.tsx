@@ -21,7 +21,84 @@ import {
 } from "./animated-header/header-property"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { Sex, SearchResultSortOrder, getVisitingsSearch, Visiting } from "#axios"
+import {
+  Sex,
+  SearchResultSortOrder,
+  getVisitingsSearch,
+  Visiting,
+  getCrechesSearch,
+  Creche,
+} from "#axios"
+
+const visitingResponse = [
+  {
+    isFavorite: false,
+    reviewCount: 0,
+    userNickname: "오옹",
+    userProfile: null,
+    visiting: {
+      __careGiver__: "[Object]",
+      __has_careGiver__: true,
+      __has_visitingReviews__: true,
+      __visitingReviews__: "[Array]",
+      acceptRate: "[Array]",
+      address: "경기도 안산시 사동 한양대학로 55 제5공학관 지하1층 창업3실",
+      createAt: "2023-07-25T20:24:33.950Z",
+      defaultFee: 10000,
+      desc: "강아지, 고양이 다 좋아합니다..",
+      extraSizeFee: "[Object]",
+      handleType: "[Array]",
+      hiredNumber: 0,
+      id: 3,
+      images: "[Array]",
+      location: "[Object]",
+      maxUnit: 3,
+      promoted: false,
+      responseRate: "[Array]",
+      serviceVisiting: "[Array]",
+      star: 0,
+      title: "강아지랑 친구하는 펫시터",
+      updatedAt: "2023-07-25T20:24:33.950Z",
+      visitingAmenities: "[Array]",
+    },
+  },
+]
+
+const crecheResponse = [
+  {
+    isFavorite: false,
+    reviewCount: 6,
+    userNickname: "지우",
+    userProfile: null,
+    creche: {
+      __careGiver__: "[Object]",
+      __crecheReviews__: "[Array]",
+      __has_careGiver__: true,
+      __has_crecheReviews__: true,
+      acceptRate: "[Array]",
+      address: "경기도 안산시 사동 한양대학로 55 제5공학관 지하1층 창업3실",
+      createAt: "2023-07-03T17:41:37.235Z",
+      crecheAmenities: "[Array]",
+      defaultFee: 10000,
+      desc: "강아지 3년 기른 경력으로 보살핍니다.",
+      extraSizeFee: "[Object]",
+      handleType: "[Array]",
+      hiredNumber: 0,
+      id: 1,
+      images: "[Array]",
+      location: "[Object]",
+      maxUnit: 3,
+      promoted: false,
+      responseRate: "[Array]",
+      serviceCreche: "[Array]",
+      star: 4,
+      title: "ENFP의 친화력",
+      updatedAt: "2023-07-16T11:15:15.837Z",
+    },
+  },
+]
+
+interface Petsitter extends Visiting, Creche {}
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
@@ -33,9 +110,13 @@ export const SearchResultScreen: FC<
     // API REQUEST BODY 관련
     lat,
     lng,
+    petIds,
+    // 방문
     startTime,
     endTime,
-    petIds,
+    //  위탁
+    startDate,
+    endDate,
 
     // 그외
     serviceType,
@@ -43,12 +124,17 @@ export const SearchResultScreen: FC<
 
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
-  const [petsitters, setPetsitters] = useState([])
-  const [visitings, setVisitings] = useState<Visiting>(null)
+  const [petsitters, setPetsitters] = useState<Petsitter[]>([])
+  const [visitings, setVisitings] = useState<Visiting[]>(null)
+  const [creches, setCreches] = useState<Creche[]>(null)
 
   if (visitings) {
     console.log("visitings \n", visitings)
     console.log("visitings[0]?.location \n", visitings[0]?.location)
+  }
+
+  if (creches) {
+    console.log("creches \n", creches)
   }
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
@@ -111,6 +197,7 @@ export const SearchResultScreen: FC<
     extrapolate: "clamp",
   })
 
+  // 검색결과 API 호출
   useEffect(() => {
     const req = {
       page: 1,
@@ -127,11 +214,27 @@ export const SearchResultScreen: FC<
       amenities: [], // [1, 2]
       certifiedOnly: false,
     }
-    console.log("req", req)
-    getVisitingsSearch(req).then(setVisitings)
-    setPetsitters(_petsitters)
+    const visReq = {
+      ...req,
+      startTime,
+      endTime,
+    }
+
+    const creReq = {
+      ...req,
+      startDate,
+      endDate,
+    }
+    // console.log("req", req)
+
+    if (serviceType === "방문") {
+      getVisitingsSearch(visReq).then(setPetsitters)
+    } else {
+      getCrechesSearch(creReq).then(setPetsitters)
+    }
   }, [])
 
+  // 스크린 헤더 설정
   useEffect(() => {
     //? case1. 바텀탭으로 넘어오는경우
     if (!route.params) {
@@ -250,30 +353,46 @@ export const SearchResultScreen: FC<
         >
           <Animated.FlatList
             data={petsitters}
-            renderItem={({ item, index }) => (
-              <SitterProfileCard
-                // key={item.id}
-                // name={item.name}
-                // image={item.image}
-                // rating={item.rating}
-                // review={item.review}
-                // title={item.title}
-                // desc={item.desc}
-                sitterData={item}
-                onPress={() => {
-                  //? 상세정보 스크린으로 이동
-                  //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", {
-                    sitterData: item,
-                    serviceType: serviceType,
-                    selectedPets: petIds,
-                    beginDate: serviceType === "방문" ? startTime : null,
-                    endTime: serviceType === "방문" ? endTime : null,
-                  })
-                }}
-                style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
-              />
-            )}
+            renderItem={({ item: petsitter, index }) => {
+              const sitterData = {
+                crecheId: serviceType === "위탁" ? petsitter.creche.id : null,
+                visitingId: serviceType === "방문" ? petsitter.visiting.id : null,
+                image:
+                  serviceType === "위탁"
+                    ? petsitter.creche.__careGiver__.__user__?.profileImage
+                    : petsitter.visiting.__careGiver__.__user__?.profileImage,
+                userNickname: petsitter.userNickname,
+                title: serviceType === "위탁" ? petsitter.creche.title : petsitter.visiting.title,
+                reviewCount: petsitter.reviewCount,
+                rating: serviceType === "위탁" ? petsitter.creche.star : petsitter.visiting.star,
+                desc: serviceType === "위탁" ? petsitter.creche.desc : petsitter.visiting.desc,
+              }
+
+              const images =
+                serviceType === "위탁" ? petsitter.creche.images : petsitter.visiting.images
+
+              return (
+                <SitterProfileCard
+                  isFavorite={petsitter.isFavorite}
+                  sitterData={sitterData}
+                  onPress={() => {
+                    //? 상세정보 스크린으로 이동
+                    //TODO: params 값 추가해줘야 함
+                    navigate("caregiver-detail-information-screen", {
+                      sitterData,
+                      serviceType,
+                      images,
+                      selectedPets: petIds,
+                      beginDate: serviceType === "방문" ? startTime : null,
+                      endTime: serviceType === "방문" ? endTime : null,
+                    })
+                  }}
+                  // TODO: 찜하기 기능 구현
+                  onLikePress={() => {}}
+                  style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
+                />
+              )
+            }}
             showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,

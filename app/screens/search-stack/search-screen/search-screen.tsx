@@ -22,9 +22,16 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   TimePicker,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
-import { IOS_BOTTOM_HOME_BAR_HEIGHT, DISABLED, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  IOS_BOTTOM_HOME_BAR_HEIGHT,
+  DISABLED,
+  HEAD_LINE,
+  SUB_HEAD_LINE,
+  BOTTOM_HEIGHT,
+} from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
 import { Calendar, DateData } from "react-native-calendars"
@@ -54,8 +61,8 @@ interface Location {
 }
 
 const 한양대에리카제5공학관 = {
-  lat: 37.29761156398638, // 위도
-  lng: 126.83717702329602, // 경도
+  lat: 37.2955072, // 위도
+  lng: 126.83539, // 경도
 }
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
@@ -313,9 +320,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                 selectedPets: selectedPets.map((item) => {
                   return item.id
                 }),
-                //? "방문"인 경우 사용될 값
+                // "방문"인 경우 사용될 값
                 startTime: serviceType === "방문" ? startTime.toISOString().substring(0, 19) : null,
                 endTime: serviceType === "방문" ? endTime.toISOString().substring(0, 19) : null,
+                // "위탁"인 경우 사용될 값
+                startDate: serviceType === "위탁" ? "2023-07-29T00:00:00" : null,
+                endDate: serviceType === "위탁" ? "2023-07-30T00:00:00" : null,
                 // 위치 값
                 ...location,
               })
@@ -339,7 +349,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             setEndDate={setEndTime}
           />
 
-          <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
+          <View
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+              marginBottom: BOTTOM_HEIGHT,
+            }}
+          >
             <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
           </View>
         </BottomSheet>

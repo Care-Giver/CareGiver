@@ -2,17 +2,17 @@ import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { Sex } from "./user"
 
-export enum SearchResultSortOrder {
+enum SearchResultSortOrder {
   ASC = "ASC",
   DESC = "DESC",
 }
 
-interface VisitingsSearchRequest {
+interface CrechesSearchRequest {
   page: number
   lat: number // 위도
   lng: number // 경도
-  startTime: string // "2023-07-27T10:40:59"
-  endTime: string //"2023-07-27T11:40:59"
+  startDate: string // "2023-07-29T00:00:00"
+  endDate: string // "2023-07-30T00:00:00"
   petIds: number[] //[1, 2, 3]
   radius: number //10
   sortBy: string // "distance"
@@ -23,7 +23,7 @@ interface VisitingsSearchRequest {
   certifiedOnly: boolean //true
 }
 
-enum VisitingHandleType {
+enum PetHandleType {
   SMALL = "소형",
   MEDIUM = "중형",
   LARGE = "대형",
@@ -35,21 +35,21 @@ type ExtraSizeFee = {
   LARGE: number
 }
 
-type VisitingService = {
+type CrechesService = {
   id: number
   createAt: string
   updatedAt: string
   name: string
 
   /* {
-    id: 1
-    createAt: "2023-01-01T11:00:00"
-    updatedAt: "2023-01-01T11:00:00"
-    name: "산책하기"
-    }, */
+    "id": 2,
+    "createAt": "2023-07-03T17:25:01.840Z",
+    "updatedAt": "2023-07-03T17:25:01.840Z",
+    "name": "실내 놀이"
+    },*/
 }
 
-type VisitingAmenity = VisitingService
+type CrecheAmenity = CrechesService
 
 type Coordinates = [number, number] //[126.834393833, 37.298004735]
 
@@ -67,7 +67,7 @@ interface CareGiverRelatedData {
   __has_crecheReviews__: boolean // true,
 }
 
-interface VisitingRelatedData extends CareGiverRelatedData {
+interface CrecheRelatedData extends CareGiverRelatedData {
   id: number //1
   createAt: string //"2023-01-01T11:00:00"
   updatedAt: string // "2023-01-01T11:00:00"
@@ -80,14 +80,14 @@ interface VisitingRelatedData extends CareGiverRelatedData {
   /* location: string // "(127, 38)" */
   location: LocationResponse
   maxUnit: number //3
-  handleType: VisitingHandleType //"대형, 중형, 소형"
+  handleType: PetHandleType[] //"대형, 중형, 소형"
   images: string[] // ["이미지 주소"]
   extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"
   promoted: false
   responseRate: number[] // [0.25, 1, 4]
   acceptRate: number[] //[0.25, 1, 4]
-  serviceVisiting: VisitingService[]
-  visitingAmenities: VisitingAmenity[]
+  serviceCreche: CrechesService[]
+  crecheAmenities: CrecheAmenity[]
 }
 
 interface UserRelatedData {
@@ -97,12 +97,12 @@ interface UserRelatedData {
   userProfile: any // null, //TODO: userProfile 타입 적용할 것
 }
 
-export interface Visiting extends UserRelatedData {
-  visiting: VisitingRelatedData
+export interface Creche extends UserRelatedData {
+  creche: CrecheRelatedData
 }
 
-interface VisitingsSearchRequestResponse extends GeneralResponse {
-  visitings: Visiting[]
+interface CrechesSearchRequestResponse extends GeneralResponse {
+  creches: Creche[]
   totalItems: number // 4
   totalpages: number // 1
 }
@@ -111,18 +111,17 @@ interface VisitingsSearchRequestResponse extends GeneralResponse {
  * 조건에 맞는 방문 펫시터를 검색한다
  * @returns {Promise<number>} 생성된 위탁장소의 id (crecheId) 를 리턴한다.
  */
-export const getVisitingsSearch = async (
-  requestBody: VisitingsSearchRequest,
-): Promise<Visiting[]> => {
+export const getCrechesSearch = async (requestBody: CrechesSearchRequest): Promise<Creche[]> => {
   try {
-    // console.log("creche", creche)
-    const response = await axios.post<VisitingsSearchRequestResponse>(
-      `${BASE_URL}/visitings/search`,
+    console.log("creche!!")
+    console.log("requestBody", requestBody)
+    const response = await axios.post<CrechesSearchRequestResponse>(
+      `${BASE_URL}/creches/search`,
       requestBody,
       CONFIG,
     )
     // console.log("response >>>", response)
-    // console.log("response.data >>>", response.data.visitings)
+    // console.log("response.data >>>", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error
@@ -131,7 +130,7 @@ export const getVisitingsSearch = async (
       return []
     }
 
-    return response.data.visitings
+    return response.data.creches
   } catch (error) {
     console.error("catch 에러!!!", error)
     return []
