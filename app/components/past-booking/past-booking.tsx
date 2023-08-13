@@ -1,5 +1,5 @@
-import { View, Pressable, Image, ImageBackground } from "react-native"
-import React, { useCallback, useLayoutEffect, useState } from "react"
+import { View, Pressable, Image, ImageBackground, ImageSourcePropType } from "react-native"
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
 
@@ -16,6 +16,7 @@ import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/axios/favorite"
+import { imageFormatValidate } from "../../utils/image-format-validate"
 
 type ServiceType = "visiting" | "creche"
 
@@ -94,6 +95,24 @@ export const PastBooking = (props: PastBookingProps) => {
     }
   }, [isFavoriteState])
 
+  // TODO: image source를 삼항연산자로 판단 vs state로 관리
+  // * 프로필 이미지 source
+  const [profileImageSource, setProfileImageSource] = useState<ImageSourcePropType>()
+  useEffect(() => {
+    // ? 프로필 이미지가 입력되지 않은 경우
+    if (!profileImage) {
+      setProfileImageSource(images.default_pet_image_60)
+      return
+    }
+    // ? 이미지가 존재하지만 형식이 올바르지 않은 경우
+    if (!imageFormatValidate(profileImage)) {
+      setProfileImageSource(images.error_profile_medium)
+      return
+    }
+    // ? 프로필 이미지 형식이 올바른 경우
+    setProfileImageSource({ uri: profileImage })
+  }, [])
+
   // * 리뷰 작성 버튼
   const ReviewButton = useCallback(() => {
     // ? 취소된 예약인 경우 - 리뷰 작성 불가능
@@ -151,11 +170,9 @@ export const PastBooking = (props: PastBookingProps) => {
       <ImageBackground
         source={
           profileImage
-            ? {
-                uri:
-                  // "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
-                  profileImage,
-              }
+            ? imageFormatValidate(profileImage)
+              ? { uri: profileImage }
+              : images.error_profile_medium
             : images.default_pet_image_60
         }
         style={styles.profileImg}

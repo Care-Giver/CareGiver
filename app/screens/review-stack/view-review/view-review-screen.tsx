@@ -15,6 +15,7 @@ import { Review, getCrecheReview, getVisitingReview } from "../../../services/ax
 import { reviewStyles } from "../styles"
 import { images } from "../../../../assets/images"
 import { GIVER_CASUAL_NAVY, HEAD_LINE, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "../../../theme"
+import { imageFormatValidate } from "../../../utils/image-format-validate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -85,7 +86,13 @@ export const ViewReviewScreen: FC<
         {/* // * 펫시터 프로필 */}
         <View style={reviewStyles.profileCard}>
           <Image
-            source={profileImage ? profileImage : images.profile_default}
+            source={
+              profileImage
+                ? imageFormatValidate(profileImage)
+                  ? { uri: profileImage }
+                  : images.error_profile_small
+                : images.profile_default
+            }
             style={reviewStyles.profileImage}
           />
           <View style={reviewStyles.profileInfo}>

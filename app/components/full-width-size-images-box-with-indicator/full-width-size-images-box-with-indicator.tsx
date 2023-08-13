@@ -3,6 +3,8 @@ import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
 import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, STANDARD_WIDTH } from "#theme"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
+import { imageFormatValidate } from "../../utils/image-format-validate"
+import { images as _images } from "../../../assets/images"
 
 export const FullWidthSizeImagesBoxWithIndicator = (props) => {
   const { items, activeIndex, style: viewStyle, firstImage } = props
@@ -53,6 +55,12 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
         ) => (
           <ImageBackground
             source={{ uri: item.profileImg }}
+            // TODO: dummydata에 있는 uri에서는 제대로 동작하지 않음. (uri 끝부분이 .jpg와 같이 끝나지 않음)
+            // source={
+            //   imageFormatValidate(item.profileImg)
+            //     ? { uri: item.profileImg }
+            //     : _images.error_profile_large
+            // }
             style={{
               // width: "100%",
               width: DEVICE_SCREEN_WIDTH,
