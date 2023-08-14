@@ -911,7 +911,7 @@ const CgMypageStack = () => {
         name="caregiver-set-price-screen"
         component={CaregiverSetPriceScreen}
         options={{
-          title: "요금 설정",
+          title: " ",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
