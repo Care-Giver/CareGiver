@@ -3,14 +3,13 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import { observer } from "mobx-react-lite"
 import {
-  CaregiverService,
   CaregiverSetPrice,
   GoBackSaveNext,
-  PreReg12,
   Screen,
   CaregiverSetAdditionalPrice,
+  CgRegisterStep,
 } from "#components"
-import { FlatList, Pressable } from "react-native"
+import { FlatList, Pressable, View } from "react-native"
 
 export const CaregiverSetPriceScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
@@ -39,18 +38,30 @@ export const CaregiverSetPriceScreen: FC<
     }
   }
 
+  const Header = () => {
+    return (
+      <View style={{ flexDirection: "row", height: 30 }}>
+        <CgRegisterStep step="done" number={1} title="제목없음" style={{ marginRight: 5 }} />
+        <CgRegisterStep step="done" number={2} title="제목없음" style={{ marginRight: 5 }} />
+        <CgRegisterStep step="progress" number={3} title="가격 및 특이설정" />
+      </View>
+    )
+  }
+
   return (
     <Screen style={{ flex: 1 }}>
       {/* <CaregiverSetPrice /> */}
+      <Header />
       <FlatList
+        snapToInterval={itemWidth}
         horizontal
-        // snapToInterval={width}
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ width: "200%" }}
         data={DATA}
         scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
+        numColumns={1}
         renderItem={(item) => (
           <>
             {item.item.page === 1 && <CaregiverSetPrice style={{ width: itemWidth }} />}
