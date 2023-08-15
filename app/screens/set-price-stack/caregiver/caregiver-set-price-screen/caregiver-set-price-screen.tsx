@@ -10,31 +10,33 @@ import {
   Screen,
   CaregiverSetAdditionalPrice,
 } from "#components"
-import { Dimensions, FlatList, Pressable } from "react-native"
+import { FlatList, Pressable } from "react-native"
 
 export const CaregiverSetPriceScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
 > = observer(({ route, navigation }) => {
-  const { width } = Dimensions.get("window")
   const [itemWidth, setItemWidth] = useState(0)
+  const [pageIndex, setPageIndex] = useState(1)
 
   const DATA = [
     {
       id: "bd7acbea",
-      title: "page1",
+      page: pageIndex,
     },
     {
       id: "bd7awwdd",
-      title: "page2",
+      page: pageIndex,
     },
   ]
   const onPressGoback = () => {
-    alert("이전 버튼 클릭")
-    // 이전버튼 클릭시, 이전 컴포넌트로 스크롤 이동
+    {
+      pageIndex !== 1 && setPageIndex(pageIndex - 1)
+    }
   }
   const onPressSaveNext = () => {
-    alert("저장 후 다음 버튼 클릭")
-    // 저장후 다음버튼 클릭시, 다음 컴포넌트로 스크롤 이동
+    {
+      pageIndex < DATA.length && setPageIndex(pageIndex + 1)
+    }
   }
 
   return (
@@ -47,13 +49,12 @@ export const CaregiverSetPriceScreen: FC<
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ width: "200%" }}
         data={DATA}
+        scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
         renderItem={(item) => (
           <>
-            {item.item.title === "page1" && <CaregiverSetPrice style={{ width: itemWidth }} />}
-            {item.item.title === "page2" && (
-              <CaregiverSetAdditionalPrice style={{ width: itemWidth }} />
-            )}
+            {item.item.page === 1 && <CaregiverSetPrice style={{ width: itemWidth }} />}
+            {item.item.page === 2 && <CaregiverSetAdditionalPrice style={{ width: itemWidth }} />}
           </>
         )}
         keyExtractor={(item) => item.id}
@@ -70,14 +71,14 @@ export const CaregiverSetPriceScreen: FC<
 
       <GoBackSaveNext onPressGoback={onPressGoback} onPressSaveNext={onPressSaveNext} />
 
-      <Pressable
+      {/* <Pressable
         style={{ width: "100%", height: 50, backgroundColor: "red", alignSelf: "center" }}
         onPress={() => {
           navigate("caregiver-set-additional-price-screen")
         }}
       >
         <PreReg12 text="caregiver-set-additional-price-screen 으로 이동" />
-      </Pressable>
+      </Pressable> */}
     </Screen>
   )
 })
