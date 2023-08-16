@@ -125,16 +125,10 @@ export const SearchResultScreen: FC<
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState<Petsitter[]>([])
-  const [visitings, setVisitings] = useState<Visiting[]>(null)
-  const [creches, setCreches] = useState<Creche[]>(null)
 
-  if (visitings) {
-    console.log("visitings \n", visitings)
-    console.log("visitings[0]?.location \n", visitings[0]?.location)
-  }
-
-  if (creches) {
-    console.log("creches \n", creches)
+  if (petsitters.length > 0) {
+    console.log("petsitters[0]", petsitters[0])
+    console.log("petsitters[0].userProfile", petsitters[0].userProfile)
   }
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { Sex } from "./user"
+import { CareGiverEntity, VisitingReviewEntity } from "./entity.types"
 
 export enum SearchResultSortOrder {
   ASC = "ASC",
@@ -59,8 +60,8 @@ interface LocationResponse {
 }
 
 interface CareGiverRelatedData {
-  __careGiver__: any // "[Object]", //TODO: __careGiver__ 타입 적용할 것
-  __crecheReviews__: any[] // "[Array]", //TODO: __crecheReviews__ 타입 적용할 것
+  __careGiver__: CareGiverEntity
+  __visitingReviews__: VisitingReviewEntity[]
   // eslint-disable-next-line camelcase
   __has_careGiver__: boolean // true,
   // eslint-disable-next-line camelcase
