@@ -6,7 +6,7 @@ import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, SHADOW_1 } from "../../../theme"
 import { images } from "../../../../assets/images"
 import { ratingRound } from "../../../utils/format"
-import { imageFormatValidate } from "../../../utils/image-format-validate"
+import { imageFormatValidate, profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props
@@ -48,13 +48,7 @@ export const SitterProfileButton = (props: ProfileButtonProps) => {
       {/* profile image */}
       <Image
         style={styles.image}
-        source={
-          image
-            ? imageFormatValidate(image)
-              ? { uri: image }
-              : images.error_profile_medium
-            : images.default_pet_image_60
-        }
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", image)}
       />
     </Pressable>
   )

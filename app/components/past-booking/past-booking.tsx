@@ -95,24 +95,6 @@ export const PastBooking = (props: PastBookingProps) => {
     }
   }, [isFavoriteState])
 
-  // TODO: image source를 삼항연산자로 판단 vs state로 관리
-  // * 프로필 이미지 source
-  const [profileImageSource, setProfileImageSource] = useState<ImageSourcePropType>()
-  useEffect(() => {
-    // ? 프로필 이미지가 입력되지 않은 경우
-    if (!profileImage) {
-      setProfileImageSource(images.default_pet_image_60)
-      return
-    }
-    // ? 이미지가 존재하지만 형식이 올바르지 않은 경우
-    if (!imageFormatValidate(profileImage)) {
-      setProfileImageSource(images.error_profile_medium)
-      return
-    }
-    // ? 프로필 이미지 형식이 올바른 경우
-    setProfileImageSource({ uri: profileImage })
-  }, [])
-
   // * 리뷰 작성 버튼
   const ReviewButton = useCallback(() => {
     // ? 취소된 예약인 경우 - 리뷰 작성 불가능
