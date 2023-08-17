@@ -39,17 +39,37 @@ export const CaregiverSetPriceScreen: FC<
   }
 
   const Header = () => {
+    const STEP_ONE = 1
+    const STEP_TWO = 2
+    const STEP_THREE = 3
+
     return (
       <View style={{ flexDirection: "row", height: 30 }}>
-        <CgRegisterStep step="done" number={1} title="제목없음" style={{ marginRight: 5 }} />
-        <CgRegisterStep step="done" number={2} title="제목없음" style={{ marginRight: 5 }} />
-        <CgRegisterStep step="progress" number={3} title="가격 및 특이설정" />
+        <CgRegisterStep
+          step={pageIndex === STEP_ONE ? "progress" : "done"}
+          number={1}
+          title="기본 요금"
+          onPress={() => {
+            setPageIndex(1)
+          }}
+          style={{ marginRight: 5 }}
+        />
+        <CgRegisterStep
+          step={pageIndex === STEP_TWO ? "progress" : "done"}
+          number={2}
+          title="크기별 추가 요금"
+          onPress={() => {
+            setPageIndex(2)
+          }}
+          style={{ marginRight: 5 }}
+        />
+        <CgRegisterStep step="todo" number={3} title="가격 및 특이설정" />
       </View>
     )
   }
 
   return (
-    <Screen style={{ flex: 1 }}>
+    <Screen>
       {/* <CaregiverSetPrice /> */}
       <Header />
       <FlatList
