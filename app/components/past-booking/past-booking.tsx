@@ -16,7 +16,7 @@ import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/axios/favorite"
-import { imageFormatValidate } from "../../utils/image-format-validate"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 type ServiceType = "visiting" | "creche"
 
@@ -150,13 +150,7 @@ export const PastBooking = (props: PastBookingProps) => {
       {/* //* 케어기버 프로필 사진 */}
       {/* // TODO default profile image 수정 */}
       <ImageBackground
-        source={
-          profileImage
-            ? imageFormatValidate(profileImage)
-              ? { uri: profileImage }
-              : images.error_profile_medium
-            : images.default_pet_image_60
-        }
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
         style={styles.profileImg}
         imageStyle={{ borderRadius: 9 }}
       >

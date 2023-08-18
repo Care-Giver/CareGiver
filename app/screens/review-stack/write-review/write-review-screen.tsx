@@ -38,7 +38,7 @@ import {
 import { images } from "../../../../assets/images"
 import { Rating, ReviewContent, useStores } from "../../../models"
 import { postCrecheReview, postVisitingReview } from "../../../services/axios/review"
-import { imageFormatValidate } from "../../../utils/image-format-validate"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -221,13 +221,7 @@ export const WriteReviewScreen: FC<
             {/* ...혜리님 작업... */}
             <View style={styles.profileCard}>
               <Image
-                source={
-                  profileImage
-                    ? imageFormatValidate(profileImage)
-                      ? { uri: profileImage }
-                      : images.error_profile_small
-                    : images.profile_default
-                }
+                source={profileImageUriHandler(images.profile_default, "small", profileImage)}
                 style={styles.profileImage}
               />
               <View style={styles.profileInfo}>

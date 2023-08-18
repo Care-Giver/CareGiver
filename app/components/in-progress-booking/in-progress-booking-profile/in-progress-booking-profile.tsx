@@ -7,7 +7,7 @@ import RatingReviewBox from "../../rating-review-box/rating-review-box"
 import { InProgressBookingProfileProps } from "./in-progress-booking-profile.props"
 import { CaregiverTypeButton } from "../../../components"
 import { images } from "../../../../assets/images"
-import { imageFormatValidate } from "../../../utils/image-format-validate"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const InProgressBookingProfile = ({
   caregiverData,
@@ -21,13 +21,7 @@ export const InProgressBookingProfile = ({
       {/* //* 프로필 사진 */}
       <Image
         // source={require(caregiverData.profileImg)}
-        source={
-          profileImage
-            ? imageFormatValidate(profileImage)
-              ? { uri: profileImage }
-              : images.error_profile_medium
-            : images.default_pet_image_60
-        }
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
         style={styles.profileImg}
       />
 

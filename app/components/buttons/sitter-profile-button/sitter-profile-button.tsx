@@ -6,7 +6,7 @@ import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, SHADOW_1 } from "../../../theme"
 import { images } from "../../../../assets/images"
 import { ratingRound } from "../../../utils/format"
-import { imageFormatValidate, profileImageUriHandler } from "../../../utils/image-format-validate"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props
