@@ -6,7 +6,7 @@ import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
 import { images } from "../../../assets/images"
 import RatingReviewBox from "../rating-review-box/rating-review-box"
 import { ProfileCardInfo } from "../../services/axios/favorite"
-import { ratingRound } from "../../utils/format"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 interface SitterProfileCardProps {
   sitterData: ProfileCardInfo
@@ -33,7 +33,7 @@ export const SitterProfileCard = ({
         {/* profile image */}
         <Image
           style={styles.profileImg}
-          source={image ? { uri: image } : images.default_pet_image_60}
+          source={profileImageUriHandler(images.default_pet_image_60, "medium", image)}
         />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>

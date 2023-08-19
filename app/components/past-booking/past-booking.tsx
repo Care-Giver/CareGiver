@@ -1,5 +1,5 @@
-import { View, Pressable, Image, ImageBackground } from "react-native"
-import React, { useCallback, useLayoutEffect, useState } from "react"
+import { View, Pressable, Image, ImageBackground, ImageSourcePropType } from "react-native"
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../basics/row/row"
 
@@ -16,6 +16,7 @@ import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/axios/favorite"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 type ServiceType = "visiting" | "creche"
 
@@ -149,15 +150,7 @@ export const PastBooking = (props: PastBookingProps) => {
       {/* //* 케어기버 프로필 사진 */}
       {/* // TODO default profile image 수정 */}
       <ImageBackground
-        source={
-          profileImage
-            ? {
-                uri:
-                  // "https://mblogthumb-phinf.pstatic.net/MjAxOTA4MjJfMjE3/MDAxNTY2NDY1NjQ0Njc3.HlKJUXi4rPFNs92rbdwegwH7JAzyM-6kWfy_UZDBxfEg.I6Jy9AhcKKWmNr6ZeKKotQSdq3pLX6v4nYH8XXqmlh8g.PNG.misomktblog/%EB%8C%80%EC%A7%80_1.png?type=w800",
-                  profileImage,
-              }
-            : images.default_pet_image_60
-        }
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
         style={styles.profileImg}
         imageStyle={{ borderRadius: 9 }}
       >

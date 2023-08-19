@@ -1,25 +1,27 @@
 import { View, Image } from "react-native"
-import React from "react"
+import React, { useCallback } from "react"
 import { styles } from "./styles"
 import { Row } from "../../basics/row/row"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import RatingReviewBox from "../../rating-review-box/rating-review-box"
 import { InProgressBookingProfileProps } from "./in-progress-booking-profile.props"
-import { CaregiverTypeButton } from "#components"
+import { CaregiverTypeButton } from "../../../components"
+import { images } from "../../../../assets/images"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const InProgressBookingProfile = ({
   caregiverData,
   style,
 }: InProgressBookingProfileProps) => {
   // const { petsitterData, style } = props
+  const { profileImage } = caregiverData
+
   return (
     <Row style={style}>
       {/* //* 프로필 사진 */}
       <Image
         // source={require(caregiverData.profileImg)}
-        source={{
-          uri: caregiverData.profileImage,
-        }}
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
         style={styles.profileImg}
       />
 
