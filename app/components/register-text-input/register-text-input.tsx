@@ -18,8 +18,7 @@ export interface RegisterTextInputProps {
 export const RegisterTextInput = observer(function RegisterTextInput(
   props: RegisterTextInputProps,
 ) {
-  const { style, title, placeholder, value, setValue } = props
-  const allStyles = Object.assign({}, styles.root, style)
+  const { title, placeholder, value, setValue } = props
   const onChange = (e) => {
     switch (title) {
       case "휴대폰 번호":
@@ -60,7 +59,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     }
   }, [value])
   return (
-    <View style={allStyles}>
+    <View>
       <PreMed14 text={title} color={BODY} style={{ marginBottom: 10 }} />
       <TextInput
         placeholder={placeholder}
