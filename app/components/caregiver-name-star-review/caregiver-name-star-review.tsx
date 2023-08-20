@@ -11,7 +11,7 @@ import { ratingRound } from "../../utils/format"
 
 export const CaregiverNameStarReview = (props) => {
   const { style: viewStyle, caregiverData } = props
-  const { name, ratings, numberOfReviews } = caregiverData
+  const { name, profileImage, ratings, numberOfReviews } = caregiverData
   const roundedRating = ratingRound(ratings)
 
   return (

@@ -10,8 +10,9 @@ import {
   DivisionLine,
   SitterProfileCard,
   SelectOptionDropdownBox,
+  PetsitterProfileCardPetsitterData,
 } from "../../../components"
-import { palette, LBG } from "../../../theme"
+import { palette, LBG, BOTTOM_HEIGHT } from "../../../theme"
 import { images } from "../../../../assets/images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -23,12 +24,16 @@ import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
 import {
   Sex,
-  SearchResultSortOrder,
   getVisitingsSearch,
   Visiting,
   getCrechesSearch,
   Creche,
+  VisitingService,
+  CrechesService,
+  CrecheAmenity,
+  VisitingAmenity,
 } from "#axios"
+import { SearchResultSortOrder } from "../../../services/axios/types/creches.visitings.common.types"
 
 const visitingResponse = [
   {
@@ -98,14 +103,19 @@ const crecheResponse = [
   },
 ]
 
-interface Petsitter extends Visiting, Creche {}
+export interface Petsitter extends Visiting, Creche {}
+
+export type ServiceAmenity = {
+  services: CrechesService[] | VisitingService[]
+  amenities: CrecheAmenity[] | VisitingAmenity[]
+}
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
-  console.log("route.params", route.params)
+  // console.log("route.params", route.params)
   const {
     // API REQUEST BODY 관련
     lat,
@@ -125,11 +135,6 @@ export const SearchResultScreen: FC<
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState<Petsitter[]>([])
-
-  if (petsitters.length > 0) {
-    console.log("petsitters[0]", petsitters[0])
-    console.log("petsitters[0].userProfile", petsitters[0].userProfile)
-  }
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -348,18 +353,29 @@ export const SearchResultScreen: FC<
           <Animated.FlatList
             data={petsitters}
             renderItem={({ item: petsitter, index }) => {
-              const sitterData = {
+              const sitterData: PetsitterProfileCardPetsitterData = {
                 crecheId: serviceType === "위탁" ? petsitter.creche.id : null,
                 visitingId: serviceType === "방문" ? petsitter.visiting.id : null,
-                image:
+                reviewCount: petsitter.reviewCount,
+                userNickname: petsitter.userNickname,
+                title: serviceType === "위탁" ? petsitter.creche.title : petsitter.visiting.title,
+                desc: serviceType === "위탁" ? petsitter.creche.desc : petsitter.visiting.desc,
+                star: serviceType === "위탁" ? petsitter.creche.star : petsitter.visiting.star,
+                profileImage:
                   serviceType === "위탁"
                     ? petsitter.creche.__careGiver__.__user__?.profileImage
                     : petsitter.visiting.__careGiver__.__user__?.profileImage,
-                userNickname: petsitter.userNickname,
-                title: serviceType === "위탁" ? petsitter.creche.title : petsitter.visiting.title,
-                reviewCount: petsitter.reviewCount,
-                rating: serviceType === "위탁" ? petsitter.creche.star : petsitter.visiting.star,
-                desc: serviceType === "위탁" ? petsitter.creche.desc : petsitter.visiting.desc,
+              }
+
+              const serviceAmenity: ServiceAmenity = {
+                services:
+                  serviceType === "위탁"
+                    ? petsitter.creche.serviceCreche
+                    : petsitter.visiting.serviceVisiting,
+                amenities:
+                  serviceType === "위탁"
+                    ? petsitter.creche.crecheAmenities
+                    : petsitter.visiting.visitingAmenities,
               }
 
               const images =
@@ -375,10 +391,17 @@ export const SearchResultScreen: FC<
                     navigate("caregiver-detail-information-screen", {
                       sitterData,
                       serviceType,
+                      serviceAmenity,
                       images,
                       selectedPets: petIds,
-                      beginDate: serviceType === "방문" ? startTime : null,
+
+                      // 방문
+                      startTime: serviceType === "방문" ? startTime : null,
                       endTime: serviceType === "방문" ? endTime : null,
+
+                      // 위탁
+                      startDate: serviceType === "위탁" ? startDate : null,
+                      endDate: serviceType === "위탁" ? endDate : null,
                     })
                   }}
                   // TODO: 찜하기 기능 구현
@@ -392,6 +415,9 @@ export const SearchResultScreen: FC<
               backgroundColor: palette.white,
               height: "auto",
               marginBottom: 34,
+            }}
+            contentContainerStyle={{
+              paddingBottom: 150,
             }}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {

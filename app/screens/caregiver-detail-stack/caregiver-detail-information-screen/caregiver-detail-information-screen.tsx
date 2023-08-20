@@ -19,7 +19,8 @@ import {
   MakeBookingButton,
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
-  CustomModal, // modal test
+  CustomModal,
+  PreMed16, // modal test
 } from "../../../components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../navigators"
@@ -34,49 +35,43 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   STANDARD_WIDTH,
+  BOTTOM_HEIGHT,
 } from "../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../utils/delay"
 
-const servicesDummy = [
-  {
-    emoji: "🦮",
-    label: "산책",
-  },
-  {
-    emoji: "🦴",
-    label: "간식주기",
-  },
-  {
-    emoji: "🛁",
-    label: "목욕시키기",
-  },
-]
+// const Services = ({ services }) => {
+//   let arr = []
 
-const services = (services) => {
-  let arr = []
+//   for (let index = 0; index < services.length; index++) {
+//     arr.push(services[index])
+//     index === services.length - 1 ? null : arr.push("division-line-vertical")
+//   }
 
-  for (let index = 0; index < services.length; index++) {
-    arr.push(services[index])
-    index === services.length - 1 ? null : arr.push("division-line-vertical")
-  }
-
-  return arr.map((item, index) =>
-    item === "division-line-vertical" ? (
-      <DivisionLineVertical color={DBG} height={16} style={{ marginHorizontal: 10 }} key={index} />
-    ) : (
-      <CaregiverService emoji={item.emoji} label={item.label} key={index} />
-    ),
-  )
-  // console.log(arr)
-}
+//   return (
+//     <>
+//       {arr?.map((item, index) =>
+//         item === "division-line-vertical" ? (
+//           <DivisionLineVertical
+//             color={DBG}
+//             height={16}
+//             style={{ marginHorizontal: 10 }}
+//             key={index}
+//           />
+//         ) : (
+//           <CaregiverService emoji={item.emoji} label={item.name} key={index} />
+//         ),
+//       )}
+//     </>
+//   )
+// }
 
 const hiredTimes = 99
 const petYearsYears = 12
 const petYearsMonths = 4
 
-const desc =
-  "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
+// const desc =
+//   "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
 
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
@@ -84,16 +79,34 @@ export const CaregiverDetailInformationScreen: FC<
   const {
     sitterData,
     serviceType,
+    serviceAmenity,
     images,
-    selectedDate,
     selectedPets,
-    beginDate,
-    endDate,
+    // selectedDate,
   } = route.params
+  const { profileImage, userNickname, star, reviewCount, desc } = sitterData
 
-  const { profileImg, name, rating } = sitterData
+  let visitingId = ""
+  let startTime = ""
+  let endTime = ""
+
+  let crecheId = ""
+  let startDate = ""
+  let endDate = ""
+  if (serviceType === "방문") {
+    visitingId = sitterData.visitingId
+    startTime = route.params.startTime
+    endTime = route.params.endTime
+  } else {
+    crecheId = sitterData.crecheId
+    startDate = route.params.startDate
+    endDate = route.params.endDate
+  }
+
+  const selectedDate = ""
 
   const [post, setPost] = useState(null)
+
   const [isMounted, setIsMounted] = useState(false)
 
   const animationValue = useRef(new Animated.Value(0)).current
@@ -127,17 +140,6 @@ export const CaregiverDetailInformationScreen: FC<
     outputRange: [0.8, 1],
   })
 
-  // useEffect(() => {
-  //   const api = new Api()
-  //   api.setup()
-
-  //   api.getCreche("1").then((response) => {
-  //     setPost(response.data)
-  //   })
-  // }, [])
-
-  // console.log("post", post)
-
   const onPressMakeBookingButton = () => {
     navigate("make-booking-screen", {
       sitterData: sitterData,
@@ -146,8 +148,14 @@ export const CaregiverDetailInformationScreen: FC<
       serviceType: serviceType,
       selectedDate: selectedDate,
       selectedPets: selectedPets,
-      beginDate: serviceType == "방문" ? beginDate : null,
-      endDate: serviceType == "방문" ? endDate : null,
+
+      // 방문
+      startTime: serviceType === "방문" ? startTime : null,
+      endTime: serviceType === "방문" ? endTime : null,
+
+      // 위탁
+      startDate: serviceType === "위탁" ? startDate : null,
+      endDate: serviceType === "위탁" ? endDate : null,
     })
   }
 
@@ -192,22 +200,25 @@ export const CaregiverDetailInformationScreen: FC<
           <CaregiverNameStarReview
             style={{ marginTop: 36 }}
             caregiverData={{
-              name: name,
-              ratings: rating,
-              numberOfReviews: 12,
+              name: userNickname,
+              profileImage,
+              ratings: star,
+              numberOfReviews: reviewCount,
             }}
           />
 
+          {/* TODO: 어떻게 가져올 것인가? API 없는 것으로 보임 */}
           {/* //* 고용된 횟수와 반려동물과 함께한 시간 */}
-          <HiredTimesAndPetYears
+          {/* <HiredTimesAndPetYears
             style={{ marginTop: 20 }}
             hiredTimes={hiredTimes}
             petYearsYears={petYearsYears}
             petYearsMonths={petYearsMonths}
-          />
+          /> */}
 
+          {/* TODO: 어떤 API? */}
           {/* //* 자격증 */}
-          <Row style={{ marginTop: 60 }}>
+          {/* <Row style={{ marginTop: 60 }}>
             <PreBol16 text={"자격증"} color={SUB_HEAD_LINE} />
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
@@ -219,14 +230,29 @@ export const CaregiverDetailInformationScreen: FC<
           <CaregiverCertificate
             label={"반려동물행동교정사"}
             detail={"반려동물을 행동교정 행동교정 행동교정 행동교정 행동교정 행동교정"}
-          />
+          /> */}
 
           {/* //* 서비스 */}
           <Row style={{ marginTop: 60 }}>
             <PreBol16 text={"서비스"} color={SUB_HEAD_LINE} />
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
-          <Row style={{ marginTop: 12 }} children={services(servicesDummy)} />
+          <View style={{ marginTop: 12 }}>
+            {serviceAmenity.services.map((item, index) => (
+              <CaregiverService emoji={"•"} label={item.name} key={`service-${item.id}`} />
+            ))}
+          </View>
+
+          {/* //* 편의시설 */}
+          <Row style={{ marginTop: 60 }}>
+            <PreBol16 text={"편의시설"} color={SUB_HEAD_LINE} />
+          </Row>
+          <DivisionLine color={LBG} style={{ marginTop: 8 }} />
+          <View style={{ marginTop: 12 }}>
+            {serviceAmenity.amenities.map((item, index) => (
+              <CaregiverService emoji={"•"} label={item.name} key={`service-${item.id}`} />
+            ))}
+          </View>
 
           {/* //* 자기소개 */}
           <Row style={{ marginTop: 28 }}>
@@ -264,7 +290,7 @@ export const CaregiverDetailInformationScreen: FC<
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
 
-          <View style={{ paddingVertical: -1, marginBottom: 120 }}>
+          <View style={{ paddingVertical: -1, marginBottom: BOTTOM_HEIGHT, alignItems: "center" }}>
             {commentsDummy.slice(0, 3).map((item, index) => (
               <Comment commentData={item} numberOfLines={2} style={{ marginTop: -1 }} key={index} />
             ))}

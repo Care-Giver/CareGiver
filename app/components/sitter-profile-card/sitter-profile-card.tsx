@@ -5,11 +5,26 @@ import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
 import { images } from "../../../assets/images"
 import RatingReviewBox from "../rating-review-box/rating-review-box"
-import { ProfileCardInfo } from "../../services/axios/favorite"
-import { ratingRound } from "../../utils/format"
+import { Petsitter } from "../../screens/search-stack/search-result-screen/search-result-screen"
+import { UserEntity } from "../../services/axios/types/entity.types"
+import { CommonData } from "../../services/axios/types/creches.visitings.common.types"
+
+export type PetsitterProfileCardPetsitterData = {
+  crecheId?: number
+  visitingId?: number
+} & Pick<Petsitter, "reviewCount" | "userNickname"> &
+  Pick<CommonData, "title" | "desc" | "star"> &
+  Pick<UserEntity, "profileImage">
+
+// export type PetsitterProfileCardPetsitterData = {
+//   crecheId?: number
+//   visitingId?: number
+// } | Pick<Petsitter, "reviewCount" | "userNickname"> |
+//   Pick<CommonData, "title" | "desc" | "star"> |
+//   Pick<UserEntity, "profileImage">
 
 interface SitterProfileCardProps {
-  sitterData: ProfileCardInfo
+  sitterData: PetsitterProfileCardPetsitterData
   style?: FlexStyle
   isFavorite: boolean
   onPress: () => void
@@ -23,7 +38,21 @@ export const SitterProfileCard = ({
   isFavorite,
   onLikePress,
 }: SitterProfileCardProps) => {
-  const { crecheId, visitingId, userNickname, image, rating, reviewCount, title, desc } = sitterData
+  const {
+    crecheId,
+    visitingId,
+    //
+    reviewCount,
+    userNickname,
+    //
+    title,
+    desc,
+    star,
+    //
+    profileImage,
+  } = sitterData
+
+  console.log("profileImage >>>", profileImage)
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
@@ -33,7 +62,7 @@ export const SitterProfileCard = ({
         {/* profile image */}
         <Image
           style={styles.profileImg}
-          source={image ? { uri: image } : images.default_pet_image_60}
+          source={profileImage ? { uri: profileImage } : images.default_pet_image_60}
         />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
@@ -41,7 +70,7 @@ export const SitterProfileCard = ({
           <PreMed16 text={userNickname} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={rating} review={reviewCount} style={{ marginTop: 4 }} />
+          <RatingReviewBox rating={star} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />

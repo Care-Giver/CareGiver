@@ -62,6 +62,7 @@ import {
   WriteReviewScreen,
   ViewReviewScreen,
   TempChatScreen,
+  ServiceAmenity,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -81,6 +82,7 @@ import {
   PreMed16,
   CgsetAddressHeader,
   CustomTabBar,
+  PetsitterProfileCardPetsitterData,
 } from "#components"
 import { images } from "../../assets/images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
@@ -106,6 +108,8 @@ import { IMPData } from "iamport-react-native"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 
+type ServiceTypeKorean = "방문" | "위탁" //TODO: ServiceType 전부 한글로 바꾸기
+
 export type NavigatorParamList = {
   //* general screens
   "home-screen": undefined
@@ -119,10 +123,25 @@ export type NavigatorParamList = {
     petIds: number[]
 
     // 그외
-    serviceType: "방문" | "위탁"
+    serviceType: ServiceTypeKorean
   }
 
-  "caregiver-detail-information-screen": undefined
+  "caregiver-detail-information-screen": {
+    sitterData: PetsitterProfileCardPetsitterData
+    serviceType: ServiceTypeKorean
+    serviceAmenity: ServiceAmenity
+    images: string[]
+    selectedPets: number[]
+
+    // 방문
+    startTime?: string
+    endTime?: string
+
+    // 위탁
+    startDate?: string
+    endDate?: string
+  }
+
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
