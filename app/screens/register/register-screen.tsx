@@ -3,7 +3,15 @@ import { Image, Pressable, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { PreBol20, PreMed14, PreMed16, RegisterTextInput, Row, Screen } from "#components"
+import {
+  ConditionalButton,
+  PreBol20,
+  PreMed14,
+  PreMed16,
+  RegisterTextInput,
+  Row,
+  Screen,
+} from "#components"
 import { BODY, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -31,6 +39,10 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     const [sex, setSex] = useState<Sex>(null)
     const [phoneNumber, setPhoneNumber] = useState<string>("")
     const [certification, setCertification] = useState<string>("")
+
+    //* 인증번호가 맞다면 활성화
+    //TODO 인증번호 로직이 완성되면 코드 추가하면 될 것 같습니다.
+    const [isActivated, setIsActivated] = useState<boolean>(true)
 
     return (
       <Screen testID="Register">
@@ -109,6 +121,14 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           title="인증번호"
           value={certification}
           setValue={setCertification}
+        />
+
+        <ConditionalButton
+          label="다음"
+          isActivated={isActivated}
+          //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
+          style={{ marginTop: 64 }}
+          onPress={() => {}}
         />
       </Screen>
     )
