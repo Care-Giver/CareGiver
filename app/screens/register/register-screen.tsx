@@ -37,7 +37,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
         <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
         <RegisterTextInput
           placeholder="활동하게 될 닉네임을 입력해주세요."
-          title={"닉네임(필수)"}
+          title="닉네임(필수)"
           value={nickname}
           setValue={setNickname}
         />
