@@ -20,7 +20,6 @@ export const RegisterSuccessScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-  const [isActivated, setIsActivated] = useState<boolean>(true)
 
   return (
     <Screen testID="RegisterSuccess">
@@ -38,9 +37,10 @@ export const RegisterSuccessScreen: FC<
       </View>
       <ConditionalButton
         label="다음"
-        isActivated={isActivated}
+        isActivated={true}
         //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
         style={{ marginTop: 324 }}
+        //TODO navigation추가 필요
         onPress={() => {}}
       />
     </Screen>

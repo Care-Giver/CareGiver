@@ -141,6 +141,7 @@ export const TermsOfServiceScreen: FC<
         isActivated={isActivated}
         //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
         style={{ marginTop: 307 }}
+        //TODO navigation추가 필요
         onPress={() => {}}
       />
     </Screen>
