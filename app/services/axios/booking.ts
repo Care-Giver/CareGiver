@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
-import { ratingRound } from "app/utils/format"
+import { ratingRound } from "../../utils/format"
 
 //* 위탁예약 생성
 export interface CreateCrecheBookingInput {

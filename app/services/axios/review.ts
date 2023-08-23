@@ -2,7 +2,7 @@ import { Rating } from "../../models"
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
-import { ratingRound } from "app/utils/format"
+import { ratingRound } from "../../utils/format"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
