@@ -4,7 +4,6 @@ import { styles } from "./styles"
 import { PreReg12 } from "../basics/custom-texts/custom-texts"
 import { MIDDLE_LINE, SUB_HEAD_LINE } from "../../theme"
 import { images } from "../../../assets/images"
-import { ratingRound } from "../../utils/format"
 
 interface RatingReviewBoxProps {
   rating: number
@@ -13,7 +12,7 @@ interface RatingReviewBoxProps {
 }
 
 const RatingReviewBox = ({ rating, review, style }: RatingReviewBoxProps) => {
-  const roundedRating = ratingRound(rating)
+  const roundedRating = rating
   return (
     <View style={[styles.reviewContainer, style]}>
       {/* rating */}

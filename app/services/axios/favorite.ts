@@ -1,5 +1,6 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { ratingRound } from "../../utils/format"
 
 export interface ProfileCardInfo {
   crecheId?: number
@@ -49,7 +50,17 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
     }
     // console.info("[getFavorites] response.data: ", response.data)
     // console.log("in Axios response.data >>>", response.data)
-    return response.data
+    const favoritePetsitters: ProfileCardInfo[] = response.data.favoritePetsitters.map(
+      (value: ProfileCardInfo) => ({
+        ...value,
+        rating: ratingRound(value.rating),
+      }),
+    )
+
+    return {
+      ...response.data,
+      favoritePetsitters,
+    }
   } catch (error) {
     console.error(error)
     //@ts-ignore
