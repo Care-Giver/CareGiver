@@ -12,7 +12,7 @@ import {
   Row,
   Screen,
 } from "#components"
-import { BODY, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
+import { BODY, BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
 // import { useNavigation } from "@react-navigation/native"
@@ -27,7 +27,7 @@ type Sex = {
 }
 
 export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-screen">> = observer(
-  function RegisterScreen() {
+  function RegisterScreen({ navigation }) {
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
 
@@ -126,10 +126,11 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
         <ConditionalButton
           label="다음"
           isActivated={isActivated}
-          //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
-          style={{ marginTop: 64 }}
+          style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
           //TODO navigation추가 필요
-          onPress={() => {}}
+          onPress={() => {
+            navigation.replace("register-success-screen")
+          }}
         />
       </Screen>
     )

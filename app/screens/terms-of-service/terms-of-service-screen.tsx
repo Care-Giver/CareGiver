@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { Pressable, StyleSheet, Image, Linking } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   BlueCheckbox,
   Checkbox,
@@ -139,10 +139,11 @@ export const TermsOfServiceScreen: FC<
       <ConditionalButton
         label="다음"
         isActivated={isActivated}
-        //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
-        style={{ marginTop: 307 }}
+        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         //TODO navigation추가 필요
-        onPress={() => {}}
+        onPress={() => {
+          navigate("register-screen")
+        }}
       />
     </Screen>
   )

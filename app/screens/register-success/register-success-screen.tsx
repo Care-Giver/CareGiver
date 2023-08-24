@@ -2,10 +2,10 @@ import React, { FC, useState } from "react"
 import { Image, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import { ConditionalButton, PreBol20, PreReg14, Screen } from "#components"
 import { images } from "#images"
-import { BODY } from "#theme"
+import { BODY, BOTTOM_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -38,10 +38,11 @@ export const RegisterSuccessScreen: FC<
       <ConditionalButton
         label="다음"
         isActivated={true}
-        //TODO bottom position을 어떻게 줘야할지 피드백 주시면 감사하겠습니다.
-        style={{ marginTop: 324 }}
+        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         //TODO navigation추가 필요
-        onPress={() => {}}
+        onPress={() => {
+          navigate("mypage-screen")
+        }}
       />
     </Screen>
   )
