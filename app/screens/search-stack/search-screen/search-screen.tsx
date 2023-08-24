@@ -23,6 +23,7 @@ import {
   SelectPetDropdownBox,
   TimePicker,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  ClientCalendar,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -194,6 +195,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             placeholder="날짜입력"
             style={{ color: "black", borderWidth: 1 }}
           />
+
+          <ClientCalendar style={{ alignSelf: "center" }} />
 
           {/* {!isCalendarOpen ? (
             <RowRoundedButton 

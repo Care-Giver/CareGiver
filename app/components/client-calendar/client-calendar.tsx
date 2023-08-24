@@ -4,70 +4,38 @@ import { observer } from "mobx-react-lite"
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars"
 import { images } from "#images"
 import { styles } from "./styles"
-import { CgCalendarProps } from "./client-calendar.props"
 import "./localeConfig"
 import { ClientCalendarDay } from "./client-calendar-day/client-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
-export const ClientCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { dates, serviceType } = props
-  const hasDates = dates?.length !== 0
+type ServiceType = "방문" | "위탁"
+
+interface ClientCalendarProps {
+  serviceType: ServiceType
+  style: ViewStyle
+}
+
+export const ClientCalendar = observer(function CgCalendar(props: ClientCalendarProps) {
+  const { serviceType, style } = props
 
   const [selected, setSelected] = useState("")
 
-  //* serviceType == "위탁"일 때 startDate와 endDate 관리
-  const [crecheStartToggle, setCrecheStartToggle] = useState(false)
-  const [crecheEndToggle, setCrecheEndToggle] = useState(false)
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
 
-  useEffect(() => {
-    if (serviceType == "위탁") {
-      if (crecheStartToggle == true && crecheEndToggle == false) {
-        const newStartDate = new Date(selected)
-        //? 다른 주기를 선택해야할 때 endDate가 남아있어서 null처리
-        if (endDate != null) {
-          setEndDate(null)
-        }
-        setStartDate(newStartDate)
-      }
-      if (crecheStartToggle == false && crecheEndToggle == true) {
-        const newEndDate = new Date(selected)
-        setEndDate(newEndDate)
-      }
-    }
-  }, [crecheStartToggle, crecheEndToggle])
-
-  //console.log("serviceType in CgCalendar >>>", serviceType)
   //console.log("dates in CgCalendar >>>", dates)
   //console.log("♦️")
 
   const onDayPress = ({ date }) => {
     setSelected(date.dateString)
-    if (crecheStartToggle == false) {
-      setCrecheStartToggle(!crecheStartToggle)
-      if (crecheEndToggle == true) {
-        setCrecheEndToggle(false)
-      }
-    } else {
-      if (new Date(date.dateString) >= new Date(selected)) {
-        console.log("new")
-        setCrecheEndToggle(!crecheEndToggle)
-        setCrecheStartToggle(!crecheStartToggle)
-      } else {
-        //? 시작일 선택 다시할때 에러 수정
-        setStartDate(new Date(date.dateString))
-      }
-    }
-
-    //console.log(currentMonth)
+    // setStartDate(new Date(date.dateString))
   }
 
   return (
-    <View>
+    <View style={style}>
       <Calendar
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) =>
@@ -87,19 +55,15 @@ export const ClientCalendar = observer(function CgCalendar(props: CgCalendarProp
         }}
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
-            {hasDates && (
-              <ClientCalendarDay //? 왜 안되는지,
-                date={date}
-                state={state}
-                selected={selected}
-                month={currentMonth}
-                serviceType={serviceType}
-                startDate={startDate}
-                endDate={endDate}
-                availableDates={dates}
-                //crecheAvailableDates={serviceType == "위탁" ? dates : null}
-              />
-            )}
+            <ClientCalendarDay //? 왜 안되는지,
+              date={date}
+              state={state}
+              selected={selected}
+              month={currentMonth}
+              startDate={startDate}
+              serviceType={serviceType}
+              endDate={endDate}
+            />
           </Pressable>
         )}
         style={[styles.calendar, SHADOW_1]}

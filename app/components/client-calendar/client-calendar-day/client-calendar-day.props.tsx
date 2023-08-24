@@ -12,22 +12,7 @@ export type ClientCalendarDayProps = {
   selected: string
   // dates: groupedVisitingAvailableTimesByDate[] | crecheAvailableDates[]
   serviceType: ServiceType
-  availableDates: Solution1[]
   month: Date
   startDate: Date
   endDate: Date
-}
-
-{
-  /**
-interface CrecheProp {
-  serviceType: "위탁"
-  crecheAvailableDates?: crecheAvailableDates[]
-}
-
-interface VisitingProp {
-  serviceType: "방문"
-  visitingAvailableDates?: groupedVisitingAvailableTimesByDate[]
-}
- */
 }

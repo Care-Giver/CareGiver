@@ -13,15 +13,7 @@ import {
 } from "#theme"
 
 export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCalendarDayProps) {
-  const { date, state, selected, availableDates, serviceType, startDate, endDate } = props
-  const [fee, setFee] = useState(null)
-  const [availableTime, setAvailableTime] = useState(false)
-
-  useEffect(() => {
-    setFee(null)
-    //setAvailableTime(false)
-    checkDate()
-  }, [date, availableDates])
+  const { date, state, selected, serviceType, startDate, endDate } = props
 
   //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
   const checkMiddleDate = ({ date }) => {
@@ -52,15 +44,6 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
     if (checkMiddleDate({ date })) {
       return "white"
     }
-    if (availableTime) {
-      if (date.dateString == selected) {
-        return "white"
-      }
-      if (state == "disabled") {
-        return MIDDLE_LINE
-      }
-      return "black"
-    }
     if (date.dateString == selected) {
       return "white"
     }
@@ -88,29 +71,6 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
     return SUB_HEAD_LINE
   }
 
-  const checkDate = () => {
-    // console.log("dates in checkDate >>>", dates)
-    // console.log("serviceType in checkDate >>>", serviceType)
-
-    if (serviceType == "방문") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.date.substring(0, 10)) {
-          setFee(availableDate.fee)
-          setAvailableTime(true)
-          return true
-        } else return null
-      })
-    } else if (serviceType == "위탁") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.startDate.substring(0, 10)) {
-          setFee(availableDate.fee)
-          setAvailableTime(true)
-          return true
-        } else return null
-      })
-    }
-  }
-
   // console.log("dates in calendar-day >>>", dates)
 
   return (
@@ -136,26 +96,13 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
           style={[
             styles.dayText,
             {
-              fontWeight: availableTime ? "600" : "400",
+              fontWeight: "400",
               backgroundColor: textBgBdSelectior({ date, state }),
               color: textColorSelector({ date, state }),
             },
           ]}
         >
           {date.day}
-        </Text>
-      </View>
-      <View style={{ marginTop: 6 }}>
-        <Text
-          style={[
-            styles.feeText,
-            {
-              color: feeTextColorSelector({ date, state }),
-              fontWeight: date.dateString == selected ? "600" : "400",
-            },
-          ]}
-        >
-          {fee}
         </Text>
       </View>
     </View>
