@@ -179,7 +179,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       <Screen testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Row style={{ marginTop: 12 }}>
+          <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
             <ServiceTypeIndicatorHeader
               onPress={() => {
                 setServiceType("방문")
