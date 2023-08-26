@@ -3,6 +3,8 @@ import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
 import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, STANDARD_WIDTH } from "#theme"
 import { DotsIndicator } from "../dots-indicator/dots-indicator"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
+import { images as _images } from "../../../assets/images"
 
 export const FullWidthSizeImagesBoxWithIndicator = (props) => {
   const { style: viewStyle, images: _images } = props
@@ -26,7 +28,8 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
           { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
         ) => (
           <ImageBackground
-            source={{ uri: item }}
+            // TODO: dummydata에 있는 uri에서는 제대로 동작하지 않음. (uri 끝부분이 .jpg와 같이 끝나지 않음)
+            source={profileImageUriHandler(_images.default_pet_image_60, "large", item.profileImg)}
             style={{
               // width: "100%",
               width: DEVICE_SCREEN_WIDTH,

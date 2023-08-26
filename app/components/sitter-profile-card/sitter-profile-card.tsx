@@ -8,6 +8,7 @@ import RatingReviewBox from "../rating-review-box/rating-review-box"
 import { Petsitter } from "../../screens/search-stack/search-result-screen/search-result-screen"
 import { UserEntity } from "../../services/axios/types/entity.types"
 import { CommonData } from "../../services/axios/types/creches.visitings.common.types"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 export type PetsitterProfileCardPetsitterData = {
   crecheId?: number
@@ -16,12 +17,7 @@ export type PetsitterProfileCardPetsitterData = {
   Pick<CommonData, "title" | "desc" | "star"> &
   Pick<UserEntity, "profileImage">
 
-// export type PetsitterProfileCardPetsitterData = {
-//   crecheId?: number
-//   visitingId?: number
-// } | Pick<Petsitter, "reviewCount" | "userNickname"> |
-//   Pick<CommonData, "title" | "desc" | "star"> |
-//   Pick<UserEntity, "profileImage">
+
 
 interface SitterProfileCardProps {
   sitterData: PetsitterProfileCardPetsitterData
@@ -62,7 +58,7 @@ export const SitterProfileCard = ({
         {/* profile image */}
         <Image
           style={styles.profileImg}
-          source={profileImage ? { uri: profileImage } : images.default_pet_image_60}
+          source={profileImageUriHandler(images.default_pet_image_60, "medium", image)}
         />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
