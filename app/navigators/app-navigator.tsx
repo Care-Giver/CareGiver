@@ -118,9 +118,15 @@ export type NavigatorParamList = {
     // API REQUEST BODY 관련
     lat: number
     lng: number
-    startTime: string // "2023-07-27T10:40:59"
-    endTime: string //"2023-07-27T11:40:59"
     petIds: number[]
+
+    // 방문
+    startTime?: string // "2023-07-27T10:40:59"
+    endTime?: string //"2023-07-27T11:40:59"
+
+    // 위탁
+    startDate?: string
+    endDate?: string
 
     // 그외
     serviceType: ServiceTypeKorean

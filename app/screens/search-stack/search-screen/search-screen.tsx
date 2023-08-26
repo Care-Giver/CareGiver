@@ -7,7 +7,6 @@ import {
   UIManager,
   ViewStyle,
   ScrollView,
-  TextInput,
 } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -32,10 +31,12 @@ import {
   HEAD_LINE,
   SUB_HEAD_LINE,
   BOTTOM_HEIGHT,
+  LIGHT_LINE,
+  GIVER_CASUAL_NAVY,
 } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
-import { Calendar, DateData } from "react-native-calendars"
+import { DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
 // Calculate the number of minutes passed since the start of the hour
 const now = new Date()
@@ -75,6 +76,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     //* 달력 - Calendar
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
     const [date, setDate] = useState<DateData>(null) //? 선택된 날짜
+    const [dateRange, setDateRange] = useState<DateData[]>([]) //? 선택된 날짜 범위
 
     //* 선택된 반려동물
     const [selectedPets, setSelectedPets] = useState([])
@@ -153,6 +155,26 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     const isActivated = hadleIsActivated()
 
+    const calendarButtonText = () => {
+      // 방문
+      if (serviceType === "방문") {
+        return date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"
+      }
+
+      // 위탁
+      switch (dateRange.length) {
+        case 0:
+          return "날짜 범위를 선택해주세요"
+        case 1:
+          return `${dateRange[0]?.dateString?.replace(/-/g, ".")} ~ `
+        case 2:
+          return `${dateRange[0]?.dateString?.replace(
+            /-/g,
+            ".",
+          )} ~ ${dateRange[1]?.dateString?.replace(/-/g, ".")}`
+      }
+    }
+
     return (
       <Screen testID="SearchScreen" preset="fixed">
         {/* //* 방문 | 위탁 */}
@@ -188,31 +210,59 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           </Row>
 
           {/* //* 날짜 선택 */}
-          {!isCalendarOpen ? (
-            //? 날짜 선택 버튼
-            <RowRoundedButton
-              onPress={() => {
-                setIsCalendarOpen(true)
-                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
-              }}
-              image={images.calendar}
-              text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
-              textColor={HEAD_LINE}
-              style={{ marginTop: 36 }}
-            />
-          ) : (
-            //? 캘린더 표출
-            <ClientCalendar
-              style={{ alignSelf: "center", marginTop: 36 }}
-              onDayPress={(date) => {
-                setDate(date)
-                setIsCalendarOpen(false)
-                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
-              }}
-              selectedDate={date ? date.dateString : now.toISOString().substring(0, 10)}
-              serviceType={serviceType}
-            />
-          )}
+          {/* //? 날짜 선택 버튼 */}
+          <RowRoundedButton
+            onPress={() => {
+              setIsCalendarOpen(!isCalendarOpen)
+              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+            }}
+            image={images.calendar}
+            // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
+            text={calendarButtonText()}
+            textColor={HEAD_LINE}
+            style={{ marginTop: 36 }}
+            borderColor={isCalendarOpen ? GIVER_CASUAL_NAVY : LIGHT_LINE}
+          />
+          {/* 캘린더 */}
+          {isCalendarOpen &&
+            (serviceType === "방문" ? (
+              // 방문 캘린더: 한 개의 날짜만 선택
+              <ClientCalendar
+                style={{ alignSelf: "center", marginTop: 12 }}
+                onDayPress={(date) => {
+                  setDate(date)
+                  setIsCalendarOpen(false)
+                  LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+                }}
+                selectedDate={date ? date.dateString : now.toISOString().substring(0, 10)}
+                dateRange={[]} //? 방문인 경우, dateRange 는 사용하지 않음
+              />
+            ) : (
+              // 위탁 캘린더: 날짜 범위(시작일, 종료일)를 선택
+              <ClientCalendar
+                style={{ alignSelf: "center", marginTop: 12 }}
+                onDayPress={(date) => {
+                  switch (dateRange.length) {
+                    case 0:
+                      // 첫번째 날짜 (시작일) 설정
+                      setDateRange([date])
+                      break
+                    case 1:
+                      // 두번째 날짜 (종료일) 추가후, 시간순으로 날짜 정렬
+                      setDateRange((pre) =>
+                        [...pre, date].sort((a, b) => a.timestamp - b.timestamp),
+                      )
+                      break
+                    case 2:
+                      // 날짜 초기화후, 선택한 날짜를 새로운 첫번째 날짜(시작일)로 설정
+                      setDateRange([date])
+                      break
+                  }
+                }}
+                selectedDate={""} //? 위탁 경우, selectedDate 는 사용하지 않음
+                dateRange={dateRange}
+              />
+            ))}
 
           {/* //* 시간 선택 */}
           {serviceType === "방문" && (
@@ -293,8 +343,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               navigate("search-result-screen", {
                 service,
                 serviceType,
-                //TODO "위탁"인 경우 사용될 값입니다. cg-calendar로 바뀌면 startDate, endDate로 나눠져 들어가야합니다. 우선 한 값만 선택할 수 있기 때문에 selectedDate로만 넘깁니다.
-                selectedDate: date,
                 // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
                 selectedPets: selectedPets.map((item) => {
                   return item.id
@@ -308,7 +356,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                         .substring(0, 19)
                         .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
                     : null,
-
                 endTime:
                   serviceType === "방문"
                     ? endTime
@@ -318,8 +365,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                     : null,
 
                 // "위탁"인 경우 사용될 값
-                startDate: serviceType === "위탁" ? "2023-07-29T00:00:00" : null,
-                endDate: serviceType === "위탁" ? "2023-07-30T00:00:00" : null,
+                startDate: serviceType === "위탁" ? `${dateRange[0].dateString}T00:00:00` : null,
+                endDate: serviceType === "위탁" ? `${dateRange[1].dateString}T00:00:00` : null,
+
                 // 위치 값
                 ...location,
               })

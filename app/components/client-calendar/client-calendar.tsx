@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react"
-import { StyleProp, View, Image, Text, ViewStyle, Pressable } from "react-native"
+import React from "react"
+import { StyleSheet, View, Image, ViewStyle, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Calendar, DateData, LocaleConfig } from "react-native-calendars"
+import { Calendar, DateData } from "react-native-calendars"
 import { images } from "#images"
-import { styles } from "./styles"
 import "./localeConfig"
 import { ClientCalendarDay } from "./client-calendar-day/client-calendar-day"
-import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
+import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_40, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
-import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
-
-type ServiceType = "방문" | "위탁"
 
 interface ClientCalendarProps {
   style: ViewStyle
-  serviceType: ServiceType
   selectedDate: string
   onDayPress: (date: any) => void
+  dateRange: DateData[]
 }
 
 export const ClientCalendar = observer(function CgCalendar(props: ClientCalendarProps) {
-  const { style, serviceType, selectedDate, onDayPress: onDayPressProp } = props
-
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
-  const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
+  const { style, selectedDate, onDayPress: onDayPressProp, dateRange } = props
 
   return (
     <View style={style}>
@@ -37,7 +29,6 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
             <Image source={images.arrow_right_navy} style={[styles.arrow, { marginRight: 40 }]} />
           )
         }
-        onMonthChange={(month) => setCurrentMonth(new Date(month.timestamp))}
         monthFormat={"MMMM"}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
@@ -55,10 +46,7 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
               date={date}
               state={state}
               selected={selectedDate}
-              month={currentMonth}
-              startDate={startDate}
-              serviceType={serviceType}
-              endDate={endDate}
+              dateRange={dateRange}
             />
           </Pressable>
         )}
@@ -66,4 +54,21 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
       />
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  arrow: {
+    width: 18,
+    height: 18,
+  },
+
+  calendar: {
+    borderColor: GIVER_CASUAL_NAVY_40,
+    borderWidth: 2,
+    borderRadius: 10,
+    width: 358,
+    height: "auto",
+    paddingBottom: 6,
+    zIndex: 1,
+  },
 })
