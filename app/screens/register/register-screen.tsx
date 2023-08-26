@@ -21,10 +21,7 @@ import { styles } from "./styles"
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
-type Sex = {
-  MALE: "MALE"
-  FEMALE: "FEMALE"
-}
+type Sex = "male" | "female"
 
 export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-screen">> = observer(
   function RegisterScreen() {
@@ -68,20 +65,20 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
             style={[
               styles.radioContainer,
               {
-                borderColor: sex === "MALE" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                borderColor: sex === "male" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
               },
             ]}
-            onPress={() => setSex("MALE")}
+            onPress={() => setSex("male")}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
-                source={sex === "MALE" ? images.radio_active : images.radio_inactive}
+                source={sex === "male" ? images.radio_active : images.radio_inactive}
                 style={styles.radioImg}
               />
               <PreMed16
                 style={{ marginLeft: 6 }}
                 text="남자"
-                color={sex === "MALE" ? GIVER_CASUAL_NAVY : DISABLED}
+                color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
               />
             </View>
           </Pressable>
@@ -91,20 +88,20 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
             style={[
               styles.radioContainer,
               {
-                borderColor: sex === "FEMALE" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                borderColor: sex === "female" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
               },
             ]}
-            onPress={() => setSex("FEMALE")}
+            onPress={() => setSex("female")}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
-                source={sex === "FEMALE" ? images.radio_active : images.radio_inactive}
+                source={sex === "female" ? images.radio_active : images.radio_inactive}
                 style={styles.radioImg}
               />
               <PreMed16
                 style={{ marginLeft: 6 }}
                 text="여자"
-                color={sex === "FEMALE" ? GIVER_CASUAL_NAVY : DISABLED}
+                color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
               />
             </View>
           </Pressable>

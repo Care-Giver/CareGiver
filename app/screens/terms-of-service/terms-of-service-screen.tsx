@@ -42,7 +42,7 @@ export const TermsOfServiceScreen: FC<
   const onPressRequired = () => setRequiredToggle(!requiredToggle)
   const onPressOptional = () => setOptionalToggle(!optionalToggle)
   const onPressAll = () => {
-    if (allToggle == false) {
+    if (allToggle === false) {
       setRequiredToggle(true)
       setOptionalToggle(true)
     } else {
@@ -57,7 +57,7 @@ export const TermsOfServiceScreen: FC<
 
   useEffect(() => {
     //* 약관 모두 동의시 "다음"버튼 활성화
-    if (requiredToggle && optionalToggle) {
+    if (requiredToggle) {
       setIsActivated(true)
     } else if (allToggle) {
       setIsActivated(true)

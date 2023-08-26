@@ -21,41 +21,48 @@ export const RegisterTextInput = observer(function RegisterTextInput(
   const { title, placeholder, value, setValue } = props
   const onChange = (e) => {
     switch (title) {
-      case "휴대폰 번호":
+      case "휴대폰 번호": {
         const phoneRegex = /^[0-9\b -]{0,13}$/
         if (phoneRegex.test(e.nativeEvent.text)) {
           setValue(e.nativeEvent.text)
         }
-      case "닉네임(필수)":
+        break
+      }
+      case "닉네임(필수)": {
         const nicknameRegex = /^[0-9a-zA-Zㄱ-ㅎ가-힣-_]{0,10}$/
         if (nicknameRegex.test(e.nativeEvent.text)) {
           setValue(e.nativeEvent.text)
         }
-      case "생년월일":
+        break
+      }
+      case "생년월일": {
         const birthRegex = /^[0-9\b -]{0,10}$/
         if (birthRegex.test(e.nativeEvent.text)) {
           setValue(e.nativeEvent.text)
         }
-      case "인증번호":
+        break
+      }
+      case "인증번호": {
         const certificationRegex = /^[0-9]{0,10}$/
         if (certificationRegex.test(e.nativeEvent.text)) {
           setValue(e.nativeEvent.text)
         }
+        break
+      }
     }
   }
   useEffect(() => {
     switch (title) {
       case "휴대폰 번호":
-        if (value.length === 10) {
-          setValue(value.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3"))
-        }
-        if (value.length === 13) {
+        if (value.length === 11) {
           setValue(value.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"))
         }
+        break
       case "생년월일":
         if (value.length === 8) {
-          setValue(value.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
+          setValue(value.replace(/-/g, "").replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
         }
+        break
     }
   }, [value])
   return (

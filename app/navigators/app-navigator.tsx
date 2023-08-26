@@ -62,6 +62,9 @@ import {
   WriteReviewScreen,
   ViewReviewScreen,
   TempChatScreen,
+  TermsOfServiceScreen,
+  RegisterScreen,
+  RegisterSuccessScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -210,6 +213,9 @@ export type NavigatorParamList = {
   }
   "test-iamport-payment-result-screen": any
   "cancel-reservation-screen": undefined
+  "terms-of-service-screen": undefined
+  "register-screen": undefined
+  "register-success-screen": undefined
 }
 
 const clBottomTabLabel = {
@@ -339,7 +345,7 @@ const SearchingStack = () => {
         name="home-screen"
         component={HomeScreen}
         options={{
-          header: (props) => <HomeScreenHeader {...props} />,
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
