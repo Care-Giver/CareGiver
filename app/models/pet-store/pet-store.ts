@@ -1,7 +1,7 @@
 import { Api, FormattedPetData } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
-export enum Sex {
+export enum PetSex {
   MALE = "MALE",
   FEMALE = "FEMALE",
 }
@@ -32,7 +32,7 @@ export interface Pet {
   name: string
   species: Species
   age: number
-  sex: Sex
+  sex: PetSex
   images: string[]
   weight: number
   petType: HandleType

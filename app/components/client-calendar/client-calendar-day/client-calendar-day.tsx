@@ -1,163 +1,175 @@
-import React, { useEffect, useState } from "react"
-import { View, Pressable, Text } from "react-native"
+import React from "react"
+import { View, StyleSheet, Text } from "react-native"
 import { observer } from "mobx-react-lite"
-import { styles } from "./styles"
-import { ClientCalendarDayProps } from "./client-calendar-day.props"
+import { DateData } from "react-native-calendars"
+import { DayState } from "react-native-calendars/src/types"
 import {
   DISABLED,
   GIVER_CASUAL_NAVY,
-  GIVER_CASUAL_NAVY_80,
+  GIVER_CASUAL_NAVY_20,
+  GIVER_CASUAL_NAVY_40,
   LBG,
+  LIGHT_LINE,
   MIDDLE_LINE,
-  SUB_HEAD_LINE,
 } from "#theme"
+import { POPPINS_REGULAR } from "#fonts"
+
+type BgColor = typeof GIVER_CASUAL_NAVY_40 | typeof GIVER_CASUAL_NAVY_20 | typeof LBG
+
+type TextBgColor = "white" | typeof GIVER_CASUAL_NAVY | typeof LBG
+
+type TextColor = "white" | typeof GIVER_CASUAL_NAVY | typeof MIDDLE_LINE | typeof DISABLED
+
+type ClientCalendarDayProps = {
+  date: string & DateData
+  state: DayState
+  selected?: string
+  dateRange: DateData[]
+}
 
 export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCalendarDayProps) {
-  const { date, state, selected, availableDates, serviceType, startDate, endDate } = props
-  const [fee, setFee] = useState(null)
-  const [availableTime, setAvailableTime] = useState(false)
+  const { date, state, selected, dateRange } = props
 
-  useEffect(() => {
-    setFee(null)
-    //setAvailableTime(false)
-    checkDate()
-  }, [date, availableDates])
+  const isStartDate = dateRange.length >= 1 && date.dateString === dateRange[0].dateString
+  const isEndDate = dateRange.length >= 2 && date.dateString === dateRange[1].dateString
+  const isInTheRange =
+    dateRange.length === 2 &&
+    date.dateString > dateRange[0].dateString &&
+    date.dateString < dateRange[1].dateString
+  const isStartAndEndDate =
+    dateRange.length === 2 &&
+    date.dateString === dateRange[0].dateString &&
+    date.dateString === dateRange[1].dateString
 
-  //* seviceType == "위탁"일 때 stratDate와 endDate사이의 날짜인지 확인하는 함수
-  const checkMiddleDate = ({ date }) => {
-    //console.log("s: ", startDate, "e: ", endDate)
+  const bgColorSelectior = (): BgColor => {
+    if (isStartDate || isEndDate) {
+      return GIVER_CASUAL_NAVY_40
+    }
 
-    const confirmedDate = new Date(date?.dateString)
-    if (startDate <= confirmedDate && confirmedDate <= endDate) {
-      // console.log(confirmedDate)
-      // console.log("check!")
-      return true
+    if (date.dateString === selected) {
+      return GIVER_CASUAL_NAVY_40
     }
-    //console.log("no!!!!!!!!")
-    return false
-  }
-  const textBgBdSelectior = ({ date, state }) => {
-    if (checkMiddleDate({ date })) {
-      return GIVER_CASUAL_NAVY
+
+    if (isInTheRange) {
+      return GIVER_CASUAL_NAVY_20
     }
-    if (date.dateString == selected) {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state == "today") {
+
+    if (state === "today") {
       return LBG
     }
+
+    return null
+  }
+
+  const textBgSelector = (): TextBgColor => {
+    if (isStartDate || isEndDate) {
+      return GIVER_CASUAL_NAVY
+    }
+
+    if (date.dateString === selected) {
+      return GIVER_CASUAL_NAVY
+    }
+
+    if (state === "today") {
+      return LBG
+    }
+
     return "white"
   }
-  const textColorSelector = ({ date, state }) => {
-    if (checkMiddleDate({ date })) {
+
+  const textColorSelector = (): TextColor => {
+    if (isStartDate || isEndDate) {
       return "white"
     }
-    if (availableTime) {
-      if (date.dateString == selected) {
-        return "white"
-      }
-      if (state == "disabled") {
-        return MIDDLE_LINE
-      }
-      return "black"
-    }
-    if (date.dateString == selected) {
+
+    if (date.dateString === selected) {
       return "white"
     }
-    if (state == "today") {
+
+    if (state === "today") {
       return GIVER_CASUAL_NAVY
     }
-    if (state == "disabled") {
+
+    if (state === "disabled") {
       return MIDDLE_LINE
     }
+
     return DISABLED
   }
-  const feeTextColorSelector = ({ date, state }) => {
-    if (checkMiddleDate({ date })) {
-      return GIVER_CASUAL_NAVY_80
-    }
-    if (date.dateString == selected) {
-      return GIVER_CASUAL_NAVY_80
-    }
-    if (state == "today") {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state == "disabled") {
-      return "white"
-    }
-    return SUB_HEAD_LINE
-  }
-
-  const checkDate = () => {
-    // console.log("dates in checkDate >>>", dates)
-    // console.log("serviceType in checkDate >>>", serviceType)
-
-    if (serviceType == "방문") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.date.substring(0, 10)) {
-          setFee(availableDate.fee)
-          setAvailableTime(true)
-          return true
-        } else return null
-      })
-    } else if (serviceType == "위탁") {
-      availableDates.map((availableDate) => {
-        if (date.dateString == availableDate?.startDate.substring(0, 10)) {
-          setFee(availableDate.fee)
-          setAvailableTime(true)
-          return true
-        } else return null
-      })
-    }
-  }
-
-  // console.log("dates in calendar-day >>>", dates)
 
   return (
     <View
       style={[
         styles.dayContainer,
         {
-          backgroundColor: state === "today" ? LBG : null,
+          backgroundColor: bgColorSelectior(),
           alignItems: "center",
         },
       ]}
     >
       <View //text를 view로 감싸고 backgroundcolor와 borderradius를 줘야한다.
-        style={[
-          styles.dayTextContainer,
-          {
-            borderWidth: 1,
-            borderColor: textBgBdSelectior({ date, state }),
-          },
-        ]}
+        style={styles.dayTextContainer}
       >
         <Text
           style={[
             styles.dayText,
             {
-              fontWeight: availableTime ? "600" : "400",
-              backgroundColor: textBgBdSelectior({ date, state }),
-              color: textColorSelector({ date, state }),
+              fontWeight: "400",
+              backgroundColor: textBgSelector(),
+              color: textColorSelector(),
             },
           ]}
         >
           {date.day}
         </Text>
-      </View>
-      <View style={{ marginTop: 6 }}>
-        <Text
-          style={[
-            styles.feeText,
-            {
-              color: feeTextColorSelector({ date, state }),
-              fontWeight: date.dateString == selected ? "600" : "400",
-            },
-          ]}
-        >
-          {fee}
-        </Text>
+
+        {/* 방문 시나리오 */}
+        {date.dateString === selected && (
+          <View style={{ marginTop: 6 }}>
+            <Text style={{ fontSize: 10, color: GIVER_CASUAL_NAVY, fontWeight: "600" }}>
+              방문일
+            </Text>
+          </View>
+        )}
+
+        {/* 위탁 시나리오 */}
+        {(isStartDate || isEndDate) && (
+          <View style={{ marginTop: 6 }}>
+            <Text style={{ fontSize: 10, color: GIVER_CASUAL_NAVY, fontWeight: "600" }}>
+              {isStartAndEndDate
+                ? "하루 예약"
+                : (isStartDate && "시작일") || (isEndDate && "종료일")}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  dayContainer: {
+    color: DISABLED,
+    marginVertical: -8,
+    borderColor: LIGHT_LINE,
+    borderWidth: 1,
+    width: 51.14,
+    height: 72,
+    zIndex: -1,
+  },
+
+  dayTextContainer: {
+    borderColor: GIVER_CASUAL_NAVY,
+    borderRadius: 4,
+    marginTop: 8,
+    alignItems: "center",
+  },
+
+  dayText: {
+    fontFamily: POPPINS_REGULAR,
+    width: 24,
+    height: 24,
+    textAlign: "center",
+    paddingTop: 2,
+  },
 })
