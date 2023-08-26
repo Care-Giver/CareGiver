@@ -123,6 +123,16 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
           {date.day}
         </Text>
 
+        {/* 방문 시나리오 */}
+        {date.dateString === selected && (
+          <View style={{ marginTop: 6 }}>
+            <Text style={{ fontSize: 10, color: GIVER_CASUAL_NAVY, fontWeight: "600" }}>
+              방문일
+            </Text>
+          </View>
+        )}
+
+        {/* 위탁 시나리오 */}
         {(isStartDate || isEndDate) && (
           <View style={{ marginTop: 6 }}>
             <Text style={{ fontSize: 10, color: GIVER_CASUAL_NAVY, fontWeight: "600" }}>
