@@ -74,8 +74,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     //* 달력 - Calendar
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-    const [date, setDate] = useState<DateData>() //? 선택된 날짜
-    const [tempDate, setTempDate] = useState<string>(new Date().toISOString())
+    const [date, setDate] = useState<DateData>(null) //? 선택된 날짜
 
     //* 선택된 반려동물
     const [selectedPets, setSelectedPets] = useState([])
@@ -180,8 +179,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             <PreReg14
               text={
                 serviceType === "방문"
-                  ? "케어기버가 직접 집을 방문합니다."
-                  : "케어기버가 있는 곳으로 아이를 맡기러 갑니다."
+                  ? "케어기버가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
+                  : "케어기버가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
               }
               color={DISABLED}
               style={styles.text}
@@ -189,54 +188,31 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           </Row>
 
           {/* //* 날짜 선택 */}
-          <TextInput
-            value={tempDate.toString()}
-            onChangeText={setTempDate}
-            placeholder="날짜입력"
-            style={{ color: "black", borderWidth: 1 }}
-          />
-
-          <ClientCalendar style={{ alignSelf: "center" }} />
-
-          {/* {!isCalendarOpen ? (
-            <RowRoundedButton 
+          {!isCalendarOpen ? (
+            //? 날짜 선택 버튼
+            <RowRoundedButton
               onPress={() => {
                 setIsCalendarOpen(true)
                 LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
               }}
               image={images.calendar}
-              text={
-                date
-                  ? `${date.dateString.replace("-", ".").replace("-", ".")}`
-                  : "날짜를 선택해주세요"
-              }
+              text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
               textColor={HEAD_LINE}
               style={{ marginTop: 36 }}
             />
           ) : (
             //? 캘린더 표출
-            <Calendar
+            <ClientCalendar
+              style={{ alignSelf: "center", marginTop: 36 }}
               onDayPress={(date) => {
-                setIsCalendarOpen(!isCalendarOpen)
                 setDate(date)
+                setIsCalendarOpen(false)
                 LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
               }}
-              style={{
-                marginTop: 36,
-                backgroundColor: "#F0F0F6",
-                padding: 4,
-                borderRadius: 8,
-              }}
-              // Collection of dates that have to be marked. Default = {}
-              markedDates={
-                {
-                  // _time: { selected: true, marked: true, selectedColor: "red" },
-                  // "2022-06-16": { selected: true, marked: true, selectedColor: "orange" },
-                  // "2022-06-24": { selected: true, marked: true, selectedColor: "green" },
-                }
-              }
+              selectedDate={date ? date.dateString : now.toISOString().substring(0, 10)}
+              serviceType={serviceType}
             />
-          )} */}
+          )}
 
           {/* //* 시간 선택 */}
           {serviceType === "방문" && (
@@ -323,9 +299,24 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
                 selectedPets: selectedPets.map((item) => {
                   return item.id
                 }),
+
                 // "방문"인 경우 사용될 값
-                startTime: serviceType === "방문" ? startTime.toISOString().substring(0, 19) : null,
-                endTime: serviceType === "방문" ? endTime.toISOString().substring(0, 19) : null,
+                startTime:
+                  serviceType === "방문"
+                    ? startTime
+                        .toISOString()
+                        .substring(0, 19)
+                        .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                    : null,
+
+                endTime:
+                  serviceType === "방문"
+                    ? endTime
+                        .toISOString()
+                        .substring(0, 19)
+                        .replace(endTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                    : null,
+
                 // "위탁"인 경우 사용될 값
                 startDate: serviceType === "위탁" ? "2023-07-29T00:00:00" : null,
                 endDate: serviceType === "위탁" ? "2023-07-30T00:00:00" : null,

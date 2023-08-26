@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native"
 import { LBG, LIGHT_LINE } from "#theme"
 
 export const styles = StyleSheet.create({
-  image: { width: 16, height: 16 },
-  text: { marginLeft: 8 },
+  image: { width: 16, height: 16, alignSelf: "flex-start" },
+  text: { marginLeft: 8, lineHeight: 20 },
   addNewPetBox: {
     height: 52,
     borderTopLeftRadius: 0,

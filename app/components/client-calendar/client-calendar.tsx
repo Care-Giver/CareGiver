@@ -13,26 +13,18 @@ import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-cale
 type ServiceType = "방문" | "위탁"
 
 interface ClientCalendarProps {
-  serviceType: ServiceType
   style: ViewStyle
+  serviceType: ServiceType
+  selectedDate: string
+  onDayPress: (date: any) => void
 }
 
 export const ClientCalendar = observer(function CgCalendar(props: ClientCalendarProps) {
-  const { serviceType, style } = props
-
-  const [selected, setSelected] = useState("")
+  const { style, serviceType, selectedDate, onDayPress: onDayPressProp } = props
 
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
   const [currentMonth, setCurrentMonth] = useState(new Date()) //calendar-day component를 rerendering하기 위해 전달하는 param
-
-  //console.log("dates in CgCalendar >>>", dates)
-  //console.log("♦️")
-
-  const onDayPress = ({ date }) => {
-    setSelected(date.dateString)
-    // setStartDate(new Date(date.dateString))
-  }
 
   return (
     <View style={style}>
@@ -54,11 +46,15 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
           textMonthFontSize: 20,
         }}
         dayComponent={({ date, state }) => (
-          <Pressable onPress={(e) => onDayPress({ date })}>
+          <Pressable
+            onPress={() => {
+              onDayPressProp(date)
+            }}
+          >
             <ClientCalendarDay //? 왜 안되는지,
               date={date}
               state={state}
-              selected={selected}
+              selected={selectedDate}
               month={currentMonth}
               startDate={startDate}
               serviceType={serviceType}
