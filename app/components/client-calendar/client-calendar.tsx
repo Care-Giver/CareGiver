@@ -22,13 +22,12 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
     <View style={style}>
       <Calendar
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
-        renderArrow={(direction) =>
-          direction === "left" ? (
-            <Image source={images.arrow_left_navy} style={[styles.arrow, { marginLeft: 40 }]} />
-          ) : (
-            <Image source={images.arrow_right_navy} style={[styles.arrow, { marginRight: 40 }]} />
-          )
-        }
+        renderArrow={(direction) => (
+          <Image
+            source={direction === "left" ? images.arrow_left_navy : images.arrow_right_navy}
+            style={[styles.arrow, direction === "left" ? { marginLeft: 40 } : { marginRight: 40 }]}
+          />
+        )}
         monthFormat={"MMMM"}
         theme={{
           textMonthFontFamily: POPPINS_REGULAR,
@@ -42,7 +41,7 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
               onDayPressProp(date)
             }}
           >
-            <ClientCalendarDay //? 왜 안되는지,
+            <ClientCalendarDay
               date={date}
               state={state}
               selected={selectedDate}
