@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react"
-import { Image, Pressable, View } from "react-native"
+import { Image, Platform, Pressable, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -41,10 +41,37 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     //* 인증번호가 맞다면 활성화
     //TODO 인증번호 로직이 완성되면 코드 추가하면 될 것 같습니다.
     const [isActivated, setIsActivated] = useState<boolean>(true)
+    // 소프트웨어 키보드 올라옴 여부
+    const [isKeyboardShown, setIsKeyboardShown] = useState(false)
+
+    // "다음" 버튼 표시 여부
+    //  1. ios 의 경우, 키보드가 "다음 버튼"을 항상 덮어씌우므로 별도의 로직이 필요없음. 항상 true
+    //  2. android 의 경우, 키보드 바로 위에 "다음 버튼" 표출됨. 따라서, 조건부로 표출해야 함. 키보드가 올라오면 false, 내려가면 true
+    const isNextButtonShown = Platform.select({
+      ios: true,
+      android: !isKeyboardShown,
+    })
 
     return (
       <Screen testID="Register" type="View">
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          showsVerticalScrollIndicator={false}
+          // onKeyboardWillShow={(e) => { // ios 만 지원되는 prop 임
+          //   console.log("onKeyboardWillShow", e)
+          // }}
+          onKeyboardDidShow={() => {
+            setIsKeyboardShown(true)
+          }}
+          // onKeyboardWillHide={(e) => { // ios 만 지원되는 prop 임
+          //   console.log("onKeyboardWillHide", e)
+          // }}
+          onKeyboardDidHide={() => {
+            // 시간지연 없이 바로 실행하면, 버튼 렌더링이  어색함
+            setTimeout(() => {
+              setIsKeyboardShown(false)
+            }, 100)
+          }}
+        >
           <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
           <RegisterTextInput
             placeholder="활동하게 될 닉네임을 입력해주세요."
@@ -126,15 +153,17 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           />
         </KeyboardAwareScrollView>
 
-        <ConditionalButton
-          label="다음"
-          isActivated={isActivated}
-          style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-          //TODO navigation추가 필요
-          onPress={() => {
-            navigation.replace("register-success-screen")
-          }}
-        />
+        {isNextButtonShown && (
+          <ConditionalButton
+            label="다음"
+            isActivated={isActivated}
+            style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
+            //TODO navigation추가 필요
+            onPress={() => {
+              navigation.replace("register-success-screen")
+            }}
+          />
+        )}
       </Screen>
     )
   },
