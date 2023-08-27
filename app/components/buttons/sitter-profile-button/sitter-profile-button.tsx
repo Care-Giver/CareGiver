@@ -5,12 +5,11 @@ import { styles } from "./styles"
 import { PreReg12, PreReg14 } from "../../basics/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, SHADOW_1 } from "../../../theme"
 import { images } from "../../../../assets/images"
-import { ratingRound } from "../../../utils/format"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const SitterProfileButton = (props: ProfileButtonProps) => {
   const { name, rating, desc, image, style, onPress } = props
-  const roundedRating = ratingRound(rating)
+  const roundedRating = rating
 
   return (
     <Pressable style={[styles.container, SHADOW_1, style]} onPress={onPress}>

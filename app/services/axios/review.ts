@@ -2,6 +2,7 @@ import { Rating } from "../../models"
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
+import { ratingRound } from "../../utils/format"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
@@ -182,7 +183,10 @@ export const getVisitingReview = async (bookingId: number): Promise<Review | nul
       return null
     }
 
-    return response.data.visitingReview
+    return {
+      ...response.data.visitingReview,
+      star: ratingRound(response.data.visitingReview.star),
+    }
   } catch (error) {
     console.error("[getVisitingReview] catch error >>>", error)
     return null
@@ -208,7 +212,10 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
       return null
     }
 
-    return response.data.crecheReview
+    return {
+      ...response.data.crecheReview,
+      star: ratingRound(response.data.crecheReview.star),
+    }
   } catch (error) {
     console.error("[getCrecheReview] catch error >>>", error)
     return null
