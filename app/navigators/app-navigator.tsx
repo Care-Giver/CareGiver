@@ -348,7 +348,7 @@ const SearchingStack = () => {
         name="home-screen"
         component={HomeScreen}
         options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
