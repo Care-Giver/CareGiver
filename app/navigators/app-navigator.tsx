@@ -63,6 +63,7 @@ import {
   ViewReviewScreen,
   TempChatScreen,
   ServiceAmenity,
+  CgSearchAddressScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -188,6 +189,8 @@ export type NavigatorParamList = {
 
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
+  "cg-set-address-screen": undefined
+  "cg-search-address-screen": undefined
 
   // * review stack
   "write-review-screen": {
@@ -219,7 +222,6 @@ export type NavigatorParamList = {
   "kakao-login-test-screen": undefined
   "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
-  "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
@@ -868,16 +870,6 @@ const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 지도상에서 위치 설정 */}
-      <Stack.Screen
-        name="cg-set-address-screen"
-        component={CgSetAddressScreen}
-        options={{
-          title: " ",
-          header: (props) => <CgsetAddressHeader {...props} />,
-        }}
-      />
-
       {/* CG - 자격증 등록 */}
       <Stack.Screen
         name="cg-certificate-registration-screen"
@@ -901,6 +893,26 @@ const CgMypageStack = () => {
         component={ServiceCenterScreen}
         options={{
           title: "고객센터",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* CG - 주소입력 */}
+      <Stack.Screen
+        name="cg-search-address-screen"
+        component={CgSearchAddressScreen}
+        options={{
+          title: "주소",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* CG - 지도상에서 위치 설정 */}
+      <Stack.Screen
+        name="cg-set-address-screen"
+        component={CgSetAddressScreen}
+        options={{
+          title: "지도",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

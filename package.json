@@ -33,6 +33,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@actbase/react-daum-postcode": "^1.0.4",
     "@expo/html-elements": "^0.2.2",
     "@expo/webpack-config": "^0.17.0",
     "@gorhom/bottom-sheet": "^4",
@@ -77,6 +78,7 @@
     "react-native-calendars": "^1.1284.0",
     "react-native-date-picker": "^4.2.9",
     "react-native-dropdown-picker": "^5.4.2",
+    "react-native-geocoder": "^0.5.0",
     "react-native-geocoding": "^0.5.0",
     "react-native-geolocation": "^1.0.0",
     "react-native-geolocation-service": "^5.3.1",
@@ -86,6 +88,7 @@
     "react-native-keychain": "6.2.0",
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
+    "react-native-permissions": "^3.8.0",
     "react-native-reanimated": "~2.9.1",
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "~3.15.0",
@@ -243,5 +246,8 @@
       "babel.config.js",
       "metro.config.backup.js"
     ]
-  }
+  },
+  "reactNativePermissionsIOS": [
+    "Camera"
+  ]
 }
