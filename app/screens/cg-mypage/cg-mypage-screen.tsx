@@ -43,9 +43,9 @@ export const CgMypageScreen: FC<
     navigate("login-screen")
   }
 
-  // * 환경설정 버튼 클릭시 실행되는 함수
+  // * 자격증 등록
   const handleRegisterCertificatation = () => {
-    navigate("cg-set-address-screen")
+    alert("자격증 등록")
   }
   // * 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
@@ -63,6 +63,17 @@ export const CgMypageScreen: FC<
 
   return (
     <Screen>
+      <Pressable
+        style={styles.modeChangeBtn}
+        onPress={() => {
+          navigate("cg-search-address-screen")
+        }}
+      >
+        <PreBol16 text="주소입력 / 지도선택 테스트" color={GIVER_CASUAL_NAVY} />
+
+        <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
+      </Pressable>
+
       {/* //! 로그인 상태일 때 */}
       {loggedIn ? (
         <>
@@ -87,14 +98,14 @@ export const CgMypageScreen: FC<
           >
             <CgServiceChoiceButton
               onPress={() => {
-                navigate("cg-set-address-screen")
+                alert("펫시터 등록하기")
               }}
               title="펫시터 등록하기"
               subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
             />
             <CgServiceChoiceButton
               onPress={() => {
-                navigate("cg-set-address-screen")
+                alert("훈련사 등록하기")
               }}
               title="훈련사 등록하기"
               subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}

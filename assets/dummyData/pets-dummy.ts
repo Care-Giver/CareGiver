@@ -1,4 +1,4 @@
-import { FamilyType, HandleType, Pet, Sex } from "../../app/models"
+import { FamilyType, HandleType, Pet, PetSex } from "../../app/models"
 
 export const petsDummy: Pet[] = [
   {
@@ -14,7 +14,7 @@ export const petsDummy: Pet[] = [
       familyType: FamilyType.DOG,
     },
     age: 3,
-    sex: Sex.FEMALE,
+    sex: PetSex.FEMALE,
     images: [],
     weight: 10,
     petType: HandleType.SMALL,
@@ -35,7 +35,7 @@ export const petsDummy: Pet[] = [
       familyType: FamilyType.DOG,
     },
     age: 3,
-    sex: Sex.FEMALE,
+    sex: PetSex.FEMALE,
     images: ["https://files.slack.com/files-tmb/T035QQ6AYK0-F05ES2U7K88-5deb92abf9/image_720.png"],
     weight: 10,
     petType: HandleType.SMALL,
@@ -56,7 +56,7 @@ export const petsDummy: Pet[] = [
       familyType: FamilyType.CAT,
     },
     age: 3,
-    sex: Sex.MALE,
+    sex: PetSex.MALE,
     images: [],
     weight: 10,
     petType: HandleType.SMALL,
@@ -77,7 +77,7 @@ export const petsDummy: Pet[] = [
       familyType: FamilyType.CAT,
     },
     age: 14,
-    sex: Sex.MALE,
+    sex: PetSex.MALE,
     images: [],
     weight: 10,
     petType: HandleType.MEDIUM,
@@ -98,7 +98,7 @@ export const petsDummy: Pet[] = [
       familyType: FamilyType.DOG,
     },
     age: 3,
-    sex: Sex.MALE,
+    sex: PetSex.MALE,
     images: [],
     weight: 10,
     petType: HandleType.LARGE,

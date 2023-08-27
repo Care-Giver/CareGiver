@@ -7,7 +7,8 @@ import { profileImageUriHandler } from "../../utils/image-format-validate"
 import { images as _images } from "../../../assets/images"
 
 export const FullWidthSizeImagesBoxWithIndicator = (props) => {
-  const { items, activeIndex, style: viewStyle, firstImage } = props
+  const { style: viewStyle, images: _images } = props
+  const images = _images || []
 
   const [currentImage, setCurrentImage] = useState(0)
 
@@ -18,33 +19,6 @@ export const FullWidthSizeImagesBoxWithIndicator = (props) => {
       setCurrentImage(viewableItems[0].index || 0)
     }
   }, [])
-
-  const images = [
-    {
-      id: "1",
-      profileImg: firstImage,
-    },
-    {
-      id: "2",
-      profileImg:
-        "https://media.istockphoto.com/id/1126947324/photo/dog-walker.jpg?s=612x612&w=0&k=20&c=bS2IWiDdRi-4SrJ87oz_nx6y3jtoZtfRkRKHqwn7UmU=",
-    },
-    {
-      id: "3",
-      profileImg:
-        "https://media.istockphoto.com/id/1149531679/photo/dog-walker-strides-with-his-pet-on-leash-while-walking-at-street-pavement.jpg?s=612x612&w=0&k=20&c=vdJf9GV2Z_S6medzK5tJbL6oLsM4cZ0pzW3mSCBjC4k=",
-    },
-    {
-      id: "4",
-      profileImg:
-        "https://media.istockphoto.com/id/1211831502/photo/arent-they-so-cute.jpg?s=612x612&w=0&k=20&c=kv44VfEenjvGLZai6tbqjiRyeVhB6egAU51I0XeDkTE=",
-    },
-    {
-      id: "5",
-      profileImg:
-        "https://media.istockphoto.com/id/1204601350/photo/professional-dog-walker-and-a-group-of-dogs-at-a-public-park.jpg?s=612x612&w=0&k=20&c=Ils2XaWA6DYv5jfUrMqr5YQdtnXx6_7K2w2qMk9aiwg=",
-    },
-  ]
 
   return (
     <View style={[styles.root, viewStyle]}>

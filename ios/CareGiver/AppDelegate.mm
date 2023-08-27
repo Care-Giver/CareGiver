@@ -41,9 +41,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   // react-native-firebase 🔻
   [FIRApp configure];
   // react-native-firebase 🔺
-
-  //5.26 mook
-  [GMSServices provideAPIKey:@"AIzaSyDGzlmhKrUA0vLqQs6jrXg1Il77Xmt8lD8"];
+  
+  [GMSServices provideAPIKey:@"AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
