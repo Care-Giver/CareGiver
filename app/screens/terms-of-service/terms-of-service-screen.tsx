@@ -1,18 +1,16 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useState } from "react"
 import { Pressable, StyleSheet, Image, Linking } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BlueCheckbox,
-  Checkbox,
   ConditionalButton,
   DivisionLine,
   PreBol20,
   PreMed16,
   PreMed18,
   PreReg14,
-  PreReg16,
   Row,
   Screen,
 } from "#components"
@@ -37,34 +35,17 @@ export const TermsOfServiceScreen: FC<
   const [requiredToggle, setRequiredToggle] = useState<boolean>(false)
   const [optionalToggle, setOptionalToggle] = useState<boolean>(false)
   const [allToggle, setAllToggle] = useState<boolean>(false)
+  //* 필수 약관 동의시, "다음" 버튼 활성화
+  const isActivated = requiredToggle
 
   //* checkbox handlers
   const onPressRequired = () => setRequiredToggle(!requiredToggle)
   const onPressOptional = () => setOptionalToggle(!optionalToggle)
   const onPressAll = () => {
-    if (allToggle === false) {
-      setRequiredToggle(true)
-      setOptionalToggle(true)
-    } else {
-      setRequiredToggle(false)
-      setOptionalToggle(false)
-    }
+    setRequiredToggle(!allToggle)
+    setOptionalToggle(!allToggle)
     setAllToggle(!allToggle)
   }
-
-  //* 약관에 모두 동의했을 때 버튼 활성화
-  const [isActivated, setIsActivated] = useState<boolean>(false)
-
-  useEffect(() => {
-    //* 약관 모두 동의시 "다음"버튼 활성화
-    if (requiredToggle) {
-      setIsActivated(true)
-    } else if (allToggle) {
-      setIsActivated(true)
-    } else {
-      setIsActivated(false)
-    }
-  }, [requiredToggle, optionalToggle, allToggle])
 
   const openLink = (link: string) => {
     Linking.openURL(link)
