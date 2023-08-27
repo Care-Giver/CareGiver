@@ -15,6 +15,7 @@ import {
 import { BODY, BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -42,83 +43,88 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     const [isActivated, setIsActivated] = useState<boolean>(true)
 
     return (
-      <Screen testID="Register">
-        <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
-        <RegisterTextInput
-          placeholder="활동하게 될 닉네임을 입력해주세요."
-          title="닉네임(필수)"
-          value={nickname}
-          setValue={setNickname}
-        />
-        <RegisterTextInput
-          placeholder="보호자님의 생년월일을 입력해주세요. 예)20010313"
-          title="생년월일"
-          value={birthday}
-          setValue={setBirthday}
-        />
+      <Screen testID="Register" type="View">
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+          <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
+          <RegisterTextInput
+            placeholder="활동하게 될 닉네임을 입력해주세요."
+            title="닉네임(필수)"
+            value={nickname}
+            setValue={setNickname}
+          />
+          <RegisterTextInput
+            placeholder="보호자님의 생년월일을 입력해주세요. 예)20010313"
+            title="생년월일"
+            value={birthday}
+            setValue={setBirthday}
+            keyboardType="number-pad"
+          />
 
-        <PreMed14 text="성별" color={BODY} style={{ marginBottom: 8 }} />
-        <Row style={{ marginBottom: 36, justifyContent: "space-between" }}>
-          {/* // ? 남자 버튼 */}
+          <PreMed14 text="성별" color={BODY} style={{ marginBottom: 8 }} />
+          <Row style={{ marginBottom: 36, justifyContent: "space-between" }}>
+            {/* // ? 남자 버튼 */}
 
-          <Pressable
-            style={[
-              styles.radioContainer,
-              {
-                borderColor: sex === "male" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
-              },
-            ]}
-            onPress={() => setSex("male")}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                source={sex === "male" ? images.radio_active : images.radio_inactive}
-                style={styles.radioImg}
-              />
-              <PreMed16
-                style={{ marginLeft: 6 }}
-                text="남자"
-                color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
-              />
-            </View>
-          </Pressable>
+            <Pressable
+              style={[
+                styles.radioContainer,
+                {
+                  borderColor: sex === "male" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                },
+              ]}
+              onPress={() => setSex("male")}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={sex === "male" ? images.radio_active : images.radio_inactive}
+                  style={styles.radioImg}
+                />
+                <PreMed16
+                  style={{ marginLeft: 6 }}
+                  text="남자"
+                  color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
+                />
+              </View>
+            </Pressable>
 
-          {/* // ? 여자 버튼 */}
-          <Pressable
-            style={[
-              styles.radioContainer,
-              {
-                borderColor: sex === "female" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
-              },
-            ]}
-            onPress={() => setSex("female")}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                source={sex === "female" ? images.radio_active : images.radio_inactive}
-                style={styles.radioImg}
-              />
-              <PreMed16
-                style={{ marginLeft: 6 }}
-                text="여자"
-                color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
-              />
-            </View>
-          </Pressable>
-        </Row>
+            {/* // ? 여자 버튼 */}
+            <Pressable
+              style={[
+                styles.radioContainer,
+                {
+                  borderColor: sex === "female" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                },
+              ]}
+              onPress={() => setSex("female")}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={sex === "female" ? images.radio_active : images.radio_inactive}
+                  style={styles.radioImg}
+                />
+                <PreMed16
+                  style={{ marginLeft: 6 }}
+                  text="여자"
+                  color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
+                />
+              </View>
+            </Pressable>
+          </Row>
 
-        <RegisterTextInput
-          placeholder="휴대폰 번호(-없이 숫자만 입력)"
-          title="휴대폰 번호"
-          value={phoneNumber}
-          setValue={setPhoneNumber}
-        />
-        <RegisterTextInput
-          placeholder="인증번호를 입력해주세요."
-          title="인증번호"
-          value={certification}
-          setValue={setCertification}
-        />
+          <RegisterTextInput
+            placeholder="휴대폰 번호(-없이 숫자만 입력)"
+            title="휴대폰 번호"
+            value={phoneNumber}
+            setValue={setPhoneNumber}
+            keyboardType="number-pad"
+          />
+          <RegisterTextInput
+            placeholder="인증번호를 입력해주세요."
+            title="인증번호"
+            value={certification}
+            setValue={setCertification}
+            keyboardType="number-pad"
+          />
+        </KeyboardAwareScrollView>
 
         <ConditionalButton
           label="다음"

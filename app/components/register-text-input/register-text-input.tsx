@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
+import { StyleProp, ViewStyle, View, StyleSheet, KeyboardTypeOptions } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreMed14, PreMed16 } from "../basics/custom-texts/custom-texts"
 import { DivisionLine } from "../division-line/division-line"
@@ -13,12 +13,13 @@ export interface RegisterTextInputProps {
   placeholder: string
   value: string
   setValue: (value: any) => void
+  keyboardType?: KeyboardTypeOptions
 }
 
 export const RegisterTextInput = observer(function RegisterTextInput(
   props: RegisterTextInputProps,
 ) {
-  const { title, placeholder, value, setValue } = props
+  const { title, placeholder, value, setValue, keyboardType = "default" } = props
   const onChange = (e) => {
     switch (title) {
       case "휴대폰 번호": {
@@ -65,6 +66,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
         break
     }
   }, [value])
+
   return (
     <View>
       <PreMed14 text={title} color={BODY} style={{ marginBottom: 10 }} />
@@ -73,6 +75,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
         value={value}
         onChange={onChange}
         placeholderTextColor={DISABLED}
+        keyboardType={keyboardType}
       />
       <DivisionLine style={{ marginTop: 4, marginBottom: 36 }} />
     </View>
