@@ -61,3 +61,29 @@ export const getUsers = async (): Promise<User> => {
     return null
   }
 }
+
+interface SendSMSRequestBody {
+  phoneNumber: string //01012341234 주의: '-' 없이 번호들만 있어야 합니다.
+}
+/**
+ * 핸드폰번호 인증을 위한 인증번호를 요청한다
+ * @returns {Promise<boolean>} 성공여부
+ */
+export const sendSMS = async (post: SendSMSRequestBody): Promise<boolean> => {
+  try {
+    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/sms`, post, CONFIG)
+
+    if (!response.data) {
+      console.error("response.data.error 에러!!!", response.data.error)
+      // @ts-ignore
+      return false
+    }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    return true
+  } catch (error) {
+    console.error("catch 에러!!! - sendSMS", error.toJSON())
+    return false
+  }
+}
