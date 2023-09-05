@@ -63,7 +63,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     console.log("인증요청")
 
     if (!isSendingSMS) {
-      console.log("- 제거된 phonenumber", value.replace(/-/g, ""))
+      console.log("대시(-)가 제거된 phonenumber", value.replace(/-/g, ""))
       sendSMS({ phoneNumber: value.replace(/-/g, "") })
       // setIsSendingSMS(true)
       // 3분 제한

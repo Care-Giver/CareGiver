@@ -16,6 +16,8 @@ import { BODY, BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#
 import { images } from "#images"
 import { styles } from "./styles"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { signUp } from "#axios"
+import { alertModal } from "../../utils/alert-modal"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -37,7 +39,8 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     const [sex, setSex] = useState<Sex>(null)
     const [phoneNumber, setPhoneNumber] = useState<string>("")
     const [certification, setCertification] = useState<string>("")
-    const [isCertificated, setIsCertificated] = useState(false) //TODO: setIsCertificated 을 "인증번호" 컴포넌트에 넣을 것
+    // const [isCertificated, setIsCertificated] = useState(false) //TODO: setIsCertificated 을 "인증번호" 컴포넌트에 넣을 것
+    const isCertificated = true //TODO: 인증번호 검증 기능 추가
 
     //* 인증번호가 맞다면 활성화
     //TODO 인증번호 로직이 완성되면 코드 추가하면 될 것 같습니다.
@@ -54,6 +57,26 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     })
 
     const isActivated = !!nickname && !!birthday && !!sex && !!phoneNumber && !!isCertificated
+
+    const nextButtonHandler = async () => {
+      // 회원가입 진행 - TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
+      const signUpResult = await signUp({
+        nickname,
+        birthday,
+        provider: "google", // 일단 구글로 하드코딩함
+        idToken: "blah-blah-blah", //일단 하드코딩
+        email: "blah@test.com", //일단 하드코딩
+      })
+
+      //  실패
+      if (!signUpResult.isSuccess) {
+        alertModal("회원가입 실패", `사유: ${signUpResult.reason}`)
+        return
+      }
+
+      // 성공
+      navigation.replace("register-success-screen")
+    }
 
     return (
       <Screen testID="Register" type="View">
@@ -148,7 +171,8 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
             keyboardType="number-pad"
           />
           <RegisterTextInput
-            placeholder="인증번호를 입력해주세요."
+            // placeholder="인증번호를 입력해주세요."
+            placeholder="(인증번호 검증 기능은 현재 미구현 상태 입니다.)"
             title="인증번호"
             value={certification}
             setValue={setCertification}
@@ -158,13 +182,11 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
 
         {isNextButtonShown && (
           <ConditionalButton
-            label="다음"
+            label="계정 생성하기"
             isActivated={isActivated}
             style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
             //TODO navigation추가 필요
-            onPress={() => {
-              navigation.replace("register-success-screen")
-            }}
+            onPress={nextButtonHandler}
           />
         )}
       </Screen>
