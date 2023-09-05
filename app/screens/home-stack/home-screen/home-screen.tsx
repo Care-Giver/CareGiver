@@ -24,6 +24,7 @@ import { delay } from "../../../utils/delay"
 import { consoleInfoAsync } from "../../../utils/console-async"
 import { useFocusEffect } from "@react-navigation/native"
 import { useShowBottomTab } from "../../../utils/hooks"
+import dayjs from "dayjs"
 
 const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
@@ -131,11 +132,21 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               //   facilities: ["공원, 동물병원"],
               // })
 
-              //  loadsh 테스트
-              var array = [1]
-              var _ = require("lodash")
-              var other = _.concat(array, 2, [3], [[4]])
+              // loadsh 테스트
+              const array = [1]
+              const _ = require("lodash")
+              const other = _.concat(array, 2, [3], [[4]])
               console.log("loadsh 테스트", other)
+
+              // dayjs 테스트
+              const 지금 = dayjs() //
+              const 이번달_달력이_0부터_시작함을_주의 = dayjs().month() // gets current month
+              const 새객체_1월 = dayjs().month(0) // returns new dayjs object
+              const 새객체_3월 = dayjs().month(2) // returns new dayjs object
+              console.log("dayjs 테스트", 지금)
+              console.log("dayjs 테스트", 이번달_달력이_0부터_시작함을_주의)
+              console.log("dayjs 테스트", 새객체_1월)
+              console.log("dayjs 테스트", 새객체_3월)
             }}
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
