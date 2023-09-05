@@ -16,6 +16,7 @@ export const images = {
   camera_white: require("../images/camera_white.png"),
   care_giver_logo_162x20: require("../images/care_giver_logo_162x20.png"),
   care_giver_logo_light_162x20: require("../images/care_giver_logo_light_162x20.png"),
+  cat_with_heart: require("../images/cat_with_heart.png"),
   certificate_badge: require("../images/certificate_badge.png"),
   cg_favicon: require("../images/cg_favicon.png"),
   default_pet_image_60: require("../images/default_pet_image_60.png"),

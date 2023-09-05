@@ -3,7 +3,7 @@ import { Alert, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
-import { Button, ConditionalButton, PreBol16, Screen } from "#components"
+import { Button, ConditionalButton, DivisionLine, PreBol16, Screen } from "#components"
 import {
   login,
   logout,
@@ -275,7 +275,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       await signOutWithNaver()
     }
 
-    console.log("loggedIn OUTSIDE >>>", loggedIn)
+    // SIGN UP FLOW - UI RENDERING TEST
+    const signUpTest = async () => {
+      navigate("terms-of-service-screen")
+    }
 
     return (
       <Screen testID="Login">
@@ -299,6 +302,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             <PreBol16 text="테스트용 로그아웃" color={palette.white} />
           </Button>
         )}
+
+        <DivisionLine mv={20} />
+        <Button onPress={signUpTest} style={styles.appleGoogleLogin}>
+          <PreBol16 text="테스트용 회원가입" color={palette.white} />
+        </Button>
       </Screen>
     )
   },
