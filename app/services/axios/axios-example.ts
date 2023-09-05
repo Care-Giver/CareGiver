@@ -1,35 +1,35 @@
-import axios from "axios"
+// import axios from "axios"
 
-interface Post {
-  userId: number
-  id: number
-  title: string
-  body: string
-}
+// interface Post {
+//   userId: number
+//   id: number
+//   title: string
+//   body: string
+// }
 
-interface User {
-  id: number
-  name: string
-  username: string
-  email: string
-  address: {
-    street: string
-    suite: string
-    city: string
-    zipcode: string
-    geo: {
-      lat: string
-      lng: string
-    }
-  }
-  phone: string
-  website: string
-  company: {
-    name: string
-    catchPhrase: string
-    bs: string
-  }
-}
+// interface User {
+//   id: number
+//   name: string
+//   username: string
+//   email: string
+//   address: {
+//     street: string
+//     suite: string
+//     city: string
+//     zipcode: string
+//     geo: {
+//       lat: string
+//       lng: string
+//     }
+//   }
+//   phone: string
+//   website: string
+//   company: {
+//     name: string
+//     catchPhrase: string
+//     bs: string
+//   }
+// }
 
 // /**
 //  * JSONPlaceholder의 게시물(post) 목록을 가져오는 함수입니다.

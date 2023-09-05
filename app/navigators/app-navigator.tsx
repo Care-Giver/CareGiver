@@ -65,6 +65,8 @@ import {
   TermsOfServiceScreen,
   RegisterScreen,
   RegisterSuccessScreen,
+  ServiceAmenity,
+  CgSearchAddressScreen,
 } from "#screens"
 import { goBack, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -84,6 +86,7 @@ import {
   PreMed16,
   CgsetAddressHeader,
   CustomTabBar,
+  PetsitterProfileCardPetsitterData,
 } from "#components"
 import { images } from "../../assets/images"
 import { BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY, GIVER_ROMANTIC_GRAY } from "../theme"
@@ -109,12 +112,46 @@ import { IMPData } from "iamport-react-native"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 
+type ServiceTypeKorean = "방문" | "위탁" //TODO: ServiceType 전부 한글로 바꾸기
+
 export type NavigatorParamList = {
   //* general screens
   "home-screen": undefined
   "search-screen": undefined
-  "search-result": undefined
-  "caregiver-detail-information-screen": undefined
+  "search-result-screen": {
+    // API REQUEST BODY 관련
+    lat: number
+    lng: number
+    petIds: number[]
+
+    // 방문
+    startTime?: string // "2023-07-27T10:40:59"
+    endTime?: string //"2023-07-27T11:40:59"
+
+    // 위탁
+    startDate?: string
+    endDate?: string
+
+    // 그외
+    serviceType: ServiceTypeKorean
+  }
+
+  "caregiver-detail-information-screen": {
+    sitterData: PetsitterProfileCardPetsitterData
+    serviceType: ServiceTypeKorean
+    serviceAmenity: ServiceAmenity
+    images: string[]
+    selectedPets: number[]
+
+    // 방문
+    startTime?: string
+    endTime?: string
+
+    // 위탁
+    startDate?: string
+    endDate?: string
+  }
+
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
@@ -158,6 +195,8 @@ export type NavigatorParamList = {
 
   // CG - 내정보 스택
   "cg-mypage-screen": undefined
+  "cg-set-address-screen": undefined
+  "cg-search-address-screen": undefined
 
   // * review stack
   "write-review-screen": {
@@ -189,7 +228,6 @@ export type NavigatorParamList = {
   "kakao-login-test-screen": undefined
   "cg-calendar-screen": undefined
   "cg-certificate-registration-screen": undefined
-  "cg-set-address-screen": undefined
   "ye-beom-test-screen": undefined
   "test-push-notification-screen": undefined
   "make-booking-screen": undefined
@@ -363,7 +401,7 @@ const SearchingStack = () => {
 
       {/* //* 검색결과 */}
       <Stack.Screen
-        name="search-result"
+        name="search-result-screen"
         component={SearchResultScreen}
         options={{
           header: (props) => <GobackAndTitleHeader {...props} />,
@@ -871,16 +909,6 @@ const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 지도상에서 위치 설정 */}
-      <Stack.Screen
-        name="cg-set-address-screen"
-        component={CgSetAddressScreen}
-        options={{
-          title: " ",
-          header: (props) => <CgsetAddressHeader {...props} />,
-        }}
-      />
-
       {/* CG - 자격증 등록 */}
       <Stack.Screen
         name="cg-certificate-registration-screen"
@@ -904,6 +932,26 @@ const CgMypageStack = () => {
         component={ServiceCenterScreen}
         options={{
           title: "고객센터",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* CG - 주소입력 */}
+      <Stack.Screen
+        name="cg-search-address-screen"
+        component={CgSearchAddressScreen}
+        options={{
+          title: "주소",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* CG - 지도상에서 위치 설정 */}
+      <Stack.Screen
+        name="cg-set-address-screen"
+        component={CgSetAddressScreen}
+        options={{
+          title: "지도",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

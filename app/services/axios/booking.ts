@@ -1,6 +1,7 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
+import { ratingRound } from "../../utils/format"
 
 //* 위탁예약 생성
 export interface CreateCrecheBookingInput {
@@ -297,8 +298,12 @@ export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
     }
 
     // console.log("[getCurrentBookings] response.data >>> ", response.data)
+    const currentBookings = response.data.currentBookings.map((value: CurrentBooking) => ({
+      ...value,
+      ratings: ratingRound(value.ratings),
+    }))
 
-    return response.data.currentBookings
+    return currentBookings
   } catch (error) {
     console.error("[getCurrentBookings] catch error >>>", error)
     return []
