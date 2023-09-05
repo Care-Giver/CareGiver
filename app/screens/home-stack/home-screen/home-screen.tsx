@@ -13,6 +13,7 @@ import {
   PreBol20,
   PreBol18,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CountDown,
 } from "../../../components"
 import { navigate, NavigatorParamList } from "../../../navigators"
 import { BODY, SUB_HEAD_LINE } from "../../../theme"
@@ -156,6 +157,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
           />
+
+          <CountDown style={{ alignSelf: "center" }} duration={30} />
 
           {/*//? Title */}
           <PreBol20
