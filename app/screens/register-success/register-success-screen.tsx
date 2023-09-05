@@ -14,7 +14,7 @@ import { BODY, BOTTOM_HEIGHT } from "#theme"
 // @ts-ignore
 export const RegisterSuccessScreen: FC<
   StackScreenProps<NavigatorParamList, "register-success-screen">
-> = observer(function RegisterSuccessScreen() {
+> = observer(function RegisterSuccessScreen({ navigation }) {
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 
@@ -24,10 +24,7 @@ export const RegisterSuccessScreen: FC<
   return (
     <Screen testID="RegisterSuccess">
       <View style={{ alignItems: "center" }}>
-        <Image
-          source={images.dog_illustration}
-          style={{ width: 156, height: 120, marginTop: 138 }}
-        />
+        <Image source={images.cat_with_heart} style={{ width: 158, height: 122, marginTop: 138 }} />
         <PreBol20 text="케어기버에 오신 것을 환영합니다!" style={{ marginTop: 18 }} />
         <PreReg14
           text="케어기버의 다양한 서비스를 구경해보세요!"
@@ -36,12 +33,15 @@ export const RegisterSuccessScreen: FC<
         />
       </View>
       <ConditionalButton
-        label="다음"
+        label="홈화면으로 이동하기"
         isActivated={true}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-        //TODO navigation추가 필요
         onPress={() => {
-          navigate("mypage-screen")
+          // 홈 스크린으로 이동
+          navigation.navigate("home-screen")
+
+          // 마이페이지 스택, 최초화면으로 변경
+          navigation.replace("mypage-screen")
         }}
       />
     </Screen>
