@@ -15,7 +15,7 @@ import { images } from "#images"
 import { TabBarItem } from "../tab-bar-item/tab-bar-item"
 import { tabLabel } from "#navigators"
 
-const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
+export const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
   android: BOTTOM_TAB_NAVIGATOR,
   ios: 52 + IOS_BOTTOM_HOME_BAR_HEIGHT,
 })

@@ -379,7 +379,7 @@ const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="home-screen"
+      initialRouteName="search-screen"
     >
       {/* //* 홈 */}
       <Stack.Screen
@@ -395,7 +395,7 @@ const SearchingStack = () => {
         name="search-screen"
         component={SearchScreen}
         options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 
