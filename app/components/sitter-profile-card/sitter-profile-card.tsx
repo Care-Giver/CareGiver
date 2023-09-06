@@ -17,8 +17,6 @@ export type PetsitterProfileCardPetsitterData = {
   Pick<CommonData, "title" | "desc" | "star"> &
   Pick<UserEntity, "profileImage">
 
-
-
 interface SitterProfileCardProps {
   sitterData: PetsitterProfileCardPetsitterData
   style?: FlexStyle
@@ -58,7 +56,7 @@ export const SitterProfileCard = ({
         {/* profile image */}
         <Image
           style={styles.profileImg}
-          source={profileImageUriHandler(images.default_pet_image_60, "medium", image)}
+          source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
         />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
