@@ -60,7 +60,7 @@ export const AllBookingsScreen: FC<
 
   return (
     <Screen>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* // * 진행중인 예약 */}
         <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
 

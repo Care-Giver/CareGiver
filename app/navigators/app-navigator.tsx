@@ -381,16 +381,16 @@ const SearchingStack = () => {
       }}
       initialRouteName="search-screen"
     >
-      {/* //* 홈 */}
-      <Stack.Screen
+      {/* //* 홈  ➡️ 원래 시작 스크린이었으나, search-screen 으로 대체되었습니다 */}
+      {/*      <Stack.Screen
         name="home-screen"
         component={HomeScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
         }}
-      />
+      /> */}
 
-      {/* //* 검색 */}
+      {/* //* 검색 ➡️ 시작 스크린입니다 */}
       <Stack.Screen
         name="search-screen"
         component={SearchScreen}

@@ -14,6 +14,7 @@ import { useStores } from "#models"
 import { images } from "#images"
 import { TabBarItem } from "../tab-bar-item/tab-bar-item"
 import { tabLabel } from "#navigators"
+import { alertModal } from "../../../utils/alert-modal"
 
 export const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
   android: BOTTOM_TAB_NAVIGATOR,
@@ -129,11 +130,25 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
         }
 
         const onPress = () => {
+          // 아직 미구현된 탭들 핸들링 - 채팅(CG, CL) 탭, 통계(CG) 탭
+          switch (label) {
+            //  채팅(CG, CL) 탭
+            case tabLabel.chatting:
+              alertModal("MVP", "채팅 기능은 아직 개발중입니다 🦮")
+              return
+
+            // 통계(CG) 탭
+            case tabLabel.statistics:
+              alertModal("MVP", "통계 기능은 아직 개발중입니다 🐈")
+              return
+          }
+
           const event = navigation.emit({
             type: "tabPress",
             target: route.key,
             canPreventDefault: true,
           })
+
           if (!isFocused && !event.defaultPrevented) {
             navigation.navigate(route.name)
           }

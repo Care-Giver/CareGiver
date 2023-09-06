@@ -37,8 +37,8 @@ export const RegisterSuccessScreen: FC<
         isActivated={true}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         onPress={() => {
-          // 홈 스크린으로 이동
-          navigation.navigate("home-screen")
+          // 시작 스크린으로 이동 - "search-screen"
+          navigation.navigate("search-screen")
 
           // 마이페이지 스택, 최초화면으로 변경
           navigation.replace("mypage-screen")
