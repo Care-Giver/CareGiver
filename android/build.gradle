@@ -4,9 +4,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '31.0.0'
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
-        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
-        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
+        //minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
+        //compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
+        //targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
+        minSdkVersion = 21
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         //if (findProperty('android.kotlinVersion')) {
         //    kotlinVersion = findProperty('android.kotlinVersion') ?: '1.6.10'
         //}
