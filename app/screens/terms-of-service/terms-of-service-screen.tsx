@@ -16,6 +16,7 @@ import {
 } from "#components"
 import { images } from "#images"
 import { BODY, BOTTOM_HEIGHT } from "#theme"
+import { openLink as openInApp } from "../../utils/in-app-browser"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -65,7 +66,7 @@ export const TermsOfServiceScreen: FC<
         <Pressable
           style={{ marginLeft: "auto" }}
           onPress={() =>
-            openLink(
+            openInApp(
               "https://foregoing-collard-3ea.notion.site/781a774f667e49168ac225a24d10e785?pvs=4",
             )
           }
@@ -78,7 +79,7 @@ export const TermsOfServiceScreen: FC<
         <Pressable
           style={{ marginLeft: "auto" }}
           onPress={() =>
-            openLink(
+            openInApp(
               "https://foregoing-collard-3ea.notion.site/584b60a89a6e4ccebe8c5cf112d05843?pvs=4",
             )
           }

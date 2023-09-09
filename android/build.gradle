@@ -5,11 +5,12 @@ buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '31.0.0'
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
-        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '31')
-        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '31')
-        if (findProperty('android.kotlinVersion')) {
-            kotlinVersion = findProperty('android.kotlinVersion')
-        }
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
+        //if (findProperty('android.kotlinVersion')) {
+        //    kotlinVersion = findProperty('android.kotlinVersion') ?: '1.6.10'
+        //}
+        kotlinVersion = '1.6.10'
         frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
 
         if (System.properties['os.arch'] == 'aarch64') {
@@ -25,11 +26,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+
         classpath('com.android.tools.build:gradle:7.1.1')
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('de.undercouch:gradle-download-task:5.0.1')
         // react-native-firebase 🔻
         classpath 'com.google.gms:google-services:4.3.15'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"   // <--- THIS
+
         // react-native-firebase 🔺
 
         // NOTE: Do not place your application dependencies here; they belong
