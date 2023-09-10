@@ -1,9 +1,16 @@
 import React, { FC, useState } from "react"
-import { Alert, StyleSheet, View, ViewStyle } from "react-native"
+import { Alert, Image, ScrollView, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
-import { Button, ConditionalButton, DivisionLine, PreBol16, Screen } from "#components"
+import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  Button,
+  ConditionalButton,
+  DivisionLine,
+  PreMed18,
+  Screen,
+} from "#components"
 import {
   login,
   logout,
@@ -15,10 +22,11 @@ import {
 } from "@react-native-seoul/kakao-login"
 import appleAuth from "@invertase/react-native-apple-authentication"
 import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
-import { GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
+import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
 import { AppleLoginOutput, appleServerLogin, naverServiceLogin, kakaoServerLogin } from "#axios"
+import { images } from "#images"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -282,31 +290,34 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     return (
       <Screen testID="Login">
+        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+        <Image source={images.cg_login_banner} style={styles.bannerImage} />
+
         <View style={styles.buttonBox}>
-          <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
-            <PreBol16 text="카카오 로그인" color={palette.black} />
+          <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
+            <PreMed18 text="Apple로 로그인" color={palette.black} />
           </Button>
           <Button onPress={naverLogin} style={styles.naverLogin}>
-            <PreBol16 text="네이버 로그인" color={palette.white} />
+            <PreMed18 text="네이버 로그인" color={palette.white} />
           </Button>
-          <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
-            <PreBol16 text="애플 로그인" color={palette.white} />
+          <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
+            <PreMed18 text="카카오 로그인" color={palette.black} />
           </Button>
+          {loggedIn && (
+            <Button onPress={logOutHanlder} style={styles.logout}>
+              <PreMed18 text="테스트용 로그아웃" color={palette.white} />
+            </Button>
+          )}
+          <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
-            <PreBol16 text="테스트용 로그인 (Auth 없음)" color={palette.white} />
+            <PreMed18 text="테스트용 로그인 (Auth 없음)" color={palette.white} />
+          </Button>
+          <Button onPress={signUpTest} style={styles.noAuthLogin}>
+            <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button>
         </View>
 
-        {loggedIn && (
-          <Button onPress={logOutHanlder} style={styles.logout}>
-            <PreBol16 text="테스트용 로그아웃" color={palette.white} />
-          </Button>
-        )}
-
-        <DivisionLine mv={20} />
-        <Button onPress={signUpTest} style={styles.appleGoogleLogin}>
-          <PreBol16 text="테스트용 회원가입" color={palette.white} />
-        </Button>
+        {/* </ScrollView> */}
       </Screen>
     )
   },
@@ -314,7 +325,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
 const button: ViewStyle = {
   width: "100%",
-  height: 56,
+  height: 54,
   borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
@@ -322,10 +333,23 @@ const button: ViewStyle = {
 }
 
 const styles = StyleSheet.create({
+  bannerImage: {
+    width: 138,
+    height: 108,
+    // top: 200,
+    alignSelf: "center",
+    marginTop: 174,
+  },
+
   buttonBox: {
-    // backgroundColor: "grey",
     justifyContent: "space-around",
-    height: 300,
+    height: 400,
+    // position: "absolute",
+    // bottom: BOTTOM_HEIGHT,
+    // left: BASIC_BACKGROUND_PADDING_WIDTH,
+    // right: BASIC_BACKGROUND_PADDING_WIDTH,
+    marginTop: "auto",
+    marginBottom: BOTTOM_HEIGHT,
   },
 
   kakaoLogin: {
@@ -340,7 +364,9 @@ const styles = StyleSheet.create({
 
   appleGoogleLogin: {
     ...button,
-    backgroundColor: "black",
+    borderColor: palette.black,
+    borderWidth: 1,
+    backgroundColor: palette.white,
   },
 
   noAuthLogin: {

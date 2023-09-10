@@ -38,7 +38,7 @@ export const LoginSignUpStack = () => {
         component={LoginScreen}
         options={{
           title: "로그인",
-          // header: (props) => <HomeScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
