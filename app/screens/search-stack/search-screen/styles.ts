@@ -1,8 +1,14 @@
 import { StyleSheet } from "react-native"
-
-import { LBG, LIGHT_LINE } from "#theme"
+import { HEIGHT, LBG, LIGHT_LINE } from "#theme"
+import { SCREEN_WIDTH } from "@gorhom/bottom-sheet"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
+  headerImage: {
+    width: "100%",
+    height: 109,
+    resizeMode: "contain",
+  },
   image: { width: 16, height: 16, alignSelf: "flex-start" },
   text: { marginLeft: 8, lineHeight: 20 },
   addNewPetBox: {

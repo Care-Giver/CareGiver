@@ -55,6 +55,7 @@ export const images = {
   rating_star_half: require("../images/rating_star_half.png"),
   right_arrow_grey: require("../images/right_arrow_grey.png"),
   search: require("../images/search.png"),
+  search_screen_header_image: require("../images/search_screen_header_image.png"),
   select_checkbox: require("../images/select_checkbox.png"),
   service_petsitting: require("../images/service_petsitting.png"),
   service_training: require("../images/service_training.png"),

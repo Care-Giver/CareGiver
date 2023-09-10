@@ -3,7 +3,7 @@ import React from "react"
 import { PreMed14, PreReg16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
 import { images } from "#images"
-import { BODY, HEAD_LINE, LBG } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, LBG } from "#theme"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
 import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
@@ -33,10 +33,11 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
       {isOpen && (
         <View
           style={{
-            borderColor: LBG,
-            borderWidth: 2,
-            borderBottomWidth: 0,
             height: "auto",
+            borderColor: GIVER_CASUAL_NAVY,
+            borderWidth: 2,
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
           }}
         >
           {/* //? 반려동물 리스트 */}

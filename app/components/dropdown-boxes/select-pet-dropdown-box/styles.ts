@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-import { LBG } from "#theme"
-
+import { GIVER_CASUAL_NAVY, LBG } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {
@@ -15,6 +14,7 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     height: 46, //? borderBottomWidth = 0 이 되므로 이것을 고려하여 높이도 조정
+    borderColor: GIVER_CASUAL_NAVY,
   },
   image: {
     width: 16,
@@ -29,6 +29,8 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     // borderTopWidth: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     borderColor: LBG,
     justifyContent: "center",
     alignItems: "center",

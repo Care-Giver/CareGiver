@@ -23,6 +23,7 @@ import {
   TimePicker,
   BASIC_BACKGROUND_PADDING_WIDTH,
   ClientCalendar,
+  BOTTOM_TAB_BAR_HEIGHT,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -33,11 +34,14 @@ import {
   BOTTOM_HEIGHT,
   LIGHT_LINE,
   GIVER_CASUAL_NAVY,
+  BOTTOM_TAB_NAVIGATOR,
 } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
 import { DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
+import { useShowBottomTab } from "../../../utils/hooks"
+
 // Calculate the number of minutes passed since the start of the hour
 const now = new Date()
 const minutesPassed = now.getMinutes()
@@ -69,9 +73,12 @@ const 한양대에리카제5공학관 = {
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
+    useShowBottomTab(navigation)
+
     //* 서비스 형태
     const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
-    const [service, setService] = useState(null) //? 팻시팅 or 훈련
+    // const [service, setService] = useState<"펫시팅" |"훈련">(null) //? 팻시팅 or 훈련
+    const service = "펫시팅"
 
     //* 달력 - Calendar
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -85,7 +92,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     //* 시간선택 - TimePicker
     const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
     const [endTime, setEndTime] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
-    const [selectedTimeText, selectedSetTimeText] = useState("방문시간을 선택해주세요")
+    const [selectedTimeText, setSelectedTimeText] = useState("방문시간을 선택해주세요")
 
     //* 위치선택
     const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
@@ -115,22 +122,22 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const closeBottomSheet = () => {
       const beginDateText = timeText(startTime)
       const endDateText = timeText(endTime)
-      selectedSetTimeText(`${beginDateText} - ${endDateText}`)
+      setSelectedTimeText(`${beginDateText} - ${endDateText}`)
 
       bottomSheetRef.current?.close()
     }
 
     useEffect(() => {
-      if (!route.params) {
-        console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-        if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      }
-      //? service 할당
-      route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
-      //? Header, 이름 설정
-      navigation.setOptions({
-        title: route.params.service === "펫시팅" ? "펫시팅" : "훈련",
-      })
+      // if (!route.params) {
+      //   console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
+      //   if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
+      // }
+      // //? service 할당
+      // route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
+      // //? Header, 이름 설정
+      // navigation.setOptions({
+      //   title: route.params.service === "펫시팅" ? "펫시팅" : "훈련",
+      // })
     }, [])
 
     //? 펫시터 찾기 버튼 활성화 여부 결정
@@ -177,9 +184,15 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     return (
       <Screen testID="SearchScreen" preset="fixed">
-        {/* //* 방문 | 위탁 */}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 + 2 * BOTTOM_TAB_BAR_HEIGHT }}
+        >
+          {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
+          <Image source={images.search_screen_header_image} style={styles.headerImage} />
+
+          {/* //* 방문 | 위탁 */}
+          <Row style={{ marginTop: 44, justifyContent: "space-between" }}>
             <ServiceTypeIndicatorHeader
               onPress={() => {
                 setServiceType("방문")
@@ -268,6 +281,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           {serviceType === "방문" && (
             <RowRoundedButton
               onPress={() => {
+                setIsCalendarOpen(false)
                 handleBottomSheet(true)
               }}
               image={images.timer}
@@ -293,6 +307,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             style={{ marginTop: 12 }}
             isOpen={isDropdownOpen}
             onPress={() => {
+              setIsCalendarOpen(false)
               setIsDropdownOpen(!isDropdownOpen)
               // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
               //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
@@ -325,55 +340,52 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               </View>
             </View>
           )}
-
-          {/*//* 펫시터 찾기 */}
-
-          <ConditionalButton
-            label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
-            isActivated={isActivated}
-            style={{
-              marginTop: 40,
-              marginBottom: Platform.select({
-                ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-                android: 0,
-              }),
-            }}
-            onPress={() => {
-              //? 펫시터 검색결과 스크린으로 이동
-              navigate("search-result-screen", {
-                service,
-                serviceType,
-                // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
-                selectedPets: selectedPets.map((item) => {
-                  return item.id
-                }),
-
-                // "방문"인 경우 사용될 값
-                startTime:
-                  serviceType === "방문"
-                    ? startTime
-                        .toISOString()
-                        .substring(0, 19)
-                        .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
-                    : null,
-                endTime:
-                  serviceType === "방문"
-                    ? endTime
-                        .toISOString()
-                        .substring(0, 19)
-                        .replace(endTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
-                    : null,
-
-                // "위탁"인 경우 사용될 값
-                startDate: serviceType === "위탁" ? `${dateRange[0].dateString}T00:00:00` : null,
-                endDate: serviceType === "위탁" ? `${dateRange[1].dateString}T00:00:00` : null,
-
-                // 위치 값
-                ...location,
-              })
-            }}
-          />
         </ScrollView>
+
+        {/*//* 펫시터 찾기 */}
+        <ConditionalButton
+          label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
+          isActivated={isActivated}
+          style={{
+            alignSelf: "center",
+            position: "absolute",
+            bottom: BOTTOM_TAB_BAR_HEIGHT,
+          }}
+          onPress={() => {
+            //? 펫시터 검색결과 스크린으로 이동
+            navigate("search-result-screen", {
+              service,
+              serviceType,
+              // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
+              selectedPets: selectedPets.map((item) => {
+                return item.id
+              }),
+
+              // "방문"인 경우 사용될 값
+              startTime:
+                serviceType === "방문"
+                  ? startTime
+                      .toISOString()
+                      .substring(0, 19)
+                      .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                  : null,
+              endTime:
+                serviceType === "방문"
+                  ? endTime
+                      .toISOString()
+                      .substring(0, 19)
+                      .replace(endTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                  : null,
+
+              // "위탁"인 경우 사용될 값
+              startDate: serviceType === "위탁" ? `${dateRange[0].dateString}T00:00:00` : null,
+              endDate: serviceType === "위탁" ? `${dateRange[1].dateString}T00:00:00` : null,
+
+              // 위치 값
+              ...location,
+            })
+          }}
+        />
 
         {/* 시간 선택 바텀시트 - !항상 컴포넌트 최하단에 있을것! */}
         <BottomSheet
@@ -394,7 +406,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           <View
             style={{
               paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-              marginBottom: BOTTOM_HEIGHT,
+              marginBottom: BOTTOM_TAB_BAR_HEIGHT,
             }}
           >
             <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
