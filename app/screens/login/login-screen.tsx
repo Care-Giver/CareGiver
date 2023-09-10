@@ -210,7 +210,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const noAuthLogin = async () => {
       setLoggedIn(true)
-      goBack()
+      // goBack()
     }
 
     const logOutHanlder = () => {

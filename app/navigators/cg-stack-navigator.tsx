@@ -70,7 +70,6 @@ export type CGStackNavigatorParamList = {
    * CgMypageStack - CG - 내정보 스택
    */
   "cg-mypage-screen": undefined
-  "login-screen": undefined
   "cg-certificate-registration-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
@@ -230,16 +229,6 @@ export const CgMypageStack = () => {
         component={CgMypageScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
-        }}
-      />
-
-      {/* 로그인 */}
-      <Stack.Screen
-        name="login-screen"
-        component={LoginScreen}
-        options={{
-          title: "로그인",
-          header: (props) => <HomeScreenHeader {...props} />,
         }}
       />
 

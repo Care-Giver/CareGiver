@@ -154,10 +154,6 @@ export type CLStackNavigatorParamList = {
    * MypageStack - 내정보 스택
    */
   "mypage-screen": undefined
-  "login-screen": undefined
-  "terms-of-service-screen": undefined
-  "register-screen": undefined
-  "register-success-screen": undefined
   "all-pets-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
@@ -526,46 +522,6 @@ export const MypageStack = () => {
         component={MypageScreen}
         options={{
           header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
-      {/* 로그인 */}
-      <Stack.Screen
-        name="login-screen"
-        component={LoginScreen}
-        options={{
-          title: "로그인",
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-
-      {/* 회원가입 - 1 */}
-      <Stack.Screen
-        name="terms-of-service-screen"
-        component={TermsOfServiceScreen}
-        options={{
-          title: "약관동의",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* 회원가입 - 2 */}
-      <Stack.Screen
-        name="register-screen"
-        component={RegisterScreen}
-        options={{
-          title: "필수 정보 입력",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* 회원가입 - 3 */}
-      <Stack.Screen
-        name="register-success-screen"
-        component={RegisterSuccessScreen}
-        options={{
-          title: "회원가입 성공",
-          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
