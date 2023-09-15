@@ -5,7 +5,9 @@ import { PreMed14, PreReg12 } from "../basics/custom-texts/custom-texts"
 import { DivisionLine } from "../division-line/division-line"
 import { TextInput } from "react-native-gesture-handler"
 import { DISABLED, BODY, GIVER_CASUAL_NAVY } from "#theme"
-import { sendSMS } from "#axios"
+import { sendSMS, verifySMS } from "#axios"
+import { alertModal } from "../../utils/alert-modal"
+
 export interface RegisterTextInputProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
@@ -15,12 +17,24 @@ export interface RegisterTextInputProps {
   value: string
   setValue: (value: any) => void
   keyboardType?: KeyboardTypeOptions
+  phoneNumber?: string
+  isVerified?: boolean
+  setIsVerified?: (value: boolean) => void
 }
 
 export const RegisterTextInput = observer(function RegisterTextInput(
   props: RegisterTextInputProps,
 ) {
-  const { title, placeholder, value, setValue, keyboardType = "default" } = props
+  const {
+    title,
+    placeholder,
+    value,
+    setValue,
+    keyboardType = "default",
+    phoneNumber,
+    isVerified,
+    setIsVerified,
+  } = props
   const [timer, setTimer] = useState(0)
   const [isSendingSMS, setIsSendingSMS] = useState(false)
 
@@ -59,7 +73,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
 
   const isValidPhoneNumber = title === "휴대폰 번호" && value?.length === 13
 
-  const sendVerificationButton = () => {
+  const sendCertification = () => {
     console.log("인증요청")
 
     if (!isSendingSMS) {
@@ -81,6 +95,28 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     }
   }
 
+  const verifyCertification = async () => {
+    console.log("인증번호 확인")
+
+    if (!phoneNumber) {
+      alertModal("인증번호 확인", "휴대폰 번호를 입력해주세요.")
+      return
+    }
+
+    const isVerified = await verifySMS({
+      phoneNumber: phoneNumber.replace(/-/g, ""),
+      inputCode: value,
+    })
+
+    if (!isVerified) {
+      alertModal("인증번호 확인", "인증번호가 일치하지 않습니다.")
+      return
+    }
+
+    // 정상
+    setIsVerified(true)
+  }
+
   useEffect(() => {
     switch (title) {
       case "휴대폰 번호":
@@ -91,6 +127,11 @@ export const RegisterTextInput = observer(function RegisterTextInput(
       case "생년월일(필수)":
         if (value.length === 8) {
           setValue(value.replace(/-/g, "").replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
+        }
+        break
+      case "인증번호":
+        if (value.length > 6) {
+          setValue(value.slice(0, 6))
         }
         break
     }
@@ -111,7 +152,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
         {title === "휴대폰 번호" && isValidPhoneNumber && (
           <TouchableOpacity
             style={[styles.sendVerificationButton, isSendingSMS && { borderColor: DISABLED }]}
-            onPress={sendVerificationButton}
+            onPress={sendCertification}
             disabled={isSendingSMS}
           >
             {timer > 0 ? (
@@ -122,6 +163,19 @@ export const RegisterTextInput = observer(function RegisterTextInput(
                 color={isSendingSMS ? DISABLED : GIVER_CASUAL_NAVY}
               />
             )}
+          </TouchableOpacity>
+        )}
+
+        {title === "인증번호" && value && (
+          <TouchableOpacity
+            style={[styles.sendVerificationButton, isVerified && { borderColor: DISABLED }]}
+            onPress={verifyCertification}
+            disabled={isVerified}
+          >
+            <PreReg12
+              text={isVerified ? "인증완료" : "인증확인"}
+              color={isVerified ? DISABLED : GIVER_CASUAL_NAVY}
+            />
           </TouchableOpacity>
         )}
       </View>

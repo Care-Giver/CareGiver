@@ -91,6 +91,37 @@ export const sendSMS = async (post: SendSMSRequestBody): Promise<boolean> => {
   }
 }
 
+interface VerifySMSRequestBody {
+  phoneNumber: string //"01012341234"
+  inputCode: string //"123456" //! 6자리 입니다.
+}
+
+/**
+ * SMS 수신한 인증번호를 검증한다
+ * @returns {Promise<boolean>} 성공여부
+ */
+export const verifySMS = async (post: VerifySMSRequestBody): Promise<boolean> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(
+      `${BASE_URL}/user/sms/confirm`,
+      post,
+      CONFIG,
+    )
+    console.log("post", post)
+
+    if (!response.data) {
+      console.error("response.data.error 에러!!!", response.data.error)
+      // @ts-ignore
+      return false
+    }
+
+    return response.data.ok
+  } catch (error) {
+    console.error("catch 에러!!! - verifySMS", error.toJSON())
+    return false
+  }
+}
+
 interface SignUpRequestBody {
   nickname: string // "일론 머스크",
   birthday: string // "2001-03-13",

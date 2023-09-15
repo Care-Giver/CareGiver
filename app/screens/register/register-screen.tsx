@@ -39,8 +39,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     const [sex, setSex] = useState<Sex>(null)
     const [phoneNumber, setPhoneNumber] = useState<string>("")
     const [certification, setCertification] = useState<string>("")
-    // const [isCertificated, setIsCertificated] = useState(false) //TODO: setIsCertificated 을 "인증번호" 컴포넌트에 넣을 것
-    const isCertificated = true //TODO: 인증번호 검증 기능 추가
+    const [isVerified, setIsVerified] = useState(false)
 
     //* 인증번호가 맞다면 활성화
     //TODO 인증번호 로직이 완성되면 코드 추가하면 될 것 같습니다.
@@ -56,7 +55,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
       android: !isKeyboardShown,
     })
 
-    const isActivated = !!nickname && !!birthday && !!sex && !!phoneNumber && !!isCertificated
+    const isActivated = nickname && birthday && sex && phoneNumber && isVerified
 
     const nextButtonHandler = async () => {
       // 회원가입 진행 - TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
@@ -164,18 +163,20 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           </Row>
 
           <RegisterTextInput
-            placeholder="휴대폰 번호(-없이 숫자만 입력)"
+            placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
             title="휴대폰 번호"
             value={phoneNumber}
             setValue={setPhoneNumber}
             keyboardType="number-pad"
           />
           <RegisterTextInput
-            // placeholder="인증번호를 입력해주세요."
-            placeholder="(인증번호 검증 기능은 현재 미구현 상태 입니다.)"
+            placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
             title="인증번호"
+            phoneNumber={phoneNumber}
             value={certification}
             setValue={setCertification}
+            isVerified={isVerified}
+            setIsVerified={setIsVerified}
             keyboardType="number-pad"
           />
         </KeyboardAwareScrollView>
