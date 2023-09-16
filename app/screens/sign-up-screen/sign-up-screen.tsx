@@ -8,7 +8,7 @@ import {
   PreBol20,
   PreMed14,
   PreMed16,
-  RegisterTextInput,
+  SignUpTextInput,
   Row,
   Screen,
 } from "#components"
@@ -27,8 +27,8 @@ type Sex = "male" | "female"
 
 const TIMER_DURATION = 60
 
-export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-screen">> = observer(
-  function RegisterScreen({ navigation }) {
+export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-screen">> = observer(
+  function SignUpScreen({ navigation }) {
     // MST store 를 가져옵니다.
     // const { someStore, anotherStore } = useStores()
 
@@ -99,7 +99,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
       }
 
       // 성공
-      navigation.replace("register-success-screen")
+      navigation.replace("sign-up-success-screen")
     }
 
     return (
@@ -125,7 +125,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
 
           {/* 닉네임 기입 */}
-          <RegisterTextInput
+          <SignUpTextInput
             placeholder="활동하게 될 닉네임을 입력해주세요."
             title="닉네임(필수)"
             value={nickname}
@@ -133,7 +133,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           />
 
           {/* 생년월일 기입 */}
-          <RegisterTextInput
+          <SignUpTextInput
             placeholder="보호자님의 생년월일을 입력해주세요. 예)20010313"
             title="생년월일(필수)"
             value={birthday}
@@ -188,7 +188,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           </Row>
 
           {/* 휴대폰번호 기입 */}
-          <RegisterTextInput
+          <SignUpTextInput
             placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
             title="휴대폰 번호"
             value={phoneNumber}
@@ -201,7 +201,7 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           />
 
           {/* 인증번호 기입 */}
-          <RegisterTextInput
+          <SignUpTextInput
             placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
             title="인증번호"
             phoneNumber={phoneNumber}

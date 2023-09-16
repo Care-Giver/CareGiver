@@ -35,7 +35,6 @@ import {
   FavoritesScreen,
   EditPetInfoScreen,
   BookingDetailScreen,
-  LoginScreen,
   PastBookingsScreen,
   MakeBookingScreen,
   PaymentScreen,
@@ -46,9 +45,6 @@ import {
   WriteReviewScreen,
   ViewReviewScreen,
   TempChatScreen,
-  TermsOfServiceScreen,
-  RegisterScreen,
-  RegisterSuccessScreen,
   ServiceAmenity,
 } from "#screens"
 import { goBack } from "./navigation-utilities"

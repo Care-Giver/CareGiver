@@ -9,12 +9,9 @@ import { BODY, BOTTOM_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
-export const RegisterSuccessScreen: FC<
-  StackScreenProps<NavigatorParamList, "register-success-screen">
-> = observer(function RegisterSuccessScreen({ navigation }) {
+export const SignUpSuccessScreen: FC<
+  StackScreenProps<NavigatorParamList, "sign-up-success-screen">
+> = observer(function SignUpSuccessScreen({ navigation }) {
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 

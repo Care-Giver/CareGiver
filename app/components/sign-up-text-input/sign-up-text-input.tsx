@@ -8,7 +8,7 @@ import { DISABLED, BODY, GIVER_CASUAL_NAVY } from "#theme"
 import { sendSMS, verifySMS } from "#axios"
 import { alertModal } from "../../utils/alert-modal"
 
-export interface RegisterTextInputProps {
+export interface SignUpTextInputProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
@@ -26,9 +26,7 @@ export interface RegisterTextInputProps {
   setIsVerified?: (value: boolean) => void
 }
 
-export const RegisterTextInput = observer(function RegisterTextInput(
-  props: RegisterTextInputProps,
-) {
+export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTextInputProps) {
   const {
     title,
     placeholder,

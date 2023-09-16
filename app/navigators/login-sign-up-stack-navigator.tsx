@@ -9,14 +9,14 @@
  */
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { LoginScreen, RegisterScreen, RegisterSuccessScreen, TermsOfServiceScreen } from "#screens"
+import { LoginScreen, SignUpScreen, SignUpSuccessScreen, TermsOfServiceScreen } from "#screens"
 import { GobackAndTitleHeader } from "#components"
 
 export type LoginSignUpStackNavigatorParamList = {
   "login-screen": undefined
   "terms-of-service-screen": undefined
-  "register-screen": undefined
-  "register-success-screen": undefined
+  "sign-up-screen": undefined
+  "sign-up-success-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<LoginSignUpStackNavigatorParamList>()
@@ -54,8 +54,8 @@ export const LoginSignUpStack = () => {
 
       {/* 회원가입 - 2 */}
       <Stack.Screen
-        name="register-screen"
-        component={RegisterScreen}
+        name="sign-up-screen"
+        component={SignUpScreen}
         options={{
           title: "필수 정보 입력",
           header: (props) => {
@@ -66,8 +66,8 @@ export const LoginSignUpStack = () => {
 
       {/* 회원가입 - 3 */}
       <Stack.Screen
-        name="register-success-screen"
-        component={RegisterSuccessScreen}
+        name="sign-up-success-screen"
+        component={SignUpSuccessScreen}
         options={{
           title: "회원가입 성공",
           header: (props) => <GobackAndTitleHeader {...props} />,

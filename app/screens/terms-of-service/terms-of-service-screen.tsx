@@ -123,7 +123,7 @@ export const TermsOfServiceScreen: FC<
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         //TODO navigation추가 필요
         onPress={() => {
-          navigate("register-screen")
+          navigate("sign-up-screen")
         }}
       />
     </Screen>
