@@ -18,6 +18,10 @@ export interface RegisterTextInputProps {
   setValue: (value: any) => void
   keyboardType?: KeyboardTypeOptions
   phoneNumber?: string
+  isSendingSMS?: boolean
+  setIsSendingSMS?: (value: boolean) => void
+
+  leftTime?: number
   isVerified?: boolean
   setIsVerified?: (value: boolean) => void
 }
@@ -32,11 +36,34 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     setValue,
     keyboardType = "default",
     phoneNumber,
+    isSendingSMS,
+    setIsSendingSMS,
+    leftTime,
     isVerified,
     setIsVerified,
   } = props
-  const [timer, setTimer] = useState(0)
-  const [isSendingSMS, setIsSendingSMS] = useState(false)
+
+  const [onVerifying, setOnVerifying] = useState(false)
+
+  useEffect(() => {
+    switch (title) {
+      case "휴대폰 번호":
+        if (value.length === 11) {
+          setValue(value.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"))
+        }
+        break
+      case "생년월일(필수)":
+        if (value.length === 8) {
+          setValue(value.replace(/-/g, "").replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
+        }
+        break
+      case "인증번호":
+        if (value.length > 6) {
+          setValue(value.slice(0, 6))
+        }
+        break
+    }
+  }, [value])
 
   const onChange = (e) => {
     switch (title) {
@@ -79,27 +106,34 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     if (!isSendingSMS) {
       console.log("대시(-)가 제거된 phonenumber", value.replace(/-/g, ""))
       sendSMS({ phoneNumber: value.replace(/-/g, "") })
-      // setIsSendingSMS(true)
-      // 3분 제한
-      // TODO: react-timer-hook 설치하기 - https://github.com/amrlabib/react-timer-hook
-      // setTimeout(() => {
-      //   setTimer(180)
-      //   const interval = setInterval(() => {
-      //     setTimer((prevTimer) => prevTimer - 1)
-      //   }, 1000)
-      //   setTimeout(() => {
-      //     clearInterval(interval)
-      //     setIsSendingSMS(false)
-      //   }, 180000)
-      // }, 1000)
+      setIsSendingSMS(true)
     }
+  }
+
+  const 인증번호_발송버튼_텍스트_및_칼러_핸들러 = () => {
+    if (isVerified) return { text: "인증완료", color: DISABLED }
+
+    if (isSendingSMS) return { text: `재요청까지 ${leftTime}초`, color: DISABLED }
+
+    return { text: "인증요청", color: GIVER_CASUAL_NAVY }
+  }
+
+  const 인증번호_검증버튼_텍스트_및_칼러_핸들러 = () => {
+    if (!onVerifying && !isVerified) return { text: "인증요청", color: GIVER_CASUAL_NAVY }
+
+    if (onVerifying) return { text: "인증중..", color: GIVER_CASUAL_NAVY }
+
+    return { text: "인증완료", color: DISABLED }
   }
 
   const verifyCertification = async () => {
     console.log("인증번호 확인")
+    setOnVerifying(true)
 
     if (!phoneNumber) {
-      alertModal("인증번호 확인", "휴대폰 번호를 입력해주세요.")
+      alertModal("휴대폰 번호 확인", "휴대폰 번호를 입력해주세요.")
+      setIsVerified(false)
+      setOnVerifying(false)
       return
     }
 
@@ -109,33 +143,16 @@ export const RegisterTextInput = observer(function RegisterTextInput(
     })
 
     if (!isVerified) {
-      alertModal("인증번호 확인", "인증번호가 일치하지 않습니다.")
+      alertModal("인증 실패", "인증번호가 일치하지 않습니다.")
+      setIsVerified(false)
+      setOnVerifying(false)
       return
     }
 
     // 정상
     setIsVerified(true)
+    setOnVerifying(false)
   }
-
-  useEffect(() => {
-    switch (title) {
-      case "휴대폰 번호":
-        if (value.length === 11) {
-          setValue(value.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"))
-        }
-        break
-      case "생년월일(필수)":
-        if (value.length === 8) {
-          setValue(value.replace(/-/g, "").replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
-        }
-        break
-      case "인증번호":
-        if (value.length > 6) {
-          setValue(value.slice(0, 6))
-        }
-        break
-    }
-  }, [value])
 
   return (
     <View>
@@ -148,21 +165,22 @@ export const RegisterTextInput = observer(function RegisterTextInput(
           onChange={onChange}
           placeholderTextColor={DISABLED}
           keyboardType={keyboardType}
+          editable={!isVerified}
+          style={isVerified && { color: DISABLED }}
         />
         {title === "휴대폰 번호" && isValidPhoneNumber && (
           <TouchableOpacity
-            style={[styles.sendVerificationButton, isSendingSMS && { borderColor: DISABLED }]}
+            style={[
+              styles.sendVerificationButton,
+              (isSendingSMS || isVerified) && { borderColor: DISABLED },
+            ]}
             onPress={sendCertification}
             disabled={isSendingSMS}
           >
-            {timer > 0 ? (
-              <PreReg12 text={`${timer} 초`} color={DISABLED} />
-            ) : (
-              <PreReg12
-                text={isSendingSMS ? "대기중" : "인증요청"}
-                color={isSendingSMS ? DISABLED : GIVER_CASUAL_NAVY}
-              />
-            )}
+            <PreReg12
+              text={인증번호_발송버튼_텍스트_및_칼러_핸들러().text}
+              color={인증번호_발송버튼_텍스트_및_칼러_핸들러().color}
+            />
           </TouchableOpacity>
         )}
 
@@ -173,8 +191,8 @@ export const RegisterTextInput = observer(function RegisterTextInput(
             disabled={isVerified}
           >
             <PreReg12
-              text={isVerified ? "인증완료" : "인증확인"}
-              color={isVerified ? DISABLED : GIVER_CASUAL_NAVY}
+              text={인증번호_검증버튼_텍스트_및_칼러_핸들러().text}
+              color={인증번호_검증버튼_텍스트_및_칼러_핸들러().color}
             />
           </TouchableOpacity>
         )}
@@ -187,7 +205,7 @@ export const RegisterTextInput = observer(function RegisterTextInput(
 
 const styles = StyleSheet.create({
   sendVerificationButton: {
-    width: 60,
+    width: "auto",
     padding: 4,
     justifyContent: "center",
     alignItems: "center",

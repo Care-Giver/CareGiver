@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Image, Platform, Pressable, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -18,13 +18,14 @@ import { styles } from "./styles"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { signUp } from "#axios"
 import { alertModal } from "../../utils/alert-modal"
+import { useTimer } from "react-timer-hook"
+import dayjs from "dayjs"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
 type Sex = "male" | "female"
+
+const TIMER_DURATION = 60
 
 export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-screen">> = observer(
   function RegisterScreen({ navigation }) {
@@ -34,31 +35,55 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
 
+    // 소프트웨어 키보드 올라옴 여부
+    const [isKeyboardShown, setIsKeyboardShown] = useState(false)
+
     const [nickname, setNickname] = useState<string>("")
     const [birthday, setBirthday] = useState<string>("")
     const [sex, setSex] = useState<Sex>(null)
     const [phoneNumber, setPhoneNumber] = useState<string>("")
+    // 인증번호
     const [certification, setCertification] = useState<string>("")
+    // 인증번호 검증 여부
     const [isVerified, setIsVerified] = useState(false)
+    const [isSendingSMS, setIsSendingSMS] = useState(false)
+    // 인증번호 발송버튼 재요청 타이머
+    const [expiryTimestamp, _] = useState(dayjs().add(TIMER_DURATION, "second").toDate())
+    const { totalSeconds, pause, restart } = useTimer({
+      expiryTimestamp,
+      onExpire: () => {
+        // console.warn("onExpire called")
+        setIsSendingSMS(false)
+      },
+    })
 
-    //* 인증번호가 맞다면 활성화
-    //TODO 인증번호 로직이 완성되면 코드 추가하면 될 것 같습니다.
-    // const [isActivated, setIsActivated] = useState<boolean>(true)
-    // 소프트웨어 키보드 올라옴 여부
-    const [isKeyboardShown, setIsKeyboardShown] = useState(false)
+    useEffect(() => {
+      if (isSendingSMS) {
+        restart(dayjs().add(TIMER_DURATION, "second").toDate())
+      } else {
+        pause()
+      }
+    }, [isSendingSMS])
 
-    // "다음" 버튼 표시 여부
+    // "계정 생성하기" 버튼 표시 여부
     //  1. ios 의 경우, 키보드가 "다음 버튼"을 항상 덮어씌우므로 별도의 로직이 필요없음. 항상 true
     //  2. android 의 경우, 키보드 바로 위에 "다음 버튼" 표출됨. 따라서, 조건부로 표출해야 함. 키보드가 올라오면 false, 내려가면 true
-    const isNextButtonShown = Platform.select({
+    const isSignUpButtonShown = Platform.select({
       ios: true,
       android: !isKeyboardShown,
     })
 
-    const isActivated = nickname && birthday && sex && phoneNumber && isVerified
+    // "계정 생성하기" 버튼 활성화 여부
+    //  - 닉네임, 생년월일, 성별, 휴대폰번호, 인증번호가 모두 입력되었는지 확인
+    //  - 인증번호가 입력되었으면, 인증번호가 맞는지 확인
+    // 생년월일 길이는 8 + 2 (대시 '-' 2개)
+    // 휴대폰번호 길이는 11 + 2 (대시 '-' 2개)
+    const isActivated =
+      nickname && birthday.length === 8 + 2 && sex && phoneNumber.length === 11 + 2 && isVerified
 
     const nextButtonHandler = async () => {
-      // 회원가입 진행 - TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
+      // 회원가입 진행
+      // TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
       const signUpResult = await signUp({
         nickname,
         birthday,
@@ -91,19 +116,23 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           //   console.log("onKeyboardWillHide", e)
           // }}
           onKeyboardDidHide={() => {
-            // 시간지연 없이 바로 실행하면, 버튼 렌더링이  어색함
+            // 시간지연 없이 바로 실행하면, 안드로이드에서 버튼 렌더링이 어색함
             setTimeout(() => {
               setIsKeyboardShown(false)
             }, 100)
           }}
         >
           <PreBol20 text={"계정 생성에\n필요한 정보를 입력해주세요"} mt={20} mb={40} />
+
+          {/* 닉네임 기입 */}
           <RegisterTextInput
             placeholder="활동하게 될 닉네임을 입력해주세요."
             title="닉네임(필수)"
             value={nickname}
             setValue={setNickname}
           />
+
+          {/* 생년월일 기입 */}
           <RegisterTextInput
             placeholder="보호자님의 생년월일을 입력해주세요. 예)20010313"
             title="생년월일(필수)"
@@ -112,10 +141,10 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
             keyboardType="number-pad"
           />
 
+          {/* 성별 기입 */}
           <PreMed14 text="성별" color={BODY} style={{ marginBottom: 8 }} />
           <Row style={{ marginBottom: 36, justifyContent: "space-between" }}>
             {/* // ? 남자 버튼 */}
-
             <Pressable
               style={[
                 styles.radioContainer,
@@ -125,17 +154,15 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
               ]}
               onPress={() => setSex("male")}
             >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={sex === "male" ? images.radio_active : images.radio_inactive}
-                  style={styles.radioImg}
-                />
-                <PreMed16
-                  style={{ marginLeft: 6 }}
-                  text="남자"
-                  color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
-                />
-              </View>
+              <Image
+                source={sex === "male" ? images.radio_active : images.radio_inactive}
+                style={styles.radioImg}
+              />
+              <PreMed16
+                style={{ marginLeft: 6 }}
+                text="남자"
+                color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
+              />
             </Pressable>
 
             {/* // ? 여자 버튼 */}
@@ -148,27 +175,32 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
               ]}
               onPress={() => setSex("female")}
             >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={sex === "female" ? images.radio_active : images.radio_inactive}
-                  style={styles.radioImg}
-                />
-                <PreMed16
-                  style={{ marginLeft: 6 }}
-                  text="여자"
-                  color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
-                />
-              </View>
+              <Image
+                source={sex === "female" ? images.radio_active : images.radio_inactive}
+                style={styles.radioImg}
+              />
+              <PreMed16
+                style={{ marginLeft: 6 }}
+                text="여자"
+                color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
+              />
             </Pressable>
           </Row>
 
+          {/* 휴대폰번호 기입 */}
           <RegisterTextInput
             placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
             title="휴대폰 번호"
             value={phoneNumber}
             setValue={setPhoneNumber}
+            isSendingSMS={isSendingSMS}
+            setIsSendingSMS={setIsSendingSMS}
+            isVerified={isVerified}
+            leftTime={totalSeconds}
             keyboardType="number-pad"
           />
+
+          {/* 인증번호 기입 */}
           <RegisterTextInput
             placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
             title="인증번호"
@@ -181,7 +213,8 @@ export const RegisterScreen: FC<StackScreenProps<NavigatorParamList, "register-s
           />
         </KeyboardAwareScrollView>
 
-        {isNextButtonShown && (
+        {/* 계정 생성하기 */}
+        {isSignUpButtonShown && (
           <ConditionalButton
             label="계정 생성하기"
             isActivated={isActivated}
