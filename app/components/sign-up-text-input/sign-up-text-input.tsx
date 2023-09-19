@@ -111,13 +111,13 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
   const 인증번호_발송버튼_텍스트_및_칼러_핸들러 = () => {
     if (isVerified) return { text: "인증완료", color: DISABLED }
 
-    if (isSendingSMS) return { text: `재요청까지 ${leftTime}초`, color: DISABLED }
+    if (isSendingSMS) return { text: `재발송까지 ${leftTime}초`, color: DISABLED }
 
-    return { text: "인증요청", color: GIVER_CASUAL_NAVY }
+    return { text: "인증번호 발송", color: GIVER_CASUAL_NAVY }
   }
 
   const 인증번호_검증버튼_텍스트_및_칼러_핸들러 = () => {
-    if (!onVerifying && !isVerified) return { text: "인증요청", color: GIVER_CASUAL_NAVY }
+    if (!onVerifying && !isVerified) return { text: "인증하기", color: GIVER_CASUAL_NAVY }
 
     if (onVerifying) return { text: "인증중..", color: GIVER_CASUAL_NAVY }
 

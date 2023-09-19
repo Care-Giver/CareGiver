@@ -76,8 +76,9 @@ export const sendSMS = async (post: SendSMSRequestBody): Promise<boolean> => {
   try {
     const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/sms`, post, CONFIG)
 
-    if (!response.data) {
+    if (!response?.data || !response?.data?.ok) {
       console.error("response.data.error 에러!!!", response.data.error)
+      console.error("response?.data?.ok", response?.data?.ok)
       // @ts-ignore
       return false
     }
@@ -128,6 +129,13 @@ interface SignUpRequestBody {
   provider: AuthProvider // "google",
   idToken: string // "aaa",
   email: string // "example@google.com"
+  phoneNumber: string //"01012341234",
+  sex: string //"MALE",
+
+  privacyPolicyConsent: boolean // true,
+  termsOfServiceConsent: boolean //true,
+  marketingConsent: boolean //true,
+  locationBasedServiceConsent: boolean //true,
 }
 
 interface SignUpResponse {
@@ -167,16 +175,19 @@ interface SignUpResult {
  */
 export const signUp = async (post: SignUpRequestBody): Promise<SignUpResult> => {
   try {
-    const response = await axios.post(`${BASE_URL}/user/signup`, post, CONFIG)
-    console.log("response -->", response)
-    console.log("response.config.data -->")
+    const response = await axios.post(`${BASE_URL}/user/signup`, post, {
+      headers: { Accept: "Application/json" },
+    })
+    console.log("response ♦️", response)
+    console.log("response.config.data ♦️", response?.config?.data)
+    console.log("response?.data ♦️", response?.data)
 
+    // if (!response.data || !response?.data?.ok) {
     if (!response.data) {
-      console.error("response.data.error 에러!!!", response.data.error)
+      console.error("response.data.error 에러!!! ♦️", response.data.error)
       // @ts-ignore
       return { isSuccess: false, reason: response.data.error }
     }
-    // console.log("response.data >>>", response.data)
 
     const responseSuccess: SignUpResponse = response.config.data
 

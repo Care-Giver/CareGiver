@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { Image, Platform, Pressable, View } from "react-native"
+import { Image, Platform, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -20,20 +20,19 @@ import { signUp } from "#axios"
 import { alertModal } from "../../utils/alert-modal"
 import { useTimer } from "react-timer-hook"
 import dayjs from "dayjs"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
+import { useStores } from "#models"
+import { delay } from "../../utils/delay"
 
-type Sex = "male" | "female"
+type Sex = "MALE" | "FEMALE"
 
 const TIMER_DURATION = 60
 
 export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-screen">> = observer(
-  function SignUpScreen({ navigation }) {
-    // MST store 를 가져옵니다.
-    // const { someStore, anotherStore } = useStores()
-
-    // 필요시, useNavigation 훅을 사용할 수 있습니다.
-    // const navigation = useNavigation()
+  function SignUpScreen({ navigation, route }) {
+    const {
+      userStore: { setLoggedIn },
+    } = useStores()
+    const { consentList } = route.params
 
     // 소프트웨어 키보드 올라옴 여부
     const [isKeyboardShown, setIsKeyboardShown] = useState(false)
@@ -54,6 +53,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       onExpire: () => {
         // console.warn("onExpire called")
         setIsSendingSMS(false)
+        setCertification("")
       },
     })
 
@@ -87,9 +87,13 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       const signUpResult = await signUp({
         nickname,
         birthday,
-        provider: "google", // 일단 구글로 하드코딩함
-        idToken: "blah-blah-blah", //일단 하드코딩
-        email: "blah@test.com", //일단 하드코딩
+        provider: "naver", // 일단 하드코딩함
+        idToken: "blah-blah-blah-2", //일단 하드코딩
+        email: "blah2@test.com", //일단 하드코딩
+        phoneNumber: phoneNumber.replace(/-/g, ""),
+        sex,
+
+        ...consentList,
       })
 
       //  실패
@@ -100,6 +104,8 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
 
       // 성공
       navigation.replace("sign-up-success-screen")
+      await delay(5000)
+      setLoggedIn(true)
     }
 
     return (
@@ -149,19 +155,19 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
               style={[
                 styles.radioContainer,
                 {
-                  borderColor: sex === "male" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                  borderColor: sex === "MALE" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
                 },
               ]}
-              onPress={() => setSex("male")}
+              onPress={() => setSex("MALE")}
             >
               <Image
-                source={sex === "male" ? images.radio_active : images.radio_inactive}
+                source={sex === "MALE" ? images.radio_active : images.radio_inactive}
                 style={styles.radioImg}
               />
               <PreMed16
                 style={{ marginLeft: 6 }}
                 text="남자"
-                color={sex === "male" ? GIVER_CASUAL_NAVY : DISABLED}
+                color={sex === "MALE" ? GIVER_CASUAL_NAVY : DISABLED}
               />
             </Pressable>
 
@@ -170,19 +176,19 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
               style={[
                 styles.radioContainer,
                 {
-                  borderColor: sex === "female" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
+                  borderColor: sex === "FEMALE" ? GIVER_CASUAL_NAVY : MIDDLE_LINE,
                 },
               ]}
-              onPress={() => setSex("female")}
+              onPress={() => setSex("FEMALE")}
             >
               <Image
-                source={sex === "female" ? images.radio_active : images.radio_inactive}
+                source={sex === "FEMALE" ? images.radio_active : images.radio_inactive}
                 style={styles.radioImg}
               />
               <PreMed16
                 style={{ marginLeft: 6 }}
                 text="여자"
-                color={sex === "female" ? GIVER_CASUAL_NAVY : DISABLED}
+                color={sex === "FEMALE" ? GIVER_CASUAL_NAVY : DISABLED}
               />
             </Pressable>
           </Row>
@@ -201,16 +207,18 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
           />
 
           {/* 인증번호 기입 */}
-          <SignUpTextInput
-            placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
-            title="인증번호"
-            phoneNumber={phoneNumber}
-            value={certification}
-            setValue={setCertification}
-            isVerified={isVerified}
-            setIsVerified={setIsVerified}
-            keyboardType="number-pad"
-          />
+          {isSendingSMS && (
+            <SignUpTextInput
+              placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
+              title="인증번호"
+              phoneNumber={phoneNumber}
+              value={certification}
+              setValue={setCertification}
+              isVerified={isVerified}
+              setIsVerified={setIsVerified}
+              keyboardType="number-pad"
+            />
+          )}
         </KeyboardAwareScrollView>
 
         {/* 계정 생성하기 */}

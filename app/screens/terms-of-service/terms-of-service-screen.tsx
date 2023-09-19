@@ -16,12 +16,14 @@ import {
 } from "#components"
 import { images } from "#images"
 import { BODY, BOTTOM_HEIGHT } from "#theme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
+export type ConsentList = {
+  privacyPolicyConsent: boolean
+  termsOfServiceConsent: boolean
+  locationBasedServiceConsent: boolean
+  marketingConsent: boolean
+}
+
 export const TermsOfServiceScreen: FC<
   StackScreenProps<NavigatorParamList, "terms-of-service-screen">
 > = observer(function TermsOfServiceScreen() {
@@ -50,6 +52,18 @@ export const TermsOfServiceScreen: FC<
   const openLink = (link: string) => {
     Linking.openURL(link)
   }
+
+  const consentList: ConsentList = {
+    privacyPolicyConsent: true,
+    termsOfServiceConsent: true,
+    locationBasedServiceConsent: true,
+    marketingConsent: false,
+  }
+
+  if (optionalToggle) {
+    consentList.marketingConsent = true
+  }
+
   return (
     <Screen testID="TermsOfService">
       <PreBol20 text={"아래 약관에 동의하시고\n케어기버 서비스를 이용해보세요!"} mt={20} mb={40} />
@@ -123,7 +137,7 @@ export const TermsOfServiceScreen: FC<
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         //TODO navigation추가 필요
         onPress={() => {
-          navigate("sign-up-screen")
+          navigate("sign-up-screen", { consentList })
         }}
       />
     </Screen>

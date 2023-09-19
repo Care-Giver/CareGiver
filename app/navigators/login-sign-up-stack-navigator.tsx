@@ -9,13 +9,19 @@
  */
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { LoginScreen, SignUpScreen, SignUpSuccessScreen, TermsOfServiceScreen } from "#screens"
+import {
+  ConsentList,
+  LoginScreen,
+  SignUpScreen,
+  SignUpSuccessScreen,
+  TermsOfServiceScreen,
+} from "#screens"
 import { GobackAndTitleHeader } from "#components"
 
 export type LoginSignUpStackNavigatorParamList = {
   "login-screen": undefined
   "terms-of-service-screen": undefined
-  "sign-up-screen": undefined
+  "sign-up-screen": { consentList: ConsentList }
   "sign-up-success-screen": undefined
 }
 

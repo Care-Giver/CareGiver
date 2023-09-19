@@ -6,17 +6,14 @@ import { NavigatorParamList, navigate } from "#navigators"
 import { ConditionalButton, PreBol20, PreReg14, Screen } from "#components"
 import { images } from "#images"
 import { BODY, BOTTOM_HEIGHT } from "#theme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
+import { useStores } from "#models"
 
 export const SignUpSuccessScreen: FC<
   StackScreenProps<NavigatorParamList, "sign-up-success-screen">
 > = observer(function SignUpSuccessScreen({ navigation }) {
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
-
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
+  const {
+    userStore: { isLoggedIn, setLoggedIn },
+  } = useStores()
 
   return (
     <Screen testID="RegisterSuccess">
@@ -34,11 +31,15 @@ export const SignUpSuccessScreen: FC<
         isActivated={true}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         onPress={() => {
-          // 시작 스크린으로 이동 - "search-screen"
-          navigation.navigate("search-screen")
+          // // 시작 스크린으로 이동 - "search-screen"
+          // navigation.navigate("search-screen")
 
-          // 마이페이지 스택, 최초화면으로 변경
-          navigation.replace("mypage-screen")
+          // // 마이페이지 스택, 최초화면으로 변경
+          // navigation.replace("mypage-screen")
+
+          if (!isLoggedIn) {
+            setLoggedIn(true)
+          }
         }}
       />
     </Screen>
