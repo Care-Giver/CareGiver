@@ -34,36 +34,6 @@ export interface User {
   locationBasedServiceConsent: number
 }
 
-interface UsersResponse extends GeneralResponse {
-  Users: User
-}
-
-/**
- * 로그인한 유저의 모든 위탁 예약을 읽어온다.
- * @returns {Promise<Users>}
- */
-export const getUsers = async (): Promise<User> => {
-  try {
-    const response = await axios.get<UsersResponse>(`${BASE_URL}/user/me`, CONFIG)
-
-    if (!response.data) {
-      const error = response.data.error
-      console.error("response.data.error 에러!!!", response.data.ok)
-      // @ts-ignore
-      return error
-    }
-
-    // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.Users", response.data.Users)
-    return response.data
-  } catch (error) {
-    console.error("catchㅁㅁ 에러!!!", error.toJSON())
-    //console.dir(error)
-    return null
-  }
-}
-
 interface SendSMSRequestBody {
   phoneNumber: string //01012341234 주의: '-' 없이 번호들만 있어야 합니다.
 }
@@ -179,6 +149,7 @@ export const signUp = async (post: SignUpRequestBody): Promise<SignUpResult> => 
       headers: { Accept: "Application/json" },
     })
     console.log("response ♦️", response)
+    console.log("response.headers ♦️", response.headers)
     console.log("response.config.data ♦️", response?.config?.data)
     console.log("response?.data ♦️", response?.data)
 
@@ -194,6 +165,119 @@ export const signUp = async (post: SignUpRequestBody): Promise<SignUpResult> => 
     return { isSuccess: true }
   } catch (error) {
     console.error("catch 에러!!! - signUp", error.toJSON())
+    return { isSuccess: false, reason: error.toJSON() }
+  }
+}
+
+export interface LoginRequestBody {
+  email: string // "example@google.com",
+  nickname: string //"일론 머스크",
+  provider: AuthProvider // "kakao",
+  OAuthId: string //"string"
+}
+
+interface LoginResponse extends GeneralResponse {
+  token: string // x-jwt 토큰
+}
+
+interface LoginResult {
+  isSuccess: boolean // 성공여부
+  token?: string // 성공시, x-jwt 토큰
+  reason?: string // 실패시, 실패이유
+}
+
+/**
+ * 로그인을 진행한다.
+ * 성공시, x-jwt 토큰값을 반환한다.
+ * @returns {Promise<LoginResult>}
+ */
+export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
+  try {
+    const response = await axios.post<LoginResponse>(`${BASE_URL}/user/login`, post, {
+      headers: { Accept: "Application/json" },
+    })
+    console.log("response ♦️", response)
+    console.log("response.headers ♦️", response.headers)
+    console.log("response.config.data ♦️", response?.config?.data)
+    console.log("response?.data ♦️", response?.data)
+
+    if (!response.data || !response?.data?.ok) {
+      // if (!response.data) {
+      console.error("response.data.error 에러!!! ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response.data.error }
+    }
+
+    return { isSuccess: true, token: response.data.token }
+  } catch (error) {
+    console.error("catch 에러!!! - signUp", error.toJSON())
+    return { isSuccess: false, reason: error.toJSON() }
+  }
+}
+
+interface UserMeResponse extends User, GeneralResponse {
+  // UserMeResponse interface 수정 필요할 듯
+}
+
+export type UserDetail = Pick<
+  User,
+  | "nickname"
+  | "phoneNumber"
+  | "sex"
+  | "birthday"
+  | "address"
+  | "profileImage"
+  | "isCertified"
+  | "pushToken"
+>
+
+interface GetMeResult {
+  isSuccess: boolean // 성공여부
+  userDetail?: UserDetail // 성공시, 유저 상세정보
+  reason?: string // 실패시, 실패이유
+}
+
+/**
+ * 로그인한 유저의 유저정보를 가져온다.
+ * @returns {Promise<any>}
+ *
+ * 의도된 구조가 맞습니다. 또한 이는 me 이외에 다른 API는 없습니다.
+ * me API의 목적은 x-jwt값을 유저 데이터로 변환하는 것에 있습니다.
+ * 따라서 별도 값이나 과정 없이 바로 유저 정보를 변환합니다.
+ * ok, error 구조는 위 API 외에 모든 함수에 포함되어 있으며,
+ * 객체 키의 경우 delete와 같이 객체 데이터를 반환할 필요가 없는 경우 제공하지 않습니다.
+ */
+export const getMe = async (token: string): Promise<GetMeResult> => {
+  try {
+    const response = await axios.get<UserMeResponse>(`${BASE_URL}/user/me`, {
+      headers: {
+        "x-jwt": token,
+        Accept: "Application/json",
+      },
+    })
+
+    console.log("response >>>", response)
+    console.log("response.data >>>", response.data)
+
+    // if (!response.data.ok) {
+    //   console.error("response.data.error 에러!!!", response.data.ok)
+    //   return { isSuccess: false, reason: response.data.error }
+    // }
+
+    return {
+      isSuccess: true,
+      userDetail: {
+        nickname: response.data.nickname,
+        phoneNumber: response.data.phoneNumber,
+        sex: response.data.sex,
+        birthday: response.data.birthday,
+        address: response.data.address,
+        profileImage: response.data.profileImage,
+        isCertified: response.data.isCertified,
+        pushToken: response.data.pushToken,
+      },
+    }
+  } catch (error) {
+    console.error("catchㅁㅁ 에러!!!", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
   }
 }

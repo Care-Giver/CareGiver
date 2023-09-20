@@ -6,10 +6,13 @@ const USER_TOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg
 // TODO: x-jwt 헤더 값은, 로그인 한 유저 마다 달라야 함.
 // TODO: 따라서, 이후에는 로그인시 UserStoreModel 에서  관리하는 값이 될 예정임.
 export const CONFIG = {
-  headers: { "x-jwt": USER_TOKEN, Accept: "Application/json" },
+  headers: {
+    "x-jwt": USER_TOKEN,
+    Accept: "Application/json",
+  },
 }
 
 export interface GeneralResponse {
-  error: string
   ok: boolean
+  error?: string
 }

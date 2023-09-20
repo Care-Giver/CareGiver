@@ -30,7 +30,7 @@ const TIMER_DURATION = 60
 export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-screen">> = observer(
   function SignUpScreen({ navigation, route }) {
     const {
-      userStore: { setLoggedIn },
+      userStore: { loginHander },
     } = useStores()
     const { consentList } = route.params
 
@@ -82,14 +82,18 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       nickname && birthday.length === 8 + 2 && sex && phoneNumber.length === 11 + 2 && isVerified
 
     const nextButtonHandler = async () => {
+      const email = "blah3@test.com" //일단 하드코딩
+      const provider = "naver" // 일단 하드코딩함
+      const idToken = "blah-blah-blah-2" //일단 하드코딩
+
       // 회원가입 진행
       // TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
       const signUpResult = await signUp({
+        email,
         nickname,
+        provider,
+        idToken,
         birthday,
-        provider: "naver", // 일단 하드코딩함
-        idToken: "blah-blah-blah-2", //일단 하드코딩
-        email: "blah2@test.com", //일단 하드코딩
         phoneNumber: phoneNumber.replace(/-/g, ""),
         sex,
 
@@ -104,8 +108,13 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
 
       // 성공
       navigation.replace("sign-up-success-screen")
-      await delay(5000)
-      setLoggedIn(true)
+      await delay(3000)
+      loginHander({
+        email,
+        nickname,
+        provider,
+        OAuthId: idToken,
+      })
     }
 
     return (

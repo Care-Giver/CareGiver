@@ -1,26 +1,8 @@
-import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { applySnapshot, Instance, SnapshotOut, types, unprotect } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-
-/* //* User Model 
-        ~ type: ENUM! ( CARE_GIVER | CLIENT )
-        ~ loggedIn: bool!
-        ~ pushToken: string~ 
-
-        ~ email: string!
-        ~ password: string?
-        ~ provider: string~ 
-
-        ~ name: string!
-        ~ phoneNumber: string!
-        ~ sex: ENUM! ( MALE | FEMALE )
-        ~ birthday: string~ 
-
-        ~ address: string!
-        ~ profileImg: string?
-        ~ isCertified: bool!
- */
+import { getMe, login, LoginRequestBody, UserDetail } from "#axios"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -49,21 +31,19 @@ export const UserStoreModel = types
     onSwitchingType: false,
 
     loggedIn: false,
-    pushToken: types.optional(types.string, ""),
-
-    email: types.optional(types.string, ""),
-    password: types.optional(types.string, ""),
+    token: types.optional(types.string, ""),
     provider: types.optional(types.frozen<AuthProvider>(), null),
-    refreshToken: types.optional(types.string, ""),
+    email: types.optional(types.string, ""),
 
-    name: types.optional(types.string, ""),
+    nickname: types.optional(types.string, ""),
     phoneNumber: types.optional(types.string, ""),
     sex: types.optional(types.frozen<Sex>(), null),
     birthday: types.optional(types.string, ""),
-
     address: types.optional(types.string, ""),
-    profileImg: types.optional(types.string, ""),
+    profileImage: types.optional(types.string, ""),
+
     isCertified: false,
+    pushToken: types.optional(types.string, ""),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -124,49 +104,106 @@ export const UserStoreModel = types
       self.onSwitchingType = true
     },
 
+    /* 유저 Auth 정보 BEGIN */
     setLoggedIn(value?: boolean) {
       self.loggedIn = value
+    },
+
+    setProvider(value: AuthProvider) {
+      self.provider = value
+    },
+
+    setToken(value: string) {
+      self.token = value
     },
 
     setEmail(value: string) {
       self.email = value.replace(/ /g, "")
     },
-    setPassword(value: string) {
-      self.password = value.replace(/ /g, "")
-    },
-    setProvider(value: AuthProvider) {
-      self.provider = value
-    },
-    setRefreshToken(value: string) {
-      self.refreshToken = value
+    /* 유저 Auth 정보 ENDED */
+
+    /* 유저 상세정보 BEGIN */
+    setNickname(value: string) {
+      self.nickname = value
     },
 
-    async signIn() {
+    setPhoneNumber(value: string) {
+      self.phoneNumber = value
+    },
+
+    setSex(value: Sex) {
+      self.sex = value
+    },
+
+    setBirthday(value: string) {
+      self.birthday = value
+    },
+
+    setAddress(value: string | null) {
+      self.address = value || ""
+    },
+
+    setProfileImg(value: string | null) {
+      self.profileImage = value || ""
+    },
+    /* 유저 상세정보 ENDED */
+
+    /**
+     * 유저 상세정보를 저장합니다
+     * */
+    async setUserDetail(token: string) {
       try {
-        //
+        const { isSuccess, userDetail } = await getMe(token)
+
+        if (!isSuccess) {
+          return false
+        }
+        // 유저 상세정보 저장
+        this.setNickname(userDetail.nickname)
+        this.setPhoneNumber(userDetail.phoneNumber)
+        this.setSex(userDetail.sex)
+        this.setBirthday(userDetail.birthday)
+        this.setAddress(userDetail.address)
+        this.setProfileImg(userDetail.profileImage)
+
+        return self
       } catch (error) {
-        //
+        console.error("catch 에러!!! - setUserDetail", error)
+        return false
       }
     },
 
-    async logIn() {
+    /**
+     * 로그인 (혹은 회원가입) 성공시, 유저 정보의 일부를 저장합니다.
+     * - token, provider, email
+     *
+     * 이후, 유저 상세정보를 저장하는 함수 setUserDetail 를 호출합니다.
+     *  */
+    async loginHander(loginRequestBody: LoginRequestBody) {
       try {
+        const { isSuccess, token } = await login(loginRequestBody)
+        if (!isSuccess) {
+          return false
+        }
+
+        this.setLoggedIn(true)
+        this.setToken(token)
+        this.setProvider(loginRequestBody.provider)
+        this.setEmail(loginRequestBody.email)
+
+        const res = await this.setUserDetail(token)
+        return res
         //
       } catch (error) {
+        console.error("catch 에러!!! - logInHander", error)
+        return false
         //
       }
     },
 
     logOut() {
-      self.loggedIn = false
-    },
-
-    async queryUser() {
-      try {
-        //
-      } catch (error) {
-        //
-      }
+      // self.loggedIn = false
+      this.reset()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

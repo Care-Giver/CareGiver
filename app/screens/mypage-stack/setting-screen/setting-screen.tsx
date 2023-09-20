@@ -13,7 +13,7 @@ import { useStores } from "#models"
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
     const {
-      userStore: { setLoggedIn },
+      userStore: { setLoggedIn, logOut },
     } = useStores()
 
     // ? 로그아웃 | 회원탈퇴 모달창 visible
@@ -28,7 +28,8 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     // ? 모달창 - 로그아웃 버튼 클릭시 동작하는 함수
     const handleLogoutPress = () => {
       setLogoutModalVisible(false)
-      setLoggedIn(false)
+      // setLoggedIn(false)
+      logOut()
       // goBack()
     }
 

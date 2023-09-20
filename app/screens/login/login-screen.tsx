@@ -31,7 +31,7 @@ import { images } from "#images"
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
     const {
-      userStore: { loggedIn, setLoggedIn, setRefreshToken, provider },
+      userStore: { loggedIn, setLoggedIn, setToken, provider },
     } = useStores()
 
     const [result, setResult] = useState<string>("")
@@ -52,7 +52,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
 
         setLoggedIn(true)
-        setRefreshToken(userToken)
+        setToken(userToken)
 
         setResult(userToken)
       } catch (err) {
@@ -93,7 +93,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           const userToken = await naverServiceLogin(successResponse.accessToken)
 
           setLoggedIn(true)
-          setRefreshToken(userToken)
+          setToken(userToken)
 
           setResult(userToken)
         }
@@ -110,7 +110,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      * - 로그인 진행
      * - 현재 기기에 등록되어있는 AppleID를 가지고 와 로그인 진행
      * - 해당 아이디에 비밀번호 입력 후, 로그인 완료 처리됨
-     * - 유저 토큰을 setRefreshToken에 일단 등록하나, 명칭 변경이 필요해보임.
+     * - 유저 토큰을 setToken에 일단 등록하나, 명칭 변경이 필요해보임.
      */
     const signInWithApple = async (): Promise<void> => {
       try {
@@ -134,7 +134,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
         // 4. state를 업데이트한다.
         setLoggedIn(true)
-        setRefreshToken(userToken)
+        setToken(userToken)
 
         // setResult 함수 용도를 알 수 없음. 일단 여기 jwtToken 저장함.
         setResult(userToken)

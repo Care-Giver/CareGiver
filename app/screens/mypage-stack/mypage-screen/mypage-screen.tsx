@@ -1,6 +1,7 @@
 import { View, Image, Pressable, Alert } from "react-native"
 import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import {
+  DivisionLine,
   MypageButton,
   PetImageCard,
   PreBol14,
@@ -24,6 +25,8 @@ import { Api } from "#api"
 import { Type, useStores } from "#models"
 import { delay } from "../../../utils/delay"
 import { useShowBottomTab } from "../../../utils/hooks"
+import { getMe, getVisitingPetsitters, login } from "#axios"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 const IS_AUTH = true
 
@@ -57,7 +60,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     useShowBottomTab(navigation)
 
     const {
-      userStore: { switchType, loggedIn, setLoggedIn },
+      userStore: { switchType, loggedIn, setLoggedIn, loginHander, token, nickname, profileImage },
     } = useStores()
 
     // ? 유저 프로필 정보
@@ -114,6 +117,44 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     return (
       <Screen preset="fixed">
+        <Pressable style={{ backgroundColor: "red", padding: 10 }}>
+          <PreBol16
+            text="유저정보 API 테스트"
+            onPress={() => {
+              getMe(token)
+            }}
+            color={GIVER_CASUAL_NAVY}
+          />
+          <DivisionLine />
+          <PreBol16
+            text="로그인 API 테스트"
+            onPress={async () => {
+              const res = await login({
+                email: "blah3@test.com",
+                nickname: "테스트9",
+                provider: "naver",
+                OAuthId: "blah-blah-blah-2",
+              })
+              console.log("로그인 API 테스트 res >>>", res)
+            }}
+            color={GIVER_CASUAL_NAVY}
+          />
+          <DivisionLine />
+          <PreBol16
+            text="MST loginHandler 테스트"
+            onPress={async () => {
+              const res = await loginHander({
+                email: "blah3@test.com",
+                nickname: "테스트9",
+                provider: "naver",
+                OAuthId: "blah-blah-blah-2",
+              })
+              console.log("MST loginHandler 테스트 res >>>", res)
+            }}
+            color={GIVER_CASUAL_NAVY}
+          />
+        </Pressable>
+
         {/* //! 로그인 상태일 때 */}
         {loggedIn ? (
           <>
@@ -121,7 +162,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             <Row style={styles.profileCard}>
               {/* //? 프로필 사진 */}
               <Image
-                source={user.profileImg ? user.profileImg : images.default_pet_image_60}
+                source={profileImageUriHandler(images.default_pet_image_60, "small", profileImage)}
                 style={styles.profileImg}
                 resizeMode="contain"
               />
@@ -129,7 +170,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
               <View style={styles.profileNameCard}>
                 {/* //? 사용자 이름 */}
                 <Row>
-                  <PreBol20 text={userInfo.name} color={STRONG_LINE} />
+                  <PreBol20 text={nickname} color={STRONG_LINE} />
                   <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                 </Row>
                 {/* //? 내 프로필 관리 버튼 */}
