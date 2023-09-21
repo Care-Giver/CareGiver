@@ -1,4 +1,4 @@
-import { View, Image, Pressable, Alert } from "react-native"
+import { View, Image, Pressable, Alert, ScrollView } from "react-native"
 import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import {
   DivisionLine,
@@ -115,117 +115,119 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     }
 
     return (
-      <Screen preset="fixed">
-        {/* //! 로그인 상태일 때 */}
-        {loggedIn ? (
-          <>
-            {/* //* 유저 프로필 카드  */}
-            <Row style={styles.profileCard}>
-              {/* //? 프로필 사진 */}
-              <Image
-                source={profileImageUriHandler(
-                  images.default_pet_image_60,
-                  "small",
-                  userDetail?.profileImage,
-                )}
-                style={styles.profileImg}
-                resizeMode="contain"
-              />
-              {/* //* 프로필 */}
-              <View style={styles.profileNameCard}>
-                {/* //? 사용자 이름 */}
-                <Row>
-                  <PreBol20 text={userDetail?.nickname} color={STRONG_LINE} />
-                  <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
-                </Row>
-                {/* //? 내 프로필 관리 버튼 */}
-                <Pressable
-                  style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}
-                  onPress={() => {
-                    navigate("edit-mypage-screen")
-                  }}
-                >
-                  <PreBol14 text="내 프로필 관리" color={BODY} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
-                </Pressable>
-              </View>
-            </Row>
-
-            {/* //? divider */}
-            <View style={styles.divisionLine} />
-
-            {/* //* 반려동물 리스트 */}
-            <View style={styles.petContainer}>
-              {/* //? 제목: 나의 반려동물 + 전체보기 버튼 */}
-              <Row style={{ justifyContent: "space-between" }}>
-                <PreBol16 text="나의 반려동물" />
-                {/* //? 전체보기 버튼 */}
-                <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
-                  <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
-                  <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
-                </Pressable>
+      <Screen>
+        <ScrollView>
+          {/* //! 로그인 상태일 때 */}
+          {loggedIn ? (
+            <>
+              {/* //* 유저 프로필 카드  */}
+              <Row style={styles.profileCard}>
+                {/* //? 프로필 사진 */}
+                <Image
+                  source={profileImageUriHandler(
+                    images.default_pet_image_60,
+                    "small",
+                    userDetail?.profileImage,
+                  )}
+                  style={styles.profileImg}
+                  resizeMode="contain"
+                />
+                {/* //* 프로필 */}
+                <View style={styles.profileNameCard}>
+                  {/* //? 사용자 이름 */}
+                  <Row>
+                    <PreBol20 text={userDetail?.nickname} color={STRONG_LINE} />
+                    <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
+                  </Row>
+                  {/* //? 내 프로필 관리 버튼 */}
+                  <Pressable
+                    style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}
+                    onPress={() => {
+                      navigate("edit-mypage-screen")
+                    }}
+                  >
+                    <PreBol14 text="내 프로필 관리" color={BODY} />
+                    <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
+                  </Pressable>
+                </View>
               </Row>
 
-              {/* //? 반려동물 카드 리스트 */}
-              <View style={styles.petListContainer}>
-                {petsList.map((item, index) => {
-                  // ! 마이페이지 메인에는 세 마리만 노출
-                  if (index < 3) {
-                    return (
-                      <PetImageCard
-                        key={index}
-                        petImage={item.image ? item.image : images.default_pet_image_60}
-                        name={item.name}
-                      />
-                    )
-                  }
-                })}
+              {/* //? divider */}
+              <View style={styles.divisionLine} />
+
+              {/* //* 반려동물 리스트 */}
+              <View style={styles.petContainer}>
+                {/* //? 제목: 나의 반려동물 + 전체보기 버튼 */}
+                <Row style={{ justifyContent: "space-between" }}>
+                  <PreBol16 text="나의 반려동물" />
+                  {/* //? 전체보기 버튼 */}
+                  <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+                    <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
+                    <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
+                  </Pressable>
+                </Row>
+
+                {/* //? 반려동물 카드 리스트 */}
+                <View style={styles.petListContainer}>
+                  {petsList.map((item, index) => {
+                    // ! 마이페이지 메인에는 세 마리만 노출
+                    if (index < 3) {
+                      return (
+                        <PetImageCard
+                          key={index}
+                          petImage={item.image ? item.image : images.default_pet_image_60}
+                          name={item.name}
+                        />
+                      )
+                    }
+                  })}
+                </View>
               </View>
-            </View>
-          </>
-        ) : (
-          // ! 비로그인 상태일 때
-          // * 로그인 이동 버튼 카드
-          <Row style={styles.loginCard}>
-            {/* //? "로그인 후 이용해주세요" 카드 */}
-            <Pressable style={{ flexDirection: "row" }} onPress={handleLoginPress}>
-              <PreBol16 text="로그인" color={GIVER_CASUAL_NAVY} />
-              <PreReg16 text="후 이용해주세요." color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
-            </Pressable>
-          </Row>
-        )}
+            </>
+          ) : (
+            // ! 비로그인 상태일 때
+            // * 로그인 이동 버튼 카드
+            <Row style={styles.loginCard}>
+              {/* //? "로그인 후 이용해주세요" 카드 */}
+              <Pressable style={{ flexDirection: "row" }} onPress={handleLoginPress}>
+                <PreBol16 text="로그인" color={GIVER_CASUAL_NAVY} />
+                <PreReg16 text="후 이용해주세요." color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
+              </Pressable>
+            </Row>
+          )}
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
-        {/* //* Care Giver 모드 전환 버튼 */}
-        <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
-          <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+          {/* //* Care Giver 모드 전환 버튼 */}
+          <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
+            <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
 
-          <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
-        </Pressable>
+            <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
+          </Pressable>
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
-        {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+          {/* //* 결제 수단 및 쿠폰 버튼 */}
+          <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
-        {/* //* 환경설정 버튼 */}
-        <MypageButton text="환경설정" onPress={handleSettingPress} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+          {/* //* 환경설정 버튼 */}
+          <MypageButton text="환경설정" onPress={handleSettingPress} />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
-        {/* //* 자주 묻는 질문 버튼 */}
-        <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+          {/* //* 자주 묻는 질문 버튼 */}
+          <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
-        {/* //* 고객센터 버튼 */}
-        <MypageButton text="고객 센터" onPress={handleServiceCenterPress} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+          {/* //* 고객센터 버튼 */}
+          <MypageButton text="고객 센터" onPress={handleServiceCenterPress} />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+          {/* //? divider */}
+          <View style={styles.divisionLine} />
+        </ScrollView>
       </Screen>
     )
   },
