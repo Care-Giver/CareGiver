@@ -1,9 +1,9 @@
-import { View, Image, Pressable, ImageBackground } from "react-native"
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
+import { View, Image, TouchableOpacity, ImageBackground } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
-import { navigationRef, NavigatorParamList } from "#navigators"
+import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED } from "#theme"
+import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED, BOTTOM_HEIGHT } from "#theme"
 import {
   Screen,
   Row,
@@ -11,22 +11,25 @@ import {
   PreMed16,
   UserOrPetProfileInfo,
   DivisionLine,
-  BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
   CustomInputModal,
 } from "#components"
 import { images } from "#images"
 import { styles } from "./styles"
 import { Users } from "./dummy-data"
-import { UserProps } from "./user.props" //?사용의 의미
+import { useStores } from "#models"
+import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
 > = observer(({ navigation, route }) => {
   //console.log("route @EditMypageScreen", route)
 
-  //* <변수>위주 정리:
+  const {
+    userStore: { userAuth, userDetail },
+  } = useStores()
 
+  //* <변수>위주 정리:
   //*route.params 의 editable (header 와 연동 : 연필버튼 누르면 -> editable = true, 수정 화면으로 돌입. 이후 저장하기 버튼 누르면 editable = false, 다시 수정 불가 화면으로 변환)
   const editable = route.params?.editable
 
@@ -39,7 +42,7 @@ export const EditMypageScreen: FC<
   //*user.id ===3 : 닉네임 변경 횟수 다 썼을때 수정 버튼 누르면 닉네임 부분 disabled 되는거 확인 가능
 
   //*화면에서 닉네임 부분에 들어갈 데이터
-  const [nickname, setNickname] = useState(currentUser.nickname)
+  const [nickname, setNickname] = useState(userDetail.nickname)
 
   //*닉네임 부분 누르면 모달 창 뜨게 관리하는 변수,함수
   const [nicknameTouched, setNicknameTouched] = useState(false)
@@ -57,7 +60,7 @@ export const EditMypageScreen: FC<
   }
 
   //* 스크린을 렌더링할때 최초실행됩니다.
-  useLayoutEffect(() => {
+  useEffect(() => {
     showEditButton() //* 수정 화면이 아닌 상태, 즉 편집버튼(연필모양 버튼)을 보여주는 상태로 설정합니다.
   }, [])
   // console.log("mainscreen", route.params)
@@ -73,6 +76,7 @@ export const EditMypageScreen: FC<
   }
 
   //*Users 데이터 안에 유저가 새로 입력한 닉네임과 중복되는 닉네임이 있는지
+  // TODO: API 로 대체해야 함
   const isDuplicateNickname = (newNickname: string) => {
     return Users.some((User) => User.id !== currentUser.id && User.nickname === newNickname)
     //*currentUser.id 비교 부분 : 현재 로그인 유저의 정보와 같지 않은 유저들 안에서 nickname 같은지 비교
@@ -83,22 +87,22 @@ export const EditMypageScreen: FC<
       {/* //*프사 부분 */}
       <ImageBackground
         style={styles.profileImage}
-        source={
-          currentUser.profileImage
-            ? currentUser.profileImage
-            : images.default_profile_image_edit_mypage
-        }
+        source={profileImageUriHandler(
+          images.default_profile_image_edit_mypage,
+          "medium",
+          userDetail?.profileImage,
+        )}
       >
         {/* //*프사 - 수정 가능 상태일때 */}
         {editable && (
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               alert("이미지 등록 준비중입니다.")
             }}
             style={{ position: "absolute", right: 0, bottom: 0 }}
           >
             <Image source={images.camera} style={{ width: 42, height: 42 }} />
-          </Pressable>
+          </TouchableOpacity>
         )}
       </ImageBackground>
 
@@ -110,25 +114,26 @@ export const EditMypageScreen: FC<
       >
         <Row style={{ marginBottom: 10 }}>
           <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               setInfoTouched(true)
             }}
           >
             {/* //*more info button */}
             <Image source={images.more_info_bigger} style={{ width: 16, height: 16 }} />
-          </Pressable>
+          </TouchableOpacity>
         </Row>
         {/* //*editable이 true, 즉 수정 가능 상태일때 -> 닉네임 변환 횟수가 3회 이하면 눌러서 수정가능, 3회면 수정 불가 */}
+        {/* // TODO: API 로 대체해야 함 */}
         {editable && currentUser.nicknameChangeCount < 3 ? (
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               setNicknameTouched(true)
             }}
           >
             <PreMed16 color={HEAD_LINE} text={nickname} />
             {/* //*수정 가능 상태인데 3번 안썼을때*/}
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <PreMed16
             color={
@@ -147,14 +152,14 @@ export const EditMypageScreen: FC<
               text={`이번 달 수정 가능 횟수 ${3 - currentUser.nicknameChangeCount}회`}
               style={{ paddingTop: 20 }}
             />
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 setInfoTouched(false)
               }}
               style={{ position: "absolute", top: 3.5, right: -6 }}
             >
               <Image source={images.x_in_circle} style={{ width: 15, height: 15 }} />
-            </Pressable>
+            </TouchableOpacity>
           </ImageBackground>
         )}
       </View>
@@ -162,33 +167,23 @@ export const EditMypageScreen: FC<
       {/* //* 생년월일 */}
       <UserOrPetProfileInfo
         title={"생년월일"}
-        profileInfo={currentUser.birthday}
+        profileInfo={userDetail.birthday}
         showOption={editable}
       />
-      {/*//*이전 코드 -> 혹시 모름에 따라 남겨둠. 후에 수정 필요시 
-      editable ? (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={DISABLED} />
-      ) : (
-        <UserOrPetProfileInfo title={"생년월일"} profileInfo={"99.12.28"} showOption={HEAD_LINE} />
-      ) */}
 
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={currentUser.sex} showOption={editable} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={userDetail.sex} showOption={editable} />
 
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo
-        title={"이메일"}
-        profileInfo={currentUser.email}
-        showOption={editable}
-      />
+      <UserOrPetProfileInfo title={"이메일"} profileInfo={userAuth.email} showOption={editable} />
 
-      {/* //* 전화번호우 */}
+      {/* //* 전화번호 */}
       {editable ? (
-        <Pressable onPress={() => alert("전화번호 등록 플로우 준비중")}>
-          <UserOrPetProfileInfo title={"전화번호"} profileInfo={currentUser.phoneNumber} />
-        </Pressable>
+        <TouchableOpacity onPress={() => alert("전화번호 수정 플로우 준비중")}>
+          <UserOrPetProfileInfo title={"전화번호"} profileInfo={userDetail.phoneNumber} />
+        </TouchableOpacity>
       ) : (
-        <UserOrPetProfileInfo title={"전화번호"} profileInfo={currentUser.phoneNumber} />
+        <UserOrPetProfileInfo title={"전화번호"} profileInfo={userDetail.phoneNumber} />
       )}
 
       {/* //*저장하기 버튼 : editable이 true 일때, 즉 수정 가능 화면 일때 화면 하단부 표시  */}
@@ -198,7 +193,7 @@ export const EditMypageScreen: FC<
           isActivated={true}
           style={{
             marginTop: "auto",
-            marginBottom: 0,
+            marginBottom: BOTTOM_HEIGHT,
           }}
           onPress={() => {
             showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기

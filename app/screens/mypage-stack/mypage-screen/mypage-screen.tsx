@@ -1,4 +1,4 @@
-import { View, Image, Pressable, ScrollView } from "react-native"
+import { View, Image, TouchableOpacity, ScrollView } from "react-native"
 import React, { FC, useState } from "react"
 import {
   MypageButton,
@@ -52,7 +52,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     useShowBottomTab(navigation)
 
     const {
-      userStore: { switchType, loggedIn, token, userDetail },
+      userStore: { switchType, loggedIn, userDetail },
     } = useStores()
 
     // ? 유저의 펫 리스트
@@ -108,7 +108,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                     <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                   </Row>
                   {/* //? 내 프로필 관리 버튼 */}
-                  <Pressable
+                  <TouchableOpacity
                     style={{ marginTop: 8, flexDirection: "row", alignItems: "center" }}
                     onPress={() => {
                       navigate("edit-mypage-screen")
@@ -116,7 +116,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   >
                     <PreBol14 text="내 프로필 관리" color={BODY} />
                     <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               </Row>
 
@@ -129,10 +129,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 <Row style={{ justifyContent: "space-between" }}>
                   <PreBol16 text="나의 반려동물" />
                   {/* //? 전체보기 버튼 */}
-                  <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
                     <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
                     <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
-                  </Pressable>
+                  </TouchableOpacity>
                 </Row>
 
                 {/* //? 반려동물 카드 리스트 */}
@@ -143,7 +143,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                       return (
                         <PetImageCard
                           key={index}
-                          petImage={item.image ? item.image : images.default_pet_image_60}
+                          petImage={item?.image || images.default_pet_image_60}
                           name={item.name}
                         />
                       )
@@ -157,21 +157,21 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             // * 로그인 이동 버튼 카드
             <Row style={styles.loginCard}>
               {/* //? "로그인 후 이용해주세요" 카드 */}
-              <Pressable style={{ flexDirection: "row" }} onPress={handleLoginPress}>
+              <TouchableOpacity style={{ flexDirection: "row" }} onPress={handleLoginPress}>
                 <PreBol16 text="로그인" color={GIVER_CASUAL_NAVY} />
                 <PreReg16 text="후 이용해주세요." color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
-              </Pressable>
+              </TouchableOpacity>
             </Row>
           )}
 
           {/* //? divider */}
           <View style={styles.divisionLine} />
           {/* //* Care Giver 모드 전환 버튼 */}
-          <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
+          <TouchableOpacity style={styles.modeChangeBtn} onPress={handleMode}>
             <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
 
             <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
-          </Pressable>
+          </TouchableOpacity>
 
           {/* //? divider */}
           <View style={styles.divisionLine} />
