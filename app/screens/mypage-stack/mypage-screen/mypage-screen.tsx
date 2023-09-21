@@ -1,7 +1,6 @@
-import { View, Image, Pressable, Alert, ScrollView } from "react-native"
-import React, { FC, useEffect, useLayoutEffect, useState } from "react"
+import { View, Image, Pressable, ScrollView } from "react-native"
+import React, { FC, useState } from "react"
 import {
-  DivisionLine,
   MypageButton,
   PetImageCard,
   PreBol14,
@@ -13,22 +12,15 @@ import {
   Screen,
 } from "#components"
 import { styles } from "./styles"
-import { user } from "./dummy-data"
 import { STRONG_LINE, GIVER_CASUAL_NAVY, SUB_HEAD_LINE, BODY } from "#theme"
 import { images } from "#images"
-import { UserProps } from "./user.props"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { Pet, PetStoreModel } from "../../../models/pet-store/pet-store"
-import { Api } from "#api"
-import { Type, useStores } from "#models"
-import { delay } from "../../../utils/delay"
+import { Pet } from "../../../models/pet-store/pet-store"
+import { useStores } from "#models"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { getMe, getVisitingPetsitters, login } from "#axios"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
-
-const IS_AUTH = true
 
 // Dummy data
 const pets = [
@@ -62,33 +54,9 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     const {
       userStore: { switchType, loggedIn, token, userDetail },
     } = useStores()
-    // ? 유저 프로필 정보
-    const [userInfo, setUserInfo] = useState<UserProps | null>(user)
 
-    // ? 펫 store
-    const petStore = PetStoreModel.create()
     // ? 유저의 펫 리스트
     const [petsList, setPetsList] = useState<Pet[]>(pets)
-
-    const { speciesStoreModel } = useStores()
-    // speciesStoreModel.setSpecies()
-    speciesStoreModel.getSpecies
-
-    // useLayoutEffect(() => {
-    //   // ? 로그인 상태일 때 -> 유저 정보 state에 저장 + 펫 리스트 state 업데이트
-    //   if (IS_AUTH) {
-    //     setUserInfo(user)
-
-    //     async function fetchData() {
-    //       await petStore.setMyPets()
-    //       setPetsList(petStore.pets)
-    //     }
-
-    //     fetchData()
-    //   } else {
-    //     setUserInfo(null)
-    //   }
-    // }, [])
 
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
     const handleLoginPress = () => {
