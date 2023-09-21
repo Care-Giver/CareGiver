@@ -82,9 +82,9 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       nickname && birthday.length === 8 + 2 && sex && phoneNumber.length === 11 + 2 && isVerified
 
     const nextButtonHandler = async () => {
-      const email = "blah3@test.com" //일단 하드코딩
-      const provider = "naver" // 일단 하드코딩함
-      const idToken = "blah-blah-blah-2" //일단 하드코딩
+      const email = `${dayjs().unix()}@test.com` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      const provider = "naver" // 일단 하드코딩함 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      const idToken = `test-idtoken-${dayjs().unix()}` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
 
       // 회원가입 진행
       // TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함

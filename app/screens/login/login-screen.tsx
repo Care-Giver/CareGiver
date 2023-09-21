@@ -31,7 +31,7 @@ import { images } from "#images"
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
     const {
-      userStore: { loggedIn, setLoggedIn, setToken, provider, loginHander },
+      userStore: { loggedIn, setLoggedIn, logOut, userAuth, loginHander },
     } = useStores()
 
     const [result, setResult] = useState<string>("")
@@ -51,8 +51,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
         const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
 
-        setLoggedIn(true)
-        setToken(userToken)
+        // setLoggedIn(true)
+        // setToken(userToken)
 
         setResult(userToken)
       } catch (err) {
@@ -92,8 +92,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           // TODO: Send the accessToken to your server for verification and sign-in
           const userToken = await naverServiceLogin(successResponse.accessToken)
 
-          setLoggedIn(true)
-          setToken(userToken)
+          // setLoggedIn(true)
+          // setToken(userToken)
 
           setResult(userToken)
         }
@@ -133,8 +133,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         const userToken = await appleServerLogin(identityToken)
 
         // 4. state를 업데이트한다.
-        setLoggedIn(true)
-        setToken(userToken)
+        // setLoggedIn(true)
+        // setToken(userToken)
 
         // setResult 함수 용도를 알 수 없음. 일단 여기 jwtToken 저장함.
         setResult(userToken)
@@ -185,10 +185,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         // console.log("profile >>>", JSON.stringify(profile))
         // TODO: POST SIGN-UP || SIGN-IN TO SERVER
         //
-        setLoggedIn(true)
-        goBack()
+        // setLoggedIn(true)
+        // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
       } catch (err) {
-        setLoggedIn(false)
+        // setLoggedIn(false)
+        logOut()
         console.error("getKProfile error", err)
         alertModal("카카오 프로필 실패", err?.message)
       }
@@ -196,13 +197,13 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const kakaoLogin = async () => {
       await signInWithKakao()
-      goBack()
+      // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
     }
 
     const naverLogin = async () => {
       //
       await signInWithNaver()
-      goBack()
+      // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
     }
 
     const googleLogin = async () => {
@@ -213,7 +214,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     const appleLogin = async () => {
       //
       await signInWithApple()
-      goBack()
+      // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
     }
 
     const noAuthLogin = async () => {
@@ -227,7 +228,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     }
 
     const logOutHanlder = () => {
-      switch (provider) {
+      switch (userAuth.provider) {
         case "kakao":
           kakaoLogOut()
           break
@@ -261,7 +262,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         console.log("LogOut message >>>", message)
         // setResult(message)
       } catch (err) {
-        setLoggedIn(false)
+        // setLoggedIn(false)
+        logOut()
         console.error("signOut error", err)
       }
     }
@@ -274,7 +276,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     const signOutWithNaver = async (): Promise<void> => {
       try {
         await NaverLogin.logout()
-        setLoggedIn(false)
+        // setLoggedIn(false)
+        logOut()
       } catch (err) {
         console.error("signOut error", err)
       }
