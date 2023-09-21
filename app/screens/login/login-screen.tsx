@@ -25,7 +25,13 @@ import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-nativ
 import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
-import { AppleLoginOutput, appleServerLogin, naverServiceLogin, kakaoServerLogin } from "#axios"
+import {
+  AppleLoginOutput,
+  appleServerLogin,
+  naverServiceLogin,
+  kakaoServerLogin,
+  getMe,
+} from "#axios"
 import { images } from "#images"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
@@ -45,19 +51,14 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      * - 만약, 카카오톡 접근이 불가하다면, loginWithKakaoAccount 를 호출하여 웹브라우저를 실행함
      * - 이후 accessToken을 케어기버 서버로 보내 로그인 진행
      */
-    const signInWithKakao = async (): Promise<void> => {
+    const signInWithKakao = async (): Promise<string | false> => {
       try {
         const kakaoLoginResponse: KakaoOAuthToken = await login()
-
-        const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
-
-        // setLoggedIn(true)
-        // setToken(userToken)
-
-        setResult(userToken)
+        return kakaoLoginResponse.accessToken
       } catch (err) {
         console.error("login err", err)
         alertModal("카카오 로그인 실패", err?.message)
+        return false
       }
     }
 
@@ -179,7 +180,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      *  gender: "null",
      *  name: "null",
      * } */
-    const getKProfile = async (): Promise<void> => {
+    const getKakaoProfile = async (): Promise<any> => {
       try {
         const profile: KakaoProfile = await getProfile()
         // console.log("profile >>>", JSON.stringify(profile))
@@ -187,17 +188,51 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         //
         // setLoggedIn(true)
         // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
+
+        return {
+          isSuccess: true,
+          email: profile.email,
+        }
       } catch (err) {
-        // setLoggedIn(false)
         logOut()
         console.error("getKProfile error", err)
         alertModal("카카오 프로필 실패", err?.message)
+
+        return {
+          isSuccess: false,
+          reason: err?.message,
+        }
       }
     }
 
     const kakaoLogin = async () => {
-      await signInWithKakao()
-      // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
+      const accessToken = await signInWithKakao()
+      if (!accessToken) return
+
+      const { isSuccess, email, reason } = await getKakaoProfile()
+      if (!isSuccess) return
+
+      const { isAlreadySignedUp, token } = await kakaoServerLogin({ idToken: accessToken })
+      if (!isAlreadySignedUp) {
+        // 회원가입 진행
+        navigate("terms-of-service-screen", {
+          email,
+          provider: "kakao",
+          idToken: accessToken,
+        })
+        return
+      }
+
+      const { isSuccess: isGetMeSuccess, userDetail } = await getMe(token)
+      if (!isGetMeSuccess) return
+
+      // 로그인 진행
+      await loginHander({
+        email,
+        nickname: userDetail.nickname,
+        provider: "kakao",
+        OAuthId: token,
+      })
     }
 
     const naverLogin = async () => {

@@ -192,6 +192,10 @@ export const UserStoreModel = types
         })
 
         this.setLoggedIn(true)
+
+        await delay(500)
+        // @ts-ignore
+        navigate("Searching", { screen: "search-screen" })
         return true
         //
       } catch (error) {

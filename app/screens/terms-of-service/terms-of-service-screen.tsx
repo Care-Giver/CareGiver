@@ -26,12 +26,8 @@ export type ConsentList = {
 
 export const TermsOfServiceScreen: FC<
   StackScreenProps<NavigatorParamList, "terms-of-service-screen">
-> = observer(function TermsOfServiceScreen() {
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
-
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
+> = observer(function TermsOfServiceScreen({ route }) {
+  const { email, provider, idToken } = route.params
 
   //* checkbox states
   const [requiredToggle, setRequiredToggle] = useState<boolean>(false)
@@ -137,7 +133,7 @@ export const TermsOfServiceScreen: FC<
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         //TODO navigation추가 필요
         onPress={() => {
-          navigate("sign-up-screen", { consentList })
+          navigate("sign-up-screen", { consentList, email, provider, idToken })
         }}
       />
     </Screen>

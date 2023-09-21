@@ -20,8 +20,17 @@ import { GobackAndTitleHeader } from "#components"
 
 export type LoginSignUpStackNavigatorParamList = {
   "login-screen": undefined
-  "terms-of-service-screen": undefined
-  "sign-up-screen": { consentList: ConsentList }
+  "terms-of-service-screen": {
+    email: string
+    provider: string
+    idToken: string
+  }
+  "sign-up-screen": {
+    consentList: ConsentList
+    email: string
+    provider: string
+    idToken: string
+  }
   "sign-up-success-screen": undefined
 }
 

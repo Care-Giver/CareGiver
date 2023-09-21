@@ -32,7 +32,8 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
     const {
       userStore: { loginHander },
     } = useStores()
-    const { consentList } = route.params
+    const { consentList, email, provider, idToken } = route.params
+    console.log("route.params", route.params)
 
     // 소프트웨어 키보드 올라옴 여부
     const [isKeyboardShown, setIsKeyboardShown] = useState(false)
@@ -82,9 +83,9 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       nickname && birthday.length === 8 + 2 && sex && phoneNumber.length === 11 + 2 && isVerified
 
     const nextButtonHandler = async () => {
-      const email = `${dayjs().unix()}@test.com` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
-      const provider = "naver" // 일단 하드코딩함 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
-      const idToken = `test-idtoken-${dayjs().unix()}` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      // const email = `${dayjs().unix()}@test.com` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      // const provider = "naver" // 일단 하드코딩함 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      // const idToken = `test-idtoken-${dayjs().unix()}` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
 
       // 회원가입 진행
       // TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
