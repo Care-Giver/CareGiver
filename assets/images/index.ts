@@ -1,7 +1,8 @@
 //! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
-  
+
 export const images = {
   //* images
+  apple_icon: require("../images/apple_icon.png"),
   arrow_change: require("../images/arrow_change.png"),
   arrow_down: require("../images/arrow_down.png"),
   arrow_left_navy: require("../images/arrow_left_navy.png"),
@@ -33,14 +34,17 @@ export const images = {
   error_profile_small: require("../images/error_profile_small.png"),
   filled_heart: require("../images/filled_heart.png"),
   go_back: require("../images/go_back.png"),
+  google_icon: require("../images/google_icon.png"),
   gps: require("../images/gps.png"),
   in_progress_booking_background: require("../images/in_progress_booking_background.png"),
+  kakao_icon: require("../images/kakao_icon.png"),
   list_bars: require("../images/list_bars.png"),
   location: require("../images/location.png"),
   location_disabled: require("../images/location_disabled.png"),
   map_marker: require("../images/map_marker.png"),
   more_info: require("../images/more_info.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
+  naver_icon: require("../images/naver_icon.png"),
   payment_kakao: require("../images/payment_kakao.png"),
   payment_naver: require("../images/payment_naver.png"),
   payment_toss: require("../images/payment_toss.png"),
@@ -72,7 +76,7 @@ export const images = {
   x_grey: require("../images/x_grey.png"),
   x_in_circle: require("../images/x_in_circle.png"),
   x_white: require("../images/x_white.png"),
-  
+
   //* bottom-tab-navigator
   chatting_grey: require("../images/bottom-tab-navigator/chatting_grey.png"),
   chatting_navy: require("../images/bottom-tab-navigator/chatting_navy.png"),

@@ -300,12 +300,15 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
         <View style={styles.buttonBox}>
           <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
+            <Image source={images.apple_icon} style={styles.icon} />
             <PreMed18 text="Apple로 로그인" color={palette.black} />
           </Button>
           <Button onPress={naverLogin} style={styles.naverLogin}>
+            <Image source={images.naver_icon} style={styles.icon} />
             <PreMed18 text="네이버 로그인" color={palette.white} />
           </Button>
           <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
+            <Image source={images.kakao_icon} style={styles.icon} />
             <PreMed18 text="카카오 로그인" color={palette.black} />
           </Button>
           {loggedIn && (
@@ -329,6 +332,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 )
 
 const button: ViewStyle = {
+  flexDirection: "row",
   width: "100%",
   height: 54,
   borderRadius: 8,
@@ -355,6 +359,13 @@ const styles = StyleSheet.create({
     // right: BASIC_BACKGROUND_PADDING_WIDTH,
     marginTop: "auto",
     marginBottom: BOTTOM_HEIGHT,
+  },
+
+  icon: {
+    width: 28,
+    height: 28,
+    position: "absolute",
+    left: 14,
   },
 
   kakaoLogin: {
