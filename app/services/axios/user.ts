@@ -1,38 +1,37 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 import { AuthProvider } from "#models"
+import { alertModal } from "../../utils/alert-modal"
 
 export enum Sex {
   MALE = "MALE",
   FEMALE = "FEMALE",
 }
 
-export interface User {
-  id: number
-  createAt: string
-  updatedAt: string
-  email: string
-  role: string
-  nickname: string
-  kakaoIdToken: string
-  naverIdToken: string
-  appleIdToken: string
-  phoneNumber: string
-  sex: Sex
-  birthday: string
-  provider: string
-  address: string
-  desc: string
-  profileImage: string
-  isCertified: boolean
-  pushToken: string
-  clientStreamToken: string
-  maxDistance: number
-  privacyPolicyConsent: number
-  termsOfServiceConsent: number
-  marketingConsent: number
-  locationBasedServiceConsent: number
+interface UserColumns {
+  id: number // 25,
+  createAt: string // "2023-09-19T19:05:07.019Z",
+  updatedAt: string // "2023-09-19T19:05:07.019Z",
+  provider: AuthProvider // "naver",
+  email: string // "blah3@test.com",
+  nickname: string // "테스트9",
+  phoneNumber: string // "01024562858",
+  sex: Sex //"MALE",
+  birthday: string // "2023-09-19",
+  address: string // null,
+  profileImage: string // null,
+  desc: string // null,
+  maxDistance: number // 10,
+  pushToken: string // null,
+  role: string // "CLIENT",
+  clientStreamToken: string // null,
+  marketingConsent: boolean // true,
+  locationBasedServiceConsent: boolean // true,
+  privacyPolicyConsent: boolean // true,
+  termsOfServiceConsent: boolean // true,
 }
+
+export type User = Omit<UserColumns, "createAt" | "updatedAt">
 
 interface SendSMSRequestBody {
   phoneNumber: string //01012341234 주의: '-' 없이 번호들만 있어야 합니다.
@@ -140,7 +139,6 @@ interface SignUpResult {
 
 /**
  * 입력한 정보로 회원가입을 진행한다.
- * TODO: 회원가입 성공시, MST 내에 회원정보 저장해야 함
  * @returns {Promise<SignUpResult>}
  */
 export const signUp = async (post: SignUpRequestBody): Promise<SignUpResult> => {
@@ -203,31 +201,24 @@ export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
 
     if (!response.data || !response?.data?.ok) {
       // if (!response.data) {
-      console.error("response.data.error 에러!!! ♦️", response?.data?.error)
+      console.error("/login API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response.data.error }
     }
 
     return { isSuccess: true, token: response.data.token }
   } catch (error) {
-    console.error("catch 에러!!! - signUp", error.toJSON())
+    console.error("catch 에러!!! - login", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
   }
 }
 
-interface UserMeResponse extends User, GeneralResponse {
-  // UserMeResponse interface 수정 필요할 듯
+interface UserMeResponse extends GeneralResponse {
+  user: User
 }
 
 export type UserDetail = Pick<
   User,
-  | "nickname"
-  | "phoneNumber"
-  | "sex"
-  | "birthday"
-  | "address"
-  | "profileImage"
-  | "isCertified"
-  | "pushToken"
+  "nickname" | "phoneNumber" | "sex" | "birthday" | "address" | "profileImage" | "pushToken"
 >
 
 interface GetMeResult {
@@ -237,17 +228,22 @@ interface GetMeResult {
 }
 
 /**
- * 로그인한 유저의 유저정보를 가져온다.
+ * me API의 목적은 x-jwt값을 유저 데이터로 변환하는 것에 있습니다.
+ * login API 를 통해 얻어낸 x-jwt 토큰값을 사용하여,
+ * 로그인한 유저의 유저정보를 가져옵니다.
  * @returns {Promise<any>}
  *
- * 의도된 구조가 맞습니다. 또한 이는 me 이외에 다른 API는 없습니다.
- * me API의 목적은 x-jwt값을 유저 데이터로 변환하는 것에 있습니다.
- * 따라서 별도 값이나 과정 없이 바로 유저 정보를 변환합니다.
- * ok, error 구조는 위 API 외에 모든 함수에 포함되어 있으며,
- * 객체 키의 경우 delete와 같이 객체 데이터를 반환할 필요가 없는 경우 제공하지 않습니다.
+ *
  */
 export const getMe = async (token: string): Promise<GetMeResult> => {
   try {
+    console.log("token", token)
+    console.log("!token", !token)
+    if (!token) {
+      alertModal("로그인이 필요합니다.", "토큰 값이 존재하지 않음")
+      return { isSuccess: false, reason: "토큰 값이 존재하지 않음" }
+    }
+
     const response = await axios.get<UserMeResponse>(`${BASE_URL}/user/me`, {
       headers: {
         "x-jwt": token,
@@ -255,29 +251,37 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
       },
     })
 
+    if (!response?.data.ok) {
+      console.error("/user/me API 에러!!! ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
     console.log("response >>>", response)
     console.log("response.data >>>", response.data)
-
-    // if (!response.data.ok) {
-    //   console.error("response.data.error 에러!!!", response.data.ok)
-    //   return { isSuccess: false, reason: response.data.error }
-    // }
+    console.log("➡️", {
+      nickname: response.data.user.nickname,
+      phoneNumber: response.data.user.phoneNumber,
+      sex: response.data.user.sex,
+      birthday: response.data.user.birthday,
+      address: response.data.user.address,
+      profileImage: response.data.user.profileImage,
+      pushToken: response.data.user.pushToken,
+    })
 
     return {
       isSuccess: true,
       userDetail: {
-        nickname: response.data.nickname,
-        phoneNumber: response.data.phoneNumber,
-        sex: response.data.sex,
-        birthday: response.data.birthday,
-        address: response.data.address,
-        profileImage: response.data.profileImage,
-        isCertified: response.data.isCertified,
-        pushToken: response.data.pushToken,
+        nickname: response.data.user.nickname,
+        phoneNumber: response.data.user.phoneNumber,
+        sex: response.data.user.sex,
+        birthday: response.data.user.birthday,
+        address: response.data.user.address,
+        profileImage: response.data.user.profileImage,
+        pushToken: response.data.user.pushToken,
       },
     }
   } catch (error) {
-    console.error("catchㅁㅁ 에러!!!", error.toJSON())
+    console.error("catch 에러!!! - getMe", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
   }
 }

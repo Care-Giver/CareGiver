@@ -1,4 +1,4 @@
-import { applySnapshot, Instance, SnapshotOut, types, unprotect } from "mobx-state-tree"
+import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
@@ -15,9 +15,10 @@ export enum Type {
  */
 export type AuthProvider = "google" | "apple" | "kakao" | "naver"
 
-enum Sex {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
+interface UserAuth {
+  token: string
+  provider: AuthProvider
+  email: string
 }
 
 /**
@@ -29,21 +30,28 @@ export const UserStoreModel = types
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
     // onSwitchingType: types.optional(types.boolean, false),
     onSwitchingType: false,
-
     loggedIn: false,
-    token: types.optional(types.string, ""),
-    provider: types.optional(types.frozen<AuthProvider>(), null),
-    email: types.optional(types.string, ""),
 
-    nickname: types.optional(types.string, ""),
-    phoneNumber: types.optional(types.string, ""),
-    sex: types.optional(types.frozen<Sex>(), null),
-    birthday: types.optional(types.string, ""),
-    address: types.optional(types.string, ""),
-    profileImage: types.optional(types.string, ""),
+    /* 유저 Auth 정보 */
+    userAuth: types.frozen<UserAuth>({
+      token: "",
+      provider: null,
+      email: "",
+    }),
 
+    /* 유저 상세정보 */
+    userDetail: types.frozen<UserDetail>({
+      nickname: "",
+      phoneNumber: "",
+      sex: null,
+      birthday: "",
+      address: "",
+      profileImage: "",
+      pushToken: "",
+    }),
+
+    /* 인증된 펫시터인지 여부 */
     isCertified: false,
-    pushToken: types.optional(types.string, ""),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -104,80 +112,62 @@ export const UserStoreModel = types
       self.onSwitchingType = true
     },
 
-    /* 유저 Auth 정보 BEGIN */
     setLoggedIn(value?: boolean) {
       self.loggedIn = value
     },
 
-    setProvider(value: AuthProvider) {
-      self.provider = value
+    /* 유저 Auth정보 쓰기 */
+    setUserAuth(value: UserAuth) {
+      // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임.
+      self.userAuth = value
     },
 
-    setToken(value: string) {
-      self.token = value
+    /* 유저 상세정보 쓰기 */
+    setUserDetail(value: UserDetail) {
+      // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임 .
+      self.userDetail = value
     },
-
-    setEmail(value: string) {
-      self.email = value.replace(/ /g, "")
-    },
-    /* 유저 Auth 정보 ENDED */
-
-    /* 유저 상세정보 BEGIN */
-    setNickname(value: string) {
-      self.nickname = value
-    },
-
-    setPhoneNumber(value: string) {
-      self.phoneNumber = value
-    },
-
-    setSex(value: Sex) {
-      self.sex = value
-    },
-
-    setBirthday(value: string) {
-      self.birthday = value
-    },
-
-    setAddress(value: string | null) {
-      self.address = value || ""
-    },
-
-    setProfileImg(value: string | null) {
-      self.profileImage = value || ""
-    },
-    /* 유저 상세정보 ENDED */
 
     /**
-     * 유저 상세정보를 저장합니다
+     * getMe API 를 통하여, 받아온 정보를
+     * 유저 상세정보 - userDetail 에 저장합니다.
      * */
-    async setUserDetail(token: string) {
+    async userDetailHandler(token: string) {
       try {
         const { isSuccess, userDetail } = await getMe(token)
 
         if (!isSuccess) {
           return false
         }
-        // 유저 상세정보 저장
-        this.setNickname(userDetail.nickname)
-        this.setPhoneNumber(userDetail.phoneNumber)
-        this.setSex(userDetail.sex)
-        this.setBirthday(userDetail.birthday)
-        this.setAddress(userDetail.address)
-        this.setProfileImg(userDetail.profileImage)
 
-        return self
+        if (!userDetail) {
+          return false
+        }
+
+        // 유저 상세정보 저장
+        this.setUserDetail({
+          nickname: userDetail.nickname,
+          phoneNumber: userDetail.phoneNumber,
+          sex: userDetail.sex,
+          birthday: userDetail.birthday,
+          address: userDetail.address,
+          profileImage: userDetail.profileImage,
+          pushToken: userDetail.pushToken,
+        })
+
+        return true
       } catch (error) {
-        console.error("catch 에러!!! - setUserDetail", error)
+        console.error("catch 에러!!! - userDetailHandler", error)
         return false
       }
     },
 
     /**
-     * 로그인 (혹은 회원가입) 성공시, 유저 정보의 일부를 저장합니다.
-     * - token, provider, email
+     * 로그인 (혹은 회원가입) 성공시, 유저 Auth정보를 저장합니다.
+     * - 유저 Auth정보: token, provider, email
      *
-     * 이후, 유저 상세정보를 저장하는 함수 setUserDetail 를 호출합니다.
+     * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
+     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, "address", profileImage, pushToken
      *  */
     async loginHander(loginRequestBody: LoginRequestBody) {
       try {
@@ -186,23 +176,36 @@ export const UserStoreModel = types
           return false
         }
 
-        this.setLoggedIn(true)
-        this.setToken(token)
-        this.setProvider(loginRequestBody.provider)
-        this.setEmail(loginRequestBody.email)
+        if (!token) {
+          return false
+        }
 
-        const res = await this.setUserDetail(token)
-        return res
+        const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
+        if (!isUserDatailHandlerSuccess) {
+          return false
+        }
+
+        this.setUserAuth({
+          token,
+          provider: loginRequestBody.provider,
+          email: loginRequestBody.email,
+        })
+
+        this.setLoggedIn(true)
+        return true
         //
       } catch (error) {
-        console.error("catch 에러!!! - logInHander", error)
+        console.error("catch 에러!!! - loginHander", error)
         return false
         //
       }
     },
 
+    /**
+     * 로그아웃
+     * - UserStoreModel 초기화
+     * */
     logOut() {
-      // self.loggedIn = false
       this.reset()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

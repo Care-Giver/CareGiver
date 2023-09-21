@@ -60,9 +60,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     useShowBottomTab(navigation)
 
     const {
-      userStore: { switchType, loggedIn, setLoggedIn, loginHander, token, nickname, profileImage },
+      userStore: { switchType, loggedIn, token, userDetail },
     } = useStores()
-
     // ? 유저 프로필 정보
     const [userInfo, setUserInfo] = useState<UserProps | null>(user)
 
@@ -117,44 +116,6 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     return (
       <Screen preset="fixed">
-        <Pressable style={{ backgroundColor: "red", padding: 10 }}>
-          <PreBol16
-            text="유저정보 API 테스트"
-            onPress={() => {
-              getMe(token)
-            }}
-            color={GIVER_CASUAL_NAVY}
-          />
-          <DivisionLine />
-          <PreBol16
-            text="로그인 API 테스트"
-            onPress={async () => {
-              const res = await login({
-                email: "blah3@test.com",
-                nickname: "테스트9",
-                provider: "naver",
-                OAuthId: "blah-blah-blah-2",
-              })
-              console.log("로그인 API 테스트 res >>>", res)
-            }}
-            color={GIVER_CASUAL_NAVY}
-          />
-          <DivisionLine />
-          <PreBol16
-            text="MST loginHandler 테스트"
-            onPress={async () => {
-              const res = await loginHander({
-                email: "blah3@test.com",
-                nickname: "테스트9",
-                provider: "naver",
-                OAuthId: "blah-blah-blah-2",
-              })
-              console.log("MST loginHandler 테스트 res >>>", res)
-            }}
-            color={GIVER_CASUAL_NAVY}
-          />
-        </Pressable>
-
         {/* //! 로그인 상태일 때 */}
         {loggedIn ? (
           <>
@@ -162,7 +123,11 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             <Row style={styles.profileCard}>
               {/* //? 프로필 사진 */}
               <Image
-                source={profileImageUriHandler(images.default_pet_image_60, "small", profileImage)}
+                source={profileImageUriHandler(
+                  images.default_pet_image_60,
+                  "small",
+                  userDetail?.profileImage,
+                )}
                 style={styles.profileImg}
                 resizeMode="contain"
               />
@@ -170,7 +135,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
               <View style={styles.profileNameCard}>
                 {/* //? 사용자 이름 */}
                 <Row>
-                  <PreBol20 text={nickname} color={STRONG_LINE} />
+                  <PreBol20 text={userDetail?.nickname} color={STRONG_LINE} />
                   <PreMed20 text="님" color={STRONG_LINE} style={{ marginLeft: 2 }} />
                 </Row>
                 {/* //? 내 프로필 관리 버튼 */}
@@ -187,7 +152,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
             </Row>
 
             {/* //? divider */}
-            <View style={[styles.divisionLine]} />
+            <View style={styles.divisionLine} />
 
             {/* //* 반려동물 리스트 */}
             <View style={styles.petContainer}>
@@ -231,7 +196,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         )}
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
         {/* //* Care Giver 모드 전환 버튼 */}
         <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
           <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
@@ -240,27 +205,27 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
         </Pressable>
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
         <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
         {/* //* 환경설정 버튼 */}
         <MypageButton text="환경설정" onPress={handleSettingPress} />
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
         {/* //* 자주 묻는 질문 버튼 */}
         <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
         {/* //* 고객센터 버튼 */}
         <MypageButton text="고객 센터" onPress={handleServiceCenterPress} />
 
         {/* //? divider */}
-        <View style={[styles.divisionLine]} />
+        <View style={styles.divisionLine} />
       </Screen>
     )
   },

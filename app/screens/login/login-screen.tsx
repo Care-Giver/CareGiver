@@ -31,7 +31,7 @@ import { images } from "#images"
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
     const {
-      userStore: { loggedIn, setLoggedIn, setToken, provider },
+      userStore: { loggedIn, setLoggedIn, setToken, provider, loginHander },
     } = useStores()
 
     const [result, setResult] = useState<string>("")
@@ -217,8 +217,13 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     }
 
     const noAuthLogin = async () => {
-      setLoggedIn(true)
-      // goBack()
+      const res = await loginHander({
+        email: "blah3@test.com",
+        nickname: "테스트9",
+        provider: "naver",
+        OAuthId: "blah-blah-blah-2",
+      })
+      console.log("MST loginHandler 테스트 res >>>", res)
     }
 
     const logOutHanlder = () => {
@@ -310,7 +315,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           )}
           <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
-            <PreMed18 text="테스트용 로그인 (Auth 없음)" color={palette.white} />
+            <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
           </Button>
           <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
