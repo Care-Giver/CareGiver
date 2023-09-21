@@ -29,21 +29,21 @@ const pets = [
     petType: "중형견",
     species: "푸들",
     age: 7,
-    sex: "여",
+    sex: "FEMALE",
   },
   {
     name: "구름이",
     petType: "소형",
     species: "고양이",
     age: 15,
-    sex: "남",
+    sex: "MALE",
   },
   {
     name: "자두",
     petType: "소형",
     species: "고양이",
     age: 3,
-    sex: "남",
+    sex: "MALE",
   },
 ]
 

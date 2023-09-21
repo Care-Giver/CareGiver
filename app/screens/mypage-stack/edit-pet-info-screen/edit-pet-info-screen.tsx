@@ -28,7 +28,7 @@ import {
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { BODY, DEVICE_SCREEN_WIDTH, LBG } from "#theme"
+import { BODY, DEVICE_SCREEN_WIDTH } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
@@ -256,7 +256,7 @@ export const EditPetInfoScreen: FC<
               <ImageBackground
                 source={{ uri: item.profileImg }}
                 style={{
-                  width: 390,
+                  width: DEVICE_SCREEN_WIDTH,
                   height: 240,
                 }}
                 key={index}

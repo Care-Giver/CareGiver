@@ -1,5 +1,5 @@
 import { View, Text, FlatList } from "react-native"
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -24,7 +24,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     // const [pets, setPets] = useState<Pet[]>([])
     const { pets } = route.params
 
-    // useLayoutEffect(() => {
+    // useEffect(() => {
     //   async function fetchData() {
     //     petStore.setMyPets()
     //   }
@@ -59,6 +59,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                 onPress={() => {
                   navigate("edit-pet-info-screen")
                 }}
+                isDeletable={false}
               />
               <View style={styles.divisionLine} />
             </>
