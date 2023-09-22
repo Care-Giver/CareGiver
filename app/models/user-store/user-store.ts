@@ -21,6 +21,8 @@ interface UserAuth {
   email: string
 }
 
+type SocialLoginHanderParams = UserAuth
+
 /**
  * User Model is for both CareGiver and Client.
  */
@@ -167,7 +169,7 @@ export const UserStoreModel = types
      * - 유저 Auth정보: token, provider, email
      *
      * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
-     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, "address", profileImage, pushToken
+     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, address, profileImage, pushToken
      *  */
     async loginHander(loginRequestBody: LoginRequestBody) {
       try {
@@ -206,11 +208,75 @@ export const UserStoreModel = types
     },
 
     /**
+     * 카카오 - 구현완료
+     * 네이버 [개발중]
+     * 애플 [개발중]
+     *
+     * 소셜 로그인 인증 성공시, 유저 Auth정보를 저장합니다.
+     * - 유저 Auth정보: token, provider, email
+     *
+     * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
+     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, address, profileImage, pushToken
+     *  */
+    async socialLoginHander({ token, provider, email }: SocialLoginHanderParams) {
+      try {
+        if (!token) {
+          return false
+        }
+
+        const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
+        if (!isUserDatailHandlerSuccess) {
+          return false
+        }
+
+        this.setUserAuth({
+          token,
+          provider,
+          email,
+        })
+
+        this.setLoggedIn(true)
+
+        await delay(500)
+        // @ts-ignore
+        navigate("Searching", { screen: "search-screen" })
+        return true
+        //
+      } catch (error) {
+        console.error("catch 에러!!! - loginHander", error)
+        return false
+        //
+      }
+    },
+
+    /**
      * 로그아웃
      * - UserStoreModel 초기화
      * */
-    logOut() {
+    logoutHandler() {
       this.reset()
+
+      // TODO: provider 마다, 추가로 해야 할 동작이 다를 것임
+      /*         
+      switch (self.userAuth.provider) {
+          case "kakao":
+            kakaoLogOut()
+            break
+
+          case "naver":
+            naverLogOut()
+            break
+
+          case "apple":
+            break
+
+          case "google":
+            break
+
+          default:
+            break
+        } 
+        */
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

@@ -238,7 +238,6 @@ interface GetMeResult {
 export const getMe = async (token: string): Promise<GetMeResult> => {
   try {
     console.log("token", token)
-    console.log("!token", !token)
     if (!token) {
       alertModal("로그인이 필요합니다.", "토큰 값이 존재하지 않음")
       return { isSuccess: false, reason: "토큰 값이 존재하지 않음" }

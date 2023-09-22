@@ -11,56 +11,22 @@ import {
   PreMed18,
   Screen,
 } from "#components"
-import {
-  login,
-  logout,
-  unlink,
-  getProfile,
-  getAccessToken,
-  KakaoOAuthToken,
-  KakaoProfile,
-} from "@react-native-seoul/kakao-login"
 import appleAuth from "@invertase/react-native-apple-authentication"
 import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
 import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
-import {
-  AppleLoginOutput,
-  appleServerLogin,
-  naverServiceLogin,
-  kakaoServerLogin,
-  getMe,
-} from "#axios"
+import { appleServerLogin, naverServiceLogin } from "#axios"
 import { images } from "#images"
+import { kakaoLogin } from "./kakao-login"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
     const {
-      userStore: { loggedIn, setLoggedIn, logOut, userAuth, loginHander },
+      userStore: { loggedIn, setLoggedIn, logoutHandler, userAuth, loginHander, socialLoginHander },
     } = useStores()
 
     const [result, setResult] = useState<string>("")
-
-    /**
-     * [테스트 결과]
-     * login:
-     * - 로그인 진행
-     * - 딥링크를 통해, 카카오톡을 실행하며, 카카오톡에 로그인되어있다면
-     * - 개인정보 이용동의 후, 로그인 완료 처리됨
-     * - 만약, 카카오톡 접근이 불가하다면, loginWithKakaoAccount 를 호출하여 웹브라우저를 실행함
-     * - 이후 accessToken을 케어기버 서버로 보내 로그인 진행
-     */
-    const signInWithKakao = async (): Promise<string | false> => {
-      try {
-        const kakaoLoginResponse: KakaoOAuthToken = await login()
-        return kakaoLoginResponse.accessToken
-      } catch (err) {
-        console.error("login err", err)
-        alertModal("카카오 로그인 실패", err?.message)
-        return false
-      }
-    }
 
     /**
      * [테스트 결과]
@@ -150,91 +116,6 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       }
     }
 
-    /**
-     * [테스트 결과]
-     * getProfile:
-     * - 로그인 된 상태에서만 사용가능
-     * - 유저의 카카오 프로필 정보를 불러옴:
-     * {
-     *  genderNeedsAgreement: false,
-     *  emailNeedsAgreement: false,
-     *  birthyearNeedsAgreement: false,
-     *  birthdayNeedsAgreement: false,
-     *  phoneNumberNeedsAgreement: false,
-     *  isKorean: false,
-     *  isEmailValid: true,
-     *  birthyear: "null",
-     *  ageRange: "null",
-     *  isKoreanNeedsAgreement: false,
-     *  isEmailVerified: true,
-     *  id: "2860292165",
-     *  phoneNumber: "null",
-     *  thumbnaillmageUrI: null,
-     *  birthday: "null",
-     *  profilelmageUrl: null,
-     *  nickname: ".",
-     *  ageRangeNeedsAgreement: false,
-     *  email: "worldcup2022@kakao.com",
-     *  birthdayType: "null",
-     *  profileNeedsAgreement: false,
-     *  gender: "null",
-     *  name: "null",
-     * } */
-    const getKakaoProfile = async (): Promise<any> => {
-      try {
-        const profile: KakaoProfile = await getProfile()
-        // console.log("profile >>>", JSON.stringify(profile))
-        // TODO: POST SIGN-UP || SIGN-IN TO SERVER
-        //
-        // setLoggedIn(true)
-        // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
-
-        return {
-          isSuccess: true,
-          email: profile.email,
-        }
-      } catch (err) {
-        logOut()
-        console.error("getKProfile error", err)
-        alertModal("카카오 프로필 실패", err?.message)
-
-        return {
-          isSuccess: false,
-          reason: err?.message,
-        }
-      }
-    }
-
-    const kakaoLogin = async () => {
-      const accessToken = await signInWithKakao()
-      if (!accessToken) return
-
-      const { isSuccess, email, reason } = await getKakaoProfile()
-      if (!isSuccess) return
-
-      const { isAlreadySignedUp, token } = await kakaoServerLogin({ idToken: accessToken })
-      if (!isAlreadySignedUp) {
-        // 회원가입 진행
-        navigate("terms-of-service-screen", {
-          email,
-          provider: "kakao",
-          idToken: accessToken,
-        })
-        return
-      }
-
-      const { isSuccess: isGetMeSuccess, userDetail } = await getMe(token)
-      if (!isGetMeSuccess) return
-
-      // 로그인 진행
-      await loginHander({
-        email,
-        nickname: userDetail.nickname,
-        provider: "kakao",
-        OAuthId: token,
-      })
-    }
-
     const naverLogin = async () => {
       //
       await signInWithNaver()
@@ -262,47 +143,6 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       console.log("MST loginHandler 테스트 res >>>", res)
     }
 
-    const logOutHanlder = () => {
-      switch (userAuth.provider) {
-        case "kakao":
-          kakaoLogOut()
-          break
-
-        case "naver":
-          naverLogOut()
-          break
-
-        case "apple":
-          break
-
-        case "google":
-          break
-
-        default:
-          break
-      }
-    }
-
-    /**
-     * [테스트 결과]
-     * logout:
-     * - 로그아웃을 이행함. (unlink 와는 다름)
-     * - 다시 로그인 시도시
-     * - 1. 캐시가 남아있고 2. refreshToken 이 만료되지 않았다면,
-     * - 추가 카카오인증 처리 없이 로그인 되는 것으로 추정
-     */
-    const signOutWithKakao = async (): Promise<void> => {
-      try {
-        const message = await logout()
-        console.log("LogOut message >>>", message)
-        // setResult(message)
-      } catch (err) {
-        // setLoggedIn(false)
-        logOut()
-        console.error("signOut error", err)
-      }
-    }
-
     /**
      * [테스트 결과]
      * - 로그인 캐시를 삭제하여 다른 네이버 아이디로도 로그인 가능하도록 함.
@@ -312,18 +152,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       try {
         await NaverLogin.logout()
         // setLoggedIn(false)
-        logOut()
+        logoutHandler()
       } catch (err) {
         console.error("signOut error", err)
       }
-    }
-
-    const kakaoLogOut = async () => {
-      await signOutWithKakao()
-    }
-
-    const naverLogOut = async () => {
-      await signOutWithNaver()
     }
 
     // SIGN UP FLOW - UI RENDERING TEST
@@ -339,18 +171,23 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         <View style={styles.buttonBox}>
           <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
             <Image source={images.apple_icon} style={styles.icon} />
-            <PreMed18 text="Apple로 로그인" color={palette.black} />
+            <PreMed18 text="Apple로 로그인 [개발중]" color={palette.black} />
           </Button>
           <Button onPress={naverLogin} style={styles.naverLogin}>
             <Image source={images.naver_icon} style={styles.icon} />
-            <PreMed18 text="네이버 로그인" color={palette.white} />
+            <PreMed18 text="네이버 로그인 [개발중]" color={palette.white} />
           </Button>
-          <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
+          <Button
+            onPress={() => {
+              kakaoLogin(socialLoginHander, logoutHandler)
+            }}
+            style={styles.kakaoLogin}
+          >
             <Image source={images.kakao_icon} style={styles.icon} />
-            <PreMed18 text="카카오 로그인" color={palette.black} />
+            <PreMed18 text="카카오 로그인 [구현완료]" color={palette.black} />
           </Button>
           {loggedIn && (
-            <Button onPress={logOutHanlder} style={styles.logout}>
+            <Button onPress={logoutHandler} style={styles.logout}>
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
           )}
