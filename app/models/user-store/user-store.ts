@@ -2,7 +2,7 @@ import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-import { getMe, login, LoginRequestBody, UserDetail } from "#axios"
+import { getMe, login, LoginRequestBody, Sex, UserDetail } from "#axios"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -67,6 +67,18 @@ export const UserStoreModel = types
       })
       return {
         ...self,
+      }
+    },
+
+    /** 성별 (sex) 정보를 enum 값 대신 한글로 리턴합니다. */
+    get sexInKorean() {
+      switch (self.userDetail?.sex) {
+        case Sex.MALE:
+          return "남성"
+        case Sex.FEMALE:
+          return "여성"
+        default:
+          return "오류"
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

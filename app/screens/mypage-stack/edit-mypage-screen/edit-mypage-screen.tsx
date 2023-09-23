@@ -26,7 +26,7 @@ export const EditMypageScreen: FC<
   //console.log("route @EditMypageScreen", route)
 
   const {
-    userStore: { userAuth, userDetail },
+    userStore: { userAuth, userDetail, sexInKorean },
   } = useStores()
 
   //* <변수>위주 정리:
@@ -172,7 +172,7 @@ export const EditMypageScreen: FC<
       />
 
       {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={userDetail.sex} showOption={editable} />
+      <UserOrPetProfileInfo title={"성별"} profileInfo={sexInKorean} showOption={editable} />
 
       {/* //* 이메일 */}
       <UserOrPetProfileInfo title={"이메일"} profileInfo={userAuth.email} showOption={editable} />
