@@ -1,17 +1,39 @@
-import { View, Pressable, Image } from "react-native"
+import { View, TouchableOpacity, Image, ViewStyle, StyleProp } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { Row } from "../basics/row/row"
+import { Pet, PetSex } from "#models"
 
-export const PetProfileCard = (props) => {
-  const { petData, style, index, onPress } = props
+interface PetProfileCardProps {
+  /**
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
+   */
+  style?: StyleProp<ViewStyle>
+
+  /**
+   * 펫 데이터
+   * TODO: Pet 타입으로 변경
+   */
+  petData: Pet
+  index?: number
+  onPress: () => void
+
+  /**
+   * 삭제 행위 가능 여부
+   */
+  isDeletable?: boolean
+}
+
+export const PetProfileCard = (props: PetProfileCardProps) => {
+  const { petData, style, index, onPress, isDeletable = true } = props
   const { name, petType, species, age, sex } = petData
 
+  console.log("sex", sex)
   let _sex = ""
-  if (sex === "male" || sex === "남") {
+  if (sex === PetSex.MALE) {
     _sex = "남"
   } else {
     _sex = "여"
@@ -22,7 +44,7 @@ export const PetProfileCard = (props) => {
   }
 
   return (
-    <Pressable style={[styles.root, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.root, style]} onPress={onPress}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <Row>
         <Image style={styles.image} source={images.default_pet_image_60} />
@@ -47,13 +69,15 @@ export const PetProfileCard = (props) => {
         </View>
 
         {/* //? 삭제 버튼 */}
-        <Pressable onPress={handleDeleting} style={styles.deleteButtonContainer}>
-          <Image style={styles.deleteButton} source={images.x_grey} />
-        </Pressable>
+        {isDeletable && (
+          <TouchableOpacity onPress={handleDeleting} style={styles.deleteButtonContainer}>
+            <Image style={styles.deleteButton} source={images.x_grey} />
+          </TouchableOpacity>
+        )}
       </Row>
 
       {/* //?  카드 하단, 구분선
       <DivisionLine color={LBG} /> */}
-    </Pressable>
+    </TouchableOpacity>
   )
 }

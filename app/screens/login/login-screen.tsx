@@ -1,100 +1,30 @@
 import React, { FC, useState } from "react"
-import { Alert, StyleSheet, View, ViewStyle } from "react-native"
+import { Alert, Image, ScrollView, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
-import { Button, ConditionalButton, DivisionLine, PreBol16, Screen } from "#components"
 import {
-  login,
-  logout,
-  unlink,
-  getProfile,
-  getAccessToken,
-  KakaoOAuthToken,
-  KakaoProfile,
-} from "@react-native-seoul/kakao-login"
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  Button,
+  ConditionalButton,
+  DivisionLine,
+  PreMed18,
+  Screen,
+} from "#components"
 import appleAuth from "@invertase/react-native-apple-authentication"
-import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
-import { GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
+import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
-import { AppleLoginOutput, appleServerLogin, naverServiceLogin, kakaoServerLogin } from "#axios"
+import { appleServerLogin } from "#axios"
+import { images } from "#images"
+import { kakaoLogin } from "./kakao-login"
+import { naverLogin } from "./naver-login"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
     const {
-      userStore: { loggedIn, setLoggedIn, setRefreshToken, provider },
+      userStore: { loggedIn, setLoggedIn, logoutHandler, userAuth, loginHander, socialLoginHander },
     } = useStores()
-
-    const [result, setResult] = useState<string>("")
-
-    /**
-     * [테스트 결과]
-     * login:
-     * - 로그인 진행
-     * - 딥링크를 통해, 카카오톡을 실행하며, 카카오톡에 로그인되어있다면
-     * - 개인정보 이용동의 후, 로그인 완료 처리됨
-     * - 만약, 카카오톡 접근이 불가하다면, loginWithKakaoAccount 를 호출하여 웹브라우저를 실행함
-     * - 이후 accessToken을 케어기버 서버로 보내 로그인 진행
-     */
-    const signInWithKakao = async (): Promise<void> => {
-      try {
-        const kakaoLoginResponse: KakaoOAuthToken = await login()
-
-        const userToken = await kakaoServerLogin(kakaoLoginResponse.accessToken)
-
-        setLoggedIn(true)
-        setRefreshToken(userToken)
-
-        setResult(userToken)
-      } catch (err) {
-        console.error("login err", err)
-        alertModal("카카오 로그인 실패", err?.message)
-      }
-    }
-
-    /**
-     * [테스트 결과]
-     * login:
-     * - 로그인 진행
-     * - 웹 뷰를 통해 네이버 로그인을 진행하고, accessToken을 받아옴.
-     * - accessToken을 백엔드 서버에 전달하여 로그인된 유저 토큰을 받아옴.
-     */
-    async function signInWithNaver() {
-      try {
-        const consumerKey = "jqWkGdkKVZ3RwlfExH0O"
-        const consumerSecret = "Xi6mBF88oM"
-        const appName = "Care Giver"
-        const serviceUrlScheme = "caregivernaverlogin"
-        const { failureResponse, successResponse } = await NaverLogin.login({
-          appName,
-          consumerKey,
-          consumerSecret,
-          serviceUrlScheme,
-        })
-
-        if (failureResponse) {
-          console.error("naverLogin Error: ", failureResponse.message)
-          alertModal("네이버 로그인 실패", failureResponse.message)
-          return
-        }
-
-        if (successResponse) {
-          console.log(successResponse)
-          // TODO: Send the accessToken to your server for verification and sign-in
-          const userToken = await naverServiceLogin(successResponse.accessToken)
-
-          setLoggedIn(true)
-          setRefreshToken(userToken)
-
-          setResult(userToken)
-        }
-        return successResponse.accessToken
-      } catch (error) {
-        console.error("Naver sign-in error", error)
-        alertModal("네이버 로그인 실패", error?.message)
-      }
-    }
 
     /**
      * [테스트 결과]
@@ -102,7 +32,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
      * - 로그인 진행
      * - 현재 기기에 등록되어있는 AppleID를 가지고 와 로그인 진행
      * - 해당 아이디에 비밀번호 입력 후, 로그인 완료 처리됨
-     * - 유저 토큰을 setRefreshToken에 일단 등록하나, 명칭 변경이 필요해보임.
+     * - 유저 토큰을 setToken에 일단 등록하나, 명칭 변경이 필요해보임.
      */
     const signInWithApple = async (): Promise<void> => {
       try {
@@ -125,11 +55,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         const userToken = await appleServerLogin(identityToken)
 
         // 4. state를 업데이트한다.
-        setLoggedIn(true)
-        setRefreshToken(userToken)
-
-        // setResult 함수 용도를 알 수 없음. 일단 여기 jwtToken 저장함.
-        setResult(userToken)
+        // setLoggedIn(true)
+        // setToken(userToken)
       } catch (error) {
         if (error.code === "1001") {
           console.log("Apple sign-in was cancelled by the user.")
@@ -141,62 +68,6 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       }
     }
 
-    /**
-     * [테스트 결과]
-     * getProfile:
-     * - 로그인 된 상태에서만 사용가능
-     * - 유저의 카카오 프로필 정보를 불러옴:
-     * {
-     *  genderNeedsAgreement: false,
-     *  emailNeedsAgreement: false,
-     *  birthyearNeedsAgreement: false,
-     *  birthdayNeedsAgreement: false,
-     *  phoneNumberNeedsAgreement: false,
-     *  isKorean: false,
-     *  isEmailValid: true,
-     *  birthyear: "null",
-     *  ageRange: "null",
-     *  isKoreanNeedsAgreement: false,
-     *  isEmailVerified: true,
-     *  id: "2860292165",
-     *  phoneNumber: "null",
-     *  thumbnaillmageUrI: null,
-     *  birthday: "null",
-     *  profilelmageUrl: null,
-     *  nickname: ".",
-     *  ageRangeNeedsAgreement: false,
-     *  email: "worldcup2022@kakao.com",
-     *  birthdayType: "null",
-     *  profileNeedsAgreement: false,
-     *  gender: "null",
-     *  name: "null",
-     * } */
-    const getKProfile = async (): Promise<void> => {
-      try {
-        const profile: KakaoProfile = await getProfile()
-        // console.log("profile >>>", JSON.stringify(profile))
-        // TODO: POST SIGN-UP || SIGN-IN TO SERVER
-        //
-        setLoggedIn(true)
-        goBack()
-      } catch (err) {
-        setLoggedIn(false)
-        console.error("getKProfile error", err)
-        alertModal("카카오 프로필 실패", err?.message)
-      }
-    }
-
-    const kakaoLogin = async () => {
-      await signInWithKakao()
-      goBack()
-    }
-
-    const naverLogin = async () => {
-      //
-      await signInWithNaver()
-      goBack()
-    }
-
     const googleLogin = async () => {
       //
       alertModal("구글 로그인", "개발중")
@@ -204,75 +75,20 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const appleLogin = async () => {
       //
+      alertModal("애플 로그인", "개발중")
+      return
+
       await signInWithApple()
-      goBack()
     }
 
     const noAuthLogin = async () => {
-      setLoggedIn(true)
-      goBack()
-    }
-
-    const logOutHanlder = () => {
-      switch (provider) {
-        case "kakao":
-          kakaoLogOut()
-          break
-
-        case "naver":
-          naverLogOut()
-          break
-
-        case "apple":
-          break
-
-        case "google":
-          break
-
-        default:
-          break
-      }
-    }
-
-    /**
-     * [테스트 결과]
-     * logout:
-     * - 로그아웃을 이행함. (unlink 와는 다름)
-     * - 다시 로그인 시도시
-     * - 1. 캐시가 남아있고 2. refreshToken 이 만료되지 않았다면,
-     * - 추가 카카오인증 처리 없이 로그인 되는 것으로 추정
-     */
-    const signOutWithKakao = async (): Promise<void> => {
-      try {
-        const message = await logout()
-        console.log("LogOut message >>>", message)
-        // setResult(message)
-      } catch (err) {
-        setLoggedIn(false)
-        console.error("signOut error", err)
-      }
-    }
-
-    /**
-     * [테스트 결과]
-     * - 로그인 캐시를 삭제하여 다른 네이버 아이디로도 로그인 가능하도록 함.
-     * - 해당 함수 호출하지 않을 시 이전에 캐싱된 네이버 아이디로 로그인 됨.
-     */
-    const signOutWithNaver = async (): Promise<void> => {
-      try {
-        await NaverLogin.logout()
-        setLoggedIn(false)
-      } catch (err) {
-        console.error("signOut error", err)
-      }
-    }
-
-    const kakaoLogOut = async () => {
-      await signOutWithKakao()
-    }
-
-    const naverLogOut = async () => {
-      await signOutWithNaver()
+      const res = await loginHander({
+        email: "blah3@test.com",
+        nickname: "테스트9",
+        provider: "naver",
+        OAuthId: "blah-blah-blah-2",
+      })
+      console.log("MST loginHandler 테스트 res >>>", res)
     }
 
     // SIGN UP FLOW - UI RENDERING TEST
@@ -282,39 +98,56 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     return (
       <Screen testID="Login">
+        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+        <Image source={images.cg_login_banner} style={styles.bannerImage} />
+
         <View style={styles.buttonBox}>
-          <Button onPress={kakaoLogin} style={styles.kakaoLogin}>
-            <PreBol16 text="카카오 로그인" color={palette.black} />
-          </Button>
-          <Button onPress={naverLogin} style={styles.naverLogin}>
-            <PreBol16 text="네이버 로그인" color={palette.white} />
-          </Button>
           <Button onPress={appleLogin} style={styles.appleGoogleLogin}>
-            <PreBol16 text="애플 로그인" color={palette.white} />
+            <Image source={images.apple_icon} style={styles.icon} />
+            <PreMed18 text="Apple로 로그인 [개발중]" color={palette.black} />
           </Button>
+          <Button
+            onPress={() => {
+              naverLogin(socialLoginHander, logoutHandler)
+            }}
+            style={styles.naverLogin}
+          >
+            <Image source={images.naver_icon} style={styles.icon} />
+            <PreMed18 text="네이버 로그인 [구현완료]" color={palette.white} />
+          </Button>
+          <Button
+            onPress={() => {
+              kakaoLogin(socialLoginHander, logoutHandler)
+            }}
+            style={styles.kakaoLogin}
+          >
+            <Image source={images.kakao_icon} style={styles.icon} />
+            <PreMed18 text="카카오 로그인 [구현완료]" color={palette.black} />
+          </Button>
+          {loggedIn && (
+            <Button onPress={logoutHandler} style={styles.logout}>
+              <PreMed18 text="테스트용 로그아웃" color={palette.white} />
+            </Button>
+          )}
+          <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
-            <PreBol16 text="테스트용 로그인 (Auth 없음)" color={palette.white} />
+            <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
+          </Button>
+          <Button onPress={signUpTest} style={styles.noAuthLogin}>
+            <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button>
         </View>
 
-        {loggedIn && (
-          <Button onPress={logOutHanlder} style={styles.logout}>
-            <PreBol16 text="테스트용 로그아웃" color={palette.white} />
-          </Button>
-        )}
-
-        <DivisionLine mv={20} />
-        <Button onPress={signUpTest} style={styles.appleGoogleLogin}>
-          <PreBol16 text="테스트용 회원가입" color={palette.white} />
-        </Button>
+        {/* </ScrollView> */}
       </Screen>
     )
   },
 )
 
 const button: ViewStyle = {
+  flexDirection: "row",
   width: "100%",
-  height: 56,
+  height: 54,
   borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
@@ -322,10 +155,30 @@ const button: ViewStyle = {
 }
 
 const styles = StyleSheet.create({
+  bannerImage: {
+    width: 138,
+    height: 108,
+    // top: 200,
+    alignSelf: "center",
+    marginTop: 174,
+  },
+
   buttonBox: {
-    // backgroundColor: "grey",
     justifyContent: "space-around",
-    height: 300,
+    height: 400,
+    // position: "absolute",
+    // bottom: BOTTOM_HEIGHT,
+    // left: BASIC_BACKGROUND_PADDING_WIDTH,
+    // right: BASIC_BACKGROUND_PADDING_WIDTH,
+    marginTop: "auto",
+    marginBottom: BOTTOM_HEIGHT,
+  },
+
+  icon: {
+    width: 28,
+    height: 28,
+    position: "absolute",
+    left: 14,
   },
 
   kakaoLogin: {
@@ -340,7 +193,9 @@ const styles = StyleSheet.create({
 
   appleGoogleLogin: {
     ...button,
-    backgroundColor: "black",
+    borderColor: palette.black,
+    borderWidth: 1,
+    backgroundColor: palette.white,
   },
 
   noAuthLogin: {

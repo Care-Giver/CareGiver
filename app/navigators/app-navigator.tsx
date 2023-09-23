@@ -22,8 +22,14 @@ import {
   CgMypageStack,
   StatisticsStack,
 } from "./cg-stack-navigator"
+import {
+  LoginSignUpStack,
+  LoginSignUpStackNavigatorParamList,
+} from "./login-sign-up-stack-navigator"
 
-export type NavigatorParamList = CLStackNavigatorParamList & CGStackNavigatorParamList
+export type NavigatorParamList = CLStackNavigatorParamList &
+  CGStackNavigatorParamList &
+  LoginSignUpStackNavigatorParamList
 
 const clBottomTabLabel = {
   favortie: "즐겨찾기",
@@ -161,6 +167,7 @@ const AllTabs = observer(function AllTabs() {
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
   // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
   // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
+
   return (
     <>
       {type === Type.CLIENT && <ClientTabs />}
@@ -171,7 +178,11 @@ const AllTabs = observer(function AllTabs() {
 })
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
-export const AppNavigator = (props: NavigationProps) => {
+export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
+  const {
+    userStore: { isLoggedIn },
+  } = useStores()
+
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
 
@@ -204,6 +215,8 @@ export const AppNavigator = (props: NavigationProps) => {
     },
   }
 
+  console.log("isLoggedIn", isLoggedIn)
+
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -212,10 +225,10 @@ export const AppNavigator = (props: NavigationProps) => {
       // @ts-ignore
       linking={linking}
     >
-      <AllTabs />
+      {isLoggedIn ? <AllTabs /> : <LoginSignUpStack />}
     </NavigationContainer>
   )
-}
+})
 
 AppNavigator.displayName = "AppNavigator"
 

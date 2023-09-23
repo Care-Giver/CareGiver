@@ -7,10 +7,10 @@ import { STRONG_LINE } from "#theme"
 import { images } from "#images"
 
 export const MypageButton = (props: MypageButtonProps) => {
-  const { text, style, onPress } = props
+  const { text, style, onPress, opacity, disabled } = props
   return (
-    <Pressable style={[styles.root, style]} onPress={onPress} disabled={props.disabled}>
-      <PreMed16 text={text} color={STRONG_LINE} style={{ opacity: props.opacity }} />
+    <Pressable style={[styles.root, style]} onPress={onPress} disabled={disabled}>
+      <PreMed16 text={text} color={STRONG_LINE} style={{ opacity }} />
       <Image source={images.arrow_right} style={styles.arrow} />
     </Pressable>
   )
