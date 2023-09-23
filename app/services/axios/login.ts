@@ -1,71 +1,89 @@
 import axios from "axios"
 import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
 
-interface AppleLoginInput {
+type SocialLoginRequestBody = {
   idToken: string
 }
+type AppleServerLoginRequestBody = SocialLoginRequestBody
+type NaverServiceLoginRequestBody = SocialLoginRequestBody
+type KakaoServerLoginRequestBody = SocialLoginRequestBody
 
-interface NaverServiceLoginRequestBody {
-  idToken: string
-}
-
-interface KakaoServerLoginRequestBody {
-  idToken: string
-}
-
-export interface AppleLoginOutput extends GeneralResponse {
+interface SocialLoginResponse extends GeneralResponse {
   token?: string
 }
 
-export interface NaverServiceLoginResponse extends GeneralResponse {
-  token?: string
-}
+type AppleServerLoginResponse = SocialLoginResponse
+type NaverServiceLoginResponse = SocialLoginResponse
+type KakaoServerLoginResponse = SocialLoginResponse
 
-export interface KakaoServerLoginResponse extends GeneralResponse {
-  token?: string
-}
-
-/**
- * 애플 로그인 요청을 서버에 보낸다.
- * @returns {Promise<string>} token
- */
-export const appleServerLogin = async (idToken: string): Promise<string> => {
-  try {
-    const response = await axios.post<AppleLoginOutput>(`${BASE_URL}/user/login/apple`, {
-      idToken,
-    } as AppleLoginInput)
-
-    if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
-      return error
-    }
-
-    return response.data.token
-  } catch (error) {
-    console.error("catch 에러!!!", error)
-    return ""
-  }
-}
-
-interface NaverServiceLoginReturn {
+interface SocialLoginReturn {
   /**
    * DB 내 유저정보가 있는지 여부.
    * 이미 존재할 경우, true
    * 존재하지 않을경우, false 입니다.
    *
    * - 유저정보가 존재할 경우, 이미 이전에 회원가입을 한 유저임.
-   * - token 값 리턴함. 네이버 로그인 플로우 진행
+   * - token 값 리턴함. 소셜 로그인 플로우 진행
    */
   isAlreadySignedUp: boolean
   reason?: string
   token?: string
 }
 
+type AppleServerLoginReturn = SocialLoginReturn
+type NaverServiceLoginReturn = SocialLoginReturn
+type KakaoServerLoginReturn = SocialLoginReturn
+
+/**
+ * 애플 로그인 요청을 서버에 보낸다.
+ * - 성공(true): DB 내 유저정보가 있음. token 값 리턴함. 애플 로그인 플로우 진행
+ * - 실퍠(false): DB 내 유저정보가 없음. 회원가입 플로우 진행
+ *
+ * @returns AppleServerLoginReturn
+ */
+export const appleServerLogin = async (
+  post: AppleServerLoginRequestBody,
+): Promise<AppleServerLoginReturn> => {
+  try {
+    const response = await axios.post<AppleServerLoginResponse>(
+      `${BASE_URL}/user/login/apple`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response.data.ok) {
+      const error = response.data.error
+      console.error("response.data.error - appleServerLogin 에러!!!", error)
+      return {
+        isAlreadySignedUp: false,
+        reason: "유저정보 없음",
+      }
+    }
+
+    console.log("response.data - appleServerLogin ", response.data)
+    return {
+      isAlreadySignedUp: true,
+      token: response.data.token,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return {
+      isAlreadySignedUp: false,
+      reason: "catch 에러",
+    }
+  }
+}
+
 /**
  * 네이버 로그인 요청을 서버에 보낸다.
- * @returns {Promise<string>} token
+ * - 성공(true): DB 내 유저정보가 있음. token 값 리턴함. 네이버 로그인 플로우 진행
+ * - 실퍠(false): DB 내 유저정보가 없음. 회원가입 플로우 진행
+ *
+ * @returns NaverServiceLoginReturn
  */
 export const naverServiceLogin = async (
   post: NaverServiceLoginRequestBody,
@@ -104,25 +122,12 @@ export const naverServiceLogin = async (
   }
 }
 
-interface KakaoServerLoginReturn {
-  /**
-   * DB 내 유저정보가 있는지 여부.
-   * 이미 존재할 경우, true
-   * 존재하지 않을경우, false 입니다.
-   *
-   * - 유저정보가 존재할 경우, 이미 이전에 회원가입을 한 유저임.
-   * - token 값 리턴함. 네이버 로그인 플로우 진행
-   */
-  isAlreadySignedUp: boolean
-  reason?: string
-  token?: string
-}
-
 /**
  * 카카오 로그인 요청을 서버에 보낸다.
  * - 성공(true): DB 내 유저정보가 있음. token 값 리턴함. 카카오 로그인 플로우 진행
  * - 실퍠(false): DB 내 유저정보가 없음. 회원가입 플로우 진행
- * @returns {Promise<boolean>} 성공여부
+ *
+ * @returns KakaoServerLoginReturn
  */
 export const kakaoServerLogin = async (
   post: KakaoServerLoginRequestBody,

@@ -78,6 +78,13 @@ async function signInWithNaver() {
   }
 }
 
+/**
+ * 네이버 로그인 플로우를 진행한다
+ * @param socialLoginHander MST userStore 의 action 이다
+ * @param logoutHandler MST userStore 의 action 이다
+ *
+ * @returns {Promise<null>}
+ */
 export const naverLogin = async (socialLoginHander, logoutHandler) => {
   const accessToken = await signInWithNaver()
   if (!accessToken) return
@@ -99,6 +106,7 @@ export const naverLogin = async (socialLoginHander, logoutHandler) => {
 
   if (!token) {
     alertModal("네이버 로그인 진행실패", "토큰값을 얻어내지 못했습니다.")
+    return
   }
 
   // MST 로그인 진행

@@ -125,6 +125,7 @@ export const kakaoLogin = async (socialLoginHander, logoutHandler) => {
 
   if (!token) {
     alertModal("카카오 로그인 진행실패", "토큰값을 얻어내지 못했습니다.")
+    return
   }
 
   // MST 로그인 진행
