@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
@@ -26,6 +26,7 @@ import {
   LoginSignUpStack,
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
+import axios from "axios"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -157,11 +158,20 @@ const CareGiverTabs = () => {
 
 /**
  * 클라이언트 탭들과 케어기버 탭들을 전환 가능하게 해주는 컴포넌트
+ * - 로그인시 보여지는 네비게이터 입니다.
+ * - type 값에 따라 클라이언트 탭 네비게이터와 케어기버 탭 네비게이터를 전환합니다.
  */
 const AllTabs = observer(function AllTabs() {
   const {
-    userStore: { type, onSwitchingType },
+    userStore: { type, onSwitchingType, userAuth },
   } = useStores()
+
+  useEffect(() => {
+    //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+    axios.defaults.headers.common["x-jwt"] = userAuth.token
+    axios.defaults.headers.common.Accept = "Application/json"
+  }, [])
+
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?

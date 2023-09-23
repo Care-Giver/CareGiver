@@ -11,6 +11,7 @@ import { images } from "#images"
 import { kakaoLogin } from "./kakao-login"
 import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
+import dayjs from "dayjs"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -35,7 +36,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     // SIGN UP FLOW - UI RENDERING TEST
     const signUpTest = async () => {
-      navigate("terms-of-service-screen")
+      navigate("terms-of-service-screen", {
+        email: `${dayjs().unix()}@test.com`,
+        provider: "naver", // 하드코딩
+        idToken: `test-idtoken-${dayjs().unix()}`,
+      })
     }
 
     const isIOS = Platform.OS === "ios"

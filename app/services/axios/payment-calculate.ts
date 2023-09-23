@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 interface Fee {
   subTotalFee: number
@@ -26,7 +26,6 @@ export const postVisitingTotalFee = async (post: CalculateVisitingTotalFeeInput)
     const response = await axios.post<CalculateVisitingTotalFeeInputResponse>(
       `${BASE_URL}/payment/visiting-booking/calculate`,
       post,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -66,7 +65,6 @@ export const postCrecheTotalFee = async (post: CalculateCrecheTotalFeeInput): Pr
     const response = await axios.post<CalculateCrecheTotalFeeInputResponse>(
       `${BASE_URL}/payment/creche-booking/calculate`,
       post,
-      CONFIG,
     )
 
     if (!response.data.ok) {

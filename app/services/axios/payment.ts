@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface CreatePaymentInput {
   imp_uid: string
@@ -18,7 +18,7 @@ export interface CreatePaymentResponse extends GeneralResponse {
  */
 export const postPayment = async (post: CreatePaymentInput): Promise<CreatePaymentResponse> => {
   try {
-    const response = await axios.post<CreatePaymentResponse>(`${BASE_URL}/payment`, post, CONFIG)
+    const response = await axios.post<CreatePaymentResponse>(`${BASE_URL}/payment`, post)
 
     if (!response.data.ok) {
       const error = response.data

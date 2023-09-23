@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface CrecheAvailableDates {
   id: number
@@ -21,10 +21,7 @@ interface CrecheDaysResponse extends GeneralResponse {
  */
 export const getCrecheDays = async (crecheId: number): Promise<CrecheAvailableDates[]> => {
   try {
-    const response = await axios.get<CrecheDaysResponse>(
-      `${BASE_URL}/creche-day/${crecheId}`,
-      CONFIG,
-    )
+    const response = await axios.get<CrecheDaysResponse>(`${BASE_URL}/creche-day/${crecheId}`)
 
     if (!response.data.ok) {
       const error = response.data.error
@@ -74,7 +71,7 @@ interface PostCrecheDayResponse extends GeneralResponse {
  */
 export const postCrecheDay = async (data: PostCrecheDayBody) => {
   try {
-    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-day`, data, CONFIG)
+    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-day`, data)
 
     if (!response.data.ok) {
       const error = response.data.error

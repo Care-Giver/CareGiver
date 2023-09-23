@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { ratingRound } from "../../utils/format"
 import {
   Amenity,
@@ -42,7 +42,6 @@ export const getVisitingsSearch = async (
     const response = await axios.post<VisitingsSearchRequestResponse>(
       `${BASE_URL}/visitings/search`,
       requestBody,
-      CONFIG,
     )
     // console.log("response >>>", response)
     // console.log("response.data >>>", response.data.visitings)

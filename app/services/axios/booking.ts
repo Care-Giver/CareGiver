@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
 
@@ -31,7 +31,6 @@ export const postCrecheBooking = async (
     const response = await axios.post<CreateCrecheBookingInputResponse>(
       `${BASE_URL}/booking/creche`,
       post,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -97,7 +96,6 @@ export const postVisitingBooking = async (
     const response = await axios.post<CreateVisitingBookingResponse>(
       `${BASE_URL}/booking/visiting`,
       post,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -232,7 +230,6 @@ export const getCrechePetsitters = async (userId: number): Promise<CrecheBooking
   try {
     const response = await axios.get<CrecheBookingsResponse>(
       `${BASE_URL}/booking/creche?userId=${userId}`,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -260,7 +257,6 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
   try {
     const response = await axios.get<VisitingBookingResponse>(
       `${BASE_URL}/booking/visiting?userId=${userId}`,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -285,10 +281,7 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
  */
 export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
   try {
-    const response = await axios.get<CurrentBookingResponse>(
-      `${BASE_URL}/user/my-current-bookings`,
-      CONFIG,
-    )
+    const response = await axios.get<CurrentBookingResponse>(`${BASE_URL}/user/my-current-bookings`)
 
     if (!response.data.ok) {
       const error = response.data.error
@@ -318,7 +311,6 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
   try {
     const response = await axios.get<PreviousBookingResponse>(
       `${BASE_URL}/user/my-previous-bookings`,
-      CONFIG,
     )
 
     // console.debug("[test] >>>", response.data)
@@ -343,7 +335,6 @@ export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams |
   try {
     const response = await axios.get<PreviousBookingResponse>(
       `${BASE_URL}/user/my-previous-bookings`,
-      CONFIG,
     )
 
     if (!response.data.ok) {

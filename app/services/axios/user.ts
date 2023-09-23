@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { AuthProvider } from "#models"
 import { alertModal } from "../../utils/alert-modal"
 
@@ -43,7 +43,11 @@ interface SendSMSRequestBody {
  */
 export const sendSMS = async (post: SendSMSRequestBody): Promise<boolean> => {
   try {
-    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/sms`, post, CONFIG)
+    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/sms`, post, {
+      headers: {
+        Accept: "Application/json",
+      },
+    })
 
     if (!response?.data || !response?.data?.ok) {
       console.error("response.data.error 에러!!!", response.data.error)
@@ -72,11 +76,11 @@ interface VerifySMSRequestBody {
  */
 export const verifySMS = async (post: VerifySMSRequestBody): Promise<boolean> => {
   try {
-    const response = await axios.patch<GeneralResponse>(
-      `${BASE_URL}/user/sms/confirm`,
-      post,
-      CONFIG,
-    )
+    const response = await axios.patch<GeneralResponse>(`${BASE_URL}/user/sms/confirm`, post, {
+      headers: {
+        Accept: "Application/json",
+      },
+    })
     console.log("post", post)
 
     if (!response.data) {
@@ -146,10 +150,6 @@ export const signUp = async (post: SignUpRequestBody): Promise<SignUpResult> => 
     const response = await axios.post(`${BASE_URL}/user/signup`, post, {
       headers: { Accept: "Application/json" },
     })
-    console.log("response ♦️", response)
-    console.log("response.headers ♦️", response.headers)
-    console.log("response.config.data ♦️", response?.config?.data)
-    console.log("response?.data ♦️", response?.data)
 
     // if (!response.data || !response?.data?.ok) {
     if (!response.data) {
@@ -194,10 +194,6 @@ export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
     const response = await axios.post<LoginResponse>(`${BASE_URL}/user/login`, post, {
       headers: { Accept: "Application/json" },
     })
-    console.log("response ♦️", response)
-    console.log("response.headers ♦️", response.headers)
-    console.log("response.config.data ♦️", response?.config?.data)
-    console.log("response?.data ♦️", response?.data)
 
     if (!response.data || !response?.data?.ok) {
       // if (!response.data) {
@@ -205,7 +201,9 @@ export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
       return { isSuccess: false, reason: response.data.error }
     }
 
-    return { isSuccess: true, token: response.data.token }
+    const token = response.data.token
+    axios.defaults.headers.common["x-jwt"] = token
+    return { isSuccess: true, token }
   } catch (error) {
     console.error("catch 에러!!! - login", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
@@ -254,18 +252,6 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
       console.error("/user/me API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-
-    console.log("response >>>", response)
-    console.log("response.data >>>", response.data)
-    console.log("➡️", {
-      nickname: response.data.user.nickname,
-      phoneNumber: response.data.user.phoneNumber,
-      sex: response.data.user.sex,
-      birthday: response.data.user.birthday,
-      address: response.data.user.address,
-      profileImage: response.data.user.profileImage,
-      pushToken: response.data.user.pushToken,
-    })
 
     return {
       isSuccess: true,

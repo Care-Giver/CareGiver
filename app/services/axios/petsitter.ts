@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface Item {
   id: number
@@ -45,7 +45,6 @@ export const getPetsitterVisitings = async (visitingId: number): Promise<Petsitt
   try {
     const response = await axios.get<PetsitterVisitingResponse>(
       `${BASE_URL}/visiting/${visitingId}`,
-      CONFIG,
     )
 
     if (!response.data.ok) {
@@ -102,10 +101,7 @@ interface PetsitterCrecheResponse extends GeneralResponse {
  */
 export const getPetsitterCreches = async (crecheId: number): Promise<PetsitterCreche> => {
   try {
-    const response = await axios.get<PetsitterCrecheResponse>(
-      `${BASE_URL}/creche/${crecheId}`,
-      CONFIG,
-    )
+    const response = await axios.get<PetsitterCrecheResponse>(`${BASE_URL}/creche/${crecheId}`)
 
     if (!response.data.ok) {
       const error = response.data.error

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface Species {
   id: number
@@ -45,10 +45,7 @@ interface confirmedBookingssResponse extends GeneralResponse {
  */
 export const getconfirmedBookings = async (): Promise<ConfirmedBookings[]> => {
   try {
-    const response = await axios.get<confirmedBookingssResponse>(
-      `${BASE_URL}/care-giver/bookings`,
-      CONFIG,
-    )
+    const response = await axios.get<confirmedBookingssResponse>(`${BASE_URL}/care-giver/bookings`)
 
     if (!response.data.ok) {
       const error = response.data.error

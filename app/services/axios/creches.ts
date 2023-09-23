@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { ratingRound } from "../../utils/format"
 import {
   Amenity,
@@ -41,7 +41,6 @@ export const getCrechesSearch = async (requestBody: CrechesSearchRequest): Promi
     const response = await axios.post<CrechesSearchRequestResponse>(
       `${BASE_URL}/creches/search`,
       requestBody,
-      CONFIG,
     )
     // console.log("response >>>", response)
     // console.log("response.data >>>", response.data)

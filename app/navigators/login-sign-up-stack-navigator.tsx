@@ -38,7 +38,8 @@ export type LoginSignUpStackNavigatorParamList = {
 const Stack = createNativeStackNavigator<LoginSignUpStackNavigatorParamList>()
 
 /**
- * 로그인 + 회원가입 스택
+ * 로그인 + 회원가입 스택 네비게이터
+ * - 비로그인시 보여지는 네비게이터 입니다.
  */
 export const LoginSignUpStack = () => {
   return (

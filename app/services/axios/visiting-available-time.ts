@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface GroupedVisitingAvailableTimesByDate {
   date: string
@@ -20,7 +20,6 @@ export const getVisitingAvailableTimes = async (
   try {
     const response = await axios.get<VisitingAvailableTimesResponse>(
       `${BASE_URL}/visiting-available-time/${visitingId}`,
-      CONFIG,
     )
 
     if (!response.data.ok) {

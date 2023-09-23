@@ -1,6 +1,6 @@
 import { Rating } from "../../models"
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
 import { ratingRound } from "../../utils/format"
 
@@ -120,7 +120,6 @@ export const postVisitingReview = async (params: PostReviewParams): Promise<bool
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/visiting-review/visiting`,
         postParams,
-        CONFIG,
       )
 
       if (response.data.ok) {
@@ -150,7 +149,6 @@ export const postCrecheReview = async (params: PostReviewParams): Promise<boolea
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/creche-review/creche`,
         postParams,
-        CONFIG,
       )
 
       if (response.data.ok) {
@@ -173,7 +171,6 @@ export const getVisitingReview = async (bookingId: number): Promise<Review | nul
   try {
     const response = await axios.get<GetVisitingReviewResponse>(
       `${BASE_URL}/visiting-review/visiting-booking/${bookingId}`,
-      CONFIG,
     )
 
     // console.debug("response.data", response.data)
@@ -202,7 +199,6 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
   try {
     const response = await axios.get<GetCrecheReviewResponse>(
       `${BASE_URL}/creche-review/creche-booking/${bookingId}`,
-      CONFIG,
     )
 
     // console.debug("response.data", response.data)

@@ -3,6 +3,7 @@ import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
 import { getMe, login, LoginRequestBody, Sex, UserDetail } from "#axios"
+import axios from "axios"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -266,6 +267,10 @@ export const UserStoreModel = types
      * - UserStoreModel 초기화
      * */
     logoutHandler() {
+      //! 중요: 로그인시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
+      axios.defaults.headers.common["x-jwt"] = ""
+
+      // UserStoreModel 모델 초기화
       this.reset()
 
       // TODO: provider 마다, 추가로 해야 할 동작이 다를 것임

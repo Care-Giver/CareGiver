@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
 type SocialLoginRequestBody = {
   idToken: string
@@ -64,7 +64,9 @@ export const appleServerLogin = async (
       }
     }
 
-    console.log("response.data - appleServerLogin ", response.data)
+    //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+    axios.defaults.headers.common["x-jwt"] = response.data.token
+    axios.defaults.headers.common.Accept = "Application/json"
     return {
       isAlreadySignedUp: true,
       token: response.data.token,
@@ -108,7 +110,9 @@ export const naverServiceLogin = async (
       }
     }
 
-    console.log("response.data - naverServiceLogin ", response.data)
+    //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+    axios.defaults.headers.common["x-jwt"] = response.data.token
+    axios.defaults.headers.common.Accept = "Application/json"
     return {
       isAlreadySignedUp: true,
       token: response.data.token,
@@ -152,7 +156,9 @@ export const kakaoServerLogin = async (
       }
     }
 
-    console.log("response.data - kakaoServerLogin ", response.data)
+    //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+    axios.defaults.headers.common["x-jwt"] = response.data.token
+    axios.defaults.headers.common.Accept = "Application/json"
     return {
       isAlreadySignedUp: true,
       token: response.data.token,
