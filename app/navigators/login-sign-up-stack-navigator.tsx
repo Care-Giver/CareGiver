@@ -17,18 +17,19 @@ import {
   TermsOfServiceScreen,
 } from "#screens"
 import { GobackAndTitleHeader } from "#components"
+import { AuthProvider } from "#models"
 
 export type LoginSignUpStackNavigatorParamList = {
   "login-screen": undefined
   "terms-of-service-screen": {
     email: string
-    provider: string
+    provider: AuthProvider
     idToken: string
   }
   "sign-up-screen": {
     consentList: ConsentList
     email: string
-    provider: string
+    provider: AuthProvider
     idToken: string
   }
   "sign-up-success-screen": undefined
