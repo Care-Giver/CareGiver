@@ -19,7 +19,10 @@ import { useStores } from "#models"
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
     // MST store 를 가져옵니다.
-    const { petStore } = useStores()
+    const {
+      petStore: { firstPet },
+    } = useStores()
+    console.log("firstPet", firstPet)
 
     // const [pets, setPets] = useState<Pet[]>([])
     const { pets } = route.params

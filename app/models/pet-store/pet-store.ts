@@ -1,4 +1,3 @@
-import { Api, FormattedPetData } from "#api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 export enum PetSex {
@@ -58,29 +57,26 @@ export interface Pet {
 export const PetStoreModel = types
   .model("PetStore")
   .props({
-    pets: types.optional(types.array(types.frozen<Pet>()), []),
+    pets: types.frozen<Pet[]>([]),
   })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({
-    addPet: (data: FormattedPetData) => {
-      const id = self.pets.reduce((maxId, pet) => Math.max(maxId, pet.id), 0)
-      const newPet = {
-        id,
-        ...data,
-      }
-      self.pets.push(newPet)
+  .views((self) => ({
+    /**
+     * (호중님 참고용 예제 코드)
+     * 펫 목록중에 첫번째 반려동물을 리턴합니다.
+     * 만약 펫 목록이 비어있다면 null 을 리턴합니다.
+     *
+     */
+    get firstPet() {
+      // console.log("self.pets", self.pets)
+      if (self.pets.length === 0) return null
+
+      return self.pets[0]
     },
-  }))
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    setMyPets: async () => {
-      const api = new Api()
-      api.setup()
-
-      const _response = await api.getMyPets()
-
-      if (_response.kind === "ok") {
-        _response.pets.forEach((data) => self.addPet(data))
-      }
+    /** API 를 통해 받아온 펫 목록을 저장합니다. */
+    setPets(value: Pet[]) {
+      self.pets = value
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
@@ -89,3 +85,8 @@ export interface PetStore extends PetStoreType {}
 type PetStoreSnapshotType = SnapshotOut<typeof PetStoreModel>
 export interface PetStoreSnapshot extends PetStoreSnapshotType {}
 export const createPetStoreDefaultModel = () => types.optional(PetStoreModel, {})
+
+// GETTER (views)
+//  저장된 펫을 "읽기" 작업
+// SETTER (actions)
+//  setPets -> API 를 통해 얻어온 반려동물 리스트를 저장

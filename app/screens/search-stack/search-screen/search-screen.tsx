@@ -147,6 +147,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
       if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
+      if (serviceType === "방문" && !date) return false
+
+      if (serviceType === "위탁" && dateRange.length !== 2) return false
+
       if (selectedPets.length === 0) return false
 
       return true
