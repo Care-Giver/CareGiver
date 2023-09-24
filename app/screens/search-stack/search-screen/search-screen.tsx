@@ -98,6 +98,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     //* 위치선택
     const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
 
+    const scrollViewRef = useRef<ScrollView>(null)
+
     // 시간선택 BottomSheet - ref
     const bottomSheetRef = useRef<BottomSheet>(null)
 
@@ -128,24 +130,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       bottomSheetRef.current?.close()
     }
 
-    useEffect(() => {
-      // if (!route.params) {
-      //   console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      //   if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      // }
-      // //? service 할당
-      // route.params.service === "펫시팅" ? setService("펫시팅") : setService("훈련")
-      // //? Header, 이름 설정
-      // navigation.setOptions({
-      //   title: route.params.service === "펫시팅" ? "펫시팅" : "훈련",
-      // })
-    }, [])
-
     //? 펫시터 찾기 버튼 활성화 여부 결정
     const hadleIsActivated = () => {
-      // 임시로 주석처리함 - 캘린더 도입시 주석해제 해야 함
-      // if (!date) return false
-
       if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
       if (serviceType === "방문" && !date) return false
@@ -187,14 +173,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       }
     }
 
-    console.log("startTime 🔷", startTime)
-    console.log("endTime 🔷", endTime)
-    console.log("date ♦️", date)
-    console.log("dateRange ♦️", dateRange)
-
     return (
       <Screen testID="SearchScreen" preset="fixed">
         <ScrollView
+          ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 + 2 * BOTTOM_TAB_BAR_HEIGHT }}
         >
@@ -236,8 +218,17 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           {/* //? 날짜 선택 버튼 */}
           <RowRoundedButton
             onPress={() => {
+              setIsDropdownOpen(false)
               setIsCalendarOpen(!isCalendarOpen)
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+              scrollViewRef.current?.scrollTo({
+                x: 0,
+                y: 200,
+                animated: true,
+              })
+              // scrollViewRef.current?.scrollToEnd({
+              //   animated: true,
+              // })
             }}
             image={images.calendar}
             // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
@@ -319,6 +310,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             onPress={() => {
               setIsCalendarOpen(false)
               setIsDropdownOpen(!isDropdownOpen)
+              scrollViewRef.current?.scrollToEnd({
+                animated: true,
+              })
               // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
               //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
