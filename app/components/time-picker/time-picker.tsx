@@ -1,9 +1,9 @@
 /**
  * DatePicker 는 기본적으로, 디바이스의 시간대를 기준으로 시간을 표시한다.
  * 그러나, 이미 부모 컴포넌트에서 디바이스 시간대를 기준으로 연산하여
- * props 를 넘겨주기 때문에, DatePicker 의 기본 설정은 이중 연사를 하게 된다.
+ * props 를 넘겨주기 때문에, DatePicker 의 기본 설정은 이중 연산을 하게 된다.
  * 따라서, timeZoneOffsetInMinutes 를 0 으로 설정하여,
- * DatePicker 컴포넌트가 UTC+0 을 기준으로 연산하도록 변경한다.
+ * DatePicker 컴포넌트가 UTC+0 을 기준으로 연산하도록 변경하여, 이중 연산을 방지한다.
  */
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, StyleProp, Pressable } from "react-native"
@@ -38,22 +38,28 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
 
   const [mode, setMode] = useState<Mode>("BEGIN")
 
-  // 선택한 시간이 바뀔때마다 핸들링
+  console.log("endDate", endDate)
+
+  /** 선택한 시간이 바뀔때마다 핸들링 */
   useEffect(() => {
     const oneHourAfterBeginDate = dayjs(beginDate).clone().add(1, "hour").toDate()
-    console.log("oneHourLaterFromBegin", oneHourAfterBeginDate)
 
-    // 끝 시간이
-    // "시작시간보다 이전" 이거나,
-    // "시작시간보다 1시간 이후보다 이전"이면,
-    // 끝 시간을 시작시간보다 1시간 이후로 강제
-    if (endDate <= beginDate || endDate < oneHourAfterBeginDate) {
-      setEndDate(oneHourAfterBeginDate)
-    }
-
-    // 끝 시간이 오늘을 넘어가면, 끝시간으로 오늘 23:55 를 강제
+    /** 끝 시간이 오늘을 넘어가면, 끝시간으로 오늘 23:55 를 강제 */
     if (endDate > localTimeEndOfToday) {
       setEndDate(setMinutes(localTimeEndOfToday, 55))
+      //
+    } else if (
+      /**
+       * 끝 시간이
+       * "시작시간보다 이전" 이거나,
+       * "시작시간보다 1시간 이후보다 이전"이면,
+       * 끝 시간을 시작시간보다 1시간 이후로 강제
+       */
+      endDate <= beginDate ||
+      (endDate < oneHourAfterBeginDate && endDate.getHours() !== 23 && endDate.getMinutes() !== 55)
+    ) {
+      setEndDate(oneHourAfterBeginDate)
+      //
     }
   }, [beginDate, endDate])
 
