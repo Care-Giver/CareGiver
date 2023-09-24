@@ -10,8 +10,6 @@ export interface SearchRequest {
   page: number
   lat: number // 위도
   lng: number // 경도
-  startDate: string // "2023-07-29T00:00:00"
-  endDate: string // "2023-07-30T00:00:00"
   petIds: number[] //[1, 2, 3]
   radius: number //10
   sortBy: string // "distance"

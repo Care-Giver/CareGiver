@@ -1,5 +1,5 @@
-import React, { FC, useRef, useEffect, useCallback, useState } from "react"
-import { View, Animated, ScrollView, FlatList } from "react-native"
+import React, { FC, useRef, useEffect, useCallback, useState, useLayoutEffect } from "react"
+import { View, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../navigators"
@@ -20,7 +20,6 @@ import {
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
-import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
 import {
   Sex,
@@ -32,78 +31,17 @@ import {
   CrechesService,
   CrecheAmenity,
   VisitingAmenity,
+  VisitingsSearchRequest,
+  CrechesSearchRequest,
 } from "#axios"
-import { SearchResultSortOrder } from "../../../services/axios/types/creches.visitings.common.types"
+import {
+  SearchRequest,
+  SearchResultSortOrder,
+} from "../../../services/axios/types/creches.visitings.common.types"
 
-const visitingResponse = [
-  {
-    isFavorite: false,
-    reviewCount: 0,
-    userNickname: "오옹",
-    userProfile: null,
-    visiting: {
-      __careGiver__: "[Object]",
-      __has_careGiver__: true,
-      __has_visitingReviews__: true,
-      __visitingReviews__: "[Array]",
-      acceptRate: "[Array]",
-      address: "경기도 안산시 사동 한양대학로 55 제5공학관 지하1층 창업3실",
-      createAt: "2023-07-25T20:24:33.950Z",
-      defaultFee: 10000,
-      desc: "강아지, 고양이 다 좋아합니다..",
-      extraSizeFee: "[Object]",
-      handleType: "[Array]",
-      hiredNumber: 0,
-      id: 3,
-      images: "[Array]",
-      location: "[Object]",
-      maxUnit: 3,
-      promoted: false,
-      responseRate: "[Array]",
-      serviceVisiting: "[Array]",
-      star: 0,
-      title: "강아지랑 친구하는 펫시터",
-      updatedAt: "2023-07-25T20:24:33.950Z",
-      visitingAmenities: "[Array]",
-    },
-  },
-]
-
-const crecheResponse = [
-  {
-    isFavorite: false,
-    reviewCount: 6,
-    userNickname: "지우",
-    userProfile: null,
-    creche: {
-      __careGiver__: "[Object]",
-      __crecheReviews__: "[Array]",
-      __has_careGiver__: true,
-      __has_crecheReviews__: true,
-      acceptRate: "[Array]",
-      address: "경기도 안산시 사동 한양대학로 55 제5공학관 지하1층 창업3실",
-      createAt: "2023-07-03T17:41:37.235Z",
-      crecheAmenities: "[Array]",
-      defaultFee: 10000,
-      desc: "강아지 3년 기른 경력으로 보살핍니다.",
-      extraSizeFee: "[Object]",
-      handleType: "[Array]",
-      hiredNumber: 0,
-      id: 1,
-      images: "[Array]",
-      location: "[Object]",
-      maxUnit: 3,
-      promoted: false,
-      responseRate: "[Array]",
-      serviceCreche: "[Array]",
-      star: 4,
-      title: "ENFP의 친화력",
-      updatedAt: "2023-07-16T11:15:15.837Z",
-    },
-  },
-]
-
-export interface Petsitter extends Visiting, Creche {}
+// export interface Petsitter extends Visiting, Creche {}
+// export type Petsitter = Visiting & Creche
+export type Petsitter = Visiting | Creche
 
 export type ServiceAmenity = {
   services: CrechesService[] | VisitingService[]
@@ -132,13 +70,17 @@ export const SearchResultScreen: FC<
     serviceType,
   } = route.params
 
+  const 방문검색 = serviceType === "방문"
+  const 위탁검색 = serviceType === "위탁"
+
   //? drop down 클릭 여부
   const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState<Petsitter[]>([])
+  console.log("petsitters ♦️", petsitters)
 
   //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
   //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
-  const optionLabels = {
+  const optionLabel = {
     distance: "가까운 거리순",
     recent: "최근 등록순",
     ratings: "별점 높은순",
@@ -146,40 +88,75 @@ export const SearchResultScreen: FC<
   }
 
   //? 현재 선택된 필터 옵션
-  const [currentOption, setCurrentOption] = useState(optionLabels.distance)
+  const [currentOption, setCurrentOption] = useState(optionLabel.distance)
 
   //? dropdown에서 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort))
-  const handlePress = useCallback((optionValue: string) => {
-    switch (optionValue) {
-      //? 최근 등록순
-      case optionLabels.recent:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
-          return Date.parse(b.createdAt) - Date.parse(a.createdAt)
-        })
-        break
+  const handlePress = useCallback(
+    (optionValue: string) => {
+      switch (optionValue) {
+        // 1. 최근 등록순
+        // 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
+        case optionLabel.recent:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return Date.parse(b.visiting.createAt) - Date.parse(a.visiting.createAt)
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return Date.parse(b.creche.createAt) - Date.parse(a.creche.createAt)
+            })
+            setPetsitters(creches)
+          }
+          break
 
-      //? 별점 높은 순
-      case optionLabels.ratings:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 높은 별점을 상위 노출
-          return Number(b.rating * 10) - Number(a.rating * 10)
-        })
-        break
+        // 2. 별점 높은 순
+        // 내림차순 정렬 -> 높은 별점을 상위 노출
+        case optionLabel.ratings:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return Number(b.visiting.star * 10) - Number(a.visiting.star * 10)
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return Number(b.creche.star * 10) - Number(a.creche.star * 10)
+            })
+            setPetsitters(creches)
+          }
+          break
 
-      //? 리뷰 많은 순
-      case optionLabels.reviews:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
-          return b.review - a.review
-        })
-        break
-    }
+        // 리뷰 많은 순
+        // 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
+        case optionLabel.reviews:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return b.reviewCount - a.reviewCount
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return b.reviewCount - a.reviewCount
+            })
+            setPetsitters(creches)
+          }
+          break
+      }
 
-    setIsOpen(false)
-    setPetsitters(_petsitters)
-    setCurrentOption(optionValue)
-  }, [])
+      setIsOpen(false)
+      setCurrentOption(optionValue)
+    },
+    [petsitters, optionLabel],
+  )
 
   //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
   const offset = useRef(new Animated.Value(0)).current
@@ -196,14 +173,20 @@ export const SearchResultScreen: FC<
     extrapolate: "clamp",
   })
 
+  // 스크린 헤더 설정
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      //@ts-ignore
+      title: `펫시팅 - ${serviceType}`,
+    })
+  }, [])
+
   // 검색결과 API 호출
   useEffect(() => {
-    const req = {
+    const req: SearchRequest = {
       page: 1,
       lat,
       lng,
-      startTime,
-      endTime,
       petIds: [1, 2],
       radius: 10, //10
       sortBy: "distance", // "distance"
@@ -213,49 +196,27 @@ export const SearchResultScreen: FC<
       amenities: [], // [1, 2]
       certifiedOnly: false,
     }
-    const visReq = {
+    const visReq: VisitingsSearchRequest = {
       ...req,
       startTime,
       endTime,
     }
 
-    const creReq = {
+    const creReq: CrechesSearchRequest = {
       ...req,
       startDate,
       endDate,
     }
     // console.log("req", req)
 
-    if (serviceType === "방문") {
+    if (방문검색) {
       getVisitingsSearch(visReq).then(setPetsitters)
-    } else {
+      return
+    }
+
+    if (위탁검색) {
       getCrechesSearch(creReq).then(setPetsitters)
     }
-  }, [])
-
-  // 스크린 헤더 설정
-  useEffect(() => {
-    //? case1. 바텀탭으로 넘어오는경우
-    if (!route.params) {
-      // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      var _service = "펫시팅"
-      var _serviceType = "위탁"
-
-      // if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      // if (!route.params.serviceType)
-      //   console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
-    }
-    //? case2. 서치스크린 이후 넘어오는 경우
-    else {
-      //? service 할당
-      var _service = "펫시팅"
-      var _serviceType = serviceType
-    }
-
-    //? Header, 이름 설정
-    navigation.setOptions({
-      title: _service + " - " + _serviceType,
-    })
   }, [])
 
   return (
@@ -313,7 +274,7 @@ export const SearchResultScreen: FC<
               height: 16,
               marginLeft: 5,
             }}
-            labels={Object.values(optionLabels)}
+            labels={Object.values(optionLabel)}
             handlePress={handlePress}
             currentOption={currentOption}
             style={{
@@ -324,15 +285,6 @@ export const SearchResultScreen: FC<
         </Row>
 
         {/* //? divider */}
-        {/* <View
-          style={{
-            width: "100%",
-            height: 2,
-            backgroundColor: LBG,
-            position: "absolute",
-            top: 47,
-          }}
-        /> */}
         <DivisionLine
           color={LBG}
           style={{
@@ -353,33 +305,47 @@ export const SearchResultScreen: FC<
           <Animated.FlatList
             data={petsitters}
             renderItem={({ item: petsitter, index }) => {
-              const sitterData: PetsitterProfileCardPetsitterData = {
-                crecheId: serviceType === "위탁" ? petsitter.creche.id : null,
-                visitingId: serviceType === "방문" ? petsitter.visiting.id : null,
-                reviewCount: petsitter.reviewCount,
-                userNickname: petsitter.userNickname,
-                title: serviceType === "위탁" ? petsitter.creche.title : petsitter.visiting.title,
-                desc: serviceType === "위탁" ? petsitter.creche.desc : petsitter.visiting.desc,
-                star: serviceType === "위탁" ? petsitter.creche.star : petsitter.visiting.star,
-                profileImage:
-                  serviceType === "위탁"
-                    ? petsitter.creche.__careGiver__.__user__?.profileImage
-                    : petsitter.visiting.__careGiver__.__user__?.profileImage,
+              let sitterData: PetsitterProfileCardPetsitterData
+              let serviceAmenity: ServiceAmenity
+              let images: string[]
+
+              if (방문검색) {
+                const visiting = petsitter as Visiting
+                sitterData = {
+                  crecheId: null,
+                  visitingId: visiting.visiting.id,
+                  reviewCount: visiting.reviewCount,
+                  userNickname: visiting.userNickname,
+                  title: visiting.visiting.title,
+                  desc: visiting.visiting.desc,
+                  star: visiting.visiting.star,
+                  profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                }
+                serviceAmenity = {
+                  services: visiting.visiting.serviceVisiting,
+                  amenities: visiting.visiting.visitingAmenities,
+                }
+                images = visiting.visiting.images
               }
 
-              const serviceAmenity: ServiceAmenity = {
-                services:
-                  serviceType === "위탁"
-                    ? petsitter.creche.serviceCreche
-                    : petsitter.visiting.serviceVisiting,
-                amenities:
-                  serviceType === "위탁"
-                    ? petsitter.creche.crecheAmenities
-                    : petsitter.visiting.visitingAmenities,
+              if (위탁검색) {
+                const creche = petsitter as Creche
+                sitterData = {
+                  crecheId: creche.creche.id,
+                  visitingId: null,
+                  reviewCount: creche.reviewCount,
+                  userNickname: creche.userNickname,
+                  title: creche.creche.title,
+                  desc: creche.creche.desc,
+                  star: creche.creche.star,
+                  profileImage: creche.creche.__careGiver__.__user__?.profileImage,
+                }
+                serviceAmenity = {
+                  services: creche.creche.serviceCreche,
+                  amenities: creche.creche.crecheAmenities,
+                }
+                images = creche.creche.images
               }
-
-              const images =
-                serviceType === "위탁" ? petsitter.creche.images : petsitter.visiting.images
 
               return (
                 <SitterProfileCard
@@ -396,16 +362,18 @@ export const SearchResultScreen: FC<
                       selectedPets: petIds,
 
                       // 방문
-                      startTime: serviceType === "방문" ? startTime : null,
-                      endTime: serviceType === "방문" ? endTime : null,
+                      startTime: 방문검색 ? startTime : null,
+                      endTime: 방문검색 ? endTime : null,
 
                       // 위탁
-                      startDate: serviceType === "위탁" ? startDate : null,
-                      endDate: serviceType === "위탁" ? endDate : null,
+                      startDate: 위탁검색 ? startDate : null,
+                      endDate: 위탁검색 ? endDate : null,
                     })
                   }}
                   // TODO: 찜하기 기능 구현
-                  onLikePress={() => {}}
+                  onLikePress={() => {
+                    //
+                  }}
                   style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
                 />
               )
