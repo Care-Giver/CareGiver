@@ -41,9 +41,11 @@ import { styles } from "./styles"
 import { DateData } from "react-native-calendars"
 import BottomSheet from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
+import { addMinutes } from "date-fns"
 
-// Calculate the number of minutes passed since the start of the hour
-const now = new Date()
+const nowInUTCZero = new Date()
+const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
+
 const minutesPassed = now.getMinutes()
 
 // Calculate how many minutes remain to reach the nearest multiple of 5
@@ -54,10 +56,9 @@ const nearestPastTime = new Date(now)
 
 // 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
 nearestPastTime.setMinutes(minutesPassed - remainder)
-// console.log(nearestPastTime)
 
 // "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
-const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
+const oneHourAfterNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
 type ServiceType = "방문" | "위탁"
 
@@ -91,7 +92,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     //* 시간선택 - TimePicker
     const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
-    const [endTime, setEndTime] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+    const [endTime, setEndTime] = useState<Date>(oneHourAfterNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
     const [selectedTimeText, setSelectedTimeText] = useState("방문시간을 선택해주세요")
 
     //* 위치선택
@@ -114,8 +115,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     }
 
     const timeText = (time: Date) => {
-      const hours = time.getHours()
-      const minute = time.getMinutes()
+      const hours = time.getUTCHours()
+      const minute = time.getUTCMinutes()
       return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
     }
 
@@ -185,6 +186,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           )} ~ ${dateRange[1]?.dateString?.replace(/-/g, ".")}`
       }
     }
+
+    console.log("startTime 🔷", startTime)
+    console.log("endTime 🔷", endTime)
+    console.log("date ♦️", date)
+    console.log("dateRange ♦️", dateRange)
 
     return (
       <Screen testID="SearchScreen" preset="fixed">

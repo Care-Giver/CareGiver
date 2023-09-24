@@ -231,7 +231,13 @@ export const SearchResultScreen: FC<
 
       {/* //? 검색 필터 박스 */}
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
-      <AnimatedHeader animatedValue={offset} />
+      <AnimatedHeader
+        animatedValue={offset}
+        startTime={startTime}
+        endTime={endTime}
+        startDate={startDate}
+        endDate={endDate}
+      />
 
       {/* //? margin */}
       {/* //? nativeDriver를 사용할 때는 레이아웃 css(ex 마진) 사용 불가능 :: 마진만큼의 높이를 가진 뷰로 대체 */}

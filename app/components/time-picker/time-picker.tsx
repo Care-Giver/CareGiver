@@ -1,9 +1,18 @@
+/**
+ * DatePicker 는 기본적으로, 디바이스의 시간대를 기준으로 시간을 표시한다.
+ * 그러나, 이미 부모 컴포넌트에서 디바이스 시간대를 기준으로 연산하여
+ * props 를 넘겨주기 때문에, DatePicker 의 기본 설정은 이중 연사를 하게 된다.
+ * 따라서, timeZoneOffsetInMinutes 를 0 으로 설정하여,
+ * DatePicker 컴포넌트가 UTC+0 을 기준으로 연산하도록 변경한다.
+ */
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, StyleProp, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { DivisionLine, PreReg14, PreReg16, PreReg32 } from "#components"
 import { GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import DatePicker from "react-native-date-picker"
+import dayjs from "dayjs"
+import { addMinutes, setMinutes, endOfToday } from "date-fns"
 
 const MODE_PRESSABLE_WIDTH = 114
 
@@ -24,26 +33,33 @@ interface TimePickerProps {
 export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const { style, beginDate, setBeginDate, endDate, setEndDate } = props
   const _styles = Object.assign({}, styles.container, style)
+  const nowInUTCZero = new Date()
+  const localTimeEndOfToday = addMinutes(endOfToday(), -1 * nowInUTCZero.getTimezoneOffset())
 
   const [mode, setMode] = useState<Mode>("BEGIN")
 
   // 선택한 시간이 바뀔때마다 핸들링
   useEffect(() => {
-    const oneHourLaterFromBegin = new Date(beginDate.getTime() + 60 * 60 * 1000)
+    const oneHourAfterBeginDate = dayjs(beginDate).clone().add(1, "hour").toDate()
+    console.log("oneHourLaterFromBegin", oneHourAfterBeginDate)
 
-    // 끝 시간이 시작시간보다 이전이면, 무조건 시작시간보다 1시간뒤로 강제
-    if (endDate <= beginDate) {
-      setEndDate(oneHourLaterFromBegin)
+    // 끝 시간이
+    // "시작시간보다 이전" 이거나,
+    // "시작시간보다 1시간 이후보다 이전"이면,
+    // 끝 시간을 시작시간보다 1시간 이후로 강제
+    if (endDate <= beginDate || endDate < oneHourAfterBeginDate) {
+      setEndDate(oneHourAfterBeginDate)
     }
-    // 끝 시간이 "시작시간보다 1시간 후" 보다 이전이면, 무조건 시작시간보다 1시간뒤로 강제
-    else if (endDate < oneHourLaterFromBegin) {
-      setEndDate(oneHourLaterFromBegin)
+
+    // 끝 시간이 오늘을 넘어가면, 끝시간으로 오늘 23:55 를 강제
+    if (endDate > localTimeEndOfToday) {
+      setEndDate(setMinutes(localTimeEndOfToday, 55))
     }
   }, [beginDate, endDate])
 
   const timeText = (time: Date) => {
-    const hours = time.getHours()
-    const minute = time.getMinutes()
+    const hours = time.getUTCHours()
+    const minute = time.getUTCMinutes()
     return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
   }
 
@@ -112,6 +128,7 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
       <View style={styles.pickerContainer}>
         {mode === "BEGIN" && (
           <DatePicker
+            timeZoneOffsetInMinutes={0} // UTC+0 을 기준으로 연산하도록 변경
             date={beginDate}
             onDateChange={setBeginDate}
             mode="time"
@@ -122,6 +139,7 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
 
         {mode === "END" && (
           <DatePicker
+            timeZoneOffsetInMinutes={0} // UTC+0 을 기준으로 연산하도록 변경
             date={endDate}
             onDateChange={setEndDate}
             mode="time"
