@@ -1,5 +1,5 @@
 import React, { FC, useRef, useEffect, useCallback, useState, useLayoutEffect } from "react"
-import { View, Animated } from "react-native"
+import { View, Animated, TouchableOpacity, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../navigators"
@@ -9,10 +9,11 @@ import {
   Screen,
   DivisionLine,
   SitterProfileCard,
-  SelectOptionDropdownBox,
   PetsitterProfileCardPetsitterData,
+  SearchSortingButton,
+  PreReg12,
 } from "../../../components"
-import { palette, LBG, BOTTOM_HEIGHT } from "../../../theme"
+import { palette, LBG, DEVICE_SCREEN_WIDTH } from "../../../theme"
 import { images } from "../../../../assets/images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -38,6 +39,7 @@ import {
   SearchRequest,
   SearchResultSortOrder,
 } from "../../../services/axios/types/creches.visitings.common.types"
+import BottomSheet from "@gorhom/bottom-sheet"
 
 // export interface Petsitter extends Visiting, Creche {}
 // export type Petsitter = Visiting & Creche
@@ -48,12 +50,23 @@ export type ServiceAmenity = {
   amenities: CrecheAmenity[] | VisitingAmenity[]
 }
 
+// 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
+// :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
+const optionLabel = {
+  distance: "가까운 거리순",
+  recent: "최근 등록순",
+  ratings: "별점 높은순",
+  reviews: "후기 많은순",
+}
+
+// 정렬 옵션 리스트의 타입
+export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLabel]
+
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
   useShowBottomTab(navigation)
 
-  // console.log("route.params", route.params)
   const {
     // API REQUEST BODY 관련
     lat,
@@ -73,26 +86,19 @@ export const SearchResultScreen: FC<
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"
 
-  //? drop down 클릭 여부
-  const [isOpen, setIsOpen] = useState(false)
   const [petsitters, setPetsitters] = useState<Petsitter[]>([])
-  console.log("petsitters ♦️", petsitters)
 
-  //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
-  //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
-  const optionLabel = {
-    distance: "가까운 거리순",
-    recent: "최근 등록순",
-    ratings: "별점 높은순",
-    reviews: "리뷰 많은순",
-  }
+  // 필터 바텀시트 - ref
+  const bottomSheetRef = useRef<BottomSheet>(null)
 
-  //? 현재 선택된 필터 옵션
-  const [currentOption, setCurrentOption] = useState(optionLabel.distance)
+  // 현재 선택된 정렬 옵션
+  const [sortingOption, setSortingOption] = useState<SearchResultSortingOption>(
+    optionLabel.distance,
+  )
 
-  //? dropdown에서 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort))
-  const handlePress = useCallback(
-    (optionValue: string) => {
+  // 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 검색결과(펫시터)의 순서를 재정렬(sort))
+  const handleSorting = useCallback(
+    (optionValue: SearchResultSortingOption) => {
       switch (optionValue) {
         // 1. 최근 등록순
         // 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
@@ -132,7 +138,7 @@ export const SearchResultScreen: FC<
           }
           break
 
-        // 리뷰 많은 순
+        // 후기 많은 순
         // 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
         case optionLabel.reviews:
           if (방문검색) {
@@ -152,8 +158,7 @@ export const SearchResultScreen: FC<
           break
       }
 
-      setIsOpen(false)
-      setCurrentOption(optionValue)
+      setSortingOption(optionValue)
     },
     [petsitters, optionLabel],
   )
@@ -254,57 +259,76 @@ export const SearchResultScreen: FC<
           transform: [{ translateY: animateTranslateY }],
         }}
       >
-        {/* //? title container - 검색 결과 텍스트 + 정렬옵션 드롭다운 */}
+        {/* //? title container - 검색 결과 텍스트 + 검색결과 필터 바텀시트 버튼 */}
         <Row
           style={{
             paddingVertical: 12,
             justifyContent: "space-between",
             alignItems: "center",
-            position: "absolute",
-            zIndex: 1,
-            backgroundColor: null,
+            backgroundColor: "transparent",
           }}
         >
           {/* //? title */}
           <PreBol18 text="검색결과" style={{ alignSelf: "flex-start" }} />
 
-          {/* //? sort button */}
-          <SelectOptionDropdownBox
+          {/* 검색결과 필터 옵션 */}
+          <TouchableOpacity
+            style={{ alignSelf: "flex-end", flexDirection: "row" }}
             onPress={() => {
-              setIsOpen(!isOpen)
+              bottomSheetRef.current?.expand()
             }}
-            isOpen={isOpen}
-            logoSrc={images.list_bars}
-            logoStyle={{
-              width: 16,
-              height: 16,
-              marginLeft: 5,
-            }}
-            labels={Object.values(optionLabel)}
-            handlePress={handlePress}
-            currentOption={currentOption}
-            style={{
-              // backgroundColor: palette.white,
-              alignSelf: "flex-start",
-            }}
-          />
+          >
+            <PreReg12 text="필터" />
+            <Image
+              source={images.list_bars}
+              style={{
+                width: 16,
+                height: 16,
+                marginLeft: 5,
+              }}
+            />
+          </TouchableOpacity>
         </Row>
 
         {/* //? divider */}
-        <DivisionLine
-          color={LBG}
+        <DivisionLine color={LBG} style={{ width: DEVICE_SCREEN_WIDTH, alignSelf: "center" }} />
+
+        {/* 정렬 옵션 */}
+        <Row
           style={{
-            position: "absolute",
-            top: 47,
+            justifyContent: "space-between",
+            backgroundColor: "transparent",
+            paddingVertical: 12,
           }}
-        />
+        >
+          <SearchSortingButton
+            sortingOption={optionLabel.distance}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.reviews}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.ratings}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.recent}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+        </Row>
 
         {/* //? sitter profile card list */}
         <View
           style={{
             backgroundColor: palette.white,
             height: "auto",
-            marginTop: 47 + 2,
+            // marginTop: 47 + 2,
             // marginBottom: 34,
           }}
         >

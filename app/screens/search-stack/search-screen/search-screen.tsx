@@ -221,14 +221,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               setIsDropdownOpen(false)
               setIsCalendarOpen(!isCalendarOpen)
               LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+              // TODO: 아이폰 디바이스에서 제대로 된 QA 필요함
               scrollViewRef.current?.scrollTo({
                 x: 0,
                 y: 200,
                 animated: true,
               })
-              // scrollViewRef.current?.scrollToEnd({
-              //   animated: true,
-              // })
             }}
             image={images.calendar}
             // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
