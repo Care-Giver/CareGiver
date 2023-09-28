@@ -3,47 +3,54 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { AuthProvider } from "#models"
 import { alertModal } from "../../utils/alert-modal"
 
-export enum Sex {
+//* Pet관련 Types
+export enum PetSex {
   MALE = "MALE",
   FEMALE = "FEMALE",
 }
 
-//* Pet관련 Types
+export enum HandleType {
+  LARGE = "대형",
+  MEDIUM = "중형",
+  SMALL = "소형",
+}
 
-export interface PetColumns {
+export enum FamilyType {
+  DOG = "DOG",
+  CAT = "CAT",
+}
+export interface PetDetail {
   id: number
-  createAt: string
-  updatedAt: string
+  createAt: Date
+  updatedAt: Date
   name: string
   species: Species
   age: number
-  sex: Sex
+  sex: PetSex
   images: string[]
   weight: number
-  petType: string
+  petType: HandleType
   isNeutralizated: boolean
-  birthday: string
+  birthday: Date
   desc: string
 }
 
 export interface Species {
   id: number
-  createAt: string
-  updatedAt: string
+  createAt: Date
+  updatedAt: Date
   name: string
-  familyType: string
+  familyType: FamilyType
 }
 
 export interface Pet {
-  pet: Omit<PetColumns, "createAt" | "updatedAt">
+  pet: PetDetail
   familyType: string
 }
 
 interface PetsResponse extends GeneralResponse {
-  pets: Pet[]
+  petResults: Pet[]
 }
-
-export type PetDetail = Pick<PetColumns, "images" | "petType" | "name" | "age" | "species" | "sex">
 
 interface GetPetsResult {
   isSuccess: boolean // 성공여부
@@ -75,25 +82,32 @@ export const getPets = async (token: string): Promise<GetPetsResult> => {
     })
 
     if (!response?.data.ok) {
-      console.error("/user/me API 에러!!! ♦️", response?.data?.error)
+      console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-
+    console.log("pets >>>", response.data.petResults)
     return {
       isSuccess: true,
-      petsDetail: response.data.pets.map((data) => {
+      petsDetail: response.data.petResults.map((data) => {
         return {
+          id: data.pet.id,
+          createAt: data.pet.createAt,
+          updatedAt: data.pet.updatedAt,
           images: data.pet.images,
           petType: data.pet.petType,
           name: data.pet.name,
           age: data.pet.age,
           species: data.pet.species,
           sex: data.pet.sex,
+          weight: data.pet.weight,
+          isNeutralizated: data.pet.isNeutralizated,
+          birthday: data.pet.birthday,
+          desc: data.pet.desc,
         }
       }),
     }
   } catch (error) {
-    console.error("catch 에러!!! - getMe", error.toJSON())
-    return { isSuccess: false, reason: error.toJSON() }
+    console.error("catch 에러!!! - getPets", error)
+    return { isSuccess: false, reason: error }
   }
 }

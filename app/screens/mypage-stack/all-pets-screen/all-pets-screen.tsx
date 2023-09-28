@@ -20,12 +20,13 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
   ({ navigation, route }) => {
     // MST store 를 가져옵니다.
     const {
-      petStore: { firstPet },
+      petStore: { pets, firstPet, petsHandler },
+      userStore: { userAuth },
     } = useStores()
     console.log("firstPet", firstPet)
 
     // const [pets, setPets] = useState<Pet[]>([])
-    const { pets } = route.params
+    //const { pets } = route.params
 
     // useEffect(() => {
     //   async function fetchData() {
@@ -34,7 +35,9 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     //   fetchData()
     //   setPets(petStore.pets)
     // }, [])
-
+    useEffect(() => {
+      petsHandler(userAuth.token)
+    }, [])
     return (
       <Screen>
         {/* //* 제목 - 전체 n 마리 */}
