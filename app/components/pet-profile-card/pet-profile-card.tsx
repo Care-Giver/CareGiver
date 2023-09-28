@@ -56,11 +56,13 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
           <Row style={{ marginTop: 8 }}>
             <PreReg14 text={petType} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
-            {/*<PreReg14
-              text={species.name.length <= 6 ? `${species}` : `${species.name.substring(0, 5)}..`} //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
+            <PreReg14
+              text={
+                species.name.length <= 6 ? `${species.name}` : `${species.name.substring(0, 5)}..`
+              } //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
               color={BODY}
               style={{ marginLeft: 8 }}
-  />*/}
+            />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
