@@ -46,8 +46,6 @@ export const SitterProfileCard = ({
     profileImage,
   } = sitterData
 
-  console.log("profileImage >>>", profileImage)
-
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}

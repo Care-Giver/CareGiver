@@ -1,5 +1,21 @@
-import React, { FC, useRef, useEffect, useCallback, useState, useLayoutEffect } from "react"
-import { View, Animated, TouchableOpacity, Image } from "react-native"
+import React, {
+  FC,
+  useRef,
+  useEffect,
+  useCallback,
+  useState,
+  useLayoutEffect,
+  useMemo,
+} from "react"
+import {
+  View,
+  Animated,
+  TouchableOpacity,
+  Image,
+  Platform,
+  StyleSheet,
+  ViewStyle,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../navigators"
@@ -12,8 +28,29 @@ import {
   PetsitterProfileCardPetsitterData,
   SearchSortingButton,
   PreReg12,
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  PreBol16,
+  PressableButton,
+  PreMed14,
+  BlueCheckbox,
+  PreMed16,
+  PopReg14,
+  PreMed18,
+  BOTTOM_TAB_BAR_HEIGHT,
 } from "../../../components"
-import { palette, LBG, DEVICE_SCREEN_WIDTH } from "../../../theme"
+import {
+  palette,
+  LBG,
+  DEVICE_SCREEN_WIDTH,
+  DEVICE_SCREEN_HEIGHT,
+  IOS_NOTCH_STATUS_BAR_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  DISABLED,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+  BOTTOM_HEIGHT,
+} from "../../../theme"
 import { images } from "../../../../assets/images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -39,10 +76,15 @@ import {
   SearchRequest,
   SearchResultSortOrder,
 } from "../../../services/axios/types/creches.visitings.common.types"
-import BottomSheet from "@gorhom/bottom-sheet"
+import {
+  BottomSheetBackdrop,
+  BottomSheetFooter,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet"
+import Slider from "@react-native-community/slider"
+import _ from "lodash"
 
-// export interface Petsitter extends Visiting, Creche {}
-// export type Petsitter = Visiting & Creche
 export type Petsitter = Visiting | Creche
 
 export type ServiceAmenity = {
@@ -65,10 +107,31 @@ export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLa
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
+  // 바텀탭 표출
   useShowBottomTab(navigation)
+  // 스크린 헤더 설정
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      //@ts-ignore
+      title: `펫시팅 - ${serviceType}`,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
+  const offset = useRef(new Animated.Value(0)).current
+  const animateTranslateY = offset.interpolate({
+    inputRange: [0, HEADER_AREA],
+    outputRange: [0, -1 * HEADER_AREA],
+    extrapolate: "clamp",
+  })
+  const listContainerMarginScale = offset.interpolate({
+    inputRange: [0, HEADER_AREA],
+    outputRange: [1.0, 0],
+    extrapolate: "clamp",
+  })
 
+  // navigation params 로 넘겨받은 API REQUEST BODY 데이터
   const {
-    // API REQUEST BODY 관련
     lat,
     lng,
     petIds,
@@ -82,21 +145,63 @@ export const SearchResultScreen: FC<
     // 그외
     serviceType,
   } = route.params
-
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"
 
+  const defaultSearchRequest: SearchRequest = {
+    page: 1,
+    lat,
+    lng,
+    petIds: [1, 2],
+    radius: 10, //10
+    sortBy: "distance", // "distance"
+    sortOrder: SearchResultSortOrder.ASC, // "ASC"
+    gender: null,
+    services: [], //[1, 2]
+    amenities: [], // [1, 2]
+    certifiedOnly: false,
+  }
+
+  /** 검색 API 호출을 위한 request body */
+  const [searchRequest, setSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
+
+  /** 검색 필터 바텀시트에서 설정한 필터값을 저장하는 임시 변수 */
+  const [draftSearchRequest, setDraftSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
+
+  /** 펫시터 */
   const [petsitters, setPetsitters] = useState<Petsitter[]>([])
 
-  // 필터 바텀시트 - ref
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  /** 펫시터 검색결과 API 호출 */
+  useEffect(() => {
+    const visReq: VisitingsSearchRequest = {
+      ...searchRequest,
+      startTime,
+      endTime,
+    }
 
-  // 현재 선택된 정렬 옵션
+    const creReq: CrechesSearchRequest = {
+      ...searchRequest,
+      startDate,
+      endDate,
+    }
+
+    if (방문검색) {
+      getVisitingsSearch(visReq).then(setPetsitters)
+      return
+    }
+
+    if (위탁검색) {
+      getCrechesSearch(creReq).then(setPetsitters)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchRequest])
+
+  /** 현재 선택된 검색결과 정렬 옵션 */
   const [sortingOption, setSortingOption] = useState<SearchResultSortingOption>(
     optionLabel.distance,
   )
 
-  // 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 검색결과(펫시터)의 순서를 재정렬(sort))
+  /** 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 검색결과(펫시터)의 순서를 재정렬(sort)) */
   const handleSorting = useCallback(
     (optionValue: SearchResultSortingOption) => {
       switch (optionValue) {
@@ -160,72 +265,85 @@ export const SearchResultScreen: FC<
 
       setSortingOption(optionValue)
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [petsitters, optionLabel],
   )
 
-  //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
-  const offset = useRef(new Animated.Value(0)).current
+  // 필터 바텀시트 - ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
-  const animateTranslateY = offset.interpolate({
-    inputRange: [0, HEADER_AREA],
-    outputRange: [0, -1 * HEADER_AREA],
-    extrapolate: "clamp",
-  })
+  // 필터 바텀시트 - snapPoints
+  const snapPoints = useMemo(
+    () => [
+      "60%",
+      // Platform.select({
+      //   ios: DEVICE_SCREEN_HEIGHT - IOS_NOTCH_STATUS_BAR_HEIGHT,
+      //   android: DEVICE_SCREEN_HEIGHT,
+      // }),
+    ],
+    [],
+  )
 
-  const listContainerMarginScale = offset.interpolate({
-    inputRange: [0, HEADER_AREA],
-    outputRange: [1.0, 0],
-    extrapolate: "clamp",
-  })
+  /** 필터 바텀시트 backdrop */
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+        pressBehavior={"close"}
+      />
+    ),
+    [],
+  )
 
-  // 스크린 헤더 설정
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      //@ts-ignore
-      title: `펫시팅 - ${serviceType}`,
-    })
-  }, [])
+  /** 필터 바텀시트 - 저장 버튼 누를 시 실행되는 함수 */
+  const handleSaveFilterButton = useCallback(() => {
+    // 임시 저장된 필터값을 현재 필터값으로 설정
+    setSearchRequest(draftSearchRequest)
+    // 필터 바텀시트 닫기
+    bottomSheetModalRef.current?.close()
+  }, [draftSearchRequest])
 
-  // 검색결과 API 호출
-  useEffect(() => {
-    const req: SearchRequest = {
-      page: 1,
-      lat,
-      lng,
-      petIds: [1, 2],
-      radius: 10, //10
-      sortBy: "distance", // "distance"
-      sortOrder: SearchResultSortOrder.ASC, // "ASC"
-      gender: Sex.MALE,
-      services: [], //[1, 2]
-      amenities: [], // [1, 2]
-      certifiedOnly: false,
+  /** 필터 바텀시트 Footer - 저장 버튼 렌더링 */
+  const renderFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+        <TouchableOpacity
+          // 임시 저장된 필터값과 현재 필터값이 같으면 (차이가 없으면)
+          // 필터 설정을 저장할 필요가 없으므로, 저장 버튼 비활성화
+          disabled={_.isEqual(searchRequest, draftSearchRequest)}
+          style={
+            _.isEqual(searchRequest, draftSearchRequest)
+              ? styles.disabledSubmitBtn
+              : styles.submitBtn
+          }
+          onPress={handleSaveFilterButton}
+        >
+          <PreBol16 text="저장" color={"white"} />
+        </TouchableOpacity>
+      </BottomSheetFooter>
+    ),
+    [handleSaveFilterButton, searchRequest, draftSearchRequest],
+  )
+
+  /** radius 값을 거리 슬라이더 값으로 변환 */
+  const radiusToSliderValue = useCallback(() => {
+    switch (draftSearchRequest.radius) {
+      case 1:
+        return 0
+      case 10:
+        return 1
+      case 20:
+        return 2
+      case 30:
+        return 3
+      default:
+        return 1
     }
-    const visReq: VisitingsSearchRequest = {
-      ...req,
-      startTime,
-      endTime,
-    }
-
-    const creReq: CrechesSearchRequest = {
-      ...req,
-      startDate,
-      endDate,
-    }
-    // console.log("req", req)
-
-    if (방문검색) {
-      getVisitingsSearch(visReq).then(setPetsitters)
-      return
-    }
-
-    if (위탁검색) {
-      getCrechesSearch(creReq).then(setPetsitters)
-    }
-  }, [])
+  }, [draftSearchRequest])
 
   return (
-    // <Screen statusBar="dark-content">
     <Screen>
       <Animated.View
         style={{
@@ -262,20 +380,23 @@ export const SearchResultScreen: FC<
         {/* //? title container - 검색 결과 텍스트 + 검색결과 필터 바텀시트 버튼 */}
         <Row
           style={{
-            paddingVertical: 12,
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: "transparent",
           }}
         >
           {/* //? title */}
-          <PreBol18 text="검색결과" style={{ alignSelf: "flex-start" }} />
+          <PreBol18 text="검색결과" />
 
           {/* 검색결과 필터 옵션 */}
           <TouchableOpacity
-            style={{ alignSelf: "flex-end", flexDirection: "row" }}
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              paddingVertical: 16,
+            }}
             onPress={() => {
-              bottomSheetRef.current?.expand()
+              bottomSheetModalRef.current?.present()
             }}
           >
             <PreReg12 text="필터" />
@@ -333,6 +454,20 @@ export const SearchResultScreen: FC<
           }}
         >
           <Animated.FlatList
+            style={{
+              backgroundColor: palette.white,
+              height: "auto",
+              // height: "100%",
+              // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
+            }}
+            contentContainerStyle={{
+              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+            }}
+            showsVerticalScrollIndicator={false}
+            // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
+              useNativeDriver: true,
+            })}
             data={petsitters}
             renderItem={({ item: petsitter, index }) => {
               let sitterData: PetsitterProfileCardPetsitterData
@@ -408,22 +543,196 @@ export const SearchResultScreen: FC<
                 />
               )
             }}
-            showsVerticalScrollIndicator={false}
-            style={{
-              backgroundColor: palette.white,
-              height: "auto",
-              marginBottom: 34,
-            }}
-            contentContainerStyle={{
-              paddingBottom: 150,
-            }}
-            // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
-              useNativeDriver: true,
-            })}
+            ListEmptyComponent={
+              <View
+                style={{
+                  alignSelf: "center",
+                  alignItems: "center",
+                  paddingTop: 40,
+                }}
+              >
+                <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+                <PreMed18 text="검색된 펫시터가 없어요 😢" />
+              </View>
+            }
           />
         </View>
       </Animated.View>
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={snapPoints}
+        enablePanDownToClose={false}
+        footerComponent={renderFooter}
+      >
+        <BottomSheetScrollView contentContainerStyle={styles.bottomSheetContainer}>
+          <Row style={{ height: 30 }}>
+            <TouchableOpacity
+              style={{ flex: 1 }}
+              onPress={() => {
+                bottomSheetModalRef.current?.close()
+              }}
+            >
+              <Image source={images.x_grey} style={{ width: 16, height: 16 }} />
+            </TouchableOpacity>
+            <View style={{ flex: 1, alignItems: "center" }}>
+              <PreBol18 text="필터" color={HEAD_LINE} />
+            </View>
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "flex-end" }}
+              onPress={() => {
+                setDraftSearchRequest(defaultSearchRequest)
+              }}
+            >
+              <PreMed16 text="초기화" color={DISABLED} />
+            </TouchableOpacity>
+          </Row>
+
+          <DivisionLine color={LBG} mt={4} />
+
+          <PreBol16 text="거리 반경" color={SUB_HEAD_LINE} mt={20} />
+          <View
+            style={{
+              width: DEVICE_SCREEN_WIDTH,
+              alignSelf: "center",
+              paddingVertical: 10,
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
+          >
+            <Slider
+              style={{ paddingVertical: 10 }}
+              minimumTrackTintColor={GIVER_CASUAL_NAVY}
+              maximumTrackTintColor={DISABLED}
+              thumbImage={Platform.select({ ios: null, android: images.slider_thumb })}
+              thumbTintColor={Platform.select({ ios: "white", android: null })}
+              tapToSeek={true}
+              step={1}
+              minimumValue={0}
+              maximumValue={3}
+              onValueChange={(value) => {
+                switch (value) {
+                  case 0:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 1 })
+                    break
+                  case 1:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 10 })
+                    break
+                  case 2:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 20 })
+                    break
+                  case 3:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 30 })
+                    break
+                }
+              }}
+              value={radiusToSliderValue()}
+            />
+            <Row
+              style={{
+                marginTop: 4,
+                paddingHorizontal: 4,
+                justifyContent: "space-between",
+                backgroundColor: "transparent",
+              }}
+            >
+              <PopReg14 text="1km" color={HEAD_LINE} />
+              <PopReg14 text="10km" color={HEAD_LINE} />
+              <PopReg14 text="20km" color={HEAD_LINE} />
+              <PopReg14 text="30km" color={HEAD_LINE} />
+            </Row>
+          </View>
+
+          <Row mt={40 - 2}>
+            <PreBol16 text="케어기버 인증 펫시터만 보기" color={SUB_HEAD_LINE} />
+            <BlueCheckbox
+              style={{ paddingVertical: 8 + 2, paddingHorizontal: 8 }}
+              imageSize={16}
+              value={draftSearchRequest.certifiedOnly}
+              onPress={() => {
+                setDraftSearchRequest({
+                  ...draftSearchRequest,
+                  certifiedOnly: !draftSearchRequest.certifiedOnly,
+                })
+              }}
+            />
+          </Row>
+
+          <PreBol16 text="펫시터 성별" color={SUB_HEAD_LINE} mt={36 - 2} mb={8} />
+          <Row style={{ justifyContent: "space-between" }}>
+            <PressableButton
+              onPress={() => {
+                setDraftSearchRequest({ ...draftSearchRequest, gender: Sex.FEMALE })
+              }}
+              isPressed={draftSearchRequest.gender === Sex.FEMALE}
+              defaultViewStyle={$defaultPressableButton}
+              pressedViewStyle={styles.pressedPressableButton}
+            >
+              <PreMed14 text="여자" color={HEAD_LINE} />
+            </PressableButton>
+            <PressableButton
+              onPress={() => {
+                setDraftSearchRequest({ ...draftSearchRequest, gender: Sex.MALE })
+              }}
+              isPressed={draftSearchRequest.gender === Sex.MALE}
+              defaultViewStyle={$defaultPressableButton}
+              pressedViewStyle={styles.pressedPressableButton}
+            >
+              <PreMed14 text="남자" color={HEAD_LINE} />
+            </PressableButton>
+          </Row>
+        </BottomSheetScrollView>
+      </BottomSheetModal>
     </Screen>
   )
+})
+
+const $defaultPressableButton: ViewStyle = {
+  borderWidth: 1,
+  borderRadius: 4,
+  borderColor: LIGHT_LINE,
+  height: 36,
+  width: "48%",
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const $defaultSubmitButton: ViewStyle = {
+  marginTop: 20,
+  paddingVertical: 18,
+  width: "100%",
+  borderRadius: 8,
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const styles = StyleSheet.create({
+  bottomSheetContainer: {
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+  },
+
+  btnContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: BASIC_BACKGROUND_PADDING_WIDTH,
+    right: BASIC_BACKGROUND_PADDING_WIDTH,
+  },
+
+  submitBtn: {
+    ...$defaultSubmitButton,
+    backgroundColor: GIVER_CASUAL_NAVY,
+  },
+
+  disabledSubmitBtn: {
+    ...$defaultSubmitButton,
+    backgroundColor: DISABLED,
+  },
+
+  pressedPressableButton: {
+    ...$defaultPressableButton,
+    borderWidth: 2,
+    borderColor: GIVER_CASUAL_NAVY,
+  },
 })
