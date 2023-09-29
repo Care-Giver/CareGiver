@@ -1,4 +1,4 @@
-import { GIVER_CASUAL_NAVY } from "#theme"
+import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
@@ -14,6 +14,6 @@ export const styles = StyleSheet.create({
     backgroundColor: GIVER_CASUAL_NAVY,
   },
   disabledViewStyle: {
-    backgroundColor: "#F1F1F4",
+    backgroundColor: DISABLED,
   },
 })

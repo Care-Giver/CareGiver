@@ -7,7 +7,16 @@ import React, {
   useCallback,
   useLayoutEffect,
 } from "react"
-import { View, Image, Pressable, LayoutAnimation, FlatList, Platform, Alert } from "react-native"
+import {
+  View,
+  Image,
+  Pressable,
+  LayoutAnimation,
+  FlatList,
+  Platform,
+  Alert,
+  TouchableOpacity,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "../../navigators"
@@ -344,13 +353,16 @@ export const FavoritesScreen: FC<
       </Row>
 
       {/* //* filter box */}
-      <Pressable onPress={() => bottomSheetModalRef.current?.present()} style={styles.filterBox}>
+      <TouchableOpacity
+        onPress={() => bottomSheetModalRef.current?.present()}
+        style={styles.filterBox}
+      >
         <PreReg12 text={filterText} color={GIVER_CASUAL_NAVY} />
         <View style={{ flexDirection: "row" }}>
           <PreReg12 text={filterInfoText} />
           <Image source={images.list_bars} style={styles.filterImg} />
         </View>
-      </Pressable>
+      </TouchableOpacity>
 
       {/* //* division line */}
       <View
@@ -411,9 +423,12 @@ export const FavoritesScreen: FC<
           <View>
             <Row style={styles.bottomSheetTitleBox}>
               {/* // ? "X" close button */}
-              <Pressable onPress={() => bottomSheetModalRef.current?.close()} style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => bottomSheetModalRef.current?.close()}
+                style={{ flex: 1 }}
+              >
                 <Image source={images.x_grey} style={{ width: 16, height: 16 }} />
-              </Pressable>
+              </TouchableOpacity>
 
               {/* //? "필터" title text */}
               <View
@@ -427,9 +442,9 @@ export const FavoritesScreen: FC<
               </View>
 
               {/* //? "초기화" reset button */}
-              <Pressable style={{ flex: 1 }} onPress={handleResetPress}>
+              <TouchableOpacity style={{ flex: 1 }} onPress={handleResetPress}>
                 <PreMed16 text="초기화" color={DISABLED} style={{ marginLeft: "auto" }} />
-              </Pressable>
+              </TouchableOpacity>
             </Row>
 
             {/* //* division line */}
