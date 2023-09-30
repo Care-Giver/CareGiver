@@ -80,9 +80,9 @@ export const PetStoreModel = types
       self.pets = value
     },
 
-    async petsHandler(token: string) {
+    async petsHandler() {
       try {
-        const { isSuccess, petsDetail } = await getPets(token)
+        const { isSuccess, petsDetail } = await getPets()
 
         if (!isSuccess) {
           return false

@@ -1,7 +1,5 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { AuthProvider } from "#models"
-import { alertModal } from "../../utils/alert-modal"
 
 //* Pet관련 Types
 export enum PetSex {
@@ -54,32 +52,17 @@ interface PetsResponse extends GeneralResponse {
 
 interface GetPetsResult {
   isSuccess: boolean // 성공여부
-  petsDetail?: PetDetail[] // 성공시, 펫 상세정보
+  petsDetail?: PetDetail[] // 성공시, 펫 상세정보 리스트
   reason?: string // 실패시, 실패이유
 }
+
 /**
- * pets API의 목적은 x-jwt값을 펫 데이터로 변환하는 것에 있습니다.
- * login API 를 통해 얻어낸 x-jwt 토큰값을 사용하여,
- * 로그인한 유저의 펫 정보를 가져옵니다.
- * @returns {Promise<any>}
- *
- *
+ * 로그인한 유저의 모든 반려동물 정보를 읽어온다.
+ * @returns {Promise<GetPetsResult>}
  */
-
-export const getPets = async (token: string): Promise<GetPetsResult> => {
+export const getPets = async (): Promise<GetPetsResult> => {
   try {
-    console.log("token", token)
-    if (!token) {
-      alertModal("로그인이 필요합니다.", "토큰 값이 존재하지 않음")
-      return { isSuccess: false, reason: "토큰 값이 존재하지 않음" }
-    }
-
-    const response = await axios.get<PetsResponse>(`${BASE_URL}/pets`, {
-      headers: {
-        "x-jwt": token,
-        Accept: "Application/json",
-      },
-    })
+    const response = await axios.get<PetsResponse>(`${BASE_URL}/pets`)
 
     if (!response?.data.ok) {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)

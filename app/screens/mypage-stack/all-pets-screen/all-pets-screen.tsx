@@ -21,7 +21,6 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     // MST store 를 가져옵니다.
     const {
       petStore: { pets, firstPet, petsHandler },
-      userStore: { userAuth },
     } = useStores()
     console.log("firstPet", firstPet)
 
@@ -36,7 +35,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     //   setPets(petStore.pets)
     // }, [])
     useEffect(() => {
-      petsHandler(userAuth.token)
+      petsHandler()
     }, [])
     return (
       <Screen>
