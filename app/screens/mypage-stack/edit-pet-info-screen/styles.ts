@@ -1,4 +1,4 @@
-import { DEVICE_SCREEN_WIDTH, LBG, LIGHT_LINE, palette } from "#theme"
+import { BOTTOM_HEIGHT, LBG } from "#theme"
 import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 export const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   },
   saveBox: {
     position: "absolute",
-    bottom: 0,
+    bottom: BOTTOM_HEIGHT,
     width: "100%",
     zIndex: 0,
     paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,

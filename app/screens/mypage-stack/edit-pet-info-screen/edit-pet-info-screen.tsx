@@ -28,7 +28,7 @@ import {
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { BODY, DEVICE_SCREEN_WIDTH } from "#theme"
+import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
@@ -248,7 +248,7 @@ export const EditPetInfoScreen: FC<
   //* 본문 코드 :
   return (
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT }}>
         <View>
           {/* //*이미지  */}
           <FlatList
@@ -465,10 +465,6 @@ export const EditPetInfoScreen: FC<
           <ConditionalButton
             label="저장하기"
             isActivated={true}
-            style={{
-              marginTop: "auto",
-              marginBottom: 0,
-            }}
             onPress={() => {
               if (anyChangeMade === true) {
                 setAnyChangeMade(false)
