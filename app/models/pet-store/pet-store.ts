@@ -1,3 +1,4 @@
+import { getPets } from "../../services/axios/pets"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 export enum PetSex {
@@ -72,11 +73,36 @@ export const PetStoreModel = types
 
       return self.pets[0]
     },
+
+    /** 반려동물 존재유무 (한 마리이상 등록했다면, true. ) */
+    get hasPets() {
+      return self.pets.length > 0
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     /** API 를 통해 받아온 펫 목록을 저장합니다. */
     setPets(value: Pet[]) {
       self.pets = value
+    },
+
+    async petsHandler() {
+      try {
+        const { isSuccess, petsDetail } = await getPets()
+
+        if (!isSuccess) {
+          return false
+        }
+
+        if (!petsDetail) {
+          return false
+        }
+        this.setPets(petsDetail)
+
+        return true
+      } catch (error) {
+        console.error("catch 에러!!! - petsDetailHandler", error)
+        return false
+      }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

@@ -60,7 +60,7 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { PetsitterType, ServiceType, Type, useStores } from "../models"
+import { Pet, PetsitterType, ServiceType, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
 
@@ -150,7 +150,9 @@ export type CLStackNavigatorParamList = {
    * MypageStack - 내정보 스택
    */
   "mypage-screen": undefined
-  "all-pets-screen": undefined
+  "all-pets-screen": {
+    pets: Pet[]
+  }
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
