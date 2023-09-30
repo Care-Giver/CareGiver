@@ -1,5 +1,5 @@
 import { View, Image, TouchableOpacity, ScrollView } from "react-native"
-import React, { FC, useState } from "react"
+import React, { FC, useEffect } from "react"
 import {
   MypageButton,
   PetImageCard,
@@ -17,46 +17,22 @@ import { images } from "#images"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { Pet } from "../../../models/pet-store/pet-store"
 import { useStores } from "#models"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
 
-// Dummy data
-const pets = [
-  {
-    name: "초코",
-    petType: "중형견",
-    species: "푸들",
-    age: 7,
-    sex: "FEMALE",
-  },
-  {
-    name: "구름이",
-    petType: "소형",
-    species: "고양이",
-    age: 15,
-    sex: "MALE",
-  },
-  {
-    name: "자두",
-    petType: "소형",
-    species: "고양이",
-    age: 3,
-    sex: "MALE",
-  },
-]
-
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   function MypageScreen({ navigation, route }) {
     useShowBottomTab(navigation)
-
     const {
       userStore: { switchType, loggedIn, userDetail },
+      petStore: { pets, petsHandler, hasPets },
     } = useStores()
 
-    // ? 유저의 펫 리스트
-    const [petsList, setPetsList] = useState<Pet[]>(pets)
+    /** 반려동물 리스트를 불러옵니다. */
+    useEffect(() => {
+      petsHandler()
+    }, [])
 
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
     const handleLoginPress = () => {
@@ -129,21 +105,23 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 <Row style={{ justifyContent: "space-between" }}>
                   <PreBol16 text="나의 반려동물" />
                   {/* //? 전체보기 버튼 */}
-                  <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
-                    <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
-                    <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
-                  </TouchableOpacity>
+                  {hasPets && (
+                    <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
+                      <PreBol14 text="전체보기" color={BODY} onPress={handleMyPetsPress} />
+                      <Image style={{ width: 16, height: 16 }} source={images.arrow_right} />
+                    </TouchableOpacity>
+                  )}
                 </Row>
 
                 {/* //? 반려동물 카드 리스트 */}
                 <View style={styles.petListContainer}>
-                  {petsList.map((item, index) => {
+                  {pets.map((item, index) => {
                     // ! 마이페이지 메인에는 세 마리만 노출
                     if (index < 3) {
                       return (
                         <PetImageCard
                           key={index}
-                          petImage={item?.image || images.default_pet_image_60}
+                          petImage={item?.images ? item.images[0] : images.default_pet_image_60}
                           name={item.name}
                         />
                       )

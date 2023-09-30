@@ -73,6 +73,11 @@ export const PetStoreModel = types
 
       return self.pets[0]
     },
+
+    /** 반려동물 존재유무 (한 마리이상 등록했다면, true. ) */
+    get hasPets() {
+      return self.pets.length > 0
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     /** API 를 통해 받아온 펫 목록을 저장합니다. */
