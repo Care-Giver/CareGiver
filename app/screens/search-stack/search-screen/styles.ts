@@ -32,4 +32,12 @@ export const styles = StyleSheet.create({
     width: 0,
     height: 0,
   },
+
+  btnContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: BASIC_BACKGROUND_PADDING_WIDTH,
+    right: BASIC_BACKGROUND_PADDING_WIDTH,
+  },
 })

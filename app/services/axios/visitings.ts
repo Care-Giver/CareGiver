@@ -9,7 +9,10 @@ import {
   UserRelatedData,
 } from "./types/creches.visitings.common.types"
 
-interface VisitingsSearchRequest extends SearchRequest {}
+export interface VisitingsSearchRequest extends SearchRequest {
+  startTime: string
+  endTime: string
+}
 
 export interface VisitingService extends Service {}
 
