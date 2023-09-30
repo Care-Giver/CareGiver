@@ -62,6 +62,7 @@ export const EditMypageScreen: FC<
   //* 스크린을 렌더링할때 최초실행됩니다.
   useEffect(() => {
     showEditButton() //* 수정 화면이 아닌 상태, 즉 편집버튼(연필모양 버튼)을 보여주는 상태로 설정합니다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // console.log("mainscreen", route.params)
 

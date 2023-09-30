@@ -1,13 +1,5 @@
-import React, { FC, useState, useEffect, useRef, useCallback } from "react"
-import {
-  Image,
-  View,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  ViewStyle,
-  ScrollView,
-} from "react-native"
+import React, { FC, useState, useRef, useCallback, useMemo } from "react"
+import { Image, View, LayoutAnimation, Platform, UIManager, ScrollView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -21,25 +13,23 @@ import {
   RowRoundedButton,
   SelectPetDropdownBox,
   TimePicker,
-  BASIC_BACKGROUND_PADDING_WIDTH,
   ClientCalendar,
   BOTTOM_TAB_BAR_HEIGHT,
+  timeText,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
-  IOS_BOTTOM_HOME_BAR_HEIGHT,
   DISABLED,
   HEAD_LINE,
   SUB_HEAD_LINE,
   BOTTOM_HEIGHT,
   LIGHT_LINE,
   GIVER_CASUAL_NAVY,
-  BOTTOM_TAB_NAVIGATOR,
 } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
 import { DateData } from "react-native-calendars"
-import BottomSheet from "@gorhom/bottom-sheet"
+import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { addMinutes } from "date-fns"
 
@@ -81,78 +71,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     // const [service, setService] = useState<"펫시팅" |"훈련">(null) //? 팻시팅 or 훈련
     const service = "펫시팅"
 
-    //* 달력 - Calendar
+    //* 날짜선택 - 달력 - Calendar
     const [isCalendarOpen, setIsCalendarOpen] = useState(false)
     const [date, setDate] = useState<DateData>(null) //? 선택된 날짜
     const [dateRange, setDateRange] = useState<DateData[]>([]) //? 선택된 날짜 범위
-
-    //* 선택된 반려동물
-    const [selectedPets, setSelectedPets] = useState([])
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
-    //* 시간선택 - TimePicker
-    const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
-    const [endTime, setEndTime] = useState<Date>(oneHourAfterNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
-    const [selectedTimeText, setSelectedTimeText] = useState("방문시간을 선택해주세요")
-
-    //* 위치선택
-    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
-
-    const scrollViewRef = useRef<ScrollView>(null)
-
-    // 시간선택 BottomSheet - ref
-    const bottomSheetRef = useRef<BottomSheet>(null)
-
-    // 시간선택 BottomSheet - callbacks
-    const handleSheetChanges = useCallback((index: number) => {
-      console.log("handleSheetChanges", index)
-    }, [])
-
-    const handleBottomSheet = (isOpen) => {
-      if (isOpen) {
-        bottomSheetRef.current?.expand()
-      } else {
-        bottomSheetRef.current?.collapse()
-      }
-    }
-
-    const timeText = (time: Date) => {
-      const hours = time.getUTCHours()
-      const minute = time.getUTCMinutes()
-      return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
-    }
-
-    const closeBottomSheet = () => {
-      const beginDateText = timeText(startTime)
-      const endDateText = timeText(endTime)
-      setSelectedTimeText(`${beginDateText} - ${endDateText}`)
-
-      bottomSheetRef.current?.close()
-    }
-
-    //? 펫시터 찾기 버튼 활성화 여부 결정
-    const hadleIsActivated = () => {
-      if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
-
-      if (serviceType === "방문" && !date) return false
-
-      if (serviceType === "위탁" && dateRange.length !== 2) return false
-
-      if (selectedPets.length === 0) return false
-
-      return true
-    }
-
-    if (Platform.OS === "android") {
-      if (UIManager.setLayoutAnimationEnabledExperimental) {
-        UIManager.setLayoutAnimationEnabledExperimental(true)
-      }
-    }
-
-    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
-
-    const isActivated = hadleIsActivated()
-
     const calendarButtonText = () => {
       // 방문
       if (serviceType === "방문") {
@@ -172,7 +94,78 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           )} ~ ${dateRange[1]?.dateString?.replace(/-/g, ".")}`
       }
     }
+    if (Platform.OS === "android") {
+      if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+      }
+    }
 
+    //* 시간선택 - TimePicker
+    const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
+    const [endTime, setEndTime] = useState<Date>(oneHourAfterNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+    const [selectedTimeText, setSelectedTimeText] = useState("방문시간을 선택해주세요")
+
+    const scrollViewRef = useRef<ScrollView>(null)
+
+    // 시간선택 바텀시트모달 - ref
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+    // 시간선택 바텀시트모달 - snapPoints
+    const snapPoints = useMemo(() => ["60%"], [])
+
+    /** 시간선택 바텀시트모달 backdrop */
+    const renderBackdrop = useCallback(
+      (props) => (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+          disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+          pressBehavior={"close"}
+        />
+      ),
+      [],
+    )
+
+    /** 시간선택 바텀시트모달 Footer - 확인 버튼 클릭시 작동 */
+    const closeBottomSheet = useCallback(() => {
+      const beginDateText = timeText(startTime)
+      const endDateText = timeText(endTime)
+      setSelectedTimeText(`${beginDateText} - ${endDateText}`)
+      bottomSheetModalRef.current?.close()
+    }, [startTime, endTime])
+
+    /** 시간선택 바텀시트모달 Footer - 확인 버튼 렌더링 */
+    const renderFooter = useCallback(
+      (props) => (
+        <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+          <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
+        </BottomSheetFooter>
+      ),
+      [closeBottomSheet],
+    )
+
+    //? 펫시터 찾기 버튼 활성화 여부 결정
+    const hadleIsActivated = () => {
+      if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
+
+      if (serviceType === "방문" && !date) return false
+
+      if (serviceType === "위탁" && dateRange.length !== 2) return false
+
+      if (selectedPets.length === 0) return false
+
+      return true
+    }
+
+    //* 위치선택
+    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
+
+    //* 반려동물선택 - 선택된 반려동물
+    const [selectedPets, setSelectedPets] = useState([])
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
+
+    const isActivated = hadleIsActivated()
     return (
       <Screen testID="SearchScreen" preset="fixed">
         <ScrollView
@@ -280,8 +273,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           {serviceType === "방문" && (
             <RowRoundedButton
               onPress={() => {
+                // handleBottomSheet(true)
+                bottomSheetModalRef.current?.present()
                 setIsCalendarOpen(false)
-                handleBottomSheet(true)
               }}
               image={images.timer}
               text={selectedTimeText}
@@ -389,45 +383,24 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           }}
         />
 
-        {/* 시간 선택 바텀시트 - !항상 컴포넌트 최하단에 있을것! */}
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
-          snapPoints={["80%"]}
-          onChange={handleSheetChanges}
-          backgroundStyle={$bottomSheetBackgroundStyleForShadow}
+        {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          backdropComponent={renderBackdrop}
+          index={0}
+          snapPoints={snapPoints}
           enablePanDownToClose
+          footerComponent={renderFooter}
         >
           <TimePicker
+            style={{ marginTop: 20 }}
             beginDate={startTime}
             setBeginDate={setStartTime}
             endDate={endTime}
             setEndDate={setEndTime}
           />
-
-          <View
-            style={{
-              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-              marginBottom: BOTTOM_TAB_BAR_HEIGHT,
-            }}
-          >
-            <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
-          </View>
-        </BottomSheet>
+        </BottomSheetModal>
       </Screen>
     )
   },
 )
-
-const $bottomSheetBackgroundStyleForShadow: ViewStyle = {
-  backgroundColor: "white",
-  borderRadius: 32,
-  elevation: 8,
-  shadowColor: "black",
-  shadowOffset: {
-    width: 2,
-    height: 2,
-  },
-  shadowOpacity: 0.2,
-  shadowRadius: 20,
-}

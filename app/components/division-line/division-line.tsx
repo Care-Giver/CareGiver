@@ -1,6 +1,5 @@
-import { View, ViewStyle } from "react-native"
+import { View, ViewStyle, StyleSheet } from "react-native"
 import React from "react"
-import { styles } from "./styles"
 import { LIGHT_LINE } from "#theme"
 
 interface DivisionLineProps {
@@ -40,3 +39,10 @@ export const DivisionLine = ({
 
   return <View style={[styles.root, COLOR_AND_HEIGHT, $style, style]} />
 }
+
+const styles = StyleSheet.create({
+  root: {
+    width: "100%",
+    backgroundColor: "red",
+  },
+})

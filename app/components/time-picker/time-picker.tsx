@@ -30,9 +30,16 @@ interface TimePickerProps {
   setEndDate: Dispatch<SetStateAction<Date>>
 }
 
+/** Date 시간객체를 "HH:MM" 꼴의 string 으로 변환합니다. */
+export const timeText = (time: Date) => {
+  const hours = time.getUTCHours()
+  const minute = time.getUTCMinutes()
+  return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
+}
+
 export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const { style, beginDate, setBeginDate, endDate, setEndDate } = props
-  const _styles = Object.assign({}, styles.container, style)
+  const allStyles = Object.assign({}, styles.root, style)
   const nowInUTCZero = new Date()
   const localTimeEndOfToday = addMinutes(endOfToday(), -1 * nowInUTCZero.getTimezoneOffset())
 
@@ -63,12 +70,6 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
     }
   }, [beginDate, endDate])
 
-  const timeText = (time: Date) => {
-    const hours = time.getUTCHours()
-    const minute = time.getUTCMinutes()
-    return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
-  }
-
   const differenceInMinutes = (begin: Date, end: Date) => {
     let diff = (end.getTime() - begin.getTime()) / 1000
     diff /= 60
@@ -80,7 +81,7 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const INTERVAL_MINUTES = diff % 60
 
   return (
-    <View style={_styles}>
+    <View style={allStyles}>
       {/* Indicator Text Area */}
       <View
         style={{
@@ -159,8 +160,8 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  root: {
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     // backgroundColor: "orange",

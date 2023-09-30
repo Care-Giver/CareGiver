@@ -165,7 +165,7 @@ export const SearchResultScreen: FC<
   /** 검색 API 호출을 위한 request body */
   const [searchRequest, setSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
 
-  /** 검색 필터 바텀시트에서 설정한 필터값을 저장하는 임시 변수 */
+  /** 검색 필터 바텀시트모달에서 설정한 필터값을 저장하는 임시 변수 */
   const [draftSearchRequest, setDraftSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
 
   /** 펫시터 */
@@ -269,10 +269,10 @@ export const SearchResultScreen: FC<
     [petsitters, optionLabel],
   )
 
-  // 필터 바텀시트 - ref
+  // 필터 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
-  // 필터 바텀시트 - snapPoints
+  // 필터 바텀시트모달 - snapPoints
   const snapPoints = useMemo(
     () => [
       "60%",
@@ -284,7 +284,7 @@ export const SearchResultScreen: FC<
     [],
   )
 
-  /** 필터 바텀시트 backdrop */
+  /** 필터 바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -297,15 +297,15 @@ export const SearchResultScreen: FC<
     [],
   )
 
-  /** 필터 바텀시트 - 저장 버튼 누를 시 실행되는 함수 */
+  /** 필터 바텀시트모달 - 저장 버튼 누를 시 실행되는 함수 */
   const handleSaveFilterButton = useCallback(() => {
     // 임시 저장된 필터값을 현재 필터값으로 설정
     setSearchRequest(draftSearchRequest)
-    // 필터 바텀시트 닫기
+    // 필터 바텀시트모달 닫기
     bottomSheetModalRef.current?.close()
   }, [draftSearchRequest])
 
-  /** 필터 바텀시트 Footer - 저장 버튼 렌더링 */
+  /** 필터 바텀시트모달 Footer - 저장 버튼 렌더링 */
   const renderFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
@@ -377,7 +377,7 @@ export const SearchResultScreen: FC<
           transform: [{ translateY: animateTranslateY }],
         }}
       >
-        {/* //? title container - 검색 결과 텍스트 + 검색결과 필터 바텀시트 버튼 */}
+        {/* //? title container - 검색 결과 텍스트 + 검색결과 필터 바텀시트모달 버튼 */}
         <Row
           style={{
             justifyContent: "space-between",
@@ -559,6 +559,7 @@ export const SearchResultScreen: FC<
         </View>
       </Animated.View>
 
+      {/* 검색 필터 바텀시트모달 */}
       <BottomSheetModal
         ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
