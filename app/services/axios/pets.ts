@@ -29,7 +29,7 @@ export interface PetDetail {
   weight: number
   petType: HandleType
   isNeutralizated: boolean
-  birthday: Date
+  birthday: string
   desc: string
 }
 
@@ -110,7 +110,7 @@ interface UpdatePetRequestBody {
   userId: number
   speciesName: string
   familyType: string
-  birthday: Date
+  birthday: string
 }
 interface UpdatePetResult {
   isSuccess: boolean // 성공여부

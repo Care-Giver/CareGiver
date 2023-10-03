@@ -152,11 +152,12 @@ export type CLStackNavigatorParamList = {
   "mypage-screen": undefined
   "all-pets-screen": {
     pets: Pet[]
+    isSaved?: boolean
   }
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
-  "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean }
+  "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
 
   // ===========================================================================================================
   // 아래는 테스트 스크린들 입니다.

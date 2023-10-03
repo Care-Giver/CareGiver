@@ -1,5 +1,5 @@
 import { View, FlatList } from "react-native"
-import React, { FC } from "react"
+import React, { FC, useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -13,11 +13,40 @@ import {
 } from "#components"
 import { styles } from "./styles"
 import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import { useFocusEffect } from "@react-navigation/native"
+import { Pet, useStores } from "#models"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
+    const {
+      petStore: { petsHandler },
+    } = useStores()
+
     //TODO 수정이 바로 적용되지 않는 문제. 여기서 getPets를 불러와야할지? 혹은 수정스크린에서 params로?
-    const { pets } = route.params
+    const {
+      // mypage-screen 에서 넘어옴
+      pets: petsFromMypageScreen,
+      // edit-pet-info-screen 에서 저장하기 버튼 클릭시 넘겨옴
+      isSaved,
+    } = route.params
+    const [pets, setPets] = useState<Pet[]>(petsFromMypageScreen)
+
+    // 만약, edit-pet-info-screen 에서 "저장하기" 버튼을 클릭한 경우,
+    // 새 펫 정보를 요청한다.
+    useFocusEffect(
+      useCallback(() => {
+        if (isSaved) {
+          console.log("isSaved >>>", isSaved)
+          const updatePetState = async () => {
+            // @ts-ignore
+            petsHandler().then(setPets)
+          }
+          updatePetState()
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [isSaved]),
+    )
 
     return (
       <Screen>

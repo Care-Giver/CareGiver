@@ -27,7 +27,7 @@ import {
   PreMed12,
 } from "#components"
 import { Pets } from "./dummy-data"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
+import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
 import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
@@ -60,11 +60,21 @@ const imagess = [
   },
 ]
 
+export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
+  NavigatorParamList,
+  스크린이름들
+>
+// 참고문헌: https://reactnavigation.org/docs/typescript/
+// https://stackoverflow.com/a/70615573/16673541
+
+// type 스크린이름들 = "스크린이름1" | "스크린이름2" | ...
+// Typescript - Generics: 마치 함수의 파라미터 처럼 작동하여, type 을 유연하게 작성할수 있게 도와주는 타입스크립트 고유 내장 기능
+// const route = useRoute<훅전용NavigatiorParamList<"edit-pet-info-screen">>()
+// const navigation = useNavigation()
+
 export const EditPetInfoScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-pet-info-screen">
-> = observer(function EditPetInfoScreen() {
-  const route = useRoute()
-  const navigation = useNavigation()
+> = observer(function EditPetInfoScreen({ route, navigation }) {
   const { keyboardShown } = useKeyboard()
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
@@ -76,9 +86,8 @@ export const EditPetInfoScreen: FC<
   const [anyChangeMade, setAnyChangeMade] = useState(false)
 
   //*현재 펫 데이터 가져오기 (일단은 더미데이터)
-  //const currentPet = Pets.find((Pet) => Pet.id === 1)
   const currentPet = route.params.pet
-  console.log("currentPet >>>", currentPet)
+
   //*화면에서 이름 부분에 들어갈 데이터
   const [name, setName] = useState(currentPet.name)
 
@@ -482,11 +491,13 @@ export const EditPetInfoScreen: FC<
                 userId: 25,
                 speciesName: "시츄",
                 familyType: "DOG",
-                birthday: new Date(),
+                birthday: "2022-07-07",
               }).then((res) => {
                 if (res.isSuccess) {
-                  navigate("all-pets-screen")
-                  //TODO navigate에 params로 getPets()를 넘겨야할지?
+                  navigate("all-pets-screen", { isSaved: true })
+                } else {
+                  //TODO
+                  alert("수정에 실패했습니다.")
                 }
               })
             }}
