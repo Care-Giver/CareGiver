@@ -16,6 +16,7 @@ import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
+    //TODO 수정이 바로 적용되지 않는 문제. 여기서 getPets를 불러와야할지? 혹은 수정스크린에서 params로?
     const { pets } = route.params
 
     return (
@@ -43,7 +44,20 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                   ...data.item,
                 }}
                 onPress={() => {
-                  navigate("edit-pet-info-screen")
+                  navigate("edit-pet-info-screen", {
+                    pet: {
+                      id: data.item.id,
+                      profileImage: data.item.images,
+                      name: data.item.name,
+                      birthday: data.item.birthday,
+                      species: data.item.species.name,
+                      sex: data.item.sex,
+                      petType: data.item.petType,
+                      weight: data.item.weight,
+                      isNeutralizated: data.item.isNeutralizated,
+                      desc: data.item.desc,
+                    },
+                  })
                 }}
                 isDeletable={false}
               />

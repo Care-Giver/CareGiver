@@ -68,7 +68,9 @@ export const getPets = async (): Promise<GetPetsResult> => {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    console.log("pets >>>", response.data.petResults)
+    console.log("getPets >>>", response.data.petResults)
+    console.log("response.request._headers", response.request._headers)
+
     return {
       isSuccess: true,
       petsDetail: response.data.petResults.map((data) => {
@@ -91,6 +93,46 @@ export const getPets = async (): Promise<GetPetsResult> => {
     }
   } catch (error) {
     console.error("catch 에러!!! - getPets", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+interface PetResponse extends GeneralResponse {
+  pet: Omit<Pet, "familyType">
+}
+interface UpdatePetRequestBody {
+  name: string
+  age: number
+  sex: PetSex
+  weight: number
+  images: string
+  isNeutralizated: boolean
+  desc: string
+  userId: number
+  speciesName: string
+  familyType: string
+  birthday: Date
+}
+interface UpdatePetResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+export const updatePet = async (
+  id: number,
+  body: UpdatePetRequestBody,
+): Promise<UpdatePetResult> => {
+  try {
+    const response = await axios.put<PetResponse>(`${BASE_URL}/pet/${id}`, body)
+
+    if (!response?.data.ok) {
+      console.error("/pets API 에러!!! ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+    console.log("updatePets >>>", response.data.pet)
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - modifyPet", error)
     return { isSuccess: false, reason: error }
   }
 }

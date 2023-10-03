@@ -12,7 +12,7 @@ import {
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, goBack } from "#navigators"
+import { NavigatorParamList, goBack, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
@@ -34,6 +34,7 @@ import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
 import { useKeyboard } from "@react-native-community/hooks"
+import { updatePet, PetSex } from "../../../services/axios/pets"
 
 //*images 임시 데이터베이스
 const imagess = [
@@ -65,7 +66,6 @@ export const EditPetInfoScreen: FC<
   const route = useRoute()
   const navigation = useNavigation()
   const { keyboardShown } = useKeyboard()
-
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
 
@@ -76,8 +76,9 @@ export const EditPetInfoScreen: FC<
   const [anyChangeMade, setAnyChangeMade] = useState(false)
 
   //*현재 펫 데이터 가져오기 (일단은 더미데이터)
-  const currentPet = Pets.find((Pet) => Pet.id === 1)
-
+  //const currentPet = Pets.find((Pet) => Pet.id === 1)
+  const currentPet = route.params.pet
+  console.log("currentPet >>>", currentPet)
   //*화면에서 이름 부분에 들어갈 데이터
   const [name, setName] = useState(currentPet.name)
 
@@ -470,7 +471,24 @@ export const EditPetInfoScreen: FC<
                 setAnyChangeMade(false)
               }
               notEditable() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-              //TODO pet data 실제로 변경하는 코드 필요 (변경된 정보들로 저장 (process -> 실제로 한 정보가 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
+              updatePet(16, {
+                name: name,
+                age: 3,
+                sex: PetSex.MALE,
+                images: "https://tr.rbxcdn.com/7b7ebb9eadb01ab435523d9ed0eb102b/420/420/Hat/Png",
+                weight: 7.3,
+                isNeutralizated: true,
+                desc: "사람을 엄청 좋아해요",
+                userId: 25,
+                speciesName: "시츄",
+                familyType: "DOG",
+                birthday: new Date(),
+              }).then((res) => {
+                if (res.isSuccess) {
+                  navigate("all-pets-screen")
+                  //TODO navigate에 params로 getPets()를 넘겨야할지?
+                }
+              })
             }}
           />
         </View>
