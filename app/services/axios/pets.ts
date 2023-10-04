@@ -104,7 +104,7 @@ interface UpdatePetRequestBody {
   age: number
   sex: PetSex
   weight: number
-  images: string
+  images: string[]
   isNeutralizated: boolean
   desc: string
   userId: number

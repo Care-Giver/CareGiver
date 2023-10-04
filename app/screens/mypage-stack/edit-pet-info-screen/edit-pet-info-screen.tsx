@@ -25,6 +25,8 @@ import {
   BirthdayModal,
   CustomModal,
   PreMed12,
+  CustomImagePicker,
+  PickerImage,
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
@@ -75,6 +77,8 @@ export type 훅전용NavigatiorParamList<스크린이름들 extends keyof Naviga
 export const EditPetInfoScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-pet-info-screen">
 > = observer(function EditPetInfoScreen({ route, navigation }) {
+  //*현재 펫 데이터 가져오기 (일단은 더미데이터)
+  const currentPet = route.params.pet
   const { keyboardShown } = useKeyboard()
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
@@ -84,9 +88,6 @@ export const EditPetInfoScreen: FC<
 
   //* 변화 감지 변수
   const [anyChangeMade, setAnyChangeMade] = useState(false)
-
-  //*현재 펫 데이터 가져오기 (일단은 더미데이터)
-  const currentPet = route.params.pet
 
   //*화면에서 이름 부분에 들어갈 데이터
   const [name, setName] = useState(currentPet.name)
@@ -98,7 +99,7 @@ export const EditPetInfoScreen: FC<
   const [birthday, setBirthday] = useState(currentPet.birthday)
 
   //*성별 한국어로 변환
-  const sex = currentPet.sex === "female" ? "여" : "남"
+  const sex = currentPet.sex === "FEMALE" ? "여" : "남"
 
   //*중성화 여부 한국어로 변환
   const Neutralizated = currentPet.isNeutralizated === true ? "함" : "안 함"
@@ -178,8 +179,11 @@ export const EditPetInfoScreen: FC<
 
   //*image 관련 변수,함수들
   //* image
-  const [currentImage, setCurrentImage] = useState(0)
-
+  const [currentImage, setCurrentImage] = useState<number>(0)
+  //* customImagePicker을 위한 state
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>([])
+  const [isSelectImages, setIsSelectImages] = useState<boolean>(false)
+  //TODO 사진 선택 후 해당 사진을 넣어야함.
   const onFlatlistUpdate = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
       setCurrentImage(viewableItems[0].index || 0)
@@ -260,42 +264,53 @@ export const EditPetInfoScreen: FC<
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT }}>
         <View>
-          {/* //*이미지  */}
-          <FlatList
-            data={imagess}
-            renderItem={(
-              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-            ) => (
-              <ImageBackground
-                source={{ uri: item.profileImg }}
-                style={{
-                  width: DEVICE_SCREEN_WIDTH,
-                  height: 240,
-                }}
-                key={index}
-              >
-                <Pressable
-                  onPress={() => {
-                    alert("이미지 등록 준비중입니다.")
+          {/* //*이미지 - case1, 2*/}
+          {!isSelectImages ? (
+            <FlatList
+              data={currentPet.images}
+              renderItem={(
+                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+              ) => (
+                <ImageBackground
+                  source={{ uri: item }}
+                  style={{
+                    width: DEVICE_SCREEN_WIDTH,
+                    height: 240,
                   }}
-                  style={{ position: "absolute", right: 16, bottom: 8 }}
+                  key={index}
                 >
-                  <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
-                </Pressable>
-              </ImageBackground>
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={DEVICE_SCREEN_WIDTH}
-            snapToAlignment={"end"}
-            decelerationRate={"fast"}
-            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-            viewabilityConfig={{
-              viewAreaCoveragePercentThreshold: 51,
-            }}
-            //? 이미지가 바뀌었을때 실행 할 행동 설정.
-            onViewableItemsChanged={onFlatlistUpdate}
-          />
+                  {editable ? (
+                    <Pressable
+                      onPress={() => setIsSelectImages(true)}
+                      style={{ position: "absolute", right: 16, bottom: 8 }}
+                    >
+                      <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                    </Pressable>
+                  ) : null}
+                </ImageBackground>
+              )}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={DEVICE_SCREEN_WIDTH}
+              snapToAlignment={"end"}
+              decelerationRate={"fast"}
+              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+              viewabilityConfig={{
+                viewAreaCoveragePercentThreshold: 51,
+              }}
+              //? 이미지가 바뀌었을때 실행 할 행동 설정.
+              onViewableItemsChanged={onFlatlistUpdate}
+            />
+          ) : (
+            <CustomImagePicker
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              submitButtonText="사진 추가하기"
+              selectionLimit={5}
+              style={{ marginTop: 20 }}
+            />
+          )}
+
           <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
         </View>
 
@@ -356,7 +371,7 @@ export const EditPetInfoScreen: FC<
 
           <UserOrPetProfileInfo
             title="품종"
-            profileInfo={currentPet.species}
+            profileInfo={currentPet.species.name}
             showOption={editable}
             additionalPadding={35}
           />
@@ -484,7 +499,7 @@ export const EditPetInfoScreen: FC<
                 name: name,
                 age: 3,
                 sex: PetSex.MALE,
-                images: "https://tr.rbxcdn.com/7b7ebb9eadb01ab435523d9ed0eb102b/420/420/Hat/Png",
+                images: ["https://tr.rbxcdn.com/7b7ebb9eadb01ab435523d9ed0eb102b/420/420/Hat/Png"],
                 weight: 7.3,
                 isNeutralizated: true,
                 desc: "사람을 엄청 좋아해요",
@@ -496,7 +511,6 @@ export const EditPetInfoScreen: FC<
                 if (res.isSuccess) {
                   navigate("all-pets-screen", { isSaved: true })
                 } else {
-                  //TODO
                   alert("수정에 실패했습니다.")
                 }
               })

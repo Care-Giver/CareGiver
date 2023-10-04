@@ -76,10 +76,10 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                   navigate("edit-pet-info-screen", {
                     pet: {
                       id: data.item.id,
-                      profileImage: data.item.images,
+                      images: data.item.images,
                       name: data.item.name,
                       birthday: data.item.birthday,
-                      species: data.item.species.name,
+                      species: data.item.species,
                       sex: data.item.sex,
                       petType: data.item.petType,
                       weight: data.item.weight,
