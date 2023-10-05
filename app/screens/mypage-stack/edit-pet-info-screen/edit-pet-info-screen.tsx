@@ -237,9 +237,6 @@ export const EditPetInfoScreen: FC<
   const showSaveButton =
     editable && !(nameTouched || weightTouched || birthdayTouched || handleGoBack) && !keyboardShown
 
-  // console.log("selectedImages >>>", selectedImages)
-  console.log("selectedImages.length >>>", selectedImages.length)
-
   //* 본문 코드 :
   return (
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>

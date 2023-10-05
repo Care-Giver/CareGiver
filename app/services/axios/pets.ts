@@ -125,7 +125,6 @@ export const updatePet = async (
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    console.log("updatePets >>>", response.data.pet)
     return {
       isSuccess: true,
     }
