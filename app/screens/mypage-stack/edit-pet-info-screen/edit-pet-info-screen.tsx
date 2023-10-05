@@ -68,7 +68,7 @@ export const EditPetInfoScreen: FC<
   const [weight, setWeight] = useState(pet.weight)
 
   //*생년월일 저장
-  const [birthday, setBirthday] = useState(pet.birthday)
+  const [birthday, setBirthday] = useState(pet.birthday.slice(0, 10))
 
   //*성별 한국어로 변환
   const sex = pet.sex === "FEMALE" ? "여" : "남"
@@ -242,7 +242,7 @@ export const EditPetInfoScreen: FC<
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT }}>
         <View>
-          {/* //*이미지 - case1, 2*/}
+          {/* //*이미지 */}
           {!isSelectingImages ? (
             <FlatList
               data={selectedImages.map((image) => image.uri)}
@@ -483,7 +483,10 @@ export const EditPetInfoScreen: FC<
                 name: name,
                 age: pet.age,
                 sex: pet.sex,
-                images: pet.images,
+                //? images 데이터 처리중 타입간 차이가있어, 해당 방식으로 처리함.
+                images: selectedImages.map((item) => {
+                  return item.uri
+                }),
                 weight: weight,
                 isNeutralizated: pet.isNeutralizated,
                 desc: text,
