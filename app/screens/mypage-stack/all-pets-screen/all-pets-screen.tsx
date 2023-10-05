@@ -31,6 +31,9 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     } = route.params
     const [pets, setPets] = useState<Pet[]>(petsFromMypageScreen)
 
+    console.log("pets - AllPetsScreen", pets)
+    console.log("pets 이미지 길이- AllPetsScreen", pets[0].images.length)
+
     // 만약, edit-pet-info-screen 에서 "저장하기" 버튼을 클릭한 경우,
     // 새 펫 정보를 요청한다.
     useFocusEffect(

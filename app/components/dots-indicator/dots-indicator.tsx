@@ -3,7 +3,7 @@ import React from "react"
 import { styles } from "./styles"
 import { LinearGradient } from "expo-linear-gradient"
 interface DotsIndicatorProps {
-  items: undefined
+  items: string[]
   activeIndex: number
   style?: StyleProp<ViewStyle>
 }

@@ -6,6 +6,7 @@ import { PreReg16 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
 import { BODY, LIGHT_LINE } from "#theme"
+import { CLStackNavigatorParamList } from "#navigators"
 
 export interface CustomImagePickerProps {
   selectedImages: PickerImage[]
@@ -18,8 +19,8 @@ export interface CustomImagePickerProps {
 // ? 백엔드에 이미지를 Upload하기 위해서는 아래와 같은 형식을 갖춰야 함
 export interface PickerImage {
   uri: string
-  type: string
-  name: string
+  type: string // 추가 설명 필요함. 무슨 데이터인지...
+  name: string // 추가 설명 필요함. 무슨 데이터인지...
 }
 
 export const CustomImagePicker = observer(function CustomImagePicker(

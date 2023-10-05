@@ -68,9 +68,6 @@ export const getPets = async (): Promise<GetPetsResult> => {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    console.log("getPets >>>", response.data.petResults)
-    console.log("response.request._headers", response.request._headers)
-
     return {
       isSuccess: true,
       petsDetail: response.data.petResults.map((data) => {
@@ -78,7 +75,7 @@ export const getPets = async (): Promise<GetPetsResult> => {
           id: data.pet.id,
           createAt: data.pet.createAt,
           updatedAt: data.pet.updatedAt,
-          images: data.pet.images,
+          images: data.pet.images?.length > 5 ? data.pet.images.slice(0, 5) : data.pet.images, // DB 에서 가져온 이미지중에서 5개까지만 저장한다.
           petType: data.pet.petType,
           name: data.pet.name,
           age: data.pet.age,
@@ -107,7 +104,8 @@ interface UpdatePetRequestBody {
   images: string[]
   isNeutralizated: boolean
   desc: string
-  userId: number
+  //? userId가 nullable
+  //userId: number
   speciesName: string
   familyType: string
   birthday: string

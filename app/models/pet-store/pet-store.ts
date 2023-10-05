@@ -96,6 +96,7 @@ export const PetStoreModel = types
         if (!petsDetail) {
           return false
         }
+
         this.setPets(petsDetail)
         return petsDetail
       } catch (error) {
