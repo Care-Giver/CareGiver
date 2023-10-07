@@ -73,20 +73,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                   ...data.item,
                 }}
                 onPress={() => {
-                  navigate("edit-pet-info-screen", {
-                    pet: {
-                      id: data.item.id,
-                      images: data.item.images,
-                      name: data.item.name,
-                      birthday: data.item.birthday,
-                      species: data.item.species,
-                      sex: data.item.sex,
-                      petType: data.item.petType,
-                      weight: data.item.weight,
-                      isNeutralizated: data.item.isNeutralizated,
-                      desc: data.item.desc,
-                    },
-                  })
+                  navigate("edit-pet-info-screen", { pet: { ...data.item } })
                 }}
                 isDeletable={false}
               />

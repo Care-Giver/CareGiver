@@ -30,7 +30,7 @@ import {
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
-import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH } from "#theme"
+import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
@@ -58,7 +58,13 @@ export const EditPetInfoScreen: FC<
   //*뒤에 버튼 눌림 감지
   const isBackPressed = route.params?.isBackPressed
 
-  //* 변화 감지 변수
+  /**
+   * 변화 감지 변수
+   * 변경내역이 있을 경우 true 를 반환한다.
+   *
+   * NOTE: 이 경우처럼, 유도되는 state 를 useState 를 사용해서 관리하는 것은 적절하지 않다. - TO: @hycv
+   * 하지만, 리팩토링 하는 것이 더 많은 시간이 소요될 것으로 판단되어, 수정하지 않았다. - FROM: @smnchoi
+   * */
   const [anyChangeMade, setAnyChangeMade] = useState(false)
 
   //*화면에서 이름 부분에 들어갈 데이터
@@ -411,7 +417,11 @@ export const EditPetInfoScreen: FC<
 
               <View style={styles.petDescTextBox}>
                 <TextInput
-                  style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
+                  style={{
+                    fontFamily: PRETENDARD_MEDIUM,
+                    fontSize: 14,
+                    color: HEAD_LINE,
+                  }}
                   multiline={true}
                   editable={editable !== undefined ? editable : false}
                   value={text}
@@ -473,7 +483,7 @@ export const EditPetInfoScreen: FC<
         <View style={styles.saveBox}>
           <ConditionalButton
             label="저장하기"
-            isActivated={true}
+            isActivated={anyChangeMade}
             onPress={() => {
               if (anyChangeMade === true) {
                 setAnyChangeMade(false)
@@ -490,7 +500,7 @@ export const EditPetInfoScreen: FC<
                 weight: weight,
                 isNeutralizated: pet.isNeutralizated,
                 desc: text,
-                //userId: 25,
+                //userId: 25, //! pet 데이터 수정시에는 userId 필요없음 - 생성시에만 필요함.
                 speciesName: pet.species.name,
                 familyType: pet.species.familyType,
                 birthday: birthday,
