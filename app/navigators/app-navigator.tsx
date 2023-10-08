@@ -134,7 +134,7 @@ export type NavigatorParamList = {
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean }
 
   // * caregiver - set price stack
-  "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
+  "caregiver-set-price-screen": { serviceType: ServiceType }
   "caregiver-set-additional-price-screen": undefined
 
   // CG - 달력 스택
@@ -848,6 +848,7 @@ const CgMypageStack = () => {
         animation: "slide_from_right",
       }}
       initialRouteName="cg-mypage-screen"
+      // initialRouteName="caregiver-set-price-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { common_styles } from "./set-price-style"
+import { commonStyles } from "./set-price-style"
 import {
   PreBol12,
   PreBol14,
@@ -12,80 +12,43 @@ import {
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { UnderlineText } from "../underline-text/underline-text"
 import { TextInput } from "react-native-gesture-handler"
-import { price } from "../../utils/format"
+import { price as priceFormatter } from "../../utils/format"
 import { DivisionLine } from "../division-line/division-line"
-import { standardCosts } from "../../screens/set-price-stack/caregiver/caregiver-set-price-screen/dummy-data"
+import { POPPINS_REGULAR } from "#fonts"
+import { ServiceType } from "#models"
 
 export interface CaregiverSetPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
+
+  price: string
+  setPrice: (price: string) => void
+
+  serviceType: ServiceType
+  standardPrice: { min: string; max: string }
 }
 
 export const CaregiverSetPrice = observer(function CaregiverSetPrice(
   props: CaregiverSetPriceProps,
 ) {
-  const { style } = props
+  const { style, price, setPrice, standardPrice, serviceType } = props
   const allStyles = Object.assign({}, styles.root, style)
 
-  // * 사용자가 입력한 비용
-  // ? inputCost의 형식은 10,000과 같이 3자릿수 단위로 쉼표 구분하여 저장한다.
-  // TODO: toLocaleString은 android에서 적용 안 됨.
-  // -> https://github.com/facebook/react-native/issues/19410
-  const [inputCost, setInputCost] = useState<string>("")
-
-  // * 서비스 타입 (방문 | 위탁)
-  // ? -> 이 스크린으로 이동할 때 params로 전달받아야 한다.
-  // const { serviceType } = route.params
-  const serviceType = "CRECHE"
-
   // ? 서비스 타입 문구 - 위탁 | 방문
-  const serviceText = serviceType === "CRECHE" ? "위탁" : "방문"
+  const serviceText = serviceType === "creche" ? "위탁" : "방문"
   // ? 서비스 유형에 따른 기준 문구 - 1박(=위탁) | 1시간(=방문)
-  const standardText = serviceType === "CRECHE" ? "1박" : "1시간"
-
-  const [standard, setStandard] = useState({
-    min: "",
-    max: "",
-  })
-
-  // * 다음 버튼 활성화 여부
-  const [isSubmitActive, setIsSubmitActive] = useState<boolean>(false)
-
-  // * 평균 요금 하한가, 상한가 설정
-  // TODO: 백엔드 팀한테 데이터 테이블 추가 요청 (1000원 쉼표 단위 문자열로 저장)
-  useEffect(() => {
-    if (serviceType === "CRECHE") {
-      setStandard({
-        min: standardCosts.creche.min,
-        max: standardCosts.creche.max,
-      })
-    } else {
-      setStandard({
-        min: standardCosts.visit.min,
-        max: standardCosts.visit.max,
-      })
-    }
-  }, [standardCosts, serviceType])
-
-  // * 사용자가 값을 입력하면 다음 버튼 활성화
-  useEffect(() => {
-    if (inputCost.length > 0) {
-      setIsSubmitActive(true)
-    } else {
-      setIsSubmitActive(false)
-    }
-  }, [inputCost])
+  const standardText = serviceType === "creche" ? "1박" : "1시간"
 
   return (
     <View style={allStyles}>
       {/* // * title container */}
-      <View style={common_styles.titleContainer}>
+      <View style={commonStyles.titleContainer}>
         {/* // ? first line */}
         <PreBol18 color={HEAD_LINE} text={`${serviceText}의 경우 기본 예약 요금을`} />
         {/* // ? second line */}
-        <View style={common_styles.secondTitleContainer}>
+        <View style={commonStyles.secondTitleContainer}>
           <UnderlineText>
             <PreBol18 text={`${standardText} 기준`} />
           </UnderlineText>
@@ -93,25 +56,8 @@ export const CaregiverSetPrice = observer(function CaregiverSetPrice(
         </View>
       </View>
 
-      {/* // * price input container */}
-      {/* // TODO: keyboard avoiding view */}
-      <View style={common_styles.priceContainer}>
-        <PreMed14 color={SUB_HEAD_LINE} text="요금(원)" />
-        <View style={common_styles.textInput}>
-          {/* // TODO: placeholder에 들어갈 가격을 백엔드 서버에 저장해둘 것인지, 하한가 + 상한가 기준으로 프론트에서 직접 계산할 것인지? */}
-          <TextInput
-            keyboardType="numeric"
-            placeholder="105,000"
-            value={price(inputCost)} //! toLocaleString 사용하지 말 것 - android 이슈 존재
-            onChangeText={setInputCost}
-            placeholderTextColor={BODY}
-          />
-        </View>
-        <DivisionLine color={MIDDLE_LINE} />
-      </View>
-
       {/* // * description container */}
-      <View style={common_styles.descriptionContainer}>
+      <View style={commonStyles.descriptionContainer}>
         <PreBol14
           text={`이 지역 ${serviceText} 케어기버가 받는 평균 요금은?`}
           color={SUB_HEAD_LINE}
@@ -124,18 +70,34 @@ export const CaregiverSetPrice = observer(function CaregiverSetPrice(
         {/* // ? 적정가 범위 */}
         <PreBol12
           style={{ marginTop: 4 }}
-          text={`${standard.min}원 ~ ${standard.max}원`}
+          text={`${standardPrice.min}원 ~ ${standardPrice.max}원`}
           color={SUB_HEAD_LINE}
         />
         <PreReg12 style={{ marginTop: 4 }} text="사이의 요금을 받습니다." color={BODY} />
 
         <PreReg12
           style={{ marginTop: 12, lineHeight: 18 }}
-          text={`- 기본적으로 지역 평균 요금이 적정가로 설정되어있습니다. 
-- 적정가는 추천금액일 뿐이며, 원하는 금액으로 직접 설정 가능합니다.
-- 요금은 지역마다, 개인마다 차이가 있을 수 있습니다.`}
+          text={`- 기본적으로 지역 평균 요금이 적정가로 설정되어있습니다.\n- 적정가는 추천금액일 뿐이며, 원하는 금액으로 직접 설정 가능합니다.\n- 요금은 지역마다, 개인마다 차이가 있을 수 있습니다.`}
           color={BODY}
         />
+      </View>
+
+      {/* // * price input container */}
+      {/* // TODO: keyboard avoiding view */}
+      <View style={commonStyles.priceContainer}>
+        <PreMed14 color={SUB_HEAD_LINE} text="요금(원)" />
+        <View style={commonStyles.textInput}>
+          {/* // TODO: placeholder에 들어갈 가격을 백엔드 서버에 저장해둘 것인지, 하한가 + 상한가 기준으로 프론트에서 직접 계산할 것인지? */}
+          <TextInput
+            keyboardType="numeric"
+            placeholder="105,000"
+            value={priceFormatter(price)} //! toLocaleString 사용하지 말 것 - android 이슈 존재
+            onChangeText={setPrice}
+            placeholderTextColor={BODY}
+            style={{ fontFamily: POPPINS_REGULAR }}
+          />
+        </View>
+        <DivisionLine color={MIDDLE_LINE} />
       </View>
     </View>
   )
