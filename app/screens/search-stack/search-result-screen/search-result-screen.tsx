@@ -1,5 +1,21 @@
-import React, { FC, useRef, useLayoutEffect, useCallback, useState } from "react"
-import { View, Animated, ScrollView, FlatList } from "react-native"
+import React, {
+  FC,
+  useRef,
+  useEffect,
+  useCallback,
+  useState,
+  useLayoutEffect,
+  useMemo,
+} from "react"
+import {
+  View,
+  Animated,
+  TouchableOpacity,
+  Image,
+  Platform,
+  StyleSheet,
+  ViewStyle,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../navigators"
@@ -9,9 +25,32 @@ import {
   Screen,
   DivisionLine,
   SitterProfileCard,
-  SelectOptionDropdownBox,
+  PetsitterProfileCardPetsitterData,
+  SearchSortingButton,
+  PreReg12,
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  PreBol16,
+  PressableButton,
+  PreMed14,
+  BlueCheckbox,
+  PreMed16,
+  PopReg14,
+  PreMed18,
+  BOTTOM_TAB_BAR_HEIGHT,
 } from "../../../components"
-import { palette, LBG } from "../../../theme"
+import {
+  palette,
+  LBG,
+  DEVICE_SCREEN_WIDTH,
+  DEVICE_SCREEN_HEIGHT,
+  IOS_NOTCH_STATUS_BAR_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  DISABLED,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+  BOTTOM_HEIGHT,
+} from "../../../theme"
 import { images } from "../../../../assets/images"
 import { AnimatedHeader } from "./animated-header/animated-header"
 import {
@@ -19,110 +58,292 @@ import {
   HEADER_MARGIN_BOTTOM,
   HEADER_AREA,
 } from "./animated-header/header-property"
-import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
+import {
+  Sex,
+  getVisitingsSearch,
+  Visiting,
+  getCrechesSearch,
+  Creche,
+  VisitingService,
+  CrechesService,
+  CrecheAmenity,
+  VisitingAmenity,
+  VisitingsSearchRequest,
+  CrechesSearchRequest,
+} from "#axios"
+import {
+  SearchRequest,
+  SearchResultSortOrder,
+} from "../../../services/axios/types/creches.visitings.common.types"
+import {
+  BottomSheetBackdrop,
+  BottomSheetFooter,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet"
+import Slider from "@react-native-community/slider"
+import _ from "lodash"
+
+export type Petsitter = Visiting | Creche
+
+export type ServiceAmenity = {
+  services: CrechesService[] | VisitingService[]
+  amenities: CrecheAmenity[] | VisitingAmenity[]
+}
+
+// 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
+// :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
+const optionLabel = {
+  distance: "가까운 거리순",
+  recent: "최근 등록순",
+  ratings: "별점 높은순",
+  reviews: "후기 많은순",
+}
+
+// 정렬 옵션 리스트의 타입
+export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLabel]
+
 export const SearchResultScreen: FC<
-  StackScreenProps<NavigatorParamList, "search-result">
+  StackScreenProps<NavigatorParamList, "search-result-screen">
 > = observer(function SearchResultScreen({ navigation, route }) {
+  // 바텀탭 표출
   useShowBottomTab(navigation)
-
-  const { serviceType, selectedDate, selectedPets, beginDate, endDate } = route.params
-  console.log(beginDate, endDate)
-  console.log(selectedPets)
-  //? drop down 클릭 여부
-  const [isOpen, setIsOpen] = useState(false)
-  const [petsitters, setPetsitters] = useState([])
-
+  // 스크린 헤더 설정
   useLayoutEffect(() => {
-    setPetsitters(_petsitters)
+    navigation.setOptions({
+      //@ts-ignore
+      title: `펫시팅 - ${serviceType}`,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  //? 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
-  //? :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
-  const optionLabels = {
-    distance: "가까운 거리순",
-    recent: "최근 등록순",
-    ratings: "별점 높은순",
-    reviews: "리뷰 많은순",
-  }
-
-  //? 현재 선택된 필터 옵션
-  const [currentOption, setCurrentOption] = useState(optionLabels.distance)
-
-  //? dropdown에서 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 펫시터의 순서를 재정렬(sort))
-  const handlePress = useCallback((optionValue: string) => {
-    switch (optionValue) {
-      //? 최근 등록순
-      case optionLabels.recent:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
-          return Date.parse(b.createdAt) - Date.parse(a.createdAt)
-        })
-        break
-
-      //? 별점 높은 순
-      case optionLabels.ratings:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 높은 별점을 상위 노출
-          return Number(b.rating * 10) - Number(a.rating * 10)
-        })
-        break
-
-      //? 리뷰 많은 순
-      case optionLabels.reviews:
-        _petsitters.sort((a, b) => {
-          //? 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
-          return b.review - a.review
-        })
-        break
-    }
-
-    setIsOpen(false)
-    setPetsitters(_petsitters)
-    setCurrentOption(optionValue)
-  }, [])
-
   //! 스크롤 애니메이션에 사용할 animation value -> 리렌더링 방지를 위해 useRef를 사용
   const offset = useRef(new Animated.Value(0)).current
-
   const animateTranslateY = offset.interpolate({
     inputRange: [0, HEADER_AREA],
     outputRange: [0, -1 * HEADER_AREA],
     extrapolate: "clamp",
   })
-
   const listContainerMarginScale = offset.interpolate({
     inputRange: [0, HEADER_AREA],
     outputRange: [1.0, 0],
     extrapolate: "clamp",
   })
 
-  useLayoutEffect(() => {
-    //? case1. 바텀탭으로 넘어오는경우
-    if (!route.params) {
-      // console.error("params 가 없습니다. 정상적인 screen-flow 인지 확인 바랍니다.")
-      var _service = "펫시팅"
-      var _serviceType = "위탁"
+  // navigation params 로 넘겨받은 API REQUEST BODY 데이터
+  const {
+    lat,
+    lng,
+    petIds,
+    // 방문
+    startTime,
+    endTime,
+    //  위탁
+    startDate,
+    endDate,
 
-      // if (!route.params.service) console.error("home-screen 에서 service 가 선택되지 않았습니다.")
-      // if (!route.params.serviceType)
-      //   console.error("home-screen 에서 serviceType 이 선택되지 않았습니다.")
-    }
-    //? case2. 서치스크린 이후 넘어오는 경우
-    else {
-      //? service 할당
-      var _service = "펫시팅"
-      var _serviceType = serviceType
+    // 그외
+    serviceType,
+  } = route.params
+  const 방문검색 = serviceType === "방문"
+  const 위탁검색 = serviceType === "위탁"
+
+  const defaultSearchRequest: SearchRequest = {
+    page: 1,
+    lat,
+    lng,
+    petIds: [1, 2],
+    radius: 10, //10
+    sortBy: "distance", // "distance"
+    sortOrder: SearchResultSortOrder.ASC, // "ASC"
+    gender: null,
+    services: [], //[1, 2]
+    amenities: [], // [1, 2]
+    certifiedOnly: false,
+  }
+
+  /** 검색 API 호출을 위한 request body */
+  const [searchRequest, setSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
+
+  /** 검색 필터 바텀시트모달에서 설정한 필터값을 저장하는 임시 변수 */
+  const [draftSearchRequest, setDraftSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
+
+  /** 펫시터 */
+  const [petsitters, setPetsitters] = useState<Petsitter[]>([])
+
+  /** 펫시터 검색결과 API 호출 */
+  useEffect(() => {
+    const visReq: VisitingsSearchRequest = {
+      ...searchRequest,
+      startTime,
+      endTime,
     }
 
-    //? Header, 이름 설정
-    navigation.setOptions({
-      title: _service + " - " + _serviceType,
-    })
-  }, [])
+    const creReq: CrechesSearchRequest = {
+      ...searchRequest,
+      startDate,
+      endDate,
+    }
+
+    if (방문검색) {
+      getVisitingsSearch(visReq).then(setPetsitters)
+      return
+    }
+
+    if (위탁검색) {
+      getCrechesSearch(creReq).then(setPetsitters)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchRequest])
+
+  /** 현재 선택된 검색결과 정렬 옵션 */
+  const [sortingOption, setSortingOption] = useState<SearchResultSortingOption>(
+    optionLabel.distance,
+  )
+
+  /** 정렬 옵션 선택시 실행되는 함수 (-> 선택된 옵션에 알맞게 검색결과(펫시터)의 순서를 재정렬(sort)) */
+  const handleSorting = useCallback(
+    (optionValue: SearchResultSortingOption) => {
+      switch (optionValue) {
+        // 1. 최근 등록순
+        // 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
+        case optionLabel.recent:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return Date.parse(b.visiting.createAt) - Date.parse(a.visiting.createAt)
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return Date.parse(b.creche.createAt) - Date.parse(a.creche.createAt)
+            })
+            setPetsitters(creches)
+          }
+          break
+
+        // 2. 별점 높은 순
+        // 내림차순 정렬 -> 높은 별점을 상위 노출
+        case optionLabel.ratings:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return Number(b.visiting.star * 10) - Number(a.visiting.star * 10)
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return Number(b.creche.star * 10) - Number(a.creche.star * 10)
+            })
+            setPetsitters(creches)
+          }
+          break
+
+        // 후기 많은 순
+        // 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
+        case optionLabel.reviews:
+          if (방문검색) {
+            const visitings = petsitters as Visiting[]
+            visitings.sort((a, b) => {
+              return b.reviewCount - a.reviewCount
+            })
+            setPetsitters(visitings)
+          }
+          if (위탁검색) {
+            const creches = petsitters as Creche[]
+            creches.sort((a, b) => {
+              return b.reviewCount - a.reviewCount
+            })
+            setPetsitters(creches)
+          }
+          break
+      }
+
+      setSortingOption(optionValue)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [petsitters, optionLabel],
+  )
+
+  // 필터 바텀시트모달 - ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  // 필터 바텀시트모달 - snapPoints
+  const snapPoints = useMemo(
+    () => [
+      "60%",
+      // Platform.select({
+      //   ios: DEVICE_SCREEN_HEIGHT - IOS_NOTCH_STATUS_BAR_HEIGHT,
+      //   android: DEVICE_SCREEN_HEIGHT,
+      // }),
+    ],
+    [],
+  )
+
+  /** 필터 바텀시트모달 backdrop */
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+        pressBehavior={"close"}
+      />
+    ),
+    [],
+  )
+
+  /** 필터 바텀시트모달 - 저장 버튼 누를 시 실행되는 함수 */
+  const handleSaveFilterButton = useCallback(() => {
+    // 임시 저장된 필터값을 현재 필터값으로 설정
+    setSearchRequest(draftSearchRequest)
+    // 필터 바텀시트모달 닫기
+    bottomSheetModalRef.current?.close()
+  }, [draftSearchRequest])
+
+  /** 필터 바텀시트모달 Footer - 저장 버튼 렌더링 */
+  const renderFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+        <TouchableOpacity
+          // 임시 저장된 필터값과 현재 필터값이 같으면 (차이가 없으면)
+          // 필터 설정을 저장할 필요가 없으므로, 저장 버튼 비활성화
+          disabled={_.isEqual(searchRequest, draftSearchRequest)}
+          style={
+            _.isEqual(searchRequest, draftSearchRequest)
+              ? styles.disabledSubmitBtn
+              : styles.submitBtn
+          }
+          onPress={handleSaveFilterButton}
+        >
+          <PreBol16 text="저장" color={"white"} />
+        </TouchableOpacity>
+      </BottomSheetFooter>
+    ),
+    [handleSaveFilterButton, searchRequest, draftSearchRequest],
+  )
+
+  /** radius 값을 거리 슬라이더 값으로 변환 */
+  const radiusToSliderValue = useCallback(() => {
+    switch (draftSearchRequest.radius) {
+      case 1:
+        return 0
+      case 10:
+        return 1
+      case 20:
+        return 2
+      case 30:
+        return 3
+      default:
+        return 1
+    }
+  }, [draftSearchRequest])
 
   return (
-    // <Screen statusBar="dark-content">
     <Screen>
       <Animated.View
         style={{
@@ -133,7 +354,13 @@ export const SearchResultScreen: FC<
 
       {/* //? 검색 필터 박스 */}
       {/* //? 검색 필터 박스를 AnimatedHeader로 설정 -> 스크롤시 위로 올라가면서 사라지는 애니매이션 */}
-      <AnimatedHeader animatedValue={offset} />
+      <AnimatedHeader
+        animatedValue={offset}
+        startTime={startTime}
+        endTime={endTime}
+        startDate={startDate}
+        endDate={endDate}
+      />
 
       {/* //? margin */}
       {/* //? nativeDriver를 사용할 때는 레이아웃 css(ex 마진) 사용 불가능 :: 마진만큼의 높이를 가진 뷰로 대체 */}
@@ -150,109 +377,363 @@ export const SearchResultScreen: FC<
           transform: [{ translateY: animateTranslateY }],
         }}
       >
-        {/* //? title container - 검색 결과 텍스트 + 정렬옵션 드롭다운 */}
+        {/* //? title container - 검색 결과 텍스트 + 검색결과 필터 바텀시트모달 버튼 */}
         <Row
           style={{
-            paddingVertical: 12,
             justifyContent: "space-between",
             alignItems: "center",
-            position: "absolute",
-            zIndex: 1,
-            backgroundColor: null,
+            backgroundColor: "transparent",
           }}
         >
           {/* //? title */}
-          <PreBol18 text="검색결과" style={{ alignSelf: "flex-start" }} />
+          <PreBol18 text="검색결과" />
 
-          {/* //? sort button */}
-          <SelectOptionDropdownBox
-            onPress={() => {
-              setIsOpen(!isOpen)
-            }}
-            isOpen={isOpen}
-            logoSrc={images.list_bars}
-            logoStyle={{
-              width: 16,
-              height: 16,
-              marginLeft: 5,
-            }}
-            labels={Object.values(optionLabels)}
-            handlePress={handlePress}
-            currentOption={currentOption}
+          {/* 검색결과 필터 옵션 */}
+          <TouchableOpacity
             style={{
-              // backgroundColor: palette.white,
-              alignSelf: "flex-start",
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              paddingVertical: 16,
             }}
-          />
+            onPress={() => {
+              bottomSheetModalRef.current?.present()
+            }}
+          >
+            <PreReg12 text="필터" />
+            <Image
+              source={images.list_bars}
+              style={{
+                width: 16,
+                height: 16,
+                marginLeft: 5,
+              }}
+            />
+          </TouchableOpacity>
         </Row>
 
         {/* //? divider */}
-        {/* <View
+        <DivisionLine color={LBG} style={{ width: DEVICE_SCREEN_WIDTH, alignSelf: "center" }} />
+
+        {/* 정렬 옵션 */}
+        <Row
           style={{
-            width: "100%",
-            height: 2,
-            backgroundColor: LBG,
-            position: "absolute",
-            top: 47,
+            justifyContent: "space-between",
+            backgroundColor: "transparent",
+            paddingVertical: 12,
           }}
-        /> */}
-        <DivisionLine
-          color={LBG}
-          style={{
-            position: "absolute",
-            top: 47,
-          }}
-        />
+        >
+          <SearchSortingButton
+            sortingOption={optionLabel.distance}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.reviews}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.ratings}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+          <SearchSortingButton
+            sortingOption={optionLabel.recent}
+            selectedSortingOption={sortingOption}
+            handlePress={handleSorting}
+          />
+        </Row>
 
         {/* //? sitter profile card list */}
         <View
           style={{
             backgroundColor: palette.white,
             height: "auto",
-            marginTop: 47 + 2,
+            // marginTop: 47 + 2,
             // marginBottom: 34,
           }}
         >
           <Animated.FlatList
-            data={petsitters}
-            renderItem={({ item, index }) => (
-              <SitterProfileCard
-                // key={item.id}
-                // name={item.name}
-                // image={item.image}
-                // rating={item.rating}
-                // review={item.review}
-                // title={item.title}
-                // desc={item.desc}
-                sitterData={item}
-                onPress={() => {
-                  //? 상세정보 스크린으로 이동
-                  //TODO: params 값 추가해줘야 함
-                  navigate("caregiver-detail-information-screen", {
-                    sitterData: item,
-                    serviceType: serviceType,
-                    selectedDate: selectedDate,
-                    selectedPets: selectedPets,
-                    beginDate: serviceType == "방문" ? beginDate : null,
-                    endDate: serviceType == "방문" ? endDate : null,
-                  })
-                }}
-                style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
-              />
-            )}
-            showsVerticalScrollIndicator={false}
             style={{
               backgroundColor: palette.white,
               height: "auto",
-              marginBottom: 34,
+              // height: "100%",
+              // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
             }}
+            contentContainerStyle={{
+              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+            }}
+            showsVerticalScrollIndicator={false}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
               useNativeDriver: true,
             })}
+            data={petsitters}
+            renderItem={({ item: petsitter, index }) => {
+              let sitterData: PetsitterProfileCardPetsitterData
+              let serviceAmenity: ServiceAmenity
+              let images: string[]
+
+              if (방문검색) {
+                const visiting = petsitter as Visiting
+                sitterData = {
+                  crecheId: null,
+                  visitingId: visiting.visiting.id,
+                  reviewCount: visiting.reviewCount,
+                  userNickname: visiting.userNickname,
+                  title: visiting.visiting.title,
+                  desc: visiting.visiting.desc,
+                  star: visiting.visiting.star,
+                  profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                }
+                serviceAmenity = {
+                  services: visiting.visiting.serviceVisiting,
+                  amenities: visiting.visiting.visitingAmenities,
+                }
+                images = visiting.visiting.images
+              }
+
+              if (위탁검색) {
+                const creche = petsitter as Creche
+                sitterData = {
+                  crecheId: creche.creche.id,
+                  visitingId: null,
+                  reviewCount: creche.reviewCount,
+                  userNickname: creche.userNickname,
+                  title: creche.creche.title,
+                  desc: creche.creche.desc,
+                  star: creche.creche.star,
+                  profileImage: creche.creche.__careGiver__.__user__?.profileImage,
+                }
+                serviceAmenity = {
+                  services: creche.creche.serviceCreche,
+                  amenities: creche.creche.crecheAmenities,
+                }
+                images = creche.creche.images
+              }
+
+              return (
+                <SitterProfileCard
+                  isFavorite={petsitter.isFavorite}
+                  sitterData={sitterData}
+                  onPress={() => {
+                    //? 상세정보 스크린으로 이동
+                    //TODO: params 값 추가해줘야 함
+                    navigate("caregiver-detail-information-screen", {
+                      sitterData,
+                      serviceType,
+                      serviceAmenity,
+                      images,
+                      selectedPets: petIds,
+
+                      // 방문
+                      startTime: 방문검색 ? startTime : null,
+                      endTime: 방문검색 ? endTime : null,
+
+                      // 위탁
+                      startDate: 위탁검색 ? startDate : null,
+                      endDate: 위탁검색 ? endDate : null,
+                    })
+                  }}
+                  // TODO: 찜하기 기능 구현
+                  onLikePress={() => {
+                    //
+                  }}
+                  style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
+                />
+              )
+            }}
+            ListEmptyComponent={
+              <View
+                style={{
+                  alignSelf: "center",
+                  alignItems: "center",
+                  paddingTop: 40,
+                }}
+              >
+                <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+                <PreMed18 text="검색된 펫시터가 없어요 😢" />
+              </View>
+            }
           />
         </View>
       </Animated.View>
+
+      {/* 검색 필터 바텀시트모달 */}
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={snapPoints}
+        enablePanDownToClose={false}
+        footerComponent={renderFooter}
+      >
+        <BottomSheetScrollView contentContainerStyle={styles.bottomSheetContainer}>
+          <Row style={{ height: 30 }}>
+            <TouchableOpacity
+              style={{ flex: 1 }}
+              onPress={() => {
+                bottomSheetModalRef.current?.close()
+              }}
+            >
+              <Image source={images.x_grey} style={{ width: 16, height: 16 }} />
+            </TouchableOpacity>
+            <View style={{ flex: 1, alignItems: "center" }}>
+              <PreBol18 text="필터" color={HEAD_LINE} />
+            </View>
+            <TouchableOpacity
+              style={{ flex: 1, alignItems: "flex-end" }}
+              onPress={() => {
+                setDraftSearchRequest(defaultSearchRequest)
+              }}
+            >
+              <PreMed16 text="초기화" color={DISABLED} />
+            </TouchableOpacity>
+          </Row>
+
+          <DivisionLine color={LBG} mt={4} />
+
+          <PreBol16 text="거리 반경" color={SUB_HEAD_LINE} mt={20} />
+          <View
+            style={{
+              width: DEVICE_SCREEN_WIDTH,
+              alignSelf: "center",
+              paddingVertical: 10,
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
+          >
+            <Slider
+              style={{ paddingVertical: 10 }}
+              minimumTrackTintColor={GIVER_CASUAL_NAVY}
+              maximumTrackTintColor={DISABLED}
+              thumbImage={Platform.select({ ios: null, android: images.slider_thumb })}
+              thumbTintColor={Platform.select({ ios: "white", android: null })}
+              tapToSeek={true}
+              step={1}
+              minimumValue={0}
+              maximumValue={3}
+              onValueChange={(value) => {
+                switch (value) {
+                  case 0:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 1 })
+                    break
+                  case 1:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 10 })
+                    break
+                  case 2:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 20 })
+                    break
+                  case 3:
+                    setDraftSearchRequest({ ...draftSearchRequest, radius: 30 })
+                    break
+                }
+              }}
+              value={radiusToSliderValue()}
+            />
+            <Row
+              style={{
+                marginTop: 4,
+                paddingHorizontal: 4,
+                justifyContent: "space-between",
+                backgroundColor: "transparent",
+              }}
+            >
+              <PopReg14 text="1km" color={HEAD_LINE} />
+              <PopReg14 text="10km" color={HEAD_LINE} />
+              <PopReg14 text="20km" color={HEAD_LINE} />
+              <PopReg14 text="30km" color={HEAD_LINE} />
+            </Row>
+          </View>
+
+          <Row mt={40 - 2}>
+            <PreBol16 text="케어기버 인증 펫시터만 보기" color={SUB_HEAD_LINE} />
+            <BlueCheckbox
+              style={{ paddingVertical: 8 + 2, paddingHorizontal: 8 }}
+              imageSize={16}
+              value={draftSearchRequest.certifiedOnly}
+              onPress={() => {
+                setDraftSearchRequest({
+                  ...draftSearchRequest,
+                  certifiedOnly: !draftSearchRequest.certifiedOnly,
+                })
+              }}
+            />
+          </Row>
+
+          <PreBol16 text="펫시터 성별" color={SUB_HEAD_LINE} mt={36 - 2} mb={8} />
+          <Row style={{ justifyContent: "space-between" }}>
+            <PressableButton
+              onPress={() => {
+                setDraftSearchRequest({ ...draftSearchRequest, gender: Sex.FEMALE })
+              }}
+              isPressed={draftSearchRequest.gender === Sex.FEMALE}
+              defaultViewStyle={$defaultPressableButton}
+              pressedViewStyle={styles.pressedPressableButton}
+            >
+              <PreMed14 text="여자" color={HEAD_LINE} />
+            </PressableButton>
+            <PressableButton
+              onPress={() => {
+                setDraftSearchRequest({ ...draftSearchRequest, gender: Sex.MALE })
+              }}
+              isPressed={draftSearchRequest.gender === Sex.MALE}
+              defaultViewStyle={$defaultPressableButton}
+              pressedViewStyle={styles.pressedPressableButton}
+            >
+              <PreMed14 text="남자" color={HEAD_LINE} />
+            </PressableButton>
+          </Row>
+        </BottomSheetScrollView>
+      </BottomSheetModal>
     </Screen>
   )
+})
+
+const $defaultPressableButton: ViewStyle = {
+  borderWidth: 1,
+  borderRadius: 4,
+  borderColor: LIGHT_LINE,
+  height: 36,
+  width: "48%",
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const $defaultSubmitButton: ViewStyle = {
+  marginTop: 20,
+  paddingVertical: 18,
+  width: "100%",
+  borderRadius: 8,
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const styles = StyleSheet.create({
+  bottomSheetContainer: {
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+  },
+
+  btnContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: BASIC_BACKGROUND_PADDING_WIDTH,
+    right: BASIC_BACKGROUND_PADDING_WIDTH,
+  },
+
+  submitBtn: {
+    ...$defaultSubmitButton,
+    backgroundColor: GIVER_CASUAL_NAVY,
+  },
+
+  disabledSubmitBtn: {
+    ...$defaultSubmitButton,
+    backgroundColor: DISABLED,
+  },
+
+  pressedPressableButton: {
+    ...$defaultPressableButton,
+    borderWidth: 2,
+    borderColor: GIVER_CASUAL_NAVY,
+  },
 })

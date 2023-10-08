@@ -1,13 +1,13 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
-export interface groupedVisitingAvailableTimesByDate {
+export interface GroupedVisitingAvailableTimesByDate {
   date: string
   fee: number
 }
 
-interface visitingAvailableTimesResponse extends GeneralResponse {
-  groupedVisitingAvailableTimesByDate: groupedVisitingAvailableTimesByDate[]
+interface VisitingAvailableTimesResponse extends GeneralResponse {
+  groupedVisitingAvailableTimesByDate: GroupedVisitingAvailableTimesByDate[]
 }
 
 /**
@@ -16,11 +16,10 @@ interface visitingAvailableTimesResponse extends GeneralResponse {
  */
 export const getVisitingAvailableTimes = async (
   visitingId: number,
-): Promise<groupedVisitingAvailableTimesByDate[]> => {
+): Promise<GroupedVisitingAvailableTimesByDate[]> => {
   try {
-    const response = await axios.get<visitingAvailableTimesResponse>(
+    const response = await axios.get<VisitingAvailableTimesResponse>(
       `${BASE_URL}/visiting-available-time/${visitingId}`,
-      CONFIG,
     )
 
     if (!response.data.ok) {

@@ -1,5 +1,6 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
+import { ratingRound } from "../../utils/format"
 
 export interface ProfileCardInfo {
   crecheId?: number
@@ -40,7 +41,10 @@ interface CreateFavoriteResponse extends GeneralResponse {
  */
 export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteResponse> => {
   try {
-    const response = await axios.post<FavoriteResponse>(`${BASE_URL}/user/favorites`, body, CONFIG)
+    if (Object.keys(body).length === 0) return
+
+    const response = await axios.post<FavoriteResponse>(`${BASE_URL}/user/favorites`, body)
+    console.log("response.request 🔷", response.request)
 
     if (!response.data.ok) {
       console.error(response.data.error)
@@ -49,9 +53,20 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
     }
     // console.info("[getFavorites] response.data: ", response.data)
     // console.log("in Axios response.data >>>", response.data)
-    return response.data
+    const favoritePetsitters: ProfileCardInfo[] = response.data.favoritePetsitters.map(
+      (value: ProfileCardInfo) => ({
+        ...value,
+        rating: ratingRound(value.rating),
+      }),
+    )
+
+    return {
+      ...response.data,
+      favoritePetsitters,
+    }
   } catch (error) {
     console.error(error)
+    console.error(error?.message)
     //@ts-ignore
     return null
   }
@@ -63,11 +78,7 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
  */
 export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFavoriteResponse> => {
   try {
-    const response = await axios.post<CreateFavoriteResponse>(
-      `${BASE_URL}/user/favorite`,
-      body,
-      CONFIG,
-    )
+    const response = await axios.post<CreateFavoriteResponse>(`${BASE_URL}/user/favorite`, body)
     if (!response.data.ok) {
       console.error(response.data.error)
       //@ts-ignore
@@ -88,7 +99,7 @@ export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFa
  */
 export const deleteFavorite = async (body: UpdateFavoriteBody): Promise<GeneralResponse> => {
   try {
-    const response = await axios.put<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body, CONFIG)
+    const response = await axios.put<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body)
     if (!response.data.ok) {
       console.error(response.data.error)
       //@ts-ignore

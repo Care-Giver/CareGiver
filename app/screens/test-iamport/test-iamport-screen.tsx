@@ -9,7 +9,7 @@ import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { getMethods, getQuotas } from "./utils"
 import { PGS, TIER_CODES } from "./constants"
 
-export interface PaymentParams {
+interface PaymentParams {
   params: IMPData.PaymentData
   tierCode?: string
 }

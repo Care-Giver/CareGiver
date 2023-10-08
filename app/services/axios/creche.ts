@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 import { Platform } from "react-native"
 import { CharacterApi } from "../api/character-api"
 import { Api } from "../api/api"
@@ -65,7 +65,7 @@ interface NewCrecheResponse extends GeneralResponse {
  */
 export const getCreche = async (crecheId: number): Promise<Creche> => {
   try {
-    const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`, CONFIG)
+    const response = await axios.get<CrecheResponse>(`${BASE_URL}/creche/${crecheId}`)
     if (!response.data.ok) {
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
@@ -142,7 +142,6 @@ export const createCreche = async (creche: NewCreche): Promise<number> => {
       `${BASE_URL}/creche`,
       //   JSON.stringify(creche),
       creche,
-      CONFIG,
     )
     console.log("response", response)
 

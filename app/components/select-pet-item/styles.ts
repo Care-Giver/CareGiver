@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-
-import { LBG } from "#theme"
+import { GIVER_CASUAL_NAVY, LBG } from "#theme"
 
 const ROOT_HEIGHT = 52
 const BORDER_BOTTOM_WIDTH = 2
@@ -13,6 +12,7 @@ export const styles = StyleSheet.create({
     height: ROOT_HEIGHT,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
+    borderWidth: 2,
     borderBottomWidth: BORDER_BOTTOM_WIDTH,
     borderColor: LBG,
   },

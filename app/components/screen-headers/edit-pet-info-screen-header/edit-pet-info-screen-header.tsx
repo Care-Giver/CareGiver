@@ -1,23 +1,17 @@
+// params 와 props 에 대한 type 이 지정되지 않았으므로,
+// 임시로 typescript 를 무시합니다.
+// @ts-nocheck
 import React from "react"
 import { StyleProp, View, ViewStyle, Image, Pressable, Alert } from "react-native"
 import { observer } from "mobx-react-lite"
 import { CustomModal, PreMed18 } from "#components"
-import { styles } from "./styles"
 import { images } from "#images"
 import { HEADER_ROOT } from "../common-styles"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { goBack } from "#navigators"
 
-export interface EditPetInfoScreenHeaderProps {
-  //? props 정리 어떻게 ? 특히 밑의 ableEdit 함수와 editable의 빨간줄 등.
-  style?: StyleProp<ViewStyle>
-}
-
-export const EditPetInfoScreenHeader = observer(function EditPetInfoScreenHeader(
-  props: EditPetInfoScreenHeaderProps,
-) {
-  const { style } = props
-  const _styles = Object.assign({}, styles, style)
+export const EditPetInfoScreenHeader = observer(function EditPetInfoScreenHeader(props) {
+  const allStyles = Object.assign({}, HEADER_ROOT, { flexDirection: "row" }, props?.style)
   const navigation = useNavigation()
   const route = useRoute()
   const params = route.params
@@ -36,7 +30,7 @@ export const EditPetInfoScreenHeader = observer(function EditPetInfoScreenHeader
   }
 
   return (
-    <View style={[HEADER_ROOT, { flexDirection: "row" }]}>
+    <View style={allStyles}>
       {/* //* 뒤로가기 (headerLeft 위치) */}
       <Pressable
         onPress={() => {

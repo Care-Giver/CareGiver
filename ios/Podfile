@@ -31,6 +31,13 @@ target 'CareGiver' do
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
   ####
+
+  ####6.24 묵추가, ios react-native error 해결####
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-AppTrackingTransparency', :path => "../node_modules/react-native-permissions/ios/AppTrackingTransparency"
+  #####
+
   # Flags change depending on the env values.
   flags = get_default_flags()
   use_react_native!(

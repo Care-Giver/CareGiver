@@ -1,30 +1,27 @@
 import axios from "axios"
-import { BASE_URL, CONFIG, GeneralResponse } from "./axios-config"
+import { BASE_URL, GeneralResponse } from "./axios-config"
 
-export interface crecheAvailableDates {
+export interface CrecheAvailableDates {
   id: number
   createAt: string
   updatedAt: string
-  startTime: string
-  endTime: string
+  startDate?: string
+  endDate: string
   fee: number
   totalFee: number
 }
 
-interface crecheDaysResponse extends GeneralResponse {
-  crecheAvailableDates: crecheAvailableDates[]
+interface CrecheDaysResponse extends GeneralResponse {
+  crecheAvailableDates: CrecheAvailableDates[]
 }
 
 /**
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<crecheAvailableDates>}
  */
-export const getCrecheDays = async (crecheId: number): Promise<crecheAvailableDates[]> => {
+export const getCrecheDays = async (crecheId: number): Promise<CrecheAvailableDates[]> => {
   try {
-    const response = await axios.get<crecheDaysResponse>(
-      `${BASE_URL}/creche-day/${crecheId}`,
-      CONFIG,
-    )
+    const response = await axios.get<CrecheDaysResponse>(`${BASE_URL}/creche-day/${crecheId}`)
 
     if (!response.data.ok) {
       const error = response.data.error
@@ -74,7 +71,7 @@ interface PostCrecheDayResponse extends GeneralResponse {
  */
 export const postCrecheDay = async (data: PostCrecheDayBody) => {
   try {
-    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-day`, data, CONFIG)
+    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-day`, data)
 
     if (!response.data.ok) {
       const error = response.data.error

@@ -28,11 +28,12 @@ import {
 } from "#components"
 import { Pets } from "./dummy-data"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { BODY, DEVICE_SCREEN_WIDTH, LBG } from "#theme"
+import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
+import { useKeyboard } from "@react-native-community/hooks"
 
 //*images 임시 데이터베이스
 const imagess = [
@@ -63,6 +64,7 @@ export const EditPetInfoScreen: FC<
 > = observer(function EditPetInfoScreen() {
   const route = useRoute()
   const navigation = useNavigation()
+  const { keyboardShown } = useKeyboard()
 
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
@@ -237,15 +239,16 @@ export const EditPetInfoScreen: FC<
   /**
    * [저장하기 버튼]
    * - editable 일때 표츌
-   * - 단, Modal 창이 켜져있다면 표출하지 않음
+   * - Modal 창이 켜져있다면 표출하지 않음
+   * - 소프트웨어 키보드가 올라와있다면 표출하지 않음
    *  */
   const showSaveButton =
-    editable && !(nameTouched || weightTouched || birthdayTouched || handleGoBack)
+    editable && !(nameTouched || weightTouched || birthdayTouched || handleGoBack) && !keyboardShown
 
   //* 본문 코드 :
   return (
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT }}>
         <View>
           {/* //*이미지  */}
           <FlatList
@@ -256,7 +259,7 @@ export const EditPetInfoScreen: FC<
               <ImageBackground
                 source={{ uri: item.profileImg }}
                 style={{
-                  width: 390,
+                  width: DEVICE_SCREEN_WIDTH,
                   height: 240,
                 }}
                 key={index}
@@ -462,10 +465,6 @@ export const EditPetInfoScreen: FC<
           <ConditionalButton
             label="저장하기"
             isActivated={true}
-            style={{
-              marginTop: "auto",
-              marginBottom: 0,
-            }}
             onPress={() => {
               if (anyChangeMade === true) {
                 setAnyChangeMade(false)

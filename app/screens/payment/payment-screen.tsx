@@ -89,7 +89,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
     //* axios 사용하여 유저정보, totalFee 초기화
     useEffect(() => {
-      getUsers().then((res) => setUserMe(res))
+      // getUsers().then((res) => setUserMe(res)) //TODO: getUsers 대신 다른것으로 대체해야 함 - 수민
       if (serviceType == "방문") {
         const visitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
           //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.

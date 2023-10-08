@@ -6,7 +6,36 @@ import { images } from "#images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
 import { DISABLED } from "#theme"
 
-export const AnimatedHeader = ({ animatedValue }) => {
+interface AnimatedHeaderProps {
+  animatedValue: Animated.Value
+
+  // 방문
+  startTime?: string
+  endTime?: string
+
+  //  위탁
+  startDate?: string
+  endDate?: string
+}
+
+export const AnimatedHeader = (props: AnimatedHeaderProps) => {
+  const { animatedValue, startTime, endTime, startDate, endDate } = props
+
+  const 방문검색 = !!startTime && !!endTime
+  const 위탁검색 = !!startDate && !!endDate
+
+  let 방문날짜, 방문시간, 위탁시작날짜, 위탁종료날짜
+
+  if (방문검색) {
+    방문날짜 = startTime.substring(0, 10).replace(/-/g, ".")
+    방문시간 = `${startTime.substring(11, 16)} ~ ${endTime.substring(11, 16)}`
+  }
+
+  if (위탁검색) {
+    위탁시작날짜 = startDate.substring(0, 10).replace(/-/g, ".")
+    위탁종료날짜 = endDate.substring(0, 10).replace(/-/g, ".")
+  }
+
   const headerOpacity = animatedValue.interpolate({
     inputRange: [OPACITY_MIN, 100],
     outputRange: [1, OPACITY_MIN * 0.01],
@@ -34,21 +63,37 @@ export const AnimatedHeader = ({ animatedValue }) => {
             justifyContent: "space-between",
           }}
         >
-          {/*//? 날짜 선택 */}
-          <RowRoundedButton
-            image={images.calender_disabled}
-            text={"2022.03.20"}
-            textColor={DISABLED}
-            style={{ width: 174 }}
-          />
+          {방문검색 && (
+            <>
+              {/*//? 날짜 */}
+              <RowRoundedButton
+                image={images.calender_disabled}
+                text={방문날짜}
+                textColor={DISABLED}
+                style={{ width: "48%" }}
+              />
 
-          {/* //? 시간 선택 */}
-          <RowRoundedButton
-            image={images.timer_disabled}
-            text={"08:00-12:00"}
-            textColor={DISABLED}
-            style={{ width: 174 }}
-          />
+              {/* //? 방문 시간 */}
+              <RowRoundedButton
+                image={images.timer_disabled}
+                text={방문시간}
+                textColor={DISABLED}
+                style={{ width: "48%" }}
+              />
+            </>
+          )}
+
+          {위탁검색 && (
+            <>
+              {/*//? 시작 날짜 */}
+              <RowRoundedButton
+                image={images.calender_disabled}
+                text={`${위탁시작날짜} ~ ${위탁종료날짜}`}
+                textColor={DISABLED}
+                style={{ width: "100%" }}
+              />
+            </>
+          )}
         </Row>
 
         {/*//? 주소 선택 */}

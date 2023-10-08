@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Pressable, StyleProp, ViewStyle } from "react-native"
+import { Pressable, StyleProp, TouchableOpacity, ViewStyle } from "react-native"
 import { palette } from "#theme"
 import { PreBol16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
@@ -25,8 +25,8 @@ export const ConditionalButton = (props: ConditionalButtonProps) => {
   // const content = children || <Text style={textStyle}>{label} </Text>
 
   return (
-    <Pressable style={[style, viewStyle]} disabled={!isActivated} onPress={onPress}>
+    <TouchableOpacity style={[style, viewStyle]} disabled={!isActivated} onPress={onPress}>
       <PreBol16 text={label} color={palette.white} />
-    </Pressable>
+    </TouchableOpacity>
   )
 }

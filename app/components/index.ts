@@ -39,6 +39,10 @@ export * from "./screen-headers/cg-certificate-registration-screen-header/cg-cer
 export * from "./screen-headers/cgset-screen-header/cgset-screen-header"
 export * from "./screen-headers/cg-screen-header/cg-screen-header"
 
+//* bottom-tab-bar
+export * from "./custom-bottom-tab-bar/custom-tab-bar/custom-tab-bar"
+export * from "./custom-bottom-tab-bar/tab-bar-item/tab-bar-item"
+
 //* others
 export * from "./screen/screen"
 export * from "./division-line/division-line"
@@ -56,7 +60,6 @@ export * from "./caregiver-service/caregiver-service"
 export * from "./caregiver-name-star-review/caregiver-name-star-review"
 export * from "./service-type-indicator-header/service-type-indicator-header"
 export * from "./dropdown-boxes/select-pet-dropdown-box/select-pet-dropdown-box"
-export * from "./dropdown-boxes/select-option-dropdown-box/select-option-dropdown-box"
 export * from "./row-rounded-time-interval-picker/row-rounded-time-interval-picker"
 export * from "./filter-header/filter-header"
 export * from "./review-box/review-box"
@@ -90,3 +93,7 @@ export * from "./payment-tool/payment-tool"
 export * from "./booking-list/booking-list"
 export * from "./caregiver-set-price/caregiver-set-price"
 export * from "./caregiver-set-additional-price/caregiver-set-additional-price"
+export * from "./client-calendar/client-calendar"
+export * from "./sign-up-text-input/sign-up-text-input"
+export * from "./count-down/count-down"
+export * from "./search-sorting-button/search-sorting-button"

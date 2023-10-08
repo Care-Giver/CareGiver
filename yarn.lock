@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.4.tgz#9606eb651955499525d068ce0ad8bea596286ce2"
   integrity sha512-W3ezhHGfO0MS1PtGloaTpg0PbaT8aZSmmaerL7idtU5F7oCI+uu25k+MsMS31BVFlp4aMkHSrNRxiD72IlK8TA==
 
+"@actbase/react-daum-postcode@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@actbase/react-daum-postcode/-/react-daum-postcode-1.0.4.tgz#fad5c595e35e835f0a7e205be698183420f42e5f"
+  integrity sha512-cTUnwfnKLM9LMh4dBPxbfGeCjpbJQcq/R6oW2aEJO20qz4i8cA7sPf0HkUyYqENfuGFU+vbsSJ8LJwNhTYoFLQ==
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.1.tgz#99e8e11851128b8702cd57c33684f1d0f260b630"
@@ -1366,6 +1371,13 @@
   integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
   dependencies:
     regenerator-runtime "^0.13.11"
+
+"@babel/runtime@^7.21.0":
+  version "7.22.15"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.15.tgz#38f46494ccf6cf020bd4eed7124b425e83e523b8"
+  integrity sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==
+  dependencies:
+    regenerator-runtime "^0.14.0"
 
 "@babel/template@^7.0.0", "@babel/template@^7.22.5", "@babel/template@^7.3.3", "@babel/template@^7.8.6":
   version "7.22.5"
@@ -2964,6 +2976,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/hooks/-/hooks-2.8.1.tgz#6e785431db49318048fdd14b601998437b6cc200"
   integrity sha512-DCmCIC0Gn9m6K0Mlg2MwNmTxMEpBu5lTLsI6b/XUAv/vLGa6o+X7RhCai4FWeqkjCU36+ZOwaLzDo4NBWMXaoQ==
 
+"@react-native-community/slider@^4.4.3":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.4.3.tgz#9b9dc639b88f5bfda72bd72a9dff55cbf9f777ed"
+  integrity sha512-WdjvGtqJfqcCiLwtbzie53Z/H6w6dIfRHhlW832D89ySAdE5DxLAsqRhDOG0eacuAxxEB+T9sGCkVMD0fa3aBg==
+
 "@react-native-firebase/app@~15.4.0":
   version "15.4.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-15.4.0.tgz#616a6d13956fbed1ee010ca05b9e62969d19b5c5"
@@ -2982,6 +2999,13 @@
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/@react-native-seoul/kakao-login/-/kakao-login-5.2.6.tgz#2a508e78d5370b34256f4281792a32c2b9ffcabf"
   integrity sha512-93pkAScF8uVnAwwFkOV5m0xCbkNFGc5ey99AUy9n191YZL5ywguEV0ZBcgij+1cPkM0e7xVcXGfUG7/GmXcn0A==
+  dependencies:
+    dooboolab-welcome "^1.3.2"
+
+"@react-native-seoul/naver-login@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@react-native-seoul/naver-login/-/naver-login-3.0.0-rc.2.tgz#fadfedff123eb58bbc3c3f0fd286aa3a4970b117"
+  integrity sha512-/gI0WJC6FLgSOLYrDAPehs9x34vFfBgdA5wER8hiwFB4g+DjXdGd+0NuT4+ISzTYfhHTG4cBHqa70oGBs5uxtQ==
   dependencies:
     dooboolab-welcome "^1.3.2"
 
@@ -7305,6 +7329,18 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+date-fns@^2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
+  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+
+dayjs@^1.11.9:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.9.tgz#9ca491933fadd0a60a2c19f6c237c03517d71d1a"
+  integrity sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==
+
 dayjs@^1.8.15:
   version "1.11.8"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.8.tgz#4282f139c8c19dd6d0c7bd571e30c2d0ba7698ea"
@@ -8304,6 +8340,11 @@ eslint-plugin-promise@4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-promise/-/eslint-plugin-promise-4.2.1.tgz#845fd8b2260ad8f82564c1222fce44ad71d9418a"
   integrity sha512-VoM09vT7bfA7D+upt+FjeBO5eHIJQBUWki1aPvB+vbNiHS3+oGIJGIeyBtKQTME6UPXXy3vV07OL1tHd3ANuDw==
+
+eslint-plugin-react-hooks@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.0.tgz#4c3e697ad95b77e93f8646aaa1630c1ba607edd3"
+  integrity sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==
 
 eslint-plugin-react-native-globals@^0.1.1:
   version "0.1.2"
@@ -16548,6 +16589,14 @@ react-native-modal@^13.0.1:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
+react-native-permissions@^3.8.0:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.8.1.tgz#8d38578686e77caf6e7faf7568411da98ab12d89"
+  integrity sha512-5e5y4RyyWAD3UCrPO70x0a8opk70RYzU3GI6xPjq/7LuIbFprSzWbOvM9lLD8SSzf/8ofCwDm29evvPYllGS+g==
+  dependencies:
+    picocolors "^1.0.0"
+    pkg-dir "^5.0.0"
+
 react-native-reanimated@~2.9.1:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"
@@ -16731,6 +16780,11 @@ react-textarea-autosize@^7.1.0:
   dependencies:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.0"
+
+react-timer-hook@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.7.tgz#ac42c43d0034b873cbf97b44eb34ccb2b11fe5e0"
+  integrity sha512-ATpNcU+PQRxxfNBPVqce2+REtjGAlwmfoNQfcEBMZFxPj0r3GYdKhyPHdStvqrejejEi0QvqaJZjy2lBlFvAsA==
 
 react@18.0.0:
   version "18.0.0"
@@ -17041,6 +17095,11 @@ regenerator-runtime@^0.13.11, regenerator-runtime@^0.13.2, regenerator-runtime@^
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
+
+regenerator-runtime@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.14.0.tgz#5e19d68eb12d486f797e15a3c6a918f7cec5eb45"
+  integrity sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==
 
 regenerator-transform@^0.15.1:
   version "0.15.1"

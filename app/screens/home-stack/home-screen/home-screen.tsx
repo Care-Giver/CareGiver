@@ -13,6 +13,7 @@ import {
   PreBol20,
   PreBol18,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CountDown,
 } from "../../../components"
 import { navigate, NavigatorParamList } from "../../../navigators"
 import { BODY, SUB_HEAD_LINE } from "../../../theme"
@@ -24,6 +25,7 @@ import { delay } from "../../../utils/delay"
 import { consoleInfoAsync } from "../../../utils/console-async"
 import { useFocusEffect } from "@react-navigation/native"
 import { useShowBottomTab } from "../../../utils/hooks"
+import dayjs from "dayjs"
 
 const FLATLIST_PADDING_VERTICAL = 6 //? FlatList 내부의 있는 요소에 그림자가 있을 경우, FlatList 의 contentContainerStyle 에 padding 이 없을 경우, 그림자가 짤린다
 const FLATLIST_PADDING_HORIZONTAL = 10 //? ""
@@ -109,29 +111,43 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               // navigate("test-map-screen")
               // alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
               // getCrechePetsitters(7)
-
               // getCreche(17)
+              // createCreche({
+              //   userId: 2,
+              //   title: "ENFP의 친화력 - 3",
+              //   address: "경기도 안산시 사동 한양대학로 55",
+              //   detailAddress: "제5공학관 지하1층 창업3실",
+              //   desc: "강아지 3년 기른 경력으로 보살핍니다.",
+              //   maxUnit: 100,
+              //   handleType: ["대형", "중형", "소형"],
+              //   roomType: "아파트",
+              //   images: { imageUrl: "이미지 주소", desc: "이미지 설명" },
+              //   services: ["산책, 목욕, 미용"],
+              //   defaultFee: 9999,
+              //   extraSizeFee: {
+              //     SMALL: 999,
+              //     MEDIUM: 10,
+              //     LARGE: 0,
+              //   },
+              //   promoted: false,
+              //   facilities: ["공원, 동물병원"],
+              // })
 
-              createCreche({
-                userId: 2,
-                title: "ENFP의 친화력 - 3",
-                address: "경기도 안산시 사동 한양대학로 55",
-                detailAddress: "제5공학관 지하1층 창업3실",
-                desc: "강아지 3년 기른 경력으로 보살핍니다.",
-                maxUnit: 100,
-                handleType: ["대형", "중형", "소형"],
-                roomType: "아파트",
-                images: { imageUrl: "이미지 주소", desc: "이미지 설명" },
-                services: ["산책, 목욕, 미용"],
-                defaultFee: 9999,
-                extraSizeFee: {
-                  SMALL: 999,
-                  MEDIUM: 10,
-                  LARGE: 0,
-                },
-                promoted: false,
-                facilities: ["공원, 동물병원"],
-              })
+              // loadsh 테스트
+              const array = [1]
+              const _ = require("lodash")
+              const other = _.concat(array, 2, [3], [[4]])
+              console.log("loadsh 테스트", other)
+
+              // dayjs 테스트
+              const 지금 = dayjs() //
+              const 이번달_달력이_0부터_시작함을_주의 = dayjs().month() // gets current month
+              const 새객체_1월 = dayjs().month(0) // returns new dayjs object
+              const 새객체_3월 = dayjs().month(2) // returns new dayjs object
+              console.log("dayjs 테스트", 지금)
+              console.log("dayjs 테스트", 이번달_달력이_0부터_시작함을_주의)
+              console.log("dayjs 테스트", 새객체_1월)
+              console.log("dayjs 테스트", 새객체_3월)
             }}
             image={images.gps}
             text={"경기 안산시 상록구 한양대학로 55"}
@@ -141,6 +157,8 @@ export const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">>
               paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
           />
+
+          <CountDown style={{ alignSelf: "center" }} duration={30} />
 
           {/*//? Title */}
           <PreBol20
