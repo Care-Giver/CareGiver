@@ -19,28 +19,26 @@ import {
   ServiceCenterScreen,
   ServiceRegistrationScreen,
   FacilityRegistrationScreen,
-  CaregiverSetPriceScreen,
-  CaregiverSetAdditionalPriceScreen,
+  CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   CgSetAddressScreen,
   ManageBookingScreen,
   CgCalendarListScreen,
   CgMypageScreen,
-  LoginScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
   CgSearchAddressScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
-  HomeScreenHeader,
   Screen,
   PreReg18,
   CgScreenHeader,
   CgCertificateRegistrationScreenHeader,
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
+import { ServiceType } from "#models"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -79,14 +77,9 @@ export type CGStackNavigatorParamList = {
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
   // ===========================================================================================================
-
-  /**
-   * NOT_ORGANISED_CG_SCREENS - CG 스크린들 (아직 정리 안 됨)
-   */
   "service-registration-screen": undefined
   "facility-registration-screen": undefined
-  "caregiver-set-price-screen": { serviceType: "CRECHE" | "VISIT" }
-  "caregiver-set-additional-price-screen": undefined
+  "cg-set-price-screen": { serviceType: ServiceType }
 }
 
 const Stack = createNativeStackNavigator<CGStackNavigatorParamList>()
@@ -278,24 +271,14 @@ export const CgMypageStack = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-    </Stack.Navigator>
-  )
-}
 
-/**
- * CG 스크린들 (아직 정리 안 됨)
- */
-const NOT_ORGANISED_CG_SCREENS = () => {
-  return (
-    <Stack.Navigator
-      //? header 와 headerTitle 과의 차이점: https://stackoverflow.com/questions/65092435/react-navigation-bar-header-has-a-margin-on-the-left
-      screenOptions={{
-        headerShown: true,
-        animation: "slide_from_right",
-      }}
-      initialRouteName="service-registration-screen"
-    >
-      {/* //! 등록 스택 */}
+      {/* 
+      // ===========================================================================================================
+      // 아래는 아직 정리되지 않은 스크린들 입니다.
+      // ===========================================================================================================
+    */}
+
+      {/* //! 등록 스택 BEGIN */}
       {/* //* 서비스 등록 스크린 */}
       <Stack.Screen
         name="service-registration-screen"
@@ -315,26 +298,13 @@ const NOT_ORGANISED_CG_SCREENS = () => {
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
-      {/* //! ------- */}
+      {/* //! 등록 스택 ENDED */}
 
-      {/* //! 요금 설정 스택 */}
       {/* //* 케어기버 요금 설정 스크린 */}
       <Stack.Screen
-        name="caregiver-set-price-screen"
-        component={CaregiverSetPriceScreen}
-        options={{
-          title: "요금 설정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      <Stack.Screen
-        name="caregiver-set-additional-price-screen"
-        component={CaregiverSetAdditionalPriceScreen}
-        options={{
-          title: "강아지 크기 별 추가 요금 설정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
+        name="cg-set-price-screen"
+        component={CgSetPriceScreen}
+        options={{ headerShown: false }} //! 이 스크린은 헤더 컴포넌트가 cg-set-price-screen 스크린 내부에 있습니다.
       />
     </Stack.Navigator>
   )

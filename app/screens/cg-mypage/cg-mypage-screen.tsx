@@ -55,6 +55,13 @@ export const CgMypageScreen: FC<
   return (
     <Screen>
       <ScrollView>
+        {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
+
+        <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
+          <PreBol16 text="cg-set-price-screen 으로 이동하기" color={GIVER_CASUAL_NAVY} />
+        </Pressable>
+
+        {/* 임시 버튼 - cg-search-address-screen 스크린 이동용  */}
         <Pressable
           style={{ backgroundColor: "red" }}
           onPress={() => {

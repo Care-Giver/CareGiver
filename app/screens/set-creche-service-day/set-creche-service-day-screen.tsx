@@ -1,5 +1,15 @@
-import React, { FC, useState } from "react"
-import { ScrollView, StyleSheet, View, Switch, Text, Modal, Pressable, Image } from "react-native"
+import React, { FC, useRef, useState } from "react"
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Switch,
+  Text,
+  Modal,
+  Pressable,
+  Image,
+  FlatList,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -82,7 +92,7 @@ export const SetCrecheServiceDayScreen: FC<
 
   return (
     <Screen testID="SetCrecheServiceDay" style={styles.root}>
-      <ScrollView>
+      <ScrollView ref={scrollViewRef}>
         <PreBol20 text="9월 15일" mb={10} ml={16} />
         <DivisionLine height={8} color={LIGHT_LINE} />
 

@@ -43,8 +43,7 @@ export * from "./review-stack/view-review/view-review-screen"
 export * from "./review-stack/write-review/write-review-screen"
 
 //* set-price-stack
-export * from "./set-price-stack/caregiver/caregiver-set-price-screen/caregiver-set-price-screen"
-export * from "./set-price-stack/caregiver/caregiver-set-additional-price-screen/caregiver-set-additional-price-screen"
+export * from "./cg-set-price/cg-set-price-screen"
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./kakao-login-test/kakao-login-test-screen"
 export * from "./cg-calendar/cg-calendar-screen"
