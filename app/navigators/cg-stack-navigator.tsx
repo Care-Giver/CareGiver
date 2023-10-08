@@ -77,10 +77,6 @@ export type CGStackNavigatorParamList = {
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
   // ===========================================================================================================
-
-  /**
-   * NOT_ORGANISED_CG_SCREENS - CG 스크린들 (아직 정리 안 됨)
-   */
   "service-registration-screen": undefined
   "facility-registration-screen": undefined
   "cg-set-price-screen": { serviceType: ServiceType }
@@ -276,6 +272,12 @@ export const CgMypageStack = () => {
         }}
       />
 
+      {/* 
+      // ===========================================================================================================
+      // 아래는 아직 정리되지 않은 스크린들 입니다.
+      // ===========================================================================================================
+    */}
+
       {/* //! 등록 스택 BEGIN */}
       {/* //* 서비스 등록 스크린 */}
       <Stack.Screen
@@ -302,10 +304,7 @@ export const CgMypageStack = () => {
       <Stack.Screen
         name="cg-set-price-screen"
         component={CgSetPriceScreen}
-        options={{
-          title: "요금 설정",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
+        options={{ headerShown: false }} //! 이 스크린은 헤더 컴포넌트가 cg-set-price-screen 스크린 내부에 있습니다.
       />
     </Stack.Navigator>
   )
