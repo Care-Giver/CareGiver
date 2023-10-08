@@ -31,8 +31,8 @@ const standardCosts = {
  * 영업을 하기로 한 "모든날짜"에 대해, 기본 요금과 크기별 추가 요금을 설정합니다.
  * 위탁/방문의 경우 모두 이 스크린을 사용합니다.
  */
-export const CaregiverSetPriceScreen: FC<
-  StackScreenProps<NavigatorParamList, "caregiver-set-price-screen">
+export const CgSetPriceScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-set-price-screen">
 > = observer(({ route, navigation }) => {
   const serviceType = route.params?.serviceType
 
