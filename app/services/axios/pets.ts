@@ -29,7 +29,7 @@ export interface PetDetail {
   weight: number
   petType: HandleType
   isNeutralizated: boolean
-  birthday: Date
+  birthday: string
   desc: string
 }
 
@@ -68,7 +68,6 @@ export const getPets = async (): Promise<GetPetsResult> => {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    console.log("pets >>>", response.data.petResults)
     return {
       isSuccess: true,
       petsDetail: response.data.petResults.map((data) => {
@@ -76,7 +75,7 @@ export const getPets = async (): Promise<GetPetsResult> => {
           id: data.pet.id,
           createAt: data.pet.createAt,
           updatedAt: data.pet.updatedAt,
-          images: data.pet.images,
+          images: data.pet.images?.length > 5 ? data.pet.images.slice(0, 5) : data.pet.images, // DB 에서 가져온 이미지중에서 5개까지만 저장한다.
           petType: data.pet.petType,
           name: data.pet.name,
           age: data.pet.age,
@@ -91,6 +90,46 @@ export const getPets = async (): Promise<GetPetsResult> => {
     }
   } catch (error) {
     console.error("catch 에러!!! - getPets", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+interface PetResponse extends GeneralResponse {
+  pet: Omit<Pet, "familyType">
+}
+interface UpdatePetRequestBody {
+  name: string
+  age: number
+  sex: PetSex
+  weight: number
+  images: string[]
+  isNeutralizated: boolean
+  desc: string
+  //? userId가 nullable
+  //userId: number
+  speciesName: string
+  familyType: string
+  birthday: string
+}
+interface UpdatePetResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+export const updatePet = async (
+  id: number,
+  body: UpdatePetRequestBody,
+): Promise<UpdatePetResult> => {
+  try {
+    const response = await axios.put<PetResponse>(`${BASE_URL}/pet/${id}`, body)
+
+    if (!response?.data.ok) {
+      console.error("/pets API 에러!!! ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - modifyPet", error)
     return { isSuccess: false, reason: error }
   }
 }

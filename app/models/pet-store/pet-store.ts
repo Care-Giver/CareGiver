@@ -37,7 +37,7 @@ export interface Pet {
   weight: number
   petType: HandleType
   isNeutralizated: boolean
-  birthday: Date
+  birthday: string
   desc: string
 }
 
@@ -96,9 +96,9 @@ export const PetStoreModel = types
         if (!petsDetail) {
           return false
         }
-        this.setPets(petsDetail)
 
-        return true
+        this.setPets(petsDetail)
+        return petsDetail
       } catch (error) {
         console.error("catch 에러!!! - petsDetailHandler", error)
         return false

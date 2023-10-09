@@ -12,7 +12,7 @@ import {
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, goBack } from "#navigators"
+import { NavigatorParamList, goBack, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
@@ -25,46 +25,33 @@ import {
   BirthdayModal,
   CustomModal,
   PreMed12,
+  CustomImagePicker,
+  PickerImage,
 } from "#components"
 import { Pets } from "./dummy-data"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH } from "#theme"
+import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
+import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
 import { useKeyboard } from "@react-native-community/hooks"
+import { updatePet, PetSex } from "../../../services/axios/pets"
+import { Pet } from "#models"
+import { uploadURIS } from "#axios"
 
-//*images 임시 데이터베이스
-const imagess = [
-  {
-    id: "1",
-    profileImg: "https://cdn.pixabay.com/photo/2019/08/19/07/45/corgi-4415649_1280.jpg",
-  },
-  {
-    id: "2",
-    profileImg: "https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_1280.jpg",
-  },
-  {
-    id: "3",
-    profileImg: "https://cdn.pixabay.com/photo/2018/04/23/14/38/dog-3344414_1280.jpg",
-  },
-  {
-    id: "4",
-    profileImg: "https://cdn.pixabay.com/photo/2019/11/08/11/56/kitten-4611189_1280.jpg",
-  },
-  {
-    id: "5",
-    profileImg: "https://cdn.pixabay.com/photo/2016/03/28/10/05/kitten-1285341_1280.jpg",
-  },
-]
+export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
+  NavigatorParamList,
+  스크린이름들
+>
 
 export const EditPetInfoScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-pet-info-screen">
-> = observer(function EditPetInfoScreen() {
-  const route = useRoute()
-  const navigation = useNavigation()
+> = observer(function EditPetInfoScreen({ route, navigation }) {
   const { keyboardShown } = useKeyboard()
+
+  //*현재 펫 데이터 가져오기 (일단은 더미데이터)
+  const pet = route.params.pet
 
   //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
   const editable = route.params?.editable
@@ -72,30 +59,33 @@ export const EditPetInfoScreen: FC<
   //*뒤에 버튼 눌림 감지
   const isBackPressed = route.params?.isBackPressed
 
-  //* 변화 감지 변수
+  /**
+   * 변화 감지 변수
+   * 변경내역이 있을 경우 true 를 반환한다.
+   *
+   * NOTE: 이 경우처럼, 유도되는 state 를 useState 를 사용해서 관리하는 것은 적절하지 않다. - TO: @hycv
+   * 하지만, 리팩토링 하는 것이 더 많은 시간이 소요될 것으로 판단되어, 수정하지 않았다. - FROM: @smnchoi
+   * */
   const [anyChangeMade, setAnyChangeMade] = useState(false)
 
-  //*현재 펫 데이터 가져오기 (일단은 더미데이터)
-  const currentPet = Pets.find((Pet) => Pet.id === 1)
-
   //*화면에서 이름 부분에 들어갈 데이터
-  const [name, setName] = useState(currentPet.name)
+  const [name, setName] = useState(pet.name)
 
   //*몸무게 + kg 넣고 저장
-  const [weight, setWeight] = useState(currentPet.weight)
+  const [weight, setWeight] = useState(pet.weight)
 
   //*생년월일 저장
-  const [birthday, setBirthday] = useState(currentPet.birthday)
+  const [birthday, setBirthday] = useState(pet.birthday.slice(0, 10))
 
   //*성별 한국어로 변환
-  const sex = currentPet.sex === "female" ? "여" : "남"
+  const sex = pet.sex === "FEMALE" ? "여" : "남"
 
   //*중성화 여부 한국어로 변환
-  const Neutralizated = currentPet.isNeutralizated === true ? "함" : "안 함"
+  const neutralizated = pet.isNeutralizated === true ? "함" : "안 함"
 
   //*수정 불가 상태 (수정(연필) 버튼 보이는 상태)로 만들기
   const notEditable = () => {
-    navigation.setParams({ editable: false }) //? 왜 object 없다고 하는지?
+    navigation.setParams({ editable: false })
   }
 
   //*anyChangeMade 를 true 로 바꾸기
@@ -152,13 +142,12 @@ export const EditPetInfoScreen: FC<
 
   //*모달창에서 생년월일 변경시 사용 함수
   const handleBirthdayInput = (newBirthday) => {
-    //TODO 벌스데이 숫자 나눠서 형식 맞춰서 넣어주기 함수
     formatBirthdayInput(newBirthday)
     isChangeMade()
   }
 
   //*반려동물 소개 관련 변수
-  const [text, setText] = useState(currentPet.desc)
+  const [text, setText] = useState(pet.desc)
 
   //*반려동물 소개 text 변화 함수
   const handleTextChange = (newText) => {
@@ -166,9 +155,18 @@ export const EditPetInfoScreen: FC<
     isChangeMade()
   }
 
+  // 펫이미지 편집 코드 BEGIN ======================================================================================================
+
   //*image 관련 변수,함수들
   //* image
-  const [currentImage, setCurrentImage] = useState(0)
+  const petImages: PickerImage[] = pet.images.map((image) => ({
+    uri: image,
+    type: "image", // 임시값. 수정필요
+    name: "image", // 임시값. 수정필요
+  }))
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(petImages || [])
+  const [currentImage, setCurrentImage] = useState<number>(0)
+  const [isSelectingImages, setIsSelectingImages] = useState<boolean>(false)
 
   const onFlatlistUpdate = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
@@ -176,9 +174,7 @@ export const EditPetInfoScreen: FC<
     }
   }, [])
 
-  //* Prevent to leave screen - Back button handler
-  //* ref: https://reactnative.dev/docs/backhandler
-  //* ref: https://reactnavigation.org/docs/custom-android-back-button-handling/
+  // 펫이미지 편집 코드 ENDED ======================================================================================================
 
   //*수정한 후 저장 안하고 goback 시 뜰 모달 visible 조절 변수
   const [handleGoBack, setHandleGoBack] = useState(false)
@@ -198,13 +194,16 @@ export const EditPetInfoScreen: FC<
     navigation.setParams({ editable: false })
     setAnyChangeMade(false)
     //*화면속 바뀐 정보 초기화
-    setName(currentPet.name)
-    setBirthday(currentPet.birthday)
-    setWeight(currentPet.weight)
-    setText(currentPet.desc)
+    setName(pet.name)
+    setBirthday(pet.birthday)
+    setWeight(pet.weight)
+    setText(pet.desc)
   }
 
   //*andorid 용 하드웨어 goback 핸들링
+  //* Prevent to leave screen - Back button handler
+  //* ref: https://reactnative.dev/docs/backhandler
+  //* ref: https://reactnavigation.org/docs/custom-android-back-button-handling/
   useFocusEffect(
     useCallback(() => {
       const androidGoBack = () => {
@@ -250,43 +249,63 @@ export const EditPetInfoScreen: FC<
     <Screen testID="EditPetInfo" style={{ paddingHorizontal: 0 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT }}>
         <View>
-          {/* //*이미지  */}
-          <FlatList
-            data={imagess}
-            renderItem={(
-              { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-            ) => (
-              <ImageBackground
-                source={{ uri: item.profileImg }}
-                style={{
-                  width: DEVICE_SCREEN_WIDTH,
-                  height: 240,
-                }}
-                key={index}
-              >
-                <Pressable
-                  onPress={() => {
-                    alert("이미지 등록 준비중입니다.")
+          {/* //*이미지 */}
+          {!isSelectingImages ? (
+            <FlatList
+              data={selectedImages.map((image) => image.uri)}
+              renderItem={(
+                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+              ) => (
+                <ImageBackground
+                  source={{ uri: item }}
+                  style={{
+                    width: DEVICE_SCREEN_WIDTH,
+                    height: 240,
                   }}
-                  style={{ position: "absolute", right: 16, bottom: 8 }}
+                  key={index}
                 >
-                  <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
-                </Pressable>
-              </ImageBackground>
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={DEVICE_SCREEN_WIDTH}
-            snapToAlignment={"end"}
-            decelerationRate={"fast"}
-            //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-            viewabilityConfig={{
-              viewAreaCoveragePercentThreshold: 51,
-            }}
-            //? 이미지가 바뀌었을때 실행 할 행동 설정.
-            onViewableItemsChanged={onFlatlistUpdate}
-          />
-          <DotsIndicator items={imagess} activeIndex={currentImage} style={{ marginTop: -28 }} />
+                  {editable && (
+                    <Pressable
+                      onPress={() => {
+                        setIsSelectingImages(true)
+                        isChangeMade()
+                      }}
+                      style={{ position: "absolute", right: 16, bottom: 8 }}
+                    >
+                      <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                    </Pressable>
+                  )}
+                </ImageBackground>
+              )}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={DEVICE_SCREEN_WIDTH}
+              snapToAlignment={"end"}
+              decelerationRate={"fast"}
+              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+              viewabilityConfig={{
+                viewAreaCoveragePercentThreshold: 51,
+              }}
+              //? 이미지가 바뀌었을때 실행 할 행동 설정.
+              onViewableItemsChanged={onFlatlistUpdate}
+            />
+          ) : (
+            <CustomImagePicker
+              selectedImages={selectedImages}
+              setSelectedImages={setSelectedImages}
+              submitButtonText="사진 추가하기"
+              selectionLimit={5}
+              style={{ marginTop: 20 }}
+            />
+          )}
+
+          {!isSelectingImages && (
+            <DotsIndicator
+              items={selectedImages.map((image) => image.uri)}
+              activeIndex={currentImage}
+              style={{ marginTop: -28 }}
+            />
+          )}
         </View>
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
@@ -346,7 +365,7 @@ export const EditPetInfoScreen: FC<
 
           <UserOrPetProfileInfo
             title="품종"
-            profileInfo={currentPet.species}
+            profileInfo={pet.species.name}
             showOption={editable}
             additionalPadding={35}
           />
@@ -360,7 +379,7 @@ export const EditPetInfoScreen: FC<
 
           <UserOrPetProfileInfo
             title="크기"
-            profileInfo={currentPet.petType}
+            profileInfo={pet.petType}
             showOption={editable}
             additionalPadding={35}
           />
@@ -390,7 +409,7 @@ export const EditPetInfoScreen: FC<
 
           <UserOrPetProfileInfo
             title="중성화여부"
-            profileInfo={Neutralizated}
+            profileInfo={neutralizated}
             showOption={editable}
             additionalPadding={35}
           />
@@ -402,7 +421,11 @@ export const EditPetInfoScreen: FC<
 
               <View style={styles.petDescTextBox}>
                 <TextInput
-                  style={{ fontFamily: PRETENDARD_MEDIUM, fontSize: 14, color: BODY }}
+                  style={{
+                    fontFamily: PRETENDARD_MEDIUM,
+                    fontSize: 14,
+                    color: HEAD_LINE,
+                  }}
                   multiline={true}
                   editable={editable !== undefined ? editable : false}
                   value={text}
@@ -464,13 +487,32 @@ export const EditPetInfoScreen: FC<
         <View style={styles.saveBox}>
           <ConditionalButton
             label="저장하기"
-            isActivated={true}
-            onPress={() => {
+            isActivated={anyChangeMade}
+            onPress={async () => {
               if (anyChangeMade === true) {
                 setAnyChangeMade(false)
               }
               notEditable() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-              //TODO pet data 실제로 변경하는 코드 필요 (변경된 정보들로 저장 (process -> 실제로 한 정보가 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
+              const imageUriList = await uploadURIS(selectedImages)
+              updatePet(pet.id, {
+                name: name,
+                age: pet.age,
+                sex: pet.sex,
+                images: imageUriList,
+                weight: weight,
+                isNeutralizated: pet.isNeutralizated,
+                desc: text,
+                //userId: 25, //! pet 데이터 수정시에는 userId 필요없음 - 생성시에만 필요함.
+                speciesName: pet.species.name,
+                familyType: pet.species.familyType,
+                birthday: birthday,
+              }).then((res) => {
+                if (res.isSuccess) {
+                  navigate("all-pets-screen", { isSaved: true })
+                } else {
+                  alert("수정에 실패했습니다.")
+                }
+              })
             }}
           />
         </View>

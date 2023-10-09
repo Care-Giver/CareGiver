@@ -32,6 +32,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     /** 반려동물 리스트를 불러옵니다. */
     useEffect(() => {
       petsHandler()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
