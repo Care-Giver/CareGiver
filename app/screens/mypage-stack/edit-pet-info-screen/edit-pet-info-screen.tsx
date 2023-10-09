@@ -38,6 +38,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import { useKeyboard } from "@react-native-community/hooks"
 import { updatePet, PetSex } from "../../../services/axios/pets"
 import { Pet } from "#models"
+import { uploadURIS } from "#axios"
 
 export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
   NavigatorParamList,
@@ -265,7 +266,10 @@ export const EditPetInfoScreen: FC<
                 >
                   {editable && (
                     <Pressable
-                      onPress={() => setIsSelectingImages(true)}
+                      onPress={() => {
+                        setIsSelectingImages(true)
+                        isChangeMade()
+                      }}
                       style={{ position: "absolute", right: 16, bottom: 8 }}
                     >
                       <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
@@ -484,19 +488,17 @@ export const EditPetInfoScreen: FC<
           <ConditionalButton
             label="저장하기"
             isActivated={anyChangeMade}
-            onPress={() => {
+            onPress={async () => {
               if (anyChangeMade === true) {
                 setAnyChangeMade(false)
               }
               notEditable() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
+              const imageUriList = await uploadURIS(selectedImages)
               updatePet(pet.id, {
                 name: name,
                 age: pet.age,
                 sex: pet.sex,
-                //? images 데이터 처리중 타입간 차이가있어, 해당 방식으로 처리함.
-                images: selectedImages.map((item) => {
-                  return item.uri
-                }),
+                images: imageUriList,
                 weight: weight,
                 isNeutralizated: pet.isNeutralizated,
                 desc: text,

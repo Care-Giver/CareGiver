@@ -86,7 +86,7 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[] | null
     })
 
     if (response.data.ok) {
-      //   console.info("[uploads response.data] >>>", response.data)
+      // console.info("[uploads response.data] >>>", response.data)
       return response.data.urls
     } else {
       throw new Error("")
