@@ -1,0 +1,27 @@
+import React from "react"
+import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
+import { observer } from "mobx-react-lite"
+
+export interface NotificationCardProps {
+  /**
+   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
+   */
+  style?: StyleProp<ViewStyle>
+}
+
+export const NotificationCard = observer(function NotificationCard(props: NotificationCardProps) {
+  const { style } = props
+  const allStyles = Object.assign({}, styles.root, style)
+
+  return (
+    <View style={allStyles}>
+      {/* 해피코딩^^ */}
+    </View>
+  )
+})
+
+const styles = StyleSheet.create({
+  root: {
+    
+  },
+})
