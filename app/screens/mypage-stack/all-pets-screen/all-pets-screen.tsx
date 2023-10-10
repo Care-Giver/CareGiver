@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native"
+import { View, FlatList, TouchableOpacity, StyleSheet } from "react-native"
 import React, { FC, useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -10,9 +10,9 @@ import {
   Screen,
   PetProfileCard,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  ConditionalButton,
 } from "#components"
-import { styles } from "./styles"
-import { HEAD_LINE, SUB_HEAD_LINE } from "#theme"
+import { HEAD_LINE, SUB_HEAD_LINE, LBG, GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
 import { useFocusEffect } from "@react-navigation/native"
 import { Pet, useStores } from "#models"
 
@@ -48,6 +48,8 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
       }, [isSaved]),
     )
 
+    const isActivated = true //TODO: 최대 반려동물 갯수 초과시 false로 바꾸기
+
     return (
       <Screen>
         {/* //* 제목 - 전체 n 마리 */}
@@ -81,7 +83,35 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
             </>
           )}
         />
+
+        <ConditionalButton
+          style={styles.addPet}
+          label={"+ 반려동물 추가하기"}
+          labelTextColor={GIVER_CASUAL_NAVY}
+          isActivated={isActivated}
+          onPress={() => {
+            navigation.navigate("add-pet-screen")
+          }}
+        />
       </Screen>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  title: {
+    height: 47,
+  },
+
+  divisionLine: {
+    height: 2,
+    backgroundColor: LBG,
+  },
+
+  addPet: {
+    bottom: BOTTOM_HEIGHT,
+    backgroundColor: "white",
+    borderColor: GIVER_CASUAL_NAVY,
+    borderWidth: 2,
+  },
+})
