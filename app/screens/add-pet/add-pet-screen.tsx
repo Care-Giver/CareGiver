@@ -1,25 +1,20 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   StyleSheet,
   View,
-  ImageBackground,
-  FlatList,
   Image,
   Pressable,
   BackHandler,
   TextInput,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
+import { useFocusEffect } from "@react-navigation/native"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
-  DotsIndicator,
   PreMed14,
   Screen,
   UserOrPetProfileInfo,
@@ -33,12 +28,14 @@ import {
   PreMed16,
   PreBol16,
   Row,
+  PreReg12,
+  PreReg10,
 } from "#components"
 import {
   BODY,
   BOTTOM_HEIGHT,
-  DEVICE_SCREEN_WIDTH,
   DISABLED,
+  ERROR_RED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
   LBG,
@@ -47,12 +44,22 @@ import {
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { useKeyboard } from "@react-native-community/hooks"
-import { uploadURIS, HandleType, PetSex, FamilyType } from "#axios"
+import { uploadURIS, HandleType, PetSex, FamilyType, createPet } from "#axios"
+import { useStores } from "#models"
+import { alertModal } from "../../utils/alert-modal"
 
-const DESC_VIEW_MIN_HEIGHT = 100 //
+const DESC_VIEW_MIN_HEIGHT = 100 // 반려동물 소개 입력창의 최소 높이
+
+const 성별 = ["남자", "여자"] as const
+const 크기 = ["소형", "중형", "대형"] as const
+const 중성화_여부 = ["예", "아니오"] as const
 
 export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-screen">> = observer(
   function AddPetScreen({ route, navigation }) {
+    const {
+      userStore: { userDetail },
+    } = useStores()
+
     const { keyboardShown } = useKeyboard()
 
     //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
@@ -71,14 +78,16 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
      * */
     const [anyChangeMade, setAnyChangeMade] = useState(false)
 
-    const [name, setName] = useState("")
-    const [familyType, setFamilyType] = useState<FamilyType>(null)
-    const [speciesName, setSpeciesName] = useState("")
-    const [weight, setWeight] = useState(0)
-    const [birthday, setBirthday] = useState("") //1998-02-16
-    const [sex, setSex] = useState<PetSex>(null)
-    const [petType, setPetType] = useState<HandleType>(null)
-    const [isNeutralizated, setIsNeutralizated] = useState<boolean>(null)
+    // 기본 정보 BEGIN ==============================================================
+    const [familyType, setFamilyType] = useState<FamilyType>(null) // 종 (고양이 OR 강아지)
+    const [name, setName] = useState("") // 이름
+    const [birthday, setBirthday] = useState("") // 1998-02-16
+    const [speciesName, setSpeciesName] = useState("") // 품종
+    const [sex, setSex] = useState<PetSex>(null) // 성별
+    const [petType, setPetType] = useState<HandleType>(null) // 크기
+    const [weight, setWeight] = useState(0) // 무게
+    const [isNeutralizated, setIsNeutralizated] = useState<boolean>(false) // 중성화여부
+    // 기본 정보 ENDED ==============================================================
 
     //*anyChangeMade 를 true 로 바꾸기
     const isChangeMade = () => {
@@ -89,6 +98,9 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
 
     //*닉네임 누르면 모달 창 뜨게 관리
     const [nameTouched, setNameTouched] = useState(false)
+
+    // 품종 모달
+    const [speciesNameTouched, setSpeciesNameTouched] = useState(false)
 
     //*이름 모달창에서 모달 창 닫을때 넣어주는 함수
     const handleNameModalHide = () => {
@@ -139,11 +151,11 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
     }
 
     //*반려동물 소개 관련 변수
-    const [text, setText] = useState("")
+    const [desc, setDesc] = useState("")
 
     //*반려동물 소개 text 변화 함수
     const handleTextChange = (newText) => {
-      setText(newText)
+      setDesc(newText)
       isChangeMade()
     }
 
@@ -157,14 +169,6 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       name: "image", // 임시값. 수정필요
     }))
     const [selectedImages, setSelectedImages] = useState<PickerImage[]>(petImages || [])
-    const [currentImage, setCurrentImage] = useState<number>(0)
-    const [isSelectingImages, setIsSelectingImages] = useState<boolean>(false)
-
-    const onFlatlistUpdate = useCallback(({ viewableItems }) => {
-      if (viewableItems.length > 0) {
-        setCurrentImage(viewableItems[0].index || 0)
-      }
-    }, [])
 
     // 펫이미지 편집 코드 ENDED ======================================================================================================
 
@@ -185,7 +189,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       setName("")
       setBirthday("")
       setWeight(0)
-      setText("")
+      setDesc("")
     }
 
     //*andorid 용 하드웨어 goback 핸들링
@@ -218,6 +222,8 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         //*수정한게 없다면 그냥 뒤로 나가지기
         goBack()
       }
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isBackPressed])
 
     /**
@@ -228,10 +234,95 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
      *  */
     const showSaveButton =
       editable &&
-      !(nameTouched || weightTouched || birthdayTouched || handleGoBack) &&
+      !(nameTouched || speciesNameTouched || weightTouched || birthdayTouched || handleGoBack) &&
       !keyboardShown
 
     const scrollViewRef = useRef<ScrollView>(null)
+
+    const isActivated =
+      name &&
+      familyType &&
+      speciesName &&
+      !!weight &&
+      birthday &&
+      sex &&
+      isNeutralizated !== null &&
+      (familyType === FamilyType.DOG ? !!petType : true)
+
+    const [draftImageUriList, setDraftImageUriList] = useState<string[]>([])
+
+    const missedField = useMemo(() => {
+      if (!familyType) {
+        return "강아지와 고양이 중에서 선택해주세요."
+      }
+      if (!name) {
+        return "이름을 입력해주세요."
+      }
+      if (!birthday) {
+        return "생년월일을 입력해주세요."
+      }
+      if (!speciesName) {
+        return "품종을 입력해주세요."
+      }
+      if (!sex) {
+        return "성별을 선택해주세요."
+      }
+      if (familyType === FamilyType.DOG && !petType) {
+        return "크기를 입력해주세요."
+      }
+      if (!weight) {
+        return "몸무게를 입력해주세요."
+      }
+
+      return false
+    }, [familyType, name, birthday, speciesName, sex, petType, weight])
+
+    // 등록하기 버튼 클릭시 실행되는 함수 - 입력한 정보로 펫 추가
+    const onPress = async () => {
+      if (!isActivated) {
+        return
+      }
+
+      if (anyChangeMade === true) {
+        setAnyChangeMade(false)
+      }
+
+      let imageUriList = []
+      if (draftImageUriList.length === 0) {
+        imageUriList = await uploadURIS(selectedImages)
+      } else {
+        imageUriList = draftImageUriList
+      }
+
+      createPet({
+        userId: userDetail.id,
+        name,
+        age: new Date().getFullYear() - parseInt(birthday.slice(0, 4)) + 1, // 나이 계산 //TODO: age 는 서버에서 birthday 값을 토대로 계산된다. 추후 age: null 로 수정할 것
+        sex,
+        images: imageUriList || [],
+        weight: weight,
+        isNeutralizated,
+        desc,
+        speciesName,
+        familyType,
+        birthday: birthday,
+      }).then((res) => {
+        if (res.isSuccess) {
+          navigate("all-pets-screen", { isSaved: true })
+          !imageUriList &&
+            alertModal(
+              "이미지 업로드 실패",
+              "반려동물을 등록했으나, 이미지 업로드에는 실패했습니다. 반려동물 수정화면에서 다시 업로드해주세요.",
+            )
+        } else {
+          alertModal(
+            "반려동물 추가 실패",
+            "알 수 없는 이유로 등록에 실패했습니다. 잠시후 다시 시도해주세요.",
+          )
+          setDraftImageUriList(imageUriList)
+        }
+      })
+    }
 
     //* 본문 코드 :
     return (
@@ -245,9 +336,10 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           showsVerticalScrollIndicator={false}
         >
           {/* 기본 정보 BEGIN ============================================================== */}
-          <PreBol16 text="반려동물 기본 정보" color={HEAD_LINE} mt={12} />
+          <PreBol16 text="반려동물 기본 정보 (필수사항)" color={HEAD_LINE} mt={12} />
           {/* 강아지 OR 고양이 */}
-          <Row style={{ marginTop: 20, justifyContent: "space-between" }}>
+          <PreMed14 color={HEAD_LINE} text={"🦮🐈"} mt={20} mb={10} />
+          <Row style={{ justifyContent: "space-between" }}>
             {/* // ? 강아지 */}
             <Pressable
               style={[
@@ -300,6 +392,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           >
             <UserOrPetProfileInfo
               title="이름"
+              titleColor={HEAD_LINE}
               profileInfo={name || "예) 구름이"}
               showOption={!name}
               additionalPadding={35}
@@ -315,6 +408,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             >
               <UserOrPetProfileInfo
                 title="생년월일"
+                titleColor={HEAD_LINE}
                 profileInfo={birthday || "예) 2005-01-01"}
                 showOption={!birthday}
                 additionalPadding={35}
@@ -328,26 +422,109 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           </View>
 
           <UserOrPetProfileInfo
+            onPress={() => {
+              setSpeciesNameTouched(true)
+              console.log("HO")
+            }}
             title="품종"
+            titleColor={HEAD_LINE}
             profileInfo={speciesName || "예) 터키시앙고라"}
             showOption={!speciesName}
             additionalPadding={35}
           />
 
-          <UserOrPetProfileInfo
-            title="성별"
-            profileInfo={sex || "예) 남자"}
-            showOption={!sex}
-            additionalPadding={35}
-          />
+          {/* 성별 */}
+          <PreMed14 color={HEAD_LINE} text={"성별"} mt={35} mb={10} />
+          <Row>
+            {성별.map((item, index) => {
+              let isSelected = false
+              let selectedSex = null
+              switch (item) {
+                case "남자":
+                  isSelected = sex === PetSex.MALE
+                  selectedSex = PetSex.MALE
+                  break
+                case "여자":
+                  isSelected = sex === PetSex.FEMALE
+                  selectedSex = PetSex.FEMALE
+                  break
+              }
 
+              if (sex === null) {
+                isSelected = false
+              }
+
+              return (
+                <Pressable
+                  key={index}
+                  style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+                  onPress={() => {
+                    setSex(selectedSex)
+                  }}
+                >
+                  <Image
+                    source={isSelected ? images.radio_active : images.radio_inactive}
+                    style={styles.radioImg}
+                  />
+                  <PreMed16
+                    style={{ marginLeft: 6 }}
+                    text={item}
+                    color={isSelected ? GIVER_CASUAL_NAVY : DISABLED}
+                  />
+                </Pressable>
+              )
+            })}
+          </Row>
+
+          {/* 크기 */}
           {familyType === FamilyType.DOG && (
-            <UserOrPetProfileInfo
-              title="크기"
-              profileInfo={petType || "예) 소형"}
-              showOption={!petType}
-              additionalPadding={35}
-            />
+            <>
+              <PreMed14 color={HEAD_LINE} text={"크기"} mt={35} mb={10} />
+              <Row style={{ justifyContent: "space-between" }}>
+                {크기.map((item, index) => {
+                  let isSelected = false
+                  let selectedPetType = null
+                  switch (item) {
+                    case "소형":
+                      isSelected = petType === HandleType.SMALL
+                      selectedPetType = HandleType.SMALL
+                      break
+                    case "중형":
+                      isSelected = petType === HandleType.MEDIUM
+                      selectedPetType = HandleType.MEDIUM
+                      break
+                    case "대형":
+                      isSelected = petType === HandleType.LARGE
+                      selectedPetType = HandleType.LARGE
+                      break
+                  }
+
+                  if (petType === null) {
+                    isSelected = false
+                  }
+
+                  return (
+                    <Pressable
+                      key={index}
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                      onPress={() => {
+                        setPetType(selectedPetType)
+                      }}
+                    >
+                      <Image
+                        source={isSelected ? images.radio_active : images.radio_inactive}
+                        style={styles.radioImg}
+                      />
+                      <PreMed16
+                        style={{ marginLeft: 6 }}
+                        text={item}
+                        color={isSelected ? GIVER_CASUAL_NAVY : DISABLED}
+                      />
+                    </Pressable>
+                  )
+                })}
+              </Row>
+            </>
           )}
 
           {/* //*몸무게 */}
@@ -358,6 +535,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           >
             <UserOrPetProfileInfo
               title="몸무게"
+              titleColor={HEAD_LINE}
               profileInfo={(!!weight && weight?.toString()) || "예) 7kg"}
               showOption={!weight}
               additionalPadding={35}
@@ -365,21 +543,60 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           </Pressable>
 
           {/* 중성화 */}
-          <UserOrPetProfileInfo
-            title="중성화여부"
-            profileInfo={
-              isNeutralizated === null ? "예) 함 OR 안 함" : isNeutralizated ? "함" : "안 함"
-            }
-            showOption={!isNeutralizated}
-            additionalPadding={35}
-          />
+          <PreMed14 color={HEAD_LINE} text={"중성화 여부"} mt={35} mb={10} />
+          <Row>
+            {중성화_여부.map((item, index) => {
+              let isSelected = false
+              let selectedValue = null
+              switch (item) {
+                case "예":
+                  isSelected = isNeutralizated
+                  selectedValue = true
+                  break
+                case "아니오":
+                  isSelected = !isNeutralizated
+                  selectedValue = false
+                  break
+              }
+
+              if (isNeutralizated === null) {
+                isSelected = false
+              }
+
+              return (
+                <Pressable
+                  key={index}
+                  style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+                  onPress={() => {
+                    setIsNeutralizated(item === "예")
+                  }}
+                >
+                  <Image
+                    source={isSelected ? images.radio_active : images.radio_inactive}
+                    style={styles.radioImg}
+                  />
+                  <PreMed16
+                    style={{ marginLeft: 6 }}
+                    text={item}
+                    color={isSelected ? GIVER_CASUAL_NAVY : DISABLED}
+                  />
+                </Pressable>
+              )
+            })}
+          </Row>
           {/* 기본 정보 ENDED ============================================================== */}
 
           {/* 세부 정보 BEGIN ============================================================== */}
-          <PreBol16 text="반려동물 세부 정보" color={HEAD_LINE} mt={32} />
+          <PreBol16 text="반려동물 세부 정보 (선택사항)" color={HEAD_LINE} mt={64} />
+
           {/* //*이미지 */}
+          <PreMed14
+            color={HEAD_LINE}
+            text={`반려동물 사진 ${selectedImages.length}/5 (최대 5장)`}
+            mt={20}
+            mb={10}
+          />
           <CustomImagePicker
-            style={{ marginTop: 20 }}
             selectedImages={selectedImages}
             setSelectedImages={setSelectedImages}
             submitButtonText="사진 추가하기"
@@ -389,30 +606,34 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           {/* //? ios 에서 키보드 올라올 때 창이 자동으로 안맞춰짐. 유저가 직접 스크롤을 내려야함  */}
           {/* //*반려동물 소개 */}
           <View style={{ paddingTop: 35, height: "auto", minHeight: DESC_VIEW_MIN_HEIGHT }}>
-            <PreMed14 color={BODY} text="반려동물 소개" style={{ marginBottom: 10 }} />
+            <PreMed14 color={HEAD_LINE} text="반려동물 소개" style={{ marginBottom: 10 }} />
 
             <View style={styles.petDescTextBox}>
               <TextInput
                 style={{
                   fontFamily: PRETENDARD_MEDIUM,
                   fontSize: 14,
+                  lineHeight: 22,
                   color: HEAD_LINE,
                 }}
                 multiline={true}
                 editable={editable !== undefined ? editable : false}
-                value={text}
+                value={desc}
                 onChangeText={handleTextChange}
                 onKeyPress={() => {
+                  // 반려동물 소개 텍스트 인풋창 클릭시, 스크롤 최하단으로 이동
                   scrollViewRef.current.scrollToEnd({ animated: true })
                 }}
+                placeholder="예) 우리 구름이는 누구에게나 배를 보여주는 착한 고양이에요 :)"
               />
             </View>
           </View>
           {/* 세부 정보 ENDED ============================================================== */}
 
           {/* //*저장하기 버튼이 화면 최하단의 내용을 가리지 않게 하기 위한 여유공간 */}
+          {/* //! 🔻이 코드때문에 ScrollView container 사이즈가 비정상적으로 바뀐다! */}
           {/* {showSaveButton && <View style={{ height: 60 }} />} */}
-          {/* //! 이코드때문에 ScrollView container 사이즈가 비정상적으로 바뀐다! */}
+          {/* //! 🔺이 코드때문에 ScrollView container 사이즈가 비정상적으로 바뀐다! */}
         </ScrollView>
 
         {/* //*닉네임 관리 모달 창  */}
@@ -423,6 +644,25 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           controlMode="userNickname"
           handleInput={handleNameInput}
           placeholderInput="pet"
+          validateFunction={() => {
+            return false
+            //TODO : 중복 검출 코드  만들기
+          }}
+        />
+
+        {/* //* 품종 모달*/}
+        <CustomInputModal
+          visibleState={speciesNameTouched}
+          handleModalHide={() => {
+            setSpeciesNameTouched(false)
+          }}
+          title="품종"
+          controlMode="userNickname"
+          handleInput={(value) => {
+            setSpeciesName(value)
+            isChangeMade()
+          }}
+          placeholderInput="반려동물의 품종을  입력해주세요."
           validateFunction={() => {
             return false
             //TODO : 중복 검출 코드  만들기
@@ -459,35 +699,18 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         {/* //*저장하기 버튼 */}
         {showSaveButton && (
           <View style={styles.saveBox}>
+            {missedField && (
+              <PreReg10
+                text={missedField}
+                color={ERROR_RED}
+                style={{ position: "absolute", bottom: 4, zIndex: 1 }}
+              />
+            )}
             <ConditionalButton
-              label="저장하기"
-              isActivated={anyChangeMade}
-              onPress={async () => {
-                if (anyChangeMade === true) {
-                  setAnyChangeMade(false)
-                }
-
-                const imageUriList = await uploadURIS(selectedImages)
-                // updatePet(pet.id, {
-                //   name: name,
-                //   age: pet.age,
-                //   sex: pet.sex,
-                //   images: imageUriList,
-                //   weight: weight,
-                //   isNeutralizated: pet.isNeutralizated,
-                //   desc: text,
-                //   //userId: 25, //! pet 데이터 수정시에는 userId 필요없음 - 생성시에만 필요함.
-                //   speciesName: pet.species.name,
-                //   familyType: pet.species.familyType,
-                //   birthday: birthday,
-                // }).then((res) => {
-                //   if (res.isSuccess) {
-                //     navigate("all-pets-screen", { isSaved: true })
-                //   } else {
-                //     alert("수정에 실패했습니다.")
-                //   }
-                // })
-              }}
+              label="등록하기"
+              // isActivated={anyChangeMade}
+              isActivated={isActivated}
+              onPress={onPress}
             />
           </View>
         )}
@@ -526,7 +749,7 @@ const styles = StyleSheet.create({
     backgroundColor: LBG,
     marginHorizontal: 0,
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   saveBox: {
     position: "absolute",
@@ -534,5 +757,6 @@ const styles = StyleSheet.create({
     width: "100%",
     zIndex: 0,
     paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+    alignItems: "center",
   },
 })

@@ -30,6 +30,7 @@ interface PetProfileCardProps {
 export const PetProfileCard = (props: PetProfileCardProps) => {
   const { petData, style, index, onPress, isDeletable = true } = props
   const { name, petType, species, age, sex } = petData
+  const petImageUri = petData.images ? petData.images[0] : null
 
   console.log("sex", sex)
   let _sex = ""
@@ -47,7 +48,10 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
     <TouchableOpacity style={[styles.root, style]} onPress={onPress}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <Row>
-        <Image style={styles.image} source={images.default_pet_image_60} />
+        <Image
+          style={styles.image}
+          source={petImageUri ? { uri: petImageUri } : images.default_pet_image_60}
+        />
         <View style={styles.infoContainer}>
           {/*//? 펫 이름 */}
           <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />
@@ -56,13 +60,13 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
           <Row style={{ marginTop: 8 }}>
             <PreReg14 text={petType} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
-            <PreReg14
+            {/* <PreReg14
               text={
                 species.name.length <= 6 ? `${species.name}` : `${species.name.substring(0, 5)}..`
               } //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
               color={BODY}
               style={{ marginLeft: 8 }}
-            />
+            /> */}
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />

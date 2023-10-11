@@ -22,15 +22,11 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
       petStore: { petsHandler },
     } = useStores()
 
-    //TODO 수정이 바로 적용되지 않는 문제. 여기서 getPets를 불러와야할지? 혹은 수정스크린에서 params로?
-    const {
-      // mypage-screen 에서 넘어옴
-      pets: petsFromMypageScreen,
-      // edit-pet-info-screen 에서 저장하기 버튼 클릭시 넘겨옴
-      isSaved,
-    } = route.params
-    const [pets, setPets] = useState<Pet[]>(petsFromMypageScreen)
+    //! 이 스크린에서는 반드시 이렇게 사용할 것. const { ... } = route.params 절대 ㄴㄴ.
+    const petsFromMypageScreen = route.params?.pets
+    const isSaved = route.params?.isSaved
 
+    const [pets, setPets] = useState<Pet[]>(petsFromMypageScreen || [])
     // 만약, edit-pet-info-screen 에서 "저장하기" 버튼을 클릭한 경우,
     // 새 펫 정보를 요청한다.
     useFocusEffect(
@@ -48,7 +44,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
       }, [isSaved]),
     )
 
-    const isActivated = true //TODO: 최대 반려동물 갯수 초과시 false로 바꾸기
+    const isActivated = pets.length <= 5
 
     return (
       <Screen>
@@ -86,7 +82,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
 
         <ConditionalButton
           style={styles.addPet}
-          label={"+ 반려동물 추가하기"}
+          label={isActivated ? "+ 반려동물 추가하기" : "반려동물은 최대 5마리 등록 가능합니다."}
           labelTextColor={GIVER_CASUAL_NAVY}
           isActivated={isActivated}
           onPress={() => {

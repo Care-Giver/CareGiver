@@ -29,7 +29,7 @@ export interface PetDetail {
   weight: number
   petType: HandleType
   isNeutralizated: boolean
-  birthday: string
+  birthday: string // "2019-09-03"
   desc: string
 }
 
@@ -46,7 +46,7 @@ export interface Pet {
   familyType: string
 }
 
-interface PetsResponse extends GeneralResponse {
+interface GetPetsResponse extends GeneralResponse {
   petResults: Pet[]
 }
 
@@ -62,7 +62,7 @@ interface GetPetsResult {
  */
 export const getPets = async (): Promise<GetPetsResult> => {
   try {
-    const response = await axios.get<PetsResponse>(`${BASE_URL}/pets`)
+    const response = await axios.get<GetPetsResponse>(`${BASE_URL}/pets`)
 
     if (!response?.data.ok) {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
@@ -93,8 +93,9 @@ export const getPets = async (): Promise<GetPetsResult> => {
     return { isSuccess: false, reason: error }
   }
 }
-interface PetResponse extends GeneralResponse {
-  pet: Omit<Pet, "familyType">
+interface GetPetResponse extends GeneralResponse {
+  pet: PetDetail
+  familyType: FamilyType
 }
 interface UpdatePetRequestBody {
   name: string
@@ -114,13 +115,19 @@ interface UpdatePetResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
 }
+
+/**
+ * 선택한 반려동물의 정보를 수정한다.
+ * @param id 반려동물 id
+ * @param body
+ * @returns
+ */
 export const updatePet = async (
   id: number,
   body: UpdatePetRequestBody,
 ): Promise<UpdatePetResult> => {
   try {
-    const response = await axios.put<PetResponse>(`${BASE_URL}/pet/${id}`, body)
-
+    const response = await axios.put<GetPetResponse>(`${BASE_URL}/pet/${id}`, body)
     if (!response?.data.ok) {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
@@ -129,7 +136,42 @@ export const updatePet = async (
       isSuccess: true,
     }
   } catch (error) {
-    console.error("catch 에러!!! - modifyPet", error)
+    console.error("catch 에러!!! - updatePet", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface CreatePetRequestBody extends UpdatePetRequestBody {
+  userId: number // 현재 로그인한 유저의 userId
+}
+interface CreatePetResponse extends GeneralResponse {
+  pet: PetDetail
+}
+interface CreatePetResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+
+/**
+ * 반려동물를 생성한다.
+ * @param body
+ * @returns
+ */
+export const createPet = async (body: CreatePetRequestBody): Promise<CreatePetResult> => {
+  try {
+    const response = await axios.post<CreatePetResponse>(`${BASE_URL}/pet`, body)
+
+    if (!response?.data.ok) {
+      console.error("/pets API 에러!!! ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    console.log("response.data 🔷", response.data)
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - createPet", error)
     return { isSuccess: false, reason: error }
   }
 }

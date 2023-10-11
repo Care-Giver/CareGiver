@@ -1,7 +1,7 @@
-import { ImageSourcePropType, StyleProp, TextStyle } from "react-native"
+import { StyleProp, TextStyle } from "react-native"
 
 export interface PetImageCardProps {
-  petImage: ImageSourcePropType
+  petImageUri: string // URI string
   name: string
   style?: StyleProp<TextStyle>
 }
