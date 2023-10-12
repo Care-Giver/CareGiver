@@ -1,9 +1,10 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { NotificationCard, Screen } from "#components"
+import { Notification, getNotifications } from "../../services/axios/notification"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -18,8 +19,28 @@ export const NotificationScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
+  const [notifications, setNotifications] = useState<Notification[]>([])
+  useEffect(() => {
+    getNotifications(25).then((res) => {
+      console.log(res.notifications)
+      setNotifications(res.notifications)
+    })
+  })
   return (
     <Screen testID="Notification">
+      {notifications &&
+        notifications.map((item) => {
+          console.log(item)
+          return (
+            <NotificationCard
+              key={item.id}
+              title={item.title}
+              subtitle={item.content}
+              time={item.title}
+              isChecked={false}
+            />
+          )
+        })}
       <NotificationCard
         title="케어기버가 승인을 완료했어요!"
         subtitle="케어기버에게 연락을 보내보세요."
