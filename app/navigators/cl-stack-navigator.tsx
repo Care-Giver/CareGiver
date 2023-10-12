@@ -46,6 +46,7 @@ import {
   ViewReviewScreen,
   TempChatScreen,
   ServiceAmenity,
+  NotificationScreen,
 } from "#screens"
 import { goBack } from "./navigation-utilities"
 import {
@@ -158,7 +159,7 @@ export type CLStackNavigatorParamList = {
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
-
+  "notification-screen": undefined
   // ===========================================================================================================
   // 아래는 테스트 스크린들 입니다.
   // ===========================================================================================================
@@ -428,6 +429,7 @@ export const SearchingStack = () => {
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
+      <Stack.Screen name="notification-screen" component={NotificationScreen} />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />

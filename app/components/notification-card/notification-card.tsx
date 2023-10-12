@@ -1,27 +1,38 @@
 import React from "react"
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-
+import { PreBol16, PreReg12 } from "../basics/custom-texts/custom-texts"
+import { BODY } from "#theme"
+import { Row } from "../basics/row/row"
+import { DivisionLine } from "../division-line/division-line"
+import { styles } from "./styles"
 export interface NotificationCardProps {
-  /**
-   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
-   */
+  title: string
+  subtitle: string
+  time: string
+  isChecked: boolean
   style?: StyleProp<ViewStyle>
 }
 
 export const NotificationCard = observer(function NotificationCard(props: NotificationCardProps) {
   const { style } = props
-  const allStyles = Object.assign({}, styles.root, style)
-
+  const { title, subtitle, time, isChecked } = props
   return (
-    <View style={allStyles}>
-      {/* 해피코딩^^ */}
+    <View>
+      <View style={styles.root}>
+        <View style={[styles.dot, { backgroundColor: isChecked ? "red" : "black" }]}></View>
+
+        <Row style={{ justifyContent: "space-between" }}>
+          <View>
+            <PreBol16 text={title} mb={4} />
+            <PreReg12 text={subtitle} color={BODY} />
+          </View>
+
+          <PreReg12 text={time} color={BODY} />
+        </Row>
+      </View>
+
+      <DivisionLine />
     </View>
   )
-})
-
-const styles = StyleSheet.create({
-  root: {
-    
-  },
 })

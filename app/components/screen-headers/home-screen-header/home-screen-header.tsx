@@ -28,7 +28,8 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            navigate("test-push-notification-screen")
+            //navigate("test-push-notification-screen")
+            navigate("notification-screen")
           }}
           style={{
             marginLeft: "auto",
