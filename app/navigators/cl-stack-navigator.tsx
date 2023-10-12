@@ -46,6 +46,7 @@ import {
   ViewReviewScreen,
   TempChatScreen,
   ServiceAmenity,
+  AddPetScreen,
 } from "#screens"
 import { goBack } from "./navigation-utilities"
 import {
@@ -157,6 +158,7 @@ export type CLStackNavigatorParamList = {
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
+  "add-pet-screen": undefined
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
 
   // ===========================================================================================================
@@ -569,6 +571,16 @@ export const MypageStack = () => {
             ),*/
           headerTitle: "",
         })}
+      />
+
+      {/* //* 반려동물 등록 */}
+      <Stack.Screen
+        name="add-pet-screen"
+        component={AddPetScreen}
+        options={{
+          title: "반려동물 등록",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
       />
 
       {/* //* 반려동물 정보 수정 */}

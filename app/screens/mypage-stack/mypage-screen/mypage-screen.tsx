@@ -1,6 +1,7 @@
 import { View, Image, TouchableOpacity, ScrollView } from "react-native"
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useMemo } from "react"
 import {
+  ConditionalButton,
   MypageButton,
   PetImageCard,
   PreBol14,
@@ -59,6 +60,18 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       switchType()
     }
 
+    const isActivated = !hasPets
+
+    const petListContainerJustfyContent = useMemo(() => {
+      if (pets.length === 1) {
+        return "flex-start"
+      } else if (pets.length === 2) {
+        return "space-evenly"
+      } else {
+        return "space-between"
+      }
+    }, [pets.length])
+
     return (
       <Screen>
         <ScrollView>
@@ -115,20 +128,33 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                 </Row>
 
                 {/* //? 반려동물 카드 리스트 */}
-                <View style={styles.petListContainer}>
-                  {pets.map((item, index) => {
-                    // ! 마이페이지 메인에는 세 마리만 노출
-                    if (index < 3) {
-                      return (
-                        <PetImageCard
-                          key={index}
-                          petImage={item?.images ? item.images[0] : images.default_pet_image_60}
-                          name={item.name}
-                        />
-                      )
-                    }
-                  })}
-                </View>
+                {hasPets ? (
+                  <View
+                    style={[
+                      styles.petListContainer,
+                      { justifyContent: petListContainerJustfyContent },
+                    ]}
+                  >
+                    {/* 마이페이지에서는 3마리 까지만 표출 */}
+                    {pets.slice(0, 3).map((item, index) => (
+                      <PetImageCard
+                        key={index}
+                        petImageUri={item?.images ? item.images[0] : null}
+                        name={item.name}
+                      />
+                    ))}
+                  </View>
+                ) : (
+                  <ConditionalButton
+                    style={styles.addPet}
+                    label={"+ 반려동물 등록하기"}
+                    labelTextColor={GIVER_CASUAL_NAVY}
+                    isActivated={isActivated}
+                    onPress={() => {
+                      navigation.navigate("add-pet-screen")
+                    }}
+                  />
+                )}
               </View>
             </>
           ) : (

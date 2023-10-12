@@ -216,7 +216,7 @@ interface UserMeResponse extends GeneralResponse {
 
 export type UserDetail = Pick<
   User,
-  "nickname" | "phoneNumber" | "sex" | "birthday" | "address" | "profileImage" | "pushToken"
+  "id" | "nickname" | "phoneNumber" | "sex" | "birthday" | "address" | "profileImage" | "pushToken"
 >
 
 interface GetMeResult {
@@ -256,6 +256,7 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
     return {
       isSuccess: true,
       userDetail: {
+        id: response.data.user.id,
         nickname: response.data.user.nickname,
         phoneNumber: response.data.user.phoneNumber,
         sex: response.data.user.sex,

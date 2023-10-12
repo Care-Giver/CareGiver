@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     height: 226,
     borderRadius: 8,
     backgroundColor: palette.white,
-    marginBottom: 60,
   },
   divisionLine: { marginTop: 4, marginBottom: 4 },
 })

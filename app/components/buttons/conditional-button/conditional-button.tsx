@@ -11,22 +11,26 @@ interface ConditionalButtonProps {
   style?: StyleProp<ViewStyle>
   isActivated: boolean
   label: string
+  labelTextColor?: string
   onPress: () => void
 }
 
 export const ConditionalButton = (props: ConditionalButtonProps) => {
-  const { style, isActivated = false, onPress, label } = props
+  const { style, isActivated = false, onPress, label, labelTextColor } = props
 
-  const activatedViewStyle = [styles.root, styles.activatedViewStyle]
-  const disabledViewStyle = [styles.root, styles.disabledViewStyle]
+  const activatedViewStyle = { ...styles.root, ...styles.activatedViewStyle }
+  const disabledViewStyle = { ...styles.root, ...styles.disabledViewStyle }
 
   const viewStyle = isActivated ? activatedViewStyle : disabledViewStyle
   // const textStyle = isActivated ? pressedTextStyle : defaultTextStyle
   // const content = children || <Text style={textStyle}>{label} </Text>
+  const color = labelTextColor || palette.white
+
+  const allStyles = Object.assign({}, viewStyle, style)
 
   return (
-    <TouchableOpacity style={[style, viewStyle]} disabled={!isActivated} onPress={onPress}>
-      <PreBol16 text={label} color={palette.white} />
+    <TouchableOpacity style={allStyles} disabled={!isActivated} onPress={onPress}>
+      <PreBol16 text={label} color={color} />
     </TouchableOpacity>
   )
 }

@@ -6,7 +6,6 @@ import { PreReg16 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
 import { BODY, LIGHT_LINE } from "#theme"
-import { CLStackNavigatorParamList } from "#navigators"
 
 export interface CustomImagePickerProps {
   selectedImages: PickerImage[]
@@ -43,7 +42,7 @@ export const CustomImagePicker = observer(function CustomImagePicker(
     maxHeight: 128,
     maxWidth: 128,
     // includeBase64: true, // ? -> 큰 이미지 피함
-    selectionLimit: selectionLimit - selectedImages.length, // 최대 등록할 수 있는 이미지 개수 / 10 정도면 괜찮을까요 ?
+    selectionLimit: selectionLimit - selectedImages.length, // 최대 등록할 수 있는 이미지 개수 - 동적으로 변함
   }
 
   const openGallery = useCallback(() => {

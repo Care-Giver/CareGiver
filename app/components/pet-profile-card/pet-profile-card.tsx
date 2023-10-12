@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Image, ViewStyle, StyleProp } from "react-native"
+import { View, TouchableOpacity, Image, ViewStyle, StyleProp, FlatList } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
@@ -20,7 +20,7 @@ interface PetProfileCardProps {
   petData: Pet
   index?: number
   onPress: () => void
-
+  onDeletePress?: () => void
   /**
    * 삭제 행위 가능 여부
    */
@@ -28,8 +28,9 @@ interface PetProfileCardProps {
 }
 
 export const PetProfileCard = (props: PetProfileCardProps) => {
-  const { petData, style, index, onPress, isDeletable = true } = props
+  const { petData, style, index, onPress, isDeletable = true, onDeletePress } = props
   const { name, petType, species, age, sex } = petData
+  const petImageUri = petData.images ? petData.images[0] : null
 
   console.log("sex", sex)
   let _sex = ""
@@ -39,15 +40,14 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
     _sex = "여"
   }
 
-  const handleDeleting = () => {
-    alert("선택된 펫 삭제")
-  }
-
   return (
-    <TouchableOpacity style={[styles.root, style]} onPress={onPress}>
+    <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
-      <Row>
-        <Image style={styles.image} source={images.default_pet_image_60} />
+      <TouchableOpacity style={styles.infoContainerWrapper} onPress={onPress}>
+        <Image
+          style={styles.image}
+          source={petImageUri ? { uri: petImageUri } : images.default_pet_image_60}
+        />
         <View style={styles.infoContainer}>
           {/*//? 펫 이름 */}
           <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />
@@ -56,30 +56,34 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
           <Row style={{ marginTop: 8 }}>
             <PreReg14 text={petType} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
-            <PreReg14
+            {/* <PreReg14
               text={
                 species.name.length <= 6 ? `${species.name}` : `${species.name.substring(0, 5)}..`
               } //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
               color={BODY}
               style={{ marginLeft: 8 }}
-            />
+            /> */}
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={_sex} color={BODY} style={{ marginLeft: 8 }} />
           </Row>
         </View>
+      </TouchableOpacity>
 
-        {/* //? 삭제 버튼 */}
-        {isDeletable && (
-          <TouchableOpacity onPress={handleDeleting} style={styles.deleteButtonContainer}>
-            <Image style={styles.deleteButton} source={images.x_grey} />
-          </TouchableOpacity>
-        )}
-      </Row>
+      {/* //? 삭제 버튼 */}
+      {isDeletable && (
+        <TouchableOpacity
+          onPress={onDeletePress}
+          disabled={!isDeletable}
+          style={styles.deleteButtonContainer}
+        >
+          <Image style={styles.deleteButton} source={images.x_grey} />
+        </TouchableOpacity>
+      )}
 
       {/* //?  카드 하단, 구분선
       <DivisionLine color={LBG} /> */}
-    </TouchableOpacity>
+    </View>
   )
 }
