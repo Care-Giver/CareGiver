@@ -84,6 +84,8 @@ import {
 } from "@gorhom/bottom-sheet"
 import Slider from "@react-native-community/slider"
 import _ from "lodash"
+import Lottie from "lottie-react-native"
+import { lotties } from "../../../../assets/lotties"
 
 export type Petsitter = Visiting | Creche
 
@@ -343,6 +345,9 @@ export const SearchResultScreen: FC<
     }
   }, [draftSearchRequest])
 
+  const size = 120
+  const duration = 3000
+
   return (
     <Screen>
       <Animated.View
@@ -453,109 +458,121 @@ export const SearchResultScreen: FC<
             // marginBottom: 34,
           }}
         >
-          <Animated.FlatList
-            style={{
-              backgroundColor: palette.white,
-              height: "auto",
-              // height: "100%",
-              // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
-            }}
-            contentContainerStyle={{
-              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
-            }}
-            showsVerticalScrollIndicator={false}
-            // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
-              useNativeDriver: true,
-            })}
-            data={petsitters}
-            renderItem={({ item: petsitter, index }) => {
-              let sitterData: PetsitterProfileCardPetsitterData
-              let serviceAmenity: ServiceAmenity
-              let images: string[]
+          {petsitters.length === 0 ? (
+            <Lottie
+              source={lotties.search_loading}
+              style={{ width: size, height: size, alignSelf: "center", marginTop: 40 }}
+              loop
+              autoPlay={true}
+              duration={duration}
+            />
+          ) : (
+            <Animated.FlatList
+              style={{
+                backgroundColor: palette.white,
+                height: "auto",
+                // height: "100%",
+                // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
+              }}
+              contentContainerStyle={{
+                paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+              }}
+              showsVerticalScrollIndicator={false}
+              // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
+              onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
+                useNativeDriver: true,
+              })}
+              data={petsitters}
+              renderItem={({ item: petsitter, index }) => {
+                let sitterData: PetsitterProfileCardPetsitterData
+                let serviceAmenity: ServiceAmenity
+                let images: string[]
 
-              if (방문검색) {
-                const visiting = petsitter as Visiting
-                sitterData = {
-                  crecheId: null,
-                  visitingId: visiting.visiting.id,
-                  reviewCount: visiting.reviewCount,
-                  userNickname: visiting.userNickname,
-                  title: visiting.visiting.title,
-                  desc: visiting.visiting.desc,
-                  star: visiting.visiting.star,
-                  profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                if (방문검색) {
+                  const visiting = petsitter as Visiting
+                  sitterData = {
+                    crecheId: null,
+                    visitingId: visiting.visiting.id,
+                    reviewCount: visiting.reviewCount,
+                    userNickname: visiting.userNickname,
+                    title: visiting.visiting.title,
+                    desc: visiting.visiting.desc,
+                    star: visiting.visiting.star,
+                    profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                  }
+                  serviceAmenity = {
+                    services: visiting.visiting.serviceVisiting,
+                    amenities: visiting.visiting.visitingAmenities,
+                  }
+                  images = visiting.visiting.images
                 }
-                serviceAmenity = {
-                  services: visiting.visiting.serviceVisiting,
-                  amenities: visiting.visiting.visitingAmenities,
+
+                if (위탁검색) {
+                  const creche = petsitter as Creche
+                  sitterData = {
+                    crecheId: creche.creche.id,
+                    visitingId: null,
+                    reviewCount: creche.reviewCount,
+                    userNickname: creche.userNickname,
+                    title: creche.creche.title,
+                    desc: creche.creche.desc,
+                    star: creche.creche.star,
+                    profileImage: creche.creche.__careGiver__.__user__?.profileImage,
+                  }
+                  serviceAmenity = {
+                    services: creche.creche.serviceCreche,
+                    amenities: creche.creche.crecheAmenities,
+                  }
+                  images = creche.creche.images
                 }
-                images = visiting.visiting.images
-              }
 
-              if (위탁검색) {
-                const creche = petsitter as Creche
-                sitterData = {
-                  crecheId: creche.creche.id,
-                  visitingId: null,
-                  reviewCount: creche.reviewCount,
-                  userNickname: creche.userNickname,
-                  title: creche.creche.title,
-                  desc: creche.creche.desc,
-                  star: creche.creche.star,
-                  profileImage: creche.creche.__careGiver__.__user__?.profileImage,
-                }
-                serviceAmenity = {
-                  services: creche.creche.serviceCreche,
-                  amenities: creche.creche.crecheAmenities,
-                }
-                images = creche.creche.images
-              }
+                return (
+                  <SitterProfileCard
+                    isFavorite={petsitter.isFavorite}
+                    sitterData={sitterData}
+                    onPress={() => {
+                      //? 상세정보 스크린으로 이동
+                      //TODO: params 값 추가해줘야 함
+                      navigate("caregiver-detail-information-screen", {
+                        sitterData,
+                        serviceType,
+                        serviceAmenity,
+                        images,
+                        selectedPets: petIds,
 
-              return (
-                <SitterProfileCard
-                  isFavorite={petsitter.isFavorite}
-                  sitterData={sitterData}
-                  onPress={() => {
-                    //? 상세정보 스크린으로 이동
-                    //TODO: params 값 추가해줘야 함
-                    navigate("caregiver-detail-information-screen", {
-                      sitterData,
-                      serviceType,
-                      serviceAmenity,
-                      images,
-                      selectedPets: petIds,
+                        // 방문
+                        startTime: 방문검색 ? startTime : null,
+                        endTime: 방문검색 ? endTime : null,
 
-                      // 방문
-                      startTime: 방문검색 ? startTime : null,
-                      endTime: 방문검색 ? endTime : null,
-
-                      // 위탁
-                      startDate: 위탁검색 ? startDate : null,
-                      endDate: 위탁검색 ? endDate : null,
-                    })
+                        // 위탁
+                        startDate: 위탁검색 ? startDate : null,
+                        endDate: 위탁검색 ? endDate : null,
+                      })
+                    }}
+                    // TODO: 찜하기 기능 구현
+                    onLikePress={() => {
+                      //
+                    }}
+                    style={
+                      index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
+                    }
+                  />
+                )
+              }}
+              ListEmptyComponent={
+                <View
+                  style={{
+                    alignSelf: "center",
+                    alignItems: "center",
+                    paddingTop: 40,
                   }}
-                  // TODO: 찜하기 기능 구현
-                  onLikePress={() => {
-                    //
-                  }}
-                  style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
-                />
-              )
-            }}
-            ListEmptyComponent={
-              <View
-                style={{
-                  alignSelf: "center",
-                  alignItems: "center",
-                  paddingTop: 40,
-                }}
-              >
-                <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
-                <PreMed18 text="검색된 펫시터가 없어요 😢" />
-              </View>
-            }
-          />
+                >
+                  <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+                  <PreMed18 text="검색된 펫시터가 없어요 😢" />
+                </View>
+              }
+            />
+          )}
         </View>
       </Animated.View>
 
