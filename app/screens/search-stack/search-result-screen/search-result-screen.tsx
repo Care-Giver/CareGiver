@@ -152,7 +152,7 @@ export const SearchResultScreen: FC<
     page: 1,
     lat,
     lng,
-    petIds: [1, 2],
+    petIds,
     radius: 10, //10
     sortBy: "distance", // "distance"
     sortOrder: SearchResultSortOrder.ASC, // "ASC"
@@ -524,8 +524,9 @@ export const SearchResultScreen: FC<
                       serviceType,
                       serviceAmenity,
                       images,
+                      //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
+                      //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
                       selectedPets: petIds,
-
                       // 방문
                       startTime: 방문검색 ? startTime : null,
                       endTime: 방문검색 ? endTime : null,

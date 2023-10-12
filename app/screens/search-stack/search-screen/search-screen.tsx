@@ -32,6 +32,7 @@ import { DateData } from "react-native-calendars"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { addMinutes } from "date-fns"
+import { Pet, useStores } from "#models"
 
 const nowInUTCZero = new Date()
 const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
@@ -65,6 +66,10 @@ const 한양대에리카제5공학관 = {
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     useShowBottomTab(navigation)
+
+    const {
+      petStore: { petsHandler, pets, hasPets },
+    } = useStores()
 
     //* 서비스 형태
     const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
@@ -144,8 +149,16 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       [closeBottomSheet],
     )
 
+    //* 위치선택
+    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
+
+    //* 반려동물선택 - 선택된 반려동물
+    const [selectedPets, setSelectedPets] = useState<Pet[]>([])
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
+
     //? 펫시터 찾기 버튼 활성화 여부 결정
-    const hadleIsActivated = () => {
+    const isActivated = useMemo(() => {
       if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
       if (serviceType === "방문" && !date) return false
@@ -155,17 +168,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       if (selectedPets.length === 0) return false
 
       return true
-    }
+    }, [serviceType, selectedTimeText, date, dateRange, selectedPets])
 
-    //* 위치선택
-    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
-
-    //* 반려동물선택 - 선택된 반려동물
-    const [selectedPets, setSelectedPets] = useState([])
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
-
-    const isActivated = hadleIsActivated()
     return (
       <Screen testID="SearchScreen" preset="fixed">
         <ScrollView
@@ -323,7 +327,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               />
               <View style={isDropdownOpen ? styles.hidden : styles.shown}>
                 {/*//* 선택된 반려동물 리스트 */}
-
                 {selectedPets.map((item, index) => (
                   <SelectedPetCard
                     key={index}
@@ -352,11 +355,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             navigate("search-result-screen", {
               service,
               serviceType,
-              // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
-              selectedPets: selectedPets.map((item) => {
-                return item.id
-              }),
-
+              petIds: selectedPets.map((item) => item.id),
               // "방문"인 경우 사용될 값
               startTime:
                 serviceType === "방문"

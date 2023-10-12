@@ -124,6 +124,8 @@ export type CLStackNavigatorParamList = {
     serviceType: ServiceTypeKorean
     serviceAmenity: ServiceAmenity
     images: string[]
+    //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
+    //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
     selectedPets: number[]
 
     // 방문

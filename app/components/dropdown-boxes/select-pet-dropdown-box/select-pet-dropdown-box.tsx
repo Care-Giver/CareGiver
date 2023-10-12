@@ -1,17 +1,16 @@
-import { View, Image, FlatList } from "react-native"
 import React from "react"
+import { View, Image } from "react-native"
 import { PreMed14, PreReg16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
 import { images } from "#images"
-import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE, LBG } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, HEAD_LINE } from "#theme"
 import { SelectPetItem } from "../../select-pet-item/select-pet-item"
-import { PET_ITEM_HEIGHT } from "../../select-pet-item/styles"
 import { RowRoundedBox } from "../../basics/row-rounded-box/row-rounded-box"
-import { petsDummy } from "../../../../assets/dummyData/pets-dummy"
 import { SelectPetDropdownBoxProps } from "./select-pet-dropdown-box.props"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-
-const INITIAL_NUMBER_OF_PET_ITEMS = 3
+import { useStores } from "#models"
+import { navigate } from "#navigators"
+import { ConditionalButton } from "#components"
 
 export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const style = props.style
@@ -22,6 +21,10 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
   const setSelectedPets = props.setSelectedPets
   const inBottomSheet = props.inBottomSheet ? props.inBottomSheet : false
   const placeholder = props.placeholder || "맡기실 반려동물을 선택해주세요"
+
+  const {
+    petStore: { pets, hasPets },
+  } = useStores()
 
   return (
     <View style={style}>
@@ -43,7 +46,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
           {/* //? 반려동물 리스트 */}
           {inBottomSheet ? (
             <BottomSheetFlatList
-              data={petsDummy}
+              data={pets}
               renderItem={({ item, index }) => (
                 <SelectPetItem
                   petData={item}
@@ -55,7 +58,7 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
               style={{ height: 156 }}
             />
           ) : (
-            petsDummy.map((item, index) => (
+            pets.map((item, index) => (
               <SelectPetItem
                 petData={item}
                 selectedPets={selectedPets}
@@ -65,16 +68,31 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
             ))
           )}
 
-          {/* //? 추가 등록하기 버튼 */}
-          <RowRoundedBox
-            style={styles.addNewPetBox}
-            preset="Pressable"
-            onPress={() => {
-              alert("gg")
-            }}
-          >
-            <PreMed14 text="+ 추가 등록하기" color={BODY} />
-          </RowRoundedBox>
+          {/* 반려동물 추가 등록하기 버튼 - 등록한 반려동물이 존재하고, 5마리 이하일때만 표출 */}
+          {hasPets && pets.length <= 5 && (
+            <RowRoundedBox
+              style={styles.addNewPetBox}
+              preset="Pressable"
+              onPress={() => {
+                navigate("add-pet-screen")
+              }}
+            >
+              <PreMed14 text={"+ 추가 등록하기"} color={BODY} />
+            </RowRoundedBox>
+          )}
+
+          {/* 등록한 반려동물이 없다면, 등록하러 가기 버튼 표출 */}
+          {!hasPets && (
+            <ConditionalButton
+              style={styles.addPet}
+              label={"+ 반려동물 등록하기"}
+              labelTextColor={GIVER_CASUAL_NAVY}
+              isActivated={!hasPets}
+              onPress={() => {
+                navigate("Mypage", { screen: "add-pet-screen" })
+              }}
+            />
+          )}
         </View>
       )}
     </View>

@@ -308,13 +308,6 @@ export const FavoritesScreen: FC<
   const renderFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={24} style={styles.btnContainer}>
-        <PreReg12
-          text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
-          color={DISABLED}
-          style={{
-            backgroundColor: palette.white,
-          }}
-        />
         <Pressable style={styles.submitBtn} onPress={handleCheckButton}>
           <PreBol16 text="확인" color={color.palette.white} />
         </Pressable>
@@ -418,6 +411,14 @@ export const FavoritesScreen: FC<
         style={styles.bottomSheetContainer}
         footerComponent={renderFooter}
       >
+        <PreReg12
+          text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
+          color={DISABLED}
+          style={{
+            backgroundColor: palette.white,
+            alignSelf: "center",
+          }}
+        />
         <BottomSheetScrollView>
           {/* //? filters container */}
           <View>
@@ -550,7 +551,7 @@ export const FavoritesScreen: FC<
               }}
               selectedPets={filterPet}
               setSelectedPets={setFilterPet}
-              inBottomSheet
+              // inBottomSheet //! VirtualizedLists 에러를 잠재우기위해 일단 주석처리함
             />
             {/*//* 선택된 반려동물 */}
             {hasSelectedPetsAndDropdownClosed && (
@@ -564,25 +565,15 @@ export const FavoritesScreen: FC<
                   style={[isPetDropdownOpen ? styles.hidden : styles.shown, { height: 78 * 3 }]}
                 >
                   {/*//* 선택된 반려동물 리스트 */}
-                  <BottomSheetFlatList
-                    data={filterPet}
-                    renderItem={({ item, index }) => (
-                      <SelectedPetCard
-                        key={index}
-                        petData={{
-                          id: item.id,
-                          name: item.name,
-                          species: item.species,
-                          age: item.age,
-                          sex: item.sex,
-                          size: item.petType,
-                        }}
-                        onPress={() => {
-                          setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
-                        }}
-                      />
-                    )}
-                  />
+                  {filterPet.map((item, index) => (
+                    <SelectedPetCard
+                      key={index}
+                      petData={item}
+                      onPress={() => {
+                        setFilterPet((pets) => pets.filter((pet) => pet.id !== item.id))
+                      }}
+                    />
+                  ))}
                 </View>
               </View>
             )}

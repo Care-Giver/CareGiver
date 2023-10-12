@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { GIVER_CASUAL_NAVY, LBG } from "#theme"
+import { LBG } from "#theme"
 
 const ROOT_HEIGHT = 52
 const BORDER_BOTTOM_WIDTH = 2

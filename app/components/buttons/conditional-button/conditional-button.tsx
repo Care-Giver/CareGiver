@@ -1,5 +1,5 @@
-import * as React from "react"
-import { Pressable, StyleProp, TouchableOpacity, ViewStyle } from "react-native"
+import React from "react"
+import { StyleProp, TouchableOpacity, ViewStyle } from "react-native"
 import { palette } from "#theme"
 import { PreBol16 } from "../../basics/custom-texts/custom-texts"
 import { styles } from "./styles"
