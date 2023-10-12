@@ -153,6 +153,7 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
             marginTop: "auto",
             height: 49,
             width: 326,
+            alignSelf: "center",
           }}
           onPress={handleSubmit(onBirthdaySubmit)}
         />

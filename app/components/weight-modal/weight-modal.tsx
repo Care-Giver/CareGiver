@@ -126,6 +126,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
             marginTop: "auto",
             height: 49,
             width: 326,
+            alignSelf: "center",
           }}
           onPress={
             handleSubmit(onNicknameSubmit)

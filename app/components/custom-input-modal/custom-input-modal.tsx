@@ -180,6 +180,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
             marginTop: "auto",
             height: 49,
             width: 326,
+            alignSelf: "center",
           }}
           onPress={
             handleSubmit(onNicknameSubmit)
