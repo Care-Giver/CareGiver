@@ -28,14 +28,12 @@ import {
   PreMed16,
   PreBol16,
   Row,
-  PreReg12,
   PreReg10,
 } from "#components"
 import {
   BODY,
   BOTTOM_HEIGHT,
   DISABLED,
-  ERROR_RED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
   LBG,
@@ -86,7 +84,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
     const [sex, setSex] = useState<PetSex>(null) // 성별
     const [petType, setPetType] = useState<HandleType>(null) // 크기
     const [weight, setWeight] = useState(0) // 무게
-    const [isNeutralizated, setIsNeutralizated] = useState<boolean>(false) // 중성화여부
+    const [isNeutralizated, setIsNeutralizated] = useState<boolean>(null) // 중성화여부
     // 기본 정보 ENDED ==============================================================
 
     //*anyChangeMade 를 true 로 바꾸기
@@ -273,9 +271,12 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       if (!weight) {
         return "몸무게를 입력해주세요."
       }
+      if (isNeutralizated === null) {
+        return "중성화 여부를 선택해주세요."
+      }
 
       return false
-    }, [familyType, name, birthday, speciesName, sex, petType, weight])
+    }, [familyType, name, birthday, speciesName, sex, petType, weight, isNeutralizated])
 
     // 등록하기 버튼 클릭시 실행되는 함수 - 입력한 정보로 펫 추가
     const onPress = async () => {
@@ -287,11 +288,19 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         setAnyChangeMade(false)
       }
 
+      // createPet() parameter 로 사용되는 이미지 "URI" 값
       let imageUriList = []
-      if (draftImageUriList.length === 0) {
-        imageUriList = await uploadURIS(selectedImages)
-      } else {
+
+      // 임시저장와 선택된 이미지와 같은 수 일 경우,
+      // 임시저장된 이미지를 할당한다.
+      //! 이미지가 선택되지 않은 경우에도, 이 블럭이 실행된다. 이경우에는, 빈 배열 (draftImageUriList 기본값)이 할당된다.
+      if (draftImageUriList.length === selectedImages.length) {
         imageUriList = draftImageUriList
+      }
+      // 선택된 이미지가 1개이상 있을경우 uploadURIS() 를 호출하여 URI 값을 얻어낸다.
+      // 만약 이미 임시 저장된 이미지가 있다면, 위에 if 블럭을 먼저 통과할 것 이기 때문에, 이 else if 블럭은 실행되지 않는다.
+      else if (selectedImages.length > 0) {
+        imageUriList = await uploadURIS(selectedImages)
       }
 
       createPet({
@@ -316,9 +325,11 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             )
         } else {
           alertModal(
-            "반려동물 추가 실패",
+            "반려동물 등록 실패",
             "알 수 없는 이유로 등록에 실패했습니다. 잠시후 다시 시도해주세요.",
           )
+          // 반려동물 등록에 실패하더라도, uploadURIS() 얻은 이미지 URI "imageUriList" 를 임시저장한다.
+          // 유저가 다시 이 버튼을 클릭했을때 사용하기 위함이다. - 불필요한 uploadURIS() 호출을 막을 수 있다.
           setDraftImageUriList(imageUriList)
         }
       })
@@ -568,7 +579,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
                   key={index}
                   style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
                   onPress={() => {
-                    setIsNeutralizated(item === "예")
+                    setIsNeutralizated(selectedValue)
                   }}
                 >
                   <Image
@@ -702,7 +713,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             {missedField && (
               <PreReg10
                 text={missedField}
-                color={ERROR_RED}
+                color={GIVER_CASUAL_NAVY}
                 style={{ position: "absolute", bottom: 4, zIndex: 1 }}
               />
             )}

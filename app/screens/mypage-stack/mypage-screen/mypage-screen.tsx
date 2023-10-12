@@ -1,5 +1,5 @@
 import { View, Image, TouchableOpacity, ScrollView } from "react-native"
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useMemo } from "react"
 import {
   ConditionalButton,
   MypageButton,
@@ -62,6 +62,16 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     const isActivated = !hasPets
 
+    const petListContainerJustfyContent = useMemo(() => {
+      if (pets.length === 1) {
+        return "flex-start"
+      } else if (pets.length === 2) {
+        return "space-evenly"
+      } else {
+        return "space-between"
+      }
+    }, [pets.length])
+
     return (
       <Screen>
         <ScrollView>
@@ -119,7 +129,12 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
                 {/* //? 반려동물 카드 리스트 */}
                 {hasPets ? (
-                  <View style={styles.petListContainer}>
+                  <View
+                    style={[
+                      styles.petListContainer,
+                      { justifyContent: petListContainerJustfyContent },
+                    ]}
+                  >
                     {/* 마이페이지에서는 3마리 까지만 표출 */}
                     {pets.slice(0, 3).map((item, index) => (
                       <PetImageCard

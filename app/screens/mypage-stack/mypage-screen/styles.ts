@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     height: 129,
     marginTop: 8,
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    //! justifyContent 값은 여기서 할당하지 말 것! - petListContainerJustfyContent 값 사용.
   },
 
   addPet: {

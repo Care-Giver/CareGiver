@@ -129,7 +129,7 @@ export const updatePet = async (
   try {
     const response = await axios.put<GetPetResponse>(`${BASE_URL}/pet/${id}`, body)
     if (!response?.data.ok) {
-      console.error("/pets API 에러!!! ♦️", response?.data?.error)
+      console.error("API 에러!!! - updatePet", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
     return {
@@ -162,7 +162,7 @@ export const createPet = async (body: CreatePetRequestBody): Promise<CreatePetRe
     const response = await axios.post<CreatePetResponse>(`${BASE_URL}/pet`, body)
 
     if (!response?.data.ok) {
-      console.error("/pets API 에러!!! ♦️", response?.data?.error)
+      console.error("API 에러!!! - createPet ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
 
@@ -172,6 +172,35 @@ export const createPet = async (body: CreatePetRequestBody): Promise<CreatePetRe
     }
   } catch (error) {
     console.error("catch 에러!!! - createPet", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface DeletePetResponse extends GeneralResponse {}
+interface DeletePetResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+
+/**
+ * 반려동물를 삭제한다.
+ * @param id 반려동물 id
+ * @returns
+ */
+export const deletePet = async (id: number): Promise<DeletePetResult> => {
+  try {
+    const response = await axios.delete<DeletePetResponse>(`${BASE_URL}/pet/${id}`)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - deletePet ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - deletePet", error)
     return { isSuccess: false, reason: error }
   }
 }

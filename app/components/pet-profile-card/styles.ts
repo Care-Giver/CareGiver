@@ -5,11 +5,11 @@ export const styles = StyleSheet.create({
   root: {
     width: "100%",
     height: 78,
-    // alignSelf: "center",
+    flexDirection: "row",
     justifyContent: "center",
     backgroundColor: palette.white,
-    // backgroundColor: "red",
   },
+  infoContainerWrapper: { flexDirection: "row", alignItems: "center", flex: 1 },
   infoContainer: {
     width: "auto",
     height: 72,
@@ -24,6 +24,9 @@ export const styles = StyleSheet.create({
   deleteButtonContainer: {
     alignSelf: "center",
     marginLeft: "auto",
+    paddingVertical: 20,
+    paddingLeft: 10,
+    // backgroundColor: "red",
   },
   image: {
     width: 60,

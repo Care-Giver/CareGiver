@@ -11,10 +11,14 @@ import {
   PetProfileCard,
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  CustomModal,
 } from "#components"
 import { HEAD_LINE, SUB_HEAD_LINE, LBG, GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
 import { useFocusEffect } from "@react-navigation/native"
 import { Pet, useStores } from "#models"
+import { PetDetail, deletePet } from "#axios"
+import { images } from "#images"
+import { appendEulReul } from "../../../utils/format"
 
 export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-screen">> = observer(
   ({ navigation, route }) => {
@@ -27,7 +31,8 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     const isSaved = route.params?.isSaved
 
     const [pets, setPets] = useState<Pet[]>(petsFromMypageScreen || [])
-    // 만약, edit-pet-info-screen 에서 "저장하기" 버튼을 클릭한 경우,
+    // 만약, edit-pet-info-screen 에서 "저장하기" 버튼을 클릭하거나,
+    // add-pet-screen 에서 "등록하기" 버튼을 클릭해서 이 스크린으로 돌아왔다면,
     // 새 펫 정보를 요청한다.
     useFocusEffect(
       useCallback(() => {
@@ -45,6 +50,16 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
     )
 
     const isActivated = pets.length <= 5
+
+    const [deletePetModal, setDeletePetModal] = useState<{
+      visibleState: boolean
+      petId: number
+      petName: string
+    }>({
+      visibleState: false,
+      petId: null,
+      petName: null,
+    })
 
     return (
       <Screen>
@@ -73,7 +88,14 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
                 onPress={() => {
                   navigate("edit-pet-info-screen", { pet: { ...data.item } })
                 }}
-                isDeletable={false}
+                isDeletable={true}
+                onDeletePress={() => {
+                  setDeletePetModal({
+                    visibleState: true,
+                    petId: data.item.id,
+                    petName: data.item.name,
+                  })
+                }}
               />
               <View style={styles.divisionLine} />
             </>
@@ -88,6 +110,28 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
           onPress={() => {
             navigation.navigate("add-pet-screen")
           }}
+        />
+
+        {/* //* 반려동물 삭제 모달 창 */}
+        <CustomModal
+          visibleState={deletePetModal.visibleState}
+          title={`반려동물 ${appendEulReul(deletePetModal.petName || "")} 삭제하시겠어요?`}
+          subtitle="삭제하면 등록된 모든 정보가 사라집니다."
+          yesBtnText="삭제할래요"
+          noBtnText="다시 생각해볼게요"
+          handleYesPress={() => {
+            deletePet(deletePetModal.petId).then(() => {
+              // 선택한 반려동물을 삭제후, 새 반려동물 리스트를 호출한다.
+              petsHandler().then((pets: Pet[]) => setPets(pets || []))
+            })
+            setDeletePetModal({ visibleState: false, petId: null, petName: null })
+          }}
+          handleNoPress={() =>
+            setDeletePetModal({ visibleState: false, petId: null, petName: null })
+          }
+          image={images.dog_illustration}
+          imageWidth={151}
+          imageHeight={156}
         />
       </Screen>
     )
