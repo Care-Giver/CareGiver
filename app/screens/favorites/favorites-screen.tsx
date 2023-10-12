@@ -329,7 +329,8 @@ export const FavoritesScreen: FC<
   return (
     <Screen testID="Favorites">
       {/* //* 펫시터 | 훈련사 토글 */}
-      <Row style={{ marginTop: 24, justifyContent: "space-between" }}>
+      {/* //! MVP 에서는 펫시터 서비스만 운영하므로, 주석처리 하였습니다. */}
+      {/* <Row style={{ marginTop: 24, justifyContent: "space-between" }}>
         <ServiceTypeIndicatorHeader
           label={"펫시터"}
           onPress={() => setServiceType("펫시터")}
@@ -343,7 +344,7 @@ export const FavoritesScreen: FC<
           }}
           state={serviceType}
         />
-      </Row>
+      </Row> */}
 
       {/* //* filter box */}
       <TouchableOpacity
@@ -412,7 +413,7 @@ export const FavoritesScreen: FC<
         footerComponent={renderFooter}
       >
         <PreReg12
-          text="즐겨찾기 한 펫시터 중 해당 조건에 가능한 사람만 보여집니다."
+          text="선택한 조건에 예약이 가능한 펫시터만 보여집니다."
           color={DISABLED}
           style={{
             backgroundColor: palette.white,
