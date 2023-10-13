@@ -58,17 +58,17 @@ export const CgMypageScreen: FC<
         {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
 
         <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
-          <PreBol16 text="cg-set-price-screen 으로 이동하기" color={GIVER_CASUAL_NAVY} />
+          <PreBol16 text="cg-set-price-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
         {/* 임시 버튼 - cg-search-address-screen 스크린 이동용  */}
         <Pressable
           style={{ backgroundColor: "red" }}
           onPress={() => {
-            navigate("cg-search-address-screen")
+            navigate("cg-set-address-temp-screen")
           }}
         >
-          <PreBol16 text="주소입력 / 지도선택 테스트 🔘" color={GIVER_CASUAL_NAVY} />
+          <PreBol16 text="cg-set-address-temp-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
         {/* //! 로그인 상태일 때 */}
@@ -89,7 +89,8 @@ export const CgMypageScreen: FC<
                 marginTop: 28,
                 paddingBottom: 18,
                 width: "100%",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
+                justifyContent: "center",
                 // backgroundColor: "red",
               }}
             >
@@ -100,14 +101,14 @@ export const CgMypageScreen: FC<
                 title="펫시터 등록하기"
                 subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
               />
-              <CgServiceChoiceButton
+              {/* <CgServiceChoiceButton
                 onPress={() => {
                   alert("훈련사 등록하기")
                 }}
                 title="훈련사 등록하기"
                 subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
                 style={{ marginLeft: "auto" }}
-              />
+              /> */}
             </Row>
           </>
         ) : (

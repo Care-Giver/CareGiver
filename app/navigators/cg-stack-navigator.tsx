@@ -29,6 +29,7 @@ import {
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
   CgSearchAddressScreen,
+  CgSetAddressTempScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -73,6 +74,7 @@ export type CGStackNavigatorParamList = {
   "service-center-screen": undefined
   "cg-search-address-screen": undefined
   "cg-set-address-screen": undefined
+  "cg-set-address-temp-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
@@ -269,6 +271,16 @@ export const CgMypageStack = () => {
         options={{
           title: "지도",
           header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* CG - 장소 등록 스크린 */}
+      <Stack.Screen
+        name="cg-set-address-temp-screen"
+        component={CgSetAddressTempScreen}
+        options={{
+          title: "지도",
+          headerShown: false,
         }}
       />
 
