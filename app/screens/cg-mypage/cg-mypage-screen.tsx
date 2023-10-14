@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { View, Image, Pressable, StyleSheet, ScrollView } from "react-native"
+import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   CgServiceChoiceButton,
@@ -29,11 +29,6 @@ export const CgMypageScreen: FC<
     userStore: { switchType, loggedIn, userDetail },
   } = useStores()
 
-  // * 비로그인시, "로그인" 버튼 클릭시 실행되는 함수
-  const handleLoginPress = () => {
-    navigate("login-screen")
-  }
-
   // * 자격증 등록
   const handleRegisterCertificatation = () => {
     alert("자격증 등록")
@@ -51,6 +46,12 @@ export const CgMypageScreen: FC<
   const handleMode = async () => {
     switchType()
   }
+
+  // 펫시터 등록하기 버튼 클릭시 실행되는 함수
+  // 1. 이전에 등록한 내역이 없을경우, cg-set-address-temp-screen 으로 이동
+  // 2. 있을 경우, 가장 마지막에 수정한 screen 으로 이동
+  // 3. 모든 등록과정을 마쳤을 경우, cg-edit-profile-screen 으로 이동
+  const onPress = () => {}
 
   return (
     <Screen>
@@ -71,20 +72,22 @@ export const CgMypageScreen: FC<
           <PreBol16 text="cg-set-address-temp-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
-        {/* //! 로그인 상태일 때 */}
-        {loggedIn ? (
-          <>
-            {/* //* 유저 프로필 카드  */}
-            <Row style={styles.profileCard}>
-              <PreReg18 style={{ lineHeight: 30 }}>
-                반가워요 <PreBol18>{userDetail.nickname}</PreBol18>님!
-                {"\n"}
-                간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
-              </PreReg18>
-            </Row>
+        {/* //* 유저 프로필 카드  */}
+        <Row style={styles.profileCard}>
+          <PreReg18 style={{ lineHeight: 30 }}>
+            반가워요 <PreBol18>{userDetail.nickname}</PreBol18>님!
+            {"\n"}
+            간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
+          </PreReg18>
+        </Row>
 
-            {/* 펫시터|훈련사 등록하기 버튼 */}
-            <Row
+        {/* 펫시터 등록하기 버튼 */}
+        <TouchableOpacity style={{ marginTop: 16, marginBottom: 28 }} onPress={onPress}>
+          <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
+        </TouchableOpacity>
+
+        {/* (구) 펫시터|훈련사 등록하기 버튼 */}
+        {/* <Row
               style={{
                 marginTop: 28,
                 paddingBottom: 18,
@@ -101,27 +104,15 @@ export const CgMypageScreen: FC<
                 title="펫시터 등록하기"
                 subtitle={"산책, 간식 주기 등 펫을\n돌봐주는 서비스입니다."}
               />
-              {/* <CgServiceChoiceButton
+              <CgServiceChoiceButton
                 onPress={() => {
                   alert("훈련사 등록하기")
                 }}
                 title="훈련사 등록하기"
                 subtitle={"손 주기, 기다려 등의 훈련\n을 시켜주는 서비스입니다."}
                 style={{ marginLeft: "auto" }}
-              /> */}
-            </Row>
-          </>
-        ) : (
-          // ! 비로그인 상태일 때
-          // * 로그인 이동 버튼 카드
-          <Row style={styles.loginCard}>
-            {/* //? "로그인 후 이용해주세요" 카드 */}
-            <Pressable style={{ flexDirection: "row" }} onPress={handleLoginPress}>
-              <PreBol16 text="로그인" color={GIVER_CASUAL_NAVY} />
-              <PreReg16 text="후 이용해주세요." color={SUB_HEAD_LINE} style={{ marginLeft: 2 }} />
-            </Pressable>
-          </Row>
-        )}
+              />
+            </Row> */}
 
         {/* //? divider */}
         <View style={styles.divisionLine} />
