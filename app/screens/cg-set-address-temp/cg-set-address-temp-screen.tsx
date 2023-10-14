@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react"
+import React, { FC, useMemo, useState } from "react"
 import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgRegisterStep, GoBackSaveNext, PreMed16, Screen } from "#components"
+import { CgRegisterStep, GoBackSaveNext, PickerImage, PreMed16, Screen } from "#components"
 import { useStores } from "#models"
 import { BOTTOM_HEIGHT, DISABLED } from "#theme"
 import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
@@ -13,8 +13,11 @@ import { CgSearchAddress } from "./cg-search-address"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { CgConfirmAddress } from "./cg-confirm-address"
 import { alertModal } from "../../utils/alert-modal"
+import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
 
 export type ServiceTypeKorean = "방문" | "위탁"
+
+const crecheImages = []
 
 export const CgSetAddressTempScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-temp-screen">
@@ -26,21 +29,7 @@ export const CgSetAddressTempScreen: FC<
   const [itemWidth, setItemWidth] = useState<number>(0)
   const [currentStep, setCurrentStep] = useState<number>(1)
 
-  const PAGE_LIST = [
-    {
-      id: 1,
-      page: currentStep,
-    },
-    {
-      id: 2,
-      page: currentStep,
-    },
-    {
-      id: 3,
-      page: currentStep,
-    },
-  ]
-
+  // 이전
   const onPressGoback = () => {
     currentStep !== 1 && setCurrentStep(currentStep - 1)
 
@@ -50,6 +39,7 @@ export const CgSetAddressTempScreen: FC<
     }
   }
 
+  // 저장 후 다음단계
   const onPressSaveNext = () => {
     switch (currentStep) {
       case 1:
@@ -64,14 +54,11 @@ export const CgSetAddressTempScreen: FC<
         step3handler()
         //TODO: MST 저장 및 API 호출
         break
+      case 4:
+        step4handler()
+        //TODO: MST 저장 및 API 호출
+        break
     }
-
-    // if (currentStep < PAGE_LIST.length) {
-    //   setCurrentStep(currentStep + 1)
-    // } else {
-    //   /* 마지막 스텝인 경우, 이전 스크린으로 돌아갑니다. */
-    //   navigation.goBack()
-    // }
   }
   // FlatList 관련 ENDED ==================================================================
 
@@ -93,13 +80,30 @@ export const CgSetAddressTempScreen: FC<
 
   const step3handler = () => {
     if (serviceType === "위탁" && !detailAddress) {
-      alertModal("상세주소를 입력해주세요.", "상세주소를 입력해주세요.")
+      alertModal("상세주소를 입력", "상세주소를 입력해주세요.")
+      return
+    }
+    /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+    if (serviceType === "방문") {
+      navigation.goBack()
+      return
+    }
+
+    // 위탁인경우 사진선택으로 이동
+    setCurrentStep(currentStep + 1)
+  }
+
+  // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
+  const step4handler = () => {
+    if (serviceType === "위탁" && selectedImages.length === 0) {
+      alertModal("위탁 장소 사진", "사진을 추가해주세요.")
       return
     }
     /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
     navigation.goBack()
   }
 
+  // 상단 헤더 내 "저징 후 나가기"
   const onPressSaveExit = () => {
     // TODO: 현재까지 내역 업데이트하는 API 호출
 
@@ -110,6 +114,34 @@ export const CgSetAddressTempScreen: FC<
   // 서비스 타입
   const [serviceType, setServiceType] = useState<ServiceTypeKorean>(null)
 
+  const PAGE_LIST = useMemo(() => {
+    const stepList = [
+      {
+        step: 1,
+        title: "서비스 종류 선택",
+        onPress: () => {},
+      },
+      {
+        step: 2,
+        title: "서비스 지역 선택",
+        onPress: () => {},
+      },
+      {
+        step: 3,
+        title: "주소 확인",
+        onPress: () => {},
+      },
+      {
+        step: 4,
+        title: "위탁장소 사진 업로드",
+        onPress: () => {},
+      },
+    ]
+
+    return serviceType === "방문" ? stepList.filter((i) => i.step !== 4) : stepList
+  }, [serviceType])
+  console.log("PAGE_LIST", PAGE_LIST)
+
   // 기본주소
   const [address, setAddress] = useState<OnCompleteParams>(null)
   // console.log("address 🔷", address)
@@ -117,14 +149,13 @@ export const CgSetAddressTempScreen: FC<
   // 상세주소
   const [detailAddress, setDetailAddress] = useState<string>(null)
 
+  // 위탁 장소 사진
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(crecheImages || [])
+
   return (
     <Screen>
       <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
-      <StepHeader
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-        style={{ marginTop: 10 }}
-      />
+      <StepHeader PAGE_LIST={PAGE_LIST} currentStep={currentStep} style={{ marginTop: 10 }} />
       <FlatList
         snapToInterval={itemWidth}
         horizontal
@@ -137,14 +168,14 @@ export const CgSetAddressTempScreen: FC<
         numColumns={1}
         renderItem={({ item }) => (
           <>
-            {item.page === 1 && (
+            {currentStep === 1 && (
               <CgSetServiceType
                 style={{ width: itemWidth }}
                 serviceType={serviceType}
                 setServiceType={setServiceType}
               />
             )}
-            {item.page === 2 && (
+            {currentStep === 2 && (
               <CgSearchAddress
                 style={{ width: itemWidth }}
                 onSelected={(data: OnCompleteParams) => {
@@ -153,7 +184,7 @@ export const CgSetAddressTempScreen: FC<
                 }}
               />
             )}
-            {item.page === 3 && (
+            {currentStep === 3 && (
               <CgConfirmAddress
                 style={{ width: itemWidth }}
                 address={address}
@@ -162,9 +193,16 @@ export const CgSetAddressTempScreen: FC<
                 serviceType={serviceType}
               />
             )}
+            {currentStep === 4 && (
+              <CgSelectCrechePhoto
+                style={{ width: itemWidth }}
+                selectedImages={selectedImages}
+                setSelectedImages={setSelectedImages}
+              />
+            )}
           </>
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.step.toString()}
       />
 
       {/* 이전 | 저장 후 다음단계 */}
@@ -206,37 +244,19 @@ const ScreenHeader = ({ navigation, onPressSaveExit }) => {
  * FlatList 상단에 표출되는
  * 현재 Step 을 보여주는 컴포넌트입니다.
  */
-const StepHeader = ({ currentStep, setCurrentStep, style }) => {
+const StepHeader = ({ PAGE_LIST, currentStep, style }) => {
   return (
     <View style={[{ flexDirection: "row", height: 30 }, style]}>
-      <CgRegisterStep
-        step={currentStep === 1 ? "progress" : "done"}
-        number={1}
-        title="서비스 종류 선택"
-        onPress={() => {
-          setCurrentStep(1)
-        }}
-        style={{ marginRight: 5 }}
-      />
-      <CgRegisterStep
-        step={currentStep === 2 ? "progress" : "done"}
-        number={2}
-        title="서비스 지역 선택"
-        onPress={() => {
-          setCurrentStep(2)
-        }}
-        style={{ marginRight: 5 }}
-      />
-      <CgRegisterStep
-        step={currentStep === 3 ? "progress" : "done"}
-        // step={"todo"}
-        number={3}
-        title="주소 확인"
-        onPress={() => {
-          setCurrentStep(3)
-        }}
-        style={{ marginRight: 5 }}
-      />
+      {PAGE_LIST.map((i) => (
+        <CgRegisterStep
+          key={i.step}
+          step={currentStep === i.step ? "progress" : "done"}
+          number={i.step}
+          title={i.title}
+          onPress={i.onPress}
+          style={{ marginRight: 5 }}
+        />
+      ))}
     </View>
   )
 }

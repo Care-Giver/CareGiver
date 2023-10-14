@@ -124,7 +124,8 @@ export const CgConfirmAddress = observer(function CgConfirmAddress(props: CgConf
             style={styles.addressDetail2}
             onChangeText={setDetailAddress}
             value={detailAddress}
-            placeholder="ex) 판교원마을 6단지 601동 101호"
+            // value={detailAddress.replace(/[^\u3131-\u314e|\u314f-\u3163|\uac00-\ud7a3|a-z|A-Z|0-9|_]+/g, '')}
+            placeholder="ex) 1층 102호"
           />
           <View style={styles.horizonLine} />
         </>
