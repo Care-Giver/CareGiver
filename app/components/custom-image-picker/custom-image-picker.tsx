@@ -34,18 +34,18 @@ export const CustomImagePicker = observer(function CustomImagePicker(
       updatedImages.splice(index, 1)
       setSelectedImages(updatedImages)
     },
-    [selectedImages],
+    [selectedImages, setSelectedImages],
   )
 
-  const options: ImageLibraryOptions = {
-    mediaType: "photo",
-    maxHeight: 128,
-    maxWidth: 128,
-    // includeBase64: true, // ? -> 큰 이미지 피함
-    selectionLimit: selectionLimit - selectedImages.length, // 최대 등록할 수 있는 이미지 개수 - 동적으로 변함
-  }
-
   const openGallery = useCallback(() => {
+    const options: ImageLibraryOptions = {
+      mediaType: "photo",
+      maxHeight: 128,
+      maxWidth: 128,
+      // includeBase64: true, // ? -> 큰 이미지 피함
+      selectionLimit: selectionLimit - selectedImages.length, // 최대 등록할 수 있는 이미지 개수 - 동적으로 변함
+    }
+
     launchImageLibrary(options, (response) => {
       if (!response.didCancel) {
         const newImages: PickerImage[] = response.assets.map((current) => {
@@ -67,11 +67,22 @@ export const CustomImagePicker = observer(function CustomImagePicker(
         // ? 선택된 사진을 정상적으로 전달 받음
       }
     })
-  }, [selectedImages])
+  }, [selectionLimit, selectedImages.length, setSelectedImages])
 
-  const disableAlert = useCallback(() => {
+  // 기존 코드 (문제있음)
+  // const disableAlert = useCallback(() => {
+  //   alert(`사진은 최대 ${selectionLimit}장까지 선택 가능합니다.`)
+  // }, [])
+
+  // 해결방법-1
+  // const disableAlert = useCallback(() => {
+  //   alert(`사진은 최대 ${selectionLimit}장까지 선택 가능합니다.`)
+  // }, [selectionLimit])
+
+  // 해결방법-2
+  const disableAlert = () => {
     alert(`사진은 최대 ${selectionLimit}장까지 선택 가능합니다.`)
-  }, [])
+  }
 
   const isEmpty = selectedImages.length === 0
   const isSelectable = selectedImages.length < selectionLimit
