@@ -429,7 +429,11 @@ export const SearchingStack = () => {
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
-      <Stack.Screen name="notification-screen" component={NotificationScreen} />
+      <Stack.Screen
+        name="notification-screen"
+        component={NotificationScreen}
+        options={{ title: "알림", header: (props) => <GobackAndTitleHeader {...props} /> }}
+      />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />

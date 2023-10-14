@@ -4,7 +4,8 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { NotificationCard, Screen } from "#components"
-import { Notification, getNotifications } from "../../services/axios/notification"
+import { useStores } from "#models"
+import { useFocusEffect } from "@react-navigation/native"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -19,40 +20,30 @@ export const NotificationScreen: FC<
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const {
+    notificationStore: { notifications, notificationsHandler, isCheckedHandler },
+  } = useStores()
   useEffect(() => {
-    getNotifications(25).then((res) => {
-      console.log(res.notifications)
-      setNotifications(res.notifications)
-    })
+    //? 계속 다시 api를 불러오는 것을 방지
+    if (notifications.length === 0) notificationsHandler()
+  }, [])
+  useFocusEffect(() => {
+    isCheckedHandler()
   })
   return (
     <Screen testID="Notification">
       {notifications &&
         notifications.map((item) => {
-          console.log(item)
           return (
             <NotificationCard
               key={item.id}
               title={item.title}
               subtitle={item.content}
               time={item.title}
-              isChecked={false}
+              isChecked={item.isChecked}
             />
           )
         })}
-      <NotificationCard
-        title="케어기버가 승인을 완료했어요!"
-        subtitle="케어기버에게 연락을 보내보세요."
-        time="3분전"
-        isChecked={false}
-      />
-      <NotificationCard
-        title="케어기버가 승인을 완료했어요!"
-        subtitle="케어기버에게 연락을 보내보세요."
-        time="3분전"
-        isChecked={true}
-      />
     </Screen>
   )
 })

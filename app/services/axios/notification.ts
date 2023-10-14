@@ -10,10 +10,11 @@ export interface Notification {
   senderName: string
   needToPush: boolean
   adAtNight: boolean
+  isChecked?: boolean
 }
 
 interface NotificationResponse extends GeneralResponse {
-  notificationResult: Notification[]
+  clientNotifications: Notification[]
 }
 
 interface GetNotificationsResult {
@@ -24,23 +25,21 @@ interface GetNotificationsResult {
 
 /**
  * 로그인한 유저의 모든 반려동물 정보를 읽어온다.
- * @returns {Promise<GetPetsResult>}
+ * @returns {Promise<GetNotificationsResult>}
  */
-export const getNotifications = async (clientId: number): Promise<GetNotificationsResult> => {
+export const getNotifications = async (): Promise<GetNotificationsResult> => {
   try {
-    const response = await axios.get<NotificationResponse>(
-      `${BASE_URL}/notification/client/${clientId}`,
-    )
+    const response = await axios.get<NotificationResponse>(`${BASE_URL}/notification/client`)
 
     if (!response?.data.ok) {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    response.data.notificationResult &&
-      response.data.notificationResult.map((item) => console.log(item))
+    response.data.clientNotifications &&
+      response.data.clientNotifications.map((item) => console.log(item))
     return {
       isSuccess: true,
-      notifications: response.data.notificationResult,
+      notifications: response.data.clientNotifications,
     }
   } catch (error) {
     console.error("catch 에러!!! - getNotifications", error)
