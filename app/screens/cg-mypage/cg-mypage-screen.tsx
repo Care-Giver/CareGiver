@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "re
 import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  BOTTOM_TAB_BAR_HEIGHT,
   CaregiverNameStarReview,
   CaregiverTypeButton,
   CgServiceChoiceButton,
@@ -19,7 +20,15 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, LBG, palette } from "#theme"
+import {
+  GIVER_CASUAL_NAVY,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+  BOTTOM_HEIGHT,
+  LBG,
+  palette,
+  BOTTOM_TAB_NAVIGATOR,
+} from "#theme"
 import { images } from "#images"
 import { useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
@@ -36,7 +45,7 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, loggedIn, userDetail },
   } = useStores()
-
+  console.log("userDetail.id", userDetail.id)
   // * 자격증 등록
   const handleRegisterCertificatation = () => {
     alert("자격증 등록")
@@ -101,6 +110,22 @@ export const CgMypageScreen: FC<
               case "방문":
                 createVisiting({
                   userId: userDetail.id,
+                  title: "테스트 방문펫시터",
+                  desc: "테스트DESC",
+                  address: "경기도 하남시 미사강변한강로 326",
+                  detailAddress: "",
+                  maxUnit: 3,
+                  handleType: [],
+                  images: [],
+                  services: [1, 2],
+                  amenities: [1, 2],
+                  defaultFee: 10000,
+                  extraSizeFee: {
+                    Small: 0,
+                    Medium: 0,
+                    Large: 0,
+                  },
+                  promoted: false,
                 })
                 break
               case "위탁":
@@ -123,9 +148,11 @@ export const CgMypageScreen: FC<
 
   return (
     <Screen>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
+      >
         {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
-
         <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
           <PreBol16 text="cg-set-price-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
@@ -148,6 +175,20 @@ export const CgMypageScreen: FC<
             간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
           </PreReg18>
         </Row>
+
+        <CaregiverNameStarReview
+          caregiverData={{
+            name: userDetail.nickname,
+            // profileImage,
+            // ratings: star,
+            ratings: 2.16,
+          }}
+          onPress={() => {
+            alert("edit-mypage-screen 으로 이동")
+            //TODO: 기본 프로필 정보 수정 화면으로 이동 - edit-mypage-screen
+          }}
+          text={"기본 정보 관리"}
+        />
 
         {/* 케어기버 프로필 관리 */}
         <TouchableOpacity

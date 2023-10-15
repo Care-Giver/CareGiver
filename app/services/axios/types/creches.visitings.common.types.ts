@@ -20,16 +20,18 @@ export interface SearchRequest {
   certifiedOnly: boolean //true
 }
 
-enum PetHandleType {
-  SMALL = "소형",
-  MEDIUM = "중형",
-  LARGE = "대형",
+// DB 정의 그대로임
+// TODO: HandleType pet.ts 와 pet-store 에 있는 HandleType 바꿀 것
+enum HandleType {
+  SMALL = "Small",
+  MEDIUM = "Medium",
+  LARGE = "Large",
 }
 
 type ExtraSizeFee = {
-  SMALL: number
-  MEDIUM: number
-  LARGE: number
+  Small: number
+  Medium: number
+  Large: number
 }
 
 export type Service = {
@@ -76,14 +78,14 @@ export interface Petsitter {
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
   address: string // "경기도 안산시 사동 한양대학로 55"
-  detailAddress?: string // 상세주소. //! "방문" 펫시터의 경우, null 값이다.
+  detailAddress: string // 상세주소. //! "방문" 펫시터의 경우, "" 엠티 스트링 입니다.
   defaultFee: number //10000
   hiredNumber: number //132
   star: number //5
   /* location: string // "(127, 38)" */
   location: LocationResponse
-  maxUnit: number //3
-  handleType: PetHandleType[] //"대형, 중형, 소형"
+  maxUnit: number //! 1이상 값이어야 합니다.
+  handleType: HandleType[]
   images: string[] // ["이미지 주소"]
   extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"
   promoted: false

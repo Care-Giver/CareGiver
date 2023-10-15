@@ -1,6 +1,5 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { VisitingAmenity, VisitingService } from "./visitings"
 import { Petsitter } from "./types/creches.visitings.common.types"
 
 interface CreateVisitingRequestBody
@@ -18,15 +17,16 @@ interface CreateVisitingRequestBody
     >
   > {
   userId: number // 현재 로그인한 유저의 userId
-  services?: VisitingService[]
-  amenities?: VisitingAmenity[]
+  services: number[] // VisitingService 객체 id[], //! 배열의 길이가 1 이상이어야 합니다.
+  amenities: number[] // VisitingAmenity 객체 id[], //! 빈 배열도 OK
 }
 interface CreateVisitingResponse extends GeneralResponse {
-  huh: Petsitter
+  visitingId: number
 }
 interface CreateVisitingResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
+  visitingId?: number // 성공시, 생성된 방문장소의 id (visitingId)
 }
 /**
  * [케어기버 전용 API]
@@ -48,6 +48,7 @@ export const createVisiting = async (
 
     return {
       isSuccess: true,
+      visitingId: response.data.visitingId,
     }
   } catch (error) {
     console.error("catch 에러!!! - createPet", error)

@@ -201,10 +201,15 @@ export const CaregiverDetailInformationScreen: FC<
             style={{ marginTop: 36 }}
             caregiverData={{
               name: userNickname,
-              profileImage,
+              // profileImage,
               ratings: star,
-              numberOfReviews: reviewCount,
             }}
+            onPress={() => {
+              //? 후기 전체보기 화면으로 이동
+              //TODO: params 값 추가해줘야 함
+              navigate("all-reviews-screen", null)
+            }}
+            text={`후기 ${reviewCount}개`}
           />
 
           {/* TODO: 어떻게 가져올 것인가? API 없는 것으로 보임 */}

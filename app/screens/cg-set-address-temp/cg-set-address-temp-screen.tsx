@@ -30,6 +30,9 @@ export const CgSetAddressTempScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-temp-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   const { serviceType } = route.params
+  // const serviceType = route?.params?.serviceType
+  // console.log("route", route)
+  // console.log("route?.params", route?.params)
 
   // MST store 를 가져옵니다.
   const {
