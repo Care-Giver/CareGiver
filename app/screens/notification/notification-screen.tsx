@@ -25,15 +25,15 @@ export const NotificationScreen: FC<
   } = useStores()
   useEffect(() => {
     //? 계속 다시 api를 불러오는 것을 방지
-    if (notifications.length === 0) notificationsHandler()
-  }, [])
-  useFocusEffect(() => {
+    notificationsHandler()
     isCheckedHandler()
-  })
+    console.log("notifications >>>", notifications)
+  }, [])
   return (
     <Screen testID="Notification">
       {notifications &&
         notifications.map((item) => {
+          console.log("item >>>", item.isChecked)
           return (
             <NotificationCard
               key={item.id}

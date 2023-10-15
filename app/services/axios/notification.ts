@@ -35,8 +35,6 @@ export const getNotifications = async (): Promise<GetNotificationsResult> => {
       console.error("/pets API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
-    response.data.clientNotifications &&
-      response.data.clientNotifications.map((item) => console.log(item))
     return {
       isSuccess: true,
       notifications: response.data.clientNotifications,

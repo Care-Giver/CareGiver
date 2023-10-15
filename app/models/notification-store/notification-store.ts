@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { getNotifications, Notification } from "../../services/axios/notification"
+import { id } from "date-fns/locale"
 
 /**
  * 로그인한 사용자의 알림 목록
@@ -18,12 +19,20 @@ export const NotificationStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     //* notifications 저장
+    //TODO 계속 업데이트돼서 inChecked가 다시 풀림. 그래서 screen 또는 api상에서 조정하고자 했으나 어려움
     setNotifications(value: Notification[]) {
-      self.notifications = value.map((item) => {
+      self.notifications = value.map((item, idx) => {
         //? 아직 isChecked가 추가되지 않았다면 isChecked:false 추가
         if (item.isChecked === null) {
           item.isChecked = false
+        } else {
+          if (self.notifications[idx].isChecked) {
+            item.isChecked = true
+          } else {
+            item.isChecked = false
+          }
         }
+
         return item
       })
     },
