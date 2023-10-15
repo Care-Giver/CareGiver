@@ -8,6 +8,7 @@ import {
   CaregiverTypeButton,
   CgServiceChoiceButton,
   ConditionalButton,
+  DivisionLine,
   MypageButton,
   PopReg18,
   PreBol16,
@@ -179,7 +180,7 @@ export const CgMypageScreen: FC<
   }
 
   return (
-    <Screen>
+    <Screen style={{ paddingHorizontal: 0 }}>
       <Button
         text="테스트"
         onPress={() => {
@@ -207,7 +208,7 @@ export const CgMypageScreen: FC<
 
         {careGiver.hasCareGiverProfile ? (
           // 1. 이전에 등록한 펫시터 프로필이 있는 경우
-          <>
+          <View style={styles.sidePadding}>
             <CaregiverNameStarReview
               style={{ marginTop: 20 }}
               caregiverData={{
@@ -242,10 +243,10 @@ export const CgMypageScreen: FC<
                 <PreReg14 text={careGiver.petsitter?.desc || ""} color={SUB_HEAD_LINE} ml={8} />
               </Row>
             </TouchableOpacity>
-          </>
+          </View>
         ) : (
           // 2. "" 없는 경우
-          <>
+          <View style={styles.sidePadding}>
             {/* 유저 프로필 카드  */}
             <Row style={styles.profileCard}>
               <PreReg18 style={{ lineHeight: 30 }}>
@@ -264,7 +265,7 @@ export const CgMypageScreen: FC<
             >
               <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
             </TouchableOpacity>
-          </>
+          </View>
         )}
 
         {/* (구) 펫시터|훈련사 등록하기 버튼 */}
@@ -295,42 +296,53 @@ export const CgMypageScreen: FC<
               />
             </Row> */}
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* Care Giver 모드 전환 버튼 */}
-        <Pressable style={styles.modeChangeBtn} onPress={handleMode}>
+        <Pressable style={[styles.modeChangeBtn, styles.sidePadding]} onPress={handleMode}>
           <PreBol16 text="Client 모드로 전환" color={GIVER_CASUAL_NAVY} />
 
           <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton text="자격증 등록" onPress={handleRegisterCertificatation} />
+        <MypageButton
+          text="자격증 등록"
+          onPress={handleRegisterCertificatation}
+          style={styles.sidePadding}
+        />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton text="결제 수단 및 쿠폰" opacity={0.2} disabled={true} />
+        <MypageButton
+          text="결제 수단 및 쿠폰"
+          opacity={0.2}
+          disabled={true}
+          style={styles.sidePadding}
+        />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* 환경설정 버튼 */}
-        <MypageButton text="환경설정" onPress={handleSettingPress} />
+        <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* 자주 묻는 질문 버튼 */}
-        <MypageButton text="자주 묻는 질문" opacity={0.2} disabled={true} />
+        <MypageButton
+          text="자주 묻는 질문"
+          opacity={0.2}
+          disabled={true}
+          style={styles.sidePadding}
+        />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
         {/* //* 고객센터 버튼 */}
-        <MypageButton text="고객 센터" onPress={handleServiceCenterPress} />
+        <MypageButton
+          text="고객 센터"
+          onPress={handleServiceCenterPress}
+          style={styles.sidePadding}
+        />
 
-        {/* //? divider */}
-        <View style={styles.divisionLine} />
+        <DivisionLine color={LIGHT_LINE} />
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
@@ -350,10 +362,8 @@ export const CgMypageScreen: FC<
 })
 
 const styles = StyleSheet.create({
-  divisionLine: {
-    height: 2,
-    marginHorizontal: -2 * BASIC_BACKGROUND_PADDING_WIDTH,
-    backgroundColor: LIGHT_LINE,
+  sidePadding: {
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
   },
 
   profileCard: {

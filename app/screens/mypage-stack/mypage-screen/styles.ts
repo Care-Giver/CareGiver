@@ -3,10 +3,8 @@ import { StyleSheet } from "react-native"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
-  divisionLine: {
-    height: 2,
-    marginHorizontal: -2 * BASIC_BACKGROUND_PADDING_WIDTH,
-    backgroundColor: LIGHT_LINE,
+  sidePadding: {
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
   },
 
   profileCard: {
