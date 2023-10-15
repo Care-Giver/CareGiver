@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   CgRegisterStep,
   ConditionalButton,
@@ -15,12 +15,12 @@ import { useStores } from "#models"
 import { BOTTOM_HEIGHT, DISABLED } from "#theme"
 import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
 import { images } from "#images"
-import { CgSetServiceType } from "./cg-set-service-type"
 import { CgSearchAddress } from "./cg-search-address"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { CgConfirmAddress } from "./cg-confirm-address"
 import { alertModal } from "../../utils/alert-modal"
 import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
+import { updateVisiting } from "../../services/axios/visiting"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 
@@ -29,10 +29,12 @@ const crecheImages = []
 export const CgSetAddressTempScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-temp-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
-  const { serviceType } = route.params
+  const { serviceType, petsitterId } = route.params
   // const serviceType = route?.params?.serviceType
   // console.log("route", route)
   // console.log("route?.params", route?.params)
+  console.log("serviceType", serviceType)
+  console.log("petsitterId", petsitterId)
 
   // MST store 를 가져옵니다.
   const {
@@ -56,15 +58,15 @@ export const CgSetAddressTempScreen: FC<
   // 저장 후 다음단계
   const onPressSaveNext = () => {
     switch (currentStep) {
-      case 2:
+      case 1:
         step1handler()
         //TODO: MST 저장 및 API 호출
         break
-      case 3:
+      case 2:
         step2handler()
         //TODO: MST 저장 및 API 호출
         break
-      case 4:
+      case 3:
         step3handler()
         //TODO: MST 저장 및 API 호출
         break
@@ -79,19 +81,31 @@ export const CgSetAddressTempScreen: FC<
     setCurrentStep(currentStep + 1)
   }
 
-  const step2handler = () => {
+  const step2handler = async () => {
     if (serviceType === "위탁" && !detailAddress) {
       alertModal("상세주소를 입력", "상세주소를 입력해주세요.")
       return
     }
-    /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+    /* 방문이면, 마지막 스텝 - update 후 돌아감 */
     if (serviceType === "방문") {
-      navigation.goBack()
-      return
+      // navigation.goBack()
+      const { isSuccess } = await updateVisiting(petsitterId, {
+        address: address?.address,
+        detailAddress: "",
+      })
+      if (!isSuccess) {
+        alertModal(
+          "서비스 지역 저장 실패",
+          "서비스 지역 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        )
+        return
+      }
+      navigate("cg-edit-profile-screen", { serviceType })
     }
-
-    // 위탁인경우 사진선택으로 이동
-    setCurrentStep(currentStep + 1)
+    // 위탁인경우 다음단계(사진 업로드)로 이동
+    else {
+      setCurrentStep(currentStep + 1)
+    }
   }
 
   // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
@@ -101,7 +115,7 @@ export const CgSetAddressTempScreen: FC<
       return
     }
     /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-    navigation.goBack()
+    navigate("cg-edit-profile-screen", { serviceType })
   }
 
   // 상단 헤더 내 "저징 후 나가기"
@@ -117,23 +131,29 @@ export const CgSetAddressTempScreen: FC<
       {
         step: 1,
         title: "서비스 지역 선택",
-        onPress: () => {},
+        onPress: () => {
+          //
+        },
       },
       {
         step: 2,
         title: "주소 확인",
-        onPress: () => {},
+        onPress: () => {
+          //
+        },
       },
       {
         step: 3,
         title: "위탁장소 사진 업로드",
-        onPress: () => {},
+        onPress: () => {
+          //
+        },
       },
     ]
 
     return serviceType === "방문" ? stepList.filter((i) => i.step !== 3) : stepList
   }, [serviceType])
-  console.log("PAGE_LIST", PAGE_LIST)
+  // console.log("PAGE_LIST", PAGE_LIST)
 
   // 기본주소
   const [address, setAddress] = useState<OnCompleteParams>(null)
@@ -191,7 +211,7 @@ export const CgSetAddressTempScreen: FC<
         )}
       />
 
-      {/* 이전 | 저장 후 다음단계 */}
+      {/* 이전 |  다음단계 */}
       <GoBackSaveNext
         onPressGoback={onPressGoback}
         onPressSaveNext={onPressSaveNext}
@@ -248,7 +268,6 @@ const StepHeader = ({ PAGE_LIST, currentStep, style }) => {
 }
 
 const styles = StyleSheet.create({
-  root: {},
   goBackButton: {
     width: 28,
     height: 28,

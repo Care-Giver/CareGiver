@@ -225,7 +225,10 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
-                navigate("cg-edit-profile-screen", { serviceType: careGiver.serviceType })
+                navigate("cg-edit-profile-screen", {
+                  serviceType: careGiver.serviceType,
+                  petsitterId: careGiver.petsitter.id,
+                })
               }}
             >
               <Row>

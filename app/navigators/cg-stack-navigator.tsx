@@ -81,7 +81,7 @@ export type CGStackNavigatorParamList = {
   "cg-edit-profile-screen": { serviceType: ServiceTypeKorean }
   "cg-search-address-screen": undefined
   "cg-set-address-screen": undefined
-  "cg-set-address-temp-screen": undefined
+  "cg-set-address-temp-screen": { serviceType: ServiceTypeKorean }
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.

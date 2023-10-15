@@ -58,6 +58,43 @@ export const createVisiting = async (
   }
 }
 
+interface UpdateVisitingRequestBody extends Partial<Omit<CreateVisitingRequestBody, "userId">> {}
+interface UpdateVisitingResponse extends GeneralResponse {}
+interface UpdateVisitingResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  // visitingId?: number // 성공시, 생성된 방문장소의 id (visitingId)
+}
+/**
+ * [케어기버 전용 API]
+ * 방문 펫시터 정보를 수정한다
+ *
+ */
+export const updateVisiting = async (
+  id: number,
+  body: UpdateVisitingRequestBody,
+): Promise<UpdateVisitingResult> => {
+  try {
+    const response = await axios.put<UpdateVisitingResponse>(`${BASE_URL}/visiting/${id}`, body)
+    console.log("response ♦️ updateVisiting", response)
+    console.log("response.data 🔷 updateVisiting", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - updateVisiting ♦️", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+      // visitingId: response.data.visitingId,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - updateVisiting", error)
+    console.error("catch 에러!!! - updateVisiting id, body", id, body)
+    return { isSuccess: false, reason: error }
+  }
+}
+
 //! NOTE: DELETE /visiting/:id 는 불가능합니다. 서버에서만 실행가능한 API 입니다.
 
 export interface VistingPetsitter extends Petsitter {

@@ -11,6 +11,7 @@ export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
 > = observer(function CgEditProfileScreen({ navigation, route }) {
   const serviceType = route.params?.serviceType
+  const petsitterId = route.params?.petsitterId
 
   // ? 헤더 타이틀 설정
   useLayoutEffect(() => {
@@ -27,7 +28,7 @@ export const CgEditProfileScreen: FC<
       <MypageButton
         text={serviceType === "방문" ? "방문 지역" : "위탁 지역 / 사진"}
         onPress={() => {
-          navigate("cg-set-address-temp-screen", { serviceType })
+          navigate("cg-set-address-temp-screen", { serviceType, petsitterId })
         }}
         style={styles.sidePadding}
       />
