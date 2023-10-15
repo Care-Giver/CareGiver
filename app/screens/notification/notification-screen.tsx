@@ -3,15 +3,33 @@ import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { NotificationCard, Screen } from "#components"
+import { CustomModal, NotificationCard, Screen } from "#components"
 import { useStores } from "#models"
 import { useFocusEffect } from "@react-navigation/native"
 import { alertModal } from "../../utils/alert-modal"
 import { NotificationColumns, getNotifications } from "../../services/axios/notification"
+import { images } from "#images"
 
 export const NotificationScreen: FC<
   StackScreenProps<NavigatorParamList, "notification-screen">
-> = observer(function NotificationScreen() {
+> = observer(({ navigation, route }) => {
+  //* 삭제하기 버튼 관련
+  const [modalOpenn, setModalOpen] = useState<boolean>(false)
+  const removeAllToggle: boolean = route.params?.removeAllToggle
+
+  const removeAllHandler = () => {
+    // @ts-ignore
+    navigation.setParams({ removeAllToggle: !removeToggle })
+  }
+
+  useEffect(() => {
+    console.log("removeToggle >>> ", removeAllToggle)
+    if (removeAllToggle === true) {
+      setModalOpen(true)
+    }
+  }, [removeAllToggle])
+
+  //* MST
   const {
     notificationStore: {
       notifications,
@@ -23,8 +41,9 @@ export const NotificationScreen: FC<
     },
   } = useStores()
 
+  //* 알림 관련
   useEffect(() => {
-    //* notifications 생성 및 핸들링 함수
+    // notifications 생성 및 핸들링 함수
     const initNotifications = async () => {
       const { isSuccess, notifications: notificationsFromServer } = await getNotifications()
       if (!isSuccess) {
@@ -70,6 +89,23 @@ export const NotificationScreen: FC<
             />
           )
         })}
+      <CustomModal
+        image={images.error_profile_medium}
+        imageWidth={100}
+        imageHeight={85}
+        title="알림을 모두 삭제하시겠어요?"
+        yesBtnText="예"
+        noBtnText="아니오"
+        handleYesPress={() => {
+          setModalOpen(!modalOpenn)
+          removeAllHandler()
+        }}
+        handleNoPress={() => {
+          setModalOpen(!modalOpenn)
+          removeAllHandler()
+        }}
+        visibleState={modalOpenn}
+      />
     </Screen>
   )
 })
