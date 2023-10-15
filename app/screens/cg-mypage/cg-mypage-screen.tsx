@@ -3,6 +3,7 @@ import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   BOTTOM_TAB_BAR_HEIGHT,
+  Button,
   CaregiverNameStarReview,
   CaregiverTypeButton,
   CgServiceChoiceButton,
@@ -35,7 +36,12 @@ import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CgSetServiceType } from "../cg-set-address-temp/cg-set-service-type"
 import { ServiceTypeKorean } from "../cg-set-address-temp/cg-set-address-temp-screen"
-import { createVisiting } from "../../services/axios/visiting"
+import {
+  VistingPetsitter,
+  createVisiting,
+  getVisitingCareGiver,
+} from "../../services/axios/visiting"
+import { ratingRound } from "../../utils/format"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -45,6 +51,27 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, loggedIn, userDetail },
   } = useStores()
+  const [careGiver, setCareGiver] = useState<{
+    hasCareGiverProfile: boolean
+    serviceType: ServiceTypeKorean
+    // petsitter?: VistingPetsitter & CrechePetsitter // TODO:
+    petsitter?: VistingPetsitter
+  }>(null)
+
+  useEffect(() => {
+    const fetchCareGiver = async () => {
+      const { isSuccess, visiting } = await getVisitingCareGiver()
+      // const creche = await getCrecheCareGiver()
+      const creche = false
+      setCareGiver({
+        hasCareGiverProfile: !!visiting || !!creche,
+        serviceType: visiting ? "방문" : "위탁",
+        petsitter: visiting || creche,
+      })
+    }
+    fetchCareGiver()
+  }, [])
+
   console.log("userDetail.id", userDetail.id)
   // * 자격증 등록
   const handleRegisterCertificatation = () => {
@@ -110,15 +137,15 @@ export const CgMypageScreen: FC<
               case "방문":
                 createVisiting({
                   userId: userDetail.id,
-                  title: "테스트 방문펫시터",
-                  desc: "테스트DESC",
-                  address: "경기도 하남시 미사강변한강로 326",
+                  title: "",
+                  desc: "",
+                  address: "경기도 안산시 사동 한양대학로 55",
                   detailAddress: "",
-                  maxUnit: 3,
+                  maxUnit: 1,
                   handleType: [],
                   images: [],
-                  services: [1, 2],
-                  amenities: [1, 2],
+                  services: [1],
+                  amenities: [1],
                   defaultFee: 10000,
                   extraSizeFee: {
                     Small: 0,
@@ -146,8 +173,19 @@ export const CgMypageScreen: FC<
   )
   // =======================================================
 
+  console.log("careGiver", careGiver)
+  if (!careGiver) {
+    return null
+  }
+
   return (
     <Screen>
+      <Button
+        text="테스트"
+        onPress={() => {
+          // deleteVisiting(5)
+        }}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
@@ -167,73 +205,68 @@ export const CgMypageScreen: FC<
           <PreBol16 text="cg-set-address-temp-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
-        {/* //* 유저 프로필 카드  */}
-        <Row style={styles.profileCard}>
-          <PreReg18 style={{ lineHeight: 30 }}>
-            반가워요 <PreBol18>{userDetail.nickname}</PreBol18>님!
-            {"\n"}
-            간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
-          </PreReg18>
-        </Row>
-
-        <CaregiverNameStarReview
-          caregiverData={{
-            name: userDetail.nickname,
-            // profileImage,
-            // ratings: star,
-            ratings: 2.16,
-          }}
-          onPress={() => {
-            alert("edit-mypage-screen 으로 이동")
-            //TODO: 기본 프로필 정보 수정 화면으로 이동 - edit-mypage-screen
-          }}
-          text={"기본 정보 관리"}
-        />
-
-        {/* 케어기버 프로필 관리 */}
-        <TouchableOpacity
-          style={{
-            width: "100%",
-            height: 88,
-            borderWidth: 2,
-            borderColor: LIGHT_LINE,
-            borderRadius: 8,
-            justifyContent: "space-between",
-            padding: 16,
-          }}
-        >
-          <Row>
-            <PreBol16 text="케어기버 프로필 관리" />
-            <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
-          </Row>
-
-          <Row>
-            <CaregiverTypeButton text={"방문"} />
-            <CaregiverTypeButton
-              text={"펫시터"}
-              textColor={GIVER_CASUAL_NAVY}
-              style={{
-                marginLeft: 4,
-                backgroundColor: palette.white,
-                borderColor: GIVER_CASUAL_NAVY,
-                borderWidth: 2,
-                paddingVertical: 3 - 2,
-                paddingHorizontal: 8 - 2,
+        {careGiver.hasCareGiverProfile ? (
+          // 1. 이전에 등록한 펫시터 프로필이 있는 경우
+          <>
+            <CaregiverNameStarReview
+              style={{ marginTop: 20 }}
+              caregiverData={{
+                name: userDetail.nickname,
+                ratings: ratingRound(careGiver.petsitter?.star),
               }}
+              onPress={() => {
+                alert("edit-mypage-screen 으로 이동")
+                //TODO: 기본 프로필 정보 수정 화면으로 이동 - edit-mypage-screen
+              }}
+              text={"기본 정보 관리"}
             />
-            <PreReg14 text="언제나 내 아이라는 마음으로" color={SUB_HEAD_LINE} ml={8} />
-          </Row>
-        </TouchableOpacity>
 
-        {/* 펫시터 등록하기 버튼 */}
-        <TouchableOpacity
-          style={{ marginTop: 16, marginBottom: 28 }}
-          onPress={() => {
-            bottomSheetModalRef.current?.present()
-          }}
-        >
-          <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
-        </TouchableOpacity>
+            {/* 케어기버 프로필 관리 */}
+            <TouchableOpacity
+              style={styles.manageCgProfile}
+              onPress={() => {
+                //TODO: 케어기버 프로필 관리 화면으로 이동 - cg-edit-profile-screen
+              }}
+            >
+              <Row>
+                <PreBol16 text="케어기버 프로필 관리" />
+                <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
+              </Row>
+
+              <Row>
+                <CaregiverTypeButton text={careGiver.serviceType} />
+                <CaregiverTypeButton
+                  text={"펫시터"}
+                  textColor={GIVER_CASUAL_NAVY}
+                  style={styles.petsitterBadge}
+                />
+                <PreReg14 text={careGiver.petsitter?.desc || ""} color={SUB_HEAD_LINE} ml={8} />
+              </Row>
+            </TouchableOpacity>
+          </>
+        ) : (
+          // 2. "" 없는 경우
+          <>
+            {/* 유저 프로필 카드  */}
+            <Row style={styles.profileCard}>
+              <PreReg18 style={{ lineHeight: 30 }}>
+                반가워요 <PreBol18>{userDetail.nickname}</PreBol18>님!
+                {"\n"}
+                간단하게 <PopReg18>Care Giver</PopReg18>가 되어보세요!
+              </PreReg18>
+            </Row>
+
+            {/* 펫시터 등록하기 버튼 */}
+            <TouchableOpacity
+              style={{ marginTop: 16, marginBottom: 28 }}
+              onPress={() => {
+                bottomSheetModalRef.current?.present()
+              }}
+            >
+              <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
+            </TouchableOpacity>
+          </>
+        )}
 
         {/* (구) 펫시터|훈련사 등록하기 버튼 */}
         {/* <Row
@@ -373,5 +406,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
+  },
+
+  manageCgProfile: {
+    width: "100%",
+    height: 88,
+    borderWidth: 2,
+    borderColor: LIGHT_LINE,
+    borderRadius: 8,
+    justifyContent: "space-between",
+    padding: 16,
+    marginVertical: 20,
+  },
+
+  petsitterBadge: {
+    marginLeft: 4,
+    backgroundColor: palette.white,
+    borderColor: GIVER_CASUAL_NAVY,
+    borderWidth: 2,
+    paddingVertical: 3 - 2,
+    paddingHorizontal: 8 - 2,
   },
 })

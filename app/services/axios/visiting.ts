@@ -1,6 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { Petsitter } from "./types/creches.visitings.common.types"
+import { Visiting, VisitingAmenity, VisitingService } from "./visitings"
 
 interface CreateVisitingRequestBody
   extends Partial<
@@ -38,11 +39,11 @@ export const createVisiting = async (
 ): Promise<CreateVisitingResult> => {
   try {
     const response = await axios.post<CreateVisitingResponse>(`${BASE_URL}/visiting`, body)
-    console.log("response ♦️", response)
-    console.log("response.data 🔷", response.data)
+    console.log("response ♦️ createVisiting", response)
+    console.log("response.data 🔷 createVisiting", response.data)
 
     if (!response?.data.ok) {
-      console.error("API 에러!!! - createPet ♦️", response?.data?.error)
+      console.error("API 에러!!! - createVisiting ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
 
@@ -51,8 +52,49 @@ export const createVisiting = async (
       visitingId: response.data.visitingId,
     }
   } catch (error) {
-    console.error("catch 에러!!! - createPet", error)
-    console.error("catch 에러!!! - createPet body", body)
+    console.error("catch 에러!!! - createVisiting", error)
+    console.error("catch 에러!!! - createVisiting body", body)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+//! NOTE: DELETE /visiting/:id 는 불가능합니다. 서버에서만 실행가능한 API 입니다.
+
+export interface VistingPetsitter extends Petsitter {
+  serviceVisiting: VisitingService[]
+  visitingAmenities: VisitingAmenity[]
+}
+interface GetVisitingCareGiver extends GeneralResponse {
+  visiting: VistingPetsitter
+}
+interface GetVisitingResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  visiting?: VistingPetsitter
+}
+export const getVisitingCareGiver = async (): Promise<GetVisitingResult> => {
+  try {
+    const response = await axios.get<GetVisitingCareGiver>(`${BASE_URL}/visiting/care-giver`)
+    // console.log("response ♦️ getVisitingCareGiver", response)
+    console.log("response.data 🔷 getVisitingCareGiver", response.data)
+
+    if (!response?.data.ok) {
+      switch (response?.data?.error?.errorCode) {
+        case 404:
+          console.error("유저가 등록한 visiting 객체가 없습니다.", response?.data?.error)
+          return { isSuccess: true, visiting: null }
+        default:
+          console.error("API 에러!!! - getVisitingCareGiver", response?.data?.error)
+          return { isSuccess: false, reason: response?.data?.error }
+      }
+    }
+
+    return {
+      isSuccess: true,
+      visiting: response.data.visiting,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getVisitingCareGiver", error)
     return { isSuccess: false, reason: error }
   }
 }

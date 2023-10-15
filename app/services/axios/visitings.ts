@@ -3,7 +3,7 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { ratingRound } from "../../utils/format"
 import {
   Amenity,
-  CommonData,
+  CareGiverPetsitter,
   SearchRequest,
   Service,
   UserRelatedData,
@@ -18,7 +18,7 @@ export interface VisitingService extends Service {}
 
 export interface VisitingAmenity extends Amenity {}
 
-interface VisitingRelatedData extends CommonData {
+interface VisitingRelatedData extends CareGiverPetsitter {
   serviceVisiting: VisitingService[]
   visitingAmenities: VisitingAmenity[]
 }

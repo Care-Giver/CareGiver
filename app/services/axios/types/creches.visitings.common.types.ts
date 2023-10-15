@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Sex } from "../user"
 import { CareGiverEntity, CrecheReviewEntity } from "./entity.types"
 
@@ -65,9 +66,7 @@ interface LocationResponse {
 interface CareGiverRelatedData {
   __careGiver__: CareGiverEntity
   __crecheReviews__: CrecheReviewEntity[]
-  // eslint-disable-next-line camelcase
   __has_careGiver__: boolean // true,
-  // eslint-disable-next-line camelcase
   __has_crecheReviews__: boolean // true,
 }
 
@@ -77,7 +76,7 @@ export interface Petsitter {
   updatedAt: string // "2023-01-01T11:00:00"
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
-  address: string // "경기도 안산시 사동 한양대학로 55"
+  address: string // "경기도 안산시 사동 한양대학로 55" //! 필수 값입니다. 실제 주소를 입력해야 합니다. 엠티 스트링 불가능.
   detailAddress: string // 상세주소. //! "방문" 펫시터의 경우, "" 엠티 스트링 입니다.
   defaultFee: number //10000
   hiredNumber: number //132
@@ -93,7 +92,7 @@ export interface Petsitter {
   acceptRate: number[] //[0.25, 1, 4]
 }
 
-export interface CommonData extends CareGiverRelatedData, Petsitter {}
+export interface CareGiverPetsitter extends CareGiverRelatedData, Petsitter {}
 
 export interface UserRelatedData {
   isFavorite: boolean //false,

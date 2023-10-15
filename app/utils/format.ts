@@ -70,6 +70,8 @@ export function msToTimestamp(millisecond: number): string {
  * @return 소숫점 아래 둘째 자리에서 반올림한 결과. 예) 2.5712 -> 2.6
  */
 export function ratingRound(rating: number): number {
+  if (typeof rating !== "number") return 0
+
   return Number.parseFloat(rating.toFixed(1))
 }
 
