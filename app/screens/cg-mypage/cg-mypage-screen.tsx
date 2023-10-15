@@ -1,12 +1,16 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CaregiverNameStarReview,
+  CaregiverTypeButton,
   CgServiceChoiceButton,
+  ConditionalButton,
   MypageButton,
   PopReg18,
   PreBol16,
   PreBol18,
+  PreReg14,
   PreReg16,
   PreReg18,
   Row,
@@ -15,10 +19,14 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE } from "#theme"
+import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, LBG, palette } from "#theme"
 import { images } from "#images"
 import { useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
+import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { CgSetServiceType } from "../cg-set-address-temp/cg-set-service-type"
+import { ServiceTypeKorean } from "../cg-set-address-temp/cg-set-address-temp-screen"
+import { createVisiting } from "../../services/axios/visiting"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -51,7 +59,67 @@ export const CgMypageScreen: FC<
   // 1. 이전에 등록한 내역이 없을경우, cg-set-address-temp-screen 으로 이동
   // 2. 있을 경우, 가장 마지막에 수정한 screen 으로 이동
   // 3. 모든 등록과정을 마쳤을 경우, cg-edit-profile-screen 으로 이동
-  const onPress = () => {}
+  const onPress = () => {
+    // bottomSheetModalRef.current?.present()
+  }
+
+  // =======================================================
+  // 서비스 타입
+  const [serviceType, setServiceType] = useState<ServiceTypeKorean>(null)
+
+  // 펫시터 등록하기 바텀시트모달 - ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  // 펫시터 등록하기 바텀시트모달 - snapPoints
+  const snapPoints = useMemo(() => ["40%"], [])
+
+  /** 펫시터 등록하기 바텀시트모달 backdrop */
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+        pressBehavior={"close"}
+      />
+    ),
+    [],
+  )
+
+  /** 펫시터 등록하기 바텀시트모달 Footer - 확인 버튼 렌더링 */
+  const renderFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+        <ConditionalButton
+          label={
+            !serviceType ? "방문과 위탁 중에서 선택해주세요." : `${serviceType} 펫시터 시작하기`
+          }
+          isActivated
+          onPress={() => {
+            bottomSheetModalRef.current?.close()
+            switch (serviceType) {
+              case "방문":
+                createVisiting({
+                  userId: userDetail.id,
+                })
+                break
+              case "위탁":
+                // createCreche({
+                //   userId: userDetail.id,
+                // })
+                break
+              default:
+                break
+            }
+
+            // navigate("cg-set-address-temp-screen", { serviceType })
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [bottomSheetModalRef, serviceType, userDetail.id],
+  )
+  // =======================================================
 
   return (
     <Screen>
@@ -81,8 +149,48 @@ export const CgMypageScreen: FC<
           </PreReg18>
         </Row>
 
+        {/* 케어기버 프로필 관리 */}
+        <TouchableOpacity
+          style={{
+            width: "100%",
+            height: 88,
+            borderWidth: 2,
+            borderColor: LIGHT_LINE,
+            borderRadius: 8,
+            justifyContent: "space-between",
+            padding: 16,
+          }}
+        >
+          <Row>
+            <PreBol16 text="케어기버 프로필 관리" />
+            <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
+          </Row>
+
+          <Row>
+            <CaregiverTypeButton text={"방문"} />
+            <CaregiverTypeButton
+              text={"펫시터"}
+              textColor={GIVER_CASUAL_NAVY}
+              style={{
+                marginLeft: 4,
+                backgroundColor: palette.white,
+                borderColor: GIVER_CASUAL_NAVY,
+                borderWidth: 2,
+                paddingVertical: 3 - 2,
+                paddingHorizontal: 8 - 2,
+              }}
+            />
+            <PreReg14 text="언제나 내 아이라는 마음으로" color={SUB_HEAD_LINE} ml={8} />
+          </Row>
+        </TouchableOpacity>
+
         {/* 펫시터 등록하기 버튼 */}
-        <TouchableOpacity style={{ marginTop: 16, marginBottom: 28 }} onPress={onPress}>
+        <TouchableOpacity
+          style={{ marginTop: 16, marginBottom: 28 }}
+          onPress={() => {
+            bottomSheetModalRef.current?.present()
+          }}
+        >
           <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
         </TouchableOpacity>
 
@@ -151,6 +259,19 @@ export const CgMypageScreen: FC<
         {/* //? divider */}
         <View style={styles.divisionLine} />
       </ScrollView>
+
+      {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={snapPoints}
+        enablePanDownToClose
+        footerComponent={renderFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <CgSetServiceType serviceType={serviceType} setServiceType={setServiceType} />
+      </BottomSheetModal>
     </Screen>
   )
 })
@@ -203,5 +324,13 @@ const styles = StyleSheet.create({
 
     flexDirection: "row",
     alignItems: "center",
+  },
+
+  btnContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: 0,
+    right: 0,
   },
 })

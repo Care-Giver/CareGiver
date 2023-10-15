@@ -1,9 +1,16 @@
-import React, { FC, useMemo, useState } from "react"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CgRegisterStep, GoBackSaveNext, PickerImage, PreMed16, Screen } from "#components"
+import {
+  CgRegisterStep,
+  ConditionalButton,
+  GoBackSaveNext,
+  PickerImage,
+  PreMed16,
+  Screen,
+} from "#components"
 import { useStores } from "#models"
 import { BOTTOM_HEIGHT, DISABLED } from "#theme"
 import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
@@ -21,9 +28,13 @@ const crecheImages = []
 
 export const CgSetAddressTempScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-temp-screen">
-> = observer(function CgSetAddressTempScreen({ navigation }) {
+> = observer(function CgSetAddressTempScreen({ navigation, route }) {
+  const { serviceType } = route.params
+
   // MST store 를 가져옵니다.
-  const { userStore } = useStores()
+  const {
+    userStore: { userDetail },
+  } = useStores()
 
   // FlatList 관련 BEGIN ==================================================================
   const [itemWidth, setItemWidth] = useState<number>(0)
@@ -42,35 +53,22 @@ export const CgSetAddressTempScreen: FC<
   // 저장 후 다음단계
   const onPressSaveNext = () => {
     switch (currentStep) {
-      case 1:
+      case 2:
         step1handler()
         //TODO: MST 저장 및 API 호출
         break
-      case 2:
+      case 3:
         step2handler()
         //TODO: MST 저장 및 API 호출
         break
-      case 3:
-        step3handler()
-        //TODO: MST 저장 및 API 호출
-        break
       case 4:
-        step4handler()
+        step3handler()
         //TODO: MST 저장 및 API 호출
         break
     }
   }
   // FlatList 관련 ENDED ==================================================================
-
   const step1handler = () => {
-    if (!serviceType) {
-      alertModal("서비스 종류를 선택해주세요.", "방문 또는 위탁 중 하나를 선택해주세요.")
-      return
-    }
-    setCurrentStep(currentStep + 1)
-  }
-
-  const step2handler = () => {
     if (!address) {
       alertModal("주소를 입력후 선택해주세요.", "주소를 입력후 선택해주세요.")
       return
@@ -78,7 +76,7 @@ export const CgSetAddressTempScreen: FC<
     setCurrentStep(currentStep + 1)
   }
 
-  const step3handler = () => {
+  const step2handler = () => {
     if (serviceType === "위탁" && !detailAddress) {
       alertModal("상세주소를 입력", "상세주소를 입력해주세요.")
       return
@@ -94,7 +92,7 @@ export const CgSetAddressTempScreen: FC<
   }
 
   // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
-  const step4handler = () => {
+  const step3handler = () => {
     if (serviceType === "위탁" && selectedImages.length === 0) {
       alertModal("위탁 장소 사진", "사진을 추가해주세요.")
       return
@@ -111,34 +109,26 @@ export const CgSetAddressTempScreen: FC<
     navigation.goBack()
   }
 
-  // 서비스 타입
-  const [serviceType, setServiceType] = useState<ServiceTypeKorean>(null)
-
   const PAGE_LIST = useMemo(() => {
     const stepList = [
       {
         step: 1,
-        title: "서비스 종류 선택",
-        onPress: () => {},
-      },
-      {
-        step: 2,
         title: "서비스 지역 선택",
         onPress: () => {},
       },
       {
-        step: 3,
+        step: 2,
         title: "주소 확인",
         onPress: () => {},
       },
       {
-        step: 4,
+        step: 3,
         title: "위탁장소 사진 업로드",
         onPress: () => {},
       },
     ]
 
-    return serviceType === "방문" ? stepList.filter((i) => i.step !== 4) : stepList
+    return serviceType === "방문" ? stepList.filter((i) => i.step !== 3) : stepList
   }, [serviceType])
   console.log("PAGE_LIST", PAGE_LIST)
 
@@ -166,16 +156,10 @@ export const CgSetAddressTempScreen: FC<
         scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
         numColumns={1}
+        keyExtractor={(item) => item.step.toString()}
         renderItem={({ item }) => (
           <>
             {currentStep === 1 && (
-              <CgSetServiceType
-                style={{ width: itemWidth }}
-                serviceType={serviceType}
-                setServiceType={setServiceType}
-              />
-            )}
-            {currentStep === 2 && (
               <CgSearchAddress
                 style={{ width: itemWidth }}
                 onSelected={(data: OnCompleteParams) => {
@@ -184,7 +168,7 @@ export const CgSetAddressTempScreen: FC<
                 }}
               />
             )}
-            {currentStep === 3 && (
+            {currentStep === 2 && (
               <CgConfirmAddress
                 style={{ width: itemWidth }}
                 address={address}
@@ -193,7 +177,7 @@ export const CgSetAddressTempScreen: FC<
                 serviceType={serviceType}
               />
             )}
-            {currentStep === 4 && (
+            {currentStep === 3 && (
               <CgSelectCrechePhoto
                 style={{ width: itemWidth }}
                 selectedImages={selectedImages}
@@ -202,7 +186,6 @@ export const CgSetAddressTempScreen: FC<
             )}
           </>
         )}
-        keyExtractor={(item) => item.step.toString()}
       />
 
       {/* 이전 | 저장 후 다음단계 */}

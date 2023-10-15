@@ -69,13 +69,14 @@ interface CareGiverRelatedData {
   __has_crecheReviews__: boolean // true,
 }
 
-export interface CommonData extends CareGiverRelatedData {
+export interface Petsitter {
   id: number //1
   createAt: string //"2023-01-01T11:00:00"
   updatedAt: string // "2023-01-01T11:00:00"
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
   address: string // "경기도 안산시 사동 한양대학로 55"
+  detailAddress?: string // 상세주소. //! "방문" 펫시터의 경우, null 값이다.
   defaultFee: number //10000
   hiredNumber: number //132
   star: number //5
@@ -89,6 +90,8 @@ export interface CommonData extends CareGiverRelatedData {
   responseRate: number[] // [0.25, 1, 4]
   acceptRate: number[] //[0.25, 1, 4]
 }
+
+export interface CommonData extends CareGiverRelatedData, Petsitter {}
 
 export interface UserRelatedData {
   isFavorite: boolean //false,

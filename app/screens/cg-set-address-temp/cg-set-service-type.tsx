@@ -84,7 +84,7 @@ export const CgSetServiceType = observer(function CgSetServiceType(props: CgSetS
           <PreReg14
             text={
               serviceType === "방문"
-                ? "회원님이 직접 케어기버가 되어 고객의 집을 방문합니다."
+                ? "회원님이 직접 고객의 집을 방문합니다."
                 : "회원님이 등록한 장소에서 고객의 반려동물을 돌봅니다."
             }
             color={DISABLED}
