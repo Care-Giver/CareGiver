@@ -215,8 +215,7 @@ export const CgMypageScreen: FC<
                 ratings: ratingRound(careGiver.petsitter?.star),
               }}
               onPress={() => {
-                alert("edit-mypage-screen 으로 이동")
-                //TODO: 기본 프로필 정보 수정 화면으로 이동 - edit-mypage-screen
+                navigate("edit-mypage-screen")
               }}
               text={"기본 정보 관리"}
             />
@@ -225,7 +224,7 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
-                //TODO: 케어기버 프로필 관리 화면으로 이동 - cg-edit-profile-screen
+                navigate("cg-edit-profile-screen", { serviceType: careGiver.serviceType })
               }}
             >
               <Row>

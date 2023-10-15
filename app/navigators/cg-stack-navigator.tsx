@@ -30,6 +30,9 @@ import {
   SetCrecheServiceDayScreen,
   CgSearchAddressScreen,
   CgSetAddressTempScreen,
+  CgEditProfileScreen,
+  ServiceTypeKorean,
+  EditMypageScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -37,6 +40,7 @@ import {
   PreReg18,
   CgScreenHeader,
   CgCertificateRegistrationScreenHeader,
+  EditMypageScreenHeader,
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { ServiceType } from "#models"
@@ -72,6 +76,9 @@ export type CGStackNavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
+
+  "edit-mypage-screen": { editable: boolean }
+  "cg-edit-profile-screen": { serviceType: ServiceTypeKorean }
   "cg-search-address-screen": undefined
   "cg-set-address-screen": undefined
   "cg-set-address-temp-screen": undefined
@@ -250,6 +257,27 @@ export const CgMypageStack = () => {
         component={ServiceCenterScreen}
         options={{
           title: "고객센터",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+
+      {/* //* 내 프로필 관리 [기본 정보 관리] */}
+      <Stack.Screen
+        name="edit-mypage-screen"
+        component={EditMypageScreen}
+        options={({ navigation, route }) => ({
+          headerShadowVisible: false,
+          header: (props) => <EditMypageScreenHeader {...props} />,
+          headerTitle: "",
+        })}
+      />
+
+      {/* //* CG - 케어기버 프로필 관리 */}
+      <Stack.Screen
+        name="cg-edit-profile-screen"
+        component={CgEditProfileScreen}
+        options={{
+          title: "펫시터",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
