@@ -1,7 +1,10 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { getNotifications, Notification } from "../../services/axios/notification"
+import { getNotifications, NotificationColumns } from "../../services/axios/notification"
 import { id } from "date-fns/locale"
+interface Notification extends NotificationColumns {
+  isChecked?: boolean // 유저가 해당 notification 을 확인했는지 안했는지를 판단한다.
+}
 
 /**
  * 로그인한 사용자의 알림 목록
@@ -12,58 +15,59 @@ export const NotificationStoreModel = types
   .model("NotificationStore")
   .props({ notifications: types.frozen<Notification[]>([]) })
   .views((self) => ({
-    get firstNotification() {
-      if (self.notifications.length === 0) return null
-      return self.notifications[0]
+    //* 안 읽은 알림 개수반환
+    get unreadNotificationCount() {
+      if (this.isEmpty) return 0
+
+      return self.notifications.filter((item) => !item.isChecked).length
+    },
+
+    //* 알림이 비어있는지 여부 반환 - 비어있으면 true, 아니면 false
+    get isEmpty() {
+      return self.notifications.length === 0
+    },
+
+    //* 모델 자신
+    get self() {
+      return self
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    //* notifications 저장
-    //TODO 계속 업데이트돼서 inChecked가 다시 풀림. 그래서 screen 또는 api상에서 조정하고자 했으나 어려움
-    setNotifications(value: Notification[]) {
-      self.notifications = value.map((item, idx) => {
-        //? 아직 isChecked가 추가되지 않았다면 isChecked:false 추가
-        if (item.isChecked === null) {
-          item.isChecked = false
-        } else {
-          if (self.notifications[idx].isChecked) {
-            item.isChecked = true
-          } else {
-            item.isChecked = false
-          }
-        }
+    //* 서버에서 받아온 notification 객체들에 isChecked 프로퍼티를 추가하여 저장한다.
+    setNotifications(value: NotificationColumns[]) {
+      // 각 notification 객체에 isChecked 프로퍼티를 추가한다.
+      self.notifications = value.map((item) => ({
+        ...item,
+        isChecked: false,
+      }))
+    },
 
+    //* 새 notification 객체를 추가한다.
+    addNotification(value: NotificationColumns) {
+      self.notifications = [
+        // 기존 notification 객체
+        ...self.notifications,
+        // 새로운 notification 객체
+        {
+          ...value,
+          isChecked: false,
+        },
+      ]
+    },
+
+    //* 확인하지 않았던 notification 객체를 확인한 상태로 바꾼다
+    setIsChecked() {
+      self.notifications = self.notifications.map((item) => {
+        if ("isChecked" in item && item.isChecked === false) {
+          item.isChecked = true
+        }
         return item
       })
     },
-    //* 확인하지 않았던 notifications 확인
-    setIsChecked() {
-      self.notifications.forEach((item) => {
-        if (!item.isChecked) {
-          item.isChecked = true
-        }
-      })
-    },
-    async notificationsHandler() {
-      try {
-        const { isSuccess, notifications } = await getNotifications()
 
-        if (!isSuccess) {
-          return false
-        }
-        if (!notifications) {
-          return false
-        }
-        this.setNotifications(notifications)
-
-        return notifications
-      } catch (error) {
-        console.error("catch 에러!!! - notificationsHandler", error)
-        return false
-      }
-    },
-    async isCheckedHandler() {
-      this.setIsChecked()
+    // NotificationStoreModel 모델을 초기화한다.
+    reset() {
+      applySnapshot(self, {})
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

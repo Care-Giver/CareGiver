@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
-export interface Notification {
+export interface NotificationColumns {
   id: number
   createAt: Date
   updatedAt: Date
@@ -10,16 +10,15 @@ export interface Notification {
   senderName: string
   needToPush: boolean
   adAtNight: boolean
-  isChecked?: boolean
 }
 
 interface NotificationResponse extends GeneralResponse {
-  clientNotifications: Notification[]
+  clientNotifications: NotificationColumns[]
 }
 
 interface GetNotificationsResult {
   isSuccess: boolean // 성공여부
-  notifications?: Notification[] // 성공시, 펫 상세정보 리스트
+  notifications?: NotificationColumns[] // 성공시, 펫 상세정보 리스트
   reason?: string // 실패시, 실패이유
 }
 
