@@ -4,6 +4,7 @@ import { getNotifications, NotificationColumns } from "../../services/axios/noti
 import { id } from "date-fns/locale"
 interface Notification extends NotificationColumns {
   isChecked?: boolean // 유저가 해당 notification 을 확인했는지 안했는지를 판단한다.
+  isDeleted?: boolean
 }
 
 /**
@@ -34,11 +35,13 @@ export const NotificationStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     //* 서버에서 받아온 notification 객체들에 isChecked 프로퍼티를 추가하여 저장한다.
+    //* MST가 비어있을 때만 사용한다.
     setNotifications(value: NotificationColumns[]) {
       // 각 notification 객체에 isChecked 프로퍼티를 추가한다.
       self.notifications = value.map((item) => ({
         ...item,
         isChecked: false,
+        isDeleted: false,
       }))
     },
 
@@ -51,10 +54,20 @@ export const NotificationStoreModel = types
         {
           ...value,
           isChecked: false,
+          isDeleted: false,
         },
       ]
     },
-
+    //* 모든 notification을 isDeleted 처리한다.
+    deleteAllNotifications() {
+      self.notifications = self.notifications.map((item) => {
+        console.log("item.id, item.isDeleted >>>", item.id, item.isDeleted)
+        if (item.isDeleted === false) {
+          item.isDeleted = true
+        }
+        return item
+      })
+    },
     //* 확인하지 않았던 notification 객체를 확인한 상태로 바꾼다
     setIsChecked() {
       self.notifications = self.notifications.map((item) => {

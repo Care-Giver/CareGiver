@@ -13,27 +13,12 @@ import { images } from "#images"
 export const NotificationScreen: FC<
   StackScreenProps<NavigatorParamList, "notification-screen">
 > = observer(({ navigation, route }) => {
-  //* 삭제하기 버튼 관련
-  const [modalOpenn, setModalOpen] = useState<boolean>(false)
-  const removeAllToggle: boolean = route.params?.removeAllToggle
-
-  const removeAllHandler = () => {
-    // @ts-ignore
-    navigation.setParams({ removeAllToggle: !removeToggle })
-  }
-
-  useEffect(() => {
-    console.log("removeToggle >>> ", removeAllToggle)
-    if (removeAllToggle === true) {
-      setModalOpen(true)
-    }
-  }, [removeAllToggle])
-
   //* MST
   const {
     notificationStore: {
       notifications,
       addNotification,
+      deleteAllNotifications,
       setNotifications,
       setIsChecked,
       isEmpty,
@@ -74,19 +59,27 @@ export const NotificationScreen: FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  //* 삭제하기 버튼 관련
+  const removeAllToggle: boolean = route.params?.removeAllToggle
+  const removeAllHandler = () => {
+    // @ts-ignore
+    navigation.setParams({ removeAllToggle: false })
+  }
+
   return (
     <Screen testID="Notification">
       {notifications &&
         notifications.map((item) => {
-          console.log("item >>>", item.isChecked)
           return (
-            <NotificationCard
-              key={item.id}
-              title={item.title}
-              subtitle={item.content}
-              time={item.title}
-              isChecked={item.isChecked}
-            />
+            !item.isDeleted && (
+              <NotificationCard
+                key={item.id}
+                title={item.title}
+                subtitle={item.content}
+                time={item.title}
+                isChecked={item.isChecked}
+              />
+            )
           )
         })}
       <CustomModal
@@ -97,14 +90,13 @@ export const NotificationScreen: FC<
         yesBtnText="예"
         noBtnText="아니오"
         handleYesPress={() => {
-          setModalOpen(!modalOpenn)
           removeAllHandler()
+          deleteAllNotifications()
         }}
         handleNoPress={() => {
-          setModalOpen(!modalOpenn)
           removeAllHandler()
         }}
-        visibleState={modalOpenn}
+        visibleState={removeAllToggle === undefined ? false : removeAllToggle}
       />
     </Screen>
   )

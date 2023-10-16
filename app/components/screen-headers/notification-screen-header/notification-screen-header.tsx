@@ -14,14 +14,13 @@ export const NotificationScreenHeader = (props) => {
   const navigation = useNavigation()
   const route = useRoute()
 
-  console.log(route.params)
   const params = route.params
   //@ts-ignore
   const removeAllToggle = params?.removeAllToggle
-  //@ts-ignore
 
+  //@ts-ignore
   const removeAllHandler = () => {
-    navigation.setParams({ removeAllToggle: !removeAllToggle })
+    navigation.setParams({ removeAllToggle: true })
   }
 
   return (
@@ -39,7 +38,7 @@ export const NotificationScreenHeader = (props) => {
         onPress={removeAllHandler}
         style={{
           marginLeft: "auto",
-          marginRight: 8, //!
+          marginRight: 8,
         }}
       >
         <Image style={{ width: 28, height: 28 }} source={images.trashcan} />
