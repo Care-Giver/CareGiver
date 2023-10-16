@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
@@ -32,16 +32,11 @@ import {
   BOTTOM_TAB_NAVIGATOR,
 } from "#theme"
 import { images } from "#images"
-import { useStores } from "#models"
+import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CgSetServiceType } from "../cg-set-address-temp/cg-set-service-type"
-import { ServiceTypeKorean } from "../cg-set-address-temp/cg-set-address-temp-screen"
-import {
-  VistingPetsitter,
-  createVisiting,
-  getVisitingCareGiver,
-} from "../../services/axios/visiting"
+import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
 
 export const CgMypageScreen: FC<
@@ -51,29 +46,10 @@ export const CgMypageScreen: FC<
 
   const {
     userStore: { switchType, loggedIn, userDetail },
+    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter },
   } = useStores()
-  const [careGiver, setCareGiver] = useState<{
-    hasCareGiverProfile: boolean
-    serviceType: ServiceTypeKorean
-    // petsitter?: VistingPetsitter & CrechePetsitter // TODO:
-    petsitter?: VistingPetsitter
-  }>(null)
-
-  useEffect(() => {
-    const fetchCareGiver = async () => {
-      const { isSuccess, visiting } = await getVisitingCareGiver()
-      // const creche = await getCrecheCareGiver()
-      const creche = false
-      setCareGiver({
-        hasCareGiverProfile: !!visiting || !!creche,
-        serviceType: visiting ? "방문" : "위탁",
-        petsitter: visiting || creche,
-      })
-    }
-    fetchCareGiver()
-  }, [])
-
   console.log("userDetail.id", userDetail.id)
+
   // * 자격증 등록
   const handleRegisterCertificatation = () => {
     alert("자격증 등록")
@@ -174,11 +150,6 @@ export const CgMypageScreen: FC<
   )
   // =======================================================
 
-  console.log("careGiver", careGiver)
-  if (!careGiver) {
-    return null
-  }
-
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <Button
@@ -206,14 +177,14 @@ export const CgMypageScreen: FC<
           <PreBol16 text="cg-set-address-temp-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
-        {careGiver.hasCareGiverProfile ? (
+        {hasPetsitterProfile ? (
           // 1. 이전에 등록한 펫시터 프로필이 있는 경우
           <View style={styles.sidePadding}>
             <CaregiverNameStarReview
               style={{ marginTop: 20 }}
               caregiverData={{
                 name: userDetail.nickname,
-                ratings: ratingRound(careGiver.petsitter?.star),
+                ratings: ratingRound(petsitter?.star),
               }}
               onPress={() => {
                 navigate("edit-mypage-screen")
@@ -225,10 +196,7 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
-                navigate("cg-edit-profile-screen", {
-                  serviceType: careGiver.serviceType,
-                  petsitterId: careGiver.petsitter.id,
-                })
+                navigate("cg-edit-profile-screen")
               }}
             >
               <Row>
@@ -237,13 +205,13 @@ export const CgMypageScreen: FC<
               </Row>
 
               <Row>
-                <CaregiverTypeButton text={careGiver.serviceType} />
+                <CaregiverTypeButton text={serviceTypeKorean} />
                 <CaregiverTypeButton
                   text={"펫시터"}
                   textColor={GIVER_CASUAL_NAVY}
                   style={styles.petsitterBadge}
                 />
-                <PreReg14 text={careGiver.petsitter?.desc || ""} color={SUB_HEAD_LINE} ml={8} />
+                <PreReg14 text={petsitter?.desc || ""} color={SUB_HEAD_LINE} ml={8} />
               </Row>
             </TouchableOpacity>
           </View>

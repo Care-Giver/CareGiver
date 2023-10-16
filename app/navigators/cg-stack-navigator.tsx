@@ -31,7 +31,6 @@ import {
   CgSearchAddressScreen,
   CgSetAddressTempScreen,
   CgEditProfileScreen,
-  ServiceTypeKorean,
   EditMypageScreen,
 } from "#screens"
 import {
@@ -78,10 +77,10 @@ export type CGStackNavigatorParamList = {
   "service-center-screen": undefined
 
   "edit-mypage-screen": { editable: boolean }
-  "cg-edit-profile-screen": { serviceType: ServiceTypeKorean }
+  "cg-edit-profile-screen": undefined
   "cg-search-address-screen": undefined
   "cg-set-address-screen": undefined
-  "cg-set-address-temp-screen": { serviceType: ServiceTypeKorean }
+  "cg-set-address-temp-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.

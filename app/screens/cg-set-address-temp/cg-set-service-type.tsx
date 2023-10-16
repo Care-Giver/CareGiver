@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { PreBol18, PreMed16, PreReg14, Row, UnderlineText } from "#components"
 import { images } from "#images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
-import { ServiceTypeKorean } from "./cg-set-address-temp-screen"
+import { ServiceTypeKorean } from "#models"
 
 export interface CgSetServiceTypeProps {
   /**

@@ -61,11 +61,9 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { Pet, PetsitterType, ServiceType, Type, useStores } from "../models"
+import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
-
-type ServiceTypeKorean = "방문" | "위탁" //TODO: ServiceType 전부 한글로 바꾸기
 
 export type CLStackNavigatorParamList = {
   /**

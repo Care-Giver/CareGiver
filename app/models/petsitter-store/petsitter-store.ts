@@ -1,0 +1,90 @@
+import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
+import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { VistingPetsitter, getVisitingCareGiver } from "../../services/axios/visiting"
+import { alertModal } from "../../utils/alert-modal"
+import { ServiceType } from "../review/review"
+
+export type ServiceTypeKorean = "방문" | "위탁"
+
+interface PetsitterModel extends VistingPetsitter {}
+// TODO: CreachePetsitter
+
+/**
+ * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
+ */
+export const PetsitterStoreModel = types
+  .model("PetsitterStore")
+  .props({
+    serviceType: types.frozen<ServiceType>(null),
+    petsitter: types.frozen<PetsitterModel>(null),
+
+    //? 필요할까..?
+    draftPetsitter: types.frozen<PetsitterModel>(null),
+  })
+  .actions(withSetPropAction)
+  .views((self) => ({
+    get serviceTypeKorean(): ServiceTypeKorean {
+      switch (self.serviceType) {
+        case "visiting":
+          return "방문"
+        case "creche":
+          return "위탁"
+        default:
+          return null
+      }
+    },
+
+    get hasPetsitterProfile() {
+      return !!self.petsitter
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    reset() {
+      applySnapshot(self, {})
+    },
+
+    setServiceType(value: ServiceType) {
+      self.serviceType = value
+    },
+
+    setPetsitter(value: PetsitterModel) {
+      self.petsitter = value
+    },
+
+    updatePetsitter(value: Partial<PetsitterModel>) {
+      self.petsitter = {
+        ...self.petsitter,
+        ...value,
+      }
+    },
+
+    removePetsitter() {
+      self.petsitter = null
+    },
+
+    async fetchPetsitter() {
+      if (self.petsitter) return // 이미 펫시터 데이터가 저장되어있다면, 더이상 진행하지 않는다.
+
+      //? API 호출
+      const { isSuccess: isSuccessVisiting, visiting } = await getVisitingCareGiver()
+      if (!isSuccessVisiting) {
+        alertModal("Error at PetsitterModel", "방문 펫시터 정보를 불러오는데 실패했습니다.")
+        return false
+      }
+
+      if (visiting) {
+        this.setPetsitter(visiting)
+        this.setServiceType("visiting")
+        return true
+      }
+
+      // TODO: 방문(creche) 로직 추가.
+      return true
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+
+type PetsitterStoreType = Instance<typeof PetsitterStoreModel>
+export interface PetsitterStore extends PetsitterStoreType {}
+type PetsitterStoreSnapshotType = SnapshotOut<typeof PetsitterStoreModel>
+export interface PetsitterStoreSnapshot extends PetsitterStoreSnapshotType {}
+export const createPetsitterStoreDefaultModel = () => types.optional(PetsitterStoreModel, {})

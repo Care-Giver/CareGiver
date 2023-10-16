@@ -10,25 +10,26 @@ import { useStores } from "#models"
 export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
 > = observer(function CgEditProfileScreen({ navigation, route }) {
-  const serviceType = route.params?.serviceType
-  const petsitterId = route.params?.petsitterId
+  const {
+    petsitterStore: { serviceTypeKorean },
+  } = useStores()
 
   // ? 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
       //@ts-ignore
-      title: `${serviceType} 펫시터`,
+      title: `${serviceTypeKorean} 펫시터`,
     })
-  }, [navigation, serviceType])
+  }, [navigation, serviceTypeKorean])
 
   return (
     <Screen testID="CgEditProfile" style={{ paddingHorizontal: 0 }}>
       <DivisionLine color={LIGHT_LINE} />
       {/* //* 방문 지역 || 위탁 지역 / 사진 */}
       <MypageButton
-        text={serviceType === "방문" ? "방문 지역" : "위탁 지역 / 사진"}
+        text={serviceTypeKorean === "방문" ? "방문 지역" : "위탁 지역 / 사진"}
         onPress={() => {
-          navigate("cg-set-address-temp-screen", { serviceType, petsitterId })
+          navigate("cg-set-address-temp-screen")
         }}
         style={styles.sidePadding}
       />

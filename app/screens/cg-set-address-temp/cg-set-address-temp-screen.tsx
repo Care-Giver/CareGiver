@@ -22,24 +22,18 @@ import { alertModal } from "../../utils/alert-modal"
 import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
 import { updateVisiting } from "../../services/axios/visiting"
 
-export type ServiceTypeKorean = "방문" | "위탁"
-
 const crecheImages = []
 
 export const CgSetAddressTempScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-temp-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
-  const { serviceType, petsitterId } = route.params
-  // const serviceType = route?.params?.serviceType
-  // console.log("route", route)
-  // console.log("route?.params", route?.params)
-  console.log("serviceType", serviceType)
-  console.log("petsitterId", petsitterId)
-
   // MST store 를 가져옵니다.
   const {
     userStore: { userDetail },
+    petsitterStore: { petsitter, serviceTypeKorean },
   } = useStores()
+  console.log("petsitter.id", petsitter.id)
+  console.log("serviceTypeKorean", serviceTypeKorean)
 
   // FlatList 관련 BEGIN ==================================================================
   const [itemWidth, setItemWidth] = useState<number>(0)
@@ -82,14 +76,14 @@ export const CgSetAddressTempScreen: FC<
   }
 
   const step2handler = async () => {
-    if (serviceType === "위탁" && !detailAddress) {
+    if (serviceTypeKorean === "위탁" && !detailAddress) {
       alertModal("상세주소를 입력", "상세주소를 입력해주세요.")
       return
     }
     /* 방문이면, 마지막 스텝 - update 후 돌아감 */
-    if (serviceType === "방문") {
+    if (serviceTypeKorean === "방문") {
       // navigation.goBack()
-      const { isSuccess } = await updateVisiting(petsitterId, {
+      const { isSuccess } = await updateVisiting(petsitter.id, {
         address: address?.address,
         detailAddress: "",
       })
@@ -100,7 +94,7 @@ export const CgSetAddressTempScreen: FC<
         )
         return
       }
-      navigate("cg-edit-profile-screen", { serviceType })
+      navigate("cg-edit-profile-screen")
     }
     // 위탁인경우 다음단계(사진 업로드)로 이동
     else {
@@ -110,12 +104,12 @@ export const CgSetAddressTempScreen: FC<
 
   // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
   const step3handler = () => {
-    if (serviceType === "위탁" && selectedImages.length === 0) {
+    if (serviceTypeKorean === "위탁" && selectedImages.length === 0) {
       alertModal("위탁 장소 사진", "사진을 추가해주세요.")
       return
     }
     /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-    navigate("cg-edit-profile-screen", { serviceType })
+    navigate("cg-edit-profile-screen")
   }
 
   // 상단 헤더 내 "저징 후 나가기"
@@ -151,8 +145,8 @@ export const CgSetAddressTempScreen: FC<
       },
     ]
 
-    return serviceType === "방문" ? stepList.filter((i) => i.step !== 3) : stepList
-  }, [serviceType])
+    return serviceTypeKorean === "방문" ? stepList.filter((i) => i.step !== 3) : stepList
+  }, [serviceTypeKorean])
   // console.log("PAGE_LIST", PAGE_LIST)
 
   // 기본주소
@@ -197,7 +191,7 @@ export const CgSetAddressTempScreen: FC<
                 address={address}
                 setDetailAddress={setDetailAddress}
                 detailAddress={detailAddress}
-                serviceType={serviceType}
+                serviceType={serviceTypeKorean}
               />
             )}
             {currentStep === 3 && (

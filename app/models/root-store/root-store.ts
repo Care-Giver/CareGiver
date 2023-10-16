@@ -7,6 +7,7 @@ import { ReviewStoreModel } from "../review-store/review-store"
 import { FavoriteModel } from "../favorite/favorite"
 import { PetStoreModel } from "../pet-store/pet-store"
 import { UiStoreModel } from "../ui-store/ui-store"
+import { PetsitterStoreModel } from "../petsitter-store/petsitter-store"
 
 /**
  * A RootStore model.
@@ -19,6 +20,7 @@ export const RootStoreModel = types.model("RootStore").props({
   userStore: types.optional(UserStoreModel, {} as any),
   uiStore: types.optional(UiStoreModel, {} as any),
   reviewStoreModel: types.optional(ReviewStoreModel, {} as any),
+  petsitterStore: types.optional(PetsitterStoreModel, {} as any),
   petStore: types.optional(PetStoreModel, {} as any),
   FavoriteModel: types.optional(FavoriteModel, {} as any),
 })

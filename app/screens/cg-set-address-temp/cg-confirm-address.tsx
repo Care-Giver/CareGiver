@@ -8,7 +8,7 @@ import { PreBol16, PreMed14, PreReg12, PreReg14, Row } from "#components"
 import MapView, { LatLng, Marker } from "react-native-maps"
 import { images } from "#images"
 import axios from "axios"
-import { ServiceTypeKorean } from "./cg-set-address-temp-screen"
+import { ServiceTypeKorean } from "#models"
 
 export interface CgConfirmAddressProps {
   /**

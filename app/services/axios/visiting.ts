@@ -119,7 +119,7 @@ export const getVisitingCareGiver = async (): Promise<GetVisitingResult> => {
       switch (response?.data?.error?.errorCode) {
         case 404:
           console.error("유저가 등록한 visiting 객체가 없습니다.", response?.data?.error)
-          return { isSuccess: true, visiting: null }
+          return { isSuccess: true, visiting: null } //! isSuccess: true 이어야 함. 수정 금지
         default:
           console.error("API 에러!!! - getVisitingCareGiver", response?.data?.error)
           return { isSuccess: false, reason: response?.data?.error }
