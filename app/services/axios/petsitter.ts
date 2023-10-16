@@ -4,7 +4,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { VisitingAmenity, VisitingService } from "./visitings"
 import { Petsitter } from "./types/creches.visitings.common.types"
-import { CrecheAmenity, CrechesService } from "./creches"
+import { CrecheAmenity, CrecheService } from "./creches"
 
 export interface PetsitterVisiting extends Petsitter {
   serviceVisiting: VisitingService[]
@@ -42,7 +42,7 @@ export const getPetsitterVisitings = async (visitingId: number): Promise<Petsitt
 }
 
 export interface PetsitterCreche extends Petsitter {
-  serviceCreche: CrechesService[]
+  serviceCreche: CrecheService[]
   crecheAmenities: CrecheAmenity[]
 }
 interface PetsitterCrecheResponse extends GeneralResponse {

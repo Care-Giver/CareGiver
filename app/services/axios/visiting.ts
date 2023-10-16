@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { Petsitter } from "./types/creches.visitings.common.types"
-import { Visiting, VisitingAmenity, VisitingService } from "./visitings"
+import { VisitingAmenity, VisitingService } from "./visitings"
 
 interface CreateVisitingRequestBody
   extends Partial<
@@ -101,17 +101,23 @@ export interface VistingPetsitter extends Petsitter {
   serviceVisiting: VisitingService[]
   visitingAmenities: VisitingAmenity[]
 }
-interface GetVisitingCareGiver extends GeneralResponse {
+interface GetVisitingCareGiverResponse extends GeneralResponse {
   visiting: VistingPetsitter
 }
-interface GetVisitingResult {
+interface GetVisitingCareGiverResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
   visiting?: VistingPetsitter
 }
-export const getVisitingCareGiver = async (): Promise<GetVisitingResult> => {
+/**
+ * [케어기버 전용 API]
+ * 로그인 유저가 등록한 모든 방문 펫시팅 정보를 가져온다.
+ */
+export const getVisitingCareGiver = async (): Promise<GetVisitingCareGiverResult> => {
   try {
-    const response = await axios.get<GetVisitingCareGiver>(`${BASE_URL}/visiting/care-giver`)
+    const response = await axios.get<GetVisitingCareGiverResponse>(
+      `${BASE_URL}/visiting/care-giver`,
+    )
     // console.log("response ♦️ getVisitingCareGiver", response)
     console.log("response.data 🔷 getVisitingCareGiver", response.data)
 

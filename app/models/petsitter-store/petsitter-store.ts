@@ -3,11 +3,11 @@ import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { VistingPetsitter, getVisitingCareGiver } from "../../services/axios/visiting"
 import { alertModal } from "../../utils/alert-modal"
 import { ServiceType } from "../review/review"
+import { CrechePetsitter, getCrecheCareGiver } from "#axios"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 
-interface PetsitterModel extends VistingPetsitter {}
-// TODO: CreachePetsitter
+interface PetsitterModel extends VistingPetsitter, CrechePetsitter {}
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -47,39 +47,80 @@ export const PetsitterStoreModel = types
       self.serviceType = value
     },
 
-    setPetsitter(value: PetsitterModel) {
-      self.petsitter = value
+    setVistingPetsitter(value: VistingPetsitter) {
+      this.setPetsitter(value, "visiting")
     },
 
-    updatePetsitter(value: Partial<PetsitterModel>) {
-      self.petsitter = {
-        ...self.petsitter,
-        ...value,
+    setCrechePetsitter(value: CrechePetsitter) {
+      this.setPetsitter(value, "creche")
+    },
+
+    setPetsitter(value: VistingPetsitter | CrechePetsitter, serviceType: ServiceType) {
+      switch (serviceType) {
+        case "visiting":
+          self.petsitter = {
+            ...value,
+            serviceCreche: null,
+            crecheAmenities: null,
+          } as PetsitterModel
+          break
+        case "creche":
+          self.petsitter = {
+            ...value,
+            serviceVisiting: null,
+            visitingAmenities: null,
+          } as PetsitterModel
+          break
+        default:
+          break
       }
     },
 
-    removePetsitter() {
-      self.petsitter = null
-    },
+    // updatePetsitter(value: Partial<PetsitterModel>) {
+    //   self.petsitter = {
+    //     ...self.petsitter,
+    //     ...value,
+    //   }
+    // },
+
+    // removePetsitter() {
+    //   self.petsitter = null
+    // },
 
     async fetchPetsitter() {
       if (self.petsitter) return // 이미 펫시터 데이터가 저장되어있다면, 더이상 진행하지 않는다.
 
-      //? API 호출
-      const { isSuccess: isSuccessVisiting, visiting } = await getVisitingCareGiver()
+      const [visitingResult, crecheResult] = await Promise.all([
+        getVisitingCareGiver(),
+        getCrecheCareGiver(),
+      ])
+
+      const isSuccessVisiting = visitingResult.isSuccess
+      const visiting = visitingResult?.visiting
+      const isSuccessCreche = crecheResult.isSuccess
+      const creche = crecheResult?.creche
+
       if (!isSuccessVisiting) {
         alertModal("Error at PetsitterModel", "방문 펫시터 정보를 불러오는데 실패했습니다.")
         return false
       }
 
+      if (!isSuccessCreche) {
+        alertModal("Error at PetsitterModel", "위탁 펫시터 정보를 불러오는데 실패했습니다.")
+        return false
+      }
+
       if (visiting) {
-        this.setPetsitter(visiting)
         this.setServiceType("visiting")
+        this.setVistingPetsitter(visiting)
         return true
       }
 
-      // TODO: 방문(creche) 로직 추가.
-      return true
+      if (creche) {
+        this.setServiceType("creche")
+        this.setCrechePetsitter(creche)
+        return true
+      }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

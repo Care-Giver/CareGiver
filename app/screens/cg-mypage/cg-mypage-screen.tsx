@@ -38,6 +38,8 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { CgSetServiceType } from "../cg-set-address-temp/cg-set-service-type"
 import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
+import { createCreche } from "#axios"
+import { alertModal } from "../../utils/alert-modal"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -46,9 +48,10 @@ export const CgMypageScreen: FC<
 
   const {
     userStore: { switchType, loggedIn, userDetail },
-    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter },
+    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
   } = useStores()
   console.log("userDetail.id", userDetail.id)
+  console.log("petsitter", petsitter)
 
   // * 자격증 등록
   const handleRegisterCertificatation = () => {
@@ -130,13 +133,51 @@ export const CgMypageScreen: FC<
                     Large: 0,
                   },
                   promoted: false,
+                }).then((res) => {
+                  if (res.isSuccess) {
+                    fetchPetsitter()
+                    // TODO: cg-set-address-temp-screen 으로 이동
+                  } else {
+                    alertModal(
+                      "등록 실패",
+                      "방문 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
+                    )
+                  }
                 })
                 break
+
               case "위탁":
-                // createCreche({
-                //   userId: userDetail.id,
-                // })
+                createCreche({
+                  userId: userDetail.id,
+                  title: "",
+                  desc: "",
+                  address: "경기도 안산시 사동 한양대학로 55",
+                  detailAddress: "",
+                  maxUnit: 1,
+                  handleType: [],
+                  images: [],
+                  services: [1],
+                  amenities: [1],
+                  defaultFee: 10000,
+                  extraSizeFee: {
+                    Small: 0,
+                    Medium: 0,
+                    Large: 0,
+                  },
+                  promoted: false,
+                }).then((res) => {
+                  if (res.isSuccess) {
+                    fetchPetsitter()
+                    // TODO: cg-set-address-temp-screen 으로 이동
+                  } else {
+                    alertModal(
+                      "등록 실패",
+                      "위탁 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
+                    )
+                  }
+                })
                 break
+
               default:
                 break
             }

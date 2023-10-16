@@ -21,6 +21,7 @@ import { CgConfirmAddress } from "./cg-confirm-address"
 import { alertModal } from "../../utils/alert-modal"
 import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
 import { updateVisiting } from "../../services/axios/visiting"
+import { updateCreche, uploadURIS } from "#axios"
 
 const crecheImages = []
 
@@ -30,8 +31,9 @@ export const CgSetAddressTempScreen: FC<
   // MST store 를 가져옵니다.
   const {
     userStore: { userDetail },
-    petsitterStore: { petsitter, serviceTypeKorean },
+    petsitterStore: { petsitter, serviceTypeKorean, setCrechePetsitter },
   } = useStores()
+  console.log("petsitter", petsitter)
   console.log("petsitter.id", petsitter.id)
   console.log("serviceTypeKorean", serviceTypeKorean)
 
@@ -80,21 +82,22 @@ export const CgSetAddressTempScreen: FC<
       alertModal("상세주소를 입력", "상세주소를 입력해주세요.")
       return
     }
-    /* 방문이면, 마지막 스텝 - update 후 돌아감 */
+    /* 방문이면, 마지막 스텝임 */
     if (serviceTypeKorean === "방문") {
-      // navigation.goBack()
-      const { isSuccess } = await updateVisiting(petsitter.id, {
+      // 방문 펫시팅 정보 UPDATE
+      updateVisiting(petsitter.id, {
         address: address?.address,
         detailAddress: "",
+      }).then(({ isSuccess }) => {
+        if (isSuccess) {
+          navigate("cg-edit-profile-screen")
+        } else {
+          alertModal(
+            "서비스 지역 저장 실패",
+            "서비스 지역 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
+          )
+        }
       })
-      if (!isSuccess) {
-        alertModal(
-          "서비스 지역 저장 실패",
-          "서비스 지역 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
-        )
-        return
-      }
-      navigate("cg-edit-profile-screen")
     }
     // 위탁인경우 다음단계(사진 업로드)로 이동
     else {
@@ -103,21 +106,40 @@ export const CgSetAddressTempScreen: FC<
   }
 
   // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
-  const step3handler = () => {
+  const step3handler = async () => {
     if (serviceTypeKorean === "위탁" && selectedImages.length === 0) {
       alertModal("위탁 장소 사진", "사진을 추가해주세요.")
       return
     }
-    /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-    navigate("cg-edit-profile-screen")
+
+    const imageUriList = await uploadURIS(selectedImages)
+
+    // 위탁 펫시팅 정보 UPDATE
+    updateCreche(petsitter.id, {
+      address: address?.address,
+      detailAddress,
+      images: imageUriList,
+    }).then(({ isSuccess, creche }) => {
+      if (isSuccess) {
+        // MST 업데이트
+        setCrechePetsitter(creche)
+        /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+        navigate("cg-edit-profile-screen")
+      } else {
+        alertModal(
+          "위탁 장소 사진 업로드 실패",
+          "위탁 장소 사진 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        )
+      }
+    })
   }
 
-  // 상단 헤더 내 "저징 후 나가기"
+  // 상단 헤더 내 "저장 후 나가기"
   const onPressSaveExit = () => {
     // TODO: 현재까지 내역 업데이트하는 API 호출
 
     /* 이전 스크린으로 돌아갑니다. */
-    navigation.goBack()
+    navigate("cg-edit-profile-screen")
   }
 
   const PAGE_LIST = useMemo(() => {
