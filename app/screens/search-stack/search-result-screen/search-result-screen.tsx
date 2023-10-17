@@ -66,7 +66,7 @@ import {
   getCrechesSearch,
   Creche,
   VisitingService,
-  CrechesService,
+  CrecheService,
   CrecheAmenity,
   VisitingAmenity,
   VisitingsSearchRequest,
@@ -88,7 +88,7 @@ import _ from "lodash"
 export type Petsitter = Visiting | Creche
 
 export type ServiceAmenity = {
-  services: CrechesService[] | VisitingService[]
+  services: CrecheService[] | VisitingService[]
   amenities: CrecheAmenity[] | VisitingAmenity[]
 }
 

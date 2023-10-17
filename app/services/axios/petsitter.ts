@@ -1,38 +1,15 @@
+// TODO: 이 파일은 삭제하고,
+// TODO: 각각 visiting.ts, creche.ts 파일로 이동시킨다
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { VisitingAmenity, VisitingService } from "./visitings"
+import { Petsitter } from "./types/creches.visitings.common.types"
+import { CrecheAmenity, CrecheService } from "./creches"
 
-export interface Item {
-  id: number
-  createAt: string
-  updatedAt: string
-  name: string
+export interface PetsitterVisiting extends Petsitter {
+  serviceVisiting: VisitingService[]
+  visitingAmenities: VisitingAmenity[]
 }
-interface Location {
-  type: string
-  coordinates: number[]
-}
-export interface PetsitterVisiting {
-  id: number
-  createAt: string
-  updatedAt: string
-  title: string
-  desc: string
-  address: string
-  defaultFee: number
-  hiredNumber: number
-  star: number
-  location: Location
-  maxUnit: number
-  handleType: string[]
-  images: string[]
-  extraSizeFee: string
-  promoted: boolean
-  responseRate: number[]
-  acceptRate: number[]
-  serviceVisiting: Item[]
-  visitingAmenities: Item[]
-}
-
 interface PetsitterVisitingResponse extends GeneralResponse {
   PetsitterVisiting: PetsitterVisiting
 }
@@ -64,33 +41,10 @@ export const getPetsitterVisitings = async (visitingId: number): Promise<Petsitt
   }
 }
 
-interface ExtraFee {
-  Small: number
-  Medium: number
-  Large: number
+export interface PetsitterCreche extends Petsitter {
+  serviceCreche: CrecheService[]
+  crecheAmenities: CrecheAmenity[]
 }
-export interface PetsitterCreche {
-  id: number
-  createAt: string
-  updatedAt: string
-  title: string
-  address: string
-  location: Location
-  desc: string
-  maxUnit: number
-  handleType: string[]
-  images: string[]
-  hiredNumber: number
-  star: number
-  defaultFee: number
-  extraSizeFee: ExtraFee
-  promoted: boolean
-  responseRate: number[]
-  acceptRate: number[]
-  serviceCreche: Item[]
-  crecheAmenities: Item[]
-}
-
 interface PetsitterCrecheResponse extends GeneralResponse {
   PetsitterCreche: PetsitterCreche
 }

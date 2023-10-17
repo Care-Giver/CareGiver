@@ -13,7 +13,10 @@
  */
 import React from "react"
 import { View } from "react-native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack"
 import {
   SettingScreen,
   ServiceCenterScreen,
@@ -22,13 +25,14 @@ import {
   CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
-  CgSetAddressScreen,
   ManageBookingScreen,
   CgCalendarListScreen,
   CgMypageScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
-  CgSearchAddressScreen,
+  CgSetAddressScreen,
+  CgEditProfileScreen,
+  EditMypageScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -36,9 +40,11 @@ import {
   PreReg18,
   CgScreenHeader,
   CgCertificateRegistrationScreenHeader,
+  EditMypageScreenHeader,
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { ServiceType } from "#models"
+import { useNavigation } from "@react-navigation/native"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -71,7 +77,8 @@ export type CGStackNavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
-  "cg-search-address-screen": undefined
+  "edit-mypage-screen": { editable: boolean }
+  "cg-edit-profile-screen": undefined
   "cg-set-address-screen": undefined
 
   // ===========================================================================================================
@@ -208,6 +215,7 @@ export const CalendarStack = () => {
  * CG - 내정보 스택
  */
 export const CgMypageStack = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<CGStackNavigatorParamList>>()
   return (
     <Stack.Navigator
       screenOptions={{
@@ -252,23 +260,41 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 주소입력 */}
+      {/* //* 내 프로필 관리 [기본 정보 관리] */}
       <Stack.Screen
-        name="cg-search-address-screen"
-        component={CgSearchAddressScreen}
+        name="edit-mypage-screen"
+        component={EditMypageScreen}
+        options={({ navigation, route }) => ({
+          headerShadowVisible: false,
+          header: (props) => <EditMypageScreenHeader {...props} />,
+          headerTitle: "",
+        })}
+      />
+
+      {/* //* CG - 케어기버 프로필 관리 */}
+      <Stack.Screen
+        name="cg-edit-profile-screen"
+        component={CgEditProfileScreen}
         options={{
-          title: "주소",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          title: "펫시터",
+          header: (props) => (
+            <GobackAndTitleHeader
+              {...props}
+              onPress={() => {
+                navigation.navigate("cg-mypage-screen")
+              }}
+            />
+          ),
         }}
       />
 
-      {/* //* CG - 지도상에서 위치 설정 */}
+      {/* //* CG - 장소 등록 스크린 */}
       <Stack.Screen
         name="cg-set-address-screen"
         component={CgSetAddressScreen}
         options={{
           title: "지도",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          headerShown: false,
         }}
       />
 

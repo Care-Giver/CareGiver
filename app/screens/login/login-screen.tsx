@@ -34,14 +34,14 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       console.log("MST loginHandler 테스트 res >>>", res)
     }
 
-    // SIGN UP FLOW - UI RENDERING TEST
-    const signUpTest = async () => {
-      navigate("terms-of-service-screen", {
-        email: `${dayjs().unix()}@test.com`,
-        provider: "naver", // 하드코딩
-        idToken: `test-idtoken-${dayjs().unix()}`,
-      })
-    }
+    // // SIGN UP FLOW - UI RENDERING TEST
+    // const signUpTest = async () => {
+    //   navigate("terms-of-service-screen", {
+    //     email: `${dayjs().unix()}@test.com`,
+    //     provider: "naver", // 하드코딩
+    //     idToken: `test-idtoken-${dayjs().unix()}`,
+    //   })
+    // }
 
     const isIOS = Platform.OS === "ios"
 
@@ -89,9 +89,9 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
           </Button>
-          <Button onPress={signUpTest} style={styles.noAuthLogin}>
+          {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
-          </Button>
+          </Button> */}
         </View>
 
         {/* </ScrollView> */}
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 
   noAuthLogin: {
     ...button,
-    backgroundColor: "red",
+    backgroundColor: GIVER_CASUAL_NAVY,
   },
 
   logout: {

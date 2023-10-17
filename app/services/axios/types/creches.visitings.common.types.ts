@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Sex } from "../user"
 import { CareGiverEntity, CrecheReviewEntity } from "./entity.types"
 
@@ -20,16 +21,18 @@ export interface SearchRequest {
   certifiedOnly: boolean //true
 }
 
-enum PetHandleType {
-  SMALL = "소형",
-  MEDIUM = "중형",
-  LARGE = "대형",
+// DB 정의 그대로임
+// TODO: HandleType pet.ts 와 pet-store 에 있는 HandleType 바꿀 것
+enum HandleType {
+  SMALL = "Small",
+  MEDIUM = "Medium",
+  LARGE = "Large",
 }
 
 type ExtraSizeFee = {
-  SMALL: number
-  MEDIUM: number
-  LARGE: number
+  Small: number
+  Medium: number
+  Large: number
 }
 
 export type Service = {
@@ -63,32 +66,33 @@ interface LocationResponse {
 interface CareGiverRelatedData {
   __careGiver__: CareGiverEntity
   __crecheReviews__: CrecheReviewEntity[]
-  // eslint-disable-next-line camelcase
   __has_careGiver__: boolean // true,
-  // eslint-disable-next-line camelcase
   __has_crecheReviews__: boolean // true,
 }
 
-export interface CommonData extends CareGiverRelatedData {
+export interface Petsitter {
   id: number //1
   createAt: string //"2023-01-01T11:00:00"
   updatedAt: string // "2023-01-01T11:00:00"
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
-  address: string // "경기도 안산시 사동 한양대학로 55"
+  address: string // "경기도 안산시 사동 한양대학로 55" //! 필수 값입니다. 실제 주소를 입력해야 합니다. 엠티 스트링 불가능.
+  detailAddress: string // 상세주소. //! "위탁" 펫시터만 입력할 것!
   defaultFee: number //10000
   hiredNumber: number //132
   star: number //5
   /* location: string // "(127, 38)" */
   location: LocationResponse
-  maxUnit: number //3
-  handleType: PetHandleType[] //"대형, 중형, 소형"
+  maxUnit: number //! 1이상 값이어야 합니다.
+  handleType: HandleType[]
   images: string[] // ["이미지 주소"]
   extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"
   promoted: false
   responseRate: number[] // [0.25, 1, 4]
   acceptRate: number[] //[0.25, 1, 4]
 }
+
+export interface CareGiverPetsitter extends CareGiverRelatedData, Petsitter {}
 
 export interface UserRelatedData {
   isFavorite: boolean //false,

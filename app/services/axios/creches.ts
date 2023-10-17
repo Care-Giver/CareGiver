@@ -3,7 +3,7 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { ratingRound } from "../../utils/format"
 import {
   Amenity,
-  CommonData,
+  CareGiverPetsitter,
   SearchRequest,
   Service,
   UserRelatedData,
@@ -14,12 +14,12 @@ export interface CrechesSearchRequest extends SearchRequest {
   endDate: string // "2023-07-30T00:00:00"
 }
 
-export interface CrechesService extends Service {}
+export interface CrecheService extends Service {}
 
 export interface CrecheAmenity extends Amenity {}
 
-interface CrecheRelatedData extends CommonData {
-  serviceCreche: CrechesService[]
+interface CrecheRelatedData extends CareGiverPetsitter {
+  serviceCreche: CrecheService[]
   crecheAmenities: CrecheAmenity[]
 }
 

@@ -14,6 +14,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
   ({ navigation, route }) => {
     const {
       userStore: { logoutHandler },
+      petsitterStore: { reset: resetPetsitterStore },
     } = useStores()
 
     // ? 로그아웃 | 회원탈퇴 모달창 visible
@@ -28,6 +29,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     // ? 모달창 - 로그아웃 버튼 클릭시 동작하는 함수
     const handleLogoutPress = () => {
       setLogoutModalVisible(false)
+      resetPetsitterStore()
       logoutHandler()
     }
 

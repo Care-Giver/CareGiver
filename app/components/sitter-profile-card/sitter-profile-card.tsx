@@ -7,14 +7,14 @@ import { images } from "../../../assets/images"
 import RatingReviewBox from "../rating-review-box/rating-review-box"
 import { Petsitter } from "../../screens/search-stack/search-result-screen/search-result-screen"
 import { UserEntity } from "../../services/axios/types/entity.types"
-import { CommonData } from "../../services/axios/types/creches.visitings.common.types"
+import { CareGiverPetsitter } from "../../services/axios/types/creches.visitings.common.types"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 export type PetsitterProfileCardPetsitterData = {
   crecheId?: number
   visitingId?: number
 } & Pick<Petsitter, "reviewCount" | "userNickname"> &
-  Pick<CommonData, "title" | "desc" | "star"> &
+  Pick<CareGiverPetsitter, "title" | "desc" | "star"> &
   Pick<UserEntity, "profileImage">
 
 interface SitterProfileCardProps {
