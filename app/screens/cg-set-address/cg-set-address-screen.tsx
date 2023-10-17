@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList } from "#navigators"
 import {
   CgRegisterStep,
   ConditionalButton,
@@ -155,11 +155,9 @@ export const CgSetAddressScreen: FC<
   }
 
   // 상단 헤더 내 "저장 후 나가기"
-  const onPressSaveExit = () => {
+  const onPressSaveExit = async () => {
+    navigation.goBack() //! goBack 을 사용할 것. replace ㄴㄴ
     // TODO: 현재까지 내역 업데이트하는 API 호출
-
-    /* 이전 스크린으로 돌아갑니다. */
-    navigation.replace("cg-edit-profile-screen")
   }
 
   const PAGE_LIST = useMemo(() => {
@@ -268,7 +266,7 @@ const ScreenHeader = ({ navigation, onPressSaveExit }) => {
       {/* 뒤로가기 버튼 */}
       <Pressable
         onPress={() => {
-          navigation.replace("cg-edit-profile-screen")
+          navigation.goBack()
         }}
       >
         <Image style={styles.goBackButton} source={images.go_back} />
