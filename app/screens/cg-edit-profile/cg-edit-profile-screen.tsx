@@ -29,7 +29,7 @@ export const CgEditProfileScreen: FC<
       <MypageButton
         text={serviceTypeKorean === "방문" ? "방문 지역" : "위탁 지역 / 사진"}
         onPress={() => {
-          navigate("cg-set-address-temp-screen")
+          navigate("cg-set-address-screen")
         }}
         style={styles.sidePadding}
       />

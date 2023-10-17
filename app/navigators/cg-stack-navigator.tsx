@@ -22,14 +22,12 @@ import {
   CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
-  CgSetAddressScreen,
   ManageBookingScreen,
   CgCalendarListScreen,
   CgMypageScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
-  CgSearchAddressScreen,
-  CgSetAddressTempScreen,
+  CgSetAddressScreen,
   CgEditProfileScreen,
   EditMypageScreen,
 } from "#screens"
@@ -75,12 +73,9 @@ export type CGStackNavigatorParamList = {
   "cg-certificate-registration-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
-
   "edit-mypage-screen": { editable: boolean }
   "cg-edit-profile-screen": undefined
-  "cg-search-address-screen": undefined
   "cg-set-address-screen": undefined
-  "cg-set-address-temp-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
@@ -281,30 +276,10 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 주소입력 */}
-      <Stack.Screen
-        name="cg-search-address-screen"
-        component={CgSearchAddressScreen}
-        options={{
-          title: "주소",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* //* CG - 지도상에서 위치 설정 */}
+      {/* //* CG - 장소 등록 스크린 */}
       <Stack.Screen
         name="cg-set-address-screen"
         component={CgSetAddressScreen}
-        options={{
-          title: "지도",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* //* CG - 장소 등록 스크린 */}
-      <Stack.Screen
-        name="cg-set-address-temp-screen"
-        component={CgSetAddressTempScreen}
         options={{
           title: "지도",
           headerShown: false,

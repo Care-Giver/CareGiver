@@ -10,7 +10,6 @@ export * from "./caregiver-detail-stack/writing-comment-screen/writing-comment-s
 
 //* home-stack
 export * from "./home-stack/home-screen/home-screen"
-export * from "./home-stack/test-map-screen/test-map-screen"
 
 //* booking-stack
 export * from "./booking-stack/all-bookings-screen/all-bookings-screen"
@@ -48,7 +47,6 @@ export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./kakao-login-test/kakao-login-test-screen"
 export * from "./cg-calendar/cg-calendar-screen"
 export * from "./cg-certificate-registration/cg-certificate-registration-screen"
-export * from "./cg-set-address/cg-set-address-screen"
 export * from "./manage-booking/manage-booking-screen"
 export * from "./cg-calendar-list/cg-calendar-list-screen"
 export * from "./cg-mypage/cg-mypage-screen"
@@ -67,7 +65,6 @@ export * from "./temp-chat/temp-chat-screen"
 export * from "./terms-of-service/terms-of-service-screen"
 export * from "./sign-up-screen/sign-up-screen"
 export * from "./sign-up-success-screen/sign-up-success-screen"
-export * from "./cg-search-address/cg-search-address-screen"
 export * from "./add-pet/add-pet-screen"
-export * from "./cg-set-address-temp/cg-set-address-temp-screen"
+export * from "./cg-set-address/cg-set-address-screen"
 export * from "./cg-edit-profile/cg-edit-profile-screen"

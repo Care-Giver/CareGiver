@@ -12,7 +12,7 @@ import Postcode from "@actbase/react-daum-postcode"
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const CgSearchAddressScreen: FC<
-  StackScreenProps<NavigatorParamList, "cg-search-address-screen">
+  StackScreenProps<NavigatorParamList, "legacy_cg-search-address-screen">
 > = observer(function CgSearchAddressScreen() {
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()

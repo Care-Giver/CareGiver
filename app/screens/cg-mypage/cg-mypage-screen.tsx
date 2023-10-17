@@ -6,7 +6,6 @@ import {
   Button,
   CaregiverNameStarReview,
   CaregiverTypeButton,
-  CgServiceChoiceButton,
   ConditionalButton,
   DivisionLine,
   MypageButton,
@@ -14,7 +13,6 @@ import {
   PreBol16,
   PreBol18,
   PreReg14,
-  PreReg16,
   PreReg18,
   Row,
   Screen,
@@ -22,20 +20,12 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import {
-  GIVER_CASUAL_NAVY,
-  SUB_HEAD_LINE,
-  LIGHT_LINE,
-  BOTTOM_HEIGHT,
-  LBG,
-  palette,
-  BOTTOM_TAB_NAVIGATOR,
-} from "#theme"
+import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, palette } from "#theme"
 import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { CgSetServiceType } from "../cg-set-address-temp/cg-set-service-type"
+import { CgSetServiceType } from "../cg-set-address/cg-set-service-type"
 import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
 import { createCreche } from "#axios"
@@ -47,16 +37,13 @@ export const CgMypageScreen: FC<
   useShowBottomTab(navigation)
 
   const {
-    userStore: { switchType, loggedIn, userDetail },
+    userStore: { switchType, userDetail },
     petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
   } = useStores()
   console.log("userDetail.id", userDetail.id)
   console.log("petsitter", petsitter)
+  console.log("petsitter.id", petsitter.id)
 
-  // * 자격증 등록
-  const handleRegisterCertificatation = () => {
-    alert("자격증 등록")
-  }
   // * 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
     navigate("setting-screen")
@@ -67,12 +54,13 @@ export const CgMypageScreen: FC<
     navigate("service-center-screen")
   }
 
+  // * "Client 모드로 전환" 버튼 클릭시 실행되는 함수
   const handleMode = async () => {
     switchType()
   }
 
   // 펫시터 등록하기 버튼 클릭시 실행되는 함수
-  // 1. 이전에 등록한 내역이 없을경우, cg-set-address-temp-screen 으로 이동
+  // 1. 이전에 등록한 내역이 없을경우, cg-set-address-screen 으로 이동
   // 2. 있을 경우, 가장 마지막에 수정한 screen 으로 이동
   // 3. 모든 등록과정을 마쳤을 경우, cg-edit-profile-screen 으로 이동
   const onPress = () => {
@@ -135,8 +123,9 @@ export const CgMypageScreen: FC<
                   promoted: false,
                 }).then((res) => {
                   if (res.isSuccess) {
-                    fetchPetsitter()
-                    // TODO: cg-set-address-temp-screen 으로 이동
+                    fetchPetsitter().then((result) => {
+                      result === true && navigate("cg-set-address-screen")
+                    })
                   } else {
                     alertModal(
                       "등록 실패",
@@ -167,8 +156,9 @@ export const CgMypageScreen: FC<
                   promoted: false,
                 }).then((res) => {
                   if (res.isSuccess) {
-                    fetchPetsitter()
-                    // TODO: cg-set-address-temp-screen 으로 이동
+                    fetchPetsitter().then((result) => {
+                      result === true && navigate("cg-set-address-screen")
+                    })
                   } else {
                     alertModal(
                       "등록 실패",
@@ -181,20 +171,18 @@ export const CgMypageScreen: FC<
               default:
                 break
             }
-
-            // navigate("cg-set-address-temp-screen", { serviceType })
           }}
         />
       </BottomSheetFooter>
     ),
-    [bottomSheetModalRef, serviceType, userDetail.id],
+    [bottomSheetModalRef, serviceType, userDetail.id, fetchPetsitter],
   )
   // =======================================================
 
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <Button
-        text="테스트"
+        text="API 테스트"
         onPress={() => {
           // deleteVisiting(5)
         }}
@@ -206,16 +194,6 @@ export const CgMypageScreen: FC<
         {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
         <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
           <PreBol16 text="cg-set-price-screen ➡️" color={GIVER_CASUAL_NAVY} />
-        </Pressable>
-
-        {/* 임시 버튼 - cg-search-address-screen 스크린 이동용  */}
-        <Pressable
-          style={{ backgroundColor: "red" }}
-          onPress={() => {
-            navigate("cg-set-address-temp-screen")
-          }}
-        >
-          <PreBol16 text="cg-set-address-temp-screen ➡️" color={GIVER_CASUAL_NAVY} />
         </Pressable>
 
         {hasPetsitterProfile ? (
@@ -315,14 +293,6 @@ export const CgMypageScreen: FC<
 
           <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>
-
-        <DivisionLine color={LIGHT_LINE} />
-        {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton
-          text="자격증 등록"
-          onPress={handleRegisterCertificatation}
-          style={styles.sidePadding}
-        />
 
         <DivisionLine color={LIGHT_LINE} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
