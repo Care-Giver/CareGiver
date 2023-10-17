@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle, View, StyleSheet, Pressable, Image } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreBol18, PreMed16, PreReg14, Row, UnderlineText } from "#components"
+import { PreBol18, PreMed16, PreReg10, PreReg14, Row, UnderlineText } from "#components"
 import { images } from "#images"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
+import { DISABLED, ERROR_RED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "#theme"
 import { ServiceTypeKorean } from "#models"
 
 export interface CgSetServiceTypeProps {
@@ -79,18 +79,25 @@ export const CgSetServiceType = observer(function CgSetServiceType(props: CgSetS
       </Row>
 
       {serviceType && (
-        <Row mt={10}>
-          <Image source={images.right_arrow_grey} style={styles.image} />
-          <PreReg14
-            text={
-              serviceType === "방문"
-                ? "회원님이 직접 고객의 집을 방문합니다."
-                : "회원님이 등록한 장소에서 고객의 반려동물을 돌봅니다."
-            }
-            color={DISABLED}
-            ml={8}
+        <View style={{ marginTop: 10 }}>
+          <Row>
+            <Image source={images.right_arrow_grey} style={styles.image} />
+            <PreReg14
+              text={
+                serviceType === "방문"
+                  ? "회원님이 직접 고객의 집을 방문합니다."
+                  : "회원님이 등록한 장소에서 고객의 반려동물을 돌봅니다."
+              }
+              color={DISABLED}
+              ml={8}
+            />
+          </Row>
+          <PreReg10
+            text="하나의 서비스만 운영할 수 있습니다! 신중히 선택해주세요."
+            color={ERROR_RED}
+            mt={10}
           />
-        </Row>
+        </View>
       )}
     </View>
   )
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
   },
   image: { width: 16, height: 16, alignSelf: "flex-start" },
   radioContainer: {
-    width: 172,
+    width: "48%",
     padding: 14.5,
 
     justifyContent: "center",

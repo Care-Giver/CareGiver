@@ -18,7 +18,10 @@ export const PetsitterStoreModel = types
     serviceType: types.frozen<ServiceType>(null),
     petsitter: types.frozen<PetsitterModel>(null),
 
-    //? 필요할까..?
+    /**
+     * 서버 API 호출 건 수를 줄이기 위한, 일종의 캐싱 작업 때 사용되는 객체이다.
+     * TODO: 케어기버 프로필 모든 CRUD 구현 후, 작업 시작 할 것.
+     */
     draftPetsitter: types.frozen<PetsitterModel>(null),
   })
   .actions(withSetPropAction)
@@ -75,13 +78,6 @@ export const PetsitterStoreModel = types
           break
       }
     },
-
-    // updatePetsitter(value: Partial<PetsitterModel>) {
-    //   self.petsitter = {
-    //     ...self.petsitter,
-    //     ...value,
-    //   }
-    // },
 
     // removePetsitter() {
     //   self.petsitter = null

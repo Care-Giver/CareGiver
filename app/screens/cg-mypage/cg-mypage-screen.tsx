@@ -41,8 +41,7 @@ export const CgMypageScreen: FC<
     petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
   } = useStores()
   console.log("userDetail.id", userDetail.id)
-  console.log("petsitter", petsitter)
-  console.log("petsitter.id", petsitter.id)
+  console.log("CgMypageScreen", petsitter)
 
   // * 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
@@ -108,7 +107,7 @@ export const CgMypageScreen: FC<
                   title: "",
                   desc: "",
                   address: "경기도 안산시 사동 한양대학로 55",
-                  detailAddress: "",
+                  // detailAddress: "",
                   maxUnit: 1,
                   handleType: [],
                   images: [],

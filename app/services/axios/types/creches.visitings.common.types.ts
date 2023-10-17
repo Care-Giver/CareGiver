@@ -77,7 +77,7 @@ export interface Petsitter {
   title: string // "ENFP의 친화력"
   desc: string //"강아지 3년 기른 경력으로 보살핍니다."
   address: string // "경기도 안산시 사동 한양대학로 55" //! 필수 값입니다. 실제 주소를 입력해야 합니다. 엠티 스트링 불가능.
-  detailAddress: string // 상세주소. //! "방문" 펫시터의 경우, "" 엠티 스트링 입니다.
+  detailAddress: string // 상세주소. //! "위탁" 펫시터만 입력할 것!
   defaultFee: number //10000
   hiredNumber: number //132
   star: number //5

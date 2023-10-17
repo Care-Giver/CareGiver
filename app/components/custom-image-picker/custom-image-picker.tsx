@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import { PreReg16 } from "../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
-import { BODY, LIGHT_LINE } from "#theme"
+import { BODY, LIGHT_LINE, palette } from "#theme"
 
 export interface CustomImagePickerProps {
   selectedImages: PickerImage[]
@@ -104,7 +104,7 @@ export const CustomImagePicker = observer(function CustomImagePicker(
             <View key={index} style={styles.imageContainer}>
               <Image
                 source={{ uri: image.uri }}
-                style={{ width: 128, height: 128, borderRadius: 8 }}
+                style={{ width: 128, height: 128, borderRadius: 8, backgroundColor: palette.black }}
               />
               <Pressable style={styles.deleteButtonWrapper} onPress={() => removeImage(index)}>
                 <Image source={images.x_in_circle} style={styles.deleteButton} />

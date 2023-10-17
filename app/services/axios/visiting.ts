@@ -1,7 +1,10 @@
+/* eslint-disable camelcase */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { Petsitter } from "./types/creches.visitings.common.types"
 import { VisitingAmenity, VisitingService } from "./visitings"
+import { CareGiverEntity } from "./types/entity.types"
+import _ from "lodash"
 
 interface CreateVisitingRequestBody
   extends Partial<
@@ -15,6 +18,7 @@ interface CreateVisitingRequestBody
       | "location"
       | "responseRate"
       | "acceptRate"
+      | "detailAddress"
     >
   > {
   userId: number // 현재 로그인한 유저의 userId
@@ -59,11 +63,19 @@ export const createVisiting = async (
 }
 
 interface UpdateVisitingRequestBody extends Partial<Omit<CreateVisitingRequestBody, "userId">> {}
-interface UpdateVisitingResponse extends GeneralResponse {}
+interface UpdatedVisiting extends VistingPetsitter {
+  __careGiver__: CareGiverEntity
+  __has_careGiver__: boolean
+  __has_visitingBookings__: boolean
+  __visitingBookings__: any[] //TODO: visitingBooking 객체로 변경
+}
+interface UpdateVisitingResponse extends GeneralResponse {
+  visiting: UpdatedVisiting // 업데이트된 방문 객체
+}
 interface UpdateVisitingResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
-  // visitingId?: number // 성공시, 생성된 방문장소의 id (visitingId)
+  visiting?: VistingPetsitter // 성공시, 업데이트된 방문 객체에서, 필요없는 필드들을 제거한 객체 ( _.omit() 참고 )
 }
 /**
  * [케어기버 전용 API]
@@ -86,7 +98,12 @@ export const updateVisiting = async (
 
     return {
       isSuccess: true,
-      // visitingId: response.data.visitingId,
+      visiting: _.omit(response.data.visiting, [
+        "__careGiver__",
+        "__has_careGiver__",
+        "__has_visitingBookings__",
+        "__visitingBookings__",
+      ]),
     }
   } catch (error) {
     console.error("catch 에러!!! - updateVisiting", error)

@@ -23,19 +23,22 @@ import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
 import { updateVisiting } from "../../services/axios/visiting"
 import { updateCreche, uploadURIS } from "#axios"
 
-const crecheImages = []
-
 export const CgSetAddressScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   // MST store 를 가져옵니다.
   const {
-    userStore: { userDetail },
-    petsitterStore: { petsitter, serviceTypeKorean, setCrechePetsitter },
+    petsitterStore: { petsitter, serviceTypeKorean, setVistingPetsitter, setCrechePetsitter },
   } = useStores()
-  console.log("petsitter", petsitter)
-  console.log("petsitter.id", petsitter.id)
-  console.log("serviceTypeKorean", serviceTypeKorean)
+
+  // 이미 기존에 DB 에 저장한 이미지.
+  const serverImages = petsitter?.images
+    ? petsitter.images.map((image) => ({
+        uri: image,
+        type: "image", // 임시값. 수정필요
+        name: "image", // 임시값. 수정필요
+      }))
+    : []
 
   // FlatList 관련 BEGIN ==================================================================
   const [itemWidth, setItemWidth] = useState<number>(0)
@@ -47,7 +50,16 @@ export const CgSetAddressScreen: FC<
 
     /* 첫번째 스텝인 경우, 이전 스크린으로 돌아갑니다. */
     if (currentStep === 1) {
-      navigation.goBack()
+      navigation.replace("cg-edit-profile-screen")
+    }
+
+    switch (currentStep) {
+      case 1:
+      case 2:
+        break
+      case 3:
+        setSelectedImages(serverImages)
+        break
     }
   }
 
@@ -84,13 +96,16 @@ export const CgSetAddressScreen: FC<
     }
     /* 방문이면, 마지막 스텝임 */
     if (serviceTypeKorean === "방문") {
+      console.log("address?.address?.trim()", address?.address?.trim())
       // 방문 펫시팅 정보 UPDATE
       updateVisiting(petsitter.id, {
-        address: address?.address,
-        detailAddress: "",
-      }).then(({ isSuccess }) => {
+        address: address?.address?.trim(),
+      }).then(({ isSuccess, visiting }) => {
         if (isSuccess) {
-          navigate("cg-edit-profile-screen")
+          // MST 업데이트
+          setVistingPetsitter(visiting)
+          /* 방문 케이스의 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+          navigation.replace("cg-edit-profile-screen")
         } else {
           alertModal(
             "방문 장소 업데이트 실패",
@@ -112,19 +127,24 @@ export const CgSetAddressScreen: FC<
       return
     }
 
-    const imageUriList = await uploadURIS(selectedImages)
+    const addedImages = selectedImages.filter((image) => !serverImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
+    const imageUriList = await uploadURIS(addedImages)
 
     // 위탁 펫시팅 정보 UPDATE
     updateCreche(petsitter.id, {
-      address: address?.address,
-      detailAddress,
-      images: imageUriList,
+      address: address?.address?.trim(),
+      detailAddress: detailAddress.trim(),
+      images: [
+        ...selectedImages.filter((image) => !addedImages.includes(image)).map((image) => image.uri), // 로컬에서 선택한 이미지를 제외한 (삭제유무가 포함된) 서버 이미지
+        ...imageUriList, // 로컬에서 추가한 이미지를 URI 로 변환한 문자열 배열
+      ],
     }).then(({ isSuccess, creche }) => {
       if (isSuccess) {
         // MST 업데이트
+        console.log("BEFORE INTO setCrechePetsitter", creche)
         setCrechePetsitter(creche)
-        /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-        navigate("cg-edit-profile-screen")
+        /* 위탁 케이스의 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+        navigation.replace("cg-edit-profile-screen")
       } else {
         alertModal(
           "위탁 장소 업데이트 실패",
@@ -139,7 +159,7 @@ export const CgSetAddressScreen: FC<
     // TODO: 현재까지 내역 업데이트하는 API 호출
 
     /* 이전 스크린으로 돌아갑니다. */
-    navigate("cg-edit-profile-screen")
+    navigation.replace("cg-edit-profile-screen")
   }
 
   const PAGE_LIST = useMemo(() => {
@@ -179,7 +199,7 @@ export const CgSetAddressScreen: FC<
   const [detailAddress, setDetailAddress] = useState<string>(null)
 
   // 위탁 장소 사진
-  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(crecheImages || [])
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(serverImages)
 
   return (
     <Screen>
@@ -248,7 +268,7 @@ const ScreenHeader = ({ navigation, onPressSaveExit }) => {
       {/* 뒤로가기 버튼 */}
       <Pressable
         onPress={() => {
-          navigation.goBack()
+          navigation.replace("cg-edit-profile-screen")
         }}
       >
         <Image style={styles.goBackButton} source={images.go_back} />

@@ -13,7 +13,10 @@
  */
 import React from "react"
 import { View } from "react-native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack"
 import {
   SettingScreen,
   ServiceCenterScreen,
@@ -41,6 +44,7 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { ServiceType } from "#models"
+import { useNavigation } from "@react-navigation/native"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -211,6 +215,7 @@ export const CalendarStack = () => {
  * CG - 내정보 스택
  */
 export const CgMypageStack = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<CGStackNavigatorParamList>>()
   return (
     <Stack.Navigator
       screenOptions={{
@@ -272,7 +277,14 @@ export const CgMypageStack = () => {
         component={CgEditProfileScreen}
         options={{
           title: "펫시터",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => (
+            <GobackAndTitleHeader
+              {...props}
+              onPress={() => {
+                navigation.navigate("cg-mypage-screen")
+              }}
+            />
+          ),
         }}
       />
 
