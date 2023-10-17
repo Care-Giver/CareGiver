@@ -3,7 +3,6 @@ import { View, Image, Pressable, StyleSheet, ScrollView, TouchableOpacity } from
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   BOTTOM_TAB_BAR_HEIGHT,
-  Button,
   CaregiverNameStarReview,
   CaregiverTypeButton,
   ConditionalButton,
@@ -180,20 +179,14 @@ export const CgMypageScreen: FC<
 
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
-      <Button
-        text="API 테스트"
-        onPress={() => {
-          // deleteVisiting(5)
-        }}
-      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
       >
         {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
-        <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
+        {/* <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
           <PreBol16 text="cg-set-price-screen ➡️" color={GIVER_CASUAL_NAVY} />
-        </Pressable>
+        </Pressable> */}
 
         {hasPetsitterProfile ? (
           // 1. 이전에 등록한 펫시터 프로필이 있는 경우
