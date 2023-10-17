@@ -88,7 +88,7 @@ export const PetsitterStoreModel = types
     // },
 
     async fetchPetsitter() {
-      if (self.petsitter) return // 이미 펫시터 데이터가 저장되어있다면, 더이상 진행하지 않는다.
+      if (self.petsitter) return true // 이미 펫시터 데이터가 저장되어있다면, 더이상 진행하지 않는다.
 
       const [visitingResult, crecheResult] = await Promise.all([
         getVisitingCareGiver(),
