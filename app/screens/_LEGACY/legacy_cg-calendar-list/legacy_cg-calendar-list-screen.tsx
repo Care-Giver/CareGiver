@@ -5,9 +5,9 @@ import { NavigatorParamList, navigate } from "#navigators"
 import { PreBol20, PreReg18, PressableButton, Screen } from "#components"
 import { View } from "react-native"
 import { useStores } from "#models"
-import { delay } from "../../utils/delay"
-import { consoleInfoAsync } from "../../utils/console-async"
-import { useShowBottomTab } from "../../utils/hooks"
+import { delay } from "../../../utils/delay"
+import { consoleInfoAsync } from "../../../utils/console-async"
+import { useShowBottomTab } from "../../../utils/hooks"
 import { GIVER_CASUAL_NAVY } from "#theme"
 
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.

@@ -46,11 +46,13 @@ export const CgEditProfileScreen: FC<
             style={{ textAlign: "right" }}
             color={BODY}
           />
-          <PreReg10
-            text={`사진 ${petsitter?.images?.length || 0}장`}
-            style={{ textAlign: "right" }}
-            color={BODY}
-          />
+          {serviceTypeKorean === "위탁" && (
+            <PreReg10
+              text={`사진 ${petsitter?.images?.length || 0}장`}
+              style={{ textAlign: "right" }}
+              color={BODY}
+            />
+          )}
         </View>
       </View>
       <DivisionLine color={LIGHT_LINE} />

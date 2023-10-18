@@ -1,28 +1,32 @@
 import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   CancelButton,
   CgCalendar,
   CgCalendarEditButton,
   Screen,
   Text,
-  Button,
-  PreBol16,
+  BOTTOM_TAB_BAR_HEIGHT,
+  ConditionalButton,
+  Row,
+  PreBol18,
 } from "#components"
 import { useStores } from "../../models"
-import { Pressable, View } from "react-native"
+import { Pressable, View, Image } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
-import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY } from "#theme"
 import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
 import { CrecheAvailableDates } from "../../services/axios/creche-day"
-
-export type ServiceType = "방문" | "위탁"
+import { useShowBottomTab } from "../../utils/hooks"
+import { images } from "#images"
 
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
 > = observer(({ navigation }) => {
+  useShowBottomTab(navigation)
+
   // MST store 를 가져옵니다.
   const {
     visitingAvailableTimesModel: {
@@ -31,80 +35,93 @@ export const CgCalendarScreen: FC<
       showAllVisitingAvailableTimes,
     },
     CrecheDayModel: { setAllCrecheDays, crecheDays },
+    userStore: { switchType, userDetail },
+    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
   } = useStores()
 
   const [visitingDates, setVisitingDates] = useState<GroupedVisitingAvailableTimesByDate[]>([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
   const [selected, setSelected] = useState<string[]>([]) // TODO - 타입 제발 정해주세요
   const [crecheId, setCrecheId] = useState(1)
-  const [serviceType, setServiceType] = useState<ServiceType>("방문")
-  const onTestPress = () => {
-    if (serviceType == "방문") {
-      setServiceType("위탁")
-    } else {
-      setServiceType("방문")
-    }
-  }
-
-  useEffect(() => {
-    if (serviceType == "방문") {
-      setAllVisitingAvailableTimes(crecheId)
-      setVisitingDates(visitingAvailableTimes)
-    } else {
-      setAllCrecheDays(crecheId)
-      setCrecheDates(crecheDays)
-    }
-  }, [serviceType])
-
-  console.log("serviceType in CgCalendarScreen >>>", serviceType)
-  console.log("selected >>>", selected)
 
   return (
     <Screen testID="CgCalendar">
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        {/*이 전 스크린 제작 전, 위탁 방문을 구분하기 위한 버튼*/}
-        <Pressable style={{ borderColor: "black", borderWidth: 2 }} onPress={onTestPress}>
-          <Text style={{ color: "black" }}>{serviceType == "방문" ? "방문" : "위탁"}</Text>
-        </Pressable>
-        <CancelButton title={"전체해제"} textcolor="#767676" style={{ alignSelf: "flex-end" }} />
-      </View>
+      {hasPetsitterProfile ? (
+        <>
+          <PreBol18
+            text={`${serviceTypeKorean} 일정 관리`}
+            style={{ alignSelf: "flex-start" }}
+            mt={10}
+          />
+          <CancelButton
+            title={"전체해제"}
+            textcolor={BODY}
+            style={{ alignSelf: "flex-end", marginBottom: 8 }}
+          />
+          <CgCalendar
+            availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDays}
+            serviceType={serviceTypeKorean}
+            selected={selected}
+            setSelected={setSelected}
+          />
 
-      <CgCalendar
-        availableDates={serviceType === "방문" ? visitingAvailableTimes : crecheDays}
-        serviceType={serviceType}
-        selected={selected}
-        setSelected={setSelected}
-      />
-
-      {/* 수정 버튼 새로 생성 */}
-      <Pressable
-        style={{
-          position: "absolute",
-          bottom: BOTTOM_HEIGHT,
-          paddingVertical: 18,
-          alignSelf: "center",
-          backgroundColor: "white",
-          borderColor: GIVER_CASUAL_NAVY,
-          borderWidth: 2,
-          borderStyle: "solid",
-          borderRadius: 10,
-          width: 358,
-        }}
-        onPress={() => {
-          serviceType === "방문"
-            ? navigation.navigate("set-visiting-service-day-screen", {
-                // TODO - 여러개의 selected 가 넘겨질 경우 처리
-                date: selected,
-                crecheId,
-              })
-            : navigation.navigate("set-creche-service-day-screen", {
-                date: selected,
-                crecheId,
-              })
-        }}
-      >
-        <PreBol16 text="수정" color={GIVER_CASUAL_NAVY} style={{ alignSelf: "center" }} />
-      </Pressable>
+          {/* 수정 버튼 */}
+          <ConditionalButton
+            label={"수정"}
+            isActivated={true}
+            style={{
+              alignSelf: "center",
+              position: "absolute",
+              bottom: BOTTOM_TAB_BAR_HEIGHT,
+              backgroundColor: "white",
+              borderColor: GIVER_CASUAL_NAVY,
+              borderWidth: 2,
+            }}
+            labelTextColor={GIVER_CASUAL_NAVY}
+            onPress={() => {
+              serviceTypeKorean === "방문"
+                ? navigate("set-visiting-service-day-screen", {
+                    // TODO - 여러개의 selected 가 넘겨질 경우 처리
+                    date: selected,
+                    crecheId,
+                  })
+                : navigate("set-creche-service-day-screen", {
+                    date: selected,
+                    crecheId,
+                  })
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Image
+            source={images.cat_with_heart}
+            style={{
+              width: 158 * 2,
+              height: 122 * 2,
+              alignSelf: "center",
+              position: "absolute",
+              top: 160,
+            }}
+          />
+          <ConditionalButton
+            label={`펫시터 서비스 등록하러 가기!`}
+            isActivated={true}
+            style={{
+              alignSelf: "center",
+              position: "absolute",
+              bottom: BOTTOM_TAB_BAR_HEIGHT,
+              backgroundColor: "white",
+              borderColor: GIVER_CASUAL_NAVY,
+              borderWidth: 2,
+            }}
+            labelTextColor={GIVER_CASUAL_NAVY}
+            onPress={() => {
+              navigate("cg-mypage-screen")
+            }}
+          />
+        </>
+      )}
     </Screen>
   )
 })

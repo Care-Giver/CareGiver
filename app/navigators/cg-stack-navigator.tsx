@@ -60,7 +60,6 @@ export type CGStackNavigatorParamList = {
   /**
    * CalendarStack - CG - 달력 스택
    */
-  "cg-calendar-list-screen": undefined
   "cg-calendar-screen": undefined
   "set-creche-service-day-screen": { date: Date; crecheId: number }
   "set-visiting-service-day-screen": { date: Date; crecheId: number }
@@ -169,22 +168,14 @@ export const CalendarStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="cg-calendar-list-screen"
+      initialRouteName="cg-calendar-screen"
     >
-      <Stack.Screen
-        name="cg-calendar-list-screen"
-        component={CgCalendarListScreen}
-        options={{
-          header: (props) => <CgScreenHeader {...props} />,
-        }}
-      />
-
       {/* CG - 달력 */}
       <Stack.Screen
         name="cg-calendar-screen"
         component={CgCalendarScreen}
         options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => <CgScreenHeader {...props} />,
         }}
       />
 

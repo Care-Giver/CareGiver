@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-
-import { GIVER_CASUAL_NAVY } from "#theme"
+import { DBG } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {
@@ -8,13 +7,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
 
     width: 58,
-    height: 23,
+    height: "auto",
 
     borderWidth: 2,
     borderRadius: 4,
-    borderColor: "#E5E5EC",
-
-    marginTop: 10,
-    marginBottom: 12,
+    borderColor: DBG,
   },
 })
