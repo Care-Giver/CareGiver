@@ -1,6 +1,8 @@
+import { GIVER_CASUAL_NAVY } from "#theme"
 import * as Device from "expo-device"
 import * as Notifications from "expo-notifications"
 import { Platform } from "react-native"
+import { alertModal } from "./alert-modal"
 
 export async function registerForPushNotificationsAsync(): Promise<string> {
   let token: string
@@ -10,7 +12,7 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
+      lightColor: GIVER_CASUAL_NAVY,
     })
   }
 
@@ -22,8 +24,8 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
       finalStatus = status
     }
     if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!")
-      return
+      alertModal("푸시토큰 발급 실패", "푸시토큰을 발급받는데 실패했습니다.")
+      return null
     }
     token = (await Notifications.getExpoPushTokenAsync()).data
     console.log(token)
