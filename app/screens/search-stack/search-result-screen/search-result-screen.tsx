@@ -84,6 +84,7 @@ import {
 } from "@gorhom/bottom-sheet"
 import Slider from "@react-native-community/slider"
 import _ from "lodash"
+import { ratingRound } from "../../../utils/format"
 
 export type Petsitter = Visiting | Creche
 
@@ -144,6 +145,9 @@ export const SearchResultScreen: FC<
 
     // 그외
     serviceType,
+
+    // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+    address, // 검색결과 헤더에 보여줄 주소
   } = route.params
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"
@@ -360,6 +364,7 @@ export const SearchResultScreen: FC<
         endTime={endTime}
         startDate={startDate}
         endDate={endDate}
+        address={address}
       />
 
       {/* //? margin */}
@@ -483,7 +488,7 @@ export const SearchResultScreen: FC<
                   userNickname: visiting.userNickname,
                   title: visiting.visiting.title,
                   desc: visiting.visiting.desc,
-                  star: visiting.visiting.star,
+                  star: ratingRound(visiting.visiting.star),
                   profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
                 }
                 serviceAmenity = {
@@ -502,7 +507,7 @@ export const SearchResultScreen: FC<
                   userNickname: creche.userNickname,
                   title: creche.creche.title,
                   desc: creche.creche.desc,
-                  star: creche.creche.star,
+                  star: ratingRound(creche.creche.star),
                   profileImage: creche.creche.__careGiver__.__user__?.profileImage,
                 }
                 serviceAmenity = {

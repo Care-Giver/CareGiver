@@ -20,8 +20,7 @@ import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { CgConfirmAddress } from "./cg-confirm-address"
 import { alertModal } from "../../utils/alert-modal"
 import { CgSelectCrechePhoto } from "./cg-select-creche-photo"
-import { updateVisiting } from "../../services/axios/visiting"
-import { updateCreche, uploadURIS } from "#axios"
+import { updateVisiting, updateCreche, uploadURIS } from "#axios"
 
 export const CgSetAddressScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-address-screen">

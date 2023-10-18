@@ -133,6 +133,9 @@ export type CLStackNavigatorParamList = {
     // 위탁
     startDate?: string
     endDate?: string
+
+    // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+    address // 검색결과 헤더에 보여줄 주소
   }
   "payment-screen": undefined
   "all-reviews-screen": undefined
