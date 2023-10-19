@@ -66,7 +66,7 @@ import {
   getCrechesSearch,
   Creche,
   VisitingService,
-  CrechesService,
+  CrecheService,
   CrecheAmenity,
   VisitingAmenity,
   VisitingsSearchRequest,
@@ -84,11 +84,12 @@ import {
 } from "@gorhom/bottom-sheet"
 import Slider from "@react-native-community/slider"
 import _ from "lodash"
+import { ratingRound } from "../../../utils/format"
 
 export type Petsitter = Visiting | Creche
 
 export type ServiceAmenity = {
-  services: CrechesService[] | VisitingService[]
+  services: CrecheService[] | VisitingService[]
   amenities: CrecheAmenity[] | VisitingAmenity[]
 }
 
@@ -144,6 +145,9 @@ export const SearchResultScreen: FC<
 
     // 그외
     serviceType,
+
+    // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+    address, // 검색결과 헤더에 보여줄 주소
   } = route.params
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"
@@ -152,7 +156,7 @@ export const SearchResultScreen: FC<
     page: 1,
     lat,
     lng,
-    petIds: [1, 2],
+    petIds,
     radius: 10, //10
     sortBy: "distance", // "distance"
     sortOrder: SearchResultSortOrder.ASC, // "ASC"
@@ -360,6 +364,7 @@ export const SearchResultScreen: FC<
         endTime={endTime}
         startDate={startDate}
         endDate={endDate}
+        address={address}
       />
 
       {/* //? margin */}
@@ -483,7 +488,7 @@ export const SearchResultScreen: FC<
                   userNickname: visiting.userNickname,
                   title: visiting.visiting.title,
                   desc: visiting.visiting.desc,
-                  star: visiting.visiting.star,
+                  star: ratingRound(visiting.visiting.star),
                   profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
                 }
                 serviceAmenity = {
@@ -502,7 +507,7 @@ export const SearchResultScreen: FC<
                   userNickname: creche.userNickname,
                   title: creche.creche.title,
                   desc: creche.creche.desc,
-                  star: creche.creche.star,
+                  star: ratingRound(creche.creche.star),
                   profileImage: creche.creche.__careGiver__.__user__?.profileImage,
                 }
                 serviceAmenity = {
@@ -524,8 +529,9 @@ export const SearchResultScreen: FC<
                       serviceType,
                       serviceAmenity,
                       images,
+                      //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
+                      //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
                       selectedPets: petIds,
-
                       // 방문
                       startTime: 방문검색 ? startTime : null,
                       endTime: 방문검색 ? endTime : null,

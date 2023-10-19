@@ -45,6 +45,7 @@ export const UserStoreModel = types
 
     /* 유저 상세정보 */
     userDetail: types.frozen<UserDetail>({
+      id: null,
       nickname: "",
       phoneNumber: "",
       sex: null,
@@ -171,6 +172,7 @@ export const UserStoreModel = types
         })
         // 유저 상세정보 저장
         this.setUserDetail({
+          id: userDetail.id,
           nickname: userDetail.nickname,
           phoneNumber: userDetail.phoneNumber,
           sex: userDetail.sex,

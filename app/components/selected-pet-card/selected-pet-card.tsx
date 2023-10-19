@@ -1,32 +1,31 @@
-import { View, Pressable, Image, StyleProp, ViewStyle } from "react-native"
 import React from "react"
+import { View, Pressable, Image, StyleProp, ViewStyle } from "react-native"
 import { styles } from "./styles"
 import { PreBol16, PreReg14 } from "../basics/custom-texts/custom-texts"
 import { BODY, DBG, LBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { DivisionLine } from "../division-line/division-line"
 import { Row } from "../basics/row/row"
-import { HandleType, Pet } from "#models"
-
-interface PetWithSize extends Pet {
-  size: HandleType
-}
-
-type PetData = Pick<PetWithSize, "id" | "name" | "species" | "age" | "sex" | "size">
+import { Pet, PetSex } from "#models"
 
 interface SelectedPetCardProps {
-  petData: PetData
-  deletable?: boolean
-
   style?: StyleProp<ViewStyle>
-  // TODO : 아래에 있는 type들 수정하기
+  petData: Pet
   onPress: () => void
   index?: any
+  deletable?: boolean
 }
 
 export const SelectedPetCard = (props: SelectedPetCardProps) => {
   const { petData, style, onPress, index, deletable = true } = props
-  const { id, name, size, species, age, sex } = petData
+  const { id, name, petType, species, age, sex } = petData
+
+  let _sex = ""
+  if (sex === PetSex.MALE) {
+    _sex = "남"
+  } else {
+    _sex = "여"
+  }
 
   return (
     <View style={[styles.root, style]}>
@@ -39,10 +38,10 @@ export const SelectedPetCard = (props: SelectedPetCardProps) => {
 
           {/*//? 타입 | 품종 | 나이 | 성별 */}
           <Row style={{ marginTop: 8 }}>
-            <PreReg14 text={size} color={BODY} />
+            <PreReg14 text={petType} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14
-              text={species.name}
+              // text={species.name}
               color={BODY}
               style={{ marginLeft: 8 }}
               //@ts-ignore
@@ -51,7 +50,7 @@ export const SelectedPetCard = (props: SelectedPetCardProps) => {
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14 text={`${age}세`} color={BODY} style={{ marginLeft: 8 }} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
-            <PreReg14 text={sex} color={BODY} style={{ marginLeft: 8 }} />
+            <PreReg14 text={_sex} color={BODY} style={{ marginLeft: 8 }} />
           </Row>
         </View>
 

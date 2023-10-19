@@ -16,10 +16,12 @@ interface AnimatedHeaderProps {
   //  위탁
   startDate?: string
   endDate?: string
+
+  address: string
 }
 
 export const AnimatedHeader = (props: AnimatedHeaderProps) => {
-  const { animatedValue, startTime, endTime, startDate, endDate } = props
+  const { animatedValue, startTime, endTime, startDate, endDate, address = "" } = props
 
   const 방문검색 = !!startTime && !!endTime
   const 위탁검색 = !!startDate && !!endDate
@@ -99,7 +101,7 @@ export const AnimatedHeader = (props: AnimatedHeaderProps) => {
         {/*//? 주소 선택 */}
         <RowRoundedButton
           image={images.location_disabled}
-          text={"경기도 안산시 상록구 한양대학로 55"}
+          text={address}
           textColor={DISABLED}
           style={{ marginTop: 12 }}
         />

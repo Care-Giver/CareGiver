@@ -17,7 +17,14 @@ const getToken = async (): Promise<string | false> => {
 
 export const BASE_URL = "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1"
 
+type Error = {
+  errorCode: number // 404
+  message: string // "Could not find CareGiver"
+  pathInfo: string //  "Occurred in 'ReadMyVisiting' method"
+  timeStamp: string // "2023-10-15T09:02:15.274Z"
+}
+
 export interface GeneralResponse {
   ok: boolean
-  error?: string
+  error?: string & Error
 }

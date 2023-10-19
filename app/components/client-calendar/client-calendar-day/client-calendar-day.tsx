@@ -105,6 +105,8 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
           backgroundColor: bgColorSelectior(),
           alignItems: "center",
         },
+        isStartDate && { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
+        isEndDate && { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
       ]}
     >
       <View //text를 view로 감싸고 backgroundcolor와 borderradius를 줘야한다.

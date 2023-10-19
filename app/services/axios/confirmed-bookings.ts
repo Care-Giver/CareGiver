@@ -1,29 +1,6 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-
-export interface Species {
-  id: number
-  createAt: string
-  updatedAt: string
-  name: string
-  familyType: string
-}
-export interface Pet {
-  id: number
-  createAt: string
-  updatedAt: string
-  name: string
-  speciesId: number
-  age: number
-  sex: string
-  images: null
-  weight: number
-  petType: string
-  isNeutralizated: boolean
-  birthday: string
-  desc: string
-  species: Species
-}
+import { Pet } from "./pets"
 
 export interface ConfirmedBookings {
   bookingId: number

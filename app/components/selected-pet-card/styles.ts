@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-
 import { CARE_NATURAL_BLUE } from "#theme"
 
 export const styles = StyleSheet.create({

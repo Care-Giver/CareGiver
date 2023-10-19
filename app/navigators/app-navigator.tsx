@@ -164,6 +164,7 @@ const CareGiverTabs = () => {
 const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType, userAuth },
+    petsitterStore: { fetchPetsitter },
   } = useStores()
 
   useEffect(() => {
@@ -171,6 +172,12 @@ const AllTabs = observer(function AllTabs() {
     axios.defaults.headers.common["x-jwt"] = userAuth.token
     axios.defaults.headers.common.Accept = "Application/json"
   }, [])
+
+  useEffect(() => {
+    //! 중요: CARE_GIVER type 이 될때, petsitter 정보를 불러온다.
+    type === Type.CARE_GIVER && fetchPetsitter()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type])
 
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함

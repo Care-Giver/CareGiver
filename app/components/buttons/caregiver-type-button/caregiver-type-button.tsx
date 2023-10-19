@@ -5,7 +5,7 @@ import { PreBol12 } from "../../basics/custom-texts/custom-texts"
 import { palette } from "#theme"
 
 interface CaregiverTypeButtonPros {
-  text: string
+  text: "방문" | "위탁" | "펫시터"
   textColor?: string
   style?: StyleProp<ViewStyle>
 }

@@ -1,24 +1,21 @@
-import { View, Image, Pressable } from "react-native"
 import React from "react"
-
+import { View, Image, Pressable } from "react-native"
 import { PreMed18 } from "../../basics/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
+import { NativeStackHeaderProps } from "@react-navigation/native-stack"
 
-export const GobackAndTitleHeader = (props) => {
-  // console.log("TestHeaderTitle props:", props)
+interface GobackAndTitleHeaderProps extends NativeStackHeaderProps {
+  onPress?: () => void
+}
 
+export const GobackAndTitleHeader = (props: GobackAndTitleHeaderProps) => {
   const title = props.options.title || props.route.name
-
   return (
     <View {...props} style={HEADER_ROOT}>
       {/* //? 뒤로가기 버튼 */}
-      <Pressable
-        onPress={() => {
-          props.navigation.goBack()
-        }}
-      >
+      <Pressable onPress={props.onPress || props.navigation.goBack}>
         <Image style={styles.goBackButton} source={images.go_back} />
       </Pressable>
 

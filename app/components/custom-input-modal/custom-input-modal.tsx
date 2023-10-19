@@ -44,7 +44,13 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
   const getPlaceholder = (placeholderInput) => {
     if (placeholderInput === "pet") {
       return "반려동물의 이름을 입력해주세요."
-    } else return "닉네임을 입력해주세요. (최대 10자)"
+    } else if (placeholderInput === "user") {
+      return "닉네임을 입력해주세요. (최대 10자)"
+    } else if (!placeholderInput) {
+      return ""
+    } else {
+      return placeholderInput
+    }
   }
 
   if (Platform.OS === "android") {
@@ -174,6 +180,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
             marginTop: "auto",
             height: 49,
             width: 326,
+            alignSelf: "center",
           }}
           onPress={
             handleSubmit(onNicknameSubmit)

@@ -47,6 +47,7 @@ import {
   TempChatScreen,
   ServiceAmenity,
   NotificationScreen,
+  AddPetScreen,
 } from "#screens"
 import { goBack } from "./navigation-utilities"
 import {
@@ -62,11 +63,9 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { Pet, PetsitterType, ServiceType, Type, useStores } from "../models"
+import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
-
-type ServiceTypeKorean = "방문" | "위탁" //TODO: ServiceType 전부 한글로 바꾸기
 
 export type CLStackNavigatorParamList = {
   /**
@@ -125,6 +124,8 @@ export type CLStackNavigatorParamList = {
     serviceType: ServiceTypeKorean
     serviceAmenity: ServiceAmenity
     images: string[]
+    //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
+    //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
     selectedPets: number[]
 
     // 방문
@@ -134,6 +135,9 @@ export type CLStackNavigatorParamList = {
     // 위탁
     startDate?: string
     endDate?: string
+
+    // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+    address // 검색결과 헤더에 보여줄 주소
   }
   "payment-screen": undefined
   "all-reviews-screen": undefined
@@ -159,6 +163,7 @@ export type CLStackNavigatorParamList = {
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
+  "add-pet-screen": undefined
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
   "notification-screen": { removeAllToggle: boolean }
   // ===========================================================================================================
@@ -579,6 +584,16 @@ export const MypageStack = () => {
             ),*/
           headerTitle: "",
         })}
+      />
+
+      {/* //* 반려동물 등록 */}
+      <Stack.Screen
+        name="add-pet-screen"
+        component={AddPetScreen}
+        options={{
+          title: "반려동물 등록",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
       />
 
       {/* //* 반려동물 정보 수정 */}

@@ -35,4 +35,12 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
+  addPet: {
+    height: 129,
+    marginTop: 8,
+    backgroundColor: "white",
+    borderColor: GIVER_CASUAL_NAVY,
+    // borderWidth: 2,
+  },
 })

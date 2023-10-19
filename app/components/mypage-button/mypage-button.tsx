@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image } from "react-native"
+import { Image, TouchableOpacity } from "react-native"
 import React from "react"
 import { MypageButtonProps } from "./mypage-button.props"
 import { styles } from "./styles"
@@ -9,9 +9,9 @@ import { images } from "#images"
 export const MypageButton = (props: MypageButtonProps) => {
   const { text, style, onPress, opacity, disabled } = props
   return (
-    <Pressable style={[styles.root, style]} onPress={onPress} disabled={disabled}>
+    <TouchableOpacity style={[styles.root, style]} onPress={onPress} disabled={disabled}>
       <PreMed16 text={text} color={STRONG_LINE} style={{ opacity }} />
       <Image source={images.arrow_right} style={styles.arrow} />
-    </Pressable>
+    </TouchableOpacity>
   )
 }

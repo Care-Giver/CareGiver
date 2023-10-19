@@ -3,6 +3,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
 import { ratingRound } from "../../utils/format"
+import { alertModal } from "../../utils/alert-modal"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
@@ -72,7 +73,7 @@ interface GetCrecheReviewResponse extends GeneralResponse {
  * @param images 서버에 업로드할 이미지 주소 배열
  * @returns 서버에 업로드된 Urls
  */
-export const uploadURIS = async (images: PickerImage[]): Promise<string[] | null> => {
+export const uploadURIS = async (images: PickerImage[]): Promise<string[] | []> => {
   try {
     const formData = new FormData()
 
@@ -89,11 +90,20 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[] | null
       // console.info("[uploads response.data] >>>", response.data)
       return response.data.urls
     } else {
-      throw new Error("")
+      // throw new Error("")
+      alertModal(
+        "이미지 업로드 실패",
+        "알 수 없는 이유로 이미지 업로드에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+      )
+      return []
     }
   } catch (error) {
     console.error("[axios/review.ts - Upload error] >>>", error)
-    return null
+    alertModal(
+      "이미지 업로드 실패 (axios)",
+      "알 수 없는 이유로 이미지 업로드에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+    )
+    return []
   }
 }
 

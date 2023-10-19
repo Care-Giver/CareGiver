@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useCallback, useMemo } from "react"
+import React, { FC, useState, useRef, useCallback, useMemo, useEffect } from "react"
 import { Image, View, LayoutAnimation, Platform, UIManager, ScrollView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -17,6 +17,7 @@ import {
   BOTTOM_TAB_BAR_HEIGHT,
   timeText,
   Button,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -33,7 +34,13 @@ import { DateData } from "react-native-calendars"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { addMinutes } from "date-fns"
-import { useStores } from "#models"
+import { useStores, Pet } from "#models"
+import Geolocation from "react-native-geolocation-service"
+import { getDevicePermission } from "./getDevicePermission"
+import { alertModal } from "../../../utils/alert-modal"
+import Postcode from "@actbase/react-daum-postcode"
+import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
+import { addressToCoordinates } from "../../cg-set-address/addressToCoordinates"
 
 const nowInUTCZero = new Date()
 const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
@@ -114,10 +121,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const scrollViewRef = useRef<ScrollView>(null)
 
     // 시간선택 바텀시트모달 - ref
-    const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-
-    // 시간선택 바텀시트모달 - snapPoints
-    const snapPoints = useMemo(() => ["60%"], [])
+    const bottomSheetModalRefTimePicker = useRef<BottomSheetModal>(null)
 
     /** 시간선택 바텀시트모달 backdrop */
     const renderBackdrop = useCallback(
@@ -137,7 +141,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       const beginDateText = timeText(startTime)
       const endDateText = timeText(endTime)
       setSelectedTimeText(`${beginDateText} - ${endDateText}`)
-      bottomSheetModalRef.current?.close()
+      bottomSheetModalRefTimePicker.current?.close()
     }, [startTime, endTime])
 
     /** 시간선택 바텀시트모달 Footer - 확인 버튼 렌더링 */
@@ -150,28 +154,68 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
       [closeBottomSheet],
     )
 
+    //* 위치선택
+    const [address, setAddress] = useState("주소를 입력해주세요") // 주소
+    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 }) // 좌표
+
+    console.log("location", location)
+
+    // 주소입력 바텀시트모달 - ref
+    const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)
+
+    const onPressLocation = async () => {
+      // 위치 권한 요청
+      getDevicePermission(
+        "location",
+        // 성공시, 현 위치를 좌표로 설정
+        () => {
+          Geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords
+              setLocation({ lat: latitude, lng: longitude })
+            },
+            (error) => {
+              console.log("error", error)
+              alertModal("위치 정보 수집 실패", error.message)
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+          )
+        },
+        // 실패시, 주소 바텀시트모달 표출
+        () => {
+          bottomSheetModalRefAddress.current?.present()
+        },
+      )
+    }
+
+    const onAddressSelected = (data: OnCompleteParams) => {
+      setAddress(data.address)
+      addressToCoordinates(data.address).then(({ latitude, longitude }) => {
+        setLocation({ lat: latitude, lng: longitude })
+      })
+      bottomSheetModalRefAddress.current?.close()
+    }
+
+    //* 반려동물선택 - 선택된 반려동물
+    const [selectedPets, setSelectedPets] = useState<Pet[]>([])
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
+
     //? 펫시터 찾기 버튼 활성화 여부 결정
-    const hadleIsActivated = () => {
+    const isActivated = useMemo(() => {
       if (serviceType === "방문" && selectedTimeText === "방문시간을 선택해주세요") return false
 
       if (serviceType === "방문" && !date) return false
 
       if (serviceType === "위탁" && dateRange.length !== 2) return false
 
+      if (!address) return false
+
       if (selectedPets.length === 0) return false
 
       return true
-    }
+    }, [serviceType, selectedTimeText, date, dateRange, address, selectedPets])
 
-    //* 위치선택
-    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 })
-
-    //* 반려동물선택 - 선택된 반려동물
-    const [selectedPets, setSelectedPets] = useState([])
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-    const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
-
-    const isActivated = hadleIsActivated()
     return (
       <Screen testID="SearchScreen" preset="fixed">
         <Button
@@ -288,7 +332,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             <RowRoundedButton
               onPress={() => {
                 // handleBottomSheet(true)
-                bottomSheetModalRef.current?.present()
+                bottomSheetModalRefTimePicker.current?.present()
                 setIsCalendarOpen(false)
               }}
               image={images.timer}
@@ -299,12 +343,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
           {/*//* 위치 선택 */}
           <RowRoundedButton
-            onPress={() => {
-              // navigate("test-map-screen")
-              alert("추후, 위치를 선택할 수 있는 화면이 추가될 예정입니다 😉")
-            }}
+            onPress={onPressLocation}
             image={images.location}
-            text={"경기도 안산시 상록구 한양대학로 55"}
+            text={address}
             textColor={HEAD_LINE}
             style={{ marginTop: 12 }}
           />
@@ -337,7 +378,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               />
               <View style={isDropdownOpen ? styles.hidden : styles.shown}>
                 {/*//* 선택된 반려동물 리스트 */}
-
                 {selectedPets.map((item, index) => (
                   <SelectedPetCard
                     key={index}
@@ -366,11 +406,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             navigate("search-result-screen", {
               service,
               serviceType,
-              // TODO: API 를 통해 받아온 pet 에서 선택한 값들로 변경해야합니다.
-              selectedPets: selectedPets.map((item) => {
-                return item.id
-              }),
-
+              petIds: selectedPets.map((item) => item.id),
               // "방문"인 경우 사용될 값
               startTime:
                 serviceType === "방문"
@@ -393,16 +429,45 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
               // 위치 값
               ...location,
+
+              // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+              address, // 검색결과 헤더에 보여줄 주소
             })
           }}
         />
 
-        {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
+        {/* 위치 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
         <BottomSheetModal
-          ref={bottomSheetModalRef}
+          ref={bottomSheetModalRefAddress}
           backdropComponent={renderBackdrop}
           index={0}
-          snapPoints={snapPoints}
+          snapPoints={["80%"]}
+          enablePanDownToClose
+          style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        >
+          <Postcode
+            style={{ width: "100%", height: "80%", paddingTop: 20 }}
+            jsOptions={{
+              animation: true,
+              useBannerLink: false,
+            }}
+            onSelected={onAddressSelected}
+            onError={(error) => {
+              console.log("우편주소 서비스 에러 - error", error)
+              alertModal(
+                "우편주소 서비스 에러",
+                "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.",
+              )
+            }}
+          />
+        </BottomSheetModal>
+
+        {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
+        <BottomSheetModal
+          ref={bottomSheetModalRefTimePicker}
+          backdropComponent={renderBackdrop}
+          index={0}
+          snapPoints={["60%"]}
           enablePanDownToClose
           footerComponent={renderFooter}
         >
