@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { CustomModal, NotificationCard, Screen } from "#components"
+import { Button, CustomModal, NotificationCard, Screen } from "#components"
 import { useStores } from "#models"
 import { useFocusEffect } from "@react-navigation/native"
 import { alertModal } from "../../utils/alert-modal"
 import { NotificationColumns, getNotifications } from "../../services/axios/notification"
 import { images } from "#images"
+import { BOTTOM_HEIGHT } from "#theme"
 
 export const NotificationScreen: FC<
   StackScreenProps<NavigatorParamList, "notification-screen">
@@ -23,6 +24,9 @@ export const NotificationScreen: FC<
       setIsChecked,
       isEmpty,
       unreadNotificationCount,
+
+      reset,
+      self,
     },
   } = useStores()
 
@@ -68,20 +72,36 @@ export const NotificationScreen: FC<
 
   return (
     <Screen testID="Notification">
-      {notifications &&
-        notifications.map((item) => {
-          return (
-            !item.isDeleted && (
-              <NotificationCard
-                key={item.id}
-                title={item.title}
-                subtitle={item.content}
-                time={item.title}
-                isChecked={item.isChecked}
-              />
+      <Button
+        onPress={() => {
+          console.log("🔻초기화 전 self", self)
+          reset()
+          console.log("🔺초기화 후self", self)
+        }}
+        text="notificationStore 초기화"
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: BOTTOM_HEIGHT,
+        }}
+      >
+        {notifications &&
+          notifications.map((item) => {
+            return (
+              !item.isDeleted && (
+                <NotificationCard
+                  key={item.id}
+                  title={item.title}
+                  subtitle={item.content}
+                  time={item.title}
+                  isChecked={item.isChecked}
+                />
+              )
             )
-          )
-        })}
+          })}
+      </ScrollView>
+
       <CustomModal
         image={images.error_profile_medium}
         imageWidth={100}

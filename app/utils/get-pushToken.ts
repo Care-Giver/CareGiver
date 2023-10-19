@@ -16,6 +16,7 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
     })
   }
 
+  // 실제 디바이스인 경우
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync()
     let finalStatus = existingStatus
@@ -28,10 +29,11 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
       return null
     }
     token = (await Notifications.getExpoPushTokenAsync()).data
-    console.log(token)
-  } else {
-    alert("Push Notifications 을 테스트 하기위해서는, 반드시 실제 기기를 사용해주세요!")
+    console.log("🔷 registerForPushNotificationsAsync - token:", token)
   }
-
-  return token
+  // 시뮬레이터인 경우
+  else {
+    alert("Push Notifications 을 테스트 하기위해서는, 반드시 실제 기기를 사용해주세요!")
+    return null
+  }
 }

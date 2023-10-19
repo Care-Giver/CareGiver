@@ -16,7 +16,6 @@ import {
   ClientCalendar,
   BOTTOM_TAB_BAR_HEIGHT,
   timeText,
-  Button,
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -74,10 +73,6 @@ const 한양대에리카제5공학관 = {
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     useShowBottomTab(navigation)
-
-    const {
-      notificationStore: { reset, self },
-    } = useStores()
 
     //* 서비스 형태
     const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
@@ -218,14 +213,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     return (
       <Screen testID="SearchScreen" preset="fixed">
-        <Button
-          onPress={() => {
-            console.log("🔻초기화 전 self", self)
-            reset()
-            console.log("🔺초기화 후self", self)
-          }}
-          text="MST 초기화"
-        />
         <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}

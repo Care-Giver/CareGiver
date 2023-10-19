@@ -4,7 +4,7 @@ import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
 import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
 import axios from "axios"
-import { registerForPushNotificationsAsync } from "app/utils/get-pushToken"
+import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
