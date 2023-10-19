@@ -2,8 +2,9 @@ import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-import { getMe, login, LoginRequestBody, Sex, UserDetail } from "#axios"
+import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
 import axios from "axios"
+import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -159,7 +160,16 @@ export const UserStoreModel = types
         if (!userDetail) {
           return false
         }
+        // 푸시토큰 발급
+        const pushToken = await registerForPushNotificationsAsync().then((token) => {
+          //? 토큰 발급에 실패한다면 null이 반환되고, 이 때 useDetail.pushToken의 type에 맞춰 ""을 return한다.
+          if (token === null) return ""
 
+          //? post api 사용하여 유저 db에 푸시토큰 저장
+          postPushToken(token)
+          //? mst내에서 사용하기 위해 발급받은 푸시토큰 return
+          return token
+        })
         // 유저 상세정보 저장
         this.setUserDetail({
           id: userDetail.id,
@@ -169,7 +179,7 @@ export const UserStoreModel = types
           birthday: userDetail.birthday,
           address: userDetail.address,
           profileImage: userDetail.profileImage,
-          pushToken: userDetail.pushToken,
+          pushToken: pushToken,
         })
 
         return true

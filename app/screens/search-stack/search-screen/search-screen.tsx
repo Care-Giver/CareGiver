@@ -33,7 +33,7 @@ import { DateData } from "react-native-calendars"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { addMinutes } from "date-fns"
-import { Pet, useStores } from "#models"
+import { useStores, Pet } from "#models"
 import Geolocation from "react-native-geolocation-service"
 import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../utils/alert-modal"
@@ -73,10 +73,6 @@ const 한양대에리카제5공학관 = {
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     useShowBottomTab(navigation)
-
-    const {
-      petStore: { petsHandler, pets, hasPets },
-    } = useStores()
 
     //* 서비스 형태
     const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁

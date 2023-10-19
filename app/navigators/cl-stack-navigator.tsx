@@ -46,6 +46,7 @@ import {
   ViewReviewScreen,
   TempChatScreen,
   ServiceAmenity,
+  NotificationScreen,
   AddPetScreen,
 } from "#screens"
 import { goBack } from "./navigation-utilities"
@@ -58,6 +59,7 @@ import {
   EditPetInfoScreenHeader,
   CgScreenHeader,
   PetsitterProfileCardPetsitterData,
+  NotificationScreenHeader,
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
@@ -163,7 +165,7 @@ export type CLStackNavigatorParamList = {
   "edit-mypage-screen": { editable: boolean }
   "add-pet-screen": undefined
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
-
+  "notification-screen": { removeAllToggle: boolean }
   // ===========================================================================================================
   // 아래는 테스트 스크린들 입니다.
   // ===========================================================================================================
@@ -433,6 +435,14 @@ export const SearchingStack = () => {
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
+      <Stack.Screen
+        name="notification-screen"
+        component={NotificationScreen}
+        options={({ navigation, route }) => ({
+          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
+          header: (props) => <NotificationScreenHeader {...props} />,
+        })}
+      />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />

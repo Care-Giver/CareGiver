@@ -38,6 +38,7 @@ export * from "./screen-headers/edit-pet-info-screen-header/edit-pet-info-screen
 export * from "./screen-headers/cg-certificate-registration-screen-header/cg-certificate-registration-screen-header"
 export * from "./screen-headers/cgset-screen-header/cgset-screen-header"
 export * from "./screen-headers/cg-screen-header/cg-screen-header"
+export * from "./screen-headers/notification-screen-header/notification-screen-header"
 
 //* bottom-tab-bar
 export * from "./custom-bottom-tab-bar/custom-tab-bar/custom-tab-bar"
@@ -97,3 +98,4 @@ export * from "./client-calendar/client-calendar"
 export * from "./sign-up-text-input/sign-up-text-input"
 export * from "./count-down/count-down"
 export * from "./search-sorting-button/search-sorting-button"
+export * from "./notification-card/notification-card"
