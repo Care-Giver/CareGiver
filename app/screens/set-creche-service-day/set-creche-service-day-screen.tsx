@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useState } from "react"
 import {
   ScrollView,
   StyleSheet,
@@ -92,7 +92,7 @@ export const SetCrecheServiceDayScreen: FC<
 
   return (
     <Screen testID="SetCrecheServiceDay" style={styles.root}>
-      <ScrollView ref={scrollViewRef}>
+      <ScrollView>
         <PreBol20 text="9월 15일" mb={10} ml={16} />
         <DivisionLine height={8} color={LIGHT_LINE} />
 

@@ -17,8 +17,11 @@ import { useStores } from "../../models"
 import { Pressable, View, Image } from "react-native"
 import { crecheDays as _crecheDays } from "./dummy-data"
 import { BODY, GIVER_CASUAL_NAVY } from "#theme"
-import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
-import { CrecheAvailableDates } from "../../services/axios/creche-day"
+import {
+  GroupedVisitingAvailableTimesByDate,
+  getVisitingAvailableTimes,
+} from "../../services/axios/visiting-available-time"
+import { CrecheAvailableDates, getCrecheDays } from "../../services/axios/creche-day"
 import { useShowBottomTab } from "../../utils/hooks"
 import { images } from "#images"
 
@@ -29,13 +32,13 @@ export const CgCalendarScreen: FC<
 
   // MST store 를 가져옵니다.
   const {
-    visitingAvailableTimesModel: {
-      setAllVisitingAvailableTimes,
-      visitingAvailableTimes,
-      showAllVisitingAvailableTimes,
-    },
-    CrecheDayModel: { setAllCrecheDays, crecheDays },
-    userStore: { switchType, userDetail },
+    // visitingAvailableTimesModel: {
+    //   setAllVisitingAvailableTimes,
+    //   visitingAvailableTimes,
+    //   showAllVisitingAvailableTimes,
+    // },
+    // CrecheDayModel: { setAllCrecheDays, crecheDays },
+    // userStore: { switchType, userDetail },
     petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
   } = useStores()
 
@@ -43,6 +46,16 @@ export const CgCalendarScreen: FC<
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
   const [selected, setSelected] = useState<string[]>([]) // TODO - 타입 제발 정해주세요
   const [crecheId, setCrecheId] = useState(1)
+
+  useEffect(() => {
+    if (serviceTypeKorean === "방문") {
+      getVisitingAvailableTimes(petsitter.id).then(setVisitingDates)
+    } else {
+      getCrecheDays(petsitter.id).then(setCrecheDates)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceTypeKorean])
 
   return (
     <Screen testID="CgCalendar">
@@ -59,7 +72,8 @@ export const CgCalendarScreen: FC<
             style={{ alignSelf: "flex-end", marginBottom: 8 }}
           />
           <CgCalendar
-            availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDays}
+            // availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDays}
+            availableDates={serviceTypeKorean === "방문" ? visitingDates : crecheDates}
             serviceType={serviceTypeKorean}
             selected={selected}
             setSelected={setSelected}
@@ -82,8 +96,8 @@ export const CgCalendarScreen: FC<
               serviceTypeKorean === "방문"
                 ? navigate("set-visiting-service-day-screen", {
                     // TODO - 여러개의 selected 가 넘겨질 경우 처리
-                    date: selected,
-                    crecheId,
+                    // date: selected,
+                    // crecheId,
                   })
                 : navigate("set-creche-service-day-screen", {
                     date: selected,

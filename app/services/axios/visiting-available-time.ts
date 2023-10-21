@@ -11,7 +11,7 @@ interface VisitingAvailableTimesResponse extends GeneralResponse {
 }
 
 /**
- * 로그인한 유저의 모든 위탁 예약을 읽어온다.
+ * 로그인한 유저의 모든 방문 예약을 읽어온다.
  * @returns {Promise<visitingAvailableTimes>}
  */
 export const getVisitingAvailableTimes = async (

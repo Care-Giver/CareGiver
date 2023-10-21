@@ -10,7 +10,7 @@ import {
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
@@ -219,6 +219,9 @@ export const SetVisitingServiceDayScreen: FC<
           <Pressable
             style={{ flexDirection: "row", alignItems: "center" }}
             onPress={() => setPricemodalOpen(true)}
+            // onPress={() => {
+            //   navigate("CgMypage", { screen: "cg-edit-profile-screen" })
+            // }}
           >
             <PreBol16 text={`${numberStringToPrice(price?.toString())} 원`} mr={4} />
             <Image style={styles.image} source={images.arrow_right} />

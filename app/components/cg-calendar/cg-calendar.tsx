@@ -25,15 +25,15 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
     // console.log("serviceType in checkDate >>>", serviceType)
     console.log("date.dateString>>>", date?.dateString)
     let isAvailableDate: boolean = false
-    if (serviceType == "방문") {
+    if (serviceType === "방문") {
       availableDates.forEach((availableDate) => {
-        if (date?.dateString == availableDate?.date.substring(0, 10)) {
+        if (date?.dateString === availableDate?.date.substring(0, 10)) {
           isAvailableDate = true
         }
       })
-    } else if (serviceType == "위탁") {
+    } else if (serviceType === "위탁") {
       availableDates.forEach((availableDate) => {
-        if (date?.dateString == availableDate?.startDate.substring(0, 10)) {
+        if (date?.dateString === availableDate?.startDate.substring(0, 10)) {
           isAvailableDate = true
         }
       })
@@ -83,15 +83,13 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }}
         dayComponent={({ date, state }) => (
           <Pressable onPress={(e) => onDayPress({ date })}>
-            {hasDates && (
-              <CgCalendarDay //? 왜 안되는지,
-                date={date}
-                state={state}
-                selected={selected}
-                availableDates={availableDates}
-                serviceType={serviceType}
-              />
-            )}
+            <CgCalendarDay //? 왜 안되는지,
+              date={date}
+              state={state}
+              selected={selected}
+              availableDates={availableDates}
+              serviceType={serviceType}
+            />
           </Pressable>
         )}
         style={[styles.calendar, SHADOW_1]}
