@@ -386,7 +386,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           style={{
             alignSelf: "center",
             position: "absolute",
-            bottom: BOTTOM_TAB_BAR_HEIGHT,
+            bottom: BOTTOM_TAB_BAR_HEIGHT + 16,
           }}
           onPress={() => {
             //? 펫시터 검색결과 스크린으로 이동

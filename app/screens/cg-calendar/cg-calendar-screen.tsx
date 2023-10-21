@@ -72,7 +72,7 @@ export const CgCalendarScreen: FC<
             style={{
               alignSelf: "center",
               position: "absolute",
-              bottom: BOTTOM_TAB_BAR_HEIGHT,
+              bottom: BOTTOM_TAB_BAR_HEIGHT + 16,
               backgroundColor: "white",
               borderColor: GIVER_CASUAL_NAVY,
               borderWidth: 2,
