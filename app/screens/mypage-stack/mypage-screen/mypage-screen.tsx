@@ -47,7 +47,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
       navigate("setting-screen")
     }
 
-    // * 고객센터 버튼 클릭시 실행되는 함수
+    // * 고객 센터 버튼 클릭시 실행되는 함수
     const handleServiceCenterPress = () => {
       navigate("service-center-screen")
     }
@@ -162,6 +162,14 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           </TouchableOpacity>
 
           <DivisionLine color={LIGHT_LINE} />
+          {/* //* 고객 센터 버튼 */}
+          <MypageButton
+            text="고객 센터"
+            onPress={handleServiceCenterPress}
+            style={styles.sidePadding}
+          />
+
+          <DivisionLine color={LIGHT_LINE} />
           {/* //* 결제 수단 및 쿠폰 버튼 */}
           <MypageButton
             text="결제 수단 및 쿠폰"
@@ -173,23 +181,6 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           <DivisionLine color={LIGHT_LINE} />
           {/* //* 환경설정 버튼 */}
           <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
-
-          <DivisionLine color={LIGHT_LINE} />
-          {/* //* 자주 묻는 질문 버튼 */}
-          <MypageButton
-            text="자주 묻는 질문"
-            opacity={0.2}
-            disabled={true}
-            style={styles.sidePadding}
-          />
-
-          <DivisionLine color={LIGHT_LINE} />
-          {/* //* 고객센터 버튼 */}
-          <MypageButton
-            text="고객 센터"
-            onPress={handleServiceCenterPress}
-            style={styles.sidePadding}
-          />
 
           <DivisionLine color={LIGHT_LINE} />
         </ScrollView>

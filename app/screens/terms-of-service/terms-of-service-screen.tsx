@@ -16,6 +16,7 @@ import {
 } from "#components"
 import { images } from "#images"
 import { BODY, BOTTOM_HEIGHT } from "#theme"
+import { 외부링크 } from "../../services/external-web-link"
 
 export type ConsentList = {
   privacyPolicyConsent: boolean
@@ -74,11 +75,7 @@ export const TermsOfServiceScreen: FC<
         <PreReg14 text="서비스 이용 약관 동의" color={BODY} ml={28} />
         <Pressable
           style={{ marginLeft: "auto" }}
-          onPress={() =>
-            openLink(
-              "https://foregoing-collard-3ea.notion.site/781a774f667e49168ac225a24d10e785?pvs=4",
-            )
-          }
+          onPress={() => openLink(외부링크.서비스_이용_약관_동의)}
         >
           <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
         </Pressable>
@@ -87,11 +84,7 @@ export const TermsOfServiceScreen: FC<
         <PreReg14 text="개인정보 수집 및 이용 동의" color={BODY} ml={28} />
         <Pressable
           style={{ marginLeft: "auto" }}
-          onPress={() =>
-            openLink(
-              "https://foregoing-collard-3ea.notion.site/584b60a89a6e4ccebe8c5cf112d05843?pvs=4",
-            )
-          }
+          onPress={() => openLink(외부링크.개인정보_수집_이용_동의)}
         >
           <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
         </Pressable>
@@ -103,11 +96,7 @@ export const TermsOfServiceScreen: FC<
         <PreReg14 text="위치기반서비스 이용 약관 동의" color={BODY} ml={28} />
         <Pressable
           style={{ marginLeft: "auto" }}
-          onPress={() =>
-            openLink(
-              "https://foregoing-collard-3ea.notion.site/386832a2945a4430ad1dd2b7f12ef23d?pvs=4",
-            )
-          }
+          onPress={() => openLink(외부링크.위치기반서비스_이용_약관_동의)}
         >
           <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
         </Pressable>

@@ -241,12 +241,12 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* //* 고객센터 스크린 */}
+      {/* //* 고객 센터 스크린 */}
       <Stack.Screen
         name="service-center-screen"
         component={ServiceCenterScreen}
         options={{
-          title: "고객센터",
+          title: "고객 센터",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
