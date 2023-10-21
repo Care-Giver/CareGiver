@@ -40,6 +40,7 @@ export type Service = {
   createAt: string
   updatedAt: string
   name: string
+  desc?: string
 
   /* {
       "id": 2,
@@ -54,6 +55,7 @@ export type Amenity = {
   createAt: string
   updatedAt: string
   name: string
+  desc?: string
 }
 
 type Coordinates = [number, number] //[126.834393833, 37.298004735]

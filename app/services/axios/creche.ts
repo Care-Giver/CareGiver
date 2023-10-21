@@ -139,3 +139,65 @@ export const getCrecheCareGiver = async (): Promise<GetCrecheCareGiverResult> =>
     return { isSuccess: false, reason: error }
   }
 }
+
+interface GetCrecheServicesResponse extends GeneralResponse {
+  crecheServices: CrecheService[]
+}
+interface GetCrecheServicesResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  crecheServices?: CrecheService[]
+}
+/**
+ * DB 에 있는 방문 펫시팅 Service 객체를 요청합니다.
+ */
+export const getCrecheServices = async (): Promise<GetCrecheServicesResult> => {
+  try {
+    const response = await axios.get<GetCrecheServicesResponse>(`${BASE_URL}/creche/services`)
+    console.log("response.data 🔷 getCrecheServices", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - getCrecheServices", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+      crecheServices: response.data.crecheServices,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getCrecheServices", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface GetCrecheAmenitiesResponse extends GeneralResponse {
+  crecheAmenities: CrecheAmenity[]
+}
+interface GetCrecheAmenitiesResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  crecheAmenities?: CrecheAmenity[]
+}
+/**
+ * DB 에 있는 방문 펫시팅 Amenity 객체를 요청합니다.
+ */
+export const getCrecheAmenities = async (): Promise<GetCrecheAmenitiesResult> => {
+  try {
+    const response = await axios.get<GetCrecheAmenitiesResponse>(`${BASE_URL}/creche/amenities`)
+    console.log("response.data 🔷 getCrecheAmenities", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - getCrecheAmenities", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+      crecheAmenities: response.data.crecheAmenities,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getCrecheAmenities", error)
+    return { isSuccess: false, reason: error }
+  }
+}

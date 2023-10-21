@@ -23,7 +23,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   const checkDate = ({ date }) => {
     // console.log("dates in checkDate >>>", dates)
     // console.log("serviceType in checkDate >>>", serviceType)
-    console.log("date.dateString>>>", date?.dateString)
+    // console.log("date.dateString>>>", date?.dateString)
     let isAvailableDate: boolean = false
     if (serviceType == "방문") {
       availableDates.forEach((availableDate) => {

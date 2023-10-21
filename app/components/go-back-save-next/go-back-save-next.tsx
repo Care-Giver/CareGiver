@@ -26,9 +26,9 @@ export const GoBackSaveNext = observer(function GoBackSaveNext(props: GoBackSave
       <TouchableOpacity style={styles.goBack} onPress={onPressGoback}>
         <PreBol16 text={"이전"} color={"white"} />
       </TouchableOpacity>
-      {/* 다음단계 및 저장 후 돌아가기 버튼 */}
+      {/* 다음단계 버튼 */}
       <TouchableOpacity style={styles.saveNext} onPress={onPressSaveNext}>
-        <PreBol16 text={isLastStep ? "저장 후 돌아가기" : "다음단계"} color={"white"} />
+        <PreBol16 text={isLastStep ? "완료하기" : "저장 후 다음단계"} color={"white"} />
       </TouchableOpacity>
     </View>
   )

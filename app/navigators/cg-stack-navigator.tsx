@@ -20,17 +20,14 @@ import {
 import {
   SettingScreen,
   ServiceCenterScreen,
-  ServiceRegistrationScreen,
-  FacilityRegistrationScreen,
   CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   ManageBookingScreen,
-  CgCalendarListScreen,
   CgMypageScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
-  CgSetAddressScreen,
+  CgRegistration1Screen,
   CgEditProfileScreen,
   EditMypageScreen,
 } from "#screens"
@@ -78,7 +75,7 @@ export type CGStackNavigatorParamList = {
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
   "cg-edit-profile-screen": undefined
-  "cg-set-address-screen": undefined
+  "cg-registration-1-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
@@ -281,8 +278,8 @@ export const CgMypageStack = () => {
 
       {/* //* CG - 장소 등록 스크린 */}
       <Stack.Screen
-        name="cg-set-address-screen"
-        component={CgSetAddressScreen}
+        name="cg-registration-1-screen"
+        component={CgRegistration1Screen}
         options={{
           title: "지도",
           headerShown: false,
@@ -294,28 +291,6 @@ export const CgMypageStack = () => {
       // 아래는 아직 정리되지 않은 스크린들 입니다.
       // ===========================================================================================================
     */}
-
-      {/* //! 등록 스택 BEGIN */}
-      {/* //* 서비스 등록 스크린 */}
-      <Stack.Screen
-        name="service-registration-screen"
-        component={ServiceRegistrationScreen}
-        options={{
-          title: "서비스 등록",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-
-      {/* //* 편의시설 등록 스크린 */}
-      <Stack.Screen
-        name="facility-registration-screen"
-        component={FacilityRegistrationScreen}
-        options={{
-          title: "근처 편의시설 등록",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/* //! 등록 스택 ENDED */}
 
       {/* //* 케어기버 요금 설정 스크린 */}
       <Stack.Screen

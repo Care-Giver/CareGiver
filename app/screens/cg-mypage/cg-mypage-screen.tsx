@@ -24,7 +24,7 @@ import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { CgSetServiceType } from "../cg-set-address/cg-set-service-type"
+import { CgSetServiceType } from "./cg-set-service-type"
 import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
 import { createCreche } from "#axios"
@@ -122,7 +122,7 @@ export const CgMypageScreen: FC<
                 }).then((res) => {
                   if (res.isSuccess) {
                     fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-set-address-screen")
+                      result === true && navigate("cg-registration-1-screen")
                     })
                   } else {
                     alertModal(
@@ -155,7 +155,7 @@ export const CgMypageScreen: FC<
                 }).then((res) => {
                   if (res.isSuccess) {
                     fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-set-address-screen")
+                      result === true && navigate("cg-registration-1-screen")
                     })
                   } else {
                     alertModal(

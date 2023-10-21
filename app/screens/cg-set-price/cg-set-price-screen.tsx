@@ -8,7 +8,7 @@ import {
   GoBackSaveNext,
   Screen,
   CaregiverSetAdditionalPrice,
-  CgRegisterStep,
+  CgRegisterState,
   AdditionalPrice,
   PreMed16,
 } from "#components"
@@ -120,7 +120,7 @@ export const CgSetPriceScreen: FC<
   return (
     <Screen>
       <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
-      <StepHeader
+      <StateHeader
         currentStep={currentStep}
         setCurrentStep={setCurrentStep}
         style={{ marginTop: 10 }}
@@ -197,11 +197,11 @@ const ScreenHeader = ({ navigation, onPressSaveExit }) => {
  * FlatList 상단에 표출되는
  * 현재 Step 을 보여주는 컴포넌트입니다.
  */
-const StepHeader = ({ currentStep, setCurrentStep, style }) => {
+const StateHeader = ({ currentStep, setCurrentStep, style }) => {
   return (
     <View style={[{ flexDirection: "row", height: 30 }, style]}>
-      <CgRegisterStep
-        step={currentStep === 1 ? "progress" : "done"}
+      <CgRegisterState
+        state={currentStep === 1 ? "progress" : "done"}
         number={1}
         title="기본 요금"
         onPress={() => {
@@ -209,8 +209,8 @@ const StepHeader = ({ currentStep, setCurrentStep, style }) => {
         }}
         style={{ marginRight: 5 }}
       />
-      <CgRegisterStep
-        step={currentStep === 2 ? "progress" : "done"}
+      <CgRegisterState
+        state={currentStep === 2 ? "progress" : "done"}
         number={2}
         title="크기별 추가 요금"
         onPress={() => {

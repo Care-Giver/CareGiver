@@ -158,3 +158,65 @@ export const getVisitingCareGiver = async (): Promise<GetVisitingCareGiverResult
     return { isSuccess: false, reason: error }
   }
 }
+
+interface GetVisitingServicesResponse extends GeneralResponse {
+  visitingServices: VisitingService[]
+}
+interface GetVisitingServicesResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  visitingServices?: VisitingService[]
+}
+/**
+ * DB 에 있는 방문 펫시팅 Service 객체를 요청합니다.
+ */
+export const getVisitingServices = async (): Promise<GetVisitingServicesResult> => {
+  try {
+    const response = await axios.get<GetVisitingServicesResponse>(`${BASE_URL}/visiting/services`)
+    console.log("response.data 🔷 getVisitingServices", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - getVisitingServices", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+      visitingServices: response.data.visitingServices,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getVisitingServices", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface GetVisitingAmenitiesResponse extends GeneralResponse {
+  visitingAmenities: VisitingAmenity[]
+}
+interface GetVisitingAmenitiesResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  visitingAmenities?: VisitingAmenity[]
+}
+/**
+ * DB 에 있는 방문 펫시팅 Amenity 객체를 요청합니다.
+ */
+export const getVisitingAmenities = async (): Promise<GetVisitingAmenitiesResult> => {
+  try {
+    const response = await axios.get<GetVisitingAmenitiesResponse>(`${BASE_URL}/visiting/amenities`)
+    console.log("response.data 🔷 getVisitingAmenities", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - getVisitingAmenities", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    return {
+      isSuccess: true,
+      visitingAmenities: response.data.visitingAmenities,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getVisitingAmenities", error)
+    return { isSuccess: false, reason: error }
+  }
+}

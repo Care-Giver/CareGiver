@@ -6,29 +6,28 @@ import { PopSem12 } from "#components"
 
 export type Step = "todo" | "progress" | "done"
 
-export interface CgRegisterStepProps {
+export interface CgRegisterStateProps {
   /**
    * padding, margin 을 줌으로써, 추가적인 스타일링을 부여할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
 
   /**
-   * 단계를 입력해주세요
+   * 상태를 입력해주세요
    * - "todo"
    * - "progress"
    * - "done"
    */
-  step: Step
+  state: Step
 
   /**
    * 몇번째 단계인지 입력해주세요.
    * number 로 입력해주세요.
-   * (TODO: stepNumber 에 따른 logic 분기)
    */
   number: number
 
   /**
-   * step 의 제목을 입력해주세요
+   * state 의 제목을 입력해주세요
    * progress 단계일때 표시됩니다.
    */
   title: string
@@ -36,8 +35,8 @@ export interface CgRegisterStepProps {
   onPress?: () => void
 }
 
-export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegisterStepProps) {
-  const { style, step = "todo", number = 1, title = "제목없음", onPress } = props
+export const CgRegisterState = observer(function CgRegisterState(props: CgRegisterStateProps) {
+  const { style, state = "todo", number = 1, title = "제목없음", onPress } = props
   const Wrapper = onPress ? Pressable : View
 
   const Todo = () => {
@@ -72,7 +71,7 @@ export const CgRegisterStep = observer(function CgRegisterStep(props: CgRegister
     )
   }
 
-  switch (step) {
+  switch (state) {
     case "todo":
       return <Todo />
     case "progress":

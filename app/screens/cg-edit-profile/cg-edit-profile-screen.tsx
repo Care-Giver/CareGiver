@@ -9,6 +9,8 @@ import {
   DivisionLine,
   BASIC_BACKGROUND_PADDING_WIDTH,
   PreReg10,
+  PreBol18,
+  PreBol16,
 } from "#components"
 import { BODY, LIGHT_LINE } from "#theme"
 import { useStores } from "#models"
@@ -33,10 +35,13 @@ export const CgEditProfileScreen: FC<
       <DivisionLine color={LIGHT_LINE} />
       {/* //* 방문 지역 || 위탁 지역 / 사진 */}
       <View style={styles.sidePadding}>
+        <PreBol16 text="1. 펫시터 정보 설정" mt={14} />
         <MypageButton
-          text={serviceTypeKorean === "방문" ? "방문 지역" : "위탁 지역 / 사진"}
+          text={
+            (serviceTypeKorean === "방문" ? "방문 지역" : "위탁 지역 / 사진") + ", 서비스, 편의사항"
+          }
           onPress={() => {
-            navigate("cg-set-address-screen")
+            navigate("cg-registration-1-screen")
           }}
         />
 
@@ -60,7 +65,9 @@ export const CgEditProfileScreen: FC<
       {/* //* 서비스 / 편의사항 / 기본요금 */}
       <MypageButton
         text="서비스 / 편의사항 / 기본요금"
-        onPress={() => {}}
+        onPress={() => {
+          //
+        }}
         style={styles.sidePadding}
       />
       <DivisionLine color={LIGHT_LINE} />

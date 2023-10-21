@@ -165,6 +165,7 @@ const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType, userAuth },
     petsitterStore: { fetchPetsitter },
+    etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
   } = useStores()
 
   useEffect(() => {
@@ -174,8 +175,11 @@ const AllTabs = observer(function AllTabs() {
   }, [])
 
   useEffect(() => {
-    //! 중요: CARE_GIVER type 이 될때, petsitter 정보를 불러온다.
-    type === Type.CARE_GIVER && fetchPetsitter()
+    if (type === Type.CARE_GIVER) {
+      fetchPetsitter() //! 중요: CARE_GIVER type 이 될때, petsitter 정보를 불러온다.
+      !hasService && fetchService() // 펫시터 등록시 필요하므로, 서비스 객체 요청
+      !hasAmenity && fetchAmenity() // 펫시터 등록시 필요하므로, 편의시설 객체 요청
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
