@@ -30,6 +30,7 @@ import {
   CgRegistration1Screen,
   CgEditProfileScreen,
   EditMypageScreen,
+  CgRegistration2Screen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -76,12 +77,11 @@ export type CGStackNavigatorParamList = {
   "edit-mypage-screen": { editable: boolean }
   "cg-edit-profile-screen": undefined
   "cg-registration-1-screen": undefined
+  "cg-registration-2-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
   // ===========================================================================================================
-  "service-registration-screen": undefined
-  "facility-registration-screen": undefined
   "cg-set-price-screen": { serviceType: ServiceType }
 }
 
@@ -210,7 +210,8 @@ export const CgMypageStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="cg-mypage-screen"
+      // initialRouteName="cg-mypage-screen"
+      initialRouteName="cg-registration-2-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
@@ -276,12 +277,20 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 장소 등록 스크린 */}
+      {/* //* CG - 등록 1단계 스크린 */}
       <Stack.Screen
         name="cg-registration-1-screen"
         component={CgRegistration1Screen}
         options={{
-          title: "지도",
+          headerShown: false,
+        }}
+      />
+
+      {/* //* CG - 등록 2단계 스크린 */}
+      <Stack.Screen
+        name="cg-registration-2-screen"
+        component={CgRegistration2Screen}
+        options={{
           headerShown: false,
         }}
       />

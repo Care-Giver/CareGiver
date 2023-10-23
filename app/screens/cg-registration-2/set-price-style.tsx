@@ -7,7 +7,6 @@ export const commonStyles = StyleSheet.create({
   },
 
   secondTitleContainer: {
-    height: 21,
     marginTop: 6,
     display: "flex",
     flexDirection: "row",

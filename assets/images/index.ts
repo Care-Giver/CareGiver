@@ -21,6 +21,8 @@ export const images = {
   certificate_badge: require("../images/certificate_badge.png"),
   cg_favicon: require("../images/cg_favicon.png"),
   cg_login_banner: require("../images/cg_login_banner.png"),
+  check_grey: require("../images/check_grey.png"),
+  check_navy: require("../images/check_navy.png"),
   default_pet_image_60: require("../images/default_pet_image_60.png"),
   default_profile_image_comment: require("../images/default_profile_image_comment.png"),
   default_profile_image_edit_mypage: require("../images/default_profile_image_edit_mypage.png"),

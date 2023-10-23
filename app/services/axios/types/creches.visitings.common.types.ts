@@ -23,7 +23,7 @@ export interface SearchRequest {
 
 // DB 정의 그대로임
 // TODO: HandleType pet.ts 와 pet-store 에 있는 HandleType 바꿀 것
-enum HandleType {
+export enum HandleType {
   SMALL = "Small",
   MEDIUM = "Medium",
   LARGE = "Large",

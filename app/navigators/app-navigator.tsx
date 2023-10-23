@@ -124,7 +124,8 @@ const CareGiverTabs = () => {
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
-      initialRouteName="Calendar"
+      // initialRouteName="Calendar"
+      initialRouteName="CgMypage"
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen

@@ -33,9 +33,9 @@ export const CgEditProfileScreen: FC<
   return (
     <Screen testID="CgEditProfile" style={{ paddingHorizontal: 0 }}>
       <DivisionLine color={LIGHT_LINE} />
-      {/* //* 방문 지역 || 위탁 지역 / 사진 */}
+      {/* //* 1. (구) 펫시터 정보 설정 */}
       <View style={styles.sidePadding}>
-        <PreBol16 text="1. 펫시터 정보 설정" mt={14} />
+        <PreBol16 text="1 단계" mt={14} />
         <MypageButton
           text={
             (serviceTypeKorean === "방문" ? "방문 지역" : "위탁 지역 / 사진") + ", 서비스, 편의사항"
@@ -60,24 +60,34 @@ export const CgEditProfileScreen: FC<
           )}
         </View>
       </View>
-      <DivisionLine color={LIGHT_LINE} />
 
-      {/* //* 서비스 / 편의사항 / 기본요금 */}
-      <MypageButton
-        text="서비스 / 편의사항 / 기본요금"
-        onPress={() => {
-          //
-        }}
-        style={styles.sidePadding}
-      />
       <DivisionLine color={LIGHT_LINE} />
+      {/* //* 2. (구) 펫시터 정보 설정 */}
+      <View style={styles.sidePadding}>
+        <PreBol16 text="2 단계" mt={14} />
+        <MypageButton
+          text={"기본요금, 케어할 반려동물 정보, 크기별 추가 요금"}
+          onPress={() => {
+            navigate("cg-registration-2-screen")
+          }}
+        />
 
-      {/* //* 반려동물 / 추가요금 */}
-      <MypageButton text="반려동물 / 추가요금" onPress={() => {}} style={styles.sidePadding} />
-      <DivisionLine color={LIGHT_LINE} />
+        <View style={{ position: "absolute", right: 44, top: 14 }}>
+          {/* <PreReg10
+            text={`${petsitter?.address || ""} ${petsitter?.detailAddress || ""}`}
+            style={{ textAlign: "right" }}
+            color={BODY}
+          />
+          {serviceTypeKorean === "위탁" && (
+            <PreReg10
+              text={`사진 ${petsitter?.images?.length || 0}장`}
+              style={{ textAlign: "right" }}
+              color={BODY}
+            />
+          )} */}
+        </View>
+      </View>
 
-      {/* //* 자기소개 / 자격증 */}
-      <MypageButton text="자기소개 / 자격증" onPress={() => {}} style={styles.sidePadding} />
       <DivisionLine color={LIGHT_LINE} />
     </Screen>
   )
