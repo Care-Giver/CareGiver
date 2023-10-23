@@ -39,8 +39,6 @@ export * from "./test-push-notification/test-push-notification-screen"
 export * from "./review-stack/view-review/view-review-screen"
 export * from "./review-stack/write-review/write-review-screen"
 
-//* set-price-stack
-export * from "./cg-set-price/cg-set-price-screen"
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./kakao-login-test/kakao-login-test-screen"
 export * from "./cg-calendar/cg-calendar-screen"

@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { commonStyles } from "./set-price-style"
+import { commonStyles } from "./commonStyles"
 import {
   PreBol12,
   PreBol14,
@@ -31,7 +31,7 @@ export type AdditionalPrice = {
   Large: number
 }
 
-export interface CaregiverSetAdditionalPriceProps {
+export interface CgSetAdditionalPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
@@ -43,8 +43,8 @@ export interface CaregiverSetAdditionalPriceProps {
   handleType: HandleType[]
 }
 
-export const CaregiverSetAdditionalPrice = observer(function CaregiverSetAdditionalPrice(
-  props: CaregiverSetAdditionalPriceProps,
+export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
+  props: CgSetAdditionalPriceProps,
 ) {
   const { style, additionalPrice, setAdditionalPrice, handleType } = props
   const allStyles = Object.assign({}, styles.root, style)

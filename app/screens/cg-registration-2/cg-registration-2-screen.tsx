@@ -26,8 +26,8 @@ import { images } from "#images"
 import { alertModal } from "../../utils/alert-modal"
 import { updateVisiting, updateCreche, uploadURIS, FamilyType } from "#axios"
 import _ from "lodash"
-import { AdditionalPrice, CaregiverSetAdditionalPrice } from "./caregiver-set-additional-price"
-import { CaregiverSetPrice } from "./caregiver-set-price"
+import { AdditionalPrice, CgSetAdditionalPrice } from "./cg-set-additional-price"
+import { CgSetPrice } from "./cg-set-price"
 import { CgSetFamilyType } from "./cg-set-pet-family-type"
 import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
@@ -272,7 +272,7 @@ export const CgRegistration2Screen: FC<
         renderItem={({ item }) => (
           <>
             {currentStep === 1 && (
-              <CaregiverSetPrice
+              <CgSetPrice
                 style={{ width: itemWidth }}
                 price={price}
                 setPrice={setPrice}
@@ -321,7 +321,7 @@ export const CgRegistration2Screen: FC<
                     </View>
                   </>
                 )}
-                <CaregiverSetAdditionalPrice
+                <CgSetAdditionalPrice
                   style={{ width: itemWidth }}
                   additionalPrice={additionalPrice}
                   setAdditionalPrice={setAdditionalPrice}

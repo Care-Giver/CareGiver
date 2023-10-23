@@ -20,7 +20,6 @@ import {
 import {
   SettingScreen,
   ServiceCenterScreen,
-  CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   ManageBookingScreen,
@@ -293,19 +292,6 @@ export const CgMypageStack = () => {
         options={{
           headerShown: false,
         }}
-      />
-
-      {/* 
-      // ===========================================================================================================
-      // 아래는 아직 정리되지 않은 스크린들 입니다.
-      // ===========================================================================================================
-    */}
-
-      {/* //* 케어기버 요금 설정 스크린 */}
-      <Stack.Screen
-        name="cg-set-price-screen"
-        component={CgSetPriceScreen}
-        options={{ headerShown: false }} //! 이 스크린은 헤더 컴포넌트가 cg-set-price-screen 스크린 내부에 있습니다.
       />
     </Stack.Navigator>
   )

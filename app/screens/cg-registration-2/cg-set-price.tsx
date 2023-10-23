@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { commonStyles } from "./set-price-style"
+import { commonStyles } from "./commonStyles"
 import {
   PreBol12,
   PreBol14,
@@ -17,7 +17,7 @@ import { DivisionLine } from "../../components/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
 import { ServiceType } from "#models"
 
-export interface CaregiverSetPriceProps {
+export interface CgSetPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
@@ -30,9 +30,7 @@ export interface CaregiverSetPriceProps {
   standardPrice: { min: string; max: string }
 }
 
-export const CaregiverSetPrice = observer(function CaregiverSetPrice(
-  props: CaregiverSetPriceProps,
-) {
+export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
   const { style, price, setPrice, standardPrice, serviceType } = props
   const allStyles = Object.assign({}, styles.root, style)
 

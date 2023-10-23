@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle, View, StyleSheet, Pressable, Image, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
-import { commonStyles } from "./set-price-style"
+import { commonStyles } from "./commonStyles"
 import {
   PreBol12,
   PreBol14,
