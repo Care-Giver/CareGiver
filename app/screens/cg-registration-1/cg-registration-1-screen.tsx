@@ -32,10 +32,13 @@ import {
 import _ from "lodash"
 import { CgSetService } from "./cg-set-service"
 import { CgSetAmenity } from "./cg-set-amenity"
+import { useKeyboardShown } from "../../utils/hooks"
 
 export const CgRegistration1Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-1-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
+  const isKeyboardShown = useKeyboardShown()
+
   // MST store 를 가져옵니다.
   const {
     petsitterStore: { petsitter, serviceTypeKorean, setVistingPetsitter, setCrechePetsitter },
@@ -329,12 +332,14 @@ export const CgRegistration1Screen: FC<
       />
 
       {/* 이전 |  다음단계 */}
-      <GoBackSaveNext
-        onPressGoback={onPressGoback}
-        onPressSaveNext={onPressSaveNext}
-        isLastStep={currentStep === data.length}
-        style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-      />
+      {!isKeyboardShown && (
+        <GoBackSaveNext
+          onPressGoback={onPressGoback}
+          onPressSaveNext={onPressSaveNext}
+          isLastStep={currentStep === data.length}
+          style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
+        />
+      )}
     </Screen>
   )
 })

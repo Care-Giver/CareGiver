@@ -209,8 +209,8 @@ export const CgMypageStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="cg-mypage-screen"
-      initialRouteName="cg-registration-2-screen"
+      initialRouteName="cg-mypage-screen"
+      // initialRouteName="cg-registration-2-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen

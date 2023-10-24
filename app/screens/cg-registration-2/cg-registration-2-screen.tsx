@@ -201,6 +201,9 @@ export const CgRegistration2Screen: FC<
         maxUnit: familyTypeNumber.DOG + familyTypeNumber.CAT,
         handleType: [...handleType],
         extraSizeFee: additionalPrice,
+        //! 🏗️디버깅중 - 이상하게 services 랑 amenities 도 넣어줘야 PUT 성공함 (@yeseong33) 님이 발견해 줌.
+        services: petsitter.serviceVisiting.map((item) => item.id),
+        amenities: petsitter.visitingAmenities.map((item) => item.id),
       }).then(({ isSuccess, visiting }) => {
         if (isSuccess) {
           // MST 업데이트
@@ -221,6 +224,9 @@ export const CgRegistration2Screen: FC<
         maxUnit: familyTypeNumber.DOG + familyTypeNumber.CAT,
         handleType,
         extraSizeFee: additionalPrice,
+        //! 🏗️디버깅중 - 이상하게 services 랑 amenities 도 넣어줘야 PUT 성공함 (@yeseong33) 님이 발견해 줌.
+        services: petsitter.serviceCreche.map((item) => item.id),
+        amenities: petsitter.crecheAmenities.map((item) => item.id),
       }).then(({ isSuccess, creche }) => {
         if (isSuccess) {
           // MST 업데이트
