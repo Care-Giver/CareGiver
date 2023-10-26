@@ -272,6 +272,40 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
   }
 }
 
+interface UpdateUserRequestBody {
+  email: string
+  password: string
+  nickname: string
+  sex: Sex
+  birthday: string
+  desc: string
+  profileImage: string
+}
+
+interface UpdateUserResult {
+  isSuccess: boolean
+  reason?: string
+}
+
+export const updateUser = async (post: UpdateUserRequestBody): Promise<UpdateUserResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(`${BASE_URL}/user/update`, post)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - updateUser", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    console.log(response.data.ok)
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - updateUsser", error)
+    return { isSuccess: false, reason: error }
+  }
+}
+
 interface PostPushTokenResult {
   isSuccess: boolean // 성공여부
   userDetail?: UserDetail // 성공시, 유저 상세정보

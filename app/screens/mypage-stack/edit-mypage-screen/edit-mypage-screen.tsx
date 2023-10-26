@@ -19,6 +19,7 @@ import { styles } from "./styles"
 import { Users } from "./dummy-data"
 import { useStores } from "#models"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
+import { updateUser } from "#axios"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -199,6 +200,15 @@ export const EditMypageScreen: FC<
           onPress={() => {
             showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
             //TODO user data 실제로 변경하는 코드 필요 (변경된 닉네임으로 저장 (process -> 실제로 닉네임이 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
+            updateUser({
+              email: "example@google.com",
+              password: "abcdefg123!",
+              nickname: nickname,
+              sex: userDetail.sex,
+              birthday: userDetail.birthday,
+              desc: "안녕하세요.",
+              profileImage: userDetail.profileImage,
+            })
           }}
         />
       )}
