@@ -39,7 +39,7 @@ import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../utils/alert-modal"
 import Postcode from "@actbase/react-daum-postcode"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
-import { addressToCoordinates } from "../../cg-set-address/addressToCoordinates"
+import { addressToCoordinates } from "../../cg-registration-1/addressToCoordinates"
 
 const nowInUTCZero = new Date()
 const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())

@@ -5,7 +5,7 @@ import { NavigatorParamList } from "#navigators"
 import {
   Screen,
   GoBackSaveNext,
-  CgRegisterStep,
+  CgRegisterState,
   PreBol20,
   UnderlineText,
   CertificateRegistrationNote,
@@ -38,9 +38,14 @@ export const CgCertificateRegistrationScreen: FC<
       {/*<CgCertificateRegistrationScreenHeader options={{ title: "저장 후 나가기" }} />*/}
       {/* 단계별 컴포넌트 */}
       <View style={styles.cgRegistration}>
-        <CgRegisterStep style={styles.step} step="todo" number={1} title=" " />
-        <CgRegisterStep style={styles.step} step="progress" number={2} title="펫시터 서비스 설정" />
-        <CgRegisterStep style={styles.step} step="done" number={3} title=" " />
+        <CgRegisterState style={styles.step} state="todo" number={1} title=" " />
+        <CgRegisterState
+          style={styles.step}
+          state="progress"
+          number={2}
+          title="펫시터 서비스 설정"
+        />
+        <CgRegisterState style={styles.step} state="done" number={3} title=" " />
       </View>
 
       {/* 텍스트 : 반려동물 관련 자격증을 등록해주세요 */}

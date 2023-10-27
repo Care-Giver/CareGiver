@@ -13,9 +13,9 @@ import { images } from "#images"
 //! 이 스크린은 아직 불안정함
 //! 지도 요소들이 오작동함
 
-export const CgSetAddressScreen: FC<
+export const CgRegistration1Screen: FC<
   StackScreenProps<NavigatorParamList, "legacy_cg-set-address-screen">
-> = observer(function CgSetAddressScreen({ navigation, route }) {
+> = observer(function CgRegistration1Screen({ navigation, route }) {
   //cg-search-address에서 넘어온 값 처리
   const setAddressParam = JSON.stringify(route.params)
   const setAddressParamData = JSON.parse(setAddressParam)

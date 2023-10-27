@@ -1,38 +1,36 @@
-import React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { commonStyles } from "./set-price-style"
+import { commonStyles } from "./commonStyles"
 import {
   PreBol12,
   PreBol14,
   PreBol18,
   PreMed14,
   PreReg12,
-} from "../basics/custom-texts/custom-texts"
+} from "../../components/basics/custom-texts/custom-texts"
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
-import { UnderlineText } from "../underline-text/underline-text"
+import { UnderlineText } from "../../components/underline-text/underline-text"
 import { TextInput } from "react-native-gesture-handler"
 import { price as priceFormatter } from "../../utils/format"
-import { DivisionLine } from "../division-line/division-line"
+import { DivisionLine } from "../../components/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
 import { ServiceType } from "#models"
 
-export interface CaregiverSetPriceProps {
+export interface CgSetPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
 
-  price: string
-  setPrice: (price: string) => void
+  price: number
+  setPrice: Dispatch<SetStateAction<number>>
 
   serviceType: ServiceType
-  standardPrice: { min: string; max: string }
+  standardPrice: { min: string; max: string } | null
 }
 
-export const CaregiverSetPrice = observer(function CaregiverSetPrice(
-  props: CaregiverSetPriceProps,
-) {
+export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
   const { style, price, setPrice, standardPrice, serviceType } = props
   const allStyles = Object.assign({}, styles.root, style)
 
@@ -70,7 +68,9 @@ export const CaregiverSetPrice = observer(function CaregiverSetPrice(
         {/* // ? 적정가 범위 */}
         <PreBol12
           style={{ marginTop: 4 }}
-          text={`${standardPrice.min}원 ~ ${standardPrice.max}원`}
+          text={`${standardPrice ? standardPrice.min : "?0,000"}원 ~ ${
+            standardPrice ? standardPrice.max : "?0,000"
+          }원`}
           color={SUB_HEAD_LINE}
         />
         <PreReg12 style={{ marginTop: 4 }} text="사이의 요금을 받습니다." color={BODY} />
@@ -81,7 +81,6 @@ export const CaregiverSetPrice = observer(function CaregiverSetPrice(
           color={BODY}
         />
       </View>
-
       {/* // * price input container */}
       {/* // TODO: keyboard avoiding view */}
       <View style={commonStyles.priceContainer}>
@@ -90,9 +89,12 @@ export const CaregiverSetPrice = observer(function CaregiverSetPrice(
           {/* // TODO: placeholder에 들어갈 가격을 백엔드 서버에 저장해둘 것인지, 하한가 + 상한가 기준으로 프론트에서 직접 계산할 것인지? */}
           <TextInput
             keyboardType="numeric"
-            placeholder="105,000"
-            value={priceFormatter(price)} //! toLocaleString 사용하지 말 것 - android 이슈 존재
-            onChangeText={setPrice}
+            returnKeyType="done"
+            placeholder={serviceType === "creche" ? "50,000" : "10,000"}
+            value={price === 0 ? null : priceFormatter(price.toString())} //! toLocaleString 사용하지 말 것 - android 이슈 존재
+            onChangeText={(text) => {
+              setPrice(Number(text.replace(/,/g, "")))
+            }}
             placeholderTextColor={BODY}
             style={{ fontFamily: POPPINS_REGULAR }}
           />

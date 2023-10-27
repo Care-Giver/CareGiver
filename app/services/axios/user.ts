@@ -272,15 +272,19 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
   }
 }
 
+interface PostPushTokenRequestBody {
+  pushToken: string // "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]"
+}
 interface PostPushTokenResult {
   isSuccess: boolean // 성공여부
   userDetail?: UserDetail // 성공시, 유저 상세정보
   reason?: string // 실패시, 실패이유
 }
-
-export const postPushToken = async (pushToken: string): Promise<PostPushTokenResult> => {
+export const postPushToken = async (
+  body: PostPushTokenRequestBody,
+): Promise<PostPushTokenResult> => {
   try {
-    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/push-token`, pushToken)
+    const response = await axios.post<GeneralResponse>(`${BASE_URL}/user/push-token`, body)
     if (!response?.data.ok) {
       console.error("/user/push-token API 에러!!! ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }

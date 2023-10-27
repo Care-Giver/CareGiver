@@ -86,8 +86,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
   }
 
   // console.log("dates in calendar-day >>>", dates)
-  console.log("fee >>>", fee)
-  console.log("availableTime", availableTime)
+  // console.log("fee >>>", fee)
+  // console.log("availableTime", availableTime)
 
   return (
     <View

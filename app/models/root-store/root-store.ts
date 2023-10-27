@@ -9,6 +9,7 @@ import { PetStoreModel } from "../pet-store/pet-store"
 import { UiStoreModel } from "../ui-store/ui-store"
 import { NotificationStoreModel } from "../notification-store/notification-store"
 import { PetsitterStoreModel } from "../petsitter-store/petsitter-store"
+import { EtcStoreModel } from "../etc-store/etc-store"
 
 /**
  * A RootStore model.
@@ -24,7 +25,8 @@ export const RootStoreModel = types.model("RootStore").props({
   petsitterStore: types.optional(PetsitterStoreModel, {} as any),
   petStore: types.optional(PetStoreModel, {} as any),
   FavoriteModel: types.optional(FavoriteModel, {} as any),
-  notificationStore: types.optional(NotificationStoreModel, {} as any)
+  notificationStore: types.optional(NotificationStoreModel, {} as any),
+  etcStore: types.optional(EtcStoreModel, {} as any)
 })
 
 /**

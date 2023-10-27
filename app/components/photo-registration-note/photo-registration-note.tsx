@@ -2,7 +2,7 @@ import React from "react"
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol12, PreBol14, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { GIVER_CASUAL_NAVY, BODY, SUB_HEAD_LINE } from "#theme"
+import { GIVER_CASUAL_NAVY, BODY, SUB_HEAD_LINE, LBG } from "#theme"
 
 export interface PhotoRegistrationNoteProps {
   /**
@@ -36,11 +36,12 @@ export const PhotoRegistrationNote = observer(function PhotoRegistrationNote(
 
 const styles = StyleSheet.create({
   root: {
-    width: 358,
+    width: "100%",
     height: 100,
-    backgroundColor: "#F8F8FA",
+    backgroundColor: LBG,
     paddingVertical: 16,
     paddingHorizontal: 12,
     justifyContent: "center",
+    borderRadius: 8,
   },
 })

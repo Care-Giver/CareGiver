@@ -1,28 +1,37 @@
 import React from "react"
-import { StyleProp, ViewStyle, View, StyleSheet, KeyboardAvoidingView, Text } from "react-native"
+import {
+  StyleProp,
+  ViewStyle,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Text,
+  ScrollView,
+} from "react-native"
 import { observer } from "mobx-react-lite"
-import { commonStyles } from "../caregiver-set-price/set-price-style"
+import { commonStyles } from "./commonStyles"
 import {
   PreBol12,
   PreBol14,
   PreBol18,
   PreMed14,
   PreReg12,
-} from "../basics/custom-texts/custom-texts"
-import { UnderlineText } from "../underline-text/underline-text"
+} from "../../components/basics/custom-texts/custom-texts"
+import { UnderlineText } from "../../components/underline-text/underline-text"
 import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, WIDTH } from "#theme"
 import { TextInput } from "react-native-gesture-handler"
 import { price as priceFormatter } from "../../utils/format"
-import { DivisionLine } from "../division-line/division-line"
+import { DivisionLine } from "../../components/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
+import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 
 export type AdditionalPrice = {
-  small: string
-  medium: string
-  large: string
+  Small: number
+  Medium: number
+  Large: number
 }
 
-export interface CaregiverSetAdditionalPriceProps {
+export interface CgSetAdditionalPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
@@ -30,16 +39,19 @@ export interface CaregiverSetAdditionalPriceProps {
 
   additionalPrice: AdditionalPrice
   setAdditionalPrice: (additionalPrice: AdditionalPrice) => void
+
+  handleType: HandleType[]
 }
 
-export const CaregiverSetAdditionalPrice = observer(function CaregiverSetAdditionalPrice(
-  props: CaregiverSetAdditionalPriceProps,
+export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
+  props: CgSetAdditionalPriceProps,
 ) {
-  const { style, additionalPrice, setAdditionalPrice } = props
+  const { style, additionalPrice, setAdditionalPrice, handleType } = props
   const allStyles = Object.assign({}, styles.root, style)
+  console.log("handleType", handleType)
 
   return (
-    <View style={allStyles}>
+    <ScrollView style={allStyles}>
       {/* // * title container */}
       <View style={commonStyles.titleContainer}>
         {/* // ? first line */}
@@ -85,64 +97,54 @@ export const CaregiverSetAdditionalPrice = observer(function CaregiverSetAdditio
           marginTop: 4,
         }}
       >
-        {/* // ? 소형견 추가 요금 */}
-        <PreMed14 color={SUB_HEAD_LINE} text="소형견 추가 요금(원)" style={styles.inputTitle} />
-        <View style={commonStyles.textInput}>
-          <TextInput
-            keyboardType="numeric"
-            placeholder="소형견 추가 요금을 입력해주세요."
-            value={priceFormatter(additionalPrice.small)}
-            onChangeText={(text) => {
-              setAdditionalPrice({
-                ...additionalPrice,
-                small: text,
-              })
-            }}
-            placeholderTextColor={BODY}
-            style={{ fontFamily: POPPINS_REGULAR }}
-          />
-        </View>
-        <DivisionLine color={MIDDLE_LINE} />
+        {handleType.length !== 0 &&
+          handleType.map((value, index) => {
+            let 강아지_크기 = ""
+            switch (value) {
+              case "Small":
+                강아지_크기 = "소형"
+                break
+              case "Medium":
+                강아지_크기 = "중형"
+                break
+              case "Large":
+                강아지_크기 = "대형"
+                break
+            }
 
-        {/* // ? 중형견 추가 요금 */}
-        <PreMed14 color={SUB_HEAD_LINE} text="중형견 추가 요금(원)" style={styles.inputTitle} />
-        <View style={commonStyles.textInput}>
-          <TextInput
-            keyboardType="numeric"
-            placeholder="중형견 추가 요금을 입력해주세요."
-            value={priceFormatter(additionalPrice.medium)}
-            onChangeText={(text) => {
-              setAdditionalPrice({
-                ...additionalPrice,
-                medium: text,
-              })
-            }}
-            placeholderTextColor={BODY}
-            style={{ fontFamily: POPPINS_REGULAR }}
-          />
-        </View>
-        <DivisionLine color={MIDDLE_LINE} />
-
-        {/* // ? 대형견 추가 요금 */}
-        <PreMed14 color={SUB_HEAD_LINE} text="대형견 추가 요금(원)" style={styles.inputTitle} />
-        <View style={commonStyles.textInput}>
-          <TextInput
-            keyboardType="numeric"
-            placeholder="대형견 추가 요금을 입력해주세요."
-            value={priceFormatter(additionalPrice.large)}
-            onChangeText={(text) => {
-              setAdditionalPrice({
-                ...additionalPrice,
-                large: text,
-              })
-            }}
-            placeholderTextColor={BODY}
-            style={{ fontFamily: POPPINS_REGULAR }}
-          />
-        </View>
-        <DivisionLine color={MIDDLE_LINE} />
+            return (
+              <View key={index}>
+                <PreMed14
+                  color={SUB_HEAD_LINE}
+                  text={`${강아지_크기}견 추가 요금(원)`}
+                  style={styles.inputTitle}
+                />
+                <View style={commonStyles.textInput}>
+                  <TextInput
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    placeholder={`${강아지_크기}견 추가 요금을 입력해주세요.`}
+                    value={
+                      additionalPrice[value] === 0
+                        ? null
+                        : priceFormatter(additionalPrice[value].toString())
+                    }
+                    onChangeText={(text) => {
+                      setAdditionalPrice({
+                        ...additionalPrice,
+                        [value]: Number(text.replace(/,/g, "")),
+                      })
+                    }}
+                    placeholderTextColor={BODY}
+                    style={{ fontFamily: POPPINS_REGULAR }}
+                  />
+                </View>
+                <DivisionLine color={MIDDLE_LINE} />
+              </View>
+            )
+          })}
       </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   )
 })
 

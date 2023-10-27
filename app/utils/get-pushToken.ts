@@ -29,7 +29,8 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
       return null
     }
     token = (await Notifications.getExpoPushTokenAsync()).data
-    console.log("🔷 registerForPushNotificationsAsync - token:", token)
+    // console.log("🔷 registerForPushNotificationsAsync - token:", token)
+    return token
   }
   // 시뮬레이터인 경우
   else {

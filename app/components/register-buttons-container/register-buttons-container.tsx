@@ -1,12 +1,26 @@
-import { View, Text, FlatList, useWindowDimensions } from "react-native"
-import React, { useLayoutEffect, useState } from "react"
-import { RegisterButtonsContainerProps } from "./register-buttons-container.props"
-import { RegistrationButton } from "../../../components/buttons/registration-button/registration-button"
-import { NUM_OF_COLS, WIDTH_INTERVAL } from "../style-const"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../../../components/screen/screen"
+import React, { Dispatch, SetStateAction, useLayoutEffect, useState } from "react"
+import { FlatList, useWindowDimensions } from "react-native"
+import { RegistrationButton } from "../buttons/registration-button/registration-button"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../screen/screen"
+import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
+
+// - 버튼의 가로 간격
+const WIDTH_INTERVAL = 16
+// - 버튼의 column 수
+const NUM_OF_COLS = 2
+
+export interface RegisterButtonsContainerProps {
+  services: Array<VisitingService | CrecheService | VisitingAmenity | CrecheAmenity>
+  selectedOptions?: Array<VisitingService | CrecheService | VisitingAmenity | CrecheAmenity>
+  handleOptionPress?: Dispatch<
+    SetStateAction<Array<VisitingService | CrecheService | VisitingAmenity | CrecheAmenity>>
+  >
+  handleXPress?: (option) => void
+  alwaysActive?: boolean
+}
 
 export const RegisterButtonsContainer = (props: RegisterButtonsContainerProps) => {
-  const { services, selectedOptions, handleOptionPress, handleXPress } = props
+  const { services, selectedOptions, handleOptionPress, handleXPress, alwaysActive } = props
 
   // * 옵션 버튼 하나의 너비
   const [registBtnWidth, setRegistBtnWidth] = useState<number>()
@@ -32,13 +46,14 @@ export const RegisterButtonsContainer = (props: RegisterButtonsContainerProps) =
       // onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
       renderItem={({ item }) => (
         <RegistrationButton
-          isActive={selectedOptions.findIndex((value) => value === item.value) !== -1}
+          isActive={alwaysActive ? true : !!selectedOptions.find((value) => value === item)}
           text={item.name}
-          onPress={() => handleOptionPress(item.value)}
-          onXPress={() => handleXPress(item.value)}
+          onPress={() => handleOptionPress(item)}
+          onXPress={() => handleXPress(item)}
           style={{
             width: registBtnWidth,
           }}
+          alwaysActive={alwaysActive}
         />
       )}
       numColumns={NUM_OF_COLS}

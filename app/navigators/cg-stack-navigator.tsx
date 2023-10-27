@@ -20,19 +20,16 @@ import {
 import {
   SettingScreen,
   ServiceCenterScreen,
-  ServiceRegistrationScreen,
-  FacilityRegistrationScreen,
-  CgSetPriceScreen,
   CgCalendarScreen,
   CgCertificateRegistrationScreen,
   ManageBookingScreen,
-  CgCalendarListScreen,
   CgMypageScreen,
   SetVisitingServiceDayScreen,
   SetCrecheServiceDayScreen,
-  CgSetAddressScreen,
+  CgRegistration1Screen,
   CgEditProfileScreen,
   EditMypageScreen,
+  CgRegistration2Screen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -78,13 +75,12 @@ export type CGStackNavigatorParamList = {
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
   "cg-edit-profile-screen": undefined
-  "cg-set-address-screen": undefined
+  "cg-registration-1-screen": undefined
+  "cg-registration-2-screen": undefined
 
   // ===========================================================================================================
   // 아래는 아직 정리되지 않은 스크린들 입니다.
   // ===========================================================================================================
-  "service-registration-screen": undefined
-  "facility-registration-screen": undefined
   "cg-set-price-screen": { serviceType: ServiceType }
 }
 
@@ -214,6 +210,7 @@ export const CgMypageStack = () => {
         animation: "slide_from_right",
       }}
       initialRouteName="cg-mypage-screen"
+      // initialRouteName="cg-registration-2-screen"
     >
       {/* //* CG 내정보 메인 */}
       <Stack.Screen
@@ -279,49 +276,22 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* //* CG - 장소 등록 스크린 */}
+      {/* //* CG - 등록 1단계 스크린 */}
       <Stack.Screen
-        name="cg-set-address-screen"
-        component={CgSetAddressScreen}
+        name="cg-registration-1-screen"
+        component={CgRegistration1Screen}
         options={{
-          title: "지도",
           headerShown: false,
         }}
       />
 
-      {/* 
-      // ===========================================================================================================
-      // 아래는 아직 정리되지 않은 스크린들 입니다.
-      // ===========================================================================================================
-    */}
-
-      {/* //! 등록 스택 BEGIN */}
-      {/* //* 서비스 등록 스크린 */}
+      {/* //* CG - 등록 2단계 스크린 */}
       <Stack.Screen
-        name="service-registration-screen"
-        component={ServiceRegistrationScreen}
+        name="cg-registration-2-screen"
+        component={CgRegistration2Screen}
         options={{
-          title: "서비스 등록",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          headerShown: false,
         }}
-      />
-
-      {/* //* 편의시설 등록 스크린 */}
-      <Stack.Screen
-        name="facility-registration-screen"
-        component={FacilityRegistrationScreen}
-        options={{
-          title: "근처 편의시설 등록",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
-      {/* //! 등록 스택 ENDED */}
-
-      {/* //* 케어기버 요금 설정 스크린 */}
-      <Stack.Screen
-        name="cg-set-price-screen"
-        component={CgSetPriceScreen}
-        options={{ headerShown: false }} //! 이 스크린은 헤더 컴포넌트가 cg-set-price-screen 스크린 내부에 있습니다.
       />
     </Stack.Navigator>
   )

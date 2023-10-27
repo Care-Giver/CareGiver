@@ -19,12 +19,20 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, palette } from "#theme"
+import {
+  GIVER_CASUAL_NAVY,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+  BOTTOM_HEIGHT,
+  palette,
+  SHADOW_1,
+  SHADOW_2,
+} from "#theme"
 import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { CgSetServiceType } from "../cg-set-address/cg-set-service-type"
+import { CgSetServiceType } from "./cg-set-service-type"
 import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
 import { createCreche } from "#axios"
@@ -122,7 +130,7 @@ export const CgMypageScreen: FC<
                 }).then((res) => {
                   if (res.isSuccess) {
                     fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-set-address-screen")
+                      result === true && navigate("cg-registration-1-screen")
                     })
                   } else {
                     alertModal(
@@ -155,7 +163,7 @@ export const CgMypageScreen: FC<
                 }).then((res) => {
                   if (res.isSuccess) {
                     fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-set-address-screen")
+                      result === true && navigate("cg-registration-1-screen")
                     })
                   } else {
                     alertModal(
@@ -240,12 +248,17 @@ export const CgMypageScreen: FC<
 
             {/* 펫시터 등록하기 버튼 */}
             <TouchableOpacity
-              style={{ marginTop: 16, marginBottom: 28 }}
+              style={{ marginTop: 16, marginBottom: 28, alignItems: "center" }}
               onPress={() => {
                 bottomSheetModalRef.current?.present()
               }}
             >
-              <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
+              <Image
+                source={images.register_petsitter}
+                style={{
+                  height: 107,
+                }}
+              />
             </TouchableOpacity>
           </View>
         )}

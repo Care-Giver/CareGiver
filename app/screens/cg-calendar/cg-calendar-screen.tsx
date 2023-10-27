@@ -63,6 +63,9 @@ export const CgCalendarScreen: FC<
             serviceType={serviceTypeKorean}
             selected={selected}
             setSelected={setSelected}
+            style={{
+              alignSelf: "center",
+            }}
           />
 
           {/* 수정 버튼 */}
