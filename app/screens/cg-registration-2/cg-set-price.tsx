@@ -27,7 +27,7 @@ export interface CgSetPriceProps {
   setPrice: Dispatch<SetStateAction<number>>
 
   serviceType: ServiceType
-  standardPrice: { min: string; max: string }
+  standardPrice: { min: string; max: string } | null
 }
 
 export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
@@ -68,7 +68,9 @@ export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
         {/* // ? 적정가 범위 */}
         <PreBol12
           style={{ marginTop: 4 }}
-          text={`${standardPrice.min}원 ~ ${standardPrice.max}원`}
+          text={`${standardPrice ? standardPrice.min : "?0,000"}원 ~ ${
+            standardPrice ? standardPrice.max : "?0,000"
+          }원`}
           color={SUB_HEAD_LINE}
         />
         <PreReg12 style={{ marginTop: 4 }} text="사이의 요금을 받습니다." color={BODY} />
@@ -79,7 +81,6 @@ export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
           color={BODY}
         />
       </View>
-
       {/* // * price input container */}
       {/* // TODO: keyboard avoiding view */}
       <View style={commonStyles.priceContainer}>

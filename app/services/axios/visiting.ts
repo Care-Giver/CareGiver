@@ -220,3 +220,57 @@ export const getVisitingAmenities = async (): Promise<GetVisitingAmenitiesResult
     return { isSuccess: false, reason: error }
   }
 }
+
+interface GetVisitingAvgPriceRequestBody {
+  lat: number // 37.2955072
+  lng: number //  126.83539
+}
+interface GetVisitingAvgPriceResponse extends GeneralResponse {
+  minAvgPrice: number | null // 7000
+  avgPrice: number | null //  10000
+  maxAvgPrice: number | null //  13000
+}
+interface GetVisitingAvgPriceResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  // 성공시, prices 객체
+  prices?: {
+    minAvgPrice: number
+    avgPrice: number
+    maxAvgPrice: number
+  }
+}
+/**
+ * 근처 10km 이내 방문 서비스의 평균 기본 요금을 요청한다.
+ */
+export const getVisitingAvgPrice = async (
+  body: GetVisitingAvgPriceRequestBody,
+): Promise<GetVisitingAvgPriceResult> => {
+  try {
+    const response = await axios.post<GetVisitingAvgPriceResponse>(
+      `${BASE_URL}/visiting/avg-price`,
+      body,
+    )
+    console.log("response.data 🔷 getVisitingAvgPrice", response.data)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - getVisitingAvgPrice", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    // null 값일 경우 방문 기본값 10000 으로 설정
+    const prices = {
+      minAvgPrice: response.data?.minAvgPrice || 10000,
+      avgPrice: response.data?.avgPrice || 10000,
+      maxAvgPrice: response.data?.maxAvgPrice || 10000,
+    }
+
+    return {
+      isSuccess: true,
+      prices,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - getVisitingAvgPrice", error)
+    return { isSuccess: false, reason: error }
+  }
+}

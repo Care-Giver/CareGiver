@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, Pressable, StyleSheet, View, Image, Keyboard, Platform } from "react-native"
+import React, { FC, useEffect, useState } from "react"
+import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -7,24 +7,16 @@ import {
   CgRegisterState,
   CgRegisterStateProps,
   GoBackSaveNext,
-  GradientBackground,
   PreBol20,
   PreMed16,
   Screen,
 } from "#components"
 import { useStores } from "#models"
-import {
-  BOTTOM_HEIGHT,
-  CARE_SOFT_YELLOW,
-  DISABLED,
-  GIVER_CASUAL_NAVY,
-  GIVER_CASUAL_NAVY_20,
-  palette,
-} from "#theme"
+import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20, palette } from "#theme"
 import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
 import { images } from "#images"
 import { alertModal } from "../../utils/alert-modal"
-import { updateVisiting, updateCreche, uploadURIS, FamilyType } from "#axios"
+import { updateVisiting, updateCreche, getVisitingAvgPrice, getCrecheAvgPrice } from "#axios"
 import _ from "lodash"
 import { AdditionalPrice, CgSetAdditionalPrice } from "./cg-set-additional-price"
 import { CgSetPrice } from "./cg-set-price"
@@ -32,20 +24,9 @@ import { CgSetFamilyType } from "./cg-set-pet-family-type"
 import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
 import { LinearGradient } from "expo-linear-gradient"
-
-// 서버로 부터 받아온 지역 평균가 더미데이터
-// TODO: 서버에서 받아온 지역 평균가를 사용하도록 수정해야 합니다.
-const standardCosts = {
-  visit: {
-    min: "40,000",
-    max: "60,000",
-  },
-
-  creche: {
-    min: "80,000",
-    max: "130,000",
-  },
-}
+import { getDevicePermission } from "../search-stack/search-screen/getDevicePermission"
+import Geolocation from "react-native-geolocation-service"
+import { price as priceFormatter } from "../../utils/format"
 
 export type FamilyTypeNumber = {
   DOG: number
@@ -68,6 +49,70 @@ export const CgRegistration2Screen: FC<
   console.log("petsitter 🔷", petsitter)
 
   const isKeyboardShown = useKeyboardShown()
+
+  const [prices, setPrices] = useState<{
+    minAvgPrice: number
+    avgPrice: number
+    maxAvgPrice: number
+  }>(null)
+
+  useEffect(() => {
+    const ERROR_PRICES = {
+      minAvgPrice: 0,
+      avgPrice: 0,
+      maxAvgPrice: 0,
+    }
+    const DEFAULT_PRICES = {
+      minAvgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
+      avgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
+      maxAvgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
+    }
+
+    // 현재 위치좌표를 얻어내고, 평균가 API 를 호출한다
+    const avgPriceHandler = async () => {
+      // 위치 권한 요청
+      getDevicePermission(
+        "location",
+        // 성공시, 현 위치를 좌표로 설정
+        () => {
+          Geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords
+              const getAvgPrice =
+                serviceTypeKorean === "방문" ? getVisitingAvgPrice : getCrecheAvgPrice
+              getAvgPrice({
+                lat: latitude,
+                lng: longitude,
+              }).then(({ isSuccess, prices, reason }) => {
+                if (isSuccess) {
+                  setPrices(prices)
+                } else {
+                  alertModal("API 호출 실패", "평균 기본 요금 정보를 요청하는 것에 실패하였습니다.")
+                  setPrices(ERROR_PRICES)
+                }
+              })
+            },
+            (error) => {
+              console.log("error", error)
+              alertModal("위치 정보 수집 실패", error.message)
+              setPrices(ERROR_PRICES)
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+          )
+        },
+        // 권한 요청 실패시,
+        () => {
+          setPrices(DEFAULT_PRICES)
+          alertModal(
+            "위치 권한 없음",
+            "내 주변 평균 기본 요금를 표시하기 위해 위치 권한이 필요합니다.",
+          )
+        },
+      )
+    }
+
+    avgPriceHandler()
+  }, [serviceTypeKorean])
 
   // 기본 요금
   const [price, setPrice] = useState(0)
@@ -244,23 +289,6 @@ export const CgRegistration2Screen: FC<
     }
   }
 
-  // 이지역 평균가
-  let standardPrice = {
-    min: "",
-    max: "",
-  }
-  if (serviceType === "creche") {
-    standardPrice = {
-      min: standardCosts.creche.min,
-      max: standardCosts.creche.max,
-    }
-  } else {
-    standardPrice = {
-      min: standardCosts.visit.min,
-      max: standardCosts.visit.max,
-    }
-  }
-
   return (
     <Screen>
       <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
@@ -283,7 +311,12 @@ export const CgRegistration2Screen: FC<
                 price={price}
                 setPrice={setPrice}
                 serviceType={serviceType}
-                standardPrice={standardPrice}
+                standardPrice={
+                  prices && {
+                    min: priceFormatter(prices.minAvgPrice.toString()),
+                    max: priceFormatter(prices.maxAvgPrice.toString()),
+                  }
+                }
               />
             )}
             {currentStep === 2 && (
