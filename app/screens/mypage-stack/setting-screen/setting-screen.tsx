@@ -77,7 +77,12 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
                     ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
                     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
                   }),
-                )
+                ).then((result) => {
+                  console.log("❗️❗️", result)
+                  if (result === RESULTS.UNAVAILABLE && Platform.OS === "ios") {
+                    alertModal("권한 요청", "iOS > 설정 > 앱 에서 위치 권한을 허용해주세요.")
+                  }
+                })
               }
               // 이미 있으면 모달
               else {

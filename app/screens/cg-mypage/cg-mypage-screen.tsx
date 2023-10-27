@@ -19,7 +19,15 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, palette } from "#theme"
+import {
+  GIVER_CASUAL_NAVY,
+  SUB_HEAD_LINE,
+  LIGHT_LINE,
+  BOTTOM_HEIGHT,
+  palette,
+  SHADOW_1,
+  SHADOW_2,
+} from "#theme"
 import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
@@ -240,12 +248,17 @@ export const CgMypageScreen: FC<
 
             {/* 펫시터 등록하기 버튼 */}
             <TouchableOpacity
-              style={{ marginTop: 16, marginBottom: 28 }}
+              style={{ marginTop: 16, marginBottom: 28, alignItems: "center" }}
               onPress={() => {
                 bottomSheetModalRef.current?.present()
               }}
             >
-              <Image source={images.register_petsitter} style={{ width: "100%", height: 95 }} />
+              <Image
+                source={images.register_petsitter}
+                style={{
+                  height: 107,
+                }}
+              />
             </TouchableOpacity>
           </View>
         )}
