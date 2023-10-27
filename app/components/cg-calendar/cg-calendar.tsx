@@ -12,7 +12,7 @@ import { POPPINS_REGULAR } from "#fonts"
 import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { availableDates, serviceType, selected, setSelected } = props
+  const { availableDates, serviceType, selected, setSelected, style } = props
   //? 가장 최근에 선택한 날짜가 이용가능한 날짜인지 판단하기 위한 state
   const [availableCheck, setAvailableCheck] = useState<boolean>(true)
   const hasDates = availableDates?.length !== 0
@@ -64,7 +64,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
   }
 
   return (
-    <View>
+    <View style={style}>
       <Calendar
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) =>
