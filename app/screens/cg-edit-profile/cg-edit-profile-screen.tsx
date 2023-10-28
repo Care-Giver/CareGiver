@@ -14,6 +14,7 @@ import {
 } from "#components"
 import { BODY, LIGHT_LINE } from "#theme"
 import { useStores } from "#models"
+import { price as priceFormatter } from "../../utils/format"
 
 export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
@@ -73,18 +74,38 @@ export const CgEditProfileScreen: FC<
         />
 
         <View style={{ position: "absolute", right: 44, top: 14 }}>
-          {/* <PreReg10
-            text={`${petsitter?.address || ""} ${petsitter?.detailAddress || ""}`}
+          <PreReg10
+            text={`${priceFormatter(String(petsitter?.defaultFee)) || "-"}원 | ${
+              petsitter?.handleType.length !== 0 ? "강아지" : "고양이"
+            }`}
             style={{ textAlign: "right" }}
             color={BODY}
           />
-          {serviceTypeKorean === "위탁" && (
-            <PreReg10
-              text={`사진 ${petsitter?.images?.length || 0}장`}
-              style={{ textAlign: "right" }}
-              color={BODY}
-            />
-          )} */}
+        </View>
+      </View>
+
+      <DivisionLine color={LIGHT_LINE} />
+      {/* //* 3. (구) 가격 및 특이사항 설정 */}
+      <View style={styles.sidePadding}>
+        <PreBol16 text="3 단계" mt={14} />
+        <MypageButton
+          text={"자기소개, 자격증"}
+          onPress={() => {
+            navigate("cg-registration-3-screen")
+          }}
+        />
+
+        <View style={{ position: "absolute", right: 44, top: 14 }}>
+          <PreReg10
+            text={`${(petsitter?.title ?? "").slice(0, 10)}...`}
+            style={{ textAlign: "right" }}
+            color={BODY}
+          />
+          <PreReg10
+            text={`${(petsitter?.desc ?? "").slice(0, 10)}...`}
+            style={{ textAlign: "right" }}
+            color={BODY}
+          />
         </View>
       </View>
 
