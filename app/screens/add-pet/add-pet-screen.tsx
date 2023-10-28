@@ -82,7 +82,6 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
     const [birthday, setBirthday] = useState("") // 1998-02-16
     const [speciesName, setSpeciesName] = useState("") // 품종
     const [sex, setSex] = useState<PetSex>(null) // 성별
-    const [petType, setPetType] = useState<HandleType>(null) // 크기
     const [weight, setWeight] = useState(0) // 무게
     const [isNeutralizated, setIsNeutralizated] = useState<boolean>(null) // 중성화여부
     // 기본 정보 ENDED ==============================================================
@@ -238,14 +237,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
     const scrollViewRef = useRef<ScrollView>(null)
 
     const isActivated =
-      name &&
-      familyType &&
-      speciesName &&
-      !!weight &&
-      birthday &&
-      sex &&
-      isNeutralizated !== null &&
-      (familyType === FamilyType.DOG ? !!petType : true)
+      name && familyType && speciesName && !!weight && birthday && sex && isNeutralizated !== null
 
     const [draftImageUriList, setDraftImageUriList] = useState<string[]>([])
 
@@ -265,9 +257,6 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       if (!sex) {
         return "성별을 선택해주세요."
       }
-      if (familyType === FamilyType.DOG && !petType) {
-        return "크기를 입력해주세요."
-      }
       if (!weight) {
         return "몸무게를 입력해주세요."
       }
@@ -276,7 +265,9 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       }
 
       return false
-    }, [familyType, name, birthday, speciesName, sex, petType, weight, isNeutralizated])
+    }, [familyType, name, birthday, speciesName, sex, weight, isNeutralizated])
+
+    console.log("typeof weight", typeof weight)
 
     // 등록하기 버튼 클릭시 실행되는 함수 - 입력한 정보로 펫 추가
     const onPress = async () => {
@@ -317,7 +308,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         birthday: birthday,
       }).then((res) => {
         if (res.isSuccess) {
-          navigate("all-pets-screen", { isSaved: true })
+          navigation.replace("all-pets-screen", { isSaved: true })
           !imageUriList &&
             alertModal(
               "이미지 업로드 실패",
@@ -487,71 +478,17 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             })}
           </Row>
 
-          {/* 크기 */}
-          {familyType === FamilyType.DOG && (
-            <>
-              <PreMed14 color={HEAD_LINE} text={"크기"} mt={35} mb={10} />
-              <Row style={{ justifyContent: "space-between" }}>
-                {크기.map((item, index) => {
-                  let isSelected = false
-                  let selectedPetType = null
-                  switch (item) {
-                    case "소형":
-                      isSelected = petType === HandleType.SMALL
-                      selectedPetType = HandleType.SMALL
-                      break
-                    case "중형":
-                      isSelected = petType === HandleType.MEDIUM
-                      selectedPetType = HandleType.MEDIUM
-                      break
-                    case "대형":
-                      isSelected = petType === HandleType.LARGE
-                      selectedPetType = HandleType.LARGE
-                      break
-                  }
-
-                  if (petType === null) {
-                    isSelected = false
-                  }
-
-                  return (
-                    <Pressable
-                      key={index}
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                      onPress={() => {
-                        setPetType(selectedPetType)
-                      }}
-                    >
-                      <Image
-                        source={isSelected ? images.radio_active : images.radio_inactive}
-                        style={styles.radioImg}
-                      />
-                      <PreMed16
-                        style={{ marginLeft: 6 }}
-                        text={item}
-                        color={isSelected ? GIVER_CASUAL_NAVY : DISABLED}
-                      />
-                    </Pressable>
-                  )
-                })}
-              </Row>
-            </>
-          )}
-
           {/* //*몸무게 */}
-          <Pressable
+          <UserOrPetProfileInfo
+            title="몸무게"
+            titleColor={HEAD_LINE}
+            profileInfo={(!!weight && weight?.toString()) || "예) 7kg"}
+            showOption={!weight}
+            additionalPadding={35}
             onPress={() => {
               setWeightTouched(true)
             }}
-          >
-            <UserOrPetProfileInfo
-              title="몸무게"
-              titleColor={HEAD_LINE}
-              profileInfo={(!!weight && weight?.toString()) || "예) 7kg"}
-              showOption={!weight}
-              additionalPadding={35}
-            />
-          </Pressable>
+          />
 
           {/* 중성화 */}
           <PreMed14 color={HEAD_LINE} text={"중성화 여부"} mt={35} mb={10} />
