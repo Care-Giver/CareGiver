@@ -179,7 +179,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
           style={{
             marginTop: "auto",
             height: 49,
-            width: 326,
+            width: "100%",
             alignSelf: "center",
           }}
           onPress={
