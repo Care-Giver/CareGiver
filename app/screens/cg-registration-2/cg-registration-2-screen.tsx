@@ -243,7 +243,8 @@ export const CgRegistration2Screen: FC<
       //! 마지막단계 - 방문 펫시팅 정보 UPDATE
       updateVisiting(petsitter.id, {
         defaultFee: price,
-        maxUnit: familyTypeNumber.DOG + familyTypeNumber.CAT,
+        dogMaxUnit: familyTypeNumber.DOG,
+        catMaxUnit: familyTypeNumber.CAT,
         handleType: [...handleType],
         extraSizeFee: additionalPrice,
       }).then(({ isSuccess, visiting }) => {
@@ -263,7 +264,8 @@ export const CgRegistration2Screen: FC<
       //! 마지막단계 - 위탁 펫시팅 정보 UPDATE
       updateCreche(petsitter.id, {
         defaultFee: price,
-        maxUnit: familyTypeNumber.DOG + familyTypeNumber.CAT,
+        dogMaxUnit: familyTypeNumber.DOG,
+        catMaxUnit: familyTypeNumber.CAT,
         handleType,
         extraSizeFee: additionalPrice,
         //! 🏗️디버깅중 - 이상하게 services 랑 amenities 도 넣어줘야 PUT 성공함 (@yeseong33) 님이 발견해 줌.

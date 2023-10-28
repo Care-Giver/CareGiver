@@ -85,7 +85,8 @@ export interface Petsitter {
   star: number //5
   /* location: string // "(127, 38)" */
   location: LocationResponse
-  maxUnit: number //! 1이상 값이어야 합니다.
+  dogMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
+  catMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
   handleType: HandleType[]
   images: string[] // ["이미지 주소"]
   extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"

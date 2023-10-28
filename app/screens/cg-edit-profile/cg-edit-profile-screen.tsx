@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from "react"
+import React, { FC, useLayoutEffect, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -15,6 +15,7 @@ import {
 import { BODY, LIGHT_LINE } from "#theme"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../utils/format"
+import _ from "lodash"
 
 export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
@@ -30,6 +31,12 @@ export const CgEditProfileScreen: FC<
       title: `${serviceTypeKorean} 펫시터`,
     })
   }, [navigation, serviceTypeKorean])
+
+  const 반려동물 = useMemo(() => {
+    if (petsitter?.catMaxUnit !== 0 && petsitter?.dogMaxUnit !== 0) return "강아지, 고양이"
+    else if (petsitter?.catMaxUnit !== 0) return "고양이"
+    else if (petsitter?.dogMaxUnit !== 0) return "강아지"
+  }, [petsitter?.catMaxUnit, petsitter?.dogMaxUnit])
 
   return (
     <Screen testID="CgEditProfile" style={{ paddingHorizontal: 0 }}>
@@ -75,9 +82,7 @@ export const CgEditProfileScreen: FC<
 
         <View style={{ position: "absolute", right: 44, top: 14 }}>
           <PreReg10
-            text={`${priceFormatter(String(petsitter?.defaultFee)) || "-"}원 | ${
-              petsitter?.handleType.length !== 0 ? "강아지" : "고양이"
-            }`}
+            text={`${priceFormatter(String(petsitter?.defaultFee)) || "-"}원 | ${반려동물}`}
             style={{ textAlign: "right" }}
             color={BODY}
           />
