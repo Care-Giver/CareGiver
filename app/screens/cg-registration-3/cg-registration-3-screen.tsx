@@ -19,7 +19,7 @@ import { alertModal } from "../../utils/alert-modal"
 import { updateVisiting, updateCreche, uploadURIS } from "#axios"
 import _ from "lodash"
 import { CgSetSelfIntro } from "./cg-set-self-intro"
-import { CgSetCertificate } from "./cg-set-certificate"
+// import { CgSetCertificate } from "./cg-set-certificate"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
 
 export const CgRegistration3Screen: FC<
@@ -27,13 +27,7 @@ export const CgRegistration3Screen: FC<
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   // MST store 를 가져옵니다.
   const {
-    petsitterStore: {
-      petsitter,
-      serviceTypeKorean,
-      serviceType,
-      setVistingPetsitter,
-      setCrechePetsitter,
-    },
+    petsitterStore: { petsitter, serviceTypeKorean, setVistingPetsitter, setCrechePetsitter },
   } = useStores()
   console.log("petsitter 🔷", petsitter)
 
@@ -41,20 +35,21 @@ export const CgRegistration3Screen: FC<
 
   const [title, setTitle] = useState("") // 제목
   const [desc, setDesc] = useState("") // 자기소개
-  // 이미 기존에 DB 에 저장한 이미지.
-  const serverImages = petsitter?.images // TODO: "자격증" 이미지로 바꿔야 한다
-    ? petsitter.images.map((image) => ({
-        uri: image,
-        type: "image", // 임시값. 수정필요
-        name: "image", // 임시값. 수정필요
-      }))
-    : []
+  // TODO: MVP 에서는 자격증을 등록하는 기능이 없다. 따라서, 아래 코드는 주석처리한다.
+  // // 이미 기존에 DB 에 저장한 이미지.
+  // const serverImages = petsitter?.images // TODO: "자격증" 이미지로 바꿔야 한다
+  //   ? petsitter.images.map((image) => ({
+  //       uri: image,
+  //       type: "image", // 임시값. 수정필요
+  //       name: "image", // 임시값. 수정필요
+  //     }))
+  //   : []
 
-  console.log("petsitter?.images", petsitter?.images)
-  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(serverImages) // 펫시터 이미지
+  // console.log("petsitter?.images", petsitter?.images)
+  // const [selectedImages, setSelectedImages] = useState<PickerImage[]>(serverImages) // 펫시터 이미지
 
   // FlatList 관련 BEGIN ==================================================================
-  const data = Array.from({ length: 2 })
+  const data = Array.from({ length: 1 })
   const [itemWidth, setItemWidth] = useState<number>(0)
   const [currentStep, setCurrentStep] = useState<number>(1)
 
@@ -98,9 +93,9 @@ export const CgRegistration3Screen: FC<
       case 1: // 첫번째 스텝인 경우, 이전 스크린으로 돌아갑니다.
         navigation.goBack()
         break
-      case 2: // 마지막 스텝
-        setCurrentStep(currentStep - 1)
-        break
+      // case 2: // 마지막 스텝
+      //   setCurrentStep(currentStep - 1)
+      //   break
     }
   }
 
@@ -110,9 +105,9 @@ export const CgRegistration3Screen: FC<
       case 1:
         step1()
         break
-      case 2:
-        step2()
-        break
+      // case 2:
+      //   step2()
+      //   break
     }
   }
   // FlatList 관련 ENDED ==================================================================
@@ -129,27 +124,13 @@ export const CgRegistration3Screen: FC<
       return
     }
 
-    setCurrentStep(currentStep + 1)
-  }
-
-  // 자격증 설정 && 마지막 단계
-  const step2 = async () => {
     const apiCaller = serviceTypeKorean === "방문" ? updateVisiting : updateCreche
     const mstSetter = serviceTypeKorean === "방문" ? setVistingPetsitter : setCrechePetsitter
 
     //! 마지막단계 - 펫시팅 정보 UPDATE
-    const addedImages = selectedImages.filter((image) => !serverImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
-    const imageUriList = await uploadURIS(addedImages)
     apiCaller(petsitter.id, {
       title,
       desc,
-      images: [
-        ...selectedImages.filter((image) => !addedImages.includes(image)).map((image) => image.uri), // 로컬에서 선택한 이미지를 제외한 (삭제유무가 포함된) 서버 이미지
-        ...imageUriList, // 로컬에서 추가한 이미지를 URI 로 변환한 문자열 배열
-      ],
-      //! 🏗️디버깅중 - 이상하게 services 랑 amenities 도 넣어줘야 PUT 성공함 (@yeseong33) 님이 발견해 줌.
-      services: petsitter.serviceVisiting.map((item) => item.id),
-      amenities: petsitter.visitingAmenities.map((item) => item.id),
     }).then(({ isSuccess, visiting, creche }) => {
       if (isSuccess) {
         const updatedData = serviceTypeKorean === "방문" ? visiting : creche
@@ -165,6 +146,38 @@ export const CgRegistration3Screen: FC<
       }
     })
   }
+
+  //TODO: MVP 에서는 자격증을 등록하는 기능이 없다. 따라서, 아래 코드는 주석처리한다.
+  // // 자격증 설정 && 마지막 단계
+  // const step2 = async () => {
+  //   const apiCaller = serviceTypeKorean === "방문" ? updateVisiting : updateCreche
+  //   const mstSetter = serviceTypeKorean === "방문" ? setVistingPetsitter : setCrechePetsitter
+
+  //   //! 마지막단계 - 펫시팅 정보 UPDATE
+  //   const addedImages = selectedImages.filter((image) => !serverImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
+  //   const imageUriList = await uploadURIS(addedImages)
+  //   apiCaller(petsitter.id, {
+  //     title,
+  //     desc,
+  //     images: [
+  //       ...selectedImages.filter((image) => !addedImages.includes(image)).map((image) => image.uri), // 로컬에서 선택한 이미지를 제외한 (삭제유무가 포함된) 서버 이미지
+  //       ...imageUriList, // 로컬에서 추가한 이미지를 URI 로 변환한 문자열 배열
+  //     ],
+  //   }).then(({ isSuccess, visiting, creche }) => {
+  //     if (isSuccess) {
+  //       const updatedData = serviceTypeKorean === "방문" ? visiting : creche
+  //       mstSetter(updatedData)
+
+  //       /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+  //       navigation.replace("cg-edit-profile-screen")
+  //     } else {
+  //       alertModal(
+  //         `${serviceTypeKorean} 서비스 업데이트 실패`,
+  //         `${serviceTypeKorean} 서비스 수정에 실패했습니다. 잠시 후 다시 시도해주세요.`,
+  //       )
+  //     }
+  //   })
+  // }
 
   return (
     <Screen>
@@ -191,13 +204,13 @@ export const CgRegistration3Screen: FC<
                 setDesc={setDesc}
               />
             )}
-            {currentStep === 2 && (
+            {/* {currentStep === 2 && (
               <CgSetCertificate
                 style={{ width: itemWidth }}
                 selectedImages={selectedImages}
                 setSelectedImages={setSelectedImages}
               />
-            )}
+            )} */}
           </>
         )}
       />

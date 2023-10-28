@@ -89,7 +89,8 @@ export const CgEditProfileScreen: FC<
       <View style={styles.sidePadding}>
         <PreBol16 text="3 단계" mt={14} />
         <MypageButton
-          text={"자기소개, 자격증"}
+          // text={"자기소개, 자격증"}
+          text={"자기소개"}
           onPress={() => {
             navigate("cg-registration-3-screen")
           }}
