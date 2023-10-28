@@ -92,14 +92,14 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
                   const number = _.toNumber(text)
                   // 숫자가 아닌 경우, 초기화
                   if (_.isNaN(number)) {
-                    return onChange("")
+                    return onChange(0)
                   }
 
                   // 0 ~ 99.99 사이 숫자만 입력 가능
                   if (_.inRange(number, 0, 99.99)) {
                     onChange(number)
                   } else {
-                    onChange("")
+                    onChange(0)
                   }
                 }}
                 value={_.toString(value)}

@@ -386,43 +386,35 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           </Row>
 
           {/* //*이름 */}
-          <Pressable
-            style={{ paddingTop: 7 }}
+          <UserOrPetProfileInfo
+            title="이름"
+            titleColor={HEAD_LINE}
+            profileInfo={name || "예) 구름이"}
+            showOption={!name}
+            additionalPadding={35 + 7}
             onPress={() => {
               setNameTouched(true)
             }}
-          >
-            <UserOrPetProfileInfo
-              title="이름"
-              titleColor={HEAD_LINE}
-              profileInfo={name || "예) 구름이"}
-              showOption={!name}
-              additionalPadding={35}
-            />
-          </Pressable>
+          />
 
           {/* //*생년월일 */}
-          <View>
-            <Pressable
-              onPress={() => {
-                setBirthdayTouched(true)
-              }}
-            >
-              <UserOrPetProfileInfo
-                title="생년월일"
-                titleColor={HEAD_LINE}
-                profileInfo={birthday || "예) 2005-01-01"}
-                showOption={!birthday}
-                additionalPadding={35}
-              />
-            </Pressable>
-            <PreMed12
-              color={BODY}
-              text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
-              style={{ marginTop: 3 }}
-            />
-          </View>
+          <UserOrPetProfileInfo
+            title="생년월일"
+            titleColor={HEAD_LINE}
+            profileInfo={birthday || "예) 2005-01-01"}
+            showOption={!birthday}
+            additionalPadding={35}
+            onPress={() => {
+              setBirthdayTouched(true)
+            }}
+          />
+          <PreMed12
+            color={BODY}
+            text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
+            style={{ marginTop: 3 }}
+          />
 
+          {/* 품종 */}
           <UserOrPetProfileInfo
             onPress={() => {
               setSpeciesNameTouched(true)

@@ -17,11 +17,13 @@ export const UserOrPetProfileInfo = (props: UserOrPetProfileInfoProps) => {
   const Wrapper = onPress ? Pressable : View
 
   return (
-    <Wrapper style={{ paddingTop: additionalPadding }} onPress={onPress}>
+    <View style={{ paddingTop: additionalPadding }}>
       <PreMed14 color={titleColor || BODY} text={title} style={{ marginBottom: 10 }} />
       {/*<PreMed16 color={color} text={profileInfo} />*/}
-      <PreMed16 color={showOption === true ? DISABLED : HEAD_LINE} text={profileInfo} />
-      <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
-    </Wrapper>
+      <Wrapper onPress={onPress}>
+        <PreMed16 color={showOption === true ? DISABLED : HEAD_LINE} text={profileInfo} />
+        <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
+      </Wrapper>
+    </View>
   )
 }
