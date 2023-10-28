@@ -21,7 +21,6 @@ import {
   SettingScreen,
   ServiceCenterScreen,
   CgCalendarScreen,
-  CgCertificateRegistrationScreen,
   ManageBookingScreen,
   CgMypageScreen,
   SetVisitingServiceDayScreen,
@@ -30,17 +29,16 @@ import {
   CgEditProfileScreen,
   EditMypageScreen,
   CgRegistration2Screen,
+  CgRegistration3Screen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
   Screen,
   PreReg18,
   CgScreenHeader,
-  CgCertificateRegistrationScreenHeader,
   EditMypageScreenHeader,
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
-import { ServiceType } from "#models"
 import { useNavigation } from "@react-navigation/native"
 
 export type CGStackNavigatorParamList = {
@@ -70,18 +68,13 @@ export type CGStackNavigatorParamList = {
    * CgMypageStack - CG - 내정보 스택
    */
   "cg-mypage-screen": undefined
-  "cg-certificate-registration-screen": undefined
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
   "cg-edit-profile-screen": undefined
   "cg-registration-1-screen": undefined
   "cg-registration-2-screen": undefined
-
-  // ===========================================================================================================
-  // 아래는 아직 정리되지 않은 스크린들 입니다.
-  // ===========================================================================================================
-  "cg-set-price-screen": { serviceType: ServiceType }
+  "cg-registration-3-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<CGStackNavigatorParamList>()
@@ -221,13 +214,6 @@ export const CgMypageStack = () => {
         }}
       />
 
-      {/* CG - 자격증 등록 */}
-      <Stack.Screen
-        name="cg-certificate-registration-screen"
-        component={CgCertificateRegistrationScreen}
-        options={{ header: (props) => <CgCertificateRegistrationScreenHeader {...props} /> }}
-      />
-
       {/* //* 환경설정 스크린 */}
       <Stack.Screen
         name="setting-screen"
@@ -289,6 +275,15 @@ export const CgMypageStack = () => {
       <Stack.Screen
         name="cg-registration-2-screen"
         component={CgRegistration2Screen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      {/* //* CG - 등록 3단계 스크린 */}
+      <Stack.Screen
+        name="cg-registration-3-screen"
+        component={CgRegistration3Screen}
         options={{
           headerShown: false,
         }}

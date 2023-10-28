@@ -6,6 +6,7 @@ import { HEAD_LINE, MIDDLE_LINE, ERROR_RED, SUCCESS_BLUE } from "#theme"
 import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components"
 import { useForm, Controller } from "react-hook-form"
 import Modal from "react-native-modal"
+import _ from "lodash"
 
 //*hook form 위한 form 정해놓기
 type WeightForm = {
@@ -67,56 +68,77 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
       style={allStyles}
     >
       <View style={styles.modalPetWeight}>
-        {/* //*모달창 제목 부분  */}
-        <PreBol18 color={HEAD_LINE} text={title} />
+        <View style={{ paddingHorizontal: 16 }}>
+          {/* //*모달창 제목 부분  */}
+          <PreBol18 color={HEAD_LINE} text={title} />
 
-        {/* //* hook form*/}
-        <Controller
-          name="weight"
-          control={petWeight}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={{
-                paddingTop: 20,
-              }}
-              placeholder={"숫자만 입력해주세요."}
-              onChangeText={onChange}
-              // 앞에있는 0 제거 ex: 01 => 1, 012 => 12
-              value={value?.toString().replace(/^0+(?!$)/, "")}
-              autoCapitalize="none"
-              keyboardType="numeric"
-              maxLength={4} //*두자리수 몸무게인 경우 00.0 까지 쓸수있게.
-            />
+          {/* //* hook form*/}
+          <Controller
+            name="weight"
+            control={petWeight}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={{
+                  paddingTop: 20,
+                }}
+                placeholder={"숫자만 입력해주세요."}
+                onChangeText={(text) => {
+                  // 소수점 입력을 위한 경우 핸들링
+                  if (text.length >= 2 && _.last(text) === ".") {
+                    onChange(text)
+                    return
+                  }
+
+                  const number = _.toNumber(text)
+                  // 숫자가 아닌 경우, 초기화
+                  if (_.isNaN(number)) {
+                    return onChange(0)
+                  }
+
+                  // 0 ~ 99.99 사이 숫자만 입력 가능
+                  if (_.inRange(number, 0, 99.99)) {
+                    onChange(number)
+                  } else {
+                    onChange(0)
+                  }
+                }}
+                value={_.toString(value)}
+                autoCapitalize="none"
+                keyboardType="numeric"
+                maxLength={4} //*두자리수 몸무게인 경우 00.0 까지 쓸수있게.
+              />
+            )}
+            rules={{
+              required: true,
+              pattern: {
+                // value: /^[0-9]+$/,
+                value: /^[\d]*\.?[\d]{0,1}$/,
+                message: "* 숫자 외에 다른 문자는 입력할 수 없습니다.",
+              },
+            }}
+          />
+
+          {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
+          {errors.weight ? (
+            <View>
+              {/* //*오류 있을 때 : 빈칸일때 회색,  오류 있으면 빨간색 */}
+              <DivisionLine
+                color={errors.weight.type === "required" ? MIDDLE_LINE : ERROR_RED}
+                mt={4}
+                mb={4}
+              />
+              <PreReg12
+                text={errors.weight.type === "pattern" ? errors.weight.message : ""}
+                color={ERROR_RED}
+              />
+            </View>
+          ) : (
+            // *오류 없을 때
+            <View>
+              <DivisionLine color={dirtyFields.weight ? SUCCESS_BLUE : MIDDLE_LINE} mt={4} mb={4} />
+            </View>
           )}
-          rules={{
-            required: true,
-            pattern: {
-              value: /^[0-9]+(\.[0-9]{0,2})?$/,
-              message: "* 숫자만 입력해주세요.(소수점 첫째 자리까지 입력 가능합니다)",
-            },
-          }}
-        />
-
-        {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
-        {errors.weight ? (
-          <View>
-            {/* //*오류 있을 때 : 빈칸일때 회색,  오류 있으면 빨간색 */}
-            <DivisionLine
-              color={errors.weight.type === "required" ? MIDDLE_LINE : ERROR_RED}
-              mt={4}
-              mb={4}
-            />
-            <PreReg12
-              text={errors.weight.type === "pattern" ? errors.weight.message : ""}
-              color={ERROR_RED}
-            />
-          </View>
-        ) : (
-          // *오류 없을 때
-          <View>
-            <DivisionLine color={dirtyFields.weight ? SUCCESS_BLUE : MIDDLE_LINE} mt={4} mb={4} />
-          </View>
-        )}
+        </View>
 
         {/* //*확인 버튼 -> 새로 입력한 몸무게가 에러가 없을때만 activated */}
         <ConditionalButton
@@ -125,7 +147,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
           style={{
             marginTop: "auto",
             height: 49,
-            width: 326,
+            width: "100%",
             alignSelf: "center",
           }}
           onPress={
