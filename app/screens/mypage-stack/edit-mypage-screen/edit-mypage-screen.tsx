@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { View, Image, TouchableOpacity, ImageBackground } from "react-native"
+import { View, Image, TouchableOpacity, ImageBackground, Platform } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
@@ -13,13 +13,15 @@ import {
   DivisionLine,
   ConditionalButton,
   CustomInputModal,
+  PickerImage,
 } from "#components"
 import { images } from "#images"
 import { styles } from "./styles"
 import { Users } from "./dummy-data"
 import { useStores } from "#models"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
-import { updateUser } from "#axios"
+import { updateUser, uploadURIS } from "#axios"
+import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -27,7 +29,7 @@ export const EditMypageScreen: FC<
   //console.log("route @EditMypageScreen", route)
 
   const {
-    userStore: { userAuth, userDetail, sexInKorean },
+    userStore: { userAuth, userDetail, userDetailHandler, sexInKorean },
   } = useStores()
 
   //* <변수>위주 정리:
@@ -42,6 +44,9 @@ export const EditMypageScreen: FC<
   //*user.id === 2 : 닉네임 변경 횟수 잘 작동하는지 확인 가능 (닉네임 옆의 i 눌렀을 때 )
   //*user.id ===3 : 닉네임 변경 횟수 다 썼을때 수정 버튼 누르면 닉네임 부분 disabled 되는거 확인 가능
 
+  //*화면에서 프로필사진에 들어갈 데이터
+  const [profileImage, setProfileImage] = useState<string>(userDetail?.profileImage)
+
   //*화면에서 닉네임 부분에 들어갈 데이터
   const [nickname, setNickname] = useState(userDetail.nickname)
 
@@ -52,6 +57,39 @@ export const EditMypageScreen: FC<
   const [infoTouced, setInfoTouched] = useState(false)
 
   //*<함수>위주 정리 :
+
+  //* 프로필 사진을 수정하기위해 갤러리를 여는 함수 (customTimePicker > openGallery 참고)
+  const openGallery = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: "photo",
+      maxHeight: 130,
+      maxWidth: 130,
+      // includeBase64: true, // ? -> 큰 이미지 피함
+      selectionLimit: 1, // 최대 등록할 수 있는 이미지 개수 - myPage는 1개로 제한
+    }
+
+    launchImageLibrary(options, (response) => {
+      if (!response.didCancel) {
+        // 갤러리에서 선택한 이미지
+        const newImage: PickerImage[] = response.assets.map((current) => {
+          return {
+            name: current.fileName,
+            type: current.type,
+            // ? iOS의 경우 uri 맨 앞에 'file://' 붙음 -> 제거
+            uri: Platform.OS === "android" ? current.uri : current.uri.replace("file://", ""),
+          }
+        })
+        // 갤러리에서 선택한 이미지 uri String만 받아와서 state에 저장
+        uploadURIS(newImage).then((imageUri) => setProfileImage(imageUri[0]))
+      } else if (response.errorCode) {
+        console.error(
+          "[custom-image-picker.ts] Image Picker Error",
+          response.errorCode,
+          response.errorMessage,
+        )
+      }
+    })
+  }
 
   //* 편집버튼(연필)보이기, editable, 즉 수정화면 닫기, 수정불가화면으로 표시
   const showEditButton = () => {
@@ -87,26 +125,27 @@ export const EditMypageScreen: FC<
   return (
     <Screen preset={"fixed"}>
       {/* //*프사 부분 */}
-      <ImageBackground
-        style={styles.profileImage}
-        source={profileImageUriHandler(
-          images.default_profile_image_edit_mypage,
-          "medium",
-          userDetail?.profileImage,
-        )}
-      >
+      <View style={{ width: 130, alignSelf: "center" }}>
+        <Image
+          style={styles.profileImage}
+          source={profileImageUriHandler(
+            images.default_profile_image_edit_mypage,
+            "medium",
+            profileImage,
+          )}
+        ></Image>
         {/* //*프사 - 수정 가능 상태일때 */}
         {editable && (
           <TouchableOpacity
             onPress={() => {
-              alert("이미지 등록 준비중입니다.")
+              openGallery()
             }}
             style={{ position: "absolute", right: 0, bottom: 0 }}
           >
             <Image source={images.camera} style={{ width: 42, height: 42 }} />
           </TouchableOpacity>
         )}
-      </ImageBackground>
+      </View>
 
       {/* //*닉네임 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
       <View
@@ -207,12 +246,12 @@ export const EditMypageScreen: FC<
               sex: userDetail.sex,
               birthday: userDetail.birthday,
               desc: "안녕하세요.",
-              profileImage: userDetail.profileImage,
+              profileImage: profileImage,
             })
+            userDetailHandler(userAuth.token)
           }}
         />
       )}
-
       {/* //*새롭게 닉네임 입력하는 모달 창 -> 수정 가능 상태에서 닉네임 눌렀을때 pop up */}
       <CustomInputModal
         visibleState={nicknameTouched}

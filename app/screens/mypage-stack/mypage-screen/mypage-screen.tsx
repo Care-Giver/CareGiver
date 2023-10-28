@@ -27,13 +27,14 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
   function MypageScreen({ navigation, route }) {
     useShowBottomTab(navigation)
     const {
-      userStore: { switchType, loggedIn, userDetail },
+      userStore: { switchType, userDetailHandler, userAuth, loggedIn, userDetail },
       petStore: { pets, petsHandler, hasPets },
     } = useStores()
 
     /** 반려동물 리스트를 불러옵니다. */
     useEffect(() => {
       petsHandler()
+      userDetailHandler(userAuth.token)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
