@@ -280,6 +280,7 @@ interface UpdateUserRequestBody {
   birthday: string
   desc: string
   profileImage: string
+  phoneNumber: string
 }
 
 interface UpdateUserResult {

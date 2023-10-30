@@ -8,16 +8,28 @@ interface UserOrPetProfileInfoProps {
   profileInfo: string
   showOption?: boolean
   additionalPadding?: number
+  additionalMargin?: number
   onPress?: () => void
   titleColor?: string
 }
 
 export const UserOrPetProfileInfo = (props: UserOrPetProfileInfoProps) => {
-  const { title, profileInfo, showOption, additionalPadding = 20, onPress, titleColor } = props
+  const {
+    title,
+    profileInfo,
+    showOption,
+    additionalPadding = 20,
+    additionalMargin,
+    onPress,
+    titleColor,
+  } = props
   const Wrapper = onPress ? Pressable : View
 
   return (
-    <Wrapper style={{ paddingTop: additionalPadding }} onPress={onPress}>
+    <Wrapper
+      style={{ paddingTop: additionalPadding, marginBottom: additionalMargin }}
+      onPress={onPress}
+    >
       <PreMed14 color={titleColor || BODY} text={title} style={{ marginBottom: 10 }} />
       {/*<PreMed16 color={color} text={profileInfo} />*/}
       <PreMed16 color={showOption === true ? DISABLED : HEAD_LINE} text={profileInfo} />

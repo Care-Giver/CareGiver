@@ -14,6 +14,7 @@ import {
   ConditionalButton,
   CustomInputModal,
   PickerImage,
+  SignUpTextInput,
 } from "#components"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -22,6 +23,8 @@ import { useStores } from "#models"
 import { profileImageUriHandler } from "../../../utils/image-format-validate"
 import { updateUser, uploadURIS } from "#axios"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
+import dayjs from "dayjs"
+import { useTimer } from "react-timer-hook"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -52,6 +55,30 @@ export const EditMypageScreen: FC<
 
   //*닉네임 부분 누르면 모달 창 뜨게 관리하는 변수,함수
   const [nicknameTouched, setNicknameTouched] = useState(false)
+
+  //*화면에서 전화번호 부분에 들어갈 데이터
+  const [phoneNumber, setPhoneNumber] = useState(userDetail.phoneNumber)
+
+  //*전화번호 부분 누르면 모달 창 뜨게 관리하는 변수,함수
+  const [phoneNumberTouched, setPhoneNumberTouched] = useState(false)
+
+  //*인증번호 관련
+  const TIMER_DURATION = 60
+  // 인증번호
+  const [certification, setCertification] = useState<string>("")
+  // 인증번호 검증 여부
+  const [isVerified, setIsVerified] = useState(false)
+  const [isSendingSMS, setIsSendingSMS] = useState(false)
+  // 인증번호 발송버튼 재요청 타이머
+  const [expiryTimestamp, _] = useState(dayjs().add(TIMER_DURATION, "second").toDate())
+  const { totalSeconds, pause, restart } = useTimer({
+    expiryTimestamp,
+    onExpire: () => {
+      // console.warn("onExpire called")
+      setIsSendingSMS(false)
+      setCertification("")
+    },
+  })
 
   //*화면 닉네임 글자 옆 i 버튼 눌렀는지 여부 체크
   const [infoTouced, setInfoTouched] = useState(false)
@@ -216,42 +243,81 @@ export const EditMypageScreen: FC<
       <UserOrPetProfileInfo title={"성별"} profileInfo={sexInKorean} showOption={editable} />
 
       {/* //* 이메일 */}
-      <UserOrPetProfileInfo title={"이메일"} profileInfo={userAuth.email} showOption={editable} />
+      <UserOrPetProfileInfo
+        title={"이메일"}
+        profileInfo={userAuth.email}
+        showOption={editable}
+        additionalMargin={20}
+      />
 
       {/* //* 전화번호 */}
       {editable ? (
-        <TouchableOpacity onPress={() => alert("전화번호 수정 플로우 준비중")}>
-          <UserOrPetProfileInfo title={"전화번호"} profileInfo={userDetail.phoneNumber} />
-        </TouchableOpacity>
+        // <TouchableOpacity onPress={() => alert("전화번호 수정 플로우 준비중")}>
+        //   <UserOrPetProfileInfo title={"전화번호"} profileInfo={phoneNumber} />
+        // </TouchableOpacity>
+        <SignUpTextInput
+          placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
+          title="휴대폰 번호"
+          value={phoneNumber}
+          setValue={setPhoneNumber}
+          isSendingSMS={isSendingSMS}
+          setIsSendingSMS={setIsSendingSMS}
+          isVerified={isVerified}
+          setIsVerified={setIsVerified}
+          leftTime={totalSeconds}
+          keyboardType="number-pad"
+          marginBottom={20}
+        />
       ) : (
-        <UserOrPetProfileInfo title={"전화번호"} profileInfo={userDetail.phoneNumber} />
+        <UserOrPetProfileInfo title={"전화번호"} profileInfo={phoneNumber} additionalPadding={0} />
       )}
 
-      {/* //*저장하기 버튼 : editable이 true 일때, 즉 수정 가능 화면 일때 화면 하단부 표시  */}
-      {editable && (
-        <ConditionalButton
-          label="저장하기"
-          isActivated={true}
-          style={{
-            marginTop: "auto",
-            marginBottom: BOTTOM_HEIGHT,
-          }}
-          onPress={() => {
-            showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-            //TODO user data 실제로 변경하는 코드 필요 (변경된 닉네임으로 저장 (process -> 실제로 닉네임이 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
-            updateUser({
-              email: "example@google.com",
-              password: "abcdefg123!",
-              nickname: nickname,
-              sex: userDetail.sex,
-              birthday: userDetail.birthday,
-              desc: "안녕하세요.",
-              profileImage: profileImage,
-            })
-            userDetailHandler(userAuth.token)
-          }}
+      {/* //* 인증번호 */}
+      {editable && isSendingSMS && (
+        <SignUpTextInput
+          placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
+          title="인증번호"
+          phoneNumber={phoneNumber}
+          value={certification}
+          setValue={setCertification}
+          isVerified={isVerified}
+          setIsVerified={setIsVerified}
+          keyboardType="number-pad"
+          marginBottom={20}
         />
       )}
+
+      {/* //*저장하기 버튼 : editable이 true 일때, 즉 수정 가능 화면 일때 화면 하단부 표시  
+          //* 전화번호도 바꾼다면 인증이 되었을 때 저장하기 버튼이 활성화되도록 로직 추가
+      */}
+      {editable ? (
+        isSendingSMS && !isVerified ? null : (
+          <ConditionalButton
+            label="저장하기"
+            isActivated={true}
+            style={{
+              marginTop: "auto",
+              marginBottom: BOTTOM_HEIGHT,
+            }}
+            onPress={() => {
+              showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
+              //TODO user data 실제로 변경하는 코드 필요 (변경된 닉네임으로 저장 (process -> 실제로 닉네임이 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
+              updateUser({
+                email: "example@google.com",
+                password: "abcdefg123!",
+                nickname: nickname,
+                sex: userDetail.sex,
+                birthday: userDetail.birthday,
+                desc: "안녕하세요.",
+                profileImage: profileImage,
+                phoneNumber: userDetail.phoneNumber,
+              })
+              userDetailHandler(userAuth.token)
+            }}
+          />
+        )
+      ) : null}
+
       {/* //*새롭게 닉네임 입력하는 모달 창 -> 수정 가능 상태에서 닉네임 눌렀을때 pop up */}
       <CustomInputModal
         visibleState={nicknameTouched}

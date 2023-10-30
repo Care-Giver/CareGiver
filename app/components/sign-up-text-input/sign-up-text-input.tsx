@@ -12,6 +12,7 @@ export interface SignUpTextInputProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
+
   title: "휴대폰 번호" | "닉네임(필수)" | "생년월일(필수)" | "인증번호"
   placeholder: string
   value: string
@@ -24,6 +25,8 @@ export interface SignUpTextInputProps {
   leftTime?: number
   isVerified?: boolean
   setIsVerified?: (value: boolean) => void
+
+  marginBottom?: number
 }
 
 export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTextInputProps) {
@@ -39,6 +42,7 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
     leftTime,
     isVerified,
     setIsVerified,
+    marginBottom,
   } = props
 
   const [onVerifying, setOnVerifying] = useState(false)
@@ -196,7 +200,7 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
         )}
       </View>
 
-      <DivisionLine style={{ marginTop: 4, marginBottom: 36 }} />
+      <DivisionLine style={{ marginTop: 4, marginBottom: marginBottom }} />
     </View>
   )
 })
