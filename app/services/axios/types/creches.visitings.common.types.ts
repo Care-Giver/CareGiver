@@ -93,6 +93,7 @@ export interface Petsitter {
   promoted: false
   responseRate: number[] // [0.25, 1, 4]
   acceptRate: number[] //[0.25, 1, 4]
+  timeWithPet: number // 반려동물과 함께한 시간 (년)
 }
 
 export interface CareGiverPetsitter extends CareGiverRelatedData, Petsitter {}

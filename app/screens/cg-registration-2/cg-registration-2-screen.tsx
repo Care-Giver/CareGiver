@@ -1,32 +1,28 @@
-import React, { FC, useEffect, useState } from "react"
-import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
+import React, { FC, useMemo, useState } from "react"
+import { FlatList, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
-  CgRegisterState,
   CgRegisterStateProps,
   GoBackSaveNext,
   PreBol20,
-  PreMed16,
   Screen,
+  TextSaveNextString,
 } from "#components"
 import { useStores } from "#models"
-import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20, palette } from "#theme"
-import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
-import { images } from "#images"
+import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20, palette } from "#theme"
 import { alertModal } from "../../utils/alert-modal"
-import { updateVisiting, updateCreche, getVisitingAvgPrice, getCrecheAvgPrice } from "#axios"
-import _ from "lodash"
+import { updateVisiting, updateCreche } from "#axios"
 import { AdditionalPrice, CgSetAdditionalPrice } from "./cg-set-additional-price"
 import { CgSetPrice } from "./cg-set-price"
 import { CgSetFamilyType } from "./cg-set-pet-family-type"
 import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
 import { LinearGradient } from "expo-linear-gradient"
-import { getDevicePermission } from "../search-stack/search-screen/getDevicePermission"
-import Geolocation from "react-native-geolocation-service"
 import { price as priceFormatter } from "../../utils/format"
+import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
+import { useFetchAvgPrice } from "./use-fetch-avg-price"
 
 export type FamilyTypeNumber = {
   DOG: number
@@ -44,98 +40,40 @@ export const CgRegistration2Screen: FC<
       serviceType,
       setVistingPetsitter,
       setCrechePetsitter,
+      hasDraftPetsitterProfile,
+      draftPetsitter,
+      setDraftPetsitter,
+      방문펫시터,
+      regState,
     },
   } = useStores()
   console.log("petsitter 🔷", petsitter)
-
   const isKeyboardShown = useKeyboardShown()
 
-  const [prices, setPrices] = useState<{
-    minAvgPrice: number
-    avgPrice: number
-    maxAvgPrice: number
-  }>(null)
-
-  useEffect(() => {
-    const ERROR_PRICES = {
-      minAvgPrice: 0,
-      avgPrice: 0,
-      maxAvgPrice: 0,
-    }
-    const DEFAULT_PRICES = {
-      minAvgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
-      avgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
-      maxAvgPrice: serviceTypeKorean === "방문" ? 10000 : 50000,
-    }
-
-    // 현재 위치좌표를 얻어내고, 평균가 API 를 호출한다
-    const avgPriceHandler = async () => {
-      // 위치 권한 요청
-      getDevicePermission(
-        "location",
-        // 성공시, 현 위치를 좌표로 설정
-        () => {
-          Geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords
-              const getAvgPrice =
-                serviceTypeKorean === "방문" ? getVisitingAvgPrice : getCrecheAvgPrice
-              getAvgPrice({
-                lat: latitude,
-                lng: longitude,
-              }).then(({ isSuccess, prices, reason }) => {
-                if (isSuccess) {
-                  setPrices(prices)
-                } else {
-                  alertModal("API 호출 실패", "평균 기본 요금 정보를 요청하는 것에 실패하였습니다.")
-                  setPrices(ERROR_PRICES)
-                }
-              })
-            },
-            (error) => {
-              console.log("error", error)
-              alertModal("위치 정보 수집 실패", error.message)
-              setPrices(ERROR_PRICES)
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-          )
-        },
-        // 권한 요청 실패시,
-        () => {
-          setPrices(DEFAULT_PRICES)
-          alertModal(
-            "위치 권한 없음",
-            "내 주변 평균 기본 요금를 표시하기 위해 위치 권한이 필요합니다.",
-          )
-        },
-      )
-    }
-
-    avgPriceHandler()
-  }, [serviceTypeKorean])
-
+  // 이 지역 평균 기본 요금
+  const avgPriceData = useFetchAvgPrice(serviceTypeKorean)
   // 기본 요금
-  const [price, setPrice] = useState(0)
-
+  const [price, setPrice] = useState(draftPetsitter?.defaultFee || petsitter?.defaultFee || 0)
   // 종 (고양이 OR 강아지) 과 마리 수
   const [familyTypeNumber, setFamilyTypeNumber] = useState<FamilyTypeNumber>({
-    DOG: 0,
-    CAT: 0,
+    DOG: draftPetsitter?.dogMaxUnit || petsitter?.dogMaxUnit || 0,
+    CAT: draftPetsitter?.catMaxUnit || petsitter?.catMaxUnit || 0,
   })
+
   const hasDogs = familyTypeNumber.DOG > 0
-
   // (강아지 일 경우) 크기
-  const [handleType, setHandleType] = useState<HandleType[]>([]) // 크기
-
+  const [handleType, setHandleType] = useState<HandleType[]>(
+    draftPetsitter?.handleType || petsitter?.handleType || [],
+  )
   // (강아지 일 경우) 크기별 추가 요금
   const [additionalPrice, setAdditionalPrice] = useState<AdditionalPrice>({
-    Small: 0,
-    Medium: 0,
-    Large: 0,
+    Small: draftPetsitter?.extraSizeFee?.Small || petsitter?.extraSizeFee?.Small || 0,
+    Medium: draftPetsitter?.extraSizeFee?.Medium || petsitter?.extraSizeFee?.Medium || 0,
+    Large: draftPetsitter?.extraSizeFee?.Large || petsitter?.extraSizeFee?.Large || 0,
   })
 
   // FlatList 관련 BEGIN ==================================================================
-  const data = Array.from({ length: 3 })
+  const dataFlatList = Array.from({ length: 3 })
   const [itemWidth, setItemWidth] = useState<number>(0)
   const [currentStep, setCurrentStep] = useState<number>(1)
 
@@ -149,10 +87,10 @@ export const CgRegistration2Screen: FC<
   const stateList: Omit<CgRegisterStateProps, "style">[] = [
     {
       number: 1,
-      state: "done",
+      state: regState.state1,
       title: "펫시터 정보 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-1-screen")
       },
     },
     {
@@ -160,15 +98,15 @@ export const CgRegistration2Screen: FC<
       state: "progress",
       title: "펫시터 서비스 설정",
       onPress: () => {
-        //
+        // 아무것도 하지 않는다.
       },
     },
     {
       number: 3,
-      state: "todo",
+      state: regState.state3,
       title: "가격 및 특이사항 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-3-screen")
       },
     },
   ]
@@ -202,6 +140,15 @@ export const CgRegistration2Screen: FC<
         break
     }
   }
+
+  const textSaveNext: TextSaveNextString = useMemo(() => {
+    const isLastStep = currentStep === dataFlatList.length
+    if (isLastStep) {
+      return hasDraftPetsitterProfile ? "저장 후 다음단계" : "수정하기"
+    } else {
+      return "저장 후 다음단계"
+    }
+  }, [hasDraftPetsitterProfile, currentStep, dataFlatList])
   // FlatList 관련 ENDED ==================================================================
 
   // 기본 요금
@@ -239,58 +186,46 @@ export const CgRegistration2Screen: FC<
       }
     }
 
-    if (serviceTypeKorean === "방문") {
-      //! 마지막단계 - 방문 펫시팅 정보 UPDATE
-      updateVisiting(petsitter.id, {
-        defaultFee: price,
-        dogMaxUnit: familyTypeNumber.DOG,
-        catMaxUnit: familyTypeNumber.CAT,
-        handleType: [...handleType],
-        extraSizeFee: additionalPrice,
-      }).then(({ isSuccess, visiting }) => {
-        if (isSuccess) {
-          // MST 업데이트
-          setVistingPetsitter(visiting)
-          /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-          navigation.replace("cg-edit-profile-screen")
-        } else {
-          alertModal(
-            "방문 장소 업데이트 실패",
-            "방문 장소 수정 실패했습니다. 잠시 후 다시 시도해주세요.",
-          )
-        }
-      })
-    } else {
-      //! 마지막단계 - 위탁 펫시팅 정보 UPDATE
-      updateCreche(petsitter.id, {
-        defaultFee: price,
-        dogMaxUnit: familyTypeNumber.DOG,
-        catMaxUnit: familyTypeNumber.CAT,
-        handleType,
-        extraSizeFee: additionalPrice,
-        //! 🏗️디버깅중 - 이상하게 services 랑 amenities 도 넣어줘야 PUT 성공함 (@yeseong33) 님이 발견해 줌.
-        services: petsitter.serviceCreche.map((item) => item.id),
-        amenities: petsitter.crecheAmenities.map((item) => item.id),
-      }).then(({ isSuccess, creche }) => {
-        if (isSuccess) {
-          // MST 업데이트
-          console.log("BEFORE INTO setCrechePetsitter", creche)
-          setCrechePetsitter(creche)
-          /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-          navigation.replace("cg-edit-profile-screen")
-        } else {
-          alertModal(
-            "위탁 장소 업데이트 실패",
-            "위탁 장소 수정 및 사진 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.",
-          )
-        }
-      })
+    const data = {
+      defaultFee: price,
+      dogMaxUnit: familyTypeNumber.DOG,
+      catMaxUnit: familyTypeNumber.CAT,
+      handleType,
+      extraSizeFee: additionalPrice,
     }
+
+    if (hasDraftPetsitterProfile) {
+      setDraftPetsitter({ ...draftPetsitter, ...data }, 방문펫시터 ? "visiting" : "creche")
+      navigate("cg-registration-3-screen")
+      return
+    }
+
+    const updater = 방문펫시터 ? updateVisiting : updateCreche
+    const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
+    //! 마지막단계 - 방문 펫시팅 정보 UPDATE
+    updater(petsitter.id, data).then(({ isSuccess, visiting, creche }) => {
+      if (isSuccess) {
+        const updatedData = 방문펫시터 ? visiting : creche
+        // MST 업데이트
+        mstSetter(updatedData)
+        /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
+        navigation.replace("cg-edit-profile-screen")
+      } else {
+        alertModal(
+          `${serviceTypeKorean} 장소 업데이트 실패`,
+          `${serviceTypeKorean} 장소 수정 실패했습니다. 잠시 후 다시 시도해주세요.`,
+        )
+      }
+    })
   }
 
   return (
     <Screen>
-      <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
+      <ScreenHeader
+        navigation={navigation}
+        onPressSaveExit={onPressSaveExit}
+        hasDraftPetsitterProfile={hasDraftPetsitterProfile}
+      />
       <StateHeader stateList={stateList} style={{ marginTop: 10 }} />
       <FlatList
         snapToInterval={itemWidth}
@@ -298,7 +233,7 @@ export const CgRegistration2Screen: FC<
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ width: "200%" }}
-        data={data}
+        data={dataFlatList}
         scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
         numColumns={1}
@@ -311,9 +246,9 @@ export const CgRegistration2Screen: FC<
                 setPrice={setPrice}
                 serviceType={serviceType}
                 standardPrice={
-                  prices && {
-                    min: priceFormatter(prices.minAvgPrice.toString()),
-                    max: priceFormatter(prices.maxAvgPrice.toString()),
+                  avgPriceData && {
+                    min: priceFormatter(avgPriceData.minAvgPrice.toString()),
+                    max: priceFormatter(avgPriceData.maxAvgPrice.toString()),
                   }
                 }
               />
@@ -376,62 +311,10 @@ export const CgRegistration2Screen: FC<
         <GoBackSaveNext
           onPressGoback={onPressGoback}
           onPressSaveNext={onPressSaveNext}
-          isLastStep={currentStep === data.length}
           style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
+          textSaveNext={textSaveNext}
         />
       )}
     </Screen>
   )
-})
-
-/**
- * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
- * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
- */
-const ScreenHeader = ({ navigation, onPressSaveExit }) => {
-  return (
-    <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
-      {/* 뒤로가기 버튼 */}
-      <Pressable
-        onPress={() => {
-          navigation.goBack()
-        }}
-      >
-        <Image style={styles.goBackButton} source={images.go_back} />
-      </Pressable>
-
-      {/* 저장 후 나가기 */}
-      <Pressable onPress={onPressSaveExit}>
-        <PreMed16 text="저장 후 나가기" color={DISABLED} />
-      </Pressable>
-    </View>
-  )
-}
-
-/**
- * FlatList 상단에 표출되는
- * 현재 state 을 보여주는 컴포넌트입니다.
- */
-const StateHeader = ({ stateList, style }) => {
-  return (
-    <View style={[{ flexDirection: "row", height: 30 }, style]}>
-      {stateList.map((i) => (
-        <CgRegisterState
-          key={i.number}
-          state={i.state}
-          number={i.number}
-          title={i.title}
-          onPress={i.onPress}
-          style={{ marginRight: 5 }}
-        />
-      ))}
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  goBackButton: {
-    width: 28,
-    height: 28,
-  },
 })

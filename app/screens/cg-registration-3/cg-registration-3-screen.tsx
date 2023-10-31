@@ -1,40 +1,46 @@
-import React, { FC, useEffect, useState } from "react"
-import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
+import React, { FC, useMemo, useState } from "react"
+import { FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import {
-  CgRegisterState,
-  CgRegisterStateProps,
-  GoBackSaveNext,
-  PickerImage,
-  PreMed16,
-  Screen,
-} from "#components"
+import { NavigatorParamList, navigate } from "#navigators"
+import { CgRegisterStateProps, GoBackSaveNext, Screen, TextSaveNextString } from "#components"
 import { useStores } from "#models"
-import { BOTTOM_HEIGHT, DISABLED } from "#theme"
-import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
-import { images } from "#images"
+import { BOTTOM_HEIGHT } from "#theme"
 import { alertModal } from "../../utils/alert-modal"
-import { updateVisiting, updateCreche, uploadURIS } from "#axios"
+import { updateVisiting, updateCreche, createVisiting, createCreche } from "#axios"
 import _ from "lodash"
 import { CgSetSelfIntro } from "./cg-set-self-intro"
 // import { CgSetCertificate } from "./cg-set-certificate"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
+import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
 
 export const CgRegistration3Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-3-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   // MST store 를 가져옵니다.
   const {
-    petsitterStore: { petsitter, serviceTypeKorean, setVistingPetsitter, setCrechePetsitter },
+    userStore: { userDetail },
+    petsitterStore: {
+      petsitter,
+      serviceTypeKorean,
+      setVistingPetsitter,
+      setCrechePetsitter,
+      hasDraftPetsitterProfile,
+      draftPetsitter,
+      draftServiceTypeKorean,
+      setDraftPetsitter,
+      방문펫시터,
+      fetchPetsitter,
+      regState,
+      resetDraftPetsitter,
+    },
   } = useStores()
   console.log("petsitter 🔷", petsitter)
 
   const isKeyboardShown = useKeyboardShown()
 
-  const [title, setTitle] = useState("") // 제목
-  const [desc, setDesc] = useState("") // 자기소개
+  const [title, setTitle] = useState(draftPetsitter?.title || petsitter?.title || "") // 제목
+  const [desc, setDesc] = useState(draftPetsitter?.desc || petsitter?.desc || "") // 자기소개
   // TODO: MVP 에서는 자격증을 등록하는 기능이 없다. 따라서, 아래 코드는 주석처리한다.
   // // 이미 기존에 DB 에 저장한 이미지.
   // const serverImages = petsitter?.images // TODO: "자격증" 이미지로 바꿔야 한다
@@ -49,7 +55,7 @@ export const CgRegistration3Screen: FC<
   // const [selectedImages, setSelectedImages] = useState<PickerImage[]>(serverImages) // 펫시터 이미지
 
   // FlatList 관련 BEGIN ==================================================================
-  const data = Array.from({ length: 1 })
+  const dataFlatList = Array.from({ length: 1 })
   const [itemWidth, setItemWidth] = useState<number>(0)
   const [currentStep, setCurrentStep] = useState<number>(1)
 
@@ -63,18 +69,18 @@ export const CgRegistration3Screen: FC<
   const stateList: Omit<CgRegisterStateProps, "style">[] = [
     {
       number: 1,
-      state: "done",
+      state: regState.state1,
       title: "펫시터 정보 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-1-screen")
       },
     },
     {
       number: 2,
-      state: "done",
+      state: regState.state2,
       title: "펫시터 서비스 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-2-screen")
       },
     },
     {
@@ -82,7 +88,7 @@ export const CgRegistration3Screen: FC<
       state: "progress",
       title: "가격 및 특이사항 설정",
       onPress: () => {
-        //
+        // 아무것도 하지 않는다.
       },
     },
   ]
@@ -110,6 +116,15 @@ export const CgRegistration3Screen: FC<
       //   break
     }
   }
+
+  const textSaveNext: TextSaveNextString = useMemo(() => {
+    const isLastStep = currentStep === dataFlatList.length
+    if (isLastStep) {
+      return hasDraftPetsitterProfile ? "이대로 등록하기" : "수정하기"
+    } else {
+      return "저장 후 다음단계"
+    }
+  }, [hasDraftPetsitterProfile, currentStep, dataFlatList])
   // FlatList 관련 ENDED ==================================================================
 
   // 자기소개
@@ -124,18 +139,50 @@ export const CgRegistration3Screen: FC<
       return
     }
 
-    const apiCaller = serviceTypeKorean === "방문" ? updateVisiting : updateCreche
-    const mstSetter = serviceTypeKorean === "방문" ? setVistingPetsitter : setCrechePetsitter
-
-    //! 마지막단계 - 펫시팅 정보 UPDATE
-    apiCaller(petsitter.id, {
+    const data = {
       title,
       desc,
-    }).then(({ isSuccess, visiting, creche }) => {
-      if (isSuccess) {
-        const updatedData = serviceTypeKorean === "방문" ? visiting : creche
-        mstSetter(updatedData)
+    }
 
+    if (hasDraftPetsitterProfile) {
+      setDraftPetsitter({ ...draftPetsitter, ...data }, 방문펫시터 ? "visiting" : "creche")
+
+      if (_.includes(regState, "todo", undefined)) {
+        alertModal("등록 거절", "모든  단계를 작성해주세요.")
+        return
+      }
+
+      const creator = 방문펫시터 ? createVisiting : createCreche
+
+      // @ts-ignore
+      creator({ ...draftPetsitter, ...data, timeWithPet: 0, userId: userDetail.id }).then(
+        ({ isSuccess }) => {
+          if (isSuccess) {
+            fetchPetsitter().then((result) => {
+              if (result === true) {
+                // navigate("cg-registration-1-screen")
+                resetDraftPetsitter() // draftPetsitter 초기화
+                navigation.replace("cg-mypage-screen")
+              }
+            })
+          } else {
+            alertModal(
+              "등록 실패",
+              `${draftServiceTypeKorean} 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.`,
+            )
+          }
+        },
+      )
+      return
+    }
+
+    const updater = 방문펫시터 ? updateVisiting : updateCreche
+    const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
+    //! 마지막단계 - 펫시팅 정보 UPDATE
+    updater(petsitter.id, data).then(({ isSuccess, visiting, creche }) => {
+      if (isSuccess) {
+        const updatedData = 방문펫시터 ? visiting : creche
+        mstSetter(updatedData)
         /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
         navigation.replace("cg-edit-profile-screen")
       } else {
@@ -150,8 +197,8 @@ export const CgRegistration3Screen: FC<
   //TODO: MVP 에서는 자격증을 등록하는 기능이 없다. 따라서, 아래 코드는 주석처리한다.
   // // 자격증 설정 && 마지막 단계
   // const step2 = async () => {
-  //   const apiCaller = serviceTypeKorean === "방문" ? updateVisiting : updateCreche
-  //   const mstSetter = serviceTypeKorean === "방문" ? setVistingPetsitter : setCrechePetsitter
+  //   const apiCaller = 방문펫시터 ? updateVisiting : updateCreche
+  //   const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
   //   //! 마지막단계 - 펫시팅 정보 UPDATE
   //   const addedImages = selectedImages.filter((image) => !serverImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
@@ -165,7 +212,7 @@ export const CgRegistration3Screen: FC<
   //     ],
   //   }).then(({ isSuccess, visiting, creche }) => {
   //     if (isSuccess) {
-  //       const updatedData = serviceTypeKorean === "방문" ? visiting : creche
+  //       const updatedData = 방문펫시터 ? visiting : creche
   //       mstSetter(updatedData)
 
   //       /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
@@ -181,7 +228,11 @@ export const CgRegistration3Screen: FC<
 
   return (
     <Screen>
-      <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
+      <ScreenHeader
+        navigation={navigation}
+        onPressSaveExit={onPressSaveExit}
+        hasDraftPetsitterProfile={hasDraftPetsitterProfile}
+      />
       <StateHeader stateList={stateList} style={{ marginTop: 10 }} />
       <FlatList
         snapToInterval={itemWidth}
@@ -189,7 +240,7 @@ export const CgRegistration3Screen: FC<
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ width: "200%" }}
-        data={data}
+        data={dataFlatList}
         scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
         numColumns={1}
@@ -220,62 +271,10 @@ export const CgRegistration3Screen: FC<
         <GoBackSaveNext
           onPressGoback={onPressGoback}
           onPressSaveNext={onPressSaveNext}
-          isLastStep={currentStep === data.length}
           style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
+          textSaveNext={textSaveNext}
         />
       )}
     </Screen>
   )
-})
-
-/**
- * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
- * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
- */
-const ScreenHeader = ({ navigation, onPressSaveExit }) => {
-  return (
-    <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
-      {/* 뒤로가기 버튼 */}
-      <Pressable
-        onPress={() => {
-          navigation.goBack()
-        }}
-      >
-        <Image style={styles.goBackButton} source={images.go_back} />
-      </Pressable>
-
-      {/* 저장 후 나가기 */}
-      <Pressable onPress={onPressSaveExit}>
-        <PreMed16 text="저장 후 나가기" color={DISABLED} />
-      </Pressable>
-    </View>
-  )
-}
-
-/**
- * FlatList 상단에 표출되는
- * 현재 state 을 보여주는 컴포넌트입니다.
- */
-const StateHeader = ({ stateList, style }) => {
-  return (
-    <View style={[{ flexDirection: "row", height: 30 }, style]}>
-      {stateList.map((i) => (
-        <CgRegisterState
-          key={i.number}
-          state={i.state}
-          number={i.number}
-          title={i.title}
-          onPress={i.onPress}
-          style={{ marginRight: 5 }}
-        />
-      ))}
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  goBackButton: {
-    width: 28,
-    height: 28,
-  },
 })

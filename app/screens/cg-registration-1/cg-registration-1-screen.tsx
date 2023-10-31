@@ -1,18 +1,18 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, Pressable, StyleSheet, View, Image } from "react-native"
+import React, { FC, useCallback, useMemo, useState } from "react"
+import { FlatList, Pressable, StyleSheet, View, Image, StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   CgRegisterState,
   CgRegisterStateProps,
   GoBackSaveNext,
   PickerImage,
-  PreMed16,
   Screen,
+  TextSaveNextString,
 } from "#components"
 import { useStores } from "#models"
-import { BOTTOM_HEIGHT, DISABLED } from "#theme"
+import { BOTTOM_HEIGHT } from "#theme"
 import { HEADER_ROOT } from "../../components/screen-headers/common-styles"
 import { images } from "#images"
 import { CgSearchAddress } from "./cg-search-address"
@@ -29,7 +29,6 @@ import {
   VisitingAmenity,
   CrecheAmenity,
 } from "#axios"
-import _ from "lodash"
 import { CgSetService } from "./cg-set-service"
 import { CgSetAmenity } from "./cg-set-amenity"
 import { useKeyboardShown } from "../../utils/hooks"
@@ -41,26 +40,51 @@ export const CgRegistration1Screen: FC<
 
   // MST store 를 가져옵니다.
   const {
-    petsitterStore: { petsitter, serviceTypeKorean, setVistingPetsitter, setCrechePetsitter },
+    petsitterStore: {
+      petsitter,
+      serviceTypeKorean,
+      setVistingPetsitter,
+      setCrechePetsitter,
+      hasDraftPetsitterProfile,
+      draftPetsitter,
+      setDraftPetsitter,
+      방문펫시터,
+      위탁펫시터,
+      regState,
+    },
     etcStore: { service, amenity },
   } = useStores()
-
-  const services =
-    serviceTypeKorean === "방문" ? service.visitingServices : service.crecheServices || []
+  const services = 방문펫시터 ? service.visitingServices : service.crecheServices || []
   const defaultServices = services.slice(0, 3)
   const additionalServices = services.slice(3, services.length)
   const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<
     Array<VisitingService | CrecheService>
   >([])
   // const submitText = useMemo(() => `총 ${setselectedAdditionalServices.length}개 등록`, [selectedOptions.length])
-  const amenities =
-    serviceTypeKorean === "방문" ? amenity.visitingAmenities : amenity.crecheAmenities || []
+  const amenities = 방문펫시터 ? amenity.visitingAmenities : amenity.crecheAmenities || []
   const [selectedAmenities, setSelectedAmenities] = useState<
     Array<VisitingAmenity | CrecheAmenity>
   >([])
 
+  // 기본주소
+  const [address, setAddress] = useState<OnCompleteParams>(null)
+  // console.log("address 🔷", address)
+
+  // 상세주소
+  const [detailAddress, setDetailAddress] = useState<string>(null)
+
+  // 이미 기존에 DB 에 저장했거나, draftPetsitter 객체에 임시 저장된 이미지
+  const imageStringList = draftPetsitter?.images || petsitter?.images || []
+  const previousImages = imageStringList.map((image) => ({
+    uri: image,
+    type: "image", // 임시값. 수정필요
+    name: "image", // 임시값. 수정필요
+  }))
+  // 위탁 장소 사진
+  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(previousImages)
+
   // FlatList 관련 BEGIN ==================================================================
-  const data = Array.from({ length: 5 })
+  const dataFlatList = Array.from({ length: 5 })
   const [itemWidth, setItemWidth] = useState<number>(0)
   const [currentStep, setCurrentStep] = useState<number>(1)
 
@@ -77,23 +101,23 @@ export const CgRegistration1Screen: FC<
       state: "progress",
       title: "펫시터 정보 설정",
       onPress: () => {
-        //
+        // 아무것도 하지 않는다.
       },
     },
     {
       number: 2,
-      state: "todo",
+      state: regState.state2,
       title: "펫시터 서비스 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-2-screen")
       },
     },
     {
       number: 3,
-      state: "todo",
+      state: regState.state3,
       title: "가격 및 특이사항 설정",
       onPress: () => {
-        //
+        navigate("cg-registration-3-screen")
       },
     },
   ]
@@ -108,11 +132,11 @@ export const CgRegistration1Screen: FC<
         setCurrentStep(currentStep - 1)
         break
       case 3: // 위탁 전용 스텝
-        setSelectedImages(serverImages)
+        setSelectedImages(previousImages)
         setCurrentStep(currentStep - 1)
         break
       case 4:
-        setCurrentStep(serviceTypeKorean === "방문" ? currentStep - 2 : currentStep - 1)
+        setCurrentStep(방문펫시터 ? currentStep - 2 : currentStep - 1)
         break
       case 5:
         setCurrentStep(currentStep - 1)
@@ -140,6 +164,15 @@ export const CgRegistration1Screen: FC<
         break
     }
   }
+
+  const textSaveNext: TextSaveNextString = useMemo(() => {
+    const isLastStep = currentStep === dataFlatList.length
+    if (isLastStep) {
+      return hasDraftPetsitterProfile ? "저장 후 다음단계" : "수정하기"
+    } else {
+      return "저장 후 다음단계"
+    }
+  }, [hasDraftPetsitterProfile, currentStep, dataFlatList])
   // FlatList 관련 ENDED ==================================================================
 
   const step1 = () => {
@@ -151,19 +184,19 @@ export const CgRegistration1Screen: FC<
   }
 
   const step2 = async () => {
-    if (serviceTypeKorean === "위탁" && !detailAddress) {
+    if (위탁펫시터 && !detailAddress) {
       alertModal("상세주소 입력", "상세주소를 입력해주세요.")
       return
     }
 
     // 방문이면, 서비스 설정 단계로 이동
     // 위탁인경우 다음단계(사진 업로드)로 이동
-    setCurrentStep(serviceTypeKorean === "방문" ? currentStep + 2 : currentStep + 1)
+    setCurrentStep(방문펫시터 ? currentStep + 2 : currentStep + 1)
   }
 
   // 위탁인 경우에만 실행됨 - 위탁장소 사진 업로드
   const step3 = async () => {
-    if (serviceTypeKorean === "위탁" && selectedImages.length === 0) {
+    if (위탁펫시터 && selectedImages.length === 0) {
       alertModal("위탁 장소 사진", "사진을 추가해주세요.")
       return
     }
@@ -183,13 +216,22 @@ export const CgRegistration1Screen: FC<
     ]
     const amenityIds = selectedAmenities.map((amenity) => amenity.id)
 
-    if (serviceTypeKorean === "방문") {
-      //! 마지막단계 - 방문 펫시팅 정보 UPDATE
-      updateVisiting(petsitter.id, {
+    let data = {}
+    //! 마지막단계 - 방문 펫시팅 정보 UPDATE
+    if (방문펫시터) {
+      data = {
         address: _address,
         services: serviceIds,
         amenities: amenityIds,
-      }).then(({ isSuccess, visiting }) => {
+      }
+
+      if (hasDraftPetsitterProfile) {
+        setDraftPetsitter({ ...draftPetsitter, ...data }, "visiting")
+        navigate("cg-registration-2-screen")
+        return
+      }
+
+      updateVisiting(petsitter.id, data).then(({ isSuccess, visiting }) => {
         if (isSuccess) {
           // MST 업데이트
           setVistingPetsitter(visiting)
@@ -202,11 +244,12 @@ export const CgRegistration1Screen: FC<
           )
         }
       })
-    } else {
-      //! 마지막단계 - 위탁 펫시팅 정보 UPDATE
-      const addedImages = selectedImages.filter((image) => !serverImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
+    }
+    //! 마지막단계 - 위탁 펫시팅 정보 UPDATE
+    else {
+      const addedImages = selectedImages.filter((image) => !previousImages.includes(image)) // 로컬에서 추가한 이미지만 필터링
       const imageUriList = await uploadURIS(addedImages)
-      updateCreche(petsitter.id, {
+      data = {
         address: _address,
         detailAddress: detailAddress.trim(),
         images: [
@@ -217,7 +260,15 @@ export const CgRegistration1Screen: FC<
         ],
         services: serviceIds,
         amenities: amenityIds,
-      }).then(({ isSuccess, creche }) => {
+      }
+
+      if (hasDraftPetsitterProfile) {
+        setDraftPetsitter({ ...draftPetsitter, ...data }, "creche")
+        navigate("cg-registration-2-screen")
+        return
+      }
+
+      updateCreche(petsitter.id, data).then(({ isSuccess, creche }) => {
         if (isSuccess) {
           // MST 업데이트
           console.log("BEFORE INTO setCrechePetsitter", creche)
@@ -233,24 +284,6 @@ export const CgRegistration1Screen: FC<
       })
     }
   }
-
-  // 기본주소
-  const [address, setAddress] = useState<OnCompleteParams>(null)
-  // console.log("address 🔷", address)
-
-  // 상세주소
-  const [detailAddress, setDetailAddress] = useState<string>(null)
-
-  // 이미 기존에 DB 에 저장한 이미지.
-  const serverImages = petsitter?.images
-    ? petsitter.images.map((image) => ({
-        uri: image,
-        type: "image", // 임시값. 수정필요
-        name: "image", // 임시값. 수정필요
-      }))
-    : []
-  // 위탁 장소 사진
-  const [selectedImages, setSelectedImages] = useState<PickerImage[]>(serverImages)
 
   const handleOptionPressService = useCallback((option) => {
     setSelectedAdditionalServices((prev) => [...prev, option])
@@ -269,7 +302,11 @@ export const CgRegistration1Screen: FC<
 
   return (
     <Screen>
-      <ScreenHeader navigation={navigation} onPressSaveExit={onPressSaveExit} />
+      <ScreenHeader
+        navigation={navigation}
+        onPressSaveExit={onPressSaveExit}
+        hasDraftPetsitterProfile={hasDraftPetsitterProfile}
+      />
       <StateHeader stateList={stateList} style={{ marginTop: 10 }} />
       <FlatList
         snapToInterval={itemWidth}
@@ -277,7 +314,7 @@ export const CgRegistration1Screen: FC<
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ width: "200%" }}
-        data={data}
+        data={dataFlatList}
         scrollEnabled={false}
         onContentSizeChange={(w) => setItemWidth(w / 2)}
         numColumns={1}
@@ -336,8 +373,8 @@ export const CgRegistration1Screen: FC<
         <GoBackSaveNext
           onPressGoback={onPressGoback}
           onPressSaveNext={onPressSaveNext}
-          isLastStep={currentStep === data.length}
           style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
+          textSaveNext={textSaveNext}
         />
       )}
     </Screen>
@@ -348,31 +385,39 @@ export const CgRegistration1Screen: FC<
  * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
  * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
  */
-const ScreenHeader = ({ navigation, onPressSaveExit }) => {
+export const ScreenHeader = ({ navigation, onPressSaveExit, hasDraftPetsitterProfile }) => {
   return (
     <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
       {/* 뒤로가기 버튼 */}
       <Pressable
         onPress={() => {
-          navigation.goBack()
+          navigate("cg-edit-profile-screen")
         }}
       >
         <Image style={styles.goBackButton} source={images.go_back} />
       </Pressable>
 
       {/* 저장 후 나가기 */}
-      <Pressable onPress={onPressSaveExit}>
-        <PreMed16 text="저장 후 나가기" color={DISABLED} />
-      </Pressable>
+      {/* //TODO: 저장 후 나가기는 어떤 UX 를 위한 UI 인가? */}
+      {/* {hasDraftPetsitterProfile && (
+        <TouchableOpacity onPress={onPressSaveExit}>
+          <PreMed16 text="저장 후 나가기" color={DISABLED} />
+        </TouchableOpacity>
+      )} */}
     </View>
   )
 }
 
+interface StateHeaderProps {
+  stateList: Omit<CgRegisterStateProps, "style">[]
+  style: StyleProp<ViewStyle>
+}
 /**
  * FlatList 상단에 표출되는
  * 현재 state 을 보여주는 컴포넌트입니다.
  */
-const StateHeader = ({ stateList, style }) => {
+export const StateHeader = (props: StateHeaderProps) => {
+  const { stateList, style } = props
   return (
     <View style={[{ flexDirection: "row", height: 30 }, style]}>
       {stateList.map((i) => (

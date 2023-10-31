@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20 } from "#theme"
 import { PopSem12 } from "#components"
 
-export type Step = "todo" | "progress" | "done"
+export type StateString = "todo" | "progress" | "done"
 
 export interface CgRegisterStateProps {
   /**
@@ -18,7 +18,7 @@ export interface CgRegisterStateProps {
    * - "progress"
    * - "done"
    */
-  state: Step
+  state: StateString
 
   /**
    * 몇번째 단계인지 입력해주세요.

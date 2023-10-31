@@ -19,24 +19,13 @@ import {
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import { NavigatorParamList, navigate } from "#navigators"
-import {
-  GIVER_CASUAL_NAVY,
-  SUB_HEAD_LINE,
-  LIGHT_LINE,
-  BOTTOM_HEIGHT,
-  palette,
-  SHADOW_1,
-  SHADOW_2,
-} from "#theme"
+import { GIVER_CASUAL_NAVY, SUB_HEAD_LINE, LIGHT_LINE, BOTTOM_HEIGHT, palette } from "#theme"
 import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CgSetServiceType } from "./cg-set-service-type"
-import { createVisiting } from "../../services/axios/visiting"
 import { ratingRound } from "../../utils/format"
-import { createCreche } from "#axios"
-import { alertModal } from "../../utils/alert-modal"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -45,35 +34,35 @@ export const CgMypageScreen: FC<
 
   const {
     userStore: { switchType, userDetail },
-    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
+    petsitterStore: {
+      serviceTypeKorean,
+      petsitter,
+      isFirstPetsitter,
+      setDraftPetsitter,
+      draftPetsitter,
+      resetDraftPetsitter,
+    },
   } = useStores()
-  console.log("userDetail.id", userDetail.id)
-  console.log("CgMypageScreen", petsitter)
+  console.log("CgMypageScreen | petsitter", petsitter)
+  console.log("CgMypageScreen | draftPetsitter", draftPetsitter)
+  console.log("CgMypageScreen | isFirstPetsitter", isFirstPetsitter)
 
-  // * 환경설정 버튼 클릭시 실행되는 함수
+  // 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
     navigate("setting-screen")
   }
 
-  // * 고객 센터 버튼 클릭시 실행되는 함수
+  // 고객 센터 버튼 클릭시 실행되는 함수
   const handleServiceCenterPress = () => {
     navigate("service-center-screen")
   }
 
-  // * "Client 모드로 전환" 버튼 클릭시 실행되는 함수
+  // "Client 모드로 전환" 버튼 클릭시 실행되는 함수
   const handleMode = async () => {
     switchType()
   }
 
-  // 펫시터 등록하기 버튼 클릭시 실행되는 함수
-  // 1. 이전에 등록한 내역이 없을경우, cg-set-address-screen 으로 이동
-  // 2. 있을 경우, 가장 마지막에 수정한 screen 으로 이동
-  // 3. 모든 등록과정을 마쳤을 경우, cg-edit-profile-screen 으로 이동
-  const onPress = () => {
-    // bottomSheetModalRef.current?.present()
-  }
-
-  // =======================================================
+  // 처음 펫시터를 등록하는 경우 보여지는 BottomSheetModal BEGIN =======================================================
   // 서비스 타입
   const [serviceType, setServiceType] = useState<ServiceTypeKorean>(null)
 
@@ -104,88 +93,18 @@ export const CgMypageScreen: FC<
           label={
             !serviceType ? "방문과 위탁 중에서 선택해주세요." : `${serviceType} 펫시터 시작하기`
           }
-          isActivated
+          isActivated={!!serviceType}
           onPress={() => {
             bottomSheetModalRef.current?.close()
-            switch (serviceType) {
-              case "방문":
-                createVisiting({
-                  userId: userDetail.id,
-                  title: "",
-                  desc: "",
-                  address: "경기도 안산시 사동 한양대학로 55",
-                  // detailAddress: "",
-                  dogMaxUnit: 0,
-                  catMaxUnit: 0,
-                  handleType: [],
-                  images: [],
-                  services: [1],
-                  amenities: [1],
-                  defaultFee: 10000,
-                  extraSizeFee: {
-                    Small: 0,
-                    Medium: 0,
-                    Large: 0,
-                  },
-                  promoted: false,
-                }).then((res) => {
-                  if (res.isSuccess) {
-                    fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-registration-1-screen")
-                    })
-                  } else {
-                    alertModal(
-                      "등록 실패",
-                      "방문 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
-                    )
-                  }
-                })
-                break
-
-              case "위탁":
-                createCreche({
-                  userId: userDetail.id,
-                  title: "",
-                  desc: "",
-                  address: "경기도 안산시 사동 한양대학로 55",
-                  detailAddress: "",
-                  dogMaxUnit: 0,
-                  catMaxUnit: 0,
-                  handleType: [],
-                  images: [],
-                  services: [1],
-                  amenities: [1],
-                  defaultFee: 10000,
-                  extraSizeFee: {
-                    Small: 0,
-                    Medium: 0,
-                    Large: 0,
-                  },
-                  promoted: false,
-                }).then((res) => {
-                  if (res.isSuccess) {
-                    fetchPetsitter().then((result) => {
-                      result === true && navigate("cg-registration-1-screen")
-                    })
-                  } else {
-                    alertModal(
-                      "등록 실패",
-                      "위탁 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
-                    )
-                  }
-                })
-                break
-
-              default:
-                break
-            }
+            setDraftPetsitter({}, serviceType === "방문" ? "visiting" : "creche")
+            navigate("cg-registration-1-screen")
           }}
         />
       </BottomSheetFooter>
     ),
-    [bottomSheetModalRef, serviceType, userDetail.id, fetchPetsitter],
+    [bottomSheetModalRef, serviceType, setDraftPetsitter],
   )
-  // =======================================================
+  // 처음 펫시터를 등록하는 경우 보여지는 BottomSheetModal ENDED =======================================================
 
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
@@ -193,13 +112,8 @@ export const CgMypageScreen: FC<
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
       >
-        {/* 임시 버튼 - cg-set-price-screen 스크린 이동용  */}
-        {/* <Pressable style={{ flexDirection: "row" }} onPress={() => navigate("cg-set-price-screen")}>
-          <PreBol16 text="cg-set-price-screen ➡️" color={GIVER_CASUAL_NAVY} />
-        </Pressable> */}
-
-        {hasPetsitterProfile ? (
-          // 1. 이전에 등록한 펫시터 프로필이 있는 경우
+        {!isFirstPetsitter ? (
+          // 펫시터 프로필이 있는 경우
           <View style={styles.sidePadding}>
             <CaregiverNameStarReview
               style={{ marginTop: 20 }}
@@ -217,6 +131,7 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
+                resetDraftPetsitter()
                 navigate("cg-edit-profile-screen")
               }}
             >
@@ -237,7 +152,7 @@ export const CgMypageScreen: FC<
             </TouchableOpacity>
           </View>
         ) : (
-          // 2. "" 없는 경우
+          // 처음 펫시터를 등록하는 경우 보여지는 BottomSheetModal
           <View style={styles.sidePadding}>
             {/* 유저 프로필 카드  */}
             <Row style={styles.profileCard}>

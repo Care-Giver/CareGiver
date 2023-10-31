@@ -36,6 +36,8 @@ import { HandleType } from "../../services/axios/types/creches.visitings.common.
 import _ from "lodash"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 
+const numberOnly = /[0-9]/g
+
 // const familyTypeArray = Object.keys(FamilyType) // ["DOG", "CAT"] 하지만, type 지정이 안되고 string[] 임... 따라서 아래와 같이 선언
 const familyTypeArray = ["DOG", "CAT"] as const
 
@@ -93,6 +95,8 @@ export const CgSetFamilyType = observer(function CgSetFamilyType(props: CgSetFam
   )
 
   const hasDogs = familyTypeNumber.DOG > 0
+
+  console.log("familyTypeNumber", familyTypeNumber)
   return (
     <ScrollView
       style={allStyles}
@@ -145,7 +149,7 @@ export const CgSetFamilyType = observer(function CgSetFamilyType(props: CgSetFam
                 onChangeText={(text) => {
                   setFamilyTypeNumber((prev) => ({
                     ...prev,
-                    [item]: Number(text),
+                    [item]: Number(text?.replace(/[^0-9]/g, "")),
                   }))
                 }}
                 value={familyTypeNumber[item] === 0 ? null : familyTypeNumber[item]?.toString()}

@@ -21,16 +21,25 @@ export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
 > = observer(function CgEditProfileScreen({ navigation, route }) {
   const {
-    petsitterStore: { serviceTypeKorean, petsitter },
+    petsitterStore: {
+      serviceTypeKorean,
+      petsitter,
+      draftServiceTypeKorean,
+      hasDraftPetsitterProfile,
+      regState,
+    },
   } = useStores()
+  console.log("regState ♦️", regState)
 
   // ? 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
       //@ts-ignore
-      title: `${serviceTypeKorean} 펫시터`,
+      title: hasDraftPetsitterProfile
+        ? `${draftServiceTypeKorean} 펫시터 [등록중]`
+        : `${serviceTypeKorean} 펫시터`,
     })
-  }, [navigation, serviceTypeKorean])
+  }, [navigation, serviceTypeKorean, draftServiceTypeKorean, hasDraftPetsitterProfile])
 
   const 반려동물 = useMemo(() => {
     if (petsitter?.catMaxUnit !== 0 && petsitter?.dogMaxUnit !== 0) return "강아지, 고양이"
