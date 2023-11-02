@@ -3,7 +3,7 @@ import { View, Image, TouchableOpacity, ImageBackground, Platform } from "react-
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
-import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED, BOTTOM_HEIGHT } from "#theme"
+import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED, BOTTOM_HEIGHT, ERROR_RED } from "#theme"
 import {
   Screen,
   Row,
@@ -15,6 +15,7 @@ import {
   CustomInputModal,
   PickerImage,
   SignUpTextInput,
+  PreReg10,
 } from "#components"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -25,6 +26,7 @@ import { updateUser, uploadURIS } from "#axios"
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker"
 import dayjs from "dayjs"
 import { useTimer } from "react-timer-hook"
+import { alertModal } from "../../../utils/alert-modal"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -53,16 +55,16 @@ export const EditMypageScreen: FC<
   //*화면에서 닉네임 부분에 들어갈 데이터
   const [nickname, setNickname] = useState(userDetail.nickname)
 
+  //*닉네임 수정 가능 여부(월 1회)
+  const [editableNickname, setEditableNickname] = useState<boolean>(true)
+
   //*닉네임 부분 누르면 모달 창 뜨게 관리하는 변수,함수
   const [nicknameTouched, setNicknameTouched] = useState(false)
 
   //*화면에서 전화번호 부분에 들어갈 데이터
   const [phoneNumber, setPhoneNumber] = useState(userDetail.phoneNumber)
 
-  //*전화번호 부분 누르면 모달 창 뜨게 관리하는 변수,함수
-  const [phoneNumberTouched, setPhoneNumberTouched] = useState(false)
-
-  //*인증번호 관련
+  //* 전화번호 수정 및 인증번호 관련
   const TIMER_DURATION = 60
   // 인증번호
   const [certification, setCertification] = useState<string>("")
@@ -80,10 +82,31 @@ export const EditMypageScreen: FC<
     },
   })
 
-  //*화면 닉네임 글자 옆 i 버튼 눌렀는지 여부 체크
-  const [infoTouced, setInfoTouched] = useState(false)
-
   //*<함수>위주 정리 :
+
+  // 스크린을 렌더링할때 최초실행됩니다.
+  useEffect(() => {
+    showEditButton() //* 수정 화면이 아닌 상태, 즉 편집버튼(연필모양 버튼)을 보여주는 상태로 설정합니다.
+
+    //* 닉네임 최근 수정 달과 현재 달이 같은지 판단하는 부분
+    // 아직 한 번도 닉네임을 수정하지 않은 사용자
+    if (userDetail.nicknameLastUpdated === null) return
+
+    const nicknameLastUpdated = new Date(userDetail.nicknameLastUpdated)
+    const current = new Date()
+    const isEqualMonth =
+      nicknameLastUpdated.getFullYear() === current.getFullYear() &&
+      nicknameLastUpdated.getMonth() === current.getMonth()
+    if (isEqualMonth) setEditableNickname(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 수정버튼 클릭시 닉네임 수정 불가능하다면 alert!
+  useEffect(() => {
+    if (editable && !editableNickname)
+      alertModal("닉네임 수정 불가능", "이번 달에 닉네임을 수정하셨습니다.")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editable])
 
   //* 프로필 사진을 수정하기위해 갤러리를 여는 함수 (customTimePicker > openGallery 참고)
   const openGallery = () => {
@@ -124,13 +147,6 @@ export const EditMypageScreen: FC<
       editable: false,
     })
   }
-
-  //* 스크린을 렌더링할때 최초실행됩니다.
-  useEffect(() => {
-    showEditButton() //* 수정 화면이 아닌 상태, 즉 편집버튼(연필모양 버튼)을 보여주는 상태로 설정합니다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  // console.log("mainscreen", route.params)
 
   //*모달창에서 닉네임 변경시 사용 함수
   const handleNicknameInput = (newNickname) => {
@@ -182,53 +198,31 @@ export const EditMypageScreen: FC<
       >
         <Row style={{ marginBottom: 10 }}>
           <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
-          <TouchableOpacity
-            onPress={() => {
-              setInfoTouched(true)
-            }}
-          >
-            {/* //*more info button */}
-            <Image source={images.more_info_bigger} style={{ width: 16, height: 16 }} />
-          </TouchableOpacity>
         </Row>
         {/* //*editable이 true, 즉 수정 가능 상태일때 -> 닉네임 변환 횟수가 3회 이하면 눌러서 수정가능, 3회면 수정 불가 */}
         {/* // TODO: API 로 대체해야 함 */}
-        {editable && currentUser.nicknameChangeCount < 3 ? (
+        {editable && editableNickname ? (
+          //* 수정중이면서 닉네임 수정 가능 기간(월 1회 조건)일 때
           <TouchableOpacity
             onPress={() => {
               setNicknameTouched(true)
             }}
           >
             <PreMed16 color={HEAD_LINE} text={nickname} />
-            {/* //*수정 가능 상태인데 3번 안썼을때*/}
           </TouchableOpacity>
         ) : (
+          //* 수정중 또는 닉네임 수정 불가능 둘 중 한 조건이라도 해당한다면 클릭 불가능해야함
           <PreMed16
             color={
               editable === true && currentUser.nicknameChangeCount === 3 ? DISABLED : HEAD_LINE
             }
             text={nickname}
-          /> //*수정 가능 상태인데 3번 다 썼을때
+          />
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
-
-        {/* //*i 버튼 클릭시 */}
-        {infoTouced && (
-          <ImageBackground source={images.speech_bubble} style={styles.speechBubble}>
-            <PreMed14
-              text={`이번 달 수정 가능 횟수 ${3 - currentUser.nicknameChangeCount}회`}
-              style={{ paddingTop: 20 }}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setInfoTouched(false)
-              }}
-              style={{ position: "absolute", top: 3.5, right: -6 }}
-            >
-              <Image source={images.x_in_circle} style={{ width: 15, height: 15 }} />
-            </TouchableOpacity>
-          </ImageBackground>
+        {editable && editableNickname && (
+          <PreReg10 color={ERROR_RED} text="내 정보는 월1회 수정 가능합니다" />
         )}
       </View>
 
