@@ -29,6 +29,7 @@ interface UserColumns {
   locationBasedServiceConsent: boolean // true,
   privacyPolicyConsent: boolean // true,
   termsOfServiceConsent: boolean // true,
+  nicknameLastUpdated: string //"2023-10-28T00:00:00"
 }
 
 export type User = Omit<UserColumns, "createAt" | "updatedAt">
@@ -216,7 +217,15 @@ interface UserMeResponse extends GeneralResponse {
 
 export type UserDetail = Pick<
   User,
-  "id" | "nickname" | "phoneNumber" | "sex" | "birthday" | "address" | "profileImage" | "pushToken"
+  | "id"
+  | "nickname"
+  | "phoneNumber"
+  | "sex"
+  | "birthday"
+  | "address"
+  | "profileImage"
+  | "pushToken"
+  | "nicknameLastUpdated"
 >
 
 interface GetMeResult {
@@ -264,6 +273,7 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
         address: response.data.user.address,
         profileImage: response.data.user.profileImage,
         pushToken: response.data.user.pushToken,
+        nicknameLastUpdated: response.data.user.nicknameLastUpdated,
       },
     }
   } catch (error) {
