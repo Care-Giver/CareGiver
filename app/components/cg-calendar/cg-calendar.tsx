@@ -1,71 +1,90 @@
-import React, { useEffect, useState } from "react"
-import { StyleProp, View, Image, Text, ViewStyle, Pressable } from "react-native"
+import React, { Dispatch, SetStateAction, useCallback } from "react"
+import { StyleProp, View, Image, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Calendar, DateData, LocaleConfig } from "react-native-calendars"
+import { Calendar } from "react-native-calendars"
 import { images } from "#images"
 import { styles } from "./styles"
-import { CgCalendarProps } from "./cg-calendar.props"
 import "./localeConfig"
 import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
-import { CgCalendarEditButton } from "../buttons/cg-calendar-edit-button/cg-calendar-edit-button"
+import { CrecheAvailableDates, GroupedVisitingAvailableTimesByDate } from "#axios"
+import { ServiceTypeKorean } from "#models"
+import _ from "lodash"
+import dayjs from "dayjs"
+
+const now = new Date()
+const today = dayjs()
+  .year(now.getFullYear())
+  .month(now.getMonth())
+  .date(now.getDate())
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toDate()
+
+export interface CgCalendarProps {
+  serviceTypeKorean: ServiceTypeKorean
+  selectedDates: string[] // 임시 type, TODO: 선택된 날짜(들)을 담을 수 있는 적절한 타입으로 변경해야 함
+  setSelectedDates: Dispatch<SetStateAction<string[]>> // 임시 type
+  availableDates: Array<GroupedVisitingAvailableTimesByDate | CrecheAvailableDates>
+  style?: StyleProp<ViewStyle>
+}
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
-  const { availableDates, serviceType, selected, setSelected, style } = props
-  //? 가장 최근에 선택한 날짜가 이용가능한 날짜인지 판단하기 위한 state
-  const [availableCheck, setAvailableCheck] = useState<boolean>(true)
-  const hasDates = availableDates?.length !== 0
+  const { availableDates, serviceTypeKorean, selectedDates, setSelectedDates, style } = props
+  const hasAvailableDates = availableDates?.length !== 0
+  const key = serviceTypeKorean === "방문" ? "date" : "startDate"
 
-  //console.log("serviceType in CgCalendar >>>", serviceType)
-  //console.log("dates in CgCalendar >>>", dates)
-  //console.log("♦️")
-  const checkDate = ({ date }) => {
-    // console.log("dates in checkDate >>>", dates)
-    // console.log("serviceType in checkDate >>>", serviceType)
-    // console.log("date.dateString>>>", date?.dateString)
-    let isAvailableDate: boolean = false
-    if (serviceType == "방문") {
+  const checkAvailableDate = useCallback(
+    (dateString: string) => {
+      let isAvailableDate = false
+      let fee = null
+
       availableDates.forEach((availableDate) => {
-        if (date?.dateString == availableDate?.date.substring(0, 10)) {
+        if (dateString === availableDate[key].substring(0, 10)) {
           isAvailableDate = true
+          fee = availableDate.fee
         }
       })
-    } else if (serviceType == "위탁") {
-      availableDates.forEach((availableDate) => {
-        if (date?.dateString == availableDate?.startDate.substring(0, 10)) {
-          isAvailableDate = true
-        }
-      })
-    }
-    return isAvailableDate
-  }
-  const onDayPress = ({ date }) => {
-    console.log(selected)
-    //? 중복클릭 선택해제
-    if (selected.includes(date.dateString)) {
-      setSelected(selected.filter((selected) => selected !== date.dateString))
-    } else {
-      //? 클린한 날짜가 이용 가능한 날짜라면
-      if (checkDate({ date })) {
-        //? 복수선택이 불가능하기 때문에 해당 날짜만 선택
-        setSelected([date.dateString])
-        setAvailableCheck(true)
-      } else {
-        //? 선택한 날짜가 이용가능한 날짜가 아닐 때, 직전에 선택한 날짜에 따라서 동작 판단
-        const newSelected = availableCheck ? [] : [...selected]
-        newSelected.push(date.dateString)
-        setSelected(newSelected)
-        setAvailableCheck(false)
-      }
+      return [isAvailableDate, fee]
+    },
+    [availableDates, key],
+  )
+
+  const onDayPress = async (pressedDay: string, isAvailableDate: boolean) => {
+    // 중복클릭시, 선택해제
+    if (selectedDates.includes(pressedDay)) {
+      setSelectedDates(selectedDates.filter((selected) => selected !== pressedDay))
+      return
     }
 
-    //console.log(currentMonth)
+    // 선택한 날짜가 서비스 가능한 날짜라면 복수선택이 불가능 하다.
+    if (isAvailableDate) {
+      setSelectedDates([pressedDay])
+      return
+    }
+
+    // 선택한 날짜가 서비스 가능한 날짜가 아니면, 복수선택이 가능하므로 해당 날짜를 추가한다.
+    setSelectedDates([
+      //! 서비스 가능 날짜를 이전에 선택했다면, 제외시킨다.
+      ...selectedDates.filter(
+        (selectedDate) => !availableDates.map((item) => item[key]).includes(selectedDate),
+      ),
+      // 선택한 날짜 추가
+      pressedDay,
+    ])
   }
 
   return (
     <View style={style}>
       <Calendar
+        onMonthChange={(props) => {
+          // console.log("props", props)
+          // TODO : 날짜가 바뀔때마다, availableDates 를 pagination 하여 재 호출 하기
+        }}
+        style={[styles.calendar, SHADOW_1]}
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) =>
           direction === "left" ? (
@@ -81,20 +100,38 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
           monthTextColor: GIVER_CASUAL_NAVY,
           textMonthFontSize: 20,
         }}
-        dayComponent={({ date, state }) => (
-          <Pressable onPress={(e) => onDayPress({ date })}>
-            {hasDates && (
-              <CgCalendarDay //? 왜 안되는지,
-                date={date}
-                state={state}
-                selected={selected}
-                availableDates={availableDates}
-                serviceType={serviceType}
-              />
-            )}
-          </Pressable>
-        )}
-        style={[styles.calendar, SHADOW_1]}
+        dayComponent={({ date, state }) => {
+          let isAvailableDate = false
+          let fee = null
+          if (hasAvailableDates) {
+            const [_isAvailableDate, _fee] = checkAvailableDate(date.dateString)
+            isAvailableDate = _isAvailableDate
+            fee = _fee
+          }
+          const textDecorationLine = isAvailableDate
+            ? "none"
+            : new Date(date.dateString) >= today
+            ? "line-through"
+            : "none"
+          return (
+            <CgCalendarDay
+              date={date}
+              state={state}
+              selected={selectedDates}
+              onPress={() => {
+                // 이미 지난 날짜들은 수정이 불가능하므로, selectedDates 로직에서 제외시킨다.
+                if (new Date(date.dateString) < today) {
+                  return
+                }
+
+                onDayPress(date.dateString, isAvailableDate)
+              }}
+              textDecorationLine={textDecorationLine}
+              isAvailableDate={isAvailableDate}
+              fee={fee}
+            />
+          )
+        }}
       />
     </View>
   )

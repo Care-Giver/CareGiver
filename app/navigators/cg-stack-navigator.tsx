@@ -56,8 +56,8 @@ export type CGStackNavigatorParamList = {
    * CalendarStack - CG - 달력 스택
    */
   "cg-calendar-screen": undefined
-  "set-creche-service-day-screen": { date: Date; crecheId: number }
-  "set-visiting-service-day-screen": { date: Date; crecheId: number }
+  "set-creche-service-day-screen": { selectedDates: string[]; crecheId: number }
+  "set-visiting-service-day-screen": { selectedDates: string[]; visitingId: number }
 
   /**
    * ChatsStack - 채팅 스택 || CG - 채팅 스택

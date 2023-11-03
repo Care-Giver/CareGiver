@@ -3,12 +3,11 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface CrecheAvailableDates {
   id: number
-  createAt: string
-  updatedAt: string
-  startDate?: string
-  endDate: string
+  createAt: string // "2023-01-01T11:00:00",
+  updatedAt: string // "2023-01-01T11:00:00",
+  startDate: string // "2022-09-14",
   fee: number
-  totalFee: number
+  isBooked: boolean
 }
 
 interface CrecheDaysResponse extends GeneralResponse {
@@ -16,24 +15,25 @@ interface CrecheDaysResponse extends GeneralResponse {
 }
 
 /**
- * 로그인한 유저의 모든 위탁 예약을 읽어온다.
- * @returns {Promise<crecheAvailableDates>}
+ * 로그인한 유저의 모든 위탁서비스 가능 날짜들을 불러온다.
  */
-export const getCrecheDays = async (crecheId: number): Promise<CrecheAvailableDates[]> => {
+export const getCrecheDates = async (crecheId: number): Promise<CrecheAvailableDates[]> => {
   try {
-    const response = await axios.get<CrecheDaysResponse>(`${BASE_URL}/creche-day/${crecheId}`)
+    const response = await axios.get<CrecheDaysResponse>(`${BASE_URL}/creche-date/${crecheId}`)
 
     if (!response.data.ok) {
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
-      return error
+      return []
     }
 
     // console.log("response", response)
     //console.log("response.data", response.data)
     // console.log("response.data.CrecheDays", response.data.CrecheDays)
-    return response.data.crecheAvailableDates
+    return response.data.crecheAvailableDates.map((item) => ({
+      ...item,
+      startDate: item.startDate.substring(0, 10),
+    }))
   } catch (error) {
     console.error("catch 에러!!!", error)
     return []
@@ -71,7 +71,7 @@ interface PostCrecheDayResponse extends GeneralResponse {
  */
 export const postCrecheDay = async (data: PostCrecheDayBody) => {
   try {
-    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-day`, data)
+    const response = await axios.post<PostCrecheDayResponse>(`${BASE_URL}/creche-date`, data)
 
     if (!response.data.ok) {
       const error = response.data.error

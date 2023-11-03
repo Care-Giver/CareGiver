@@ -56,7 +56,9 @@ const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 
 
 export const SetVisitingServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-visiting-service-day-screen">
-> = observer(function SetVisitingServiceDayScreen() {
+> = observer(function SetVisitingServiceDayScreen({ route }) {
+  const { selectedDates: date, visitingId } = route.params
+
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => {
     setIsEnabled((prev) => !prev)

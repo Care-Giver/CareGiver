@@ -45,7 +45,7 @@ import { useKeyboard } from "@react-native-community/hooks"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
-  const { date, crecheId } = route.params
+  const { selectedDates: date, crecheId } = route.params
   console.log(date, crecheId)
 
   // isEnabled가 true인 경우 서비스 가능 toggle on
