@@ -29,6 +29,7 @@ interface UserColumns {
   locationBasedServiceConsent: boolean // true,
   privacyPolicyConsent: boolean // true,
   termsOfServiceConsent: boolean // true,
+  nicknameLastUpdated: string //"2023-10-28T00:00:00"
 }
 
 export type User = Omit<UserColumns, "createAt" | "updatedAt">
@@ -216,7 +217,15 @@ interface UserMeResponse extends GeneralResponse {
 
 export type UserDetail = Pick<
   User,
-  "id" | "nickname" | "phoneNumber" | "sex" | "birthday" | "address" | "profileImage" | "pushToken"
+  | "id"
+  | "nickname"
+  | "phoneNumber"
+  | "sex"
+  | "birthday"
+  | "address"
+  | "profileImage"
+  | "pushToken"
+  | "nicknameLastUpdated"
 >
 
 interface GetMeResult {
@@ -264,11 +273,47 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
         address: response.data.user.address,
         profileImage: response.data.user.profileImage,
         pushToken: response.data.user.pushToken,
+        nicknameLastUpdated: response.data.user.nicknameLastUpdated,
       },
     }
   } catch (error) {
     console.error("catch 에러!!! - getMe", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
+  }
+}
+
+interface UpdateUserRequestBody {
+  email: string
+  password: string
+  nickname: string
+  sex: Sex
+  birthday: string
+  desc: string
+  profileImage: string
+  phoneNumber: string
+}
+
+interface UpdateUserResult {
+  isSuccess: boolean
+  reason?: string
+}
+
+export const updateUser = async (post: UpdateUserRequestBody): Promise<UpdateUserResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(`${BASE_URL}/user/update`, post)
+
+    if (!response?.data.ok) {
+      console.error("API 에러!!! - updateUser", response?.data?.error)
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+
+    console.log(response.data.ok)
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!! - updateUsser", error)
+    return { isSuccess: false, reason: error }
   }
 }
 

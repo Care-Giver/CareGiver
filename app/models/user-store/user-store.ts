@@ -53,6 +53,7 @@ export const UserStoreModel = types
       address: "",
       profileImage: "",
       pushToken: "",
+      nicknameLastUpdated: "",
     }),
 
     /* 인증된 펫시터인지 여부 */
@@ -180,6 +181,7 @@ export const UserStoreModel = types
           address: userDetail.address,
           profileImage: userDetail.profileImage,
           pushToken: pushToken,
+          nicknameLastUpdated: userDetail.nicknameLastUpdated,
         })
 
         return true

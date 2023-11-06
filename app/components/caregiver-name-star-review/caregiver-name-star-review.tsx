@@ -7,9 +7,11 @@ import { Row } from "../basics/row/row"
 import { images } from "#images"
 import { DivisionLineVertical } from "../division-line-vertical/division-line-vertical"
 import { observer } from "mobx-react-lite"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 interface CaregiverNameStarReviewProps {
   style?: StyleProp<ViewStyle>
+  profileImage?: string
   caregiverData: {
     name: string
     ratings: number
@@ -21,13 +23,17 @@ interface CaregiverNameStarReviewProps {
 export const CaregiverNameStarReview = observer(function CaregiverNameStarReview(
   props: CaregiverNameStarReviewProps,
 ) {
-  const { style: viewStyle, caregiverData, onPress, text } = props
+  const { style: viewStyle, profileImage, caregiverData, onPress, text } = props
   const { name, ratings } = caregiverData
 
   return (
     <View style={[styles.root, viewStyle]}>
       <Row>
-        <Image style={styles.profileImage} source={images.default_pet_image_60} />
+        <Image
+          style={styles.profileImage}
+          source={profileImageUriHandler(images.default_pet_image_60, "small", profileImage)}
+          resizeMode="cover"
+        />
 
         <View
           style={{

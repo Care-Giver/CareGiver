@@ -117,6 +117,7 @@ export const CgMypageScreen: FC<
           <View style={styles.sidePadding}>
             <CaregiverNameStarReview
               style={{ marginTop: 20 }}
+              profileImage={userDetail?.profileImage}
               caregiverData={{
                 name: userDetail.nickname,
                 ratings: ratingRound(petsitter?.star),

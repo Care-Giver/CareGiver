@@ -146,6 +146,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             title="닉네임(필수)"
             value={nickname}
             setValue={setNickname}
+            marginBottom={36}
           />
 
           {/* 생년월일 기입 */}
@@ -155,6 +156,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             value={birthday}
             setValue={setBirthday}
             keyboardType="number-pad"
+            marginBottom={36}
           />
 
           {/* 성별 기입 */}
@@ -214,6 +216,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             isVerified={isVerified}
             leftTime={totalSeconds}
             keyboardType="number-pad"
+            marginBottom={36}
           />
 
           {/* 인증번호 기입 */}
@@ -227,6 +230,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
               isVerified={isVerified}
               setIsVerified={setIsVerified}
               keyboardType="number-pad"
+              marginBottom={36}
             />
           )}
         </KeyboardAwareScrollView>

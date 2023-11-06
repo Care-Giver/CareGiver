@@ -8,12 +8,21 @@ interface UserOrPetProfileInfoProps {
   profileInfo: string
   showOption?: boolean
   additionalPadding?: number
+  additionalMargin?: number
   onPress?: () => void
   titleColor?: string
 }
 
 export const UserOrPetProfileInfo = (props: UserOrPetProfileInfoProps) => {
-  const { title, profileInfo, showOption, additionalPadding = 20, onPress, titleColor } = props
+  const {
+    title,
+    profileInfo,
+    showOption,
+    additionalPadding = 20,
+    additionalMargin,
+    onPress,
+    titleColor,
+  } = props
   const Wrapper = onPress ? Pressable : View
 
   return (

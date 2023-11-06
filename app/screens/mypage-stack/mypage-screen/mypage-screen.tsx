@@ -27,7 +27,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
   function MypageScreen({ navigation, route }) {
     useShowBottomTab(navigation)
     const {
-      userStore: { switchType, loggedIn, userDetail },
+      userStore: { switchType, userDetailHandler, userAuth, loggedIn, userDetail },
       petStore: { pets, petsHandler, hasPets },
     } = useStores()
 
@@ -85,7 +85,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   userDetail?.profileImage,
                 )}
                 style={styles.profileImg}
-                resizeMode="contain"
+                resizeMode="cover"
               />
               {/* //* 프로필 */}
               <View style={styles.profileNameCard}>

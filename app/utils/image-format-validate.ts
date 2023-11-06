@@ -9,6 +9,7 @@ const imageFormat = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/
  * @returns 이미지 형식이 올바른지 아닌지를 boolean 형태로 반환합니다.
  */
 export const imageFormatValidate = (uri: string): boolean => {
+  if (typeof uri !== "string") return false
   if (new RegExp(imageFormat, "i").test(uri)) return true
   return false
 }
