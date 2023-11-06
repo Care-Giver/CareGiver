@@ -176,6 +176,22 @@ export const PetsitterStoreModel = types
     get 위탁펫시터() {
       return self.serviceType === "creche" || self.draftServiceType === "creche"
     },
+
+    /**
+     * 강아지를 케어하는 펫시터인지 판단한다.
+     * 강아지도 케어하면 true 반환
+     */
+    get hasDogs() {
+      return self.petsitter?.dogMaxUnit > 0
+    },
+
+    /**
+     * 고양이를 케어하는 펫시터인지 판단한다.
+     * 고양이도 케어하면 true 반환
+     */
+    get hasCats() {
+      return self.petsitter?.catMaxUnit > 0
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     /**

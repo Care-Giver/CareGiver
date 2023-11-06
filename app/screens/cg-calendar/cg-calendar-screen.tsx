@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -21,6 +21,8 @@ import { CrecheAvailableDates, getCrecheDates } from "../../services/axios/crech
 import { useShowBottomTab } from "../../utils/hooks"
 import { images } from "#images"
 import { dummy } from "./dummy-data"
+import _ from "lodash"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
@@ -28,18 +30,32 @@ export const CgCalendarScreen: FC<
   useShowBottomTab(navigation)
 
   const {
-    // userStore: { switchType, userDetail },
+    userStore: { userAuth, userDetail },
     petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, petsitter },
   } = useStores()
+  console.log("userAuth.token", userAuth.token)
 
-  useEffect(() => {
-    const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
-    const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
-    getter(petsitter.id).then((res) => {
-      console.log("res", res)
-      setter(res)
-    })
-  }, [petsitter.id, serviceType])
+  useFocusEffect(
+    useCallback(() => {
+      const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
+      const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
+      getter(petsitter.id).then((res) => {
+        console.log("res 🔷", res)
+        setter(res)
+      })
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [petsitter.id, serviceType]),
+  )
+
+  // useEffect(() => {
+  //   const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
+  //   const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
+  //   getter(petsitter.id).then((res) => {
+  //     console.log("res 🔷", res)
+  //     setter(res)
+  //   })
+  // }, [petsitter.id, serviceType])
 
   // 더미 데이터 테스트용.
   // useEffect(() => {
@@ -65,6 +81,13 @@ export const CgCalendarScreen: FC<
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
   const [selectedDates, setSelectedDates] = useState<string[]>([])
   console.log("selected", selectedDates)
+  console.log(
+    ">>>",
+    _.intersection(
+      visitingAvailableTimes.map((item) => item.date),
+      selectedDates,
+    ),
+  )
 
   return (
     <Screen testID="CgCalendar">
@@ -107,8 +130,13 @@ export const CgCalendarScreen: FC<
               serviceTypeKorean === "방문"
                 ? navigate("set-visiting-service-day-screen", {
                     // TODO - 여러개의 selected 가 넘겨질 경우 처리
-                    date: selectedDates,
+                    selectedDates,
                     visitingId: petsitter.id,
+                    isAvailableDate:
+                      _.intersection(
+                        visitingAvailableTimes.map((item) => item.date),
+                        selectedDates,
+                      ).length !== 0,
                   })
                 : navigate("set-creche-service-day-screen", {
                     date: selectedDates,

@@ -9,7 +9,7 @@ import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
 import { CrecheAvailableDates, GroupedVisitingAvailableTimesByDate } from "#axios"
-import { ServiceTypeKorean } from "#models"
+import { ServiceTypeKorean, useStores } from "#models"
 import _ from "lodash"
 import dayjs from "dayjs"
 
@@ -33,6 +33,10 @@ export interface CgCalendarProps {
 }
 
 export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
+  const {
+    petsitterStore: { petsitter },
+  } = useStores()
+
   const { availableDates, serviceTypeKorean, selectedDates, setSelectedDates, style } = props
   const hasAvailableDates = availableDates?.length !== 0
   const key = serviceTypeKorean === "방문" ? "date" : "startDate"
@@ -128,7 +132,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
               }}
               textDecorationLine={textDecorationLine}
               isAvailableDate={isAvailableDate}
-              fee={fee}
+              totalFee={isAvailableDate && petsitter.defaultFee + fee}
             />
           )
         }}

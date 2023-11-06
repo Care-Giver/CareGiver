@@ -222,7 +222,7 @@ export const CgRegistration2Screen: FC<
   return (
     <Screen>
       <ScreenHeader
-        navigation={navigation}
+        route={route}
         onPressSaveExit={onPressSaveExit}
         hasDraftPetsitterProfile={hasDraftPetsitterProfile}
       />

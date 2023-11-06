@@ -37,6 +37,23 @@ export const timeText = (time: Date) => {
   return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
 }
 
+type TimeTextAMPM = {
+  ampm: "오후" | "오전"
+  time: string // HH:MM
+}
+export const timeTextAMPM = (time: Date): TimeTextAMPM => {
+  let hours = time.getUTCHours()
+  const minute = time.getUTCMinutes()
+  const ampm = hours >= 12 ? "오후" : "오전"
+  if (hours > 12) {
+    hours -= 12
+  }
+  return {
+    ampm,
+    time: `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`,
+  }
+}
+
 export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const { style, beginDate, setBeginDate, endDate, setEndDate } = props
   const allStyles = Object.assign({}, styles.root, style)

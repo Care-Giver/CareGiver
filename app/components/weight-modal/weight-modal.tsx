@@ -19,10 +19,11 @@ export interface WeightModalProps {
   title: string
   handleModalHide: () => any
   handleInput: (arg: any) => any
+  placeholder?: string
 }
 
 export const WeightModal = observer(function WeightModal(props: WeightModalProps) {
-  const { style, visibleState, handleModalHide, title, handleInput } = props
+  const { style, visibleState, handleModalHide, title, handleInput, placeholder } = props
 
   const allStyles = Object.assign({}, styles.root, style)
 
@@ -81,7 +82,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
                 style={{
                   paddingTop: 20,
                 }}
-                placeholder={"숫자만 입력해주세요."}
+                placeholder={placeholder || "숫자만 입력해주세요."}
                 onChangeText={(text) => {
                   // 소수점 입력을 위한 경우 핸들링
                   if (text.length >= 2 && _.last(text) === ".") {

@@ -21,7 +21,7 @@ type CgCalendarDayProps = {
   onPress: () => void
   textDecorationLine: "none" | "line-through"
   isAvailableDate: boolean
-  fee?: number
+  totalFee?: number
 }
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
@@ -32,7 +32,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     onPress,
     textDecorationLine = "line-through",
     isAvailableDate,
-    fee,
+    totalFee,
   } = props
 
   const textBgBdColor = useMemo(() => {
@@ -127,7 +127,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
             },
           ]}
         >
-          {!!fee && priceFormatter(fee?.toString())}
+          {!!totalFee && priceFormatter(totalFee?.toString())}
         </Text>
       </View>
     </Pressable>
