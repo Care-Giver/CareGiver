@@ -305,7 +305,13 @@ export const EditMypageScreen: FC<
                 profileImage: profileImage,
                 phoneNumber: userDetail.phoneNumber,
               })
-              userDetailHandler(userAuth.token)
+              //! 1초의 시간차를 두고, 호출합니다.
+              //! 그렇지 않으면, getMe() 호출 시 업데이트 된 정보를 호출받을 수 없습니다. (DB 내 유저객체 수정사항이 반영되는데 필요한 연산시간보다 getMe API 호출 시간이 더 짧기 때문입니다.)
+              // TODO: updateUser() 의 리턴값을 "업데이트된 유저객체" 로 사용할 수 있도록 API 를 수정후,
+              // TODO: updateUser().then(...setUserDetail...) 을 통해 유저객체를 업데이트합니다.
+              setTimeout(() => {
+                userDetailHandler(userAuth.token)
+              }, 1000)
             }}
           />
         )
