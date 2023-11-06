@@ -34,7 +34,6 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     /** 반려동물 리스트를 불러옵니다. */
     useEffect(() => {
       petsHandler()
-      userDetailHandler(userAuth.token)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -86,7 +85,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                   userDetail?.profileImage,
                 )}
                 style={styles.profileImg}
-                resizeMode="contain"
+                resizeMode="cover"
               />
               {/* //* 프로필 */}
               <View style={styles.profileNameCard}>

@@ -222,7 +222,7 @@ export const EditMypageScreen: FC<
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
         {editable && editableNickname && (
-          <PreReg10 color={ERROR_RED} text="내 정보는 월1회 수정 가능합니다" />
+          <PreReg10 color={ERROR_RED} text="닉네임은 월1회 수정 가능합니다" />
         )}
       </View>
 
@@ -295,14 +295,13 @@ export const EditMypageScreen: FC<
             }}
             onPress={() => {
               showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-              //TODO user data 실제로 변경하는 코드 필요 (변경된 닉네임으로 저장 (process -> 실제로 닉네임이 변경 되었다면 저장 보내서 backend 데이터 건들기 ))
               updateUser({
-                email: "example@google.com",
-                password: "abcdefg123!",
+                email: userAuth.email,
+                password: null,
                 nickname: nickname,
                 sex: userDetail.sex,
                 birthday: userDetail.birthday,
-                desc: "안녕하세요.",
+                desc: null,
                 profileImage: profileImage,
                 phoneNumber: userDetail.phoneNumber,
               })
