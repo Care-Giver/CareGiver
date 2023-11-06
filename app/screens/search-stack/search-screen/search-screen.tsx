@@ -39,7 +39,8 @@ import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../utils/alert-modal"
 import Postcode from "@actbase/react-daum-postcode"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
-import { addressToCoordinates } from "../../cg-set-address/addressToCoordinates"
+import { addressToCoordinates } from "../../cg-registration-1/addressToCoordinates"
+import { isInKorea } from "../../../utils/is-in-korea"
 
 const nowInUTCZero = new Date()
 const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
@@ -167,7 +168,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           Geolocation.getCurrentPosition(
             (position) => {
               const { latitude, longitude } = position.coords
-              setLocation({ lat: latitude, lng: longitude })
+              if (isInKorea({ lat: latitude, lng: longitude })) {
+                setLocation({ lat: latitude, lng: longitude })
+              } else {
+                bottomSheetModalRefAddress.current?.present()
+              }
             },
             (error) => {
               console.log("error", error)

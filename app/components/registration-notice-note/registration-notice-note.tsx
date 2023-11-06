@@ -2,7 +2,7 @@ import React, { ReactElement } from "react"
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol14, PreReg12, PreBol12 } from "#components"
-import { BODY, GIVER_CASUAL_NAVY, SUB_HEAD_LINE } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, LBG, SUB_HEAD_LINE } from "#theme"
 
 export interface RegistrationNoticeNoteProps {
   /**
@@ -76,11 +76,11 @@ export const RegistrationNoticeNote = observer(function RegistrationNoticeNote(
 
 const styles = StyleSheet.create({
   root: {
-    width: 358,
-    backgroundColor: "#F8F8FA",
+    width: "100%",
+    backgroundColor: LBG,
     paddingVertical: 16,
     paddingHorizontal: 12,
     justifyContent: "center",
-    top: 100,
+    borderRadius: 8,
   },
 })

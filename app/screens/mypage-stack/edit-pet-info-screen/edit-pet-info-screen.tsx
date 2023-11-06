@@ -310,56 +310,39 @@ export const EditPetInfoScreen: FC<
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
           {/* //*이름 */}
-          {editable ? (
-            <Pressable
-              style={{ paddingTop: 7 }}
-              onPress={() => {
-                setNameTouched(true)
-              }}
-            >
-              <UserOrPetProfileInfo
-                title="이름"
-                profileInfo={name}
-                showOption={false}
-                additionalPadding={35}
-              />
-            </Pressable>
-          ) : (
-            <UserOrPetProfileInfo
-              title="이름"
-              profileInfo={name}
-              showOption={false}
-              additionalPadding={35}
-            />
-          )}
+          <UserOrPetProfileInfo
+            title="이름"
+            profileInfo={name}
+            showOption={false}
+            additionalPadding={35 + 7}
+            onPress={
+              editable
+                ? () => {
+                    setNameTouched(true)
+                  }
+                : null
+            }
+          />
 
           {/* //*생년월일 */}
-          {editable ? (
-            <View>
-              <Pressable
-                onPress={() => {
-                  setBirthdayTouched(true)
-                }}
-              >
-                <UserOrPetProfileInfo
-                  title="생년월일"
-                  profileInfo={birthday}
-                  showOption={false}
-                  additionalPadding={35}
-                />
-              </Pressable>
-              <PreMed12
-                color={BODY}
-                text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
-                style={{ marginTop: 3 }}
-              />
-            </View>
-          ) : (
-            <UserOrPetProfileInfo
-              title="생년월일"
-              profileInfo={birthday}
-              showOption={false}
-              additionalPadding={35}
+          <UserOrPetProfileInfo
+            title="생년월일"
+            profileInfo={birthday}
+            showOption={false}
+            additionalPadding={35}
+            onPress={
+              editable
+                ? () => {
+                    setBirthdayTouched(true)
+                  }
+                : null
+            }
+          />
+          {editable && (
+            <PreMed12
+              color={BODY}
+              text="* 반려동물의 생년월일을 모를 경우, 추청 생년월일을 입력해주세요."
+              style={{ marginTop: 3 }}
             />
           )}
 
@@ -385,27 +368,19 @@ export const EditPetInfoScreen: FC<
           />
 
           {/* //*몸무게 */}
-          {editable ? (
-            <Pressable
-              onPress={() => {
-                setWeightTouched(true)
-              }}
-            >
-              <UserOrPetProfileInfo
-                title="몸무게"
-                profileInfo={weight + "kg"}
-                showOption={false}
-                additionalPadding={35}
-              />
-            </Pressable>
-          ) : (
-            <UserOrPetProfileInfo
-              title="몸무게"
-              profileInfo={weight + "kg"}
-              showOption={false}
-              additionalPadding={35}
-            />
-          )}
+          <UserOrPetProfileInfo
+            title="몸무게"
+            profileInfo={weight + "kg"}
+            showOption={false}
+            additionalPadding={35}
+            onPress={
+              editable
+                ? () => {
+                    setWeightTouched(true)
+                  }
+                : null
+            }
+          />
 
           <UserOrPetProfileInfo
             title="중성화여부"

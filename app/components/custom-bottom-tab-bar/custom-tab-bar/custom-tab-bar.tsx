@@ -137,6 +137,11 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
               alertModal("MVP", "채팅 기능은 아직 개발중입니다 🦮")
               return
 
+            // 예약관리(CG) 탭
+            case tabLabel.manage_booking:
+              alertModal("MVP", "예약관리 기능은 아직 개발중입니다 🐈")
+              return
+
             // 통계(CG) 탭
             case tabLabel.statistics:
               alertModal("MVP", "통계 기능은 아직 개발중입니다 🐈")

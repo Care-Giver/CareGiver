@@ -23,7 +23,7 @@ export interface SearchRequest {
 
 // DB 정의 그대로임
 // TODO: HandleType pet.ts 와 pet-store 에 있는 HandleType 바꿀 것
-enum HandleType {
+export enum HandleType {
   SMALL = "Small",
   MEDIUM = "Medium",
   LARGE = "Large",
@@ -40,6 +40,7 @@ export type Service = {
   createAt: string
   updatedAt: string
   name: string
+  desc?: string
 
   /* {
       "id": 2,
@@ -54,6 +55,7 @@ export type Amenity = {
   createAt: string
   updatedAt: string
   name: string
+  desc?: string
 }
 
 type Coordinates = [number, number] //[126.834393833, 37.298004735]
@@ -83,13 +85,15 @@ export interface Petsitter {
   star: number //5
   /* location: string // "(127, 38)" */
   location: LocationResponse
-  maxUnit: number //! 1이상 값이어야 합니다.
+  dogMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
+  catMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
   handleType: HandleType[]
   images: string[] // ["이미지 주소"]
   extraSizeFee: ExtraSizeFee // "{SMALL:0, MEDIUM:0, LARGE:0}"
   promoted: false
   responseRate: number[] // [0.25, 1, 4]
   acceptRate: number[] //[0.25, 1, 4]
+  timeWithPet: number // 반려동물과 함께한 시간 (년)
 }
 
 export interface CareGiverPetsitter extends CareGiverRelatedData, Petsitter {}

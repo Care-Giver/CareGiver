@@ -2,7 +2,10 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface GroupedVisitingAvailableTimesByDate {
-  date: string
+  id: number
+  createAt: string // "2023-01-01T11:00:00",
+  updatedAt: string // "2023-01-01T11:00:00",
+  date: string // "2023-06-05",
   fee: number
 }
 
@@ -11,8 +14,7 @@ interface VisitingAvailableTimesResponse extends GeneralResponse {
 }
 
 /**
- * 로그인한 유저의 모든 위탁 예약을 읽어온다.
- * @returns {Promise<visitingAvailableTimes>}
+ * 로그인한 유저의 모든 방문서비스 가능 날짜들으 불러온다.
  */
 export const getVisitingAvailableTimes = async (
   visitingId: number,
@@ -25,14 +27,16 @@ export const getVisitingAvailableTimes = async (
     if (!response.data.ok) {
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
-      return error
+      return []
     }
 
     // console.log("response", response)
     //console.log("response.data", response.data)
     // console.log("response.data.visitingAvailableTimes", response.data.visitingAvailableTimes)
-    return response.data.groupedVisitingAvailableTimesByDate
+    return response.data.groupedVisitingAvailableTimesByDate.map((item) => ({
+      ...item,
+      date: item.date.substring(0, 10),
+    }))
   } catch (error) {
     console.error("catch 에러!!!", error)
     return []

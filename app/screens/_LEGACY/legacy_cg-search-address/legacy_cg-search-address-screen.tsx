@@ -35,7 +35,7 @@ export const CgSearchAddressScreen: FC<
         //onSelected={(data) => alert(JSON.stringify(data))}
         onSelected={(data) => {
           //alert(JSON.stringify(data))
-          navigate("cg-set-address-screen", { data })
+          navigate("cg-registration-1-screen", { data })
         }}
         //onSelected={alert("test")}
       ></Postcode>

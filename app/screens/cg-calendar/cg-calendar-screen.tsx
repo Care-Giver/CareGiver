@@ -1,48 +1,70 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   CancelButton,
   CgCalendar,
-  CgCalendarEditButton,
   Screen,
-  Text,
   BOTTOM_TAB_BAR_HEIGHT,
   ConditionalButton,
-  Row,
   PreBol18,
 } from "#components"
 import { useStores } from "../../models"
 import { Pressable, View, Image } from "react-native"
-import { crecheDays as _crecheDays } from "./dummy-data"
 import { BODY, GIVER_CASUAL_NAVY } from "#theme"
-import { GroupedVisitingAvailableTimesByDate } from "../../services/axios/visiting-available-time"
-import { CrecheAvailableDates } from "../../services/axios/creche-day"
+import {
+  GroupedVisitingAvailableTimesByDate,
+  getVisitingAvailableTimes,
+} from "../../services/axios/visiting-available-time"
+import { CrecheAvailableDates, getCrecheDates } from "../../services/axios/creche-date"
 import { useShowBottomTab } from "../../utils/hooks"
 import { images } from "#images"
+import { dummy } from "./dummy-data"
 
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
 > = observer(({ navigation }) => {
   useShowBottomTab(navigation)
 
-  // MST store 를 가져옵니다.
   const {
-    visitingAvailableTimesModel: {
-      setAllVisitingAvailableTimes,
-      visitingAvailableTimes,
-      showAllVisitingAvailableTimes,
-    },
-    CrecheDayModel: { setAllCrecheDays, crecheDays },
-    userStore: { switchType, userDetail },
-    petsitterStore: { serviceTypeKorean, hasPetsitterProfile, petsitter, fetchPetsitter },
+    // userStore: { switchType, userDetail },
+    petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, petsitter },
   } = useStores()
 
-  const [visitingDates, setVisitingDates] = useState<GroupedVisitingAvailableTimesByDate[]>([])
+  useEffect(() => {
+    const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
+    const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
+    getter(petsitter.id).then((res) => {
+      console.log("res", res)
+      setter(res)
+    })
+  }, [petsitter.id, serviceType])
+
+  // 더미 데이터 테스트용.
+  // useEffect(() => {
+  //   const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
+
+  //   setter(
+  //     // @ts-ignore
+  //     serviceType === "visiting"
+  //       ? dummy.visitingAvailableTimes.map((item) => ({
+  //           ...item,
+  //           date: item.date.substring(0, 10),
+  //         }))
+  //       : dummy.crecheDates.map((item) => ({
+  //           ...item,
+  //           startDate: item.startDate.substring(0, 10),
+  //         })),
+  //   )
+  // }, [serviceType])
+
+  const [visitingAvailableTimes, setVisitingAvailableTimes] = useState<
+    GroupedVisitingAvailableTimesByDate[]
+  >([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
-  const [selected, setSelected] = useState<string[]>([]) // TODO - 타입 제발 정해주세요
-  const [crecheId, setCrecheId] = useState(1)
+  const [selectedDates, setSelectedDates] = useState<string[]>([])
+  console.log("selected", selectedDates)
 
   return (
     <Screen testID="CgCalendar">
@@ -59,10 +81,13 @@ export const CgCalendarScreen: FC<
             style={{ alignSelf: "flex-end", marginBottom: 8 }}
           />
           <CgCalendar
-            availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDays}
-            serviceType={serviceTypeKorean}
-            selected={selected}
-            setSelected={setSelected}
+            availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDates}
+            serviceTypeKorean={serviceTypeKorean}
+            selectedDates={selectedDates}
+            setSelectedDates={setSelectedDates}
+            style={{
+              alignSelf: "center",
+            }}
           />
 
           {/* 수정 버튼 */}
@@ -82,12 +107,12 @@ export const CgCalendarScreen: FC<
               serviceTypeKorean === "방문"
                 ? navigate("set-visiting-service-day-screen", {
                     // TODO - 여러개의 selected 가 넘겨질 경우 처리
-                    date: selected,
-                    crecheId,
+                    date: selectedDates,
+                    visitingId: petsitter.id,
                   })
                 : navigate("set-creche-service-day-screen", {
-                    date: selected,
-                    crecheId,
+                    date: selectedDates,
+                    crecheId: petsitter.id,
                   })
             }}
           />

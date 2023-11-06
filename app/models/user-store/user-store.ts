@@ -163,11 +163,11 @@ export const UserStoreModel = types
         }
         // 푸시토큰 발급
         const pushToken = await registerForPushNotificationsAsync().then((token) => {
-          //? 토큰 발급에 실패한다면 null이 반환되고, 이 때 useDetail.pushToken의 type에 맞춰 ""을 return한다.
-          if (token === null) return ""
+          //? 토큰 발급에 실패한다면 useDetail.pushToken의 type에 맞춰 ""을 return한다.
+          if (token === null || token === undefined) return ""
 
           //? post api 사용하여 유저 db에 푸시토큰 저장
-          postPushToken(token)
+          postPushToken({ pushToken: token })
           //? mst내에서 사용하기 위해 발급받은 푸시토큰 return
           return token
         })

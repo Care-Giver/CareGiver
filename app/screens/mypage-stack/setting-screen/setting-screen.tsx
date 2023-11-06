@@ -1,4 +1,4 @@
-import { View, Text, Modal, Image, Pressable } from "react-native"
+import { View, Text, Modal, Image, Pressable, Platform } from "react-native"
 import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack } from "#navigators"
@@ -9,6 +9,8 @@ import { styles } from "./styles"
 import TEST_BUILD_VERSION from "./test-build-version"
 import { images } from "#images"
 import { useStores } from "#models"
+import { request, PERMISSIONS, check, RESULTS } from "react-native-permissions"
+import { alertModal } from "../../../utils/alert-modal"
 
 export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-screen">> = observer(
   ({ navigation, route }) => {
@@ -53,6 +55,42 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
           <PreMed16 text="버전 정보" color={HEAD_LINE} />
           <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
         </View>
+        {/* //? division line */}
+        <View style={styles.divisionLine} />
+
+        {/* //* 위치권한 */}
+        <MypageButton
+          text="위치 권한 요청"
+          onPress={() => {
+            // 위치권한 확인
+            check(
+              Platform.select({
+                ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+                android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+              }),
+            ).then((result) => {
+              console.log("❗️", result)
+              // 없다면 요청
+              if (result !== RESULTS.GRANTED) {
+                request(
+                  Platform.select({
+                    ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+                    android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+                  }),
+                ).then((result) => {
+                  console.log("❗️❗️", result)
+                  if (result === RESULTS.UNAVAILABLE && Platform.OS === "ios") {
+                    alertModal("권한 요청", "iOS > 설정 > 앱 에서 위치 권한을 허용해주세요.")
+                  }
+                })
+              }
+              // 이미 있으면 모달
+              else {
+                alertModal("권한 확인", "이미 위치 권한을 승인 받았습니다.")
+              }
+            })
+          }}
+        />
         {/* //? division line */}
         <View style={styles.divisionLine} />
 

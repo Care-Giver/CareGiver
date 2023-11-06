@@ -16,7 +16,7 @@ export const PaymentModel = types
   }))
   .actions((self) => ({
     async setPayment(paymentInput: CreatePaymentInput) {
-      // const CrecheDays = await getCrecheDays(crecheId)
+      // const CrecheDays = await getCrecheDates(crecheId)
       // self.CrecheDays = CrecheDays
       await postPayment(paymentInput)
         .then((res) => {

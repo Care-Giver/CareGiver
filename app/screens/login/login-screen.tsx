@@ -26,10 +26,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
     const noAuthLogin = async () => {
       const res = await loginHander({
-        email: "blah3@test.com",
-        nickname: "테스트9",
+        email: "example@google.com",
+        nickname: "테스트8",
         provider: "naver",
-        OAuthId: "blah-blah-blah-2",
+        OAuthId: "just-test-id",
       })
       console.log("MST loginHandler 테스트 res >>>", res)
     }

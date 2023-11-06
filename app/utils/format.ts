@@ -11,7 +11,7 @@ export const won = (number: number): string =>
  숫자 문자열(number string) 에 세자리마다 "," 를 삽입한다.
  ex: 27000 -> 27,000
  input, output 모두 string 임을 주의할 것.
- toLocaleString 은 android 에서 작동하지 않는 문제 때문에, 이 함수를 대신 사용한다.
+ Number.toLocaleString() 은 android 에서 작동하지 않는 문제 때문에, 이 함수를 대신 사용한다.
 */
 export const price = (_numberString: string): string => {
   //* 값에 이미 comma (,) 가 포함되어 있다면, 모두 제거
