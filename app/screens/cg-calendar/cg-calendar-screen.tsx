@@ -37,15 +37,17 @@ export const CgCalendarScreen: FC<
 
   useFocusEffect(
     useCallback(() => {
-      const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
-      const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
-      getter(petsitter.id).then((res) => {
-        console.log("res 🔷", res)
-        setter(res)
-      })
+      if (hasPetsitterProfile) {
+        const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
+        const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
+        getter(petsitter.id).then((res) => {
+          console.log("res 🔷", res)
+          setter(res)
+        })
+      }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [petsitter.id, serviceType]),
+    }, [petsitter?.id, serviceType, hasPetsitterProfile]),
   )
 
   // useEffect(() => {

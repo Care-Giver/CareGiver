@@ -293,16 +293,23 @@ export const PetsitterStoreModel = types
         return false
       }
 
-      if (visiting) {
-        this.setServiceType("visiting")
-        this.setVistingPetsitter(visiting)
-        return true
-      }
+      if (visiting || creche) {
+        console.log("visiting", visiting)
+        console.log("creche", creche)
 
-      if (creche) {
-        this.setServiceType("creche")
-        this.setCrechePetsitter(creche)
-        return true
+        if (visiting) {
+          this.setServiceType("visiting")
+          this.setVistingPetsitter(visiting)
+          return true
+        }
+
+        if (creche) {
+          this.setServiceType("creche")
+          this.setCrechePetsitter(creche)
+          return true
+        }
+      } else {
+        return false
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

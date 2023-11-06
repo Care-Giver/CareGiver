@@ -48,6 +48,7 @@ export const CgRegistration1Screen: FC<
       hasDraftPetsitterProfile,
       draftPetsitter,
       setDraftPetsitter,
+      draftServiceTypeKorean,
       방문펫시터,
       위탁펫시터,
       regState,
@@ -174,7 +175,6 @@ export const CgRegistration1Screen: FC<
     }
   }, [hasDraftPetsitterProfile, currentStep, dataFlatList])
   // FlatList 관련 ENDED ==================================================================
-
   const step1 = () => {
     if (!address) {
       alertModal("주소를 입력후 선택해주세요.", "주소를 입력후 선택해주세요.")
@@ -335,7 +335,7 @@ export const CgRegistration1Screen: FC<
                 address={address}
                 setDetailAddress={setDetailAddress}
                 detailAddress={detailAddress}
-                serviceType={serviceTypeKorean}
+                serviceTypeKorean={serviceTypeKorean || draftServiceTypeKorean}
               />
             )}
             {currentStep === 3 && (

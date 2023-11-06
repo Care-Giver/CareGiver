@@ -15,6 +15,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { DivisionLine } from "../../components/division-line/division-line"
 import { POPPINS_REGULAR, PRETENDARD_REGULAR } from "#fonts"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { useStores } from "#models"
 
 export interface CgSetSelfIntroProps {
   /**
@@ -32,6 +33,14 @@ export interface CgSetSelfIntroProps {
 export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfIntroProps) {
   const { style, title, setTitle, desc, setDesc } = props
   const allStyles = Object.assign({}, styles.root, style)
+  const {
+    petsitterStore: {
+      hasDraftPetsitterProfile,
+      draftPetsitter,
+      draftServiceType,
+      setDraftPetsitter,
+    },
+  } = useStores()
 
   return (
     <KeyboardAwareScrollView
@@ -87,6 +96,15 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
               setTitle(text)
             }}
             value={title}
+            onBlur={(e) => {
+              console.log("e.nativeEvent.text", e.nativeEvent.text)
+              if (hasDraftPetsitterProfile) {
+                setDraftPetsitter(
+                  { ...draftPetsitter, title: e.nativeEvent.text },
+                  draftServiceType,
+                )
+              }
+            }}
           />
         </View>
         <DivisionLine color={MIDDLE_LINE} />
@@ -110,6 +128,8 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
           }}
           multiline
           maxLength={3000}
+          keyboardType="default"
+          returnKeyType="done"
           // autoFocus={true}
           placeholder={"본인을 가장 잘 소개할 수 있는 글을 써보세요."}
           // onSubmitEditing={Keyboard.dismiss}
@@ -120,6 +140,12 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
             setDesc(text)
           }}
           value={desc}
+          onBlur={(e) => {
+            console.log("e.nativeEvent.text", e.nativeEvent.text)
+            if (hasDraftPetsitterProfile) {
+              setDraftPetsitter({ ...draftPetsitter, desc: e.nativeEvent.text }, draftServiceType)
+            }
+          }}
         />
       </View>
     </KeyboardAwareScrollView>

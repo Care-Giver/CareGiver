@@ -17,7 +17,7 @@ export interface CgConfirmAddressProps {
   address: OnCompleteParams
   detailAddress: string
   setDetailAddress: Dispatch<SetStateAction<string>>
-  serviceType: ServiceTypeKorean
+  serviceTypeKorean: ServiceTypeKorean
 }
 
 // const GOOGLE_MAP_API_KEY = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
@@ -57,7 +57,7 @@ export interface CgConfirmAddressProps {
 // }
 
 export const CgConfirmAddress = observer(function CgConfirmAddress(props: CgConfirmAddressProps) {
-  const { style, address, detailAddress, setDetailAddress, serviceType } = props
+  const { style, address, detailAddress, setDetailAddress, serviceTypeKorean } = props
   const allStyles = Object.assign({}, styles.root, style)
   const [coordinate, setCoordinate] = useState<LatLng>(null)
 
@@ -86,7 +86,7 @@ export const CgConfirmAddress = observer(function CgConfirmAddress(props: CgConf
       </Row>
 
       {/* "위탁"일 경우, 상세 주소 필수 */}
-      {serviceType === "위탁" && (
+      {serviceTypeKorean === "위탁" && (
         <>
           <PreMed14 text={"상세 주소"} color={BODY} style={styles.addressDetail1} />
           <TextInput

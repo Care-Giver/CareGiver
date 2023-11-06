@@ -132,7 +132,7 @@ export const getCrecheCareGiver = async (): Promise<GetCrecheCareGiverResult> =>
 
     return {
       isSuccess: true,
-      creche: response.data.creches ? response.data.creches[0] : null,
+      creche: response.data.creches?.length !== 0 ? response.data.creches[0] : null,
     }
   } catch (error) {
     console.error("catch 에러!!! - getCrecheCareGiver", error)
