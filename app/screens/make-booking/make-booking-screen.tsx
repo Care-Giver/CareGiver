@@ -11,10 +11,9 @@ import {
   PreBol16,
 } from "#components"
 import { View, ScrollView, Pressable, StyleSheet, Keyboard, Platform } from "react-native"
-import { useKeyboard } from "@react-native-community/hooks"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import { Type } from "#models"
+import { useKeyboardShown } from "../../utils/hooks"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -43,12 +42,7 @@ export const MakeBookingScreen: FC<
     endDate,
   } = route.params
 
-  /**
-   * 키보드 관련
-   * 안드로이드 일 경우에 useKeyboard의 keyboardshown 사용 (단, 에뮬레이터 상으로 버튼이 늦게 사라지고 생성됨..)
-   * ios 일 경우에 useKeyboard도 사용 가능해 보이지만, keyboardWillshow, keyboardWillHide사용
-   */
-  const keyboard = useKeyboard()
+  const isKeyboardShown = useKeyboardShown()
 
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   useEffect(() => {
@@ -67,9 +61,7 @@ export const MakeBookingScreen: FC<
     }
   }, [])
 
-  const isButtonShown =
-    (Platform.OS === "android" && !keyboard.keyboardShown) ||
-    (Platform.OS === "ios" && !keyboardStatus)
+  const isButtonShown = !isKeyboardShown
 
   /**
    *  1번째 버튼 그룹의 예외 처리

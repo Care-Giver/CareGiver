@@ -37,7 +37,6 @@ import {
 import { images } from "#images"
 import { createCrecheDate, updateCrecheDate } from "#axios"
 import { price as priceFormatter } from "../../utils/format"
-import { useKeyboard } from "@react-native-community/hooks"
 import {
   CARE_GIVER_COMMISION_RATE,
   PricePerSize,
@@ -45,6 +44,7 @@ import {
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
 import _ from "lodash"
+import { useKeyboardShown } from "../../utils/hooks"
 
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
@@ -93,7 +93,7 @@ export const SetCrecheServiceDayScreen: FC<
     [totalPrice],
   )
 
-  const { keyboardShown } = useKeyboard()
+  const keyboardShown = useKeyboardShown()
   const showSaveButton = !keyboardShown
 
   const onPressSave = () => {

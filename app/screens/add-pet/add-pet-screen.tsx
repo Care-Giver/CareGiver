@@ -41,10 +41,10 @@ import {
 } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
-import { useKeyboard } from "@react-native-community/hooks"
 import { uploadURIS, HandleType, PetSex, FamilyType, createPet } from "#axios"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
+import { useKeyboardShown } from "../../utils/hooks"
 
 const DESC_VIEW_MIN_HEIGHT = 100 // 반려동물 소개 입력창의 최소 높이
 
@@ -58,7 +58,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       userStore: { userDetail },
     } = useStores()
 
-    const { keyboardShown } = useKeyboard()
+    const keyboardShown = useKeyboardShown()
 
     //* 수정(연필) 버튼 눌렀는지 안눌렀는지 판별하는 변수. 즉, 수정 가능 상태인지 아닌지
     // const editable = route.params?.editable

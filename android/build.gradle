@@ -7,9 +7,12 @@ buildscript {
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '31')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '31')
-        if (findProperty('android.kotlinVersion')) {
-            kotlinVersion = findProperty('android.kotlinVersion')
-        }
+        // react-native-keyboard-controller 🔻 ======================================================
+        // if (findProperty('android.kotlinVersion')) {
+        //     kotlinVersion = findProperty('android.kotlinVersion')
+        // }
+        kotlinVersion = "1.6.21"
+        // react-native-keyboard-controller 🔺 ======================================================
         frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
 
         if (System.properties['os.arch'] == 'aarch64') {

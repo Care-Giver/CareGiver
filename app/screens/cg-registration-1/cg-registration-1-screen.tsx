@@ -37,6 +37,7 @@ export const CgRegistration1Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-1-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   const isKeyboardShown = useKeyboardShown()
+  console.log("isKeyboardShown", isKeyboardShown)
 
   // MST store 를 가져옵니다.
   const {

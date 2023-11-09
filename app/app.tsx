@@ -22,6 +22,7 @@ import { useAssets } from "expo-asset"
 import { images } from "#images"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { KeyboardProvider } from "react-native-keyboard-controller"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -65,16 +66,18 @@ function App() {
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ErrorBoundary catchErrors={"always"}>
-            {/* // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android */}
-            {/* // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818 */}
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <BottomSheetModalProvider>
-                <AppNavigator
-                // initialState={initialNavigationState} //* Do NOT use before the deployment
-                // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
-                />
-              </BottomSheetModalProvider>
-            </GestureHandlerRootView>
+            <KeyboardProvider>
+              {/* // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android */}
+              {/* // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818 */}
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <BottomSheetModalProvider>
+                  <AppNavigator
+                  // initialState={initialNavigationState} //* Do NOT use before the deployment
+                  // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
+                  />
+                </BottomSheetModalProvider>
+              </GestureHandlerRootView>
+            </KeyboardProvider>
           </ErrorBoundary>
         </SafeAreaProvider>
       </RootStoreProvider>

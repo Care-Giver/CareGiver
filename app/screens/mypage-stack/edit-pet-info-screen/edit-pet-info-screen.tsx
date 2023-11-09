@@ -35,10 +35,10 @@ import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
-import { useKeyboard } from "@react-native-community/hooks"
 import { updatePet, PetSex } from "../../../services/axios/pets"
 import { Pet } from "#models"
 import { uploadURIS } from "#axios"
+import { useKeyboardShown } from "../../../utils/hooks"
 
 export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
   NavigatorParamList,
@@ -48,7 +48,7 @@ export type 훅전용NavigatiorParamList<스크린이름들 extends keyof Naviga
 export const EditPetInfoScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-pet-info-screen">
 > = observer(function EditPetInfoScreen({ route, navigation }) {
-  const { keyboardShown } = useKeyboard()
+  const keyboardShown = useKeyboardShown()
 
   //*현재 펫 데이터 가져오기 (일단은 더미데이터)
   const pet = route.params.pet

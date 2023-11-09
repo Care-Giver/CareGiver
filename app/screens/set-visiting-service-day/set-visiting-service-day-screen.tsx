@@ -42,11 +42,11 @@ import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { addMinutes, isAfter, max } from "date-fns"
 import { price as priceFormatter } from "../../utils/format"
-import { useKeyboard } from "@react-native-community/hooks"
 import { useStores } from "#models"
 import { createVisitingAvailableTime, getAvailableTimesByDate } from "#axios"
 import _ from "lodash"
 import { alertModal } from "../../utils/alert-modal"
+import { useKeyboardShown } from "../../utils/hooks"
 
 const nowInUTCZero = new Date()
 const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
@@ -273,7 +273,7 @@ export const SetVisitingServiceDayScreen: FC<
     [closeBottomSheet],
   )
 
-  const { keyboardShown } = useKeyboard()
+  const keyboardShown = useKeyboardShown()
   const showSaveButton = !keyboardShown
 
   return (
