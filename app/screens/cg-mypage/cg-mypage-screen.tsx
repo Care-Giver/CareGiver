@@ -43,9 +43,9 @@ export const CgMypageScreen: FC<
       resetDraftPetsitter,
     },
   } = useStores()
-  console.log("CgMypageScreen | petsitter", petsitter)
-  console.log("CgMypageScreen | draftPetsitter", draftPetsitter)
-  console.log("CgMypageScreen | isFirstPetsitter", isFirstPetsitter)
+  // console.log("CgMypageScreen | petsitter", petsitter)
+  // console.log("CgMypageScreen | draftPetsitter", draftPetsitter)
+  // console.log("CgMypageScreen | isFirstPetsitter", isFirstPetsitter)
 
   // 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {

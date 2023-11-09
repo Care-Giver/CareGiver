@@ -1,13 +1,21 @@
 //*edit-mypage-screen, edit-pet-info-screen 에서 닉네임, 이름 등의 input 받을때 사용하는 컴포넌트
 //*재사용 할때 어떻게 refactor 할지 추후 고민 필요
 
-import React from "react"
-import { StyleProp, ViewStyle, TextInput, Platform, UIManager, View } from "react-native"
+import React, { useMemo } from "react"
+import {
+  StyleProp,
+  ViewStyle,
+  TextInput,
+  Platform,
+  UIManager,
+  View,
+  TextInputProps,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
 import { HEAD_LINE, MIDDLE_LINE, ERROR_RED, SUCCESS_BLUE } from "#theme"
 import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components"
-import { useForm, Controller } from "react-hook-form"
+import { useForm, Controller, UseControllerProps } from "react-hook-form"
 import Modal from "react-native-modal"
 
 //*hook form 위한 form 정해놓기
@@ -19,11 +27,13 @@ export interface CustomInputModalProps {
   visibleState: boolean
   style?: StyleProp<ViewStyle>
   title: string
-  controlMode: string
+  controlMode?: "userNickname"
   placeholderInput?: string
   validateFunction?: (arg: any) => any
   handleModalHide: () => any
   handleInput: (arg: any) => any
+  rules?: UseControllerProps["rules"]
+  textInputProps?: TextInputProps
 }
 
 export const CustomInputModal = observer(function CustomInputModal(props: CustomInputModalProps) {
@@ -35,23 +45,23 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     controlMode,
     validateFunction,
     handleInput,
-    placeholderInput,
+    placeholderInput = "",
+    rules,
+    textInputProps,
   } = props
 
   const allStyles = Object.assign({}, styles.root, style)
 
   //*pet, user 에 따라 달라지는 Placeholder 관련 변수
-  const getPlaceholder = (placeholderInput) => {
+  const placeholder = useMemo(() => {
     if (placeholderInput === "pet") {
       return "반려동물의 이름을 입력해주세요."
     } else if (placeholderInput === "user") {
       return "닉네임을 입력해주세요. (최대 10자)"
-    } else if (!placeholderInput) {
-      return ""
     } else {
       return placeholderInput
     }
-  }
+  }, [placeholderInput])
 
   if (Platform.OS === "android") {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -61,7 +71,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
 
   //* 유저 nickname 설정 위한 hook form 설정
   const {
-    control: userNickname,
+    control,
     handleSubmit, //추후 다른 스크린의 모달과 섞어 써야할시 : handleNicknameSubmit로 바꾸기
     formState: { errors, isValid, isDirty, dirtyFields },
     reset,
@@ -109,7 +119,8 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
           {/* //* hook form*/}
           <Controller
             name="nickname"
-            control={userNickname}
+            // @ts-ignore
+            control={control}
             //control = {contrilMode} //? -> type : string 안맞아서 안됨. 이 경우에 어떻게 재활용 기능한 코드로 바꿀지?
             //?원래 계획 : control 에 controlMode 를 string 으로 받고 parent screen 에서 여기에 뭘 주느냐에 따라 달라지는 Controller control 설정들
             render={({ field: { onChange, value } }) => (
@@ -117,26 +128,29 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 style={{
                   paddingTop: 20,
                 }}
-                placeholder={getPlaceholder(placeholderInput)}
+                placeholder={placeholder}
                 onChangeText={onChange}
                 value={value}
                 autoCapitalize="none"
                 maxLength={10}
+                {...textInputProps}
               />
             )}
-            rules={{
-              required: true,
-              pattern: {
-                value: /^[ㄱ-ㅎ|가-힣|ㅏ-ㅣ|a-z|A-Z|0-9|_]+$/,
-                message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
-              },
-              validate: {
-                //* 중복 닉네임 찾기 위한 코드
-                duplicateSearch: (value) =>
-                  validateFunction(value) ? "중복된 닉네임입니다." : true,
-                //*validation rule to true to indicate that the field is valid and has no error.
-              },
-            }}
+            rules={
+              rules || {
+                required: true,
+                pattern: {
+                  value: /^[ㄱ-ㅎ|가-힣|ㅏ-ㅣ|a-z|A-Z|0-9|_]+$/,
+                  message: "* 언더바 제외, 특수문자, 이모티콘, 공백은 사용할 수 없습니다.",
+                },
+                validate: {
+                  //* 중복 닉네임 찾기 위한 코드
+                  duplicateSearch: (value) =>
+                    validateFunction(value) ? "중복된 닉네임입니다." : true,
+                  //*validation rule to true to indicate that the field is valid and has no error.
+                },
+              }
+            }
           />
           {/* {console.log("errors! ", errors.nickname)} */}
           {/* //* 위에서 입력한 닉네임 에러 여부에 따라 달라지는 bordercolor, error message */}
@@ -165,7 +179,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
                 color={dirtyFields.nickname ? SUCCESS_BLUE : MIDDLE_LINE}
                 style={styles.divisionLine}
               />
-              {dirtyFields.nickname && (
+              {dirtyFields.nickname && controlMode === "userNickname" && (
                 <PreReg12 text={"* 사용가능한 이름입니다!"} color={SUCCESS_BLUE} />
               )}
             </View>

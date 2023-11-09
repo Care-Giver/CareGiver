@@ -10,14 +10,15 @@ export interface CancelButtonProps {
   style?: StyleProp<ViewStyle>
   title?: string
   textcolor?: string
+  onPress: () => void
 }
 
 export const CancelButton = observer(function CancelButton(props: CancelButtonProps) {
-  const { style, title, textcolor } = props
+  const { style, title, textcolor, onPress } = props
   const $subStyle = Object.assign({}, style)
 
   return (
-    <Pressable style={[styles.root, $subStyle]}>
+    <Pressable style={[styles.root, $subStyle]} onPress={onPress}>
       <PreMed12
         text={title}
         color={textcolor}

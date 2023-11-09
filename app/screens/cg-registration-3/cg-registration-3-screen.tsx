@@ -13,6 +13,7 @@ import { CgSetSelfIntro } from "./cg-set-self-intro"
 // import { CgSetCertificate } from "./cg-set-certificate"
 import { useKeyboardShown } from "../../utils/hooks/use-keyboard-shown"
 import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
+import { delay } from "../../utils/delay"
 
 export const CgRegistration3Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-3-screen">
@@ -128,7 +129,7 @@ export const CgRegistration3Screen: FC<
   // FlatList 관련 ENDED ==================================================================
 
   // 자기소개
-  const step1 = () => {
+  const step1 = async () => {
     if (!title) {
       alertModal("제목", "제목을 입력해주세요.")
       return
@@ -145,8 +146,6 @@ export const CgRegistration3Screen: FC<
     }
 
     if (hasDraftPetsitterProfile) {
-      setDraftPetsitter({ ...draftPetsitter, ...data }, 방문펫시터 ? "visiting" : "creche")
-
       if (_.includes(regState, "todo", undefined)) {
         alertModal("등록 거절", "모든  단계를 작성해주세요.")
         return
@@ -158,11 +157,14 @@ export const CgRegistration3Screen: FC<
       creator({ ...draftPetsitter, ...data, timeWithPet: 0, userId: userDetail.id }).then(
         ({ isSuccess }) => {
           if (isSuccess) {
+            // TODO: fetchPetsitter() 대신, 수정된 API 의 리턴값 - "생성된 펫시터 객체" 을 사용하여 setServiceType, setCrechePetsitter 에 할당한다.
             fetchPetsitter().then((result) => {
               if (result === true) {
                 // navigate("cg-registration-1-screen")
-                resetDraftPetsitter() // draftPetsitter 초기화
                 navigation.replace("cg-mypage-screen")
+                resetDraftPetsitter() // draftPetsitter 초기화
+              } else {
+                alertModal("등록 실패", "fetchPetsitter 실패")
               }
             })
           } else {

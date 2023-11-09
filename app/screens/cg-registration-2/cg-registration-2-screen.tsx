@@ -43,6 +43,7 @@ export const CgRegistration2Screen: FC<
       hasDraftPetsitterProfile,
       draftPetsitter,
       setDraftPetsitter,
+      draftServiceType,
       방문펫시터,
       regState,
     },
@@ -222,7 +223,7 @@ export const CgRegistration2Screen: FC<
   return (
     <Screen>
       <ScreenHeader
-        navigation={navigation}
+        route={route}
         onPressSaveExit={onPressSaveExit}
         hasDraftPetsitterProfile={hasDraftPetsitterProfile}
       />
@@ -244,7 +245,7 @@ export const CgRegistration2Screen: FC<
                 style={{ width: itemWidth }}
                 price={price}
                 setPrice={setPrice}
-                serviceType={serviceType}
+                serviceType={serviceType || draftServiceType}
                 standardPrice={
                   avgPriceData && {
                     min: priceFormatter(avgPriceData.minAvgPrice.toString()),
@@ -256,7 +257,7 @@ export const CgRegistration2Screen: FC<
             {currentStep === 2 && (
               <CgSetFamilyType
                 style={{ width: itemWidth }}
-                serviceType={serviceType}
+                serviceType={serviceType || draftServiceType}
                 familyTypeNumber={familyTypeNumber}
                 setFamilyTypeNumber={setFamilyTypeNumber}
                 handleType={handleType}

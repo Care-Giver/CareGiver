@@ -48,6 +48,7 @@ export const CgRegistration1Screen: FC<
       hasDraftPetsitterProfile,
       draftPetsitter,
       setDraftPetsitter,
+      draftServiceTypeKorean,
       방문펫시터,
       위탁펫시터,
       regState,
@@ -174,7 +175,6 @@ export const CgRegistration1Screen: FC<
     }
   }, [hasDraftPetsitterProfile, currentStep, dataFlatList])
   // FlatList 관련 ENDED ==================================================================
-
   const step1 = () => {
     if (!address) {
       alertModal("주소를 입력후 선택해주세요.", "주소를 입력후 선택해주세요.")
@@ -335,7 +335,7 @@ export const CgRegistration1Screen: FC<
                 address={address}
                 setDetailAddress={setDetailAddress}
                 detailAddress={detailAddress}
-                serviceType={serviceTypeKorean}
+                serviceTypeKorean={serviceTypeKorean || draftServiceTypeKorean}
               />
             )}
             {currentStep === 3 && (
@@ -385,12 +385,19 @@ export const CgRegistration1Screen: FC<
  * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
  * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
  */
-export const ScreenHeader = ({ navigation, onPressSaveExit, hasDraftPetsitterProfile }) => {
+export const ScreenHeader = ({ route, onPressSaveExit, hasDraftPetsitterProfile }) => {
   return (
     <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
       {/* 뒤로가기 버튼 */}
       <Pressable
         onPress={() => {
+          // TODO: 되돌아갈 스크린에서, route.params 가 필요하다면, 되돌아갈때 그 정보들도 같이 가져가야 함
+          // TODO: 로직이 매우 복잡해지므로, 일단 주석처리 함.
+          // if (route?.params?.from) {
+          //   navigate(route.params.from)
+          //   return
+          // }
+
           navigate("cg-edit-profile-screen")
         }}
       >
