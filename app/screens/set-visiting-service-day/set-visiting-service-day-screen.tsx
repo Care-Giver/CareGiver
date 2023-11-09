@@ -22,6 +22,7 @@ import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  CustomInputModal,
   DivisionLine,
   PopSem16,
   PopSem24,
@@ -34,8 +35,6 @@ import {
   PreReg16,
   Screen,
   TimePicker,
-  WeightModal,
-  timeText,
   timeTextAMPM,
 } from "#components"
 import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
@@ -157,10 +156,12 @@ export const SetVisitingServiceDayScreen: FC<
   }
 
   const handlePriceInput = (newPrice) => {
-    setFee(newPrice)
+    let fee = Number(newPrice)
+    if (_.isNaN(fee)) {
+      fee = 0
+    }
+    setFee(fee)
   }
-  console.log(fee)
-  console.log(typeof fee)
 
   const totalPrice = useMemo(() => petsitter.defaultFee + fee, [petsitter.defaultFee, fee])
 
@@ -422,14 +423,24 @@ export const SetVisitingServiceDayScreen: FC<
       </View>
 
       {/* 시간당 가격 설정  모달 */}
-      {/* // TODO: WeightModal 대신, CustomInputModal 으로 대체할 것  */}
-      {/* // TODO: CustomInputModal 업데이트 필요함 */}
-      <WeightModal
+      <CustomInputModal
         visibleState={priceModalOpen}
         handleModalHide={handlepriceModalHide}
-        title="시간당 받을 요금을 입력해주세요(원)"
-        placeholder={`기본요금 ${priceFormatter(petsitter.defaultFee.toString())}원에 더해집니다.`}
+        title="1박당 받을 요금을 입력해주세요(원)"
+        placeholderInput={`기본요금 ${priceFormatter(
+          petsitter.defaultFee.toString(),
+        )}원에 더해집니다.`}
         handleInput={handlePriceInput}
+        textInputProps={{
+          keyboardType: "number-pad",
+        }}
+        rules={{
+          required: true,
+          pattern: {
+            value: /^[0-9]+$/,
+            message: "숫자만 입력해주세요.",
+          },
+        }}
       />
 
       {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}

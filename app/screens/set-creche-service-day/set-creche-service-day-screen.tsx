@@ -14,6 +14,7 @@ import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  CustomInputModal,
   DivisionLine,
   PopSem24,
   PreBol16,
@@ -23,7 +24,6 @@ import {
   PreMed18,
   PreReg16,
   Screen,
-  WeightModal,
 } from "#components"
 import {
   BODY,
@@ -44,6 +44,7 @@ import {
 } from "../set-visiting-service-day/set-visiting-service-day-screen"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
+import _ from "lodash"
 
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
@@ -78,7 +79,11 @@ export const SetCrecheServiceDayScreen: FC<
 
   //*모달창에서 가격 변경시 사용 함수
   const handlePriceInput = (newPrice) => {
-    setFee(newPrice)
+    let fee = Number(newPrice)
+    if (_.isNaN(fee)) {
+      fee = 0
+    }
+    setFee(fee)
   }
 
   const totalPrice = useMemo(() => petsitter.defaultFee + fee, [petsitter.defaultFee, fee])
@@ -101,6 +106,11 @@ export const SetCrecheServiceDayScreen: FC<
 
     // POST
     if (!isAvailableDate) {
+      if (!isAvailable) {
+        alertModal("서비스 가능 토글", "서비스 가능 여부를 먼저 정해주세요.")
+        return
+      }
+
       createCrecheDate({
         startDates: selectedDates,
         crecheId,
@@ -241,13 +251,24 @@ export const SetCrecheServiceDayScreen: FC<
         </View>
 
         {/* 1박당 가격 설정  모달 창 */}
-        {/* // TODO: WeightModal 대신, CustomInputModal 으로 대체할 것  */}
-        {/* // TODO: CustomInputModal 업데이트 필요함 */}
-        <WeightModal
+        <CustomInputModal
           visibleState={priceModalOpen}
           handleModalHide={handlepriceModalHide}
           title="1박당 받을 요금을 입력해주세요(원)"
+          placeholderInput={`기본요금 ${priceFormatter(
+            petsitter.defaultFee.toString(),
+          )}원에 더해집니다.`}
           handleInput={handlePriceInput}
+          textInputProps={{
+            keyboardType: "number-pad",
+          }}
+          rules={{
+            required: true,
+            pattern: {
+              value: /^[0-9]+$/,
+              message: "숫자만 입력해주세요.",
+            },
+          }}
         />
       </ScrollView>
 
