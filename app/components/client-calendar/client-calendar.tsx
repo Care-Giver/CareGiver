@@ -17,9 +17,9 @@ interface ClientCalendarProps {
 
 export const ClientCalendar = observer(function CgCalendar(props: ClientCalendarProps) {
   const { style, selectedDate, onDayPress: onDayPressProp, dateRange } = props
-
+  const $allStyles = Object.assign({}, styles.root, style)
   return (
-    <View style={style}>
+    <View style={$allStyles}>
       <Calendar
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) => (
@@ -56,16 +56,18 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
 })
 
 const styles = StyleSheet.create({
+  root: {
+    width: "100%",
+  },
   arrow: {
     width: 18,
     height: 18,
   },
-
   calendar: {
     borderColor: GIVER_CASUAL_NAVY_40,
     borderWidth: 2,
     borderRadius: 10,
-    width: 358,
+    width: "100%",
     height: "auto",
     paddingBottom: 6,
     zIndex: 1,

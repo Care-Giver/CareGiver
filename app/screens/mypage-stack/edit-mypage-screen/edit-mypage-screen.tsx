@@ -241,7 +241,7 @@ export const EditMypageScreen: FC<
         title={"이메일"}
         profileInfo={userAuth.email}
         showOption={editable}
-        additionalMargin={20}
+        style={{ marginBottom: 20 }}
       />
 
       {/* //* 전화번호 */}

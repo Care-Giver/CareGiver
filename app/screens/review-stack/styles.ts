@@ -3,7 +3,7 @@ import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "../../theme"
 
 export const reviewStyles = StyleSheet.create({
   profileCard: {
-    width: 358,
+    width: "100%",
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderStyle: "solid",

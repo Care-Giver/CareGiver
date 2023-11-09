@@ -1,5 +1,5 @@
 import React from "react"
-import { Pressable, View } from "react-native"
+import { Pressable, StyleProp, View, ViewStyle } from "react-native"
 import { BODY, HEAD_LINE, MIDDLE_LINE, DISABLED } from "#theme"
 import { PreMed16, PreMed14, DivisionLine } from "#components"
 
@@ -8,9 +8,9 @@ interface UserOrPetProfileInfoProps {
   profileInfo: string
   showOption?: boolean
   additionalPadding?: number
-  additionalMargin?: number
   onPress?: () => void
   titleColor?: string
+  style?: StyleProp<ViewStyle>
 }
 
 export const UserOrPetProfileInfo = (props: UserOrPetProfileInfoProps) => {
@@ -19,14 +19,15 @@ export const UserOrPetProfileInfo = (props: UserOrPetProfileInfoProps) => {
     profileInfo,
     showOption,
     additionalPadding = 20,
-    additionalMargin,
     onPress,
     titleColor,
+    style,
   } = props
   const Wrapper = onPress ? Pressable : View
 
+  const $allStyles = Object.assign({}, { paddingTop: additionalPadding }, style)
   return (
-    <View style={{ paddingTop: additionalPadding }}>
+    <View style={$allStyles}>
       <PreMed14 color={titleColor || BODY} text={title} style={{ marginBottom: 10 }} />
       {/*<PreMed16 color={color} text={profileInfo} />*/}
       <Wrapper onPress={onPress}>

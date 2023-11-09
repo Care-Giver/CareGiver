@@ -81,8 +81,9 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
     ])
   }
 
+  const $allStyles = Object.assign({}, styles.root, style)
   return (
-    <View style={style}>
+    <View style={$allStyles}>
       <Calendar
         onMonthChange={(props) => {
           // console.log("props", props)

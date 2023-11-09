@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   radioContainer: {
-    width: 174,
+    width: "48%",
     height: 48,
 
     flexDirection: "row",

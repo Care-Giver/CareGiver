@@ -119,7 +119,7 @@ export const WritingCommentScreen: FC<
       <TextInput
         style={{
           marginTop: 10,
-          width: 358,
+          width: "100%",
           backgroundColor: LBG,
           borderRadius: 8,
           textAlignVertical: "top",
