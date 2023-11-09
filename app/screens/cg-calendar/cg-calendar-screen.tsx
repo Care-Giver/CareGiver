@@ -188,7 +188,8 @@ export const CgCalendarScreen: FC<
               }}
               labelTextColor={GIVER_CASUAL_NAVY}
               onPress={() => {
-                navigate("cg-mypage-screen")
+                // @ts-ignore
+                navigate("CgMypage")
               }}
             />
           </>

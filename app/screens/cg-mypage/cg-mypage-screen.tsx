@@ -34,18 +34,8 @@ export const CgMypageScreen: FC<
 
   const {
     userStore: { switchType, userDetail },
-    petsitterStore: {
-      serviceTypeKorean,
-      petsitter,
-      isFirstPetsitter,
-      setDraftPetsitter,
-      draftPetsitter,
-      resetDraftPetsitter,
-    },
+    petsitterStore: { serviceTypeKorean, petsitter, isFirstPetsitter, setDraftPetsitter },
   } = useStores()
-  // console.log("CgMypageScreen | petsitter", petsitter)
-  // console.log("CgMypageScreen | draftPetsitter", draftPetsitter)
-  // console.log("CgMypageScreen | isFirstPetsitter", isFirstPetsitter)
 
   // 환경설정 버튼 클릭시 실행되는 함수
   const handleSettingPress = () => {
@@ -132,7 +122,6 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
-                resetDraftPetsitter()
                 navigate("cg-edit-profile-screen")
               }}
             >
