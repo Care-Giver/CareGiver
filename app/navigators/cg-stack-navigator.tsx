@@ -40,6 +40,7 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { useNavigation } from "@react-navigation/native"
+import { CrecheAvailableDate } from "#axios"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -60,6 +61,7 @@ export type CGStackNavigatorParamList = {
     selectedDates: string[]
     crecheId: number
     isAvailableDate: boolean
+    availableDate?: CrecheAvailableDate
   }
   "set-visiting-service-day-screen": {
     selectedDates: string[]

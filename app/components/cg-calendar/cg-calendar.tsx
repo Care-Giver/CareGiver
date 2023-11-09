@@ -8,7 +8,7 @@ import "./localeConfig"
 import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { POPPINS_REGULAR } from "#fonts"
-import { CrecheAvailableDates, GroupedVisitingAvailableTimesByDate } from "#axios"
+import { CrecheAvailableDate, GroupedVisitingAvailableTimesByDate } from "#axios"
 import { ServiceTypeKorean, useStores } from "#models"
 import _ from "lodash"
 import dayjs from "dayjs"
@@ -28,7 +28,7 @@ export interface CgCalendarProps {
   serviceTypeKorean: ServiceTypeKorean
   selectedDates: string[] // 임시 type, TODO: 선택된 날짜(들)을 담을 수 있는 적절한 타입으로 변경해야 함
   setSelectedDates: Dispatch<SetStateAction<string[]>> // 임시 type
-  availableDates: Array<GroupedVisitingAvailableTimesByDate | CrecheAvailableDates>
+  availableDates: Array<GroupedVisitingAvailableTimesByDate | CrecheAvailableDate>
   style?: StyleProp<ViewStyle>
 }
 

@@ -17,7 +17,7 @@ import {
   GroupedVisitingAvailableTimesByDate,
   getVisitingAvailableTimes,
 } from "../../services/axios/visiting-available-time"
-import { CrecheAvailableDates, getCrecheDates } from "../../services/axios/creche-date"
+import { CrecheAvailableDate, getCrecheDates } from "../../services/axios/creche-date"
 import { useShowBottomTab } from "../../utils/hooks"
 import { images } from "#images"
 import { dummy } from "./dummy-data"
@@ -80,7 +80,7 @@ export const CgCalendarScreen: FC<
   const [visitingAvailableTimes, setVisitingAvailableTimes] = useState<
     GroupedVisitingAvailableTimesByDate[]
   >([])
-  const [crecheDates, setCrecheDates] = useState<CrecheAvailableDates[]>([])
+  const [crecheDates, setCrecheDates] = useState<CrecheAvailableDate[]>([])
   const [selectedDates, setSelectedDates] = useState<string[]>([])
   console.log("selected", selectedDates)
   console.log(
@@ -104,6 +104,9 @@ export const CgCalendarScreen: FC<
             title={"전체해제"}
             textcolor={BODY}
             style={{ alignSelf: "flex-end", marginBottom: 8 }}
+            onPress={() => {
+              setSelectedDates([])
+            }}
           />
           <CgCalendar
             availableDates={serviceTypeKorean === "방문" ? visitingAvailableTimes : crecheDates}
@@ -141,8 +144,14 @@ export const CgCalendarScreen: FC<
                       ).length !== 0,
                   })
                 : navigate("set-creche-service-day-screen", {
-                    date: selectedDates,
+                    selectedDates,
                     crecheId: petsitter.id,
+                    isAvailableDate:
+                      _.intersection(
+                        crecheDates.map((item) => item.startDate),
+                        selectedDates,
+                      ).length !== 0,
+                    availableDate: crecheDates.find((item) => item.startDate === selectedDates[0]),
                   })
             }}
           />

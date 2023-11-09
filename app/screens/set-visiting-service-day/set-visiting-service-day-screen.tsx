@@ -1,4 +1,12 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import {
   StyleSheet,
   View,
@@ -84,7 +92,7 @@ const ServiceTime = (props) => {
 }
 
 // 강아지크기별 가격
-const PricePerSize = (props) => {
+export const PricePerSize = (props) => {
   return (
     <View>
       <PreReg14 text={props.size} mb={8} color={BODY} style={{ textAlign: "center" }} />
@@ -93,13 +101,12 @@ const PricePerSize = (props) => {
   )
 }
 
-const CARE_GIVER_COMMISION_RATE = 0.06 as const
+export const CARE_GIVER_COMMISION_RATE = 0.06 as const
 
 export const SetVisitingServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-visiting-service-day-screen">
-> = observer(function SetVisitingServiceDayScreen({ route }) {
+> = observer(function SetVisitingServiceDayScreen({ route, navigation }) {
   const { selectedDates, visitingId, isAvailableDate } = route.params
-  console.log("isAvailableDate", isAvailableDate)
   const 날짜 =
     selectedDates?.length === 1
       ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
@@ -108,6 +115,15 @@ export const SetVisitingServiceDayScreen: FC<
     petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, hasDogs, petsitter },
   } = useStores()
   // console.log("petsitter", petsitter)
+  console.log("isAvailableDate", isAvailableDate)
+
+  // 헤더 타이틀 설정
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      //@ts-ignore
+      title: isAvailableDate ? `날짜 별 서비스 수정` : `날짜 별 서비스 등록`,
+    })
+  }, [isAvailableDate, navigation])
 
   useEffect(() => {
     if (isAvailableDate) {
@@ -326,8 +342,8 @@ export const SetVisitingServiceDayScreen: FC<
         <View style={[styles.rowText, { marginTop: 20 }]}>
           <PreMed18 text="서비스 요금 설정" />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PreMed14 text="평균 요금 알아보기" mr={4} />
-            <Image style={styles.image} source={images.more_info_bigger} />
+            <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
+            <Image style={styles.image28} source={images.more_info_bigger} />
           </View>
         </View>
 
@@ -525,5 +541,9 @@ const styles = StyleSheet.create({
   image: {
     width: 16,
     height: 16,
+  },
+  image28: {
+    width: 28,
+    height: 28,
   },
 })
