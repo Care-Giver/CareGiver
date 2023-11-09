@@ -85,9 +85,9 @@ const ClientTabs = () => {
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
-        name="Favorites"
-        component={FavoritesStack}
-        options={{ tabBarLabel: tabLabel.favortie }}
+        name="Searching"
+        component={SearchingStack}
+        options={{ tabBarLabel: tabLabel.search }}
       />
       <Tab.Screen
         name="Bookings"
@@ -95,15 +95,15 @@ const ClientTabs = () => {
         options={{ tabBarLabel: tabLabel.schedule }}
       />
       <Tab.Screen
-        name="Searching"
-        component={SearchingStack}
-        options={{ tabBarLabel: tabLabel.search }}
+        name="Favorites"
+        component={FavoritesStack}
+        options={{ tabBarLabel: tabLabel.favortie }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Chats"
         component={ChatsStack}
         options={{ tabBarLabel: tabLabel.chatting }}
-      />
+      /> */}
       <Tab.Screen
         name="Mypage"
         component={MypageStack}
@@ -128,26 +128,26 @@ const CareGiverTabs = () => {
       initialRouteName="CgMypage"
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Statistics"
         component={StatisticsStack}
         options={{ tabBarLabel: tabLabel.statistics }}
-      />
-      <Tab.Screen
-        name="CgBookings"
-        component={CgBookingsStack}
-        options={{ tabBarLabel: tabLabel.manage_booking }}
-      />
+      /> */}
       <Tab.Screen
         name="Calendar"
         component={CalendarStack}
         options={{ tabBarLabel: tabLabel.manage_schedule }}
       />
       <Tab.Screen
+        name="CgBookings"
+        component={CgBookingsStack}
+        options={{ tabBarLabel: tabLabel.manage_booking }}
+      />
+      {/* <Tab.Screen
         name="Chats"
         component={ChatsStack}
         options={{ tabBarLabel: tabLabel.chatting }}
-      />
+      /> */}
       <Tab.Screen
         name="CgMypage"
         component={CgMypageStack}
