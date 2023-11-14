@@ -11,7 +11,7 @@ import {
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { useFocusEffect } from "@react-navigation/native"
-import { NavigatorParamList, goBack, navigate } from "#navigators"
+import { NavigatorParamList, goBack } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
@@ -41,7 +41,7 @@ import {
 } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
-import { uploadURIS, HandleType, PetSex, FamilyType, createPet } from "#axios"
+import { uploadURIS, PetSex, FamilyType, createPet } from "#axios"
 import { useStores } from "#models"
 import { alertModal } from "../../utils/alert-modal"
 import { useKeyboardShown } from "../../utils/hooks"
@@ -49,7 +49,7 @@ import { useKeyboardShown } from "../../utils/hooks"
 const DESC_VIEW_MIN_HEIGHT = 100 // 반려동물 소개 입력창의 최소 높이
 
 const 성별 = ["남자", "여자"] as const
-const 크기 = ["소형", "중형", "대형"] as const
+// const 크기 = ["소형", "중형", "대형"] as const
 const 중성화_여부 = ["예", "아니오"] as const
 
 export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-screen">> = observer(
@@ -308,7 +308,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         birthday: birthday,
       }).then((res) => {
         if (res.isSuccess) {
-          navigation.replace("all-pets-screen", { isSaved: true })
+          navigation.navigate("all-pets-screen", { isSaved: true })
           !imageUriList &&
             alertModal(
               "이미지 업로드 실패",

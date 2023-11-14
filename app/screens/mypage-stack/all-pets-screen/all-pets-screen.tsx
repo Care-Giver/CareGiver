@@ -1,4 +1,4 @@
-import { View, FlatList, TouchableOpacity, StyleSheet } from "react-native"
+import { View, FlatList, StyleSheet } from "react-native"
 import React, { FC, useCallback, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -16,7 +16,7 @@ import {
 import { HEAD_LINE, SUB_HEAD_LINE, LBG, GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
 import { useFocusEffect } from "@react-navigation/native"
 import { Pet, useStores } from "#models"
-import { PetDetail, deletePet } from "#axios"
+import { deletePet } from "#axios"
 import { images } from "#images"
 import { appendEulReul } from "../../../utils/format"
 
@@ -49,7 +49,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
       }, [isSaved]),
     )
 
-    const isActivated = pets.length <= 5
+    const isActivated = pets.length < 5
 
     const [deletePetModal, setDeletePetModal] = useState<{
       visibleState: boolean

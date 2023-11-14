@@ -1,16 +1,11 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { HandleType } from "./types/creches.visitings.common.types"
 
 //* Pet관련 Types
 export enum PetSex {
   MALE = "MALE",
   FEMALE = "FEMALE",
-}
-
-export enum HandleType {
-  LARGE = "대형",
-  MEDIUM = "중형",
-  SMALL = "소형",
 }
 
 export enum FamilyType {

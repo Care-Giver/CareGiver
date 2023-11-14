@@ -34,6 +34,6 @@
     "resolveJsonModule": true
   },
   "exclude": ["node_modules", "babel.config.js"],
-  "include": ["App.js", "app", "test", "storybook", "assets/dummyData/pets-dummy.ts"],
+  "include": ["App.js", "app", "test", "storybook"],
   "extends": "expo/tsconfig.base"
 }

@@ -1,15 +1,10 @@
+import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 import { getPets } from "../../services/axios/pets"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 export enum PetSex {
   MALE = "MALE",
   FEMALE = "FEMALE",
-}
-
-export enum HandleType {
-  LARGE = "대형",
-  MEDIUM = "중형",
-  SMALL = "소형",
 }
 
 export enum FamilyType {

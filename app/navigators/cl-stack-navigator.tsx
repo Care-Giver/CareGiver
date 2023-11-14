@@ -157,7 +157,7 @@ export type CLStackNavigatorParamList = {
    */
   "mypage-screen": undefined
   "all-pets-screen": {
-    pets: Pet[]
+    pets?: Pet[]
     isSaved?: boolean
   }
   "setting-screen": undefined

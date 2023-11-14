@@ -4,11 +4,11 @@ import {
   ImageBackground,
   FlatList,
   Image,
-  Pressable,
   BackHandler,
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -28,17 +28,16 @@ import {
   CustomImagePicker,
   PickerImage,
 } from "#components"
-import { Pets } from "./dummy-data"
-import { useNavigation, useRoute, useFocusEffect, RouteProp } from "@react-navigation/native"
+import { useFocusEffect, RouteProp } from "@react-navigation/native"
 import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
-import { updatePet, PetSex } from "../../../services/axios/pets"
-import { Pet } from "#models"
+import { updatePet } from "../../../services/axios/pets"
 import { uploadURIS } from "#axios"
 import { useKeyboardShown } from "../../../utils/hooks"
+import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
 
 export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
   NavigatorParamList,
@@ -79,6 +78,19 @@ export const EditPetInfoScreen: FC<
 
   //*성별 한국어로 변환
   const sex = pet.sex === "FEMALE" ? "여" : "남"
+
+  let _petType = ""
+  switch (pet.petType) {
+    case HandleType.SMALL:
+      _petType = "소형"
+      break
+    case HandleType.MEDIUM:
+      _petType = "중형"
+      break
+    case HandleType.LARGE:
+      _petType = "대형"
+      break
+  }
 
   //*중성화 여부 한국어로 변환
   const neutralizated = pet.isNeutralizated === true ? "함" : "안 함"
@@ -219,7 +231,7 @@ export const EditPetInfoScreen: FC<
       return () => {
         subscription.remove()
       }
-    }, [anyChangeMade]),
+    }, [anyChangeMade, notEditable]),
   )
 
   //*ios + android 에서 둘 다 해당되는 back handle : 수정 상태에서 헤더의 go back 을 눌렀을 때
@@ -233,7 +245,7 @@ export const EditPetInfoScreen: FC<
       notEditable()
       navigation.setParams({ isBackPressed: false })
     }
-  }, [isBackPressed])
+  }, [isBackPressed, notEditable, navigation, anyChangeMade])
 
   /**
    * [저장하기 버튼]
@@ -251,51 +263,83 @@ export const EditPetInfoScreen: FC<
         <View>
           {/* //*이미지 */}
           {!isSelectingImages ? (
-            <FlatList
-              data={selectedImages.map((image) => image.uri)}
-              renderItem={(
-                { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
-              ) => (
-                <ImageBackground
-                  source={{ uri: item }}
-                  style={{
-                    width: DEVICE_SCREEN_WIDTH,
-                    height: 240,
-                  }}
-                  key={index}
-                >
-                  {editable && (
-                    <Pressable
-                      onPress={() => {
-                        setIsSelectingImages(true)
-                        isChangeMade()
-                      }}
-                      style={{ position: "absolute", right: 16, bottom: 8 }}
-                    >
-                      <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
-                    </Pressable>
-                  )}
-                </ImageBackground>
-              )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              snapToInterval={DEVICE_SCREEN_WIDTH}
-              snapToAlignment={"end"}
-              decelerationRate={"fast"}
-              //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
-              viewabilityConfig={{
-                viewAreaCoveragePercentThreshold: 51,
-              }}
-              //? 이미지가 바뀌었을때 실행 할 행동 설정.
-              onViewableItemsChanged={onFlatlistUpdate}
-            />
+            selectedImages.length !== 0 ? (
+              <FlatList
+                data={selectedImages.map((image) => image.uri)}
+                renderItem={(
+                  { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
+                ) => (
+                  <ImageBackground
+                    source={{ uri: item }}
+                    style={{
+                      width: DEVICE_SCREEN_WIDTH,
+                      height: 240,
+                    }}
+                    key={index}
+                  >
+                    {editable && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIsSelectingImages(true)
+                          isChangeMade()
+                        }}
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          bottom: 0,
+                          padding: 20,
+                        }}
+                      >
+                        <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                      </TouchableOpacity>
+                    )}
+                  </ImageBackground>
+                )}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={DEVICE_SCREEN_WIDTH}
+                snapToAlignment={"end"}
+                decelerationRate={"fast"}
+                //? 표출되는 이미지 요소가 바뀌는 기준을 설정.
+                viewabilityConfig={{
+                  viewAreaCoveragePercentThreshold: 51,
+                }}
+                //? 이미지가 바뀌었을때 실행 할 행동 설정.
+                onViewableItemsChanged={onFlatlistUpdate}
+              />
+            ) : (
+              <ImageBackground
+                source={images.default_pet_image_60}
+                style={{
+                  width: DEVICE_SCREEN_WIDTH,
+                  height: 240,
+                }}
+              >
+                {editable && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsSelectingImages(true)
+                      isChangeMade()
+                    }}
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      bottom: 0,
+                      padding: 20,
+                    }}
+                  >
+                    <Image source={images.camera_white} style={{ width: 42, height: 42 }} />
+                  </TouchableOpacity>
+                )}
+              </ImageBackground>
+            )
           ) : (
             <CustomImagePicker
               selectedImages={selectedImages}
               setSelectedImages={setSelectedImages}
               submitButtonText="사진 추가하기"
               selectionLimit={5}
-              style={{ marginTop: 20 }}
+              style={{ marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
             />
           )}
 
@@ -362,7 +406,7 @@ export const EditPetInfoScreen: FC<
 
           <UserOrPetProfileInfo
             title="크기"
-            profileInfo={pet.petType}
+            profileInfo={_petType}
             showOption={editable}
             additionalPadding={35}
           />
@@ -468,7 +512,17 @@ export const EditPetInfoScreen: FC<
                 setAnyChangeMade(false)
               }
               notEditable() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-              const imageUriList = await uploadURIS(selectedImages)
+
+              let imageUriList = []
+              if (selectedImages.length === 0) {
+                imageUriList = []
+              } else if (selectedImages === petImages) {
+                imageUriList = []
+              } else {
+                const addedImages = selectedImages.filter((image) => !petImages.includes(image))
+                imageUriList = await uploadURIS(addedImages)
+              }
+
               updatePet(pet.id, {
                 name: name,
                 age: pet.age,

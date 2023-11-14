@@ -6,6 +6,7 @@ import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { Row } from "../basics/row/row"
 import { Pet, PetSex } from "#models"
+import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 
 interface PetProfileCardProps {
   /**
@@ -32,7 +33,19 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
   const { name, petType, species, age, sex } = petData
   const petImageUri = petData.images ? petData.images[0] : null
 
-  console.log("sex", sex)
+  let _petType = ""
+  switch (petType) {
+    case HandleType.SMALL:
+      _petType = "소형"
+      break
+    case HandleType.MEDIUM:
+      _petType = "중형"
+      break
+    case HandleType.LARGE:
+      _petType = "대형"
+      break
+  }
+
   let _sex = ""
   if (sex === PetSex.MALE) {
     _sex = "남"
@@ -54,12 +67,14 @@ export const PetProfileCard = (props: PetProfileCardProps) => {
 
           {/*//? 타입 | 품종 | 나이 | 성별 */}
           <Row style={{ marginTop: 8 }}>
-            <PreReg14 text={petType} color={BODY} />
+            <PreReg14 text={_petType} color={BODY} />
             <PreReg14 text={"|"} color={DBG} style={{ marginLeft: 8 }} />
             <PreReg14
-              // text={
-              //   species.name.length <= 6 ? `${species.name}` : `${species.name.substring(0, 5)}..`
-              // } //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
+              text={
+                species?.name.length <= 6
+                  ? `${species?.name}`
+                  : `${species?.name.substring(0, 5)}..`
+              } //? 총 글자가 6글자 이내면 그대로 표기, 7글자 부터는 5글자까지만 표기하고 점 두개. ex) 브리티시쇼트헤어 -> 브리티시쇼..
               color={BODY}
               style={{ marginLeft: 8 }}
             />

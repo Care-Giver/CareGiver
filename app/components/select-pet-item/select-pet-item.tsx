@@ -6,6 +6,7 @@ import { BODY } from "#theme"
 import { Row } from "../basics/row/row"
 import { BlueCheckbox } from "../blue-checkbox/blue-checkbox"
 import { Pet, PetSex } from "#models"
+import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
 
 interface SelectPetItemProps {
   style?: StyleProp<ViewStyle>
@@ -47,6 +48,19 @@ export const SelectPetItem = (props: SelectPetItemProps) => {
     }
   }
 
+  let _petType = ""
+  switch (petType) {
+    case HandleType.SMALL:
+      _petType = "소형"
+      break
+    case HandleType.MEDIUM:
+      _petType = "중형"
+      break
+    case HandleType.LARGE:
+      _petType = "대형"
+      break
+  }
+
   let _sex = ""
   if (sex === PetSex.MALE) {
     _sex = "남"
@@ -63,13 +77,13 @@ export const SelectPetItem = (props: SelectPetItemProps) => {
 
       {/* //? 사이즈 */}
       <View style={styles.sizeContainer}>
-        <PreReg14 text={petType} color={BODY} style={{ textAlign: "center" }} />
+        <PreReg14 text={_petType} color={BODY} style={{ textAlign: "center" }} />
       </View>
 
       {/* //? 종 */}
       <View style={styles.speciesContainer}>
         <PreReg14
-          // text={species.name}
+          text={species?.name}
           color={BODY}
           style={{ textAlign: "center" }}
           //@ts-ignore

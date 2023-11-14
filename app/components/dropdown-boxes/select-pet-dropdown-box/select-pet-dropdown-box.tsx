@@ -69,12 +69,13 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
           )}
 
           {/* 반려동물 추가 등록하기 버튼 - 등록한 반려동물이 존재하고, 5마리 이하일때만 표출 */}
-          {hasPets && pets.length <= 5 && (
+          {hasPets && pets.length < 5 && (
             <RowRoundedBox
               style={styles.addNewPetBox}
               preset="Pressable"
               onPress={() => {
-                navigate("add-pet-screen")
+                // @ts-ignore
+                navigate("Mypage")
               }}
             >
               <PreMed14 text={"+ 추가 등록하기"} color={BODY} />
@@ -89,7 +90,8 @@ export const SelectPetDropdownBox = (props: SelectPetDropdownBoxProps) => {
               labelTextColor={GIVER_CASUAL_NAVY}
               isActivated={!hasPets}
               onPress={() => {
-                navigate("Mypage", { screen: "add-pet-screen" })
+                // @ts-ignore
+                navigate("Mypage")
               }}
             />
           )}
