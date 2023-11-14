@@ -32,7 +32,7 @@ import { styles } from "./styles"
 import { DateData } from "react-native-calendars"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { addMinutes } from "date-fns"
+import { subMinutes } from "date-fns"
 import { useStores, Pet } from "#models"
 import Geolocation from "react-native-geolocation-service"
 import { getDevicePermission } from "./getDevicePermission"
@@ -41,22 +41,24 @@ import Postcode from "@actbase/react-daum-postcode"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { addressToCoordinates } from "../../cg-registration-1/addressToCoordinates"
 import { isInKorea } from "../../../utils/is-in-korea"
+import dayjs from "dayjs"
 
 const nowInUTCZero = new Date()
-const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
+const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
 
-const minutesPassed = now.getMinutes()
+// const minutesPassed = now.getMinutes()
 
-// Calculate how many minutes remain to reach the nearest multiple of 5
-const remainder = minutesPassed % 5
+// // Calculate how many minutes remain to reach the nearest multiple of 5
+// const remainder = minutesPassed % 5
+// // 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
+// nearestPastTime.setMinutes(minutesPassed - remainder)
 
 // Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
-const nearestPastTime = new Date(now)
+// const nearestPastTime = new Date(now)
 
-// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
-nearestPastTime.setMinutes(minutesPassed - remainder)
+const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).toDate() // 지금 시간으로 부터 가장 가까운 정시
 
-// "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
+// "지금 시간으로 부터 가장 가까운 정시" 에서 딱 1시간 뒤
 const oneHourAfterNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
 type ServiceType = "방문" | "위탁"
@@ -110,8 +112,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     }
 
     //* 시간선택 - TimePicker
-    const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
-    const [endTime, setEndTime] = useState<Date>(oneHourAfterNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+    const [startTime, setStartTime] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 정시` 로 초기값 세팅
+    const [endTime, setEndTime] = useState<Date>(oneHourAfterNearestPastTime) // `"지금 시간으로 부터 가장 가까운 정시" 에서 딱 1시간 뒤`로 초기값 세팅
     const [selectedTimeText, setSelectedTimeText] = useState("방문시간을 선택해주세요")
 
     const scrollViewRef = useRef<ScrollView>(null)
@@ -154,7 +156,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [address, setAddress] = useState("주소를 입력해주세요") // 주소
     const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 }) // 좌표
 
-    console.log("location", location)
+    // console.log("location", location)
 
     // 주소입력 바텀시트모달 - ref
     const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)

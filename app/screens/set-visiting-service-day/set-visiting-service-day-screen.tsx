@@ -40,28 +40,30 @@ import {
 import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { addMinutes, isAfter, max } from "date-fns"
+import { addMinutes, isAfter, subMinutes } from "date-fns"
 import { price as priceFormatter } from "../../utils/format"
 import { useStores } from "#models"
 import { createVisitingAvailableTime, getAvailableTimesByDate } from "#axios"
 import _ from "lodash"
 import { alertModal } from "../../utils/alert-modal"
 import { useKeyboardShown } from "../../utils/hooks"
+import dayjs from "dayjs"
 
 const nowInUTCZero = new Date()
-const now = addMinutes(nowInUTCZero, -1 * nowInUTCZero.getTimezoneOffset())
+const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
 
-const minutesPassed = now.getMinutes()
+// const minutesPassed = now.getMinutes()
 
-// Calculate how many minutes remain to reach the nearest multiple of 5
-const remainder = minutesPassed % 5
+// // Calculate how many minutes remain to reach the nearest multiple of 5
+// const remainder = minutesPassed % 5
+// // 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
+// nearestPastTime.setMinutes(minutesPassed - remainder)
 
 // Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
-const nearestPastTime = new Date(now)
+// const nearestPastTime = new Date(now)
 
-// 지금 시간으로 부터 가장 가까운 5분단위 과거 시간
-nearestPastTime.setMinutes(minutesPassed - remainder)
-// console.log(nearestPastTime)
+// 지금 시간으로 부터 가장 가까운 정시
+const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).toDate()
 
 // "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
 const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
@@ -344,7 +346,7 @@ export const SetVisitingServiceDayScreen: FC<
           <PreMed18 text="서비스 요금 설정" />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
-            <Image style={styles.image28} source={images.more_info_bigger} />
+            <Image style={styles.image} source={images.more_info_bigger} />
           </View>
         </View>
 
@@ -552,9 +554,5 @@ const styles = StyleSheet.create({
   image: {
     width: 16,
     height: 16,
-  },
-  image28: {
-    width: 28,
-    height: 28,
   },
 })

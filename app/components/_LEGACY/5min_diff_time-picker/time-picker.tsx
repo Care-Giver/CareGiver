@@ -8,11 +8,11 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { View, StyleSheet, ViewStyle, StyleProp, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
-import { DivisionLine, PreReg10, PreReg14, PreReg16, PreReg32 } from "#components"
+import { DivisionLine, PreReg14, PreReg16, PreReg32 } from "#components"
 import { GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import DatePicker from "react-native-date-picker"
 import dayjs from "dayjs"
-import { endOfToday, subMinutes } from "date-fns"
+import { addMinutes, setMinutes, endOfToday } from "date-fns"
 
 const MODE_PRESSABLE_WIDTH = 114
 
@@ -31,7 +31,7 @@ interface TimePickerProps {
 }
 
 /** Date 시간객체를 "HH:MM" 꼴의 string 으로 변환합니다. */
-export const timeText = (time: Date) => {
+const timeText = (time: Date) => {
   const hours = time.getUTCHours()
   const minute = time.getUTCMinutes()
   return `${hours.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
@@ -41,7 +41,7 @@ type TimeTextAMPM = {
   ampm: "오후" | "오전"
   time: string // HH:MM
 }
-export const timeTextAMPM = (time: Date): TimeTextAMPM => {
+const timeTextAMPM = (time: Date): TimeTextAMPM => {
   let hours = time.getUTCHours()
   const minute = time.getUTCMinutes()
   const ampm = hours >= 12 ? "오후" : "오전"
@@ -54,68 +54,44 @@ export const timeTextAMPM = (time: Date): TimeTextAMPM => {
   }
 }
 
-const nowInUTCZero = new Date()
-const UTCZeroToday22h00m = subMinutes(
-  dayjs(endOfToday()).hour(22).minute(0).second(0).millisecond(0).toDate(),
-  nowInUTCZero.getTimezoneOffset(),
-)
-const UTCZeroToday23h00m = subMinutes(
-  dayjs(endOfToday()).hour(23).minute(0).second(0).millisecond(0).toDate(),
-  nowInUTCZero.getTimezoneOffset(),
-)
-
-export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
+/**
+ * 5분 간격으로 시간설정이 가능한 TimePicker 입니다.
+ * MVP 출시를 위해, 시간 선택이 "정시" 기준으로만 가능하도록 바뀜에 따라
+ * 기존 TimePicker 를 백업하고자 만들었습니다.
+ * 2023-11-14, @smnchoi
+ */
+const TimePicker = observer(function TimePicker(props: TimePickerProps) {
   const { style, beginDate, setBeginDate, endDate, setEndDate } = props
   const allStyles = Object.assign({}, styles.root, style)
+  const nowInUTCZero = new Date()
+  const localTimeEndOfToday = addMinutes(endOfToday(), -1 * nowInUTCZero.getTimezoneOffset())
 
   const [mode, setMode] = useState<Mode>("BEGIN")
 
-  /**
-   * 시간 간격 핸들링
-   */
-  useEffect(() => {
-    const oneHourAfterBeginDate = dayjs(beginDate)
-      .clone()
-      .add(1, "hour")
-      .minute(0)
-      .second(0)
-      .millisecond(0)
-      .toDate()
+  console.log("endDate", endDate)
 
-    if (
-      /**
-       * 끝 시간이
-       * "시작시간보다 이전" 이면,
-       * 끝 시간을 시작시간보다 1시간 이후로 강제
-       */
-      endDate <= beginDate
-    ) {
-      setEndDate(oneHourAfterBeginDate)
+  /** 선택한 시간이 바뀔때마다 핸들링 */
+  useEffect(() => {
+    const oneHourAfterBeginDate = dayjs(beginDate).clone().add(1, "hour").toDate()
+
+    /** 끝 시간이 오늘을 넘어가면, 끝시간으로 오늘 23:55 를 강제 */
+    if (endDate > localTimeEndOfToday) {
+      setEndDate(setMinutes(localTimeEndOfToday, 55))
+      //
     } else if (
       /**
        * 끝 시간이
-       * "시작시간보다 1시간 이후보다 이전" 이면,
+       * "시작시간보다 이전" 이거나,
+       * "시작시간보다 1시간 이후보다 이전"이면,
        * 끝 시간을 시작시간보다 1시간 이후로 강제
        */
-      endDate < oneHourAfterBeginDate
+      endDate <= beginDate ||
+      (endDate < oneHourAfterBeginDate && endDate.getHours() !== 23 && endDate.getMinutes() !== 55)
     ) {
       setEndDate(oneHourAfterBeginDate)
+      //
     }
-  }, [beginDate, endDate, setBeginDate, setEndDate])
-
-  /**
-   * 30분 간격 선택시, 다음 정시로 바꿈
-   */
-  useEffect(() => {
-    if (beginDate.getMinutes() === 30) {
-      setBeginDate(
-        dayjs(beginDate).clone().add(1, "hour").minute(0).second(0).millisecond(0).toDate(),
-      )
-    }
-    if (endDate.getMinutes() === 30) {
-      setEndDate(dayjs(endDate).clone().add(1, "hour").minute(0).second(0).millisecond(0).toDate())
-    }
-  }, [beginDate, endDate, setBeginDate, setEndDate])
+  }, [beginDate, endDate])
 
   const differenceInMinutes = (begin: Date, end: Date) => {
     let diff = (end.getTime() - begin.getTime()) / 1000
@@ -182,32 +158,26 @@ export const TimePicker = observer(function TimePicker(props: TimePickerProps) {
       <View style={styles.pickerContainer}>
         {mode === "BEGIN" && (
           <DatePicker
-            key={"BEGIN"}
             timeZoneOffsetInMinutes={0} // UTC+0 을 기준으로 연산하도록 변경
-            maximumDate={UTCZeroToday22h00m} // 오늘 22:00 까지만 선택 가능
             date={beginDate}
             onDateChange={setBeginDate}
             mode="time"
-            minuteInterval={30}
+            minuteInterval={5}
             textColor="black"
           />
         )}
 
         {mode === "END" && (
           <DatePicker
-            key={"END"}
             timeZoneOffsetInMinutes={0} // UTC+0 을 기준으로 연산하도록 변경
-            maximumDate={UTCZeroToday23h00m} // 오늘 23:00 까지만 선택 가능
             date={endDate}
             onDateChange={setEndDate}
             mode="time"
-            minuteInterval={30}
+            minuteInterval={5}
             textColor="black"
           />
         )}
       </View>
-
-      <PreReg10 text={"* 정시만 선택 가능합니다."} />
     </View>
   )
 })
