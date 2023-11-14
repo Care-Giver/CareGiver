@@ -54,6 +54,8 @@ export const SetCrecheServiceDayScreen: FC<
     petsitterStore: { hasDogs, petsitter },
   } = useStores()
 
+  const [isActivated, setIsActivated] = useState(true)
+
   // 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -118,7 +120,11 @@ export const SetCrecheServiceDayScreen: FC<
       })
         .then((response) => {
           if (response.isSuccess) {
-            navigation.goBack()
+            setIsActivated(false)
+            setTimeout(() => {
+              navigation.goBack()
+              setIsActivated(true)
+            }, 1000)
           } else {
             alertModal("등록 실패", "잠시 후 다시 시도해주세요.")
           }
@@ -127,6 +133,12 @@ export const SetCrecheServiceDayScreen: FC<
     }
     // PUT
     else {
+      if (!isAvailable) {
+        alertModal("개발중", "🏗️ soft delete 기능은 개발중입니다.")
+        setIsAvailable(true)
+        return
+      }
+
       updateCrecheDate(availableDate?.id, {
         startDate: selectedDates[0],
         crecheId,
@@ -134,7 +146,11 @@ export const SetCrecheServiceDayScreen: FC<
       })
         .then((response) => {
           if (response.isSuccess) {
-            navigation.goBack()
+            setIsActivated(false)
+            setTimeout(() => {
+              navigation.goBack()
+              setIsActivated(true)
+            }, 1000)
           } else {
             alertModal("수정 실패", "잠시 후 다시 시도해주세요.")
           }
@@ -282,7 +298,7 @@ export const SetCrecheServiceDayScreen: FC<
             right: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
-          <ConditionalButton label="저장하기" isActivated onPress={onPressSave} />
+          <ConditionalButton label="저장하기" isActivated={isActivated} onPress={onPressSave} />
         </View>
       )}
     </Screen>

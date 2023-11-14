@@ -40,7 +40,7 @@ import {
 import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { addMinutes, isAfter, subMinutes } from "date-fns"
+import { addMinutes, isAfter, subMinutes, isEqual } from "date-fns"
 import { price as priceFormatter } from "../../utils/format"
 import { useStores } from "#models"
 import { createVisitingAvailableTime, getAvailableTimesByDate } from "#axios"
@@ -118,6 +118,8 @@ export const SetVisitingServiceDayScreen: FC<
   // console.log("petsitter", petsitter)
   console.log("isAvailableDate", isAvailableDate)
 
+  const [isActivated, setIsActivated] = useState(true)
+
   // 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -179,6 +181,8 @@ export const SetVisitingServiceDayScreen: FC<
   console.log("selectedTimeframes", selectedTimeframes)
 
   const checkIsValidTimeframe = useCallback((sorted: SelectedTimeframe[]) => {
+    console.log("sorted", sorted)
+
     let isValid = false
     if (sorted.length === 1) {
       isValid = true
@@ -192,6 +196,11 @@ export const SetVisitingServiceDayScreen: FC<
         const curr = sorted[index]
         const next = sorted[index + 1]
         if (!isAfter(new Date(next.beginTime), new Date(curr.endTime))) {
+          if (isEqual(new Date(next.beginTime), new Date(curr.endTime))) {
+            isValid = true
+            break
+          }
+
           isValid = false
           break
         }
@@ -223,8 +232,17 @@ export const SetVisitingServiceDayScreen: FC<
           ),
         ),
       )
-        .then((response) => console.log("response >>>", response))
+        .then((response) => {
+          // console.log("response >>>", response)
+          setIsActivated(false)
+          setTimeout(() => {
+            navigation.goBack()
+            setIsActivated(true)
+          }, 1000)
+        })
         .catch(console.log)
+    } else {
+      alertModal("개발중", "🏗️ 수정 기능은 개발중입니다.")
     }
   }
 
@@ -421,7 +439,7 @@ export const SetVisitingServiceDayScreen: FC<
           bottom: BOTTOM_HEIGHT,
         }}
       >
-        <ConditionalButton label="저장하기" isActivated onPress={onPressSave} />
+        <ConditionalButton label="저장하기" isActivated={isActivated} onPress={onPressSave} />
       </View>
 
       {/* 시간당 가격 설정  모달 */}

@@ -56,7 +56,8 @@ const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
 // Subtract the remainder from the current minutes to get the nearest past time in 5-minute intervals
 // const nearestPastTime = new Date(now)
 
-const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).toDate() // 지금 시간으로 부터 가장 가까운 정시
+// 지금 시간으로 부터 가장 가까운 정시
+const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).toDate()
 
 // "지금 시간으로 부터 가장 가까운 정시" 에서 딱 1시간 뒤
 const oneHourAfterNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
