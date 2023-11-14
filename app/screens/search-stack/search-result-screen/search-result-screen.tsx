@@ -490,6 +490,7 @@ export const SearchResultScreen: FC<
                   desc: visiting.visiting.desc,
                   star: ratingRound(visiting.visiting.star),
                   profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                  defaultFee: visiting.visiting.defaultFee,
                 }
                 serviceAmenity = {
                   services: visiting.visiting.serviceVisiting,
@@ -509,6 +510,7 @@ export const SearchResultScreen: FC<
                   desc: creche.creche.desc,
                   star: ratingRound(creche.creche.star),
                   profileImage: creche.creche.__careGiver__.__user__?.profileImage,
+                  defaultFee: creche.creche.defaultFee,
                 }
                 serviceAmenity = {
                   services: creche.creche.serviceCreche,

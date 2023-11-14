@@ -84,7 +84,7 @@ export const CaregiverDetailInformationScreen: FC<
     selectedPets,
     // selectedDate,
   } = route.params
-  const { profileImage, userNickname, star, reviewCount, desc } = sitterData
+  const { profileImage, userNickname, star, reviewCount, desc, defaultFee } = sitterData
 
   let visitingId = ""
   let startTime = ""
@@ -199,9 +199,9 @@ export const CaregiverDetailInformationScreen: FC<
           {/* //* 케어기버 이름/ 별점/ 리뷰  */}
           <CaregiverNameStarReview
             style={{ marginTop: 36 }}
+            profileImage={profileImage}
             caregiverData={{
               name: userNickname,
-              // profileImage,
               ratings: star,
             }}
             onPress={() => {
@@ -319,7 +319,8 @@ export const CaregiverDetailInformationScreen: FC<
         >
           {/* //* 예약 신청하기 버튼*/}
           <MakeBookingButton
-            pricePerHour={50000}
+            price={defaultFee}
+            serviceType={serviceType}
             isActivated={true}
             /*onPress={() => {
             // 원본

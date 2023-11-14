@@ -14,7 +14,7 @@ export type PetsitterProfileCardPetsitterData = {
   crecheId?: number
   visitingId?: number
 } & Pick<Petsitter, "reviewCount" | "userNickname"> &
-  Pick<CareGiverPetsitter, "title" | "desc" | "star"> &
+  Pick<CareGiverPetsitter, "title" | "desc" | "star" | "defaultFee"> &
   Pick<UserEntity, "profileImage">
 
 interface SitterProfileCardProps {
