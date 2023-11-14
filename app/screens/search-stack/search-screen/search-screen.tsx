@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useCallback, useMemo, useEffect } from "react"
+import React, { FC, useState, useRef, useCallback, useMemo } from "react"
 import { Image, View, LayoutAnimation, Platform, UIManager, ScrollView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -30,7 +30,12 @@ import {
 import { images } from "#images"
 import { styles } from "./styles"
 import { DateData } from "react-native-calendars"
-import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import {
+  BottomSheetBackdrop,
+  BottomSheetFlatList,
+  BottomSheetFooter,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { subMinutes } from "date-fns"
 import { useStores, Pet } from "#models"
@@ -39,7 +44,10 @@ import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../utils/alert-modal"
 import Postcode from "@actbase/react-daum-postcode"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
-import { addressToCoordinates } from "../../cg-registration-1/addressToCoordinates"
+import {
+  addressToCoordinates,
+  coordinatesToAddress,
+} from "../../cg-registration-1/addressToCoordinates"
 import { isInKorea } from "../../../utils/is-in-korea"
 import dayjs from "dayjs"
 
@@ -157,38 +165,39 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     const [address, setAddress] = useState("주소를 입력해주세요") // 주소
     const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 }) // 좌표
 
-    // console.log("location", location)
-
     // 주소입력 바텀시트모달 - ref
     const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)
 
     const onPressLocation = async () => {
-      // 위치 권한 요청
-      getDevicePermission(
-        "location",
-        // 성공시, 현 위치를 좌표로 설정
-        () => {
-          Geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords
-              if (isInKorea({ lat: latitude, lng: longitude })) {
-                setLocation({ lat: latitude, lng: longitude })
-              } else {
-                bottomSheetModalRefAddress.current?.present()
-              }
-            },
-            (error) => {
-              console.log("error", error)
-              alertModal("위치 정보 수집 실패", error.message)
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-          )
-        },
-        // 실패시, 주소 바텀시트모달 표출
-        () => {
-          bottomSheetModalRefAddress.current?.present()
-        },
-      )
+      bottomSheetModalRefAddress.current?.present()
+
+      // // 위치 권한 요청
+      // getDevicePermission(
+      //   "location",
+      //   // 성공시, 현 위치를 좌표로 설정
+      //   () => {
+      //     Geolocation.getCurrentPosition(
+      //       (position) => {
+      //         const { latitude, longitude } = position.coords
+      //         if (isInKorea({ lat: latitude, lng: longitude })) {
+      //           setLocation({ lat: latitude, lng: longitude })
+      //           coordinatesToAddress({ ...location }).then(setAddress)
+      //         } else {
+      //           bottomSheetModalRefAddress.current?.present()
+      //         }
+      //       },
+      //       (error) => {
+      //         console.log("error", error)
+      //         alertModal("위치 정보 수집 실패", error.message)
+      //       },
+      //       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      //     )
+      //   },
+      //   // 실패시, 주소 바텀시트모달 표출
+      //   () => {
+      //     bottomSheetModalRefAddress.current?.present()
+      //   },
+      // )
     }
 
     const onAddressSelected = (data: OnCompleteParams) => {
@@ -440,20 +449,34 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           enablePanDownToClose
           style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
         >
-          <Postcode
-            style={{ width: "100%", height: "80%", paddingTop: 20 }}
-            jsOptions={{
-              animation: true,
-              useBannerLink: false,
+          <BottomSheetFlatList
+            style={{
+              flex: 1,
+              height: 2000,
             }}
-            onSelected={onAddressSelected}
-            onError={(error) => {
-              console.log("우편주소 서비스 에러 - error", error)
-              alertModal(
-                "우편주소 서비스 에러",
-                "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.",
-              )
-            }}
+            data={[0]}
+            renderItem={() => (
+              <Postcode
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  height: 2000,
+                  paddingTop: 20,
+                }}
+                jsOptions={{
+                  animation: true,
+                  useBannerLink: false,
+                }}
+                onSelected={onAddressSelected}
+                onError={(error) => {
+                  console.log("우편주소 서비스 에러 - error", error)
+                  alertModal(
+                    "우편주소 서비스 에러",
+                    "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.",
+                  )
+                }}
+              />
+            )}
           />
         </BottomSheetModal>
 
