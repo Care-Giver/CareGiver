@@ -1,17 +1,37 @@
-import { View, Text, Pressable, Image, FlatList, LayoutAnimation } from "react-native"
-import React, { useLayoutEffect, useState } from "react"
-import { Row } from "../basics/row/row"
-
-import { PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
+import React, { useState } from "react"
+import {
+  View,
+  Pressable,
+  Image,
+  FlatList,
+  LayoutAnimation,
+  StyleProp,
+  ViewStyle,
+} from "react-native"
+import { Row } from "../_BASIC/row/row"
+import { PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "#images"
-import RatingStars from "../rating-stars/rating-stars"
+import { RatingStars } from "./rating-stars/rating-stars"
 import { MIDDLE_LINE, DISABLED } from "../../theme"
-import { ReviewBoxProps } from "./review-box.props"
-import { PetProfileCard } from "../pet-profile-card/pet-profile-card"
-import { PetInfoDropdownBox } from "../dropdown-boxes/pet-info-dropdown-box/pet-info-dropdown-box"
+import { PetInfoDropdownBox } from "../_DROPDOWN_BOX/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
+import { Pet } from "#models"
 
-export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
+interface ReviewBoxProps {
+  style?: StyleProp<ViewStyle>
+  //TODO: 이미지 url 주소로 넘겨받는 것 맞겠지..?
+  profileImg: string
+  userName: string
+  ratings: number
+  createdAt: Date
+  images: Array<string>
+  review: string
+  pets: Array<Pet>
+
+  reviewData: any // TODO
+}
+
+export const ReviewBox = (props: ReviewBoxProps) => {
   // const profileImg = profileImg
   // const userName = userName
   // const ratings = ratings
@@ -19,6 +39,8 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
   // const images = images
   // const review = review
   // const pets = pets
+  const { style: viewStyle, reviewData } = props
+
   // ? 리뷰 정보
   const { user, ratings, createdAt, review, pets } = reviewData
   const userName = user.name
@@ -27,7 +49,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
-    let formatted =
+    const formatted =
       date.getFullYear().toString().slice(2) +
       "." +
       (date.getMonth() + 1 < 10 ? "0" : "") +
@@ -84,7 +106,7 @@ export const ReviewBox = ({ style: viewStyle, key, reviewData }) => {
         }}
       >
         {/* //? 평점 */}
-        <RatingStars ratings={ratings} key={key} />
+        <RatingStars ratings={ratings} key={Math.random()} />
         {/* //? vertical divider */}
         <PreReg12 text="|" color={MIDDLE_LINE} style={{ marginHorizontal: 4 }} />
         {/* //? 날짜 */}

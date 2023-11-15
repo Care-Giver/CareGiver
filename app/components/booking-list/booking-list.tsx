@@ -5,7 +5,7 @@ import { images } from "#images"
 import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
 import { GIVER_CASUAL_NAVY } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
-import { PreBol16, PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { PreBol16, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { ConfirmedBookings } from "../../services/axios/confirmed-bookings"
 
 export interface BookingListProps {

@@ -1,7 +1,7 @@
 import { View, Pressable, Image, ImageBackground, ImageSourcePropType } from "react-native"
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
-import { Row } from "../basics/row/row"
+import { Row } from "../_BASIC/row/row"
 
 import {
   PreBol14,
@@ -9,7 +9,7 @@ import {
   PreReg10,
   PreReg12,
   PreReg14,
-} from "../basics/custom-texts/custom-texts"
+} from "../_BASIC/custom-texts/custom-texts"
 import { images } from "../../../assets/images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "../../theme"
 import { CaregiverTypeButton } from "../../components"

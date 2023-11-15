@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useLayoutEffect, useState } from "react"
 import { FlatList, useWindowDimensions } from "react-native"
-import { RegistrationButton } from "../buttons/registration-button/registration-button"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../screen/screen"
+import { RegistrationButton } from "../_BUTTON/registration-button/registration-button"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../_BASIC/screen/screen"
 import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
 
 // - 버튼의 가로 간격

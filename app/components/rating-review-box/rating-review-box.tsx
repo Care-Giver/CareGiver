@@ -1,7 +1,7 @@
-import { View, Image, StyleProp, ViewStyle } from "react-native"
 import React from "react"
+import { View, Image, StyleProp, ViewStyle } from "react-native"
 import { styles } from "./styles"
-import { PreReg12 } from "../basics/custom-texts/custom-texts"
+import { PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 import { MIDDLE_LINE, SUB_HEAD_LINE } from "../../theme"
 import { images } from "../../../assets/images"
 
@@ -11,7 +11,7 @@ interface RatingReviewBoxProps {
   style?: StyleProp<ViewStyle>
 }
 
-const RatingReviewBox = ({ rating, review, style }: RatingReviewBoxProps) => {
+export const RatingReviewBox = ({ rating, review, style }: RatingReviewBoxProps) => {
   const roundedRating = rating
   return (
     <View style={[styles.reviewContainer, style]}>
@@ -24,5 +24,3 @@ const RatingReviewBox = ({ rating, review, style }: RatingReviewBoxProps) => {
     </View>
   )
 }
-
-export default RatingReviewBox

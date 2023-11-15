@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image } from "react-native"
 import React from "react"
 import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
-import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
+import { PreMed16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
 import { images } from "#images"
 

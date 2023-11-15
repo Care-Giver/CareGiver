@@ -2,7 +2,7 @@ import { View, Text, Image } from "react-native"
 import React from "react"
 import { PetImageCardProps } from "./pet-image-card.props"
 import { styles } from "./styles"
-import { PreMed14 } from "../basics/custom-texts/custom-texts"
+import { PreMed14 } from "../_BASIC/custom-texts/custom-texts"
 import { STRONG_LINE } from "#theme"
 import { images } from "#images"
 

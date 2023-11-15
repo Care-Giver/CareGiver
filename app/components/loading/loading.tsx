@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { CARE_SOFT_YELLOW, GIVER_CASUAL_NAVY } from "#theme"
 import Lottie, { AnimatedLottieViewProps } from "lottie-react-native"
 import { lotties } from "../../../assets/lotties"
-import { PopSem16, PreReg12 } from "../basics/custom-texts/custom-texts"
+import { PopSem16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 
 export interface LoadingProps {
   /**

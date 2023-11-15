@@ -1,12 +1,18 @@
-import { ImageBackground, Pressable, StyleSheet } from "react-native"
-import React, { useLayoutEffect, useState } from "react"
+import React from "react"
+import { ImageBackground, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { InProgressBookingProfile } from "./in-progress-booking-profile/in-progress-booking-profile"
 import { DEVICE_WINDOW_WIDTH } from "#theme"
 import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { images } from "#images"
-import { InProgressBookingProps } from "./in-progress-booking.props"
 import { navigate } from "#navigators"
-import { BASIC_BACKGROUND_PADDING_WIDTH } from "../screen/screen"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../_BASIC/screen/screen"
+import { CurrentBooking } from "#axios"
+
+interface InProgressBookingProps {
+  currentBooking: CurrentBooking
+  onPress?: () => void
+  style?: StyleProp<ViewStyle>
+}
 
 export const InProgressBooking = (props: InProgressBookingProps) => {
   const { currentBooking, style } = props

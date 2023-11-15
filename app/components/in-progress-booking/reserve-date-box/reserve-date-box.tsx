@@ -1,7 +1,7 @@
-import { View, Image } from "react-native"
 import React from "react"
-import { Row } from "../../basics/row/row"
-import { PreBol14, PreReg12 } from "../../basics/custom-texts/custom-texts"
+import { View, Image } from "react-native"
+import { Row } from "../../_BASIC/row/row"
+import { PreBol14, PreReg12 } from "../../_BASIC/custom-texts/custom-texts"
 import { images } from "#images"
 import { styles } from "./styles"
 

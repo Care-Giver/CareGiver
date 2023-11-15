@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreBol12, PreBol14, PreReg12 } from "../basics/custom-texts/custom-texts"
+import { PreBol12, PreBol14, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 import { GIVER_CASUAL_NAVY, BODY, SUB_HEAD_LINE, LBG } from "#theme"
 
 export interface PhotoRegistrationNoteProps {

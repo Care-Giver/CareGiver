@@ -2,7 +2,7 @@ import { View, ImageBackground, Text, FlatList } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
 import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, STANDARD_WIDTH } from "#theme"
-import { DotsIndicator } from "../dots-indicator/dots-indicator"
+import { DotsIndicator } from "./dots-indicator/dots-indicator"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 import { images as _images } from "../../../assets/images"
 

@@ -1,67 +1,57 @@
 //* ignite-basics
 export * from "./ignite-basics/error/error-boundary"
 
-//* caregiver-detail-stack
-export * from "./caregiver-detail-stack/all-comments-screen/all-comments-screen"
-export * from "./caregiver-detail-stack/all-reviews-screen/all-reviews-screen"
-export * from "./caregiver-detail-stack/caregiver-detail-information-screen/caregiver-detail-information-screen"
-export * from "./caregiver-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
-export * from "./caregiver-detail-stack/writing-comment-screen/writing-comment-screen"
+// _CARE_GIVER
+export * from "./_CARE_GIVER/cg-calendar/cg-calendar-screen"
+export * from "./_CARE_GIVER/manage-booking/manage-booking-screen"
+export * from "./_CARE_GIVER/cg-mypage/cg-mypage-screen"
+export * from "./_CARE_GIVER/set-visiting-service-day/set-visiting-service-day-screen"
+export * from "./_CARE_GIVER/set-creche-service-day/set-creche-service-day-screen"
+export * from "./_CARE_GIVER/cg-registration-1/cg-registration-1-screen"
+export * from "./_CARE_GIVER/cg-registration-2/cg-registration-2-screen"
+export * from "./_CARE_GIVER/cg-registration-3/cg-registration-3-screen"
+export * from "./_CARE_GIVER/cg-edit-profile/cg-edit-profile-screen"
 
-//* home-stack
-export * from "./home-stack/home-screen/home-screen"
+// _CLIENT
+export * from "./_CLIENT/caregiver-detail-stack/all-comments-screen/all-comments-screen"
+export * from "./_CLIENT/caregiver-detail-stack/all-reviews-screen/all-reviews-screen"
+export * from "./_CLIENT/caregiver-detail-stack/caregiver-detail-information-screen/caregiver-detail-information-screen"
+export * from "./_CLIENT/caregiver-detail-stack/caregiver-self-introduction-screen/caregiver-self-introduction-screen"
+export * from "./_CLIENT/caregiver-detail-stack/writing-comment-screen/writing-comment-screen"
+export * from "./_CLIENT/booking-stack/all-bookings-screen/all-bookings-screen"
+export * from "./_CLIENT/booking-stack/booking-detail-screen/booking-detail-screen"
+export * from "./_CLIENT/pay-stack/payment-request-screen/payment-request-screen"
+export * from "./_CLIENT/search-stack/search-result-screen/search-result-screen"
+export * from "./_CLIENT/search-stack/search-screen/search-screen"
+export * from "./_CLIENT/mypage-stack/mypage-screen/mypage-screen"
+export * from "./_CLIENT/mypage-stack/all-pets-screen/all-pets-screen"
+export * from "./_CLIENT/mypage-stack/service-center-screen/service-center-screen"
+export * from "./_CLIENT/mypage-stack/edit-mypage-screen/edit-mypage-screen"
+export * from "./_CLIENT/mypage-stack/edit-pet-info-screen/edit-pet-info-screen"
+export * from "./_CLIENT/favorites/favorites-screen"
+export * from "./_CLIENT/review-stack/view-review/view-review-screen"
+export * from "./_CLIENT/review-stack/write-review/write-review-screen"
+export * from "./_CLIENT/booking-stack/past-bookings/past-bookings-screen"
+export * from "./_CLIENT/make-booking/make-booking-screen"
+export * from "./_CLIENT/pay-stack/payment/payment-screen"
+export * from "./_CLIENT/notification/notification-screen"
+export * from "./_CLIENT/add-pet/add-pet-screen"
 
-//* booking-stack
-export * from "./booking-stack/all-bookings-screen/all-bookings-screen"
-export * from "./booking-stack/booking-detail-screen/booking-detail-screen"
+// _COMMON
+export * from "./_COMMON/setting-screen/setting-screen"
+export * from "./_COMMON/login/login-screen"
+export * from "./_COMMON/terms-of-service/terms-of-service-screen"
+export * from "./_COMMON/sign-up-screen/sign-up-screen"
+export * from "./_COMMON/sign-up-success-screen/sign-up-success-screen"
 
-//* pay-stack
-export * from "./pay-stack/payment-request-screen/payment-request-screen"
-
-//* search-stack
-export * from "./search-stack/search-result-screen/search-result-screen"
-export * from "./search-stack/search-screen/search-screen"
-
-//* mypage-stack
-export * from "./mypage-stack/mypage-screen/mypage-screen"
-export * from "./mypage-stack/all-pets-screen/all-pets-screen"
-export * from "./mypage-stack/setting-screen/setting-screen"
-export * from "./mypage-stack/service-center-screen/service-center-screen"
-export * from "./mypage-stack/edit-mypage-screen/edit-mypage-screen"
-export * from "./mypage-stack/edit-pet-info-screen/edit-pet-info-screen"
-
-//* registration-stack
-export * from "./favorites/favorites-screen"
+// 기타
 export * from "./test-web-view/test-web-view-screen"
 export * from "./test-push-notification/test-push-notification-screen"
-
-//* review-stack
-export * from "./review-stack/view-review/view-review-screen"
-export * from "./review-stack/write-review/write-review-screen"
-
 export * from "./test/test-bottom-sheet/test-bottom-sheet-screen"
 export * from "./kakao-login-test/kakao-login-test-screen"
-export * from "./cg-calendar/cg-calendar-screen"
-export * from "./manage-booking/manage-booking-screen"
-export * from "./cg-mypage/cg-mypage-screen"
-export * from "./login/login-screen"
-export * from "./booking-stack/past-bookings/past-bookings-screen"
-export * from "./make-booking/make-booking-screen"
-export * from "./payment/payment-screen"
 export * from "./test-iamport/test-iamport-screen"
 export * from "./test-iamport/test-iamport-payment-screen"
 export * from "./test-iamport/test-iamport-payment-result-screen"
 export * from "./test-network-error/test-network-error-screen"
 export * from "./cancel-reservation/cancel-reservation-screen"
-export * from "./set-visiting-service-day/set-visiting-service-day-screen"
-export * from "./set-creche-service-day/set-creche-service-day-screen"
 export * from "./temp-chat/temp-chat-screen"
-export * from "./terms-of-service/terms-of-service-screen"
-export * from "./sign-up-screen/sign-up-screen"
-export * from "./sign-up-success-screen/sign-up-success-screen"
-export * from "./notification/notification-screen"
-export * from "./add-pet/add-pet-screen"
-export * from "./cg-registration-1/cg-registration-1-screen"
-export * from "./cg-registration-2/cg-registration-2-screen"
-export * from "./cg-registration-3/cg-registration-3-screen"
-export * from "./cg-edit-profile/cg-edit-profile-screen"

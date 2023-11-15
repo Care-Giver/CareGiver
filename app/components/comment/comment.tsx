@@ -1,12 +1,11 @@
+import React from "react"
 import { View, Image, Pressable } from "react-native"
-import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-
-import { PreReg12, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
-import { Row } from "../basics/row/row"
+import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
-import { DivisionLine } from "../division-line/division-line"
+import { DivisionLine } from "../_BASIC/division-line/division-line"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -45,13 +44,20 @@ export class PetSitterReview extends CoreEntity {
   user: User; // 작성자가 삭제되었을때 펫시터 화면에서 리뷰 정보에 누굴 띄워야할까?
 } */
 
-export const Comment = ({ style: viewStyle, numberOfLines, commentData }) => {
+interface CommentProps {
+  style?: any
+  numberOfLines?: number
+  commentData: any //TODO:
+}
+
+export const Comment = (props: CommentProps) => {
+  const { style: viewStyle, numberOfLines, commentData } = props
   const { userId, desc, createdAt, updatedAt, reply, profileImg } = commentData
   const _numberOfLines = numberOfLines || undefined
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
-    let formatted =
+    const formatted =
       date.getFullYear().toString().slice(2) +
       "." +
       (date.getMonth() + 1 < 10 ? "0" : "") +

@@ -9,7 +9,7 @@ import {
   ImageSourcePropType,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreBol14, PreReg14 } from "../basics/custom-texts/custom-texts"
+import { PreBol14, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "#images"
 import { BODY, GIVER_CASUAL_NAVY, WIDTH } from "#theme"
 import { PaymentModuleType } from "#screens"
