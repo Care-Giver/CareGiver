@@ -3,7 +3,7 @@ import { Button, Platform, View, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView } from "#components"
+import { Screen } from "#components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import * as Device from "expo-device"
@@ -18,7 +18,7 @@ Notifications.setNotificationHandler({
 })
 
 export const TestPushNotificationScreen: FC<
-  StackScreenProps<NavigatorParamList, "testPushNotification">
+  StackScreenProps<NavigatorParamList, "test-push-notification-screen">
 > = observer(function TestPushNotificationScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
@@ -89,14 +89,14 @@ export const TestPushNotificationScreen: FC<
       token = (await Notifications.getExpoPushTokenAsync()).data
       console.log(token)
     } else {
-      alert("Must use physical device for Push Notifications")
+      alert("Push Notifications 을 테스트 하기위해서는, 반드시 실제 기기를 사용해주세요!")
     }
 
     return token
   }
 
   return (
-    <ScreenRootView testID="TestPushNotification" preset="fixed">
+    <Screen testID="TestPushNotification" preset="fixed">
       <View
         style={{
           flex: 1,
@@ -121,6 +121,6 @@ export const TestPushNotificationScreen: FC<
           }}
         />
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })

@@ -2,25 +2,9 @@ import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-
-/* //* User Model 
-        ~ type: ENUM! ( CARE_GIVER | CLIENT )
-        ~ loggedIn: bool!
-        ~ pushToken: string~ 
-
-        ~ email: string!
-        ~ password: string?
-        ~ provider: string~ 
-
-        ~ name: string!
-        ~ phoneNumber: string!
-        ~ sex: ENUM! ( MALE | FEMALE )
-        ~ birthday: string~ 
-
-        ~ address: string!
-        ~ profileImg: string?
-        ~ isCertified: bool!
- */
+import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
+import axios from "axios"
+import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -33,10 +17,13 @@ export enum Type {
  */
 export type AuthProvider = "google" | "apple" | "kakao" | "naver"
 
-enum Sex {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
+interface UserAuth {
+  token: string
+  provider: AuthProvider
+  email: string
 }
+
+type SocialLoginHanderParams = UserAuth
 
 /**
  * User Model is for both CareGiver and Client.
@@ -47,22 +34,29 @@ export const UserStoreModel = types
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
     // onSwitchingType: types.optional(types.boolean, false),
     onSwitchingType: false,
-
     loggedIn: false,
-    pushToken: types.optional(types.string, ""),
 
-    email: types.optional(types.string, ""),
-    password: types.optional(types.string, ""),
-    provider: types.optional(types.frozen<AuthProvider>(), null),
-    refreshToken: types.optional(types.string, ""),
+    /* 유저 Auth 정보 */
+    userAuth: types.frozen<UserAuth>({
+      token: "",
+      provider: null,
+      email: "",
+    }),
 
-    name: types.optional(types.string, ""),
-    phoneNumber: types.optional(types.string, ""),
-    sex: types.optional(types.frozen<Sex>(), null),
-    birthday: types.optional(types.string, ""),
+    /* 유저 상세정보 */
+    userDetail: types.frozen<UserDetail>({
+      id: null,
+      nickname: "",
+      phoneNumber: "",
+      sex: null,
+      birthday: "",
+      address: "",
+      profileImage: "",
+      pushToken: "",
+      nicknameLastUpdated: "",
+    }),
 
-    address: types.optional(types.string, ""),
-    profileImg: types.optional(types.string, ""),
+    /* 인증된 펫시터인지 여부 */
     isCertified: false,
   })
   .actions(withSetPropAction)
@@ -77,6 +71,18 @@ export const UserStoreModel = types
       })
       return {
         ...self,
+      }
+    },
+
+    /** 성별 (sex) 정보를 enum 값 대신 한글로 리턴합니다. */
+    get sexInKorean() {
+      switch (self.userDetail?.sex) {
+        case Sex.MALE:
+          return "남성"
+        case Sex.FEMALE:
+          return "여성"
+        default:
+          return "오류"
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -128,45 +134,180 @@ export const UserStoreModel = types
       self.loggedIn = value
     },
 
-    setEmail(value: string) {
-      self.email = value.replace(/ /g, "")
-    },
-    setPassword(value: string) {
-      self.password = value.replace(/ /g, "")
-    },
-    setProvider(value: AuthProvider) {
-      self.provider = value
-    },
-    setRefreshToken(value: string) {
-      self.refreshToken = value
+    /* 유저 Auth정보 쓰기 */
+    setUserAuth(value: UserAuth) {
+      // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임.
+      self.userAuth = value
     },
 
-    async signIn() {
+    /* 유저 상세정보 쓰기 */
+    setUserDetail(value: UserDetail) {
+      // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임 .
+      self.userDetail = value
+    },
+
+    /**
+     * getMe API 를 통하여, 받아온 정보를
+     * 유저 상세정보 - userDetail 에 저장합니다.
+     * */
+    async userDetailHandler(token: string) {
       try {
+        const { isSuccess, userDetail } = await getMe(token)
+
+        if (!isSuccess) {
+          return false
+        }
+
+        if (!userDetail) {
+          return false
+        }
+        // 푸시토큰 발급
+        const pushToken = await registerForPushNotificationsAsync().then((token) => {
+          //? 토큰 발급에 실패한다면 useDetail.pushToken의 type에 맞춰 ""을 return한다.
+          if (token === null || token === undefined) return ""
+
+          //? post api 사용하여 유저 db에 푸시토큰 저장
+          postPushToken({ pushToken: token })
+          //? mst내에서 사용하기 위해 발급받은 푸시토큰 return
+          return token
+        })
+        // 유저 상세정보 저장
+        this.setUserDetail({
+          id: userDetail.id,
+          nickname: userDetail.nickname,
+          phoneNumber: userDetail.phoneNumber,
+          sex: userDetail.sex,
+          birthday: userDetail.birthday,
+          address: userDetail.address,
+          profileImage: userDetail.profileImage,
+          pushToken: pushToken,
+          nicknameLastUpdated: userDetail.nicknameLastUpdated,
+        })
+
+        return true
+      } catch (error) {
+        console.error("catch 에러!!! - userDetailHandler", error)
+        return false
+      }
+    },
+
+    /**
+     * 로그인 (혹은 회원가입) 성공시, 유저 Auth정보를 저장합니다.
+     * - 유저 Auth정보: token, provider, email
+     *
+     * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
+     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, address, profileImage, pushToken
+     *  */
+    async loginHander(loginRequestBody: LoginRequestBody) {
+      try {
+        const { isSuccess, token } = await login(loginRequestBody)
+        if (!isSuccess) {
+          return false
+        }
+
+        if (!token) {
+          return false
+        }
+
+        const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
+        if (!isUserDatailHandlerSuccess) {
+          return false
+        }
+
+        this.setUserAuth({
+          token,
+          provider: loginRequestBody.provider,
+          email: loginRequestBody.email,
+        })
+
+        this.setLoggedIn(true)
+
+        await delay(500)
+        // @ts-ignore
+        navigate("Searching", { screen: "search-screen" })
+        return true
         //
       } catch (error) {
+        console.error("catch 에러!!! - loginHander", error)
+        return false
         //
       }
     },
 
-    async logIn() {
+    /**
+     * 카카오 - 구현완료
+     * 네이버 [개발중]
+     * 애플 [개발중]
+     *
+     * 소셜 로그인 인증 성공시, 유저 Auth정보를 저장합니다.
+     * - 유저 Auth정보: token, provider, email
+     *
+     * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
+     * - 유저 상세정보: nickname, phoneNumber, sex, birthday, address, profileImage, pushToken
+     *  */
+    async socialLoginHander({ token, provider, email }: SocialLoginHanderParams) {
       try {
+        if (!token) {
+          return false
+        }
+
+        const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
+        if (!isUserDatailHandlerSuccess) {
+          return false
+        }
+
+        this.setUserAuth({
+          token,
+          provider,
+          email,
+        })
+
+        this.setLoggedIn(true)
+
+        await delay(500)
+        // @ts-ignore
+        navigate("Searching", { screen: "search-screen" })
+        return true
         //
       } catch (error) {
+        console.error("catch 에러!!! - loginHander", error)
+        return false
         //
       }
     },
 
-    logOut() {
-      self.loggedIn = false
-    },
+    /**
+     * 로그아웃
+     * - UserStoreModel 초기화
+     * */
+    logoutHandler() {
+      //! 중요: 로그인시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
+      axios.defaults.headers.common["x-jwt"] = ""
 
-    async queryUser() {
-      try {
-        //
-      } catch (error) {
-        //
-      }
+      // UserStoreModel 모델 초기화
+      this.reset()
+
+      // TODO: provider 마다, 추가로 해야 할 동작이 다를 것임
+      /*         
+      switch (self.userAuth.provider) {
+          case "kakao":
+            kakaoLogOut()
+            break
+
+          case "naver":
+            naverLogOut()
+            break
+
+          case "apple":
+            break
+
+          case "google":
+            break
+
+          default:
+            break
+        } 
+        */
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

@@ -7,6 +7,7 @@
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>
@@ -18,7 +19,7 @@
       <!-- 묵 추가 -->
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAPziDHnPS4EEAHq1EjWe1KpQ9hUWE0x6M"/>
+        android:value="AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"/>
 
     <!-- You will also only need to add this uses-libray tag -->
     <uses-library android:name="org.apache.http.legacy" android:required="false"/>
@@ -33,15 +34,16 @@
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
+    </activity>
+    <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity" android:exported="true">
       <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="pet.caregiver"/>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
 
-        <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
-        <data android:host="oauth"
-            android:scheme="kakaob6bb8137d93b8b5a3f7c565453235ba4" />
+          <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+          <data android:host="oauth"
+                android:scheme="kakaob6bb8137d93b8b5a3f7c565453235ba4" />
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>

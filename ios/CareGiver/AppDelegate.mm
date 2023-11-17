@@ -1,4 +1,7 @@
 #import "AppDelegate.h"
+// react-native-firebase 🔻
+#import <Firebase.h>
+// react-native-firebase 🔺
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -35,8 +38,11 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  //5.26 mook
-  [GMSServices provideAPIKey:@"AIzaSyDGzlmhKrUA0vLqQs6jrXg1Il77Xmt8lD8"];
+  // react-native-firebase 🔻
+  [FIRApp configure];
+  // react-native-firebase 🔺
+  
+  [GMSServices provideAPIKey:@"AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];

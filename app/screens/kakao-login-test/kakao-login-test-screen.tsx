@@ -2,7 +2,7 @@ import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { PreBol20, ScreenRootView } from "#components"
+import { PreBol20, Screen } from "#components"
 import { Text, StyleSheet, View, ScrollView } from "react-native"
 import {
   login,
@@ -122,7 +122,7 @@ export const KakaoLoginTestScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="KakaoLoginTest">
+    <Screen testID="KakaoLoginTest">
       <ScrollView style={{ height: 500, width: "100%", backgroundColor: "cyan" }}>
         <Text>{result}</Text>
       </ScrollView>
@@ -133,7 +133,7 @@ export const KakaoLoginTestScreen: FC<
         <PreBol20 onPress={signOutWithKakao} text="로그아웃" />
         <PreBol20 onPress={unlinkKakao} text="언링크" />
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

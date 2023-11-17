@@ -1,20 +1,28 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { CharacterStoreModel } from "../character-store/character-store"
 import { SpeciesStoreModel } from "../species-store/species-store"
-import { VisitingAvailableTimesModel } from "../visiting-available-times/visiting-available-times"
-import { CrecheDayModel } from "../creche-day/creche-day"
 import { UserStoreModel } from "../user-store/user-store"
+import { ReviewStoreModel } from "../review-store/review-store"
+import { FavoriteModel } from "../favorite/favorite"
+import { PetStoreModel } from "../pet-store/pet-store"
+import { UiStoreModel } from "../ui-store/ui-store"
+import { NotificationStoreModel } from "../notification-store/notification-store"
+import { PetsitterStoreModel } from "../petsitter-store/petsitter-store"
+import { EtcStoreModel } from "../etc-store/etc-store"
 
 /**
  * A RootStore model.
  */
 // prettier-ignore
 export const RootStoreModel = types.model("RootStore").props({
-  characterStore: types.optional(CharacterStoreModel, {} as any),
   speciesStoreModel: types.optional(SpeciesStoreModel, {} as any),
-  visitingAvailableTimesModel: types.optional(VisitingAvailableTimesModel, {} as any),
-  CrecheDayModel: types.optional(CrecheDayModel, {} as any),
   userStore: types.optional(UserStoreModel, {} as any),
+  uiStore: types.optional(UiStoreModel, {} as any),
+  reviewStoreModel: types.optional(ReviewStoreModel, {} as any),
+  petsitterStore: types.optional(PetsitterStoreModel, {} as any),
+  petStore: types.optional(PetStoreModel, {} as any),
+  FavoriteModel: types.optional(FavoriteModel, {} as any),
+  notificationStore: types.optional(NotificationStoreModel, {} as any),
+  etcStore: types.optional(EtcStoreModel, {} as any)
 })
 
 /**

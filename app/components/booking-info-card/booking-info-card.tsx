@@ -6,7 +6,7 @@ import { PreBol16, PreReg12, PreBol12, Row, BASIC_BACKGROUND_PADDING_WIDTH } fro
 import { SUB_HEAD_LINE, SHADOW_1, GIVER_CASUAL_NAVY, palette, BODY } from "#theme" // 묵 추가
 import { images } from "#images"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { PressableButton } from "../buttons/pressable-button/pressable-button"
+import { PressableButton } from "../_BUTTON/pressable-button/pressable-button"
 
 const ROOT: ViewStyle = {
   justifyContent: "center",

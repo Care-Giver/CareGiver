@@ -13,15 +13,31 @@ install! 'cocoapods',
 
 target 'CareGiver' do
   use_expo_modules!
+
+  # npx expo install @react-native-firebase/app 이후, 발생한 pod install 오류를 해결하기 위해 추가함 - 참고: https://stackoverflow.com/a/72705219/16673541
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+
   config = use_native_modules!
 
-  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+  # use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks'] #! Flipper 를 사용하려면, use_frameworks! 를 주석처리해야함
+  $RNFirebaseAsStaticFramework = true
+  
   ####5.28 묵추가
   pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
   ####
+
+  ####6.24 묵추가, ios react-native error 해결####
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-AppTrackingTransparency', :path => "../node_modules/react-native-permissions/ios/AppTrackingTransparency"
+  #####
+
   # Flags change depending on the env values.
   flags = get_default_flags()
   use_react_native!(
@@ -34,10 +50,10 @@ target 'CareGiver' do
 
   # Uncomment to opt-in to using Flipper
   # Note that if you have use_frameworks! enabled, Flipper will not work
-  #
-  # if !ENV['CI']
-  #   use_flipper!()
-  # end
+  #! Flipper 사용.
+  if !ENV['CI']
+    use_flipper!()
+  end
 
   post_install do |installer|
     react_native_post_install(installer)

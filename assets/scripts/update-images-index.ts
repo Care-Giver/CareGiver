@@ -37,13 +37,19 @@ const imageFileNamesAtBottomTabNavigator = () => {
 const generateImagesIndex = () => {
   let properties = imageFileNames()
     .map((name) => {
-      return `${name}: require("../images/${name}.png")`
+      // @ts-ignore
+      const refinedName = name.replace(/@4x|@3x|@2x/g, "")
+      return `${refinedName}: require("../images/${refinedName}.png")`
     })
+    .filter((value, index, self) => self.indexOf(value) === index) // 중복 제거
     .join(",\n  ")
 
   let properties2 = imageFileNamesAtBottomTabNavigator()
+    .filter((value, index, self) => self.indexOf(value) === index)
     .map((name) => {
-      return `${name}: require("../images/bottom-tab-navigator/${name}.png")`
+      // @ts-ignore
+      const refinedName = name.replace(/@4x|@3x|@2x/g, "")
+      return `${refinedName}: require("../images/bottom-tab-navigator/${refinedName}.png")`
     })
     .join(",\n  ")
 

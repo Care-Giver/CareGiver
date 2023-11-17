@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>688881083690-n3l2m2d6nkieuaj9pe3vl1ikffi5ork4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.688881083690-n3l2m2d6nkieuaj9pe3vl1ikffi5ork4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBWWQ5GvNAlRxOuCn06tR0TzM3rjmJ2-PI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>688881083690</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>pet.caregiver</string>
+	<key>PROJECT_ID</key>
+	<string>boreal-logic-389913</string>
+	<key>STORAGE_BUCKET</key>
+	<string>boreal-logic-389913.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:688881083690:ios:37c34ec3f1205eba4eaa53</string>
+</dict>
+</plist>

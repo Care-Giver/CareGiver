@@ -1,10 +1,9 @@
-import { View, Image, Pressable } from "react-native"
 import React from "react"
+import { View, Image, Pressable } from "react-native"
 import { styles } from "./styles"
-
-import { PreReg12, PreReg16 } from "../basics/custom-texts/custom-texts"
+import { PreReg16 } from "../_BASIC/custom-texts/custom-texts"
 import { SUB_HEAD_LINE } from "#theme"
-import { Row } from "../basics/row/row"
+import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
 
 export const CaregiverCertificate = (props) => {

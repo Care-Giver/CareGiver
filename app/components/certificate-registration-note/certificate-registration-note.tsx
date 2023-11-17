@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol14, PreReg12, PopSem12 } from "#components"

@@ -3,7 +3,7 @@ import React, { FC, useLayoutEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { ScreenRootView, InProgressBooking } from "#components"
+import { Screen, InProgressBooking } from "#components"
 import { petsitterReserves, crecheReserves } from "./dummy-data"
 
 export const MinseonTest: FC<StackScreenProps<NavigatorParamList, "minseon-test">> = observer(
@@ -43,14 +43,14 @@ export const MinseonTest: FC<StackScreenProps<NavigatorParamList, "minseon-test"
     console.log(inprogressReserves)
     console.log("inprogressReserves=========")
     return (
-      <ScreenRootView>
+      <Screen>
         {/* //? 진행중인 예약 */}
         <FlatList
           data={inprogressReserves}
           renderItem={({ item, index }) => <InProgressBooking reserveData={item} />}
         />
         {/* <InProgressBooking reserveData={inprogressReserves[0]} /> */}
-      </ScreenRootView>
+      </Screen>
     )
   },
 )

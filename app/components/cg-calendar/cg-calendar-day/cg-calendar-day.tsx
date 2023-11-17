@@ -1,80 +1,88 @@
-import * as React from "react"
+import React, { useMemo } from "react"
 import { View, Pressable, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
-import { CgCalendarDayProps } from "./cg-calendar-day.props"
-import { DISABLED, GIVER_CASUAL_NAVY, LBG, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  GIVER_CASUAL_NAVY_80,
+  LBG,
+  MIDDLE_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
+import { DateData } from "react-native-calendars"
+import { DayState } from "react-native-calendars/src/types"
+import { price as priceFormatter } from "../../../utils/format"
+
+type CgCalendarDayProps = {
+  date: string & DateData
+  state: DayState
+  selected: string[]
+  onPress: () => void
+  textDecorationLine: "none" | "line-through"
+  isAvailableDate: boolean
+  totalFee?: number
+}
 
 export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDayProps) {
-  const { date, state, selected, dates, month } = props
-  const [fee, setFee] = React.useState(null)
-  const [availableTime, setAvailableTime] = React.useState(false)
-  const textBgBdSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
+  const {
+    date,
+    state,
+    selected,
+    onPress,
+    textDecorationLine = "line-through",
+    isAvailableDate,
+    totalFee,
+  } = props
+
+  const textBgBdColor = useMemo(() => {
+    if (selected.includes(date.dateString)) {
       return GIVER_CASUAL_NAVY
     }
-    if (state == "today") {
+    if (state === "today") {
       return LBG
     }
     return "white"
-  }
-  const textColorSelector = ({ date, state }) => {
-    if (availableTime) {
-      if (date.dateString == selected) {
+  }, [selected, date, state])
+
+  const textColor = useMemo(() => {
+    if (isAvailableDate) {
+      if (selected.includes(date.dateString)) {
         return "white"
       }
-      if (state == "disabled") {
+      if (state === "disabled") {
         return MIDDLE_LINE
       }
       return "black"
     }
-    if (date.dateString == selected) {
+    if (selected.includes(date.dateString)) {
       return "white"
     }
-    if (state == "today") {
+    if (state === "today") {
       return GIVER_CASUAL_NAVY
     }
-    if (state == "disabled") {
+    if (state === "disabled") {
       return MIDDLE_LINE
     }
     return DISABLED
-  }
-  const feeTextColorSelector = ({ date, state }) => {
-    if (date.dateString == selected) {
-      return "#324C89"
+  }, [isAvailableDate, selected, date, state])
+
+  const feeTextColor = useMemo(() => {
+    if (selected.includes(date.dateString)) {
+      return GIVER_CASUAL_NAVY_80
     }
-    if (state == "today") {
+    if (state === "today") {
       return GIVER_CASUAL_NAVY
     }
-    if (state == "disabled") {
+    if (state === "disabled") {
       return "white"
     }
     return SUB_HEAD_LINE
-  }
-  React.useEffect(() => {
-    setFee(null)
-    //setAvailableTime(false)
-    const checkDate = ({ date, dates }) => {
-      {
-        /**현재 위탁에 Data가 없음 */
-      }
-      if (dates == undefined) {
-        return null
-      }
-      for (let i = 0; i < dates.length; i++) {
-        if (date.dateString == dates[i].startTime.substring(0, 10)) {
-          setFee(dates[i].fee)
-          setAvailableTime(true)
-          return true
-        } else continue
-      }
-      return null
-    }
-    checkDate({ date, dates })
-  }, [])
+  }, [selected, date, state])
 
   return (
-    <View
+    <Pressable
+      onPress={onPress}
       style={[
         styles.dayContainer,
         {
@@ -83,12 +91,13 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
         },
       ]}
     >
+      {/* 날짜 */}
       <View //text를 view로 감싸고 backgroundcolor와 borderradius를 줘야한다.
         style={[
           styles.dayTextContainer,
           {
             borderWidth: 1,
-            borderColor: textBgBdSelectior({ date, state }),
+            borderColor: textBgBdColor,
           },
         ]}
       >
@@ -96,28 +105,31 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
           style={[
             styles.dayText,
             {
-              fontWeight: availableTime ? "600" : "400",
-              backgroundColor: textBgBdSelectior({ date, state }),
-              color: textColorSelector({ date, state }),
+              fontWeight: isAvailableDate ? "600" : "400",
+              backgroundColor: textBgBdColor,
+              color: textColor,
+              textDecorationLine: textDecorationLine,
             },
           ]}
         >
           {date.day}
         </Text>
       </View>
+
+      {/* 가격 */}
       <View style={{ marginTop: 6 }}>
         <Text
           style={[
             styles.feeText,
             {
-              color: feeTextColorSelector({ date, state }),
-              fontWeight: date.dateString == selected ? "600" : "400",
+              color: feeTextColor,
+              fontWeight: selected.includes(date.dateString) ? "600" : "400",
             },
           ]}
         >
-          {fee}
+          {!!totalFee && priceFormatter(totalFee?.toString())}
         </Text>
       </View>
-    </View>
+    </Pressable>
   )
 })

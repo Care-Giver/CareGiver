@@ -29,6 +29,8 @@
 			</array>
 		</dict>
 		<dict>
+			<key>CFBundleIdentifier</key>
+			<string></string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
@@ -36,25 +38,81 @@
 				<string>kakaob6bb8137d93b8b5a3f7c565453235ba4</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>caregivernaverlogin</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0.0</string>
 	<key>KAKAO_APP_KEY</key>
- <string>b6bb8137d93b8b5a3f7c565453235ba4</string>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>kakaokompassauth</string> 
-    <string>storykompassauth</string>
-    <string>kakaolink</string>
-  </array>
+	<string>b6bb8137d93b8b5a3f7c565453235ba4</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kftc-bankpay</string>
+		<string>ispmobile</string>
+		<string>itms-apps</string>
+		<string>hdcardappcardansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>smshinhanansimclick</string>
+		<string>kb-acp</string>
+		<string>mpocket.online.ansimclick</string>
+		<string>ansimclickscard</string>
+		<string>ansimclickipcollect</string>
+		<string>vguardstart</string>
+		<string>samsungpay</string>
+		<string>scardcertiapp</string>
+		<string>lottesmartpay</string>
+		<string>lotteappcard</string>
+		<string>cloudpay</string>
+		<string>nhappcardansimclick</string>
+		<string>nonghyupcardansimclick</string>
+		<string>citispay</string>
+		<string>citicardappkr</string>
+		<string>citimobileapp</string>
+		<string>kakaotalk</string>
+		<string>payco</string>
+		<string>lpayapp</string>
+		<string>hanamopmoasign</string>
+		<string>wooripay</string>
+		<string>nhallonepayansimclick</string>
+		<string>hanawalletmembers</string>
+		<string>chaipayment</string>
+		<string>kb-auth</string>
+		<string>hyundaicardappcardid</string>
+		<string>com.wooricard.wcard</string>
+		<string>lmslpay</string>
+		<string>lguthepay-xpay</string>
+		<string>liivbank</string>
+		<string>supertoss</string>
+		<string>newsmartpib</string>
+		<string>ukbanksmartbanknonloginpay</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

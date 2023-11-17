@@ -1,49 +1,68 @@
-import { View, Text, Pressable, Image, FlexStyle } from "react-native"
+import { View, Pressable, Image, FlexStyle } from "react-native"
 import React from "react"
-import { SitterProfileCardProps } from "./sitter-profile-card.props"
 import { styles } from "./styles"
-import { PreMed16, PreReg12 } from "../basics/custom-texts/custom-texts"
-import { HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, DISABLED } from "#theme"
-import { images } from "#images"
+import { PreMed16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
+import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
+import { images } from "../../../assets/images"
+import { RatingReviewBox } from "../rating-review-box/rating-review-box"
+import { Petsitter } from "../../screens/_CLIENT/search-stack/search-result-screen/search-result-screen"
+import { UserEntity } from "../../services/axios/types/entity.types"
+import { CareGiverPetsitter } from "../../services/axios/types/creches.visitings.common.types"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
 
-import RatingReviewBox from "../rating-review-box/rating-review-box"
+export type PetsitterProfileCardPetsitterData = {
+  crecheId?: number
+  visitingId?: number
+} & Pick<Petsitter, "reviewCount" | "userNickname"> &
+  Pick<CareGiverPetsitter, "title" | "desc" | "star" | "defaultFee"> &
+  Pick<UserEntity, "profileImage">
 
-const ONPRESS_LIKED_BTN = () => {
-  alert("준비중인 서비스입니다.")
-}
-
-interface ExampleProps {
-  sitterData: {
-    id: string
-    image: string
-    name: string
-    profileImg: string
-    rating: number
-    review: number
-    title: string
-    desc: string
-  }
+interface SitterProfileCardProps {
+  sitterData: PetsitterProfileCardPetsitterData
   style?: FlexStyle
-  onPress: () => void //! 함수 props 의 type 으로써 적절치 못하나, 임시로 이렇게 처리한다
+  isFavorite: boolean
+  onPress: () => void
+  onLikePress: () => void
 }
 
-export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) => {
-  const { id, name, profileImg, rating, review, title, desc } = sitterData
+export const SitterProfileCard = ({
+  sitterData,
+  style,
+  onPress,
+  isFavorite,
+  onLikePress,
+}: SitterProfileCardProps) => {
+  const {
+    crecheId,
+    visitingId,
+    //
+    reviewCount,
+    userNickname,
+    //
+    title,
+    desc,
+    star,
+    //
+    profileImage,
+  } = sitterData
 
   return (
     <Pressable style={[styles.container, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}
-      {/* profile image */}
-      <Image style={styles.profileImg} source={{ uri: profileImg }} />
 
       <View style={styles.infoContainer}>
+        {/* profile image */}
+        <Image
+          style={styles.profileImg}
+          source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
+        />
         {/* info box - user name, ratings, descriptions */}
         <View style={styles.infoWrapper}>
           {/* sitter name */}
-          <PreMed16 text={name} color={HEAD_LINE} />
+          <PreMed16 text={userNickname} color={HEAD_LINE} />
 
           {/* rating, reviews */}
-          <RatingReviewBox rating={rating} review={review} style={{ marginTop: 4 }} />
+          <RatingReviewBox rating={star} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
           <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />
@@ -57,11 +76,15 @@ export const SitterProfileCard = ({ sitterData, style, onPress }: ExampleProps) 
             ellipsizeMode="tail"
           />
         </View>
-        {/* like button */}
-        {/* // TODO: alert로 변경 */}
-        <Pressable onPress={ONPRESS_LIKED_BTN}>
+      </View>
+      {/* like button */}
+      <View style={styles.likeContainer}>
+        <Pressable onPress={onLikePress}>
           {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
-          <Image style={styles.likeBtn} source={images.empty_heart} />
+          <Image
+            style={styles.likeBtn}
+            source={isFavorite ? images.filled_heart : images.empty_heart}
+          />
         </Pressable>
       </View>
     </Pressable>

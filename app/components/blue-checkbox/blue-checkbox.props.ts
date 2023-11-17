@@ -41,4 +41,9 @@ export interface BlueCheckboxProps {
    * Fires when the user tabs to change the value.
    */
   onToggle?: (newValue: boolean) => void
+
+  onPress: (boolean) => void
+
+  /** 체크박스 이미지 사이즈 */
+  imageSize?: number
 }

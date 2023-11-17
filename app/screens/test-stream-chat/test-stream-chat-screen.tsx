@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, PreBol14, PreReg12, ScreenRootView } from "#components"
+import { Button, PreBol14, PreReg12, Screen } from "#components"
 import { StreamChat, ConnectionOpen } from "stream-chat"
 import axios from "axios"
 import { GIVER_CASUAL_NAVY } from "#theme"
@@ -78,7 +78,7 @@ export const TestStreamChatScreen: FC<
   }
 
   return (
-    <ScreenRootView testID="TestStreamChat">
+    <Screen testID="TestStreamChat">
       <PreBol14 text="token" mt={100} />
       {token && <PreReg12 text={token} />}
       <PreBol14 text="connected user" mt={10} />
@@ -93,7 +93,7 @@ export const TestStreamChatScreen: FC<
         />
         <Button text="connectUser 테스트" onPress={onPress} />
       </View>
-    </ScreenRootView>
+    </Screen>
   )
 })
 

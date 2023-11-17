@@ -1,8 +1,7 @@
-import { View, Pressable, Image } from "react-native"
 import React from "react"
-import { Row } from "../basics/row/row"
-import { PopSem16, PreBol16, PreReg12 } from "../basics/custom-texts/custom-texts"
-
+import { View, Pressable, Image } from "react-native"
+import { Row } from "../_BASIC/row/row"
+import { PopSem16, PreBol16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "#images"
 import { FilterHeaderProps } from "./filter-header.props"
 
