@@ -103,7 +103,7 @@
     "reactotron-mst": "3.1.4",
     "reactotron-react-js": "^3.3.7",
     "reactotron-react-native": "5.0.1",
-    "stream-chat-react-native": "^5.15.1",
+    "stream-chat-react-native": "^5.21.0",
     "validate.js": "0.13.1"
   },
   "devDependencies": {
