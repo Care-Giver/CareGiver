@@ -27,6 +27,7 @@ import {
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
+import { TestStreamChatScreen } from "#screens"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -99,11 +100,12 @@ const ClientTabs = () => {
         component={FavoritesStack}
         options={{ tabBarLabel: tabLabel.favortie }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Chats"
-        component={ChatsStack}
+        // component={ChatsStack}
+        component={TestStreamChatScreen}
         options={{ tabBarLabel: tabLabel.chatting }}
-      /> */}
+      />
       <Tab.Screen
         name="Mypage"
         component={MypageStack}

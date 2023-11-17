@@ -132,10 +132,10 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
         const onPress = () => {
           // 아직 미구현된 탭들 핸들링 - 채팅(CG, CL) 탭, 통계(CG) 탭
           switch (label) {
-            //  채팅(CG, CL) 탭
-            case tabLabel.chatting:
-              alertModal("MVP", "채팅 기능은 아직 개발중입니다 🦮")
-              return
+            // //  채팅(CG, CL) 탭
+            // case tabLabel.chatting:
+            //   alertModal("MVP", "채팅 기능은 아직 개발중입니다 🦮")
+            //   return
 
             // 예약관리(CG) 탭
             case tabLabel.manage_booking:

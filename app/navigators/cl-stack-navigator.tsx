@@ -197,6 +197,7 @@ export type CLStackNavigatorParamList = {
     bondingTipsInfo: string
   }
   "test-iamport-payment-result-screen": any
+  "test-stream-chat-screen": any
 }
 
 const Stack = createNativeStackNavigator<CLStackNavigatorParamList>()
