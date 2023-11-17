@@ -267,8 +267,6 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
       return false
     }, [familyType, name, birthday, speciesName, sex, weight, isNeutralizated])
 
-    console.log("typeof weight", typeof weight)
-
     // 등록하기 버튼 클릭시 실행되는 함수 - 입력한 정보로 펫 추가
     const onPress = async () => {
       if (!isActivated) {
@@ -317,7 +315,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         } else {
           alertModal(
             "반려동물 등록 실패",
-            "알 수 없는 이유로 등록에 실패했습니다. 잠시후 다시 시도해주세요.",
+            `${res?.reason || "알 수 없는 이유로 등록에 실패했습니다. 잠시후 다시 시도해주세요."}`,
           )
           // 반려동물 등록에 실패하더라도, uploadURIS() 얻은 이미지 URI "imageUriList" 를 임시저장한다.
           // 유저가 다시 이 버튼을 클릭했을때 사용하기 위함이다. - 불필요한 uploadURIS() 호출을 막을 수 있다.

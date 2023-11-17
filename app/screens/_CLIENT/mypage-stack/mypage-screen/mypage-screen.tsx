@@ -28,14 +28,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     useShowBottomTab(navigation)
     const {
       userStore: { switchType, userDetailHandler, userAuth, loggedIn, userDetail },
-      petStore: { pets, petsHandler, hasPets },
+      petStore: { pets, hasPets },
     } = useStores()
-
-    /** 반려동물 리스트를 불러옵니다. */
-    useEffect(() => {
-      petsHandler()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
     const handleMyPetsPress = () => {

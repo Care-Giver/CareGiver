@@ -8,6 +8,7 @@ import { DivisionLine } from "../../../_BASIC/division-line/division-line"
 import { Row } from "../../../_BASIC/row/row"
 import { Pet, PetSex } from "#models"
 import { HandleType } from "../../../../services/axios/types/creches.visitings.common.types"
+import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 
 interface SelectedPetCardProps {
   style?: StyleProp<ViewStyle>
@@ -55,7 +56,14 @@ export const SelectedPetCard = (props: SelectedPetCardProps) => {
     <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
       <TouchableOpacity style={styles.infoBox} onPress={onPress}>
-        <Image style={styles.image} source={images.default_pet_image_60} />
+        <Image
+          style={styles.image}
+          source={profileImageUriHandler(
+            images.default_pet_image_60,
+            "medium",
+            petData?.images.length > 0 ? petData?.images[0] : null,
+          )}
+        />
         <View style={styles.infoContainer}>
           {/*//? 펫 이름 */}
           <PreBol16 text={`${name}`} color={SUB_HEAD_LINE} />

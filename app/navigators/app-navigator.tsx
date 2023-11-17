@@ -167,6 +167,7 @@ const CareGiverTabs = () => {
 const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType, userAuth },
+    petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
   } = useStores()
@@ -175,13 +176,19 @@ const AllTabs = observer(function AllTabs() {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
     axios.defaults.headers.common.Accept = "Application/json"
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (type === Type.CARE_GIVER) {
-      fetchPetsitter() //! 중요: CARE_GIVER type 이 될때, petsitter 정보를 불러온다.
+      fetchPetsitter() //! 중요: CARE_GIVER 모드이면, petsitter 정보를 불러온다.
       !hasService && fetchService() // 펫시터 등록시 필요하므로, 서비스 객체 요청
       !hasAmenity && fetchAmenity() // 펫시터 등록시 필요하므로, 편의시설 객체 요청
+    } else if (type === Type.CLIENT) {
+      petsHandler() //! 중요: CLIENT 모드이면, 반려동물 리스트를 불러옵니다.
+    } else {
+      console.warn("예외 발생 - app-navigator.tsx line 190 참고")
+      console.log("type", type)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])

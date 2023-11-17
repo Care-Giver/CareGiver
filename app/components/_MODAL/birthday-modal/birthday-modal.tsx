@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { styles } from "./styles"
@@ -6,10 +7,11 @@ import { HEAD_LINE, MIDDLE_LINE, ERROR_RED, SUCCESS_BLUE, BODY } from "#theme"
 import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components"
 import { useForm, Controller } from "react-hook-form"
 import Modal from "react-native-modal"
+import { isExists } from "date-fns"
 
 //*hook form 위한 form 정해놓기
 type BirthdayForm = {
-  birthday: number
+  birthday: string
 }
 
 export interface BirthdayModalProps {
@@ -104,9 +106,22 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
                   const pattern = /^[0-9]+$/
                   if (!pattern.test(String(value))) {
                     return "* 숫자만 입력해주세요."
-                  } else if (String(value).length < 8) {
-                    return "* 8자리 숫자로 입력해주세요."
-                  } else return null
+                  }
+
+                  switch (String(value).length) {
+                    case 8:
+                      const year = Number(String(value).substring(0, 4))
+                      const month = Number(String(value).substring(4, 6)) - 1 //! Date object 에서 month 는 0 부터 시작한다.
+                      const date = Number(String(value).substring(6, 8))
+                      if (isExists(year, month, date)) {
+                        return null
+                      } else {
+                        return `* 유효하지 않은 생년월일 입니다: ${year}년 ${month + 1}월 ${date}일`
+                      }
+
+                    default:
+                      return "* 8자리 숫자로 입력해주세요."
+                  }
                 },
               },
             }}
