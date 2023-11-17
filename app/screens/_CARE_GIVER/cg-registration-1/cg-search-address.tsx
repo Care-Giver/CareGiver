@@ -13,10 +13,11 @@ export interface CgSearchAddressProps {
    */
   style?: StyleProp<ViewStyle>
   onSelected: (data: OnCompleteParams) => void
+  previousAddress?: string
 }
 
 export const CgSearchAddress = observer(function CgSearchAddress(props: CgSearchAddressProps) {
-  const { style, onSelected } = props
+  const { style, onSelected, previousAddress } = props
   const allStyles = Object.assign({}, styles.root, style)
 
   return (
@@ -27,6 +28,10 @@ export const CgSearchAddress = observer(function CgSearchAddress(props: CgSearch
           등록해주신 위치를 기반으로 최대 30km 이내의 반려인 분들이 펫시터님을 검색할 수 있습니다!
         </PreReg12>
       </View>
+
+      {!!previousAddress && (
+        <PreBol12 text={`등록된 주소: ${previousAddress}`} color={SUB_HEAD_LINE} mt={8} ml={12} />
+      )}
 
       <Postcode
         style={{ width: "100%", height: "80%", paddingVertical: 20 }}

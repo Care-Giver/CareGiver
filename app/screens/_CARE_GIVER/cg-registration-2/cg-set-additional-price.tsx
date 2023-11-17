@@ -18,12 +18,13 @@ import {
   PreReg12,
 } from "../../../components/_BASIC/custom-texts/custom-texts"
 import { UnderlineText } from "../../../components/underline-text/underline-text"
-import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE, WIDTH } from "#theme"
+import { BODY, HEAD_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { TextInput } from "react-native-gesture-handler"
 import { price as priceFormatter } from "../../../utils/format"
 import { DivisionLine } from "../../../components/_BASIC/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
 import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
+import _ from "lodash"
 
 export type AdditionalPrice = {
   Small: number
@@ -43,12 +44,17 @@ export interface CgSetAdditionalPriceProps {
   handleType: HandleType[]
 }
 
+const SORT_SCORE = {
+  Small: 0,
+  Medium: 1,
+  Large: 2,
+}
+
 export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
   props: CgSetAdditionalPriceProps,
 ) {
   const { style, additionalPrice, setAdditionalPrice, handleType } = props
   const allStyles = Object.assign({}, styles.root, style)
-  console.log("handleType", handleType)
 
   return (
     <ScrollView style={allStyles}>
@@ -98,51 +104,53 @@ export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
         }}
       >
         {handleType.length !== 0 &&
-          handleType.map((value, index) => {
-            let 강아지_크기 = ""
-            switch (value) {
-              case "Small":
-                강아지_크기 = "소형"
-                break
-              case "Medium":
-                강아지_크기 = "중형"
-                break
-              case "Large":
-                강아지_크기 = "대형"
-                break
-            }
+          _.cloneDeep(handleType) //! 중요! step3() 메서드에서 handleType array 를 사용하므로, sort 는 clone 이후 값에 적용해야 readonly error 를 피할 수 있다.
+            .sort((a, b) => SORT_SCORE[a] - SORT_SCORE[b])
+            .map((value, index) => {
+              let 강아지_크기 = ""
+              switch (value) {
+                case "Small":
+                  강아지_크기 = "소형"
+                  break
+                case "Medium":
+                  강아지_크기 = "중형"
+                  break
+                case "Large":
+                  강아지_크기 = "대형"
+                  break
+              }
 
-            return (
-              <View key={index}>
-                <PreMed14
-                  color={SUB_HEAD_LINE}
-                  text={`${강아지_크기}견 추가 요금(원)`}
-                  style={styles.inputTitle}
-                />
-                <View style={commonStyles.textInput}>
-                  <TextInput
-                    keyboardType="numeric"
-                    returnKeyType="done"
-                    placeholder={`${강아지_크기}견 추가 요금을 입력해주세요.`}
-                    value={
-                      additionalPrice[value] === 0
-                        ? null
-                        : priceFormatter(additionalPrice[value].toString())
-                    }
-                    onChangeText={(text) => {
-                      setAdditionalPrice({
-                        ...additionalPrice,
-                        [value]: Number(text.replace(/,/g, "")),
-                      })
-                    }}
-                    placeholderTextColor={BODY}
-                    style={{ fontFamily: POPPINS_REGULAR }}
+              return (
+                <View key={index}>
+                  <PreMed14
+                    color={SUB_HEAD_LINE}
+                    text={`${강아지_크기}견 추가 요금(원)`}
+                    style={styles.inputTitle}
                   />
+                  <View style={commonStyles.textInput}>
+                    <TextInput
+                      keyboardType="numeric"
+                      returnKeyType="done"
+                      placeholder={`${강아지_크기}견 추가 요금을 입력해주세요.`}
+                      value={
+                        additionalPrice[value] === 0
+                          ? null
+                          : priceFormatter(additionalPrice[value].toString())
+                      }
+                      onChangeText={(text) => {
+                        setAdditionalPrice({
+                          ...additionalPrice,
+                          [value]: Number(text.replace(/,/g, "")),
+                        })
+                      }}
+                      placeholderTextColor={BODY}
+                      style={{ fontFamily: POPPINS_REGULAR }}
+                    />
+                  </View>
+                  <DivisionLine color={MIDDLE_LINE} />
                 </View>
-                <DivisionLine color={MIDDLE_LINE} />
-              </View>
-            )
-          })}
+              )
+            })}
       </KeyboardAvoidingView>
     </ScrollView>
   )

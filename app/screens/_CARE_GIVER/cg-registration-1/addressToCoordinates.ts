@@ -24,13 +24,24 @@ export async function addressToCoordinates(address: OnCompleteParams["address"])
       return { latitude: 37.2955072, longitude: 126.83539 } //! 에러시, 한양대 에리카 주소 반환
     }
 
+    if (response.data.documents.length === 0) {
+      alertModal(
+        "주소➡️좌표 변환 에러 003",
+        "예상치 못한 문제로 인해, 해당 주소의 좌표를 알 수 없습니다. 다른 주소를 입력해주세요.",
+      )
+      return { latitude: 37.2955072, longitude: 126.83539 } //! 에러시, 한양대 에리카 주소 반환
+    }
+
     const { x, y } = response.data.documents[0].address
     const latitude = parseFloat(y) // 위도
     const longitude = parseFloat(x) // 경도
     return { latitude, longitude }
   } catch (error) {
     console.error(error)
-    alertModal("주소 변환 에러 002", "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.")
+    alertModal(
+      "주소➡️좌표 변환 에러 002",
+      "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.",
+    )
     return { latitude: 37.2955072, longitude: 126.83539 } //! 에러시, 한양대 에리카 주소 반환
   }
 }
@@ -51,6 +62,7 @@ export async function coordinatesToAddress(body: Location) {
 
   try {
     const response = await axios.get(url, { headers })
+    console.log("response", response)
     if (!response.data) {
       alertModal(
         "좌표➡️주소 변환 에러 001",
@@ -58,6 +70,15 @@ export async function coordinatesToAddress(body: Location) {
       )
       return "한양대학로 55" //! 에러시, 한양대 에리카 주소 반환
     }
+
+    if (response.data.documents.length === 0) {
+      alertModal(
+        "좌표➡️주소 변환 에러 003",
+        "예상치 못한 문제로 인해, 현재 좌표의 주소를 알 수 없습니다. 다른 주소를 입력해주세요.",
+      )
+      return "한양대학로 55" //! 에러시, 한양대 에리카 주소 반환
+    }
+
     return response.data.documents[0].address_name
   } catch (error) {
     console.error(error)

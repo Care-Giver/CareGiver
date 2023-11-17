@@ -4,17 +4,13 @@ import { VistingPetsitter, getVisitingCareGiver } from "../../services/axios/vis
 import { alertModal } from "../../utils/alert-modal"
 import { ServiceType } from "../review/review"
 import { CrechePetsitter, getCrecheCareGiver } from "#axios"
-import { Petsitter } from "../../services/axios/types/creches.visitings.common.types"
 import { StateString } from "#components"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 
 interface PetsitterModel extends VistingPetsitter, CrechePetsitter {}
 
-interface DraftPetsitterModel extends Petsitter {
-  services: number[]
-  amenities: number[]
-}
+type DraftPetsitterModel = PetsitterModel
 
 /**
  * 펫시터 프로필과 관련된 정보들을 관리하는 모델입니다.
@@ -106,14 +102,14 @@ export const PetsitterStoreModel = types
       // draftPetsitter - state1
       if (
         !self.draftPetsitter?.address &&
-        !self.draftPetsitter?.services &&
-        !self.draftPetsitter?.amenities
+        (!self.draftPetsitter?.serviceVisiting || !self.draftPetsitter.serviceCreche) &&
+        (!self.draftPetsitter?.visitingAmenities || !self.draftPetsitter?.crecheAmenities)
       ) {
         state1 = "todo"
       } else if (
         self.draftPetsitter?.address !== "" &&
-        !!self.draftPetsitter?.services &&
-        !!self.draftPetsitter?.amenities
+        (!!self.draftPetsitter?.serviceVisiting || !!self.draftPetsitter.serviceCreche) &&
+        (!!self.draftPetsitter?.visitingAmenities || !!self.draftPetsitter?.crecheAmenities)
       ) {
         state1 = "done"
       } else {

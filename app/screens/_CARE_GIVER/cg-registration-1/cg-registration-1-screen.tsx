@@ -37,7 +37,6 @@ export const CgRegistration1Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-1-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
   const isKeyboardShown = useKeyboardShown()
-  console.log("isKeyboardShown", isKeyboardShown)
 
   // MST store 를 가져옵니다.
   const {
@@ -56,17 +55,35 @@ export const CgRegistration1Screen: FC<
     },
     etcStore: { service, amenity },
   } = useStores()
-  const services = 방문펫시터 ? service.visitingServices : service.crecheServices || []
-  const defaultServices = services.slice(0, 3)
-  const additionalServices = services.slice(3, services.length)
+  const previousAddress = draftPetsitter?.address || petsitter?.address
+  const allServices = 방문펫시터 ? service.visitingServices : service.crecheServices || []
+  const defaultServices = allServices.slice(0, 3)
+  const additionalServices = allServices.slice(3, allServices.length)
+  const targetService = 방문펫시터 ? "serviceVisiting" : "serviceCreche"
+  const targetAmenity = 방문펫시터 ? "visitingAmenities" : "crecheAmenities"
+  const previousAdditionalServices = hasDraftPetsitterProfile
+    ? draftPetsitter?.[targetService]
+      ? draftPetsitter?.[targetService].filter(
+          (item) => !defaultServices.map((dItem) => dItem.id).includes(item.id),
+        )
+      : []
+    : petsitter?.serviceVisiting.filter(
+        (item) => !defaultServices.map((dItem) => dItem.id).includes(item.id),
+      )
   const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<
     Array<VisitingService | CrecheService>
-  >([])
-  // const submitText = useMemo(() => `총 ${setselectedAdditionalServices.length}개 등록`, [selectedOptions.length])
-  const amenities = 방문펫시터 ? amenity.visitingAmenities : amenity.crecheAmenities || []
+    // @ts-ignore
+  >(previousAdditionalServices || [])
+  const amenities = amenity[targetAmenity] || []
+  const previousAmenities = hasDraftPetsitterProfile
+    ? draftPetsitter[targetAmenity]
+    : petsitter[targetAmenity]
   const [selectedAmenities, setSelectedAmenities] = useState<
     Array<VisitingAmenity | CrecheAmenity>
-  >([])
+    // @ts-ignore
+  >(previousAmenities || [])
+
+  // const submitText = useMemo(() => `총 ${setselectedAdditionalServices.length}개 등록`, [selectedOptions.length])
 
   // 기본주소
   const [address, setAddress] = useState<OnCompleteParams>(null)
@@ -216,7 +233,6 @@ export const CgRegistration1Screen: FC<
       ...selectedAdditionalServices.map((service) => service.id),
     ]
     const amenityIds = selectedAmenities.map((amenity) => amenity.id)
-
     let data = {}
     //! 마지막단계 - 방문 펫시팅 정보 UPDATE
     if (방문펫시터) {
@@ -227,7 +243,15 @@ export const CgRegistration1Screen: FC<
       }
 
       if (hasDraftPetsitterProfile) {
-        setDraftPetsitter({ ...draftPetsitter, ...data }, "visiting")
+        setDraftPetsitter(
+          {
+            ...draftPetsitter,
+            address: _address,
+            serviceVisiting: selectedAdditionalServices,
+            visitingAmenities: selectedAmenities,
+          },
+          "visiting",
+        )
         navigate("cg-registration-2-screen")
         return
       }
@@ -264,7 +288,15 @@ export const CgRegistration1Screen: FC<
       }
 
       if (hasDraftPetsitterProfile) {
-        setDraftPetsitter({ ...draftPetsitter, ...data }, "creche")
+        setDraftPetsitter(
+          {
+            ...draftPetsitter,
+            address: _address,
+            serviceCreche: selectedAdditionalServices,
+            crecheAmenities: selectedAmenities,
+          },
+          "creche",
+        )
         navigate("cg-registration-2-screen")
         return
       }
@@ -286,27 +318,35 @@ export const CgRegistration1Screen: FC<
     }
   }
 
-  const handleOptionPressService = useCallback((option) => {
-    setSelectedAdditionalServices((prev) => [...prev, option])
-  }, [])
+  const handleOptionPressService = useCallback(
+    (option) => {
+      if (selectedAdditionalServices.map((item) => item.id).includes(option?.id)) return
+      setSelectedAdditionalServices((prev) => [...prev, option])
+    },
+    [selectedAdditionalServices],
+  )
 
   const handleXPressService = useCallback((option) => {
-    setSelectedAdditionalServices((prev) => prev.filter((value) => value !== option))
+    setSelectedAdditionalServices((prev) => prev.filter((value) => value.id !== option.id))
   }, [])
 
-  const handleOptionPressAmenity = useCallback((option) => {
-    setSelectedAmenities((prev) => [...prev, option])
-  }, [])
+  const handleOptionPressAmenity = useCallback(
+    (option) => {
+      if (selectedAmenities.map((item) => item.id).includes(option?.id)) return
+      setSelectedAmenities((prev) => [...prev, option])
+    },
+    [selectedAmenities],
+  )
   const handleXPressAmenity = useCallback((option) => {
-    setSelectedAmenities((prev) => prev.filter((value) => value !== option))
+    setSelectedAmenities((prev) => prev.filter((value) => value.id !== option.id))
   }, [])
 
   return (
     <Screen>
       <ScreenHeader
-        navigation={navigation}
-        onPressSaveExit={onPressSaveExit}
-        hasDraftPetsitterProfile={hasDraftPetsitterProfile}
+      // navigation={navigation}
+      // onPressSaveExit={onPressSaveExit}
+      // hasDraftPetsitterProfile={hasDraftPetsitterProfile}
       />
       <StateHeader stateList={stateList} style={{ marginTop: 10 }} />
       <FlatList
@@ -328,6 +368,7 @@ export const CgRegistration1Screen: FC<
                   setAddress(data)
                   setCurrentStep(currentStep + 1)
                 }}
+                previousAddress={previousAddress}
               />
             )}
             {currentStep === 2 && (
@@ -386,7 +427,8 @@ export const CgRegistration1Screen: FC<
  * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
  * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
  */
-export const ScreenHeader = ({ route, onPressSaveExit, hasDraftPetsitterProfile }) => {
+export const ScreenHeader = (props) => {
+  // const { route, onPressSaveExit, hasDraftPetsitterProfile }= props
   return (
     <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
       {/* 뒤로가기 버튼 */}

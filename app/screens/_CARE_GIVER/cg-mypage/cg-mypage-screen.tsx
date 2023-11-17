@@ -26,6 +26,7 @@ import { useShowBottomTab } from "../../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
+import _ from "lodash"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -137,7 +138,11 @@ export const CgMypageScreen: FC<
                   textColor={GIVER_CASUAL_NAVY}
                   style={styles.petsitterBadge}
                 />
-                <PreReg14 text={petsitter?.desc || ""} color={SUB_HEAD_LINE} ml={8} />
+                <PreReg14
+                  text={_.truncate(petsitter?.desc || "", { length: 18 })}
+                  color={SUB_HEAD_LINE}
+                  ml={8}
+                />
               </Row>
             </TouchableOpacity>
           </View>

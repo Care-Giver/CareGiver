@@ -100,12 +100,12 @@ const ClientTabs = () => {
         component={FavoritesStack}
         options={{ tabBarLabel: tabLabel.favortie }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Chats"
         // component={ChatsStack}
         component={TestStreamChatScreen}
         options={{ tabBarLabel: tabLabel.chatting }}
-      />
+      /> */}
       <Tab.Screen
         name="Mypage"
         component={MypageStack}

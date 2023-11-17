@@ -13,7 +13,6 @@ import { CgSetSelfIntro } from "./cg-set-self-intro"
 // import { CgSetCertificate } from "./cg-set-certificate"
 import { useKeyboardShown } from "../../../utils/hooks/use-keyboard-shown"
 import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
-import { delay } from "../../../utils/delay"
 
 export const CgRegistration3Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-3-screen">
@@ -24,14 +23,13 @@ export const CgRegistration3Screen: FC<
     petsitterStore: {
       petsitter,
       serviceTypeKorean,
+      setServiceType,
       setVistingPetsitter,
       setCrechePetsitter,
       hasDraftPetsitterProfile,
       draftPetsitter,
       draftServiceTypeKorean,
-      setDraftPetsitter,
       방문펫시터,
-      fetchPetsitter,
       regState,
       resetDraftPetsitter,
     },
@@ -144,42 +142,49 @@ export const CgRegistration3Screen: FC<
       title,
       desc,
     }
+    const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
     if (hasDraftPetsitterProfile) {
       if (_.includes(regState, "todo", undefined)) {
         alertModal("등록 거절", "모든  단계를 작성해주세요.")
         return
       }
-
       const creator = 방문펫시터 ? createVisiting : createCreche
-
+      const targetService = 방문펫시터 ? "serviceVisiting" : "serviceCreche"
+      const targetAmenity = 방문펫시터 ? "visitingAmenities" : "crecheAmenities"
       // @ts-ignore
-      creator({ ...draftPetsitter, ...data, timeWithPet: 0, userId: userDetail.id }).then(
-        ({ isSuccess }) => {
-          if (isSuccess) {
-            // TODO: fetchPetsitter() 대신, 수정된 API 의 리턴값 - "생성된 펫시터 객체" 을 사용하여 setServiceType, setCrechePetsitter 에 할당한다.
-            fetchPetsitter().then((result) => {
-              if (result === true) {
-                // navigate("cg-registration-1-screen")
-                navigation.replace("cg-mypage-screen")
-                resetDraftPetsitter() // draftPetsitter 초기화
-              } else {
-                alertModal("등록 실패", "fetchPetsitter 실패")
-              }
-            })
-          } else {
-            alertModal(
-              "등록 실패",
-              `${draftServiceTypeKorean} 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.`,
-            )
-          }
-        },
-      )
+      creator({
+        ..._.omit(draftPetsitter, [
+          "serviceVisiting",
+          "serviceCreche",
+          "visitingAmenities",
+          "crecheAmenities",
+        ]),
+        services: draftPetsitter[targetService].map((service) => service.id),
+        amenities: draftPetsitter[targetAmenity].map((amenity) => amenity.id),
+        ...data,
+        timeWithPet: 0,
+        userId: userDetail.id,
+      }).then(({ isSuccess, visiting, creche }) => {
+        if (isSuccess) {
+          const createdData = 방문펫시터 ? visiting : creche
+          const serviceType = 방문펫시터 ? "visiting" : "creche"
+          // "생성된 펫시터 객체" 를 setServiceType, setCrechePetsitter 에 할당한다.
+          setServiceType(serviceType)
+          mstSetter(createdData)
+          navigation.replace("cg-mypage-screen")
+          resetDraftPetsitter()
+        } else {
+          alertModal(
+            "등록 실패",
+            `${draftServiceTypeKorean} 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.`,
+          )
+        }
+      })
       return
     }
 
     const updater = 방문펫시터 ? updateVisiting : updateCreche
-    const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
     //! 마지막단계 - 펫시팅 정보 UPDATE
     updater(petsitter.id, data).then(({ isSuccess, visiting, creche }) => {
       if (isSuccess) {

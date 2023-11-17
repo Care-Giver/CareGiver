@@ -210,9 +210,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     //* 반려동물선택 - 선택된 반려동물
     const [selectedPets, setSelectedPets] = useState<Pet[]>([])
-
-    console.log("selectedPets", selectedPets)
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const hasSelectedPetsAndDropdownClosed = selectedPets.length > 0 && !isDropdownOpen
 

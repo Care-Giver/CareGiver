@@ -26,12 +26,12 @@ interface CreateVisitingRequestBody
   amenities: number[] // VisitingAmenity 객체 id[], //! 빈 배열도 OK
 }
 interface CreateVisitingResponse extends GeneralResponse {
-  visitingId: number
+  visiting: VistingPetsitter // 생성된 방문 객체
 }
 interface CreateVisitingResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
-  visitingId?: number // 성공시, 생성된 방문장소의 id (visitingId)
+  visiting?: VistingPetsitter // 성공시, 생성된 방문 객체
 }
 /**
  * [케어기버 전용 API]
@@ -53,7 +53,7 @@ export const createVisiting = async (
 
     return {
       isSuccess: true,
-      visitingId: response.data.visitingId,
+      visiting: response.data.visiting,
     }
   } catch (error) {
     console.error("catch 에러!!! - createVisiting", error)

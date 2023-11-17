@@ -33,7 +33,6 @@ export const CgCalendarScreen: FC<
     userStore: { userAuth, userDetail },
     petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, petsitter },
   } = useStores()
-  console.log("userAuth.token", userAuth.token)
 
   useFocusEffect(
     useCallback(() => {
@@ -82,14 +81,14 @@ export const CgCalendarScreen: FC<
   >([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDate[]>([])
   const [selectedDates, setSelectedDates] = useState<string[]>([])
-  console.log("selected", selectedDates)
-  console.log(
-    ">>>",
-    _.intersection(
-      visitingAvailableTimes.map((item) => item.date),
-      selectedDates,
-    ),
-  )
+  // console.log("selected", selectedDates)
+  // console.log(
+  //   ">>>",
+  //   _.intersection(
+  //     visitingAvailableTimes.map((item) => item.date),
+  //     selectedDates,
+  //   ),
+  // )
 
   return (
     <Screen testID="CgCalendar">

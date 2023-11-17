@@ -22,12 +22,12 @@ interface CreateCrecheRequestBody
   amenities: number[] // CrecheAmenity 객체 id[], //! 빈 배열도 OK
 }
 interface CreateCrecheResponse extends GeneralResponse {
-  crecheId: number
+  creche: CrechePetsitter // 생성된 위탁 객체
 }
 interface CreateCrecheResult {
   isSuccess: boolean // 성공여부
   reason?: string // 실패시, 실패이유
-  crecheId?: number // 성공시, 생성된 위탁장소의 id (crecheId)
+  creche?: CrechePetsitter // 성공시, 생성된 위탁 객체
 }
 /**
  * [케어기버 전용 API]
@@ -47,7 +47,7 @@ export const createCreche = async (body: CreateCrecheRequestBody): Promise<Creat
 
     return {
       isSuccess: true,
-      crecheId: response.data.crecheId,
+      creche: response.data.creche,
     }
   } catch (error) {
     console.error("catch 에러!!! - createCreche", error)

@@ -46,7 +46,7 @@ export const RegisterButtonsContainer = (props: RegisterButtonsContainerProps) =
       // onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
       renderItem={({ item }) => (
         <RegistrationButton
-          isActive={alwaysActive ? true : !!selectedOptions.find((value) => value === item)}
+          isActive={alwaysActive ? true : !!selectedOptions.find((value) => value.id === item.id)}
           text={item.name}
           onPress={() => handleOptionPress(item)}
           onXPress={() => handleXPress(item)}
