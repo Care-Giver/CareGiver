@@ -55,7 +55,7 @@ export const SelectedPetCard = (props: SelectedPetCardProps) => {
   return (
     <View style={[styles.root, style]}>
       {/*//? 이름, 사이즈, 종, 나이, 성별 */}
-      <TouchableOpacity style={styles.infoBox} onPress={onPress}>
+      <TouchableOpacity style={styles.infoBox} onPress={onPress} disabled={!onPress}>
         <Image
           style={styles.image}
           source={profileImageUriHandler(

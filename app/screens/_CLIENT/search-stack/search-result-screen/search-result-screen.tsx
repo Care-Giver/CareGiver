@@ -85,6 +85,7 @@ import {
 import Slider from "@react-native-community/slider"
 import _ from "lodash"
 import { ratingRound } from "../../../../utils/format"
+import { alertModal } from "../../../../utils/alert-modal"
 
 export type Petsitter = Visiting | Creche
 
@@ -543,9 +544,9 @@ export const SearchResultScreen: FC<
                       endDate: 위탁검색 ? endDate : null,
                     })
                   }}
-                  // TODO: 찜하기 기능 구현
                   onLikePress={() => {
-                    //
+                    alertModal("개발중", "🏗️ 즐겨찾기 추가 기능은 개발중입니다.")
+                    // TODO: 찜하기 기능 구현
                   }}
                   style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
                 />
