@@ -79,7 +79,7 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
       {/* 날짜 */}
       <View //text를 view로 감싸고 backgroundcolor와 borderradius를 줘야한다.
         style={[
-          styles.dayTextContainer,
+          styles.dayView,
           {
             borderWidth: 1,
             borderColor: dayViewBorderColor,

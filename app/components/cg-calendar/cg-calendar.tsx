@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useCallback } from "react"
-import { StyleProp, View, Image, ViewStyle } from "react-native"
+import { StyleProp, View, Image, ViewStyle, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Calendar } from "react-native-calendars"
 import { images } from "#images"
@@ -7,10 +7,9 @@ import { styles } from "./styles"
 import "./localeConfig"
 import { CgCalendarDay } from "./cg-calendar-day/cg-calendar-day"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
-import { POPPINS_REGULAR } from "#fonts"
+import { POPPINS_SEMIBOLD } from "#fonts"
 import { CrecheAvailableDate, GroupedVisitingAvailableTimesByDate } from "#axios"
 import { ServiceTypeKorean, useStores } from "#models"
-import _ from "lodash"
 import dayjs from "dayjs"
 import { subMinutes } from "date-fns"
 
@@ -96,8 +95,8 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         }
         monthFormat={"MMMM"}
         theme={{
-          textMonthFontFamily: POPPINS_REGULAR,
-          textMonthFontWeight: "bold",
+          textMonthFontFamily: POPPINS_SEMIBOLD,
+          textMonthFontWeight: Platform.select({ ios: "bold", android: null }),
           monthTextColor: GIVER_CASUAL_NAVY,
           textMonthFontSize: 20,
         }}

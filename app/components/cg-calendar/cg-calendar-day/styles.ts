@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     zIndex: -1,
     boxShadow: "0px 0px 100px rgba(10, 100, 79, 0.5)",
   },
-  dayTextContainer: {
+  dayView: {
     borderColor: GIVER_CASUAL_NAVY,
     borderRadius: 4,
     marginTop: 8,

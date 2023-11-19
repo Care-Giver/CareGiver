@@ -1,12 +1,12 @@
 import React from "react"
-import { StyleSheet, View, Image, ViewStyle, Pressable } from "react-native"
+import { StyleSheet, View, Image, ViewStyle, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Calendar, DateData } from "react-native-calendars"
 import { images } from "#images"
 import "./localeConfig"
 import { ClientCalendarDay } from "./client-calendar-day/client-calendar-day"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_40, SHADOW_1 } from "#theme"
-import { POPPINS_REGULAR } from "#fonts"
+import { POPPINS_SEMIBOLD } from "#fonts"
 
 interface ClientCalendarProps {
   style: ViewStyle
@@ -30,24 +30,21 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
         )}
         monthFormat={"MMMM"}
         theme={{
-          textMonthFontFamily: POPPINS_REGULAR,
-          textMonthFontWeight: "bold",
+          textMonthFontFamily: POPPINS_SEMIBOLD,
+          textMonthFontWeight: Platform.select({ ios: "bold", android: null }),
           monthTextColor: GIVER_CASUAL_NAVY,
           textMonthFontSize: 20,
         }}
         dayComponent={({ date, state }) => (
-          <Pressable
+          <ClientCalendarDay
             onPress={() => {
               onDayPressProp(date)
             }}
-          >
-            <ClientCalendarDay
-              date={date}
-              state={state}
-              selected={selectedDate}
-              dateRange={dateRange}
-            />
-          </Pressable>
+            date={date}
+            state={state}
+            selected={selectedDate}
+            dateRange={dateRange}
+          />
         )}
         style={[styles.calendar, SHADOW_1]}
       />
