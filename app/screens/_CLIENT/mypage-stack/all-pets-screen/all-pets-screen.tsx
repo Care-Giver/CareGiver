@@ -107,7 +107,7 @@ export const AllPetsScreen: FC<StackScreenProps<NavigatorParamList, "all-pets-sc
           labelTextColor={GIVER_CASUAL_NAVY}
           isActivated={isActivated}
           onPress={() => {
-            navigation.navigate("add-pet-screen")
+            navigation.replace("add-pet-screen")
           }}
         />
 

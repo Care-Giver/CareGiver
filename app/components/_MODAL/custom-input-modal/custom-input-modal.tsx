@@ -32,6 +32,7 @@ export interface CustomInputModalProps {
   validateFunction?: (arg: any) => any
   handleModalHide: () => any
   handleInput: (arg: any) => any
+  defaultValue?: string
   rules?: UseControllerProps["rules"]
   textInputProps?: TextInputProps
 }
@@ -45,6 +46,7 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
     controlMode,
     validateFunction,
     handleInput,
+    defaultValue = "",
     placeholderInput = "",
     rules,
     textInputProps,
@@ -78,14 +80,13 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
   } = useForm<NicknameForm>({
     mode: "onChange",
     defaultValues: {
-      nickname: "",
+      nickname: defaultValue,
     },
   })
 
   const onNicknameSubmit = (data: NicknameForm) => {
     handleInput(data.nickname)
     handleModalHide()
-    reset()
   }
 
   return (
@@ -96,7 +97,6 @@ export const CustomInputModal = observer(function CustomInputModal(props: Custom
       isVisible={visibleState}
       //*모달 바깥쪽 터치시 모달창 사라지는데에 사용
       onBackdropPress={() => {
-        reset()
         handleModalHide()
       }}
       //* 키보드 자동 회피

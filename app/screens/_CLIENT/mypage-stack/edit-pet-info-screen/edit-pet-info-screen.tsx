@@ -96,9 +96,9 @@ export const EditPetInfoScreen: FC<
   const neutralizated = pet.isNeutralizated === true ? "함" : "안 함"
 
   //*수정 불가 상태 (수정(연필) 버튼 보이는 상태)로 만들기
-  const notEditable = () => {
+  const notEditable = useCallback(() => {
     navigation.setParams({ editable: false })
-  }
+  }, [navigation])
 
   //*anyChangeMade 를 true 로 바꾸기
   const isChangeMade = () => {
@@ -202,7 +202,7 @@ export const EditPetInfoScreen: FC<
   const handleQuitEditPress = () => {
     navigation.setParams({ isBackPressed: false })
     setHandleGoBack(false)
-    goBack()
+    notEditable()
     navigation.setParams({ editable: false })
     setAnyChangeMade(false)
     //*화면속 바뀐 정보 초기화
@@ -210,6 +210,8 @@ export const EditPetInfoScreen: FC<
     setBirthday(pet.birthday)
     setWeight(pet.weight)
     setText(pet.desc)
+    // 뒤로가기
+    goBack()
   }
 
   //*andorid 용 하드웨어 goback 핸들링
@@ -241,9 +243,9 @@ export const EditPetInfoScreen: FC<
       setHandleGoBack(true)
     } else if (isBackPressed) {
       //*수정한게 없다면 그냥 뒤로 나가지기
-      goBack()
       notEditable()
-      navigation.setParams({ isBackPressed: false })
+      // 뒤로가기
+      goBack()
     }
   }, [isBackPressed, notEditable, navigation, anyChangeMade])
 
@@ -468,6 +470,7 @@ export const EditPetInfoScreen: FC<
         title="이름"
         controlMode="userNickname"
         handleInput={handleNameInput}
+        defaultValue={name}
         placeholderInput="pet"
         validateFunction={() => {
           return false
@@ -480,6 +483,7 @@ export const EditPetInfoScreen: FC<
         handleModalHide={handleweightModalHide}
         title="몸무게(kg)"
         handleInput={handleWeightInput}
+        defaultValue={weight}
       />
       {/* //*생일 관리 모달 창  */}
       <BirthdayModal

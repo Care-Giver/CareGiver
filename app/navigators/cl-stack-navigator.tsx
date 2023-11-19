@@ -49,7 +49,7 @@ import {
   NotificationScreen,
   AddPetScreen,
 } from "#screens"
-import { goBack } from "./navigation-utilities"
+import { goBack, navigate } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
@@ -163,7 +163,7 @@ export type CLStackNavigatorParamList = {
   "setting-screen": undefined
   "service-center-screen": undefined
   "edit-mypage-screen": { editable: boolean }
-  "add-pet-screen": undefined
+  "add-pet-screen": { isBackPressed: boolean }
   "edit-pet-info-screen": { editable: boolean; isBackPressed: boolean; pet: Pet }
   "notification-screen": { removeAllToggle: boolean }
   // ===========================================================================================================
@@ -546,7 +546,9 @@ export const MypageStack = () => {
         component={AllPetsScreen}
         options={{
           title: "나의 반려동물",
-          header: (props) => <GobackAndTitleHeader {...props} />,
+          header: (props) => (
+            <GobackAndTitleHeader {...props} onPress={() => navigate("mypage-screen")} />
+          ),
         }}
       />
 

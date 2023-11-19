@@ -19,11 +19,20 @@ export interface WeightModalProps {
   title: string
   handleModalHide: () => any
   handleInput: (arg: any) => any
+  defaultValue?: number
   placeholder?: string
 }
 
 export const WeightModal = observer(function WeightModal(props: WeightModalProps) {
-  const { style, visibleState, handleModalHide, title, handleInput, placeholder } = props
+  const {
+    style,
+    visibleState,
+    handleModalHide,
+    title,
+    handleInput,
+    defaultValue = undefined,
+    placeholder,
+  } = props
 
   const allStyles = Object.assign({}, styles.root, style)
 
@@ -42,7 +51,7 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
   } = useForm<WeightForm>({
     mode: "onChange",
     defaultValues: {
-      weight: undefined,
+      weight: defaultValue,
     },
   })
 
@@ -50,7 +59,6 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
     //console.log("pressed!!!!")
     handleInput(data.weight)
     handleModalHide()
-    reset()
   }
 
   return (
@@ -61,7 +69,6 @@ export const WeightModal = observer(function WeightModal(props: WeightModalProps
       isVisible={visibleState}
       //* 모달 바깥쪽 터치시 모달창 사라지는데에 사용
       onBackdropPress={() => {
-        reset()
         handleModalHide()
       }}
       //* 키보드 자동 회피

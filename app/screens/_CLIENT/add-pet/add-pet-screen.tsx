@@ -180,13 +180,14 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
     //*수정 취소를 눌렀을 때
     const handleQuitEditPress = () => {
       setHandleGoBack(false)
-      goBack()
       setAnyChangeMade(false)
       //*화면속 바뀐 정보 초기화
       setName("")
       setBirthday("")
       setWeight(0)
       setDesc("")
+      // 뒤로가기
+      goBack()
     }
 
     //*andorid 용 하드웨어 goback 핸들링
@@ -306,7 +307,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
         birthday: birthday,
       }).then((res) => {
         if (res.isSuccess) {
-          navigation.navigate("all-pets-screen", { isSaved: true })
+          navigation.replace("all-pets-screen", { isSaved: true })
           !imageUriList &&
             alertModal(
               "이미지 업로드 실패",
@@ -600,6 +601,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             setSpeciesName(value)
             isChangeMade()
           }}
+          defaultValue={name}
           placeholderInput="반려동물의 품종을  입력해주세요."
           validateFunction={() => {
             return false
@@ -612,6 +614,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
           handleModalHide={handleweightModalHide}
           title="몸무게(kg)"
           handleInput={handleWeightInput}
+          defaultValue={weight}
         />
         {/* //*생일 관리 모달 창  */}
         <BirthdayModal
