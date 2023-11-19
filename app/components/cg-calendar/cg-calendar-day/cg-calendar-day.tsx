@@ -13,6 +13,8 @@ import {
 import { DateData } from "react-native-calendars"
 import { DayState } from "react-native-calendars/src/types"
 import { price as priceFormatter } from "../../../utils/format"
+import { TODAY_YEAR_MONTH_DATE } from "../cg-calendar"
+import { POPPINS_REGULAR, POPPINS_SEMIBOLD } from "#fonts"
 
 type CgCalendarDayProps = {
   date: string & DateData
@@ -34,54 +36,37 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
     isAvailableDate,
     totalFee,
   } = props
+  const isPastDate = new Date(date.dateString) < TODAY_YEAR_MONTH_DATE
 
-  const textBgBdColor = useMemo(() => {
-    if (selected.includes(date.dateString)) {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state === "today") {
-      return LBG
-    }
+  const dayViewBorderColor = useMemo(() => {
+    if (selected.includes(date.dateString)) return GIVER_CASUAL_NAVY
+    if (state === "today") return LBG
+
     return "white"
   }, [selected, date, state])
+  const dayViewBackgroundColor = dayViewBorderColor
 
-  const textColor = useMemo(() => {
-    if (isAvailableDate) {
-      if (selected.includes(date.dateString)) {
-        return "white"
-      }
-      if (state === "disabled") {
-        return MIDDLE_LINE
-      }
-      return "black"
-    }
-    if (selected.includes(date.dateString)) {
-      return "white"
-    }
-    if (state === "today") {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state === "disabled") {
-      return MIDDLE_LINE
-    }
+  const dayTextColor = useMemo(() => {
+    if (isPastDate) return MIDDLE_LINE
+    if (state === "disabled") return MIDDLE_LINE
+    if (isAvailableDate) return selected.includes(date.dateString) ? "white" : "black"
+    if (selected.includes(date.dateString)) return "white"
+    if (state === "today") return GIVER_CASUAL_NAVY
+
     return DISABLED
-  }, [isAvailableDate, selected, date, state])
+  }, [isAvailableDate, selected, date, state, isPastDate])
 
   const feeTextColor = useMemo(() => {
-    if (selected.includes(date.dateString)) {
-      return GIVER_CASUAL_NAVY_80
-    }
-    if (state === "today") {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state === "disabled") {
-      return "white"
-    }
+    if (isPastDate) return MIDDLE_LINE
+    if (selected.includes(date.dateString)) return GIVER_CASUAL_NAVY_80
+    if (state === "today") return GIVER_CASUAL_NAVY
+
     return SUB_HEAD_LINE
-  }, [selected, date, state])
+  }, [selected, date, state, isPastDate])
 
   return (
     <Pressable
+      disabled={isPastDate}
       onPress={onPress}
       style={[
         styles.dayContainer,
@@ -97,7 +82,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
           styles.dayTextContainer,
           {
             borderWidth: 1,
-            borderColor: textBgBdColor,
+            borderColor: dayViewBorderColor,
+            backgroundColor: dayViewBackgroundColor,
           },
         ]}
       >
@@ -105,9 +91,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
           style={[
             styles.dayText,
             {
-              fontWeight: isAvailableDate ? "600" : "400",
-              backgroundColor: textBgBdColor,
-              color: textColor,
+              fontFamily: selected.includes(date.dateString) ? POPPINS_SEMIBOLD : POPPINS_REGULAR,
+              color: dayTextColor,
               textDecorationLine: textDecorationLine,
             },
           ]}
@@ -122,8 +107,8 @@ export const CgCalendarDay = observer(function CgCalendarDay(props: CgCalendarDa
           style={[
             styles.feeText,
             {
+              fontFamily: selected.includes(date.dateString) ? POPPINS_SEMIBOLD : POPPINS_REGULAR,
               color: feeTextColor,
-              fontWeight: selected.includes(date.dateString) ? "600" : "400",
             },
           ]}
         >

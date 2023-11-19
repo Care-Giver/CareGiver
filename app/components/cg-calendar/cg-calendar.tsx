@@ -12,17 +12,13 @@ import { CrecheAvailableDate, GroupedVisitingAvailableTimesByDate } from "#axios
 import { ServiceTypeKorean, useStores } from "#models"
 import _ from "lodash"
 import dayjs from "dayjs"
+import { subMinutes } from "date-fns"
 
-const now = new Date()
-const today = dayjs()
-  .year(now.getFullYear())
-  .month(now.getMonth())
-  .date(now.getDate())
-  .hour(0)
-  .minute(0)
-  .second(0)
-  .millisecond(0)
-  .toDate()
+const nowInUTCZero = new Date()
+export const TODAY_YEAR_MONTH_DATE = subMinutes(
+  dayjs(nowInUTCZero).hour(0).minute(0).second(0).millisecond(0).toDate(),
+  nowInUTCZero.getTimezoneOffset(),
+)
 
 export interface CgCalendarProps {
   serviceTypeKorean: ServiceTypeKorean
@@ -108,6 +104,7 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
         dayComponent={({ date, state }) => {
           let isAvailableDate = false
           let fee = null
+
           if (hasAvailableDates) {
             const [_isAvailableDate, _fee] = checkAvailableDate(date.dateString)
             isAvailableDate = _isAvailableDate
@@ -115,9 +112,10 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
           }
           const textDecorationLine = isAvailableDate
             ? "none"
-            : new Date(date.dateString) >= today
+            : new Date(date.dateString) >= TODAY_YEAR_MONTH_DATE
             ? "line-through"
             : "none"
+
           return (
             <CgCalendarDay
               date={date}
@@ -125,7 +123,8 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
               selected={selectedDates}
               onPress={() => {
                 // 이미 지난 날짜들은 수정이 불가능하므로, selectedDates 로직에서 제외시킨다.
-                if (new Date(date.dateString) < today) {
+                //! isPast() 사용하지 말 것! - isPast() 는 "시/분/초" 까지 고려하기 때문에 날짜만을 사용한 비교가 불가능 함.
+                if (new Date(date.dateString) < TODAY_YEAR_MONTH_DATE) {
                   return
                 }
 

@@ -1,4 +1,3 @@
-import { POPPINS_REGULAR } from "#fonts"
 import { DISABLED, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_40 } from "#theme"
 import { StyleSheet } from "react-native"
 
@@ -23,7 +22,6 @@ export const styles = StyleSheet.create({
     marginTop: 8,
   },
   dayText: {
-    fontFamily: POPPINS_REGULAR,
     width: 24,
     height: 24,
     textAlign: "center",
