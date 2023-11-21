@@ -40,7 +40,7 @@ export const CgCalendarScreen: FC<
         const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
         const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
         getter(petsitter.id).then((res) => {
-          console.log("res 🔷", res)
+          // console.log("res 🔷", res)
           setter(res)
         })
       }
