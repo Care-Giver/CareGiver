@@ -297,8 +297,8 @@ export const SetVisitingServiceDayScreen: FC<
       return
     }
 
+    // 처음 생성 시나리오
     if (isPOST) {
-      // 처음 생성 시나리오
       Promise.all(
         selectedDates.map((dateItem) =>
           timeframe.selected.forEach((tiemItem) =>
@@ -320,8 +320,9 @@ export const SetVisitingServiceDayScreen: FC<
           }, 1000)
         })
         .catch(console.log)
-    } else {
-      // 수정 혹은 삭제 시나리오
+    }
+    // 수정 혹은 삭제 시나리오
+    else {
       const added = timeframe.added
       const hasAdded = added.length !== 0
       const trulyDeleted = timeframe.deleted.filter((v) => _.isSafeInteger(v.id))
