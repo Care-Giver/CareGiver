@@ -48,6 +48,9 @@ import {
   ServiceAmenity,
   NotificationScreen,
   AddPetScreen,
+  TestStreamChatScreen,
+  ChannelListScreen,
+  ChannelScreen,
 } from "#screens"
 import { goBack } from "./navigation-utilities"
 import {
@@ -67,6 +70,8 @@ import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } f
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
 
+import { StreamChat } from "stream-chat"
+import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 export type CLStackNavigatorParamList = {
   /**
    * FavoritesStack -즐겨찾기 스택
@@ -197,7 +202,12 @@ export type CLStackNavigatorParamList = {
     bondingTipsInfo: string
   }
   "test-iamport-payment-result-screen": any
+  // stream-chat 테스트
   "test-stream-chat-screen": any
+  "channel-list-screen": any
+  "channel-screen": {
+    channel: any
+  }
 }
 
 const Stack = createNativeStackNavigator<CLStackNavigatorParamList>()
@@ -290,20 +300,25 @@ export const BookingsStack = () => {
   )
 }
 
+const API_KEY = "cyt5mvxvratf"
+const chatClient = StreamChat.getInstance(API_KEY)
+
 /**
  * 검색 스택
  */
 export const SearchingStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: true,
-        animation: "slide_from_right",
-      }}
-      initialRouteName="search-screen"
-    >
-      {/* //* 홈 ➡️ 원래 시작 스크린이었으나, search-screen 으로 대체되었습니다 */}
-      {/*      <Stack.Screen
+    <OverlayProvider>
+      <Chat client={chatClient}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: true,
+            animation: "slide_from_right",
+          }}
+          initialRouteName="search-screen"
+        >
+          {/* //* 홈 ➡️ 원래 시작 스크린이었으나, search-screen 으로 대체되었습니다 */}
+          {/*      <Stack.Screen
           name="home-screen"
           component={HomeScreen}
           options={{
@@ -311,95 +326,95 @@ export const SearchingStack = () => {
           }}
         /> */}
 
-      {/* //* 검색 ➡️ 시작 스크린입니다 */}
-      <Stack.Screen
-        name="search-screen"
-        component={SearchScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
+          {/* //* 검색 ➡️ 시작 스크린입니다 */}
+          <Stack.Screen
+            name="search-screen"
+            component={SearchScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
 
-      {/* //* 검색결과 */}
-      <Stack.Screen
-        name="search-result-screen"
-        component={SearchResultScreen}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* 검색결과 */}
+          <Stack.Screen
+            name="search-result-screen"
+            component={SearchResultScreen}
+            options={{
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* 펫시터 상세정보 */}
-      <Stack.Screen
-        name="caregiver-detail-information-screen"
-        component={CaregiverDetailInformationScreen}
-        // TODO: web 에서 스타일링 고장남. 고쳐야 함
-        options={{
-          headerTransparent: true,
-          headerLeft: (props) => (
-            <Pressable
-              onPress={() => {
-                goBack()
-              }}
-            >
-              <Image style={{ width: 28, height: 28 }} source={images.go_back} />
-            </Pressable>
-          ),
-          // title: null,
-          headerTitle: "",
-        }}
-      />
+          {/* //* 펫시터 상세정보 */}
+          <Stack.Screen
+            name="caregiver-detail-information-screen"
+            component={CaregiverDetailInformationScreen}
+            // TODO: web 에서 스타일링 고장남. 고쳐야 함
+            options={{
+              headerTransparent: true,
+              headerLeft: (props) => (
+                <Pressable
+                  onPress={() => {
+                    goBack()
+                  }}
+                >
+                  <Image style={{ width: 28, height: 28 }} source={images.go_back} />
+                </Pressable>
+              ),
+              // title: null,
+              headerTitle: "",
+            }}
+          />
 
-      {/* 결제 정보 */}
-      <Stack.Screen
-        name="payment-screen"
-        component={PaymentScreen}
-        options={{
-          title: "결제 정보",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* 결제 정보 */}
+          <Stack.Screen
+            name="payment-screen"
+            component={PaymentScreen}
+            options={{
+              title: "결제 정보",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* 리뷰 전체보기 */}
-      <Stack.Screen
-        name="all-reviews-screen"
-        component={AllReviewsScreen}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* 리뷰 전체보기 */}
+          <Stack.Screen
+            name="all-reviews-screen"
+            component={AllReviewsScreen}
+            options={{
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* 자기소개 전체보기 */}
-      <Stack.Screen
-        name="caregiver-self-introduction-screen"
-        component={CaregiverSelfIntroductionScreen}
-        options={{
-          title: "자기소개",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* 자기소개 전체보기 */}
+          <Stack.Screen
+            name="caregiver-self-introduction-screen"
+            component={CaregiverSelfIntroductionScreen}
+            options={{
+              title: "자기소개",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* 댓글 전체보기 */}
-      <Stack.Screen
-        name="all-comments-screen"
-        component={AllCommentsScreen}
-        options={{
-          title: "댓글 전체보기",
-          header: (props) => <AllCommentsScreenHeader {...props} />,
-        }}
-      />
+          {/* //* 댓글 전체보기 */}
+          <Stack.Screen
+            name="all-comments-screen"
+            component={AllCommentsScreen}
+            options={{
+              title: "댓글 전체보기",
+              header: (props) => <AllCommentsScreenHeader {...props} />,
+            }}
+          />
 
-      {/* //* 댓글쓰기 */}
-      <Stack.Screen
-        name="writing-comment-screen"
-        component={WritingCommentScreen}
-        options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
-        }}
-      />
+          {/* //* 댓글쓰기 */}
+          <Stack.Screen
+            name="writing-comment-screen"
+            component={WritingCommentScreen}
+            options={{
+              header: (props) => <WritingCommentScreenHeader {...props} />,
+            }}
+          />
 
-      {/* //* (구)요청사항 */}
-      {/* <Stack.Screen
+          {/* //* (구)요청사항 */}
+          {/* <Stack.Screen
           name="payment-request-screen"
           component={PaymentRequestScreen}
           options={{
@@ -408,85 +423,113 @@ export const SearchingStack = () => {
           }}
         /> */}
 
-      {/*// 요청 사항 (결제 직전 스크린 입니다. 이 스크린에서 결제스크린으로 넘어갑니다. )  */}
-      <Stack.Screen
-        name="make-booking-screen"
-        component={MakeBookingScreen}
-        options={{
-          title: "요청 사항",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/*// 요청 사항 (결제 직전 스크린 입니다. 이 스크린에서 결제스크린으로 넘어갑니다. )  */}
+          <Stack.Screen
+            name="make-booking-screen"
+            component={MakeBookingScreen}
+            options={{
+              title: "요청 사항",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* =========================================================================================================== */}
-      {/* 테스트 스크린들은 아래에다가 추가해주세요 */}
-      {/* =========================================================================================================== */}
-      {/* //? 민선 테스트 */}
-      <Stack.Screen
-        name="minseon-test"
-        component={MinseonTest}
-        options={{
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* =========================================================================================================== */}
+          {/* 테스트 스크린들은 아래에다가 추가해주세요 */}
+          {/* =========================================================================================================== */}
+          {/* //? 민선 테스트 */}
+          <Stack.Screen
+            name="minseon-test"
+            component={MinseonTest}
+            options={{
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //? 위치(지도) 테스트 화면 */}
-      {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
-      <Stack.Screen name="test-web-view-screen" component={TestWebViewScreen} />
+          {/* //? 위치(지도) 테스트 화면 */}
+          {/* <Stack.Screen name="test-map-screen" component={TestMapScreen} /> */}
+          <Stack.Screen name="test-web-view-screen" component={TestWebViewScreen} />
 
-      {/* //? 푸시알림 테스트 화면 */}
-      <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
-      <Stack.Screen
-        name="notification-screen"
-        component={NotificationScreen}
-        options={({ navigation, route }) => ({
-          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
-          header: (props) => <NotificationScreenHeader {...props} />,
-        })}
-      />
+          {/* //? 푸시알림 테스트 화면 */}
+          <Stack.Screen
+            name="test-push-notification-screen"
+            component={TestPushNotificationScreen}
+          />
+          <Stack.Screen
+            name="notification-screen"
+            component={NotificationScreen}
+            options={({ navigation, route }) => ({
+              //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
+              header: (props) => <NotificationScreenHeader {...props} />,
+            })}
+          />
 
-      {/* //? bottom-sheet 테스트 화면 */}
-      <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
+          {/* //? bottom-sheet 테스트 화면 */}
+          <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />
 
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-screen"
-        component={TestIamportScreen}
-        options={{
-          title: "결제테스트 세팅",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* iamport test */}
+          <Stack.Screen
+            name="test-iamport-screen"
+            component={TestIamportScreen}
+            options={{
+              title: "결제테스트 세팅",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-payment-screen"
-        component={TestIamportPaymentScreen}
-        options={{
-          title: "결제 진행중",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* iamport test */}
+          <Stack.Screen
+            name="test-iamport-payment-screen"
+            component={TestIamportPaymentScreen}
+            options={{
+              title: "결제 진행중",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* //* iamport test */}
-      <Stack.Screen
-        name="test-iamport-payment-result-screen"
-        component={TestIamportPaymentResultScreen}
-        options={{
-          title: "결제 결과",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
-      />
+          {/* //* iamport test */}
+          <Stack.Screen
+            name="test-iamport-payment-result-screen"
+            component={TestIamportPaymentResultScreen}
+            options={{
+              title: "결제 결과",
+              header: (props) => <GobackAndTitleHeader {...props} />,
+            }}
+          />
 
-      {/* hotfix/network-error */}
-      <Stack.Screen
-        name="test-network-error-screen"
-        component={TestNetworkErrorScreen}
-        options={{
-          header: (props) => <HomeScreenHeader {...props} />,
-        }}
-      />
-    </Stack.Navigator>
+          {/* hotfix/network-error */}
+          <Stack.Screen
+            name="test-network-error-screen"
+            component={TestNetworkErrorScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
+
+          {/*//* stream-chat 테스트 플로우 */}
+          <Stack.Screen
+            name="test-stream-chat-screen"
+            component={TestStreamChatScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
+          <Stack.Screen
+            name="channel-list-screen"
+            component={ChannelListScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
+          <Stack.Screen
+            name="channel-screen"
+            component={ChannelScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
+        </Stack.Navigator>
+      </Chat>
+    </OverlayProvider>
   )
 }
 

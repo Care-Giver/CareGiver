@@ -8,6 +8,16 @@ import { StreamChat, ConnectionOpen } from "stream-chat"
 import axios from "axios"
 import { GIVER_CASUAL_NAVY } from "#theme"
 
+import {
+  Chat,
+  OverlayProvider,
+  ChannelList,
+  Channel,
+  MessageList,
+  MessageInput,
+  Thread,
+} from "stream-chat-react-native"
+
 const API_KEY = "cyt5mvxvratf"
 const USER_ID = "test_user_230628_cl"
 
@@ -17,7 +27,7 @@ const sampleData = {
 
 export const TestStreamChatScreen: FC<
   StackScreenProps<NavigatorParamList, "test-stream-chat-screen">
-> = observer(function TestStreamChatScreen() {
+> = observer(function TestStreamChatScreen({ navigation }) {
   const client = StreamChat.getInstance(API_KEY)
 
   const [token, setToken] = useState(null)
@@ -46,6 +56,23 @@ export const TestStreamChatScreen: FC<
       })
   }
 
+  // 채널 리스트 만들기 및 불러오기
+  const createChannels = async () => {
+    const chatClient = await StreamChat.getInstance(API_KEY)
+    const channelNames = ["x", "y", "z"]
+
+    await channelNames.forEach((channelName) => {
+      console.log(channelName)
+      const channel = chatClient.channel("messaging", channelName, {
+        name: "CGorCL",
+      })
+      channel.create()
+    })
+
+    const channels = chatClient.queryChannels({ watch: true, state: true })
+    console.log("channels >>>", channels)
+  }
+
   /**
    * 발행된 토큰과 userId 를 사용하여, 유저를 연결함
    * response 정보 (ConnectionOpen) 속에 채팅에 필요한 유저정보가 담겨있음
@@ -65,6 +92,8 @@ export const TestStreamChatScreen: FC<
       if (connectUserResponse) {
         setConnectedUser(connectUserResponse)
       }
+      await createChannels()
+      navigation.navigate("channel-list-screen")
     } catch (error) {
       console.error("connectUser ERROR", error)
     }
