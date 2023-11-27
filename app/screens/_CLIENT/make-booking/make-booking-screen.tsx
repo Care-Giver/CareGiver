@@ -10,13 +10,11 @@ import {
   PreBol14,
   PreBol16,
 } from "#components"
-import { View, ScrollView, Pressable, StyleSheet, Keyboard, Platform } from "react-native"
+import { View, Pressable, StyleSheet } from "react-native"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
 type Requests = {
   petToolsLocInfo: string
   avoidFoodInfo: string
@@ -27,41 +25,11 @@ type Requests = {
 export const MakeBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "make-booking-screen">
 > = observer(function MakeBookingScreen({ route }) {
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
-
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
-  const {
-    sitterData,
-    services,
-    serviceType,
-    selectedDate,
-    selectedPets,
-    beginDate,
-    endDate,
-  } = route.params
-
+  // @ts-ignore
+  const { key, service, selectedPetIds, selectedTime } = route.params
   const isKeyboardShown = useKeyboardShown()
-
-  const [keyboardStatus, setKeyboardStatus] = useState(undefined)
-  useEffect(() => {
-    const keyboardUp = Keyboard.addListener("keyboardWillShow", () => {
-      //*console.log("keyboardUp!")
-      setKeyboardStatus(true)
-    })
-    const keyboardDown = Keyboard.addListener("keyboardWillHide", () => {
-      //*console.log("keboardDown!")
-      setKeyboardStatus(false)
-    })
-
-    return () => {
-      keyboardUp.remove()
-      keyboardDown.remove()
-    }
-  }, [])
-
   const isButtonShown = !isKeyboardShown
+  console.log("selectedTime 2", selectedTime)
 
   /**
    *  1번째 버튼 그룹의 예외 처리
@@ -91,12 +59,12 @@ export const MakeBookingScreen: FC<
     if (is없음Active && (is치즈Active || is닭고기Active)) {
       setIs없음Active(!is없음Active)
     }
-  }, [is치즈Active, is닭고기Active])
+  }, [is치즈Active, is닭고기Active, is없음Active])
 
   /**
    * 2번째 버튼 그룹의 예외 처리
    */
-  const [꿀팁, set꿀팁] = useState<"강아지" | "처음엔" | "되도록">(null)
+  const [꿀팁, set꿀팁] = useState<"사람이면다" | "처음엔" | "되도록">(null)
 
   /**
    * 3번째 버튼 그룹의 예외 처리
@@ -125,7 +93,7 @@ export const MakeBookingScreen: FC<
     if (is모두Active && (is엉덩이Active || is다리Active)) {
       setIs모두Active(!is모두Active)
     }
-  }, [is엉덩이Active, is다리Active])
+  }, [is엉덩이Active, is다리Active, is모두Active])
 
   /**
    *  선택하는 버튼이 함께 있는 TextInput박스를 눌렀을 때, onPressIn을 사용하여 눌려있는 버튼을 취소할 수 있게됨
@@ -156,14 +124,11 @@ export const MakeBookingScreen: FC<
   const onPress = () => {
     console.log("petToolsLocInfo: ", petToolsLocInfo)
     navigate("payment-screen", {
-      sitterData: sitterData,
-      services: services,
-      serviceType: serviceType,
-      selectedDate: selectedDate,
-      selectedPets: selectedPets,
-      beginDate: serviceType == "방문" ? beginDate : null,
-      endDate: serviceType == "방문" ? endDate : null,
-      requests: requests,
+      key,
+      service,
+      selectedPetIds,
+      selectedTime,
+      requests,
     })
   }
 
@@ -175,7 +140,7 @@ export const MakeBookingScreen: FC<
           color={DISABLED}
           text={"상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다 :)"}
         />
-        {serviceType == "방문" ? (
+        {key === "visiting" ? (
           <View>
             <PreBol14
               style={{ marginTop: 24, marginBottom: 8 }}
@@ -194,7 +159,6 @@ export const MakeBookingScreen: FC<
           style={{ marginTop: 24, marginBottom: 14 }}
           text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
         />
-        {/** 
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
           <ClickToBlueButton
             buttonText={"없음"}
@@ -218,7 +182,7 @@ export const MakeBookingScreen: FC<
             onPress={() => firstClick("닭고기")}
           />
         </View>
-        */}
+
         <PlaceHolderInputBox
           placeholderText="주의할 음식을 직접 작성해주세요!"
           boxHeight={78}
@@ -230,14 +194,13 @@ export const MakeBookingScreen: FC<
           style={{ marginTop: 24, marginBottom: 14 }}
           text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
         />
-        {/** 
         <View style={{ justifyContent: "space-between", marginBottom: 11, height: 151 }}>
           <ClickToBlueButton
-            buttonText={"강아지계의 ENFP! 사람이면 다 좋아해요."}
+            buttonText={"ENFP! 사람이면 다 좋아해요."}
             buttonHeight={45}
             buttonWidth={358}
-            isActiving={꿀팁 === "강아지"}
-            onPress={() => set꿀팁("강아지")}
+            isActiving={꿀팁 === "사람이면다"}
+            onPress={() => set꿀팁("사람이면다")}
           />
           <ClickToBlueButton
             buttonText={"처음엔 낯가릴 수 있어서 조심이 필요해요."}
@@ -254,7 +217,7 @@ export const MakeBookingScreen: FC<
             onPress={() => set꿀팁("되도록")}
           />
         </View>
-        */}
+
         <PlaceHolderInputBox
           placeholderText="꿀팁을 자유롭게 작성해주세요"
           boxHeight={78}
@@ -262,7 +225,6 @@ export const MakeBookingScreen: FC<
           text={bondingTipsInfo}
           setText={setBondingTipsInfo}
         />
-        {/**
         <PreBol14
           style={{ marginTop: 16, marginBottom: 11 }}
           text={"배변 처리 방법을 알려주세요"}
@@ -271,36 +233,7 @@ export const MakeBookingScreen: FC<
           placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
           boxHeight={78}
         />
-         */}
-        {/** 
-        <PreBol14
-          style={{ marginTop: 16, marginBottom: 17 }}
-          text={"스킨십할 때 좋아하는 부위를 말씀해주세요"}
-        />
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
-          <ClickToBlueButton
-            buttonText={"모두"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is모두Active}
-            onPress={() => thirdClick("모두")}
-          />
-          <ClickToBlueButton
-            buttonText={"엉덩이 빼고"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is엉덩이Active}
-            onPress={() => thirdClick("엉덩이")}
-          />
-          <ClickToBlueButton
-            buttonText={"다리 빼고"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is다리Active}
-            onPress={() => thirdClick("다리")}
-          />
-        </View>
-        */}
+
         <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
         <PlaceHolderInputBox
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"

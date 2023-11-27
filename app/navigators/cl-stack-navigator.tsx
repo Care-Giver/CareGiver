@@ -45,9 +45,9 @@ import {
   WriteReviewScreen,
   ViewReviewScreen,
   TempChatScreen,
-  ServiceAmenity,
   NotificationScreen,
   AddPetScreen,
+  VisitingCreche,
 } from "#screens"
 import { goBack, navigate } from "./navigation-utilities"
 import {
@@ -58,7 +58,6 @@ import {
   EditMypageScreenHeader,
   EditPetInfoScreenHeader,
   CgScreenHeader,
-  PetsitterProfileCardPetsitterData,
   NotificationScreenHeader,
 } from "#components"
 import { images } from "../../assets/images"
@@ -66,6 +65,11 @@ import { MinseonTest } from "../screens/test/minseon-test"
 import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
+
+type SelectedTime = {
+  start: string
+  end: string
+}
 
 export type CLStackNavigatorParamList = {
   /**
@@ -118,34 +122,37 @@ export type CLStackNavigatorParamList = {
 
     // 그외
     serviceType: ServiceTypeKorean
-  }
-  "caregiver-detail-information-screen": {
-    sitterData: PetsitterProfileCardPetsitterData
-    serviceType: ServiceTypeKorean
-    serviceAmenity: ServiceAmenity
-    images: string[]
-    //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
-    //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
-    selectedPets: number[]
-
-    // 방문
-    startTime?: string
-    endTime?: string
-
-    // 위탁
-    startDate?: string
-    endDate?: string
 
     // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
-    address // 검색결과 헤더에 보여줄 주소
+    address: string // 검색결과 헤더에 보여줄 주소
   }
-  "payment-screen": undefined
+  "caregiver-detail-information-screen": {
+    serviceTypeKorean: ServiceTypeKorean
+
+    service: VisitingCreche
+    selectedPetIds: number[]
+    selectedTime: SelectedTime
+  }
+  "make-booking-screen": {
+    key: ServiceType
+    service: VisitingCreche
+    selectedPetIds: number[]
+    selectedTime: SelectedTime
+  }
+  "payment-screen": {
+    key: ServiceType
+    service: VisitingCreche
+    selectedPetIds: number[]
+    selectedTime: SelectedTime
+
+    requests: any
+  }
+
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
   "writing-comment-screen": undefined
   "payment-request-screen": undefined
-  "make-booking-screen": undefined
 
   /**
    * ChatsStack - 채팅 스택 || CG - 채팅 스택
@@ -300,7 +307,8 @@ export const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      initialRouteName="search-screen"
+      // initialRouteName="search-screen"
+      initialRouteName="search-result-screen"
     >
       {/* //* 홈 ➡️ 원래 시작 스크린이었으나, search-screen 으로 대체되었습니다 */}
       {/*      <Stack.Screen
