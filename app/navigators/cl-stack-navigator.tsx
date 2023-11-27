@@ -204,7 +204,9 @@ export type CLStackNavigatorParamList = {
   "test-iamport-payment-result-screen": any
   // stream-chat 테스트
   "test-stream-chat-screen": any
-  "channel-list-screen": any
+  "channel-list-screen": {
+    parsedEmail: string
+  }
   "channel-screen": {
     channel: any
   }

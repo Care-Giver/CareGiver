@@ -23,15 +23,17 @@ import {
 // @ts-ignore
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
-> = observer(function ChannelListScreen({ navigation }) {
+> = observer(function ChannelListScreen({ navigation, route }) {
   // MST store 를 가져옵니다.
   // const { someStore, anotherStore } = useStores()
 
   // 필요시, useNavigation 훅을 사용할 수 있습니다.
   // const navigation = useNavigation()
-
+  const parsedEmail = route.params.parsedEmail
   const filters = {
     type: "messaging",
+    members: { $in: [parsedEmail] },
+    userType: "CLIENT",
   }
 
   const sort = {
