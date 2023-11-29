@@ -15,7 +15,7 @@ const getToken = async (): Promise<string | false> => {
   return token || ""
 }
 
-export const BASE_URL = "http://ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com:3000/api/v1"
+export const BASE_URL = "http://api.caregiver.pet:3000/api/v1"
 
 type Error = {
   errorCode: number // 404
