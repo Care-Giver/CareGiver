@@ -32,6 +32,20 @@ export const MakeBookingScreen: FC<
   console.log("selectedTime 2", selectedTime)
 
   /**
+   * 총 네가지 requestText
+   */
+  const [petToolsLocInfo, setPetToolsLocInfo] = useState("")
+  const [avoidFoodInfo, setAvoidFoodInfo] = useState("")
+  const [bondingTipsInfo, setBondingTipsInfo] = useState("")
+  const [request, setRequest] = useState("")
+  const requests: Requests = {
+    petToolsLocInfo: petToolsLocInfo,
+    avoidFoodInfo: avoidFoodInfo,
+    bondingTipsInfo: bondingTipsInfo,
+    request: request,
+  }
+
+  /**
    *  1번째 버튼 그룹의 예외 처리
    */
   const [is없음Active, setIs없음Active] = useState(false)
@@ -52,14 +66,13 @@ export const MakeBookingScreen: FC<
     if (is없음Active) {
       setIs치즈Active(false)
       setIs닭고기Active(false)
+      setAvoidFoodInfo("")
     }
-  }, [is없음Active])
 
-  useEffect(() => {
     if (is없음Active && (is치즈Active || is닭고기Active)) {
-      setIs없음Active(!is없음Active)
+      setIs없음Active(false)
     }
-  }, [is치즈Active, is닭고기Active, is없음Active])
+  }, [is닭고기Active, is없음Active, is치즈Active])
 
   /**
    * 2번째 버튼 그룹의 예외 처리
@@ -108,19 +121,6 @@ export const MakeBookingScreen: FC<
     }
   }
 
-  /**
-   * 4가지 requestText
-   */
-  const [petToolsLocInfo, setPetToolsLocInfo] = useState("")
-  const [avoidFoodInfo, setAvoidFoodInfo] = useState("")
-  const [bondingTipsInfo, setBondingTipsInfo] = useState("")
-  const [request, setRequest] = useState("")
-  const requests: Requests = {
-    petToolsLocInfo: petToolsLocInfo,
-    avoidFoodInfo: avoidFoodInfo,
-    bondingTipsInfo: bondingTipsInfo,
-    request: request,
-  }
   const onPress = () => {
     console.log("petToolsLocInfo: ", petToolsLocInfo)
     navigate("payment-screen", {
