@@ -27,11 +27,9 @@ export const ChannelScreen: FC<StackScreenProps<NavigatorParamList, "channel-scr
     // 필요시, useNavigation 훅을 사용할 수 있습니다.
     // const navigation = useNavigation()
     const channel = route.params.channel
-    const sort = { user_id: -1 }
-    const members = channel.queryMembers({}, sort, {})
-    console.log("members>>>", members)
+
     return (
-      <Screen testID="Channel">
+      <Screen testID="Channel" style={{ top: -33 }}>
         <Channel channel={channel}>
           <MessageList />
           <MessageInput />

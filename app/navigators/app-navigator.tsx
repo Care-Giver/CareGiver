@@ -103,7 +103,7 @@ const ClientTabs = () => {
       <Tab.Screen
         name="Chats"
         // component={ChatsStack}
-        component={TestStreamChatScreen}
+        component={ChatsStack}
         options={{ tabBarLabel: tabLabel.chatting }}
       />
       <Tab.Screen

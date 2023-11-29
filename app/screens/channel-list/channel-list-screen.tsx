@@ -1,35 +1,70 @@
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { Screen } from "#components"
+import { useShowBottomTab } from "../../utils/hooks"
 
-import { StreamChat } from "stream-chat"
-import {
-  Chat,
-  OverlayProvider,
-  ChannelList,
-  Channel,
-  MessageList,
-  MessageInput,
-  Thread,
-} from "stream-chat-react-native" // Or stream-chat-expo
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
+import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
+import { StreamChat, ConnectionOpen } from "stream-chat"
+import { getStreamToken } from "../../services/axios/stream"
+import { useStores } from "#models"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
+const API_KEY = "cyt5mvxvratf"
+
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
-> = observer(function ChannelListScreen({ navigation, route }) {
-  // MST store 를 가져옵니다.
-  // const { someStore, anotherStore } = useStores()
+> = observer(function ChannelListScreen({ navigation }) {
+  useShowBottomTab(navigation)
 
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
-  const parsedEmail = route.params.parsedEmail
+  const {
+    userStore: { type, userAuth },
+  } = useStores()
+
+  const parsedEmail = userAuth.email.substring(0, userAuth.email.indexOf("@"))
+  const client = StreamChat.getInstance(API_KEY)
+
+  // 채널 리스트 만들기 및 불러오기
+  const createChannels = async () => {
+    const channel = client.channel("messaging", parsedEmail, {
+      members: ["example", "ky7939"],
+      name: parsedEmail,
+      userType: type,
+    })
+    channel.create()
+  }
+
+  /**
+   * 발행된 토큰과 userId 를 사용하여, 유저를 연결함
+   * */
+  const connectAndSetUser = async () => {
+    // Connect user to chat. This establishes a websocket connection between client and server.
+    try {
+      const streamToken = await getStreamToken().then((response) => response.streamToken)
+      const connectUserResponse = await client.connectUser(
+        {
+          id: parsedEmail,
+          name: "TEST_USER",
+          image: "https://i.imgur.com/fR9Jz14.png",
+        },
+        streamToken,
+      )
+      if (connectUserResponse) {
+        await createChannels()
+      }
+    } catch (error) {
+      console.error("connectUser ERROR", error)
+    }
+
+    // To disconnect a user
+    // await client.disconnect()
+  }
+
+  useEffect(() => {
+    connectAndSetUser()
+  }, [])
+
   const filters = {
     type: "messaging",
     members: { $in: [parsedEmail] },
