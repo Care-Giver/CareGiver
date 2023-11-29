@@ -106,6 +106,13 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>api.caregiver.pet</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>ec2-3-36-101-9.ap-northeast-2.compute.amazonaws.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
