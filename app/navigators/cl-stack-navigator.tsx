@@ -48,6 +48,7 @@ import {
   NotificationScreen,
   AddPetScreen,
   VisitingCreche,
+  BookingRequest,
 } from "#screens"
 import { goBack, navigate } from "./navigation-utilities"
 import {
@@ -144,8 +145,7 @@ export type CLStackNavigatorParamList = {
     service: VisitingCreche
     selectedPetIds: number[]
     selectedTime: SelectedTime
-
-    requests: any
+    bookingRequest: BookingRequest
   }
 
   "all-reviews-screen": undefined

@@ -14,39 +14,46 @@ import { View, Pressable, StyleSheet } from "react-native"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
+import _ from "lodash"
 
-type Requests = {
-  petToolsLocInfo: string
-  avoidFoodInfo: string
-  bondingTipsInfo: string
-  request: string
+export type BookingRequest = {
+  petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치
+  avoidFoodInfo: string // 먹으면 안되는 음식
+  bondingTipsInfo: string // 친해지기 위한 꿀팁
+  request: string // 자유 요청사항
+}
+
+const bondingTip = {
+  0: "ENFP! 사람이면 다 좋아해요.",
+  1: "처음엔 낯가릴 수 있어서 조심이 필요해요.",
+  2: "되도록이면 만지지 말고 간식만 챙겨주세요.",
 }
 
 export const MakeBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "make-booking-screen">
 > = observer(function MakeBookingScreen({ route }) {
-  // @ts-ignore
   const { key, service, selectedPetIds, selectedTime } = route.params
   const isKeyboardShown = useKeyboardShown()
   const isButtonShown = !isKeyboardShown
   console.log("selectedTime 2", selectedTime)
 
   /**
-   * 총 네가지 requestText
+   * [유저인풋 텍스트] 요청사항들
    */
-  const [petToolsLocInfo, setPetToolsLocInfo] = useState("")
-  const [avoidFoodInfo, setAvoidFoodInfo] = useState("")
-  const [bondingTipsInfo, setBondingTipsInfo] = useState("")
-  const [request, setRequest] = useState("")
-  const requests: Requests = {
-    petToolsLocInfo: petToolsLocInfo,
-    avoidFoodInfo: avoidFoodInfo,
-    bondingTipsInfo: bondingTipsInfo,
-    request: request,
-  }
+  const [bookingRequest, setBookingRequest] = useState<
+    BookingRequest & {
+      cleaningTipsInfo: string
+    }
+  >({
+    avoidFoodInfo: "",
+    bondingTipsInfo: "",
+    petToolsLocInfo: "",
+    cleaningTipsInfo: "",
+    request: "",
+  })
 
   /**
-   *  1번째 버튼 그룹의 예외 처리
+   * [버튼] 먹으면 안되는 음식
    */
   const [is없음Active, setIs없음Active] = useState(false)
   const [is치즈Active, setIs치즈Active] = useState(false)
@@ -54,7 +61,7 @@ export const MakeBookingScreen: FC<
 
   const firstClick = (click: "없음" | "치즈" | "닭고기") => {
     if (click === "없음") {
-      setIs없음Active(true)
+      setIs없음Active(!is없음Active)
     } else if (click === "치즈") {
       setIs치즈Active(!is치즈Active)
     } else if (click === "닭고기") {
@@ -66,7 +73,7 @@ export const MakeBookingScreen: FC<
     if (is없음Active) {
       setIs치즈Active(false)
       setIs닭고기Active(false)
-      setAvoidFoodInfo("")
+      setBookingRequest((_) => ({ ..._, avoidFoodInfo: "" }))
     }
 
     if (is없음Active && (is치즈Active || is닭고기Active)) {
@@ -75,60 +82,62 @@ export const MakeBookingScreen: FC<
   }, [is닭고기Active, is없음Active, is치즈Active])
 
   /**
-   * 2번째 버튼 그룹의 예외 처리
+   * [버튼] 반려동물과 친해질 수 있는 꿀팁
    */
-  const [꿀팁, set꿀팁] = useState<"사람이면다" | "처음엔" | "되도록">(null)
+  const [꿀팁, set꿀팁] = useState<keyof typeof bondingTip>(null)
 
-  /**
-   * 3번째 버튼 그룹의 예외 처리
-   */
-  const [is모두Active, setIs모두Active] = useState(false)
-  const [is엉덩이Active, setIs엉덩이Active] = useState(false)
-  const [is다리Active, setIs다리Active] = useState(false)
+  // /**
+  //  * 3번째 버튼 그룹의 예외 처리
+  //  */
+  // const [is모두Active, setIs모두Active] = useState(false)
+  // const [is엉덩이Active, setIs엉덩이Active] = useState(false)
+  // const [is다리Active, setIs다리Active] = useState(false)
 
-  const thirdClick = (click: "모두" | "엉덩이" | "다리") => {
-    if (click === "모두") {
-      setIs모두Active(!is모두Active)
-    } else if (click === "엉덩이") {
-      setIs엉덩이Active(!is엉덩이Active)
-    } else if (click === "다리") {
-      setIs다리Active(!is다리Active)
-    }
-  }
-  useEffect(() => {
-    if (is모두Active) {
-      setIs엉덩이Active(false)
-      setIs다리Active(false)
-    }
-  }, [is모두Active])
+  // useEffect(() => {
+  //   if (is모두Active) {
+  //     setIs엉덩이Active(false)
+  //     setIs다리Active(false)
+  //   }
+  // }, [is모두Active])
 
-  useEffect(() => {
-    if (is모두Active && (is엉덩이Active || is다리Active)) {
-      setIs모두Active(!is모두Active)
-    }
-  }, [is엉덩이Active, is다리Active, is모두Active])
-
-  /**
-   *  선택하는 버튼이 함께 있는 TextInput박스를 눌렀을 때, onPressIn을 사용하여 눌려있는 버튼을 취소할 수 있게됨
-   */
-  const textboxClick = (click: "먹으면안되는음식" | "꿀팁") => {
-    if (click === "먹으면안되는음식") {
-      setIs없음Active(false)
-      setIs치즈Active(false)
-      setIs닭고기Active(false)
-    } else if (click === "꿀팁") {
-      set꿀팁(null)
-    }
-  }
+  // useEffect(() => {
+  //   if (is모두Active && (is엉덩이Active || is다리Active)) {
+  //     setIs모두Active(!is모두Active)
+  //   }
+  // }, [is엉덩이Active, is다리Active, is모두Active])
 
   const onPress = () => {
-    console.log("petToolsLocInfo: ", petToolsLocInfo)
+    let avo = ""
+    let bond = ""
+    if (is없음Active) {
+      avo = ""
+    } else if (is치즈Active && is닭고기Active) {
+      avo = "치즈, 닭고기"
+    } else if (is치즈Active) {
+      avo = "치즈"
+    } else if (is닭고기Active) {
+      avo = "닭고기"
+    }
+
+    if (꿀팁 === null) {
+      bond = ""
+    } else {
+      bond = bondingTip[꿀팁]
+    }
+
     navigate("payment-screen", {
       key,
       service,
       selectedPetIds,
       selectedTime,
-      requests,
+      bookingRequest: {
+        petToolsLocInfo: bookingRequest.petToolsLocInfo,
+        avoidFoodInfo: (avo && avo + " | ") + bookingRequest.avoidFoodInfo,
+        bondingTipsInfo: (bond && bond + " | ") + bookingRequest.bondingTipsInfo,
+        request:
+          (bookingRequest.cleaningTipsInfo && bookingRequest.cleaningTipsInfo + " | ") +
+          bookingRequest.request,
+      },
     })
   }
 
@@ -149,8 +158,10 @@ export const MakeBookingScreen: FC<
             <PlaceHolderInputBox
               placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
               boxHeight={78}
-              text={petToolsLocInfo}
-              setText={setPetToolsLocInfo}
+              text={bookingRequest.petToolsLocInfo}
+              setText={(text) => {
+                setBookingRequest((_) => ({ ..._, petToolsLocInfo: text }))
+              }}
             />
           </View>
         ) : null}
@@ -182,66 +193,68 @@ export const MakeBookingScreen: FC<
             onPress={() => firstClick("닭고기")}
           />
         </View>
-
         <PlaceHolderInputBox
           placeholderText="주의할 음식을 직접 작성해주세요!"
           boxHeight={78}
-          onPressIn={() => textboxClick("먹으면안되는음식")}
-          text={avoidFoodInfo}
-          setText={setAvoidFoodInfo}
+          text={bookingRequest.avoidFoodInfo}
+          setText={(text) => {
+            is없음Active && setIs없음Active(false)
+            setBookingRequest((_) => ({ ..._, avoidFoodInfo: text }))
+          }}
         />
+
         <PreBol14
           style={{ marginTop: 24, marginBottom: 14 }}
           text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
         />
         <View style={{ justifyContent: "space-between", marginBottom: 11, height: 151 }}>
-          <ClickToBlueButton
-            buttonText={"ENFP! 사람이면 다 좋아해요."}
-            buttonHeight={45}
-            buttonWidth={358}
-            isActiving={꿀팁 === "사람이면다"}
-            onPress={() => set꿀팁("사람이면다")}
-          />
-          <ClickToBlueButton
-            buttonText={"처음엔 낯가릴 수 있어서 조심이 필요해요."}
-            buttonHeight={45}
-            buttonWidth={358}
-            isActiving={꿀팁 === "처음엔"}
-            onPress={() => set꿀팁("처음엔")}
-          />
-          <ClickToBlueButton
-            buttonText={"되도록이면 만지지 말고 간식만 챙겨주세요."}
-            buttonHeight={45}
-            buttonWidth={358}
-            isActiving={꿀팁 === "되도록"}
-            onPress={() => set꿀팁("되도록")}
-          />
+          {_.map(bondingTip, (item, index) => (
+            <ClickToBlueButton
+              key={index}
+              buttonText={bondingTip[Number(index)]}
+              buttonHeight={45}
+              buttonWidth={358}
+              isActiving={꿀팁 === Number(index)}
+              onPress={() =>
+                // @ts-ignore
+                set꿀팁(Number(index))
+              }
+            />
+          ))}
         </View>
-
         <PlaceHolderInputBox
           placeholderText="꿀팁을 자유롭게 작성해주세요"
           boxHeight={78}
-          onPressIn={() => textboxClick("꿀팁")}
-          text={bondingTipsInfo}
-          setText={setBondingTipsInfo}
+          text={bookingRequest.bondingTipsInfo}
+          setText={(text) => {
+            setBookingRequest((_) => ({ ..._, bondingTipsInfo: text }))
+          }}
         />
+
         <PreBol14
           style={{ marginTop: 16, marginBottom: 11 }}
           text={"배변 처리 방법을 알려주세요"}
         />
         <PlaceHolderInputBox
-          placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
+          placeholderText="Ex) ..."
           boxHeight={78}
+          text={bookingRequest.cleaningTipsInfo}
+          setText={(text) => {
+            setBookingRequest((_) => ({ ..._, cleaningTipsInfo: text }))
+          }}
         />
 
         <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
         <PlaceHolderInputBox
           placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
           boxHeight={161}
-          text={request}
-          setText={setRequest}
+          text={bookingRequest.request}
+          setText={(text) => {
+            setBookingRequest((_) => ({ ..._, request: text }))
+          }}
         />
       </KeyboardAwareScrollView>
+
       {isButtonShown && (
         <Pressable style={styles.pressableContainer} onPress={onPress}>
           <PreBol16 text={"예약하기"} color="white" />
