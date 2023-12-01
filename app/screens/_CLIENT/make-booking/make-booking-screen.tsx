@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -125,13 +125,13 @@ export const MakeBookingScreen: FC<
     let avo = ""
     let bond = ""
     if (is없음Active) {
-      avo = ""
+      avo = "모든 음식 가능"
     } else if (is치즈Active && is닭고기Active) {
-      avo = "치즈, 닭고기"
+      avo = "치즈, 닭고기 금지"
     } else if (is치즈Active) {
-      avo = "치즈"
+      avo = "치즈 금지"
     } else if (is닭고기Active) {
-      avo = "닭고기"
+      avo = "닭고기 금지"
     }
 
     if (꿀팁 === null) {
@@ -147,11 +147,15 @@ export const MakeBookingScreen: FC<
       selectedTime,
       bookingRequest: {
         petToolsLocInfo: bookingRequest.petToolsLocInfo,
-        avoidFoodInfo: bookingRequest.avoidFoodInfo + (avo && " | " + avo),
-        bondingTipsInfo: bookingRequest.bondingTipsInfo + (bond && " | " + bond),
-        request:
-          bookingRequest.request +
-          (bookingRequest.cleaningTipsInfo && " | " + bookingRequest.cleaningTipsInfo),
+        avoidFoodInfo: avo
+          ? `${avo} | ${bookingRequest.avoidFoodInfo}`
+          : bookingRequest.avoidFoodInfo,
+        bondingTipsInfo: bond
+          ? `${bond} | ${bookingRequest.bondingTipsInfo}`
+          : bookingRequest.bondingTipsInfo,
+        request: bookingRequest.cleaningTipsInfo
+          ? `${bookingRequest.cleaningTipsInfo} | ${bookingRequest.request}`
+          : bookingRequest.request,
       },
     })
   }

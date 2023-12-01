@@ -6,6 +6,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CustomModal,
   DivisionLine,
   PaymentTool,
   PreBol14,
@@ -26,7 +27,7 @@ import {
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
-import { createCrecheBooking, createPayment } from "#axios"
+import { createCrecheBooking, createPayment, createVisitingBooking } from "#axios"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
@@ -49,7 +50,7 @@ export interface PaymentParams {
 export type SimplePayment = "카카오페이" | "네이버페이" | "토스"
 
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
-  function PaymentScreen({ route }) {
+  function PaymentScreen({ route, navigation }) {
     const { key, service, selectedPetIds, selectedTime, bookingRequest } = route.params
     console.log("selectedTime 3", selectedTime)
     console.log("bookingRequest", bookingRequest)
@@ -57,6 +58,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const {
       userStore: { userDetail },
     } = useStores()
+
+    // 결제/예약 성공시 모달
+    const [successModalVisible, setSuccessModalVisible] = useState(false)
 
     //* 결제 정보 관련
     const [pg, setPg] = useState("html5_inicis")
@@ -205,9 +209,19 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
      * 참고 디스코드: https://discord.com/channels/1137734002258755654/1139710316675080203/1178274350856675369
      */
     const onPressPay = () => {
+      // setSuccessModalVisible(true)
+      // return
+
       if (!selectedTool) {
         alertModal("결제 수단", "결제 수단을 선택해주세요.")
         return
+      }
+
+      if (!amount?.totalFee) {
+        alertModal(
+          "결제 금액 계산 실패",
+          "알 수 없는 이유로 결제 금액 계산에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+        )
       }
 
       //TODO: 1. 예약 결제 가격 계산
@@ -232,26 +246,37 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       }).then((res) => {
         if (res.isSuccess) {
           // 6.
-          createCrecheBooking({
-            crecheId: service.creche.id,
+          const creator = key === "visiting" ? createVisitingBooking : createCrecheBooking
+          const idProp = key === "visiting" ? "visitingId" : "crecheId"
+          const startProp = key === "visiting" ? "startTime" : "startDate"
+          const endProp = key === "visiting" ? "endTime" : "endDate"
+          const req = {
+            [idProp]: service[key].id,
             userId: userDetail.id,
-            startDate: selectedTime.start,
-            endDate: selectedTime.end,
+            [startProp]: selectedTime.start,
+            [endProp]: selectedTime.end,
             petIds: selectedPetIds,
             paymentId: res.paymentId,
             request: bookingRequest.request,
             avoidFoodInfo: bookingRequest.avoidFoodInfo,
             bondingTipsInfo: bookingRequest.bondingTipsInfo,
-          }).then((res) => {
+          }
+          if (key === "visiting") {
+            req.petToolsLocInfo = bookingRequest.petToolsLocInfo
+          }
+          console.log("req 🔷", req)
+          //@ts-ignore
+          creator(req).then((res) => {
             if (res.isSuccess) {
               alertModal(
                 "결제기능 개발중 🏗️",
                 "실제 결제는 이루어지지 않았으며, 예약 객체가 성공적으로 생성되었습니다.",
               )
+              setSuccessModalVisible(true)
             } else {
               alertModal(
                 "예약 객체 생성 실패",
-                "알 수 없는 이유로, 예약 객체 생성에 실패하였습니다.",
+                "알 수 없는 이유로, 예약 객체 생성에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
               )
             }
           })
@@ -390,6 +415,29 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             </View>
           )}
         </ScrollView>
+
+        <CustomModal
+          visibleState={successModalVisible}
+          title="결제가 완료되었습니다!"
+          subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
+          yesBtnText="홈으로 가기"
+          noBtnText="예약 내역 확인"
+          handleYesPress={() => {
+            setSuccessModalVisible(false)
+            navigation.popToTop() //! DO NOT REMOVE
+          }}
+          handleNoPress={() => {
+            setSuccessModalVisible(false)
+            navigation.popToTop() //! DO NOT REMOVE
+            setTimeout(() => {
+              //@ts-ignore
+              navigate("Bookings")
+            }, 1000)
+          }}
+          image={images.round_blue_check}
+          imageWidth={66}
+          imageHeight={66}
+        />
 
         <TouchableOpacity style={styles.paymentButton} onPress={onPressPay}>
           <PreBol16
