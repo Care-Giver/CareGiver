@@ -59,27 +59,42 @@ export const MakeBookingScreen: FC<
   const [is치즈Active, setIs치즈Active] = useState(false)
   const [is닭고기Active, setIs닭고기Active] = useState(false)
 
-  const firstClick = (click: "없음" | "치즈" | "닭고기") => {
-    if (click === "없음") {
-      setIs없음Active(!is없음Active)
-    } else if (click === "치즈") {
-      setIs치즈Active(!is치즈Active)
-    } else if (click === "닭고기") {
-      setIs닭고기Active(!is닭고기Active)
+  const onPress먹으면안되는음식 = (click: "없음" | "치즈" | "닭고기") => {
+    switch (click) {
+      case "없음":
+        setIs없음Active(!is없음Active) // 없음 버튼 토글
+        // 초기상태
+        if (!is없음Active && !is치즈Active && !is닭고기Active) {
+          setBookingRequest((_) => ({ ..._, avoidFoodInfo: "" }))
+        }
+        // 없음 버튼이 눌려있는 상태
+        else if (is없음Active) {
+          setIs치즈Active(false)
+          setIs닭고기Active(false)
+          setBookingRequest((_) => ({ ..._, avoidFoodInfo: "" }))
+        }
+        // 없음 버튼이 눌려있지 않고, 다른 버튼들은 눌려있는 상태
+        else if (!is없음Active && (is치즈Active || is닭고기Active)) {
+          setIs없음Active(true)
+          setIs치즈Active(false)
+          setIs닭고기Active(false)
+          setBookingRequest((_) => ({ ..._, avoidFoodInfo: "" }))
+        }
+        break
+      case "치즈":
+        setIs치즈Active(!is치즈Active) // 치즈 버튼 토글
+        if (is없음Active) {
+          setIs없음Active(false)
+        }
+        break
+      case "닭고기":
+        setIs닭고기Active(!is닭고기Active) // 닭고기 버튼 토글
+        if (is없음Active) {
+          setIs없음Active(false)
+        }
+        break
     }
   }
-
-  useEffect(() => {
-    if (is없음Active) {
-      setIs치즈Active(false)
-      setIs닭고기Active(false)
-      setBookingRequest((_) => ({ ..._, avoidFoodInfo: "" }))
-    }
-
-    if (is없음Active && (is치즈Active || is닭고기Active)) {
-      setIs없음Active(false)
-    }
-  }, [is닭고기Active, is없음Active, is치즈Active])
 
   /**
    * [버튼] 반려동물과 친해질 수 있는 꿀팁
@@ -132,11 +147,11 @@ export const MakeBookingScreen: FC<
       selectedTime,
       bookingRequest: {
         petToolsLocInfo: bookingRequest.petToolsLocInfo,
-        avoidFoodInfo: (avo && avo + " | ") + bookingRequest.avoidFoodInfo,
-        bondingTipsInfo: (bond && bond + " | ") + bookingRequest.bondingTipsInfo,
+        avoidFoodInfo: bookingRequest.avoidFoodInfo + (avo && " | " + avo),
+        bondingTipsInfo: bookingRequest.bondingTipsInfo + (bond && " | " + bond),
         request:
-          (bookingRequest.cleaningTipsInfo && bookingRequest.cleaningTipsInfo + " | ") +
-          bookingRequest.request,
+          bookingRequest.request +
+          (bookingRequest.cleaningTipsInfo && " | " + bookingRequest.cleaningTipsInfo),
       },
     })
   }
@@ -176,21 +191,21 @@ export const MakeBookingScreen: FC<
             buttonHeight={45}
             buttonWidth={115}
             isActiving={is없음Active}
-            onPress={() => firstClick("없음")}
+            onPress={() => onPress먹으면안되는음식("없음")}
           />
           <ClickToBlueButton
             buttonText={"치즈"}
             buttonHeight={45}
             buttonWidth={115}
             isActiving={is치즈Active}
-            onPress={() => firstClick("치즈")}
+            onPress={() => onPress먹으면안되는음식("치즈")}
           />
           <ClickToBlueButton
             buttonText={"닭고기"}
             buttonHeight={45}
             buttonWidth={115}
             isActiving={is닭고기Active}
-            onPress={() => firstClick("닭고기")}
+            onPress={() => onPress먹으면안되는음식("닭고기")}
           />
         </View>
         <PlaceHolderInputBox

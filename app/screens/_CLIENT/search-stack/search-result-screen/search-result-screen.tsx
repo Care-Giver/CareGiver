@@ -104,7 +104,7 @@ export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLa
 const TEMP_CRE_SEARCH_REQ = {
   amenities: [],
   certifiedOnly: false,
-  endDate: "2023-11-28T00:00:00",
+  endDate: "2023-11-29T00:00:00",
   gender: null,
   lat: 37.5637312032917,
   lng: 127.191741670397,
@@ -115,7 +115,7 @@ const TEMP_CRE_SEARCH_REQ = {
   sortBy: "distance",
   // @ts-ignore
   sortOrder: "ASC",
-  startDate: "2023-11-28T00:00:00",
+  startDate: "2023-11-29T00:00:00",
 
   //
   startTime: null,

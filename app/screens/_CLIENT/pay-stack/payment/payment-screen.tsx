@@ -26,6 +26,7 @@ import {
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
+import { createCrecheBooking, createPayment } from "#axios"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
@@ -208,12 +209,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
         alertModal("결제 수단", "결제 수단을 선택해주세요.")
         return
       }
-      alertModal(
-        "결제기능 개발중 🏗️",
-        "실제 결제는 이루어지지 않았으며, 예약객체가 성공적으로 생성되었습니다.",
-      )
 
-      //TODO: 아래 항목중에서 5, 6 API 구현 후 추가. (visiting 도 마찬가지)
       //TODO: 1. 예약 결제 가격 계산
       //TODO:     /api/v1/payment/creche-booking/calculate 를 통해 결제될 총 금액을 계산합니다.
       //TODO: 2. 결제 사전 등록
@@ -225,6 +221,42 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       //TODO:   POST /api/v1/payment 를 통해 정상적으로 처리된 결제 내용을 DB에 저장합니다.
       //TODO: 6.예약 완료
       //TODO:   POST /api/v1/booking/creche 를 통해 결제 정보와 같이 예약을 생성합니다.
+
+      // 5.
+      createPayment({
+        imp_uid: "111",
+        merchant_uid: "111",
+        imp_success: true,
+        isRefunded: false,
+        totalFee: amount.totalFee,
+      }).then((res) => {
+        if (res.isSuccess) {
+          // 6.
+          createCrecheBooking({
+            crecheId: service.creche.id,
+            userId: userDetail.id,
+            startDate: selectedTime.start,
+            endDate: selectedTime.end,
+            petIds: selectedPetIds,
+            paymentId: res.paymentId,
+            request: bookingRequest.request,
+            avoidFoodInfo: bookingRequest.avoidFoodInfo,
+            bondingTipsInfo: bookingRequest.bondingTipsInfo,
+          }).then((res) => {
+            if (res.isSuccess) {
+              alertModal(
+                "결제기능 개발중 🏗️",
+                "실제 결제는 이루어지지 않았으며, 예약 객체가 성공적으로 생성되었습니다.",
+              )
+            } else {
+              alertModal(
+                "예약 객체 생성 실패",
+                "알 수 없는 이유로, 예약 객체 생성에 실패하였습니다.",
+              )
+            }
+          })
+        }
+      })
     }
 
     return (

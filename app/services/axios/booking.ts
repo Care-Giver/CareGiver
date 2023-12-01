@@ -4,50 +4,51 @@ import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
 
 //* 위탁예약 생성
-export interface CreateCrecheBookingInput {
+export interface CreateCrecheBookingRequestBody {
   crecheId: number
   userId: number
   request: string
-  services: string[]
   startDate: string
   endDate: string
   petIds: number[]
   paymentId: number
   avoidFoodInfo: string
   bondingTipsInfo: string
-  totalFee: number
-  defalutFee: number
 }
-interface CreateCrecheBookingInputResponse extends GeneralResponse {
-  CreateCrecheBookingInput: CreateCrecheBookingInput
+interface CreateCrecheBookingResponse extends GeneralResponse {
+  //
 }
+type CreateCrecheBookingResult =
+  | {
+      isSuccess: true // 성공
+      // TODO: 성공시...
+    }
+  | {
+      isSuccess: false // 실패
+      // TODO: 실패시...
+    }
 /**
- * @returns {Promise<CreateCrecheBookingInput>}
+ * [클라이언트 ➡️ 펫시터]
+ * 위탁 예약을 생성합니다.
+ * 결제완료후, "예약신청" 상황에서 사용됩니다.
  */
-export const postCrecheBooking = async (
-  post: CreateCrecheBookingInput,
-): Promise<CreateCrecheBookingInput> => {
+export const createCrecheBooking = async (
+  body: CreateCrecheBookingRequestBody,
+): Promise<CreateCrecheBookingResult> => {
   try {
-    const response = await axios.post<CreateCrecheBookingInputResponse>(
+    const response = await axios.post<CreateCrecheBookingResponse>(
       `${BASE_URL}/booking/creche`,
-      post,
+      body,
     )
 
     if (!response.data.ok) {
-      const error = response.data.error
-      console.log(response.data)
-      console.error("postCrecheBooking response.data.error 에러!!!", error)
-      // @ts-ignore
-      return error
+      return { isSuccess: false }
     }
 
-    // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.CreateCrecheBookingInputs", response.data.CreateCrecheBookingInput)
-    return response.data.CreateCrecheBookingInput
+    return { isSuccess: true }
   } catch (error) {
     console.error("catch 에러!!!", error)
-    return null
+    return { isSuccess: false }
   }
 }
 
@@ -88,7 +89,7 @@ interface CreateVisitingBookingResponse extends GeneralResponse {
 /**
  * @returns {Promise<CreateVisitingBookingResponse>}
  */
-export const postVisitingBooking = async (
+export const createVisitingBooking = async (
   post: CreateVisitingBookingInput,
 ): Promise<CreateVisitingBookingResponse> => {
   try {
