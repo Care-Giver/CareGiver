@@ -58,6 +58,7 @@ import { Calendar, DateData } from "react-native-calendars"
 import { Pet, useStores } from "../../../models"
 import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
+import { getFavorites } from "#axios"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -88,7 +89,6 @@ export const FavoritesScreen: FC<
       setFavorites,
       cancelFavorite,
       favoritePetsitters,
-      favoriteTrainers,
       isEmptyFavoritePetsitters,
       isEmptyFavoriteTrainers,
     },
@@ -246,9 +246,16 @@ export const FavoritesScreen: FC<
   }, [filterServiceType, startDate, endDate, filterPet])
 
   // * load petsitters
-  useLayoutEffect(() => {
-    setFavorites({})
-    console.log("[FAVORITES SCREEN] favoritePetsitters:", favoritePetsitters)
+  useEffect(() => {
+    // setFavorites({})
+    getFavorites({
+      startTime: "2023-11-29T00:00:00",
+      endTime: "2023-11-29T01:00:00",
+      // petIds: [28, 27, 30],
+      petIds: [21, 22, 24],
+      sortBy: "rating",
+      petSitterType: "visiting",
+    })
   }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수
@@ -273,7 +280,6 @@ export const FavoritesScreen: FC<
     }
 
     // console.log("in handleCheckButton postBody >>>", postBody)
-    // console.log("favoritePetsitters:", favoritePetsitters)
 
     // * 필터 조건이 존재하는 경우에만 텍스트 변경
     // ? - 필터 조건이 없는 상태는 초기상태 혹은 초기화 버튼을 누른 경우밖에 없으므로, 텍스트를 수정하거나 결과를 수정할 필요가 없음
@@ -370,34 +376,35 @@ export const FavoritesScreen: FC<
       ) : (
         // TODO: serviceType이 훈련사이면서 훈련사 목록이 존재하는 경우 - 훈련사 목록 띄우기
         //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
-        <FlatList
-          data={favoritePetsitters}
-          renderItem={({ item, index }) => {
-            const serviceType: Service = item.crecheId ? "creche" : "visiting"
-            const id = item.crecheId ? item.crecheId : item.visitingId
+        // <FlatList
+        //   data={favoritePetsitters}
+        //   renderItem={({ item, index }) => {
+        //     const serviceType: Service = item.crecheId ? "creche" : "visiting"
+        //     const id = item.crecheId ? item.crecheId : item.visitingId
 
-            const info: OnLikePressProp = {
-              serviceType,
-              id,
-            }
+        //     const info: OnLikePressProp = {
+        //       serviceType,
+        //       id,
+        //     }
 
-            return (
-              <SitterProfileCard
-                key={item.crecheId ? item.crecheId : item.visitingId}
-                sitterData={item}
-                onPress={() => {
-                  //? 상세정보 스크린으로 이동
-                  navigate("caregiver-detail-information-screen", { sitterData: item })
-                }}
-                isFavorite={true}
-                style={
-                  index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
-                }
-                onLikePress={() => onLikePress(info)}
-              />
-            )
-          }}
-        />
+        //     return (
+        //       <SitterProfileCard
+        //         key={item.crecheId ? item.crecheId : item.visitingId}
+        //         sitterData={item}
+        //         onPress={() => {
+        //           //? 상세정보 스크린으로 이동
+        //           navigate("caregiver-detail-information-screen", { sitterData: item })
+        //         }}
+        //         isFavorite={true}
+        //         style={
+        //           index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
+        //         }
+        //         onLikePress={() => onLikePress(info)}
+        //       />
+        //     )
+        //   }}
+        // />
+        <></>
       )}
 
       {/* //* 바텀시트 bottomSheet */}
