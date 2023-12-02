@@ -247,15 +247,15 @@ export const FavoritesScreen: FC<
 
   // * load petsitters
   useEffect(() => {
-    // setFavorites({})
-    getFavorites({
-      startTime: "2023-11-29T00:00:00",
-      endTime: "2023-11-29T01:00:00",
-      // petIds: [28, 27, 30],
-      petIds: [21, 22, 24],
-      sortBy: "rating",
-      petSitterType: "visiting",
-    })
+    setFavorites({})
+    // getFavorites({
+    //   startTime: "2023-11-29T00:00:00",
+    //   endTime: "2023-11-29T01:00:00",
+    //   // petIds: [28, 27, 30],
+    //   petIds: [21, 22, 24],
+    //   sortBy: "rating",
+    //   petSitterType: "visiting",
+    // })
   }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수

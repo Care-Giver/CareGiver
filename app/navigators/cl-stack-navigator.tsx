@@ -353,8 +353,10 @@ export const SearchingStack = () => {
               <Image style={{ width: 28, height: 28 }} source={images.go_back} />
             </Pressable>
           ),
-          // title: null,
           headerTitle: "",
+          headerTitleStyle: {
+            color: "white",
+          },
         }}
       />
 
@@ -373,6 +375,7 @@ export const SearchingStack = () => {
         name="all-reviews-screen"
         component={AllReviewsScreen}
         options={{
+          title: "후기 (더미)",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

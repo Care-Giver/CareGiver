@@ -56,9 +56,6 @@ export const CaregiverDetailInformationScreen: FC<
   } = useStores()
 
   const { serviceTypeKorean, service, selectedPetIds, selectedTime } = route.params
-  // console.log("petsitter 🔷", petsitter)
-  // console.log("petsitter?.__careGiver__ 🔷", service?.creche?.__careGiver__)
-
   const { userProfile: profileImage, userNickname, reviewCount } = service
   const key: ServiceType = serviceTypeKorean === "방문" ? "visiting" : "creche"
   const { star, desc, defaultFee, images } = service[key]
@@ -72,7 +69,6 @@ export const CaregiverDetailInformationScreen: FC<
         ? service.visiting.visitingAmenities
         : service.creche.crecheAmenities,
   }
-  // console.log("images", images)
   console.log("selectedTime 1", selectedTime)
 
   const [post, setPost] = useState(null)
@@ -149,6 +145,9 @@ export const CaregiverDetailInformationScreen: FC<
             headerStyle: {
               elevation: headerOpacity,
               backgroundColor: `rgba(255,255,255,${headerOpacity})`,
+            },
+            headerTitleStyle: {
+              color: headerOpacity < 0.3 ? "white" : "black",
             },
           })
         }}
@@ -252,7 +251,7 @@ export const CaregiverDetailInformationScreen: FC<
 
           {/* //* 댓글 */}
           <Row style={{ marginTop: 60 }}>
-            <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
+            <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
               color={BODY}
