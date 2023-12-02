@@ -441,7 +441,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
         <TouchableOpacity style={styles.paymentButton} onPress={onPressPay}>
           <PreBol16
-            text={amount ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
+            text={amount?.totalFee ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
             color="white"
             ml={16}
           />

@@ -82,8 +82,10 @@ export const CaregiverDetailInformationScreen: FC<
   const animationValue = useRef(new Animated.Value(0)).current
 
   useLayoutEffect(() => {
+    // @ts-ignore
+    navigation.setOptions({ headerTitle: service[key]?.__careGiver__?.__user__?.nickname })
     delayedIsMount()
-  }, [])
+  }, [key, navigation, service])
 
   const delayedIsMount = async () => {
     await delay(600)
@@ -153,12 +155,14 @@ export const CaregiverDetailInformationScreen: FC<
         scrollEventThrottle={16}
         contentInsetAdjustmentBehavior="never"
       >
-        {/* //* 케어기버 사진들 */}
+        {/* //* 위탁 장소 사진들 */}
         <FullWidthSizeImagesBoxWithIndicator
           style={{
             marginTop: 0,
           }}
-          images={images}
+          // 위탁의 경우, "위탁 사진" 을,
+          // 방문의 경우, "방문 펫시터 프로필 사진" 을 렌더링 하다.
+          images={key === "creche" ? images : [service.userProfile]}
         />
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>

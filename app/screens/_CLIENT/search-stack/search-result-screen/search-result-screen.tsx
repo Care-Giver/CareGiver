@@ -101,10 +101,31 @@ const optionLabel = {
 // 정렬 옵션 리스트의 타입
 export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLabel]
 
+const TEMP_VIS_SEARCH_REQ = {
+  amenities: [],
+  certifiedOnly: false,
+  gender: null,
+  lat: 37.2955072, // 위도
+  lng: 126.83539,
+  page: 1,
+  petIds: [28],
+  radius: 10,
+  services: [],
+  sortBy: "distance",
+  // @ts-ignore
+  sortOrder: "ASC",
+  startTime: "2023-11-25 21:00:00",
+  endTime: "2023-11-25 22:00:00",
+
+  //
+  startDate: null,
+  endDate: null,
+  address: "테스트중",
+}
+
 const TEMP_CRE_SEARCH_REQ = {
   amenities: [],
   certifiedOnly: false,
-  endDate: "2023-11-29T00:00:00",
   gender: null,
   lat: 37.5637312032917,
   lng: 127.191741670397,
@@ -116,6 +137,7 @@ const TEMP_CRE_SEARCH_REQ = {
   // @ts-ignore
   sortOrder: "ASC",
   startDate: "2023-11-29T00:00:00",
+  endDate: "2023-11-29T00:00:00",
 
   //
   startTime: null,
@@ -124,8 +146,11 @@ const TEMP_CRE_SEARCH_REQ = {
 }
 
 const TEMP_ROUTE_PARAMS = {
-  ...TEMP_CRE_SEARCH_REQ,
-  serviceType: "위탁",
+  // ...TEMP_CRE_SEARCH_REQ,
+  // serviceType: "위탁",
+
+  ...TEMP_VIS_SEARCH_REQ,
+  serviceType: "방문",
 }
 
 export const SearchResultScreen: FC<
