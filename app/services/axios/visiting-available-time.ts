@@ -48,17 +48,20 @@ interface GetAvailableTimesByDateRequestBody {
   visitingId: number // 1,
   date: string // "2022-09-14"
 }
-export interface VisitingAvailableTime {
-  id: number // visitingAvailableTimeId
-  createAt: string // "2023-01-01T11:00:00"
-  updatedAt: string // "2023-01-01T11:00:00"
-  startTime: string // "2022-09-14T22:00:00"
-  fee: number
-  isBooked: boolean // 해당 시간 객체가 유저 예약이 되어있는지 여부. true 일 경우, 예약이 걸려있으므로 PUT 불가 함.
+interface VisitingAvailableTimes {
+  id: number //1,
+  createAt: string // "2023-01-01T11:00:00",
+  updatedAt: string // "2023-01-01T11:00:00",
+  startTime: string // "2022-09-14T22:00:00",
+  fee: number // 10000,
+  isBooked: boolean // false
 }
 interface GetAvailableTimesByDateResponse extends GeneralResponse {
-  visitingAvailableTimes: VisitingAvailableTime[]
+  visitingAvailableTimes: VisitingAvailableTimes[]
 }
+// interface GetAvailableTimesByDateResult {
+//   visitingAvailableTimes: VisitingAvailableTimes[]
+// }
 /**
  * 🏗️ WIP
  * [케어기버 전용 API]
@@ -66,7 +69,7 @@ interface GetAvailableTimesByDateResponse extends GeneralResponse {
  */
 export const getAvailableTimesByDate = async (
   body: GetAvailableTimesByDateRequestBody,
-): Promise<VisitingAvailableTime[]> => {
+): Promise<VisitingAvailableTimes[]> => {
   try {
     const response = await axios.post<GetAvailableTimesByDateResponse>(
       `${BASE_URL}/visiting-available-time/availableTimes`,
@@ -91,6 +94,14 @@ interface CreateVisitingAvailableTimeRequestBody {
   visitingId: number // 16,
   fee: number //  "시간당 추가요금" 입니다. 기본요금(defaultFee)랑 다름.
 }
+interface VisitingAvailableTime {
+  id: number // visitingAvailableTimeId
+  createAt: string // "2023-01-01T11:00:00"
+  updatedAt: string // "2023-01-01T11:00:00"
+  startTime: string // "2022-09-14T22:00:00"
+  fee: number
+  isBooked: boolean // 해당 시간 객체가 유저 예약이 되어있는지 여부. true 일 경우, 예약이 걸려있으므로 PUT 불가 함.
+}
 interface CreateVisitingAvailableTimeResponse extends GeneralResponse {
   visitingAvailableTimes: VisitingAvailableTime[]
 }
@@ -114,117 +125,21 @@ export const createVisitingAvailableTime = async (
     )
     console.log("response.data 🔷 createVisitingAvailableTime", response.data)
 
-    if (!response?.data.ok) {
-      return { isSuccess: false, reason: response?.data?.error }
-    }
+    // if (!response?.data.ok) {
+    //   console.error("API 에러!!! - createVisitingAvailableTime ♦️", response?.data?.error)
+    //   return { isSuccess: false, reason: response?.data?.error }
+    // }
 
-    return {
-      isSuccess: true,
-      visitingAvailableTimes: response.data.visitingAvailableTimes,
-    }
+    // return {
+    //   isSuccess: true,
+    //   // visitingAvailableTime: response.data.visitingAvailableTime,
+    //   visitingAvailableTime: response.data,
+    // }
+
+    return response
   } catch (error) {
     console.error("catch 에러!!! - createVisitingAvailableTime", error)
     console.error("catch 에러!!! - createVisitingAvailableTime body", body)
-    return { isSuccess: false, reason: error }
-  }
-}
-
-interface DeleteVisitingAvailableTimeResponse extends GeneralResponse {}
-interface DeleteVisitingAvailableTimeResult {
-  isSuccess: boolean // 성공여부
-  reason?: string // 실패시, 실패이유
-}
-/**
- * [케어기버 전용 API]
- * 입력받은 id의 펫시팅 서비스를 진행할 시간을 삭제한다.
- */
-export const deleteVisitingAvailableTime = async (
-  visitingAvailableTimeId: number,
-): Promise<DeleteVisitingAvailableTimeResult> => {
-  try {
-    const response = await axios.delete<DeleteVisitingAvailableTimeResponse>(
-      `${BASE_URL}/visiting-available-time/${visitingAvailableTimeId}`,
-    )
-
-    if (!response?.data.ok) {
-      console.error("API 에러!!! - createVisitingAvailableTime ♦️", response?.data?.error)
-      return { isSuccess: false, reason: response?.data?.error?.message }
-    }
-
-    return {
-      isSuccess: true,
-    }
-  } catch (error) {
-    return { isSuccess: false, reason: error }
-  }
-}
-
-interface DisableVisitingAvailableTimeRequestBody {
-  visitingId: number // 16,
-  date: string // "2023-06-05",
-}
-interface DisableVisitingAvailableTimeResponse extends GeneralResponse {}
-interface DisableVisitingAvailableTimeResult {
-  isSuccess: boolean // 성공여부
-  reason?: string // 실패시, 실패이유
-}
-/**
- * [케어기버 전용 API]
- * 입력받은 날짜에 해당하는 펫시팅 서비스를 비활성화 한다.
- */
-export const disableVisitingAvailableTime = async (
-  body: DisableVisitingAvailableTimeRequestBody,
-): Promise<DisableVisitingAvailableTimeResult> => {
-  try {
-    const response = await axios.post<DisableVisitingAvailableTimeResponse>(
-      `${BASE_URL}/visiting-available-time/disable`,
-      body,
-    )
-
-    if (!response?.data.ok) {
-      return { isSuccess: false, reason: response?.data?.error.message }
-    }
-
-    return {
-      isSuccess: true,
-    }
-  } catch (error) {
-    return { isSuccess: false, reason: error }
-  }
-}
-
-interface RestoreVisitingAvailableTimeRequestBody {
-  visitingId: number // 16,
-  date: string // "2023-06-05",
-}
-interface RestoreVisitingAvailableTimeResponse extends GeneralResponse {
-  visitingAvailableTimes: VisitingAvailableTime[]
-}
-interface RestoreVisitingAvailableTimeResult {
-  isSuccess: boolean // 성공여부
-  reason?: string // 실패시, 실패이유
-}
-/**
- * [케어기버 전용 API]
- * 한번 비활성화 된 적 있는 펫시팅 서비스를 다시 활성화 한다.
- */
-export const restoreVisitingAvailableTime = async (
-  body: RestoreVisitingAvailableTimeRequestBody,
-): Promise<RestoreVisitingAvailableTimeResult> => {
-  try {
-    const response = await axios.post<RestoreVisitingAvailableTimeResponse>(
-      `${BASE_URL}/visiting-available-time/restore`,
-      body,
-    )
-
-    if (!response?.data.ok) {
-      return { isSuccess: false, reason: response?.data?.error.message }
-    }
-
-    return {
-      isSuccess: true,
-    }
-  } catch (error) {
     return { isSuccess: false, reason: error }
   }
 }

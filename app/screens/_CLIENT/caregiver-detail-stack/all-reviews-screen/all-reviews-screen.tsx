@@ -6,7 +6,6 @@ import { observer } from "mobx-react-lite"
 import { DivisionLine, Screen, ReviewBox, FilterHeader } from "../../../../components"
 import { reviews as _reviews } from "./dummy-data"
 import { LBG } from "../../../../theme"
-import { alertModal } from "../../../../utils/alert-modal"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
@@ -20,6 +19,12 @@ export const AllReviewsScreen: FC<
     setReviews(_reviews)
   }, [])
 
+  // ? 헤더 타이틀 설정
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "리뷰",
+    })
+  }, [])
   return (
     <Screen preset={"fixed"}>
       {/* //? 필터 헤더 박스 */}
@@ -27,9 +32,6 @@ export const AllReviewsScreen: FC<
         title={"전체"}
         number={reviews.length < 1000 ? `${reviews.length}` : "999+"}
         seletedOption={seletedOption}
-        onPress={() => {
-          alertModal("개발중 🏗️", "후기 정렬 기능은 개발 중 입니다.")
-        }}
       />
 
       <DivisionLine color={LBG} />

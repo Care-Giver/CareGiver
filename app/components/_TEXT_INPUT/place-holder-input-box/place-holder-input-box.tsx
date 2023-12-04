@@ -1,8 +1,9 @@
-import React from "react"
+import React, { Dispatch, SetStateAction, useState } from "react"
 import { StyleProp, ViewStyle, TextInput, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { DISABLED, LBG } from "#theme"
 import { PRETENDARD_REGULAR } from "#fonts"
+import { Text } from "../../_BASIC/ignite-basics"
 
 export interface PlaceHolderInputBoxProps {
   /**
@@ -21,19 +22,38 @@ export interface PlaceHolderInputBoxProps {
   boxHeight: number
 
   /**
+   * 기본적으로 Width는 100%이며 Height는 값을 추가하여 사용할 수 있습니다.
+   */
+  onPressIn?: () => void
+
+  /**
    * 상위 컴포넌트(make-booking-screen) 에서 받아오는 text, setText
    */
   text: string
-  setText: (text: string) => void
+  setText: Dispatch<SetStateAction<any>>
 }
 
 export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   props: PlaceHolderInputBoxProps,
 ) {
-  const { style, placeholderText = "예시입니다.", boxHeight = 78 } = props
+  const { style, placeholderText = "예시입니다.", boxHeight = 78, onPressIn } = props
   const text = props.text
   const setText = props.setText
   const allStyles = Object.assign({}, styles.root, style)
+
+  const handleFocus = () => {
+    if (onPressIn) {
+      onPressIn()
+    }
+    console.log("focus")
+  }
+
+  //* text update
+  const onChange = (e) => {
+    setText(e.nativeEvent.text)
+    //console.log(text)
+    //console.log(e.nativeEvent.text)
+  }
 
   return (
     <View style={allStyles}>
@@ -43,8 +63,9 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         multiline
         maxLength={300}
         autoFocus={true}
-        value={text}
-        onChangeText={setText}
+        onPressIn={handleFocus}
+        //value={text}
+        onChange={onChange}
         //*scrollEnabled={false}
       />
     </View>

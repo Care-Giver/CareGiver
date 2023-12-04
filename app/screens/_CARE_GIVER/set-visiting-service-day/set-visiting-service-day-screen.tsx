@@ -43,14 +43,7 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { addMinutes, isAfter, subMinutes, isEqual } from "date-fns"
 import { price as priceFormatter } from "../../../utils/format"
 import { useStores } from "#models"
-import {
-  VisitingAvailableTime,
-  createVisitingAvailableTime,
-  deleteVisitingAvailableTime,
-  disableVisitingAvailableTime,
-  getAvailableTimesByDate,
-  restoreVisitingAvailableTime,
-} from "#axios"
+import { createVisitingAvailableTime, getAvailableTimesByDate } from "#axios"
 import _ from "lodash"
 import { alertModal } from "../../../utils/alert-modal"
 import { useKeyboardShown } from "../../../utils/hooks"
@@ -75,16 +68,10 @@ const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).
 // "지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤
 const oneHourLaterFromNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
-interface Timeframe {
-  selected: SelectedTimeframe[]
-  deleted: SelectedTimeframe[]
-  added: SelectedTimeframe[]
-}
 interface SelectedTimeframe {
-  id: number //! 프론트에서 추가한 id 는 float 이고, API 를 통해 DB 에서 가져온 id 는 integer 입니다.
-  beginTime: VisitingAvailableTime["startTime"]
+  id: number
+  beginTime: string
   endTime: string
-  isBooked: VisitingAvailableTime["isBooked"]
 }
 
 // 서비스 시간 : 오전(오후) 08:00 ~ 오전(오후) 03:00
@@ -128,81 +115,38 @@ export const SetVisitingServiceDayScreen: FC<
   const {
     petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, hasDogs, petsitter },
   } = useStores()
+  // console.log("petsitter", petsitter)
+  console.log("isAvailableDate", isAvailableDate)
 
-  const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // 시간선택 - TimePicker: `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
-  const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // 시간선택 - TimePicker: `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
-  const [previousSelectedTimeframes, setPreviousSelectedTimeframes] = useState<SelectedTimeframe[]>(
-    [],
-  )
-  const [timeframe, setTimeframe] = useState<Timeframe>({
-    selected: [],
-    deleted: [],
-    added: [],
-  })
-  console.log("timeframe 🔷", timeframe)
-  console.log(_.isEqual(timeframe.added, timeframe.selected))
-  const isPOST = _.isEqual(timeframe.added, timeframe.selected) && !isAvailableDate
-  console.log("isPOST", isPOST)
-  const [isAvailable, setIsAvailable] = useState(isAvailableDate)
-  const [isSaveButtonActivated, setIsSaveButtonActivated] = useState(false)
+  const [isActivated, setIsActivated] = useState(true)
 
   // 헤더 타이틀 설정
   useLayoutEffect(() => {
     navigation.setOptions({
       //@ts-ignore
-      title: selectedDates?.length === 1 ? `날짜 별 서비스 수정` : `날짜 별 서비스 등록`,
+      title: isAvailableDate ? `날짜 별 서비스 수정` : `날짜 별 서비스 등록`,
     })
-  }, [selectedDates, navigation])
+  }, [isAvailableDate, navigation])
 
-  // 최초 렌더링시, availableTimes 객체 호출
   useEffect(() => {
-    getAvailableTimesByDate({ visitingId: petsitter.id, date: selectedDates[0] }).then((res) => {
-      const sorted = _.uniqBy(
-        _.sortBy(
-          res.map((item) => ({
-            beginTime: item.startTime,
-            endTime: addMinutes(new Date(item.startTime), 60).toISOString(),
-            isBooked: item.isBooked,
-            id: item.id,
-          })),
-          ["beginTime"],
+    if (isAvailableDate) {
+      getAvailableTimesByDate({ visitingId: petsitter.id, date: selectedDates[0] }).then((res) =>
+        setSelectedTimeframes(
+          _.sortBy(
+            res.map((item) => ({
+              beginTime: item.startTime,
+              endTime: addMinutes(new Date(item.startTime), 60).toISOString(),
+              id: item.id,
+            })),
+            ["beginTime"],
+          ),
         ),
-        "beginTime",
       )
-      setPreviousSelectedTimeframes(sorted)
-      setTimeframe((timeframe) => ({
-        ...timeframe,
-        selected: sorted,
-      }))
-    })
-  }, [petsitter.id, selectedDates])
-
-  // 저장하기 버튼 활성화 핸들링
-  useEffect(() => {
-    if (isPOST && !isAvailable) {
-      setIsSaveButtonActivated(false)
-      return
     }
+  }, [isAvailableDate, petsitter.id, selectedDates])
 
-    setIsSaveButtonActivated(
-      (previousSelectedTimeframes.length === 0 && timeframe.selected.length !== 0) ||
-        (previousSelectedTimeframes.length !== 0 &&
-          previousSelectedTimeframes !== timeframe.selected) ||
-        (isAvailableDate && !isAvailable) ||
-        (!isAvailableDate && isAvailable),
-    )
-  }, [isAvailable, isAvailableDate, isPOST, previousSelectedTimeframes, timeframe.selected])
-
-  // 서비스 가능 활성화 핸들링
-  useEffect(() => {
-    setIsAvailable(timeframe.selected.length !== 0)
-  }, [timeframe.selected.length])
-
+  const [isAvailable, setIsAvailable] = useState(isAvailableDate)
   const toggleSwitch = () => {
-    if (!isAvailable && timeframe.selected.length === 0) {
-      alertModal("시간대를 선택해주세요", "선택된 시간대가 없습니다.")
-      return
-    }
     setIsAvailable((prev) => !prev)
   }
 
@@ -230,8 +174,14 @@ export const SetVisitingServiceDayScreen: FC<
     [totalPrice],
   )
 
-  const checkIsValidTimeframe = useCallback((selected: SelectedTimeframe[]) => {
-    const sorted: SelectedTimeframe[] = _.uniqBy(_.sortBy(selected, ["beginTime"]), "beginTime")
+  //* 시간선택 - TimePicker
+  const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
+  const [endDate, setEndDate] = useState<Date>(oneHourLaterFromNearestPastTime) // `"지금 시간으로 부터 가장 가까운 5분단위 과거 시간" 에서 딱 1시간 뒤`로 초기값 세팅
+  const [selectedTimeframes, setSelectedTimeframes] = useState<SelectedTimeframe[]>([])
+  console.log("selectedTimeframes", selectedTimeframes)
+
+  const checkIsValidTimeframe = useCallback((sorted: SelectedTimeframe[]) => {
+    console.log("sorted", sorted)
 
     let isValid = false
     if (sorted.length === 1) {
@@ -259,49 +209,20 @@ export const SetVisitingServiceDayScreen: FC<
     return isValid
   }, [])
 
-  // 서비스 시간대 삭제버튼 클릭시 작동
-  const onPressDelete = (item: SelectedTimeframe) => {
-    if (item.isBooked) {
-      alertModal(
-        "예약이 진행중인 시간대 입니다.",
-        "예약 진행중에는 서비스 시간대를 수정할 수 없습니다.",
-      )
-      return
-    }
-
-    setTimeframe({
-      selected: _.uniqBy(
-        _.sortBy(
-          timeframe.selected.filter((fItem) => fItem.id !== item.id),
-          ["beginTime"],
-        ),
-        "beginTime",
-      ),
-      added: _.uniqBy(
-        _.sortBy(
-          timeframe.added.filter((fItem) => fItem.beginTime !== item.beginTime), //! DO NOT CHANGE THIS
-          ["beginTime"],
-        ),
-        "beginTime",
-      ),
-      deleted: _.uniqBy(_.sortBy([...timeframe.deleted, item], ["beginTime"]), "beginTime"),
-    })
-  }
-
-  // 저장하기 버튼 클릭시 데이터 POST 또는 DELETE
+  // 저장하기 버튼 클릭시 데이터 POST
   const onPressSave = () => {
-    const isValid = checkIsValidTimeframe(timeframe.selected)
+    const sorted: SelectedTimeframe[] = _.sortBy(selectedTimeframes, ["beginTime"])
+    const isValid = checkIsValidTimeframe(sorted)
     console.log("🔷 isValid", isValid)
     if (!isValid) {
-      alertModal("올바른 서비스 시간대가 아닙니다", "이미 선택한 서비스 시간대와 겹침니다.")
+      alertModal("시간대 겹침", "올바른 서비스 시간대가 아닙니다.")
       return
     }
 
-    // 처음 생성 시나리오
-    if (isPOST) {
+    if (!isAvailableDate) {
       Promise.all(
         selectedDates.map((dateItem) =>
-          timeframe.selected.forEach((tiemItem) =>
+          selectedTimeframes.forEach((tiemItem) =>
             createVisitingAvailableTime({
               startTime: dateItem.slice(0, 10) + tiemItem.beginTime.slice(10, 19),
               endTime: dateItem.slice(0, 10) + tiemItem.endTime.slice(10, 19),
@@ -313,105 +234,25 @@ export const SetVisitingServiceDayScreen: FC<
       )
         .then((response) => {
           // console.log("response >>>", response)
-          setIsSaveButtonActivated(false)
+          setIsActivated(false)
           setTimeout(() => {
             navigation.goBack()
-            setIsSaveButtonActivated(true)
+            setIsActivated(true)
           }, 1000)
         })
         .catch(console.log)
-    }
-    // 수정 혹은 삭제 시나리오
-    else {
-      const added = timeframe.added
-      const hasAdded = added.length !== 0
-      const trulyDeleted = timeframe.deleted.filter((v) => _.isSafeInteger(v.id))
-      const hasDeleted = trulyDeleted.length !== 0
-      console.log("hasDeleted", hasDeleted)
-      console.log("trulyDeleted", trulyDeleted)
-
-      // 추가로 CREATE
-      if (hasAdded) {
-        // console.log("added", added)
-        Promise.all(
-          added.map((tiemItem) =>
-            createVisitingAvailableTime({
-              startTime: selectedDates[0].slice(0, 10) + tiemItem.beginTime.slice(10, 19),
-              endTime: selectedDates[0].slice(0, 10) + tiemItem.endTime.slice(10, 19),
-              visitingId,
-              fee: fee,
-            }),
-          ),
-        ).then((res) => console.log("CREATE createVisitingAvailableTime >>>", res))
-      }
-
-      // DELETE
-      if (hasDeleted) {
-        //! 현재 API 는 알 수 없는 이유로 403 에러 반환 함
-        //TODO: API 업데이트이후 다시 테스트 해야 함
-        Promise.all(trulyDeleted.map((v) => deleteVisitingAvailableTime(v.id)))
-      }
-
-      // 비활성화 (SOFT DELETE)
-      if (!isAvailable) {
-        disableVisitingAvailableTime({
-          visitingId,
-          date: selectedDates[0],
-        }).then((res) => {
-          console.log("disableVisitingAvailableTime >>>", res.isSuccess)
-        })
-      }
-      // 비활성화 해제 (SOFT RESTORE)
-      //! 현재 API 로는 restore 대상을 구별해낼 수가 없음
-      //TODO: API 업데이트시, else if 조건문 변경
-      else if (false) {
-        restoreVisitingAvailableTime({
-          visitingId,
-          date: selectedDates[0],
-        }).then((res) => {
-          console.log("restoreVisitingAvailableTime >>>", res.isSuccess)
-        })
-      }
-
-      setIsSaveButtonActivated(false)
-      setTimeout(() => {
-        navigation.goBack()
-        setIsSaveButtonActivated(true)
-      }, 1000)
+    } else {
+      alertModal("개발중", "🏗️ 수정 기능은 개발중입니다.")
     }
   }
 
-  /** 시간선택 "확인 버튼" */
-  const onPressTimePickerConfirm = useCallback(() => {
-    const newTimeframe: SelectedTimeframe = {
-      id: (Math.random() + 1) / 10, //! 0 과 1 사이 랜덤 float
-      beginTime: selectedDates[0].slice(0, 10) + beginDate.toISOString().slice(10),
-      endTime: selectedDates[0].slice(0, 10) + endDate.toISOString().slice(10),
-      isBooked: false,
-    }
-
-    // 시간대 검증
-    const isValid = checkIsValidTimeframe([...timeframe.selected, newTimeframe])
-    console.log("🔷 isValid", isValid)
-    if (!isValid) {
-      alertModal("올바른 서비스 시간대가 아닙니다", "이미 선택한 서비스 시간대와 겹침니다.")
-      return
-    }
-
-    // 통과시;
-    setTimeframe({
-      ...timeframe,
-      selected: _.uniqBy(
-        _.sortBy([...timeframe.selected, newTimeframe], ["beginTime"]),
-        "beginTime",
-      ),
-      added: _.uniqBy(_.sortBy([...timeframe.added, newTimeframe], ["beginTime"]), "beginTime"),
-    })
-    bottomSheetModalRef.current?.close()
-  }, [beginDate, checkIsValidTimeframe, endDate, selectedDates, timeframe])
-
+  // 시간선택 바텀시트모달 - ref -> search-screen 참고!
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  // 시간선택 바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["60%"], [])
+
+  /** 시간선택 바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -423,13 +264,33 @@ export const SetVisitingServiceDayScreen: FC<
     ),
     [],
   )
+
+  /** 시간선택 바텀시트모달 Footer - 확인 버튼 클릭시 작동 */
+  const closeBottomSheet = useCallback(() => {
+    setSelectedTimeframes(
+      _.sortBy(
+        [
+          ...selectedTimeframes,
+          {
+            id: Math.random(),
+            beginTime: beginDate.toISOString(),
+            endTime: endDate.toISOString(),
+          },
+        ],
+        ["beginTime"],
+      ),
+    )
+    bottomSheetModalRef.current?.close()
+  }, [beginDate, endDate, selectedTimeframes])
+
+  /** 시간선택 바텀시트모달 Footer - 확인 버튼 렌더링 */
   const renderFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
-        <ConditionalButton label={"확인"} isActivated onPress={onPressTimePickerConfirm} />
+        <ConditionalButton label={"확인"} isActivated onPress={closeBottomSheet} />
       </BottomSheetFooter>
     ),
-    [onPressTimePickerConfirm],
+    [closeBottomSheet],
   )
 
   const keyboardShown = useKeyboardShown()
@@ -451,8 +312,8 @@ export const SetVisitingServiceDayScreen: FC<
             trackColor={{ false: LIGHT_LINE, true: GIVER_CASUAL_NAVY }}
             thumbColor={isAvailable ? "white" : "white"}
             // ios_backgroundColor="#3e3e3e"
-            value={isAvailable}
             onValueChange={toggleSwitch}
+            value={isAvailable}
             style={styles.switch}
           />
         </View>
@@ -461,8 +322,8 @@ export const SetVisitingServiceDayScreen: FC<
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
           <DivisionLine height={2} color={LBG} />
           <PreMed18 text="서비스 시간대" mt={16} mb={12} />
-          {timeframe.selected.length > 0 &&
-            timeframe.selected.map((item) => {
+          {selectedTimeframes.length > 0 &&
+            selectedTimeframes.map((item) => {
               // const beginDateText = timeText(beginDate)
               // const endDateText = timeText(endDate)
               return (
@@ -471,7 +332,12 @@ export const SetVisitingServiceDayScreen: FC<
                   startTimeText={timeTextAMPM(new Date(item.beginTime))}
                   endTimeText={timeTextAMPM(new Date(item.endTime))}
                   onPress={() => {
-                    onPressDelete(item)
+                    setSelectedTimeframes(
+                      _.sortBy(
+                        selectedTimeframes.filter((fItem) => fItem.id !== item.id),
+                        ["beginTime"],
+                      ),
+                    )
                   }}
                 />
               )
@@ -479,6 +345,11 @@ export const SetVisitingServiceDayScreen: FC<
           <TouchableOpacity
             style={styles.boxTwo}
             onPress={() => {
+              if (!isAvailable) {
+                alertModal("서비스 가능 토글", "서비스 가능 여부를 먼저 정해주세요.")
+                return
+              }
+
               bottomSheetModalRef.current?.present()
             }}
           >
@@ -568,11 +439,7 @@ export const SetVisitingServiceDayScreen: FC<
           bottom: BOTTOM_HEIGHT,
         }}
       >
-        <ConditionalButton
-          label="저장하기"
-          isActivated={isSaveButtonActivated}
-          onPress={onPressSave}
-        />
+        <ConditionalButton label="저장하기" isActivated={isActivated} onPress={onPressSave} />
       </View>
 
       {/* 시간당 가격 설정  모달 */}

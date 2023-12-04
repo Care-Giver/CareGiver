@@ -10,11 +10,11 @@ interface MakeBookingButtonProps {
   price: number
   isActivated: boolean
   onPress: () => void
-  serviceTypeKorean: ServiceTypeKorean
+  serviceType: ServiceTypeKorean
   style?: StyleProp<ViewStyle>
 }
 export const MakeBookingButton = (props: MakeBookingButtonProps) => {
-  const { price, isActivated = false, onPress, serviceTypeKorean, style } = props
+  const { price, isActivated = false, onPress, serviceType, style } = props
 
   const activatedViewStyle = [styles.root, styles.activatedViewStyle, style]
   const disabledViewStyle = [styles.root, styles.disabledViewStyle, style]
@@ -24,7 +24,7 @@ export const MakeBookingButton = (props: MakeBookingButtonProps) => {
   return (
     <PressableButton style={viewStyle} isDisabled={!isActivated} onPress={onPress}>
       <PreBol16 text={priceFormatter(price?.toString())} color={"white"} />
-      <PreReg14 text={serviceTypeKorean === "방문" ? " / 시간" : " / 박"} color={"white"} />
+      <PreReg14 text={serviceType === "방문" ? " / 시간" : " / 박"} color={"white"} />
       <PreBol16 text={"예약 신청하기"} color={"white"} style={{ marginLeft: "auto" }} />
     </PressableButton>
   )

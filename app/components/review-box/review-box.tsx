@@ -16,7 +16,6 @@ import { MIDDLE_LINE, DISABLED } from "../../theme"
 import { PetInfoDropdownBox } from "../_DROPDOWN_BOX/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
 import { Pet } from "#models"
-import { alertModal } from "../../utils/alert-modal"
 
 interface ReviewBoxProps {
   style?: StyleProp<ViewStyle>
@@ -46,7 +45,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const { user, ratings, createdAt, review, pets } = reviewData
   const userName = user.name
   const profileImg = user.profileImg ? user.profileImg : images.profile_default
-  const reviewImages = reviewData?.images || []
+  const reviewImages = reviewData.images ? reviewData.images : []
 
   // ? 날짜 표기를 YY.MM.DD 형태로 변환
   const formatDate = (date: Date) => {
@@ -65,9 +64,6 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 
   const handlePress = () => {
-    alertModal("개발중 🏗️", "후기 펫정보는 (더미) 데이터에서 제공되지 않습니다.")
-    return
-
     setDropdownIsOpen(!dropdownIsOpen)
     LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
   }
@@ -80,7 +76,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
           justifyContent: "space-between",
         }}
       >
-        <View style={styles.profileContainer}>
+        <Pressable style={styles.profileContainer}>
           {/* //? 프로필 사진 */}
           <Image source={profileImg} style={styles.profileImg} />
           {/* //? 사용자 이름 */}
@@ -90,14 +86,10 @@ export const ReviewBox = (props: ReviewBoxProps) => {
               marginLeft: 8,
             }}
           />
-        </View>
+        </Pressable>
 
         {/* //? 더보기 버튼 */}
-        <Pressable
-          onPress={() => {
-            alertModal("개발중 🏗️", "후기 편집 기능은 개발 중 입니다.")
-          }}
-        >
+        <Pressable>
           <Image source={images.three_dots} style={styles.moreBtn} />
         </Pressable>
       </Row>

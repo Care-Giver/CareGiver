@@ -3,57 +3,63 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
 
-export interface CreateCrecheBookingRequestBody {
+//* 위탁예약 생성
+export interface CreateCrecheBookingInput {
   crecheId: number
   userId: number
   request: string
+  services: string[]
   startDate: string
   endDate: string
   petIds: number[]
   paymentId: number
   avoidFoodInfo: string
   bondingTipsInfo: string
+  totalFee: number
+  defalutFee: number
 }
-interface CreateCrecheBookingResponse extends GeneralResponse {
-  //
+interface CreateCrecheBookingInputResponse extends GeneralResponse {
+  CreateCrecheBookingInput: CreateCrecheBookingInput
 }
-type CreateCrecheBookingResult =
-  | {
-      isSuccess: true // 성공
-      // TODO: 성공시...
-    }
-  | {
-      isSuccess: false // 실패
-      // TODO: 실패시...
-    }
 /**
- * [클라이언트 ➡️ 펫시터]
- * 위탁 예약을 생성합니다.
- * 결제완료후, "예약신청" 상황에서 사용됩니다.
+ * @returns {Promise<CreateCrecheBookingInput>}
  */
-export const createCrecheBooking = async (
-  body: CreateCrecheBookingRequestBody,
-): Promise<CreateCrecheBookingResult> => {
+export const postCrecheBooking = async (
+  post: CreateCrecheBookingInput,
+): Promise<CreateCrecheBookingInput> => {
   try {
-    const response = await axios.post<CreateCrecheBookingResponse>(
+    const response = await axios.post<CreateCrecheBookingInputResponse>(
       `${BASE_URL}/booking/creche`,
-      body,
+      post,
     )
+
     if (!response.data.ok) {
-      return { isSuccess: false }
+      const error = response.data.error
+      console.log(response.data)
+      console.error("postCrecheBooking response.data.error 에러!!!", error)
+      // @ts-ignore
+      return error
     }
-    return { isSuccess: true }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log("response.data.CreateCrecheBookingInputs", response.data.CreateCrecheBookingInput)
+    return response.data.CreateCrecheBookingInput
   } catch (error) {
     console.error("catch 에러!!!", error)
-    return { isSuccess: false }
+    return null
   }
 }
 
-export interface CreateVisitingBookingRequestBody {
+//* 방문 예약 생성
+
+//? requestBody
+export interface CreateVisitingBookingInput {
   visitingId: number
   userId: number
   request: string
-  destination: string // 방문 펫시터가 찾아갈 목적지 입니다.
+  services: string[]
+  destination: string
   startTime: string[]
   endTime: string[]
   petIds: number[]
@@ -62,31 +68,54 @@ export interface CreateVisitingBookingRequestBody {
   avoidFoodInfo: string
   bondingTipsInfo: string
 }
-interface CreateVisitingBookingResponse extends GeneralResponse {
-  //
+//? responseBody
+export interface CreateVisitingBookingRes {
+  id: number
+  createAt: Date
+  updatedAt: Date
+  status: string
+  reviewStatus: string
+  destination: string
+  visitingId: string
+  request: string
+  petToolsLocInfo: string
+  avoidFoodInfo: string
+  bondingTipsInfo: string
 }
-type CreateVisitingBookingResult = CreateCrecheBookingResult
+interface CreateVisitingBookingResponse extends GeneralResponse {
+  CreateVisitingBookingResponse: CreateVisitingBookingRes
+}
 /**
- * [클라이언트 ➡️ 펫시터]
- * 방문 예약을 생성합니다.
- * 결제완료후, "예약신청" 상황에서 사용됩니다.
+ * @returns {Promise<CreateVisitingBookingResponse>}
  */
-export const createVisitingBooking = async (
-  body: CreateVisitingBookingRequestBody,
-): Promise<CreateVisitingBookingResult> => {
+export const postVisitingBooking = async (
+  post: CreateVisitingBookingInput,
+): Promise<CreateVisitingBookingResponse> => {
   try {
-    console.log(body)
+    console.log(post)
     const response = await axios.post<CreateVisitingBookingResponse>(
       `${BASE_URL}/booking/visiting`,
-      body,
+      post,
     )
+
     if (!response.data.ok) {
-      return { isSuccess: false }
+      const error = response.data.error
+      console.error("postVisitingBooking response.data.error 에러!!!", error)
+      console.log(response.data)
+      // @ts-ignore
+      return error
     }
-    return { isSuccess: true }
+
+    // console.log("response", response)
+    console.log("response.data", response.data)
+    console.log(
+      "response.data.CreateVisitingBookingInputs",
+      response.data.CreateVisitingBookingResponse,
+    )
+    return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
-    return { isSuccess: false }
+    return null
   }
 }
 

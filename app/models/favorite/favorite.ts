@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import {
   ProfileCardInfo,
-  GetFavoritesRequestBody,
+  SearchOption,
   deleteFavorite,
   getFavorites,
 } from "../../services/axios/favorite"
@@ -42,7 +42,7 @@ export const FavoriteModel = types
     },
   }))
   .actions((self) => ({
-    async setFavorites(option: GetFavoritesRequestBody | {}) {
+    async setFavorites(option: SearchOption | {}) {
       await getFavorites(option)
         .then((res) => {
           console.log("in MST rest >>>", res)

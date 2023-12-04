@@ -6,7 +6,6 @@ import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
 import { DivisionLine } from "../_BASIC/division-line/division-line"
-import { alertModal } from "../../utils/alert-modal"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -83,7 +82,7 @@ export const Comment = (props: CommentProps) => {
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           onPress={() => {
-            alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
+            alert("하위")
           }}
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />

@@ -7,8 +7,8 @@ import { NavigatorParamList } from "#navigators"
 import { Button, PreReg18, Screen } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
-import { createPayment } from "../../services/axios/payment"
-import { createCrecheBooking, createVisitingBooking } from "../../services/axios/booking"
+import { postPayment } from "../../services/axios/payment"
+import { postCrecheBooking, postVisitingBooking } from "../../services/axios/booking"
 
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
@@ -59,7 +59,7 @@ export const TestIamportPaymentResultScreen: FC<
 
   useEffect(() => {
     if (!isSuccess) {
-      createPayment({
+      postPayment({
         imp_uid: imp_uid,
         merchant_uid: merchant_uid,
         imp_success: imp_success,
@@ -81,7 +81,7 @@ export const TestIamportPaymentResultScreen: FC<
               avoidFoodInfo,
               bondingTipsInfo,
             )
-            createVisitingBooking({
+            postVisitingBooking({
               //? dummy
               visitingId: 2,
               userId: userId,
@@ -97,7 +97,7 @@ export const TestIamportPaymentResultScreen: FC<
               bondingTipsInfo: bondingTipsInfo,
             })
           } else if (serviceType == "위탁") {
-            createCrecheBooking({
+            postCrecheBooking({
               crecheId: 2,
               userId: userId,
               request: request,

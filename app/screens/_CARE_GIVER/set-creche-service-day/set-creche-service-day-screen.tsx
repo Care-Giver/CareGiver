@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react"
+import React, { FC, useLayoutEffect, useMemo, useState } from "react"
 import {
   ScrollView,
   StyleSheet,
@@ -35,7 +35,7 @@ import {
   SUB_HEAD_LINE,
 } from "#theme"
 import { images } from "#images"
-import { createCrecheDate, disableCrecheDate, updateCrecheDate } from "#axios"
+import { createCrecheDate, updateCrecheDate } from "#axios"
 import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
@@ -50,16 +50,11 @@ export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
   const { selectedDates, crecheId, isAvailableDate, availableDate } = route.params
-  const 날짜 =
-    selectedDates?.length === 1
-      ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
-      : `날짜 ${selectedDates?.length}개`
   const {
     petsitterStore: { hasDogs, petsitter },
   } = useStores()
 
-  const [isAvailable, setIsAvailable] = useState(isAvailableDate)
-  const [isSaveButtonActivated, setIsSaveButtonActivated] = useState(false)
+  const [isActivated, setIsActivated] = useState(true)
 
   // 헤더 타이틀 설정
   useLayoutEffect(() => {
@@ -69,11 +64,7 @@ export const SetCrecheServiceDayScreen: FC<
     })
   }, [isAvailableDate, navigation])
 
-  // 저장하기 버튼 활성화 핸들링
-  useEffect(() => {
-    setIsSaveButtonActivated((isAvailableDate && !isAvailable) || (!isAvailableDate && isAvailable))
-  }, [isAvailable, isAvailableDate])
-
+  const [isAvailable, setIsAvailable] = useState(isAvailableDate)
   const toggleSwitch = () => {
     setIsAvailable((prev) => !prev)
   }
@@ -108,14 +99,14 @@ export const SetCrecheServiceDayScreen: FC<
   const showSaveButton = !keyboardShown
 
   const onPressSave = () => {
-    // console.log(
-    //   "저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다",
-    //   selectedDates,
-    //   fee,
-    //   crecheId,
-    // )
+    console.log(
+      "저장하기 버튼이 눌리면, 서비스 수정에 관한 정보들이 POST 되어야 합니다",
+      selectedDates,
+      fee,
+      crecheId,
+    )
 
-    // 처음 생성 시나리오
+    // POST
     if (!isAvailableDate) {
       if (!isAvailable) {
         alertModal("서비스 가능 토글", "서비스 가능 여부를 먼저 정해주세요.")
@@ -129,10 +120,10 @@ export const SetCrecheServiceDayScreen: FC<
       })
         .then((response) => {
           if (response.isSuccess) {
-            setIsSaveButtonActivated(false)
+            setIsActivated(false)
             setTimeout(() => {
               navigation.goBack()
-              setIsSaveButtonActivated(true)
+              setIsActivated(true)
             }, 1000)
           } else {
             alertModal("등록 실패", "잠시 후 다시 시도해주세요.")
@@ -140,47 +131,25 @@ export const SetCrecheServiceDayScreen: FC<
         })
         .catch(console.log)
     }
-    // 수정 혹은 삭제 시나리오
+    // PUT
     else {
-      // 비활성화 (SOFT DELETE)
-      // TODO: disableCrecheDate() response 수정 필요함 - 백엔드 API 업데이트 대기중
       if (!isAvailable) {
-        disableCrecheDate({
-          crecheId,
-          date: selectedDates[0],
-        }).then((res) => {
-          if (res.isSuccess) {
-            setIsSaveButtonActivated(false)
-            setTimeout(() => {
-              navigation.goBack()
-              setIsSaveButtonActivated(true)
-            }, 1000)
-          } else {
-            alertModal("비활성화 실패", "잠시 후 다시 시도해주세요.")
-          }
-        })
+        alertModal("개발중", "🏗️ soft delete 기능은 개발중입니다.")
+        setIsAvailable(true)
         return
       }
 
-      // 비활성화 해제 (SOFT RESTORE)
-      //! 현재 API 로는 restore 대상을 구별해낼 수가 없음
-      //TODO: API 업데이트후, 작업 재개
-      //
-      //
-      //
-
-      // UPDATE
       updateCrecheDate(availableDate?.id, {
         startDate: selectedDates[0],
         crecheId,
         fee,
       })
-        .then((res) => {
-          if (res.isSuccess) {
-            setIsSaveButtonActivated(false)
+        .then((response) => {
+          if (response.isSuccess) {
+            setIsActivated(false)
             setTimeout(() => {
               navigation.goBack()
-              setIsSaveButtonActivated(true)
+              setIsActivated(true)
             }, 1000)
           } else {
             alertModal("수정 실패", "잠시 후 다시 시도해주세요.")
@@ -196,7 +165,7 @@ export const SetCrecheServiceDayScreen: FC<
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentContainerStyle}
       >
-        <PreBol20 text={날짜} mt={20} mb={10} mh={BASIC_BACKGROUND_PADDING_WIDTH} />
+        <PreBol20 text="9월 15일" mb={10} ml={16} />
         <DivisionLine height={8} color={LIGHT_LINE} />
 
         {/* 서비스 가능 여부 토글 버튼 */}
@@ -329,11 +298,7 @@ export const SetCrecheServiceDayScreen: FC<
             right: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
-          <ConditionalButton
-            label="저장하기"
-            isActivated={isSaveButtonActivated}
-            onPress={onPressSave}
-          />
+          <ConditionalButton label="저장하기" isActivated={isActivated} onPress={onPressSave} />
         </View>
       )}
     </Screen>

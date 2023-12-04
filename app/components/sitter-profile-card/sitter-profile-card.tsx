@@ -5,7 +5,7 @@ import { PreMed16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
 import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
 import { images } from "../../../assets/images"
 import { RatingReviewBox } from "../rating-review-box/rating-review-box"
-import { VisitingCreche } from "../../screens/_CLIENT/search-stack/search-result-screen/search-result-screen"
+import { Petsitter } from "../../screens/_CLIENT/search-stack/search-result-screen/search-result-screen"
 import { UserEntity } from "../../services/axios/types/entity.types"
 import { CareGiverPetsitter } from "../../services/axios/types/creches.visitings.common.types"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
@@ -13,7 +13,7 @@ import { profileImageUriHandler } from "../../utils/image-format-validate"
 export type PetsitterProfileCardPetsitterData = {
   crecheId?: number
   visitingId?: number
-} & Pick<VisitingCreche, "reviewCount" | "userNickname"> &
+} & Pick<Petsitter, "reviewCount" | "userNickname"> &
   Pick<CareGiverPetsitter, "title" | "desc" | "star" | "defaultFee"> &
   Pick<UserEntity, "profileImage">
 

@@ -1,20 +1,14 @@
-import { View, ImageBackground, FlatList, StyleProp, ViewStyle } from "react-native"
+import { View, ImageBackground, Text, FlatList } from "react-native"
 import React, { useCallback, useState } from "react"
 import { styles } from "./styles"
-import { DEVICE_SCREEN_WIDTH } from "#theme"
+import { CARE_NATURAL_BLUE, DEVICE_SCREEN_WIDTH, STANDARD_WIDTH } from "#theme"
 import { DotsIndicator } from "./dots-indicator/dots-indicator"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
-import { images } from "../../../assets/images"
+import { images as _images } from "../../../assets/images"
 
-interface FullWidthSizeImagesBoxWithIndicatorProps {
-  style?: StyleProp<ViewStyle>
-  images: string[]
-}
-
-export const FullWidthSizeImagesBoxWithIndicator = (
-  props: FullWidthSizeImagesBoxWithIndicatorProps,
-) => {
-  const { style: viewStyle, images: imagesProp = [] } = props
+export const FullWidthSizeImagesBoxWithIndicator = (props) => {
+  const { style: viewStyle, images: _images } = props
+  const images = _images || []
 
   const [currentImage, setCurrentImage] = useState(0)
 
@@ -29,14 +23,13 @@ export const FullWidthSizeImagesBoxWithIndicator = (
   return (
     <View style={[styles.root, viewStyle]}>
       <FlatList
-        data={imagesProp}
+        data={images}
         renderItem={(
           { item, index }, //! renderItem 에다가 사용하는 params 는 item 이다. 딴걸로 바꿔 쓰지 말 것!!!
         ) => (
           <ImageBackground
             // TODO: dummydata에 있는 uri에서는 제대로 동작하지 않음. (uri 끝부분이 .jpg와 같이 끝나지 않음)
-            source={profileImageUriHandler(images.default_pet_image_60, "large", item)}
-            resizeMode="contain"
+            source={profileImageUriHandler(_images.default_pet_image_60, "large", item.profileImg)}
             style={{
               // width: "100%",
               width: DEVICE_SCREEN_WIDTH,
@@ -48,14 +41,6 @@ export const FullWidthSizeImagesBoxWithIndicator = (
           >
             {/* <Text> 인덱스 {index}</Text> */}
           </ImageBackground>
-        )}
-        //! data.length === 0 일때 렌더링됨
-        ListEmptyComponent={() => (
-          <ImageBackground
-            source={images.default_pet_image_60}
-            resizeMode="contain"
-            style={{ width: DEVICE_SCREEN_WIDTH, height: 444, backgroundColor: "white" }}
-          />
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -70,7 +55,7 @@ export const FullWidthSizeImagesBoxWithIndicator = (
         onViewableItemsChanged={onFlatlistUpdate}
       />
 
-      <DotsIndicator items={imagesProp} activeIndex={currentImage} style={{ marginTop: -28 }} />
+      <DotsIndicator items={images} activeIndex={currentImage} style={{ marginTop: -28 }} />
     </View>
   )
 }

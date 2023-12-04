@@ -6,7 +6,6 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { navigate } from "#navigators"
 import { HEADER_ROOT } from "../common-styles"
-import { alertModal } from "../../../utils/alert-modal"
 
 export const AllCommentsScreenHeader = (props) => {
   return (
@@ -29,7 +28,7 @@ export const AllCommentsScreenHeader = (props) => {
         style={{ marginLeft: "auto" }}
         onPress={() => {
           // props.navigation.goBack()
-          alertModal("개발중 🏗️", "댓글 검색으로 이동.")
+          alert("댓글 검색으로 이동")
         }}
       >
         <Image style={styles.search} source={images.search} />

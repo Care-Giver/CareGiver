@@ -87,7 +87,12 @@ import _ from "lodash"
 import { ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 
-export type VisitingCreche = Visiting & Creche
+export type Petsitter = Visiting | Creche
+
+export type ServiceAmenity = {
+  services: CrecheService[] | VisitingService[]
+  amenities: CrecheAmenity[] | VisitingAmenity[]
+}
 
 // 정렬 옵션 리스트 (-> 정렬 문구가 수정될 경우를 대비하여 객체로 관리)
 // :: ["가까운 거리순", "최근 등록순", ..]와 같은 형식으로 관리하게 되면, 정렬 문구가 수정될 때마다 코드 내에 수정해야 하는 부분이 증가하기 때문
@@ -100,58 +105,6 @@ const optionLabel = {
 
 // 정렬 옵션 리스트의 타입
 export type SearchResultSortingOption = typeof optionLabel[keyof typeof optionLabel]
-
-const TEMP_VIS_SEARCH_REQ = {
-  amenities: [],
-  certifiedOnly: false,
-  gender: null,
-  lat: 37.2955072, // 위도
-  lng: 126.83539,
-  page: 1,
-  petIds: [28],
-  radius: 10,
-  services: [],
-  sortBy: "distance",
-  // @ts-ignore
-  sortOrder: "ASC",
-  startTime: "2023-11-25 21:00:00",
-  endTime: "2023-11-25 22:00:00",
-
-  //
-  startDate: null,
-  endDate: null,
-  address: "테스트중",
-}
-
-const TEMP_CRE_SEARCH_REQ = {
-  amenities: [],
-  certifiedOnly: false,
-  gender: null,
-  lat: 37.5637312032917,
-  lng: 127.191741670397,
-  page: 1,
-  petIds: [28, 27, 30],
-  radius: 10,
-  services: [],
-  sortBy: "distance",
-  // @ts-ignore
-  sortOrder: "ASC",
-  startDate: "2023-11-29T00:00:00",
-  endDate: "2023-11-29T00:00:00",
-
-  //
-  startTime: null,
-  endTime: null,
-  address: "테스트중",
-}
-
-const TEMP_ROUTE_PARAMS = {
-  // ...TEMP_CRE_SEARCH_REQ,
-  // serviceType: "위탁",
-
-  ...TEMP_VIS_SEARCH_REQ,
-  serviceType: "방문",
-}
 
 export const SearchResultScreen: FC<
   StackScreenProps<NavigatorParamList, "search-result-screen">
@@ -179,7 +132,7 @@ export const SearchResultScreen: FC<
     extrapolate: "clamp",
   })
 
-  /*   // navigation params 로 넘겨받은 API REQUEST BODY 데이터
+  // navigation params 로 넘겨받은 API REQUEST BODY 데이터
   const {
     lat,
     lng,
@@ -196,26 +149,7 @@ export const SearchResultScreen: FC<
 
     // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
     address, // 검색결과 헤더에 보여줄 주소
-  } = route.params */
-
-  const {
-    lat,
-    lng,
-    petIds,
-    // 방문
-    startTime,
-    endTime,
-    //  위탁
-    startDate,
-    endDate,
-
-    // 그외
-    serviceType,
-
-    // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
-    address, // 검색결과 헤더에 보여줄 주소
-  } = TEMP_ROUTE_PARAMS
-
+  } = route.params
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"
 
@@ -240,8 +174,7 @@ export const SearchResultScreen: FC<
   const [draftSearchRequest, setDraftSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
 
   /** 펫시터 */
-  const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", petsitters)
+  const [petsitters, setPetsitters] = useState<Petsitter[]>([])
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {
@@ -265,7 +198,6 @@ export const SearchResultScreen: FC<
     if (위탁검색) {
       getCrechesSearch(creReq).then(setPetsitters)
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchRequest])
 
@@ -544,33 +476,72 @@ export const SearchResultScreen: FC<
             })}
             data={petsitters}
             renderItem={({ item: petsitter, index }) => {
-              const key = 방문검색 ? "visiting" : "creche"
+              let sitterData: PetsitterProfileCardPetsitterData
+              let serviceAmenity: ServiceAmenity
+              let images: string[]
+
+              if (방문검색) {
+                const visiting = petsitter as Visiting
+                sitterData = {
+                  crecheId: null,
+                  visitingId: visiting.visiting.id,
+                  reviewCount: visiting.reviewCount,
+                  userNickname: visiting.userNickname,
+                  title: visiting.visiting.title,
+                  desc: visiting.visiting.desc,
+                  star: ratingRound(visiting.visiting.star),
+                  profileImage: visiting.visiting.__careGiver__.__user__?.profileImage,
+                  defaultFee: visiting.visiting.defaultFee,
+                }
+                serviceAmenity = {
+                  services: visiting.visiting.serviceVisiting,
+                  amenities: visiting.visiting.visitingAmenities,
+                }
+                images = visiting.visiting.images
+              }
+
+              if (위탁검색) {
+                const creche = petsitter as Creche
+                sitterData = {
+                  crecheId: creche.creche.id,
+                  visitingId: null,
+                  reviewCount: creche.reviewCount,
+                  userNickname: creche.userNickname,
+                  title: creche.creche.title,
+                  desc: creche.creche.desc,
+                  star: ratingRound(creche.creche.star),
+                  profileImage: creche.creche.__careGiver__.__user__?.profileImage,
+                  defaultFee: creche.creche.defaultFee,
+                }
+                serviceAmenity = {
+                  services: creche.creche.serviceCreche,
+                  amenities: creche.creche.crecheAmenities,
+                }
+                images = creche.creche.images
+              }
+
               return (
                 <SitterProfileCard
                   isFavorite={petsitter.isFavorite}
-                  sitterData={{
-                    crecheId: 위탁검색 ? petsitter[key].id : null,
-                    visitingId: 방문검색 ? petsitter[key].id : null,
-                    reviewCount: petsitter.reviewCount,
-                    userNickname: petsitter.userNickname,
-                    title: petsitter[key].title,
-                    desc: petsitter[key].desc,
-                    star: ratingRound(petsitter[key].star),
-                    profileImage: petsitter[key].__careGiver__.__user__?.profileImage,
-                    defaultFee: petsitter[key].defaultFee,
-                  }}
+                  sitterData={sitterData}
                   onPress={() => {
                     //? 상세정보 스크린으로 이동
                     //TODO: params 값 추가해줘야 함
                     navigate("caregiver-detail-information-screen", {
-                      serviceTypeKorean: serviceType,
-                      service: petsitter,
-                      selectedPetIds: petIds,
-                      selectedTime: {
-                        start: (방문검색 && startTime) || (위탁검색 && startDate),
-                        end: (방문검색 && endTime) || (위탁검색 && endDate),
-                      },
-                      address,
+                      sitterData,
+                      serviceType,
+                      serviceAmenity,
+                      images,
+                      //TODO: selectedPets 프로퍼티를 petIds 으로 바꾸고,
+                      //TODO: petStore 에서, id값으로 pet 객체를 가져오는 메서드를 추가해서 사용해야 함.
+                      selectedPets: petIds,
+                      // 방문
+                      startTime: 방문검색 ? startTime : null,
+                      endTime: 방문검색 ? endTime : null,
+
+                      // 위탁
+                      startDate: 위탁검색 ? startDate : null,
+                      endDate: 위탁검색 ? endDate : null,
                     })
                   }}
                   onLikePress={() => {
