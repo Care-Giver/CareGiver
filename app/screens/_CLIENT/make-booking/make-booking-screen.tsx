@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -12,7 +12,7 @@ import {
   RowRoundedButton,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
-import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, palette } from "#theme"
+import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, palette } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
@@ -207,9 +207,9 @@ export const MakeBookingScreen: FC<
               onPress={() => {
                 //
               }}
-              image={images.location}
+              image={images.location_disabled}
               text={visitingAddress?.address}
-              textColor={HEAD_LINE}
+              textColor={DISABLED}
               style={{ marginVertical: 12 }}
             />
             <PlaceHolderInputBox
