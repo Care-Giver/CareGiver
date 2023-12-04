@@ -1,6 +1,8 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { ratingRound } from "../../utils/format"
+import { SearchResultSortingOption } from "#screens"
+import { ServiceType } from "#models"
 
 export interface ProfileCardInfo {
   crecheId?: number
@@ -13,46 +15,34 @@ export interface ProfileCardInfo {
   desc: string
 }
 
-export interface SearchOption {
+export interface GetFavoritesRequestBody {
   startTime: string
   endTime: string
   petIds: number[]
-  sortBy: string
-  petSitterType: string
+  sortBy: SearchResultSortingOption
+  petSitterType: ServiceType
 }
-
-export interface UpdateFavoriteBody {
-  visitingId?: number
-  crecheId?: number
-}
-
-interface FavoriteResponse extends GeneralResponse {
+interface GetFavoritesResponse extends GeneralResponse {
   favoritePetsitters: ProfileCardInfo[] | null[]
   // TODO: 훈련사 추가
 }
-
-interface CreateFavoriteResponse extends GeneralResponse {
-  favoriteId: number
-}
-
+type GetFavoritesResult = { isSuccess: true } | { isSuccess: false }
 /**
- * 현재 유저가 찜한 펫시터 / 훈련사 리스트를 받아온다.
- * @returns {Promise<FavoriteResponse>}
+ * 현재 유저가 즐겨찾기 한
+ * 모든 펫시터 리스트를 받아온다.
  */
-export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteResponse> => {
+export const getFavorites = async (body: GetFavoritesRequestBody): Promise<GetFavoritesResult> => {
   try {
     if (Object.keys(body).length === 0) return
 
-    const response = await axios.post<FavoriteResponse>(`${BASE_URL}/user/favorites`, body)
-    console.log("response.request 🔷", response.request)
+    const response = await axios.post<GetFavoritesResponse>(`${BASE_URL}/user/favorites`, body)
 
     if (!response.data.ok) {
       console.error(response.data.error)
       //@ts-ignore
       return null
     }
-    // console.info("[getFavorites] response.data: ", response.data)
-    // console.log("in Axios response.data >>>", response.data)
+
     const favoritePetsitters: ProfileCardInfo[] = response.data.favoritePetsitters.map(
       (value: ProfileCardInfo) => ({
         ...value,
@@ -72,6 +62,13 @@ export const getFavorites = async (body: SearchOption | {}): Promise<FavoriteRes
   }
 }
 
+export interface UpdateFavoriteBody {
+  visitingId?: number
+  crecheId?: number
+}
+interface CreateFavoriteResponse extends GeneralResponse {
+  favoriteId: number
+}
 /**
  * 현재 유저의 찜을 새로 생성한다.
  * @returns {Promise<CreateFavoriteResponse>}

@@ -39,71 +39,37 @@ import {
 } from "../../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../../utils/delay"
+import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
+import { ServiceType, useStores } from "#models"
+import { alertModal } from "../../../../utils/alert-modal"
 
-// const Services = ({ services }) => {
-//   let arr = []
-
-//   for (let index = 0; index < services.length; index++) {
-//     arr.push(services[index])
-//     index === services.length - 1 ? null : arr.push("division-line-vertical")
-//   }
-
-//   return (
-//     <>
-//       {arr?.map((item, index) =>
-//         item === "division-line-vertical" ? (
-//           <DivisionLineVertical
-//             color={DBG}
-//             height={16}
-//             style={{ marginHorizontal: 10 }}
-//             key={index}
-//           />
-//         ) : (
-//           <CaregiverService emoji={item.emoji} label={item.name} key={index} />
-//         ),
-//       )}
-//     </>
-//   )
-// }
-
-const hiredTimes = 99
-const petYearsYears = 12
-const petYearsMonths = 4
-
-// const desc =
-//   "안녕하세요. 강아지들의 단짝 펫시터 강단입니다! 강아지들은 저의 소중한 단짝이자 저 또한 강아지들의 소중한 단짝 이라고 생각합니다. 여러분들도 아시겠지만, 반려견은 말을 할 수 없기 때문에 행동으로 자신의 의사를 표현합니다. 그렇기 때문에 저는 언제나 강아지들의 눈높이에서 강이지들과 친구가 되어 함께 논다는 마음으로 강아지들과 함께 해오고 있습니다. 어느덧 강아지들과 함께 해 온 시간이 10년을 훌쩍 넘었네요. 저의 강아지 뿐 아니라 여러분의 강아지들과도 단짝이 되어 보호자님들이 없는 시간에도 우리 아이들이 불안해하지 않을 수 있도록 있도록있도록 있도록 있도록"
+type ServiceAmenity = {
+  services: CrecheService[] | VisitingService[]
+  amenities: CrecheAmenity[] | VisitingAmenity[]
+}
 
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
 > = observer(({ navigation, route }) => {
   const {
-    sitterData,
-    serviceType,
-    serviceAmenity,
-    images,
-    selectedPets,
-    // selectedDate,
-  } = route.params
-  const { profileImage, userNickname, star, reviewCount, desc, defaultFee } = sitterData
+    userStore: { userDetail },
+  } = useStores()
 
-  let visitingId = ""
-  let startTime = ""
-  let endTime = ""
-
-  let crecheId = ""
-  let startDate = ""
-  let endDate = ""
-  if (serviceType === "방문") {
-    visitingId = sitterData.visitingId
-    startTime = route.params.startTime
-    endTime = route.params.endTime
-  } else {
-    crecheId = sitterData.crecheId
-    startDate = route.params.startDate
-    endDate = route.params.endDate
+  const { serviceTypeKorean, service, selectedPetIds, selectedTime, address } = route.params
+  const { userProfile: profileImage, userNickname, reviewCount } = service
+  const key: ServiceType = serviceTypeKorean === "방문" ? "visiting" : "creche"
+  const { star, desc, defaultFee, images } = service[key]
+  const serviceAmenity: ServiceAmenity = {
+    services:
+      serviceTypeKorean === "방문"
+        ? service.visiting.serviceVisiting
+        : service.creche.serviceCreche,
+    amenities:
+      serviceTypeKorean === "방문"
+        ? service.visiting.visitingAmenities
+        : service.creche.crecheAmenities,
   }
-
-  const selectedDate = ""
+  console.log("selectedTime 1", selectedTime)
 
   const [post, setPost] = useState(null)
 
@@ -112,8 +78,13 @@ export const CaregiverDetailInformationScreen: FC<
   const animationValue = useRef(new Animated.Value(0)).current
 
   useLayoutEffect(() => {
+    const serviceType = key === "visiting" ? "방문" : "위탁"
+    navigation.setOptions({
+      // @ts-ignore
+      headerTitle: `(${serviceType}) ${service[key]?.__careGiver__?.__user__?.nickname}`,
+    })
     delayedIsMount()
-  }, [])
+  }, [key, navigation, service])
 
   const delayedIsMount = async () => {
     await delay(600)
@@ -141,21 +112,17 @@ export const CaregiverDetailInformationScreen: FC<
   })
 
   const onPressMakeBookingButton = () => {
+    if (userDetail.id === service[key].__careGiver__.__user__.id) {
+      alertModal("예약 신청 불가", "나 자신에게는 예약을 신청할 수 없어요.")
+      return
+    }
+
     navigate("make-booking-screen", {
-      sitterData: sitterData,
-      //TODO sitterData에 있어야 할 것 같다. 왜 여기 Dummydata로 빠져있는지??
-      services: ["사료 및 물 급여", "실내 놀이", "배변처리 및 환경정리"],
-      serviceType: serviceType,
-      selectedDate: selectedDate,
-      selectedPets: selectedPets,
-
-      // 방문
-      startTime: serviceType === "방문" ? startTime : null,
-      endTime: serviceType === "방문" ? endTime : null,
-
-      // 위탁
-      startDate: serviceType === "위탁" ? startDate : null,
-      endDate: serviceType === "위탁" ? endDate : null,
+      key,
+      service,
+      selectedPetIds,
+      selectedTime,
+      address,
     })
   }
 
@@ -178,21 +145,27 @@ export const CaregiverDetailInformationScreen: FC<
             Math.min(Math.max(event.nativeEvent.contentOffset.y / 2, 0) / HEADER_HEIGHT, 1.0) ?? 0.0
 
           navigation.setOptions({
+            // @ts-ignore
             headerStyle: {
               elevation: headerOpacity,
               backgroundColor: `rgba(255,255,255,${headerOpacity})`,
+            },
+            headerTitleStyle: {
+              color: headerOpacity < 0.3 ? "white" : "black",
             },
           })
         }}
         scrollEventThrottle={16}
         contentInsetAdjustmentBehavior="never"
       >
-        {/* //* 케어기버 사진들 */}
+        {/* //* 위탁 장소 사진들 */}
         <FullWidthSizeImagesBoxWithIndicator
           style={{
             marginTop: 0,
           }}
-          images={images}
+          // 위탁의 경우, "위탁 사진" 을,
+          // 방문의 경우, "방문 펫시터 프로필 사진" 을 렌더링 하다.
+          images={key === "creche" ? images : [service.userProfile]}
         />
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>
@@ -282,7 +255,7 @@ export const CaregiverDetailInformationScreen: FC<
 
           {/* //* 댓글 */}
           <Row style={{ marginTop: 60 }}>
-            <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
+            <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
               color={BODY}
@@ -320,12 +293,8 @@ export const CaregiverDetailInformationScreen: FC<
           {/* //* 예약 신청하기 버튼*/}
           <MakeBookingButton
             price={defaultFee}
-            serviceType={serviceType}
+            serviceTypeKorean={serviceTypeKorean}
             isActivated={true}
-            /*onPress={() => {
-            // 원본
-            alert("결제하기 화면으로 이동")
-          }}*/
             onPress={onPressMakeBookingButton}
           />
         </Animated.View>

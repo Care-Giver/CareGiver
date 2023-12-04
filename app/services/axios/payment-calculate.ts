@@ -1,31 +1,30 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
-interface Fee {
-  subTotalFee: number
-  totalFee: number
+export interface FeeResponse {
+  subTotalFee: number // 수수료 포함 이전, 원가
+  totalFee: number // 수수료 포함 가격
 }
 
 //* 방문 totalFee
-export interface CalculateVisitingTotalFeeInput {
+export interface CalculateVisitingBookingRequestBody {
   visitingId: number
   startTime: string
   endTime: string
   petIds: number[]
 }
-
-interface CalculateVisitingTotalFeeInputResponse extends GeneralResponse {
-  FeeResponse: Fee
-}
+interface CalculateVisitingBookingResponse extends GeneralResponse, FeeResponse {}
 /**
- * @returns {Promise<CalculateVisitingTotalFeeInputResponse>}
+ * @returns {Promise<CalculateVisitingBookingResponse>}
  */
 //TODO 이런 식으로 response 잡아도 되는지??? 우선 test해보기
-export const postVisitingTotalFee = async (post: CalculateVisitingTotalFeeInput): Promise<Fee> => {
+export const calculateVisitingBooking = async (
+  body: CalculateVisitingBookingRequestBody,
+): Promise<FeeResponse> => {
   try {
-    const response = await axios.post<CalculateVisitingTotalFeeInputResponse>(
+    const response = await axios.post<CalculateVisitingBookingResponse>(
       `${BASE_URL}/payment/visiting-booking/calculate`,
-      post,
+      body,
     )
 
     if (!response.data.ok) {
@@ -36,9 +35,6 @@ export const postVisitingTotalFee = async (post: CalculateVisitingTotalFeeInput)
       return error
     }
 
-    // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.CalculateVisitingTotalFeeInputs", response.data.FeeResponse)
     return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
@@ -47,24 +43,23 @@ export const postVisitingTotalFee = async (post: CalculateVisitingTotalFeeInput)
 }
 
 //* 위탁 totalFee
-export interface CalculateCrecheTotalFeeInput {
+export interface CalculateCrecheBookingRequestBody {
   crecheId: number
   startDate: string
   endDate: string
   petIds: number[]
 }
-
-interface CalculateCrecheTotalFeeInputResponse extends GeneralResponse {
-  CalculateCrecheTotalFeeInputResponse: Fee
-}
+interface CalculateCrecheBookingResponse extends GeneralResponse, FeeResponse {}
 /**
- * @returns {Promise<CalculateCrecheTotalFeeInput>}
+ * @returns {Promise<CalculateCrecheBookingRequestBody>}
  */
-export const postCrecheTotalFee = async (post: CalculateCrecheTotalFeeInput): Promise<Fee> => {
+export const calculateCrecheBooking = async (
+  body: CalculateCrecheBookingRequestBody,
+): Promise<FeeResponse> => {
   try {
-    const response = await axios.post<CalculateCrecheTotalFeeInputResponse>(
+    const response = await axios.post<CalculateCrecheBookingResponse>(
       `${BASE_URL}/payment/creche-booking/calculate`,
-      post,
+      body,
     )
 
     if (!response.data.ok) {
@@ -75,9 +70,6 @@ export const postCrecheTotalFee = async (post: CalculateCrecheTotalFeeInput): Pr
       return error
     }
 
-    // console.log("response", response)
-    console.log("response.data", response.data)
-    console.log("response.data.CalculateCrecheTotalFeeInputs", response.data.totalFee)
     return response.data
   } catch (error) {
     console.error("catch 에러!!!", error)
