@@ -323,6 +323,10 @@ export const SetVisitingServiceDayScreen: FC<
     }
     // 수정 혹은 삭제 시나리오
     else {
+      //! API 리팩토링 대기중이므로, 의도적으로 진행 막음
+      alertModal("개발중🏗️", "현재 방문 펫시팅은 서비스 날짜 수정이 불가능합니다.")
+      return
+
       const added = timeframe.added
       const hasAdded = added.length !== 0
       const trulyDeleted = timeframe.deleted.filter((v) => _.isSafeInteger(v.id))
