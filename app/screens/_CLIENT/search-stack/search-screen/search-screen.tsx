@@ -38,7 +38,7 @@ import {
 } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import { subMinutes } from "date-fns"
-import { useStores, Pet } from "#models"
+import { useStores, Pet, ServiceTypeKorean } from "#models"
 import Geolocation from "react-native-geolocation-service"
 import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../../utils/alert-modal"
@@ -70,8 +70,6 @@ const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).
 // "지금 시간으로 부터 가장 가까운 정시" 에서 딱 1시간 뒤
 const oneHourAfterNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
-type ServiceType = "방문" | "위탁"
-
 interface Location {
   lat: number
   lng: number
@@ -87,8 +85,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     useShowBottomTab(navigation)
 
     //* 서비스 형태
-    const [serviceType, setServiceType] = useState<ServiceType>("방문") //? 방뮨 or 위탁
-    // const [service, setService] = useState<"펫시팅" |"훈련">(null) //? 팻시팅 or 훈련
+    const [serviceType, setServiceType] = useState<ServiceTypeKorean>("방문") //? 방문 or 위탁
+    // const [service, setService] = useState<"펫시팅" |"훈련">(null) //? 펫시팅 or 훈련
     const service = "펫시팅"
 
     //* 날짜선택 - 달력 - Calendar

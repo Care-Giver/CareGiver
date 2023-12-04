@@ -101,5 +101,5 @@ export interface UserRelatedData {
   isFavorite: boolean //false,
   reviewCount: number // 6,
   userNickname: string //"지우",
-  userProfile: any // null, //TODO: userProfile 타입 적용할 것
+  userProfile: string // 유저 프로필 이미지
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { FC, useState } from "react"
 import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native"
 import { images } from "#images"
 import { observer } from "mobx-react-lite"
@@ -6,6 +6,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CustomModal,
   DivisionLine,
   PaymentTool,
   PreBol14,
@@ -18,27 +19,21 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
-import { userinfo } from "./dummy-data"
-import { getUsers, User } from "../../../../services/axios/user"
-import {
-  postCrecheTotalFee,
-  postVisitingTotalFee,
-  CalculateVisitingTotalFeeInput,
-  CalculateCrecheTotalFeeInput,
-} from "../../../../services/axios/payment-calculate"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
+import { useStores } from "#models"
+import { price as priceFormatter } from "../../../../utils/format"
+import { alertModal } from "../../../../utils/alert-modal"
+import { useCalculator, createBooking } from "./payment-screen.controller"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
   tierCode?: string
-  serviceType: string
-  visitingId: number
+
+  visitingId: number // TODO: 교체하기!!
   userId: number
   request: string
   services: string[]
   destination: string
-  selectedDate: string
+
   startTime: string[]
   endTime: string[]
   petIds: number[]
@@ -47,15 +42,20 @@ export interface PaymentParams {
   bondingTipsInfo: string
 }
 
-export type PaymentModuleType = "카카오페이" | "네이버페이" | "토스" | "신용/체크카드"
+export type SimplePayment = "카카오페이" | "네이버페이" | "토스"
 
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
-  function PaymentScreen({ route }) {
-    // MST store 를 가져옵니다.
-    // const { someStore, anotherStore } = useStores()
+  function PaymentScreen({ route, navigation }) {
+    const { key, service, selectedPetIds, selectedTime, bookingRequest, destination } = route.params
+    console.log("selectedTime 3", selectedTime)
+    console.log("bookingRequest", bookingRequest)
+    const {
+      userStore: { userDetail },
+    } = useStores()
+
+    // 결제/예약 성공시 모달
+    const [successModalVisible, setSuccessModalVisible] = useState(false)
+
     //* 결제 정보 관련
     const [pg, setPg] = useState("html5_inicis")
     const [tierCode, setTierCode] = useState(undefined)
@@ -63,7 +63,6 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [cardQuota, setCardQuota] = useState(0)
     const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`)
     const [name, setName] = useState("아임포트 결제데이터분석")
-    const [amount, setAmount] = useState("39000")
     const [buyerName, setBuyerName] = useState("홍길동")
     const [buyerTel, setBuyerTel] = useState("01012341234")
     const [buyerEmail, setBuyerEmail] = useState("example@example.com")
@@ -71,150 +70,48 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [bizNum, setBizNum] = useState("")
     const [escrow, setEscrow] = useState(false)
     const [digital, setDigital] = useState(false)
-    const {
-      sitterData,
-      services,
-      serviceType,
-      selectedDate,
-      selectedPets,
-      beginDate,
-      endDate,
-      requests,
-    } = route.params
-    console.log(requests)
-    //* 로그인된 유저 정보
-    const [userMe, setUserMe] = useState<User>()
-    const [selectedTool, setSelectedTool] = useState<PaymentModuleType>(null)
+    const [selectedTool, setSelectedTool] = useState<SimplePayment | "신용/체크카드">(null)
     const is신용체크카드 = selectedTool === "신용/체크카드"
 
-    //* axios 사용하여 유저정보, totalFee 초기화
-    useEffect(() => {
-      // getUsers().then((res) => setUserMe(res)) //TODO: getUsers 대신 다른것으로 대체해야 함 - 수민
-      if (serviceType == "방문") {
-        const visitingTotalFeeInput: CalculateVisitingTotalFeeInput = {
-          //? 현재 visitingId가 2 이상이면 데이터가 없어, responseerror 발생하여, 일시적으로 예외처리.
-          visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
-          startTime: beginDate,
-          endTime: endDate,
-          petIds: selectedPets,
-        }
-        console.log(visitingTotalFeeInput)
-        postVisitingTotalFee(visitingTotalFeeInput).then((res) =>
-          setAmount(res.totalFee.toString()),
+    // totalFee 계산
+    const amount = useCalculator({ key, selectedPetIds, selectedTime, service })
+
+    /**
+     * [개발중 🏗️]
+     * 결제기능은 원포트 계약 체결후 개발가능하므로,
+     * 우선 결제를 패스하고 예약객체만 생성하도록 함.
+     * 참고 디스코드: https://discord.com/channels/1137734002258755654/1139710316675080203/1178274350856675369
+     */
+    const onPressPay = () => {
+      if (!selectedTool) {
+        alertModal("결제 수단", "결제 수단을 선택해주세요.")
+        return
+      }
+
+      if (!amount?.totalFee) {
+        alertModal(
+          "결제 금액 계산 실패",
+          "알 수 없는 이유로 결제 금액 계산에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
         )
-      } else if (serviceType == "위탁") {
-        const crecheTotalFeeInput: CalculateCrecheTotalFeeInput = {
-          crecheId: sitterData.id,
-          startDate: selectedDate.dateString,
-          endDate: selectedDate.dateString,
-          petIds: selectedPets,
-        }
-        console.log("crecheTotalFeeInput: ", crecheTotalFeeInput)
-        postCrecheTotalFee(crecheTotalFeeInput).then((res) => setAmount("10000"))
-        //res.totalFee.toString()))
       }
-    }, [])
 
-    //* 결제 정보에 따른 data update 및 결제스크린 이동
-    const onPress = () => {
-      const data: PaymentParams = {
-        params: {
-          pg,
-          pay_method: method,
-          currency: undefined,
-          notice_url: undefined,
-          display: undefined,
-          merchant_uid: merchantUid,
-          name,
-          amount,
-          app_scheme: "exampleforrn",
-          tax_free: undefined,
-          buyer_name: buyerName,
-          buyer_tel: buyerTel,
-          buyer_email: buyerEmail,
-          buyer_addr: undefined,
-          buyer_postcode: undefined,
-          custom_data: undefined,
-          vbank_due: undefined,
-          digital: undefined,
-          language: undefined,
-          biz_num: undefined,
-          customer_uid: undefined,
-          naverPopupMode: undefined,
-          naverUseCfm: undefined,
-          naverProducts: undefined,
-          m_redirect_url: IMPConst.M_REDIRECT_URL,
-          niceMobileV2: true,
-          escrow,
+      createBooking({
+        key,
+        userId: userDetail.id,
+        selectedTime,
+        selectedPetIds,
+        bookingRequest,
+        destination,
+        service,
+        setSuccessModalVisible,
+        paymentData: {
+          imp_uid: "111",
+          merchant_uid: "111",
+          imp_success: true,
+          isRefunded: false,
+          totalFee: amount.totalFee,
         },
-        tierCode,
-        serviceType: serviceType,
-
-        //? 예약 생성 api를 위한 값들
-        visitingId: Number(sitterData.id) < 3 ? Number(sitterData.id) : 1,
-        userId: userMe.id,
-        request: requests?.request,
-        services: services,
-        destination: userMe.address,
-        selectedDate: selectedDate,
-        startTime: beginDate,
-        endTime: endDate,
-        petIds: selectedPets,
-        petToolsLocInfo: requests?.petToolsLocInfo,
-        avoidFoodInfo: requests?.avoidFoodInfo,
-        bondingTipsInfo: requests?.bondingTipsInfo,
-      }
-
-      // 신용카드의 경우, 할부기한 추가
-      if (method === "card" && cardQuota !== 0) {
-        data.params.display = {
-          card_quota: cardQuota === 1 ? [] : [cardQuota],
-        }
-      }
-
-      /*     // 가상계좌의 경우, 입금기한 추가
-      if (method === "vbank" && vbankDue) {
-        data.params.vbank_due = vbankDue
-      }
-
-      // 다날 && 가상계좌의 경우, 사업자 등록번호 10자리 추가
-      if (method === "vbank" && pg === "danal_tpay") {
-        data.params.biz_num = bizNum
-      }
-
-      // 휴대폰 소액결제의 경우, 실물 컨텐츠 여부 추가
-      if (method === "phone") {
-        data.params.digital = digital
-      }
-
-      // 정기결제의 경우, customer_uid 추가
-      if (pg === "kcp_billing") {
-        data.params.customer_uid = `cuid_${new Date().getTime()}`
-      } */
-
-      if (pg === "naverpay") {
-        const today = new Date()
-        const oneMonthLater = new Date(today.setMonth(today.getMonth() + 1))
-        const dd = String(oneMonthLater.getDate()).padStart(2, "0")
-        const mm = String(oneMonthLater.getMonth() + 1).padStart(2, "0") // January is 0!
-        const yyyy = oneMonthLater.getFullYear()
-
-        data.params.naverPopupMode = false
-        data.params.naverUseCfm = `${yyyy}${mm}${dd}`
-        data.params.naverProducts = [
-          {
-            categoryType: "BOOK",
-            categoryId: "GENERAL",
-            uid: "107922211",
-            name: "한국사",
-            payReferrer: "NAVER_BOOK",
-            count: 10,
-          },
-        ]
-      }
-
-      console.log("Payment data >>>", data)
-      navigate("test-iamport-payment-screen", data)
+      })
     }
 
     return (
@@ -229,17 +126,20 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <DivisionLine mt={12} />
             <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text={userMe?.nickname} mb={24} color={BODY} />
+            <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={24} color={BODY} />
             {/* 맡길 반려동물 컴포넌트 가져오기 */}
             <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text={userMe?.address} mb={24} color={BODY} />
-            <PreMed14 text="방문 시간" mb={8} />
-            <PreReg14 text="6월 14일 10:00 - 6월 14일 18:00" mb={24} color={BODY} />
+            <PreReg14 text={service[key].address} mb={24} color={BODY} />
+            <PreMed14 text="예약 일정" mb={8} />
+            <PreReg14
+              text={`${selectedTime.start.slice(0, 10)} - ${selectedTime.end.slice(0, 10)}`}
+              mb={24}
+              color={BODY}
+            />
           </View>
 
           <DivisionLine height={6} mb={24} />
 
-          {/* paddingHorizontal:16 */}
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <PreBol14 text="결제 수단" mb={14} />
             <DivisionLine />
@@ -255,6 +155,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             >
               <PaymentTool
                 tool="카카오페이"
+                // @ts-ignore
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("카카오페이")
@@ -263,6 +164,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               />
               <PaymentTool
                 tool="네이버페이"
+                // @ts-ignore
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("네이버페이")
@@ -271,6 +173,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               />
               <PaymentTool
                 tool="토스"
+                // @ts-ignore
                 selectedTool={selectedTool}
                 setSelectedTool={() => {
                   setSelectedTool("토스")
@@ -304,38 +207,74 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
           <DivisionLine height={6} mv={24} />
 
-          <View style={styles.priceContainer}>
-            <PreBol14 text="요금 세부 정보" mb={13} />
-            <DivisionLine />
-            {/* 가격 테이블  */}
-            <View style={styles.table}>
-              <View style={styles.tableRow}>
-                <PreReg14 text="서비스 이용료" style={{ flex: 3 }} />
-                <PreReg14 text="50,000" style={{ flex: 2 }} />
-                <PreReg14 text="8시간" style={{ flex: 1 }} />
-                <PreReg14 text="400,000원" style={{ flex: 3, textAlign: "right" }} />
-              </View>
-              <View style={styles.tableRow}>
-                <PreReg14 text="수수료" style={{ flex: 3 }} />
-                <PreReg14 text="40,000" style={{ flex: 3 }} />
-                <PreReg14 text="40,000원" style={{ flex: 3, textAlign: "right" }} />
-              </View>
-              <View style={styles.tableRow}>
-                <PreReg14 text="할인 쿠폰" style={{ flex: 5 }} />
+          {amount && (
+            <View style={styles.priceContainer}>
+              <PreBol14 text="요금 세부 정보" mb={13} />
+              <DivisionLine />
+              {/* 가격 테이블  */}
+              <View style={styles.table}>
+                <View style={styles.tableRow}>
+                  <PreReg14 text="서비스 이용료" style={{ flex: 3 }} />
+                  {/* <PreReg14 text="50,000" style={{ flex: 2 }} />
+                <PreReg14 text="8시간" style={{ flex: 1 }} /> */}
+                  <PreReg14
+                    text={`${priceFormatter(String(amount?.subTotalFee))} 원`}
+                    style={{ flex: 3, textAlign: "right" }}
+                  />
+                </View>
+                <View style={styles.tableRow}>
+                  <PreReg14 text="수수료" style={{ flex: 3 }} />
+                  {/* <PreReg14 text="40,000" style={{ flex: 3 }} /> */}
+                  <PreReg14
+                    text={`${priceFormatter(String(amount?.totalFee - amount?.subTotalFee))} 원`}
+                    style={{ flex: 3, textAlign: "right" }}
+                  />
+                </View>
+                <View style={styles.tableRow}>
+                  {/* // TODO: 쿠폰 기능 구현완료후, 주석 해제할 것.  */}
+                  {/* <PreReg14 text="할인 쿠폰" style={{ flex: 5 }} />
                 <PreReg14 text="1" style={{ flex: 1, textAlign: "center" }} />
-                <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} />
+                <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} /> */}
+                </View>
+              </View>
+              <DivisionLine />
+              <View style={styles.totalPrice}>
+                <PreBol16 text="결제 금액" />
+                <PreBol18 text={`${priceFormatter(String(amount?.totalFee))} 원`} />
               </View>
             </View>
-            <DivisionLine />
-            <View style={styles.totalPrice}>
-              <PreBol16 text="결제 금액" />
-              <PreBol18 text="430,000원" />
-            </View>
-          </View>
+          )}
         </ScrollView>
 
-        <TouchableOpacity style={styles.paymentButton} onPress={onPress}>
-          <PreBol16 text={amount + "원"} color="white" ml={16} />
+        <CustomModal
+          visibleState={successModalVisible}
+          title="결제가 완료되었습니다!"
+          subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
+          yesBtnText="홈으로 가기"
+          noBtnText="예약 내역 확인"
+          handleYesPress={() => {
+            setSuccessModalVisible(false)
+            navigation.popToTop() //! DO NOT REMOVE
+          }}
+          handleNoPress={() => {
+            setSuccessModalVisible(false)
+            navigation.popToTop() //! DO NOT REMOVE
+            setTimeout(() => {
+              //@ts-ignore
+              navigate("Bookings")
+            }, 1000)
+          }}
+          image={images.round_blue_check}
+          imageWidth={66}
+          imageHeight={66}
+        />
+
+        <TouchableOpacity style={styles.paymentButton} onPress={onPressPay}>
+          <PreBol16
+            text={amount?.totalFee ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
+            color="white"
+            ml={16}
+          />
           <PreBol16 text="결제하기" color="white" mr={16} />
         </TouchableOpacity>
       </Screen>

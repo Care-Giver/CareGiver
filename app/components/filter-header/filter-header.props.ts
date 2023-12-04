@@ -3,4 +3,5 @@ export interface FilterHeaderProps {
   title: string
   number?: string
   seletedOption?: string //? all-comments-screen 에서 재활용하기 위해 optional 로 변경함
+  onPress: () => void
 }

@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite"
 import { PreBol14, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "#images"
 import { BODY, GIVER_CASUAL_NAVY, WIDTH } from "#theme"
-import { PaymentModuleType } from "#screens"
+import { SimplePayment } from "#screens"
 
 export interface PaymentToolProps {
   /**
@@ -24,13 +24,13 @@ export interface PaymentToolProps {
    * 결제 모듈의 종류입니다.
    * "카카오페이" | "네이버페이" | "토스"
    */
-  tool: Exclude<PaymentModuleType, "신용/체크카드">
+  tool: SimplePayment
 
   /**
    * 선택된 결제 모듈입니다. (스타일링을 위해 추가됨)
    * "카카오페이" | "네이버페이" | "토스"
    */
-  selectedTool: Exclude<PaymentModuleType, "신용/체크카드">
+  selectedTool: SimplePayment
 
   setSelectedTool: () => void
 }

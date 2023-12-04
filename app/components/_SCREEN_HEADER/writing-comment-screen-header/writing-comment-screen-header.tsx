@@ -6,6 +6,7 @@ import { images } from "#images"
 import { styles } from "./styles"
 import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
 import { HEADER_ROOT } from "../common-styles"
+import { alertModal } from "../../../utils/alert-modal"
 
 export const WritingCommentScreenHeader = (props) => {
   const title = props.options.title ? props.options.title : props.route.name
@@ -27,7 +28,7 @@ export const WritingCommentScreenHeader = (props) => {
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
       <Pressable
         onPress={() => {
-          alert("댓글이 등록되었습니다!")
+          alertModal("개발중 🏗️", "댓글 등록 기능은 추후 추가예정입니다.")
         }}
         style={{
           marginLeft: "auto",

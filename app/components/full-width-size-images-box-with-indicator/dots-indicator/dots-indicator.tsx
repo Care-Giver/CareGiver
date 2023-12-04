@@ -15,8 +15,8 @@ export const DotsIndicator = (props: DotsIndicatorProps) => {
     //? https://docs.expo.dev/versions/latest/sdk/linear-gradient/#locations
     <LinearGradient
       style={[styles.root, viewStyle]}
-      colors={["rgba(256,256,256,0)", "rgba(256,256,256,1)"]} //! transparent 와 rgba(256,256,256,0) 는 다르다!
-      locations={[0.05, 1]}
+      colors={["rgba(256,256,256,0)", "rgba(256,256,256,0.5)", "rgba(256,256,256,1)"]} //! transparent 와 rgba(256,256,256,0) 는 다르다!
+      locations={[0.01, 0.9, 1]}
     >
       <View style={styles.dotsContainer}>
         {items.map((item, index) => (

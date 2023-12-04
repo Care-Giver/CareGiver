@@ -62,6 +62,8 @@ type CreateCrecheDateResult =
  * 위탁장소 펫시팅 서비스를 진행할 날짜들을 입력한다.
  * 날짜는 한 개 가 될수도 있고,
  * 여러개가 될수도 있다.
+ * TODO: 현재 API는 DB 내 객체들 중에서 이미 해당 startDate 가 존재하는지 확인하지 않음.
+ * TODO: 개선이 필요 함.
  */
 export const createCrecheDate = async (
   body: CreateCrecheDateBody,
@@ -133,5 +135,76 @@ export const updateCrecheDate = async (
   } catch (error) {
     console.error("updateCrecheDate | catch 에러!!!", error)
     return { isSuccess: false, reason: "axios catch error", crecheAvailableDates: [] }
+  }
+}
+
+interface DisableCrecheDateRequestBody {
+  crecheId: number // 16,
+  date: string // "2023-06-05",
+}
+interface DisableCrecheDateResponse extends GeneralResponse {}
+interface DisableCrecheDateResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+/**
+ * [케어기버 전용 API]
+ * 입력받은 날짜에 해당하는 펫시팅 서비스를 비활성화 한다.
+ * TODO: 현재 reponse 구조가 이상함. error, ok 구조가 아님. 수정 필요 함
+ */
+export const disableCrecheDate = async (
+  body: DisableCrecheDateRequestBody,
+): Promise<DisableCrecheDateResult> => {
+  try {
+    const response = await axios.post<DisableCrecheDateResponse>(
+      `${BASE_URL}/creche-date/disable`,
+      body,
+    )
+
+    if (!response?.data.ok) {
+      return { isSuccess: false, reason: response?.data?.error.message }
+    }
+
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface RestoreCrecheDateRequestBody {
+  crecheId: number // 16,
+  date: string // "2023-06-05",
+}
+interface RestoreCrecheDateResponse extends GeneralResponse {
+  crecheAvailableDates: CrecheAvailableDate[]
+}
+interface RestoreCrecheDateResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+}
+/**
+ * [케어기버 전용 API]
+ * 한번 비활성화 된 적 있는 펫시팅 서비스를 다시 활성화 한다.
+ */
+export const restoreCrecheDate = async (
+  body: RestoreCrecheDateRequestBody,
+): Promise<RestoreCrecheDateResult> => {
+  try {
+    const response = await axios.post<RestoreCrecheDateResponse>(
+      `${BASE_URL}/creche-date/restore`,
+      body,
+    )
+
+    if (!response?.data.ok) {
+      return { isSuccess: false, reason: response?.data?.error.message }
+    }
+
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    return { isSuccess: false, reason: error }
   }
 }

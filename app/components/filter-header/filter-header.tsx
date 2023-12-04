@@ -7,7 +7,7 @@ import { FilterHeaderProps } from "./filter-header.props"
 
 // ? 필터 헤더 부분에 오는 숫자는 Poppins 폰트를 사용하기 때문에, 따로 전달 받음
 
-export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps) => {
+export const FilterHeader = ({ title, number, seletedOption, onPress }: FilterHeaderProps) => {
   return (
     <Row
       style={{
@@ -34,6 +34,7 @@ export const FilterHeader = ({ title, number, seletedOption }: FilterHeaderProps
       {/* //* 필터 버튼 */}
       {seletedOption && (
         <Pressable
+          onPress={onPress}
           style={{
             flexDirection: "row",
             alignItems: "center",
