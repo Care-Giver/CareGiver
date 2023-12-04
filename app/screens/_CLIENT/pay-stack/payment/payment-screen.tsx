@@ -51,7 +51,7 @@ export type SimplePayment = "카카오페이" | "네이버페이" | "토스"
 
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
   function PaymentScreen({ route, navigation }) {
-    const { key, service, selectedPetIds, selectedTime, bookingRequest } = route.params
+    const { key, service, selectedPetIds, selectedTime, bookingRequest, destination } = route.params
     console.log("selectedTime 3", selectedTime)
     console.log("bookingRequest", bookingRequest)
 
@@ -209,9 +209,6 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
      * 참고 디스코드: https://discord.com/channels/1137734002258755654/1139710316675080203/1178274350856675369
      */
     const onPressPay = () => {
-      // setSuccessModalVisible(true)
-      // return
-
       if (!selectedTool) {
         alertModal("결제 수단", "결제 수단을 선택해주세요.")
         return
@@ -263,6 +260,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           }
           if (key === "visiting") {
             req.petToolsLocInfo = bookingRequest.petToolsLocInfo
+            req.destination = destination
           }
           console.log("req 🔷", req)
           //@ts-ignore

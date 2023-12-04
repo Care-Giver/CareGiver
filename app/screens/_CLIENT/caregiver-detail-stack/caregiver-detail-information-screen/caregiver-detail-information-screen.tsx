@@ -55,7 +55,7 @@ export const CaregiverDetailInformationScreen: FC<
     userStore: { userDetail },
   } = useStores()
 
-  const { serviceTypeKorean, service, selectedPetIds, selectedTime } = route.params
+  const { serviceTypeKorean, service, selectedPetIds, selectedTime, address } = route.params
   const { userProfile: profileImage, userNickname, reviewCount } = service
   const key: ServiceType = serviceTypeKorean === "방문" ? "visiting" : "creche"
   const { star, desc, defaultFee, images } = service[key]
@@ -78,8 +78,11 @@ export const CaregiverDetailInformationScreen: FC<
   const animationValue = useRef(new Animated.Value(0)).current
 
   useLayoutEffect(() => {
-    // @ts-ignore
-    navigation.setOptions({ headerTitle: service[key]?.__careGiver__?.__user__?.nickname })
+    const serviceType = key === "visiting" ? "방문" : "위탁"
+    navigation.setOptions({
+      // @ts-ignore
+      headerTitle: `(${serviceType}) ${service[key]?.__careGiver__?.__user__?.nickname}`,
+    })
     delayedIsMount()
   }, [key, navigation, service])
 
@@ -119,6 +122,7 @@ export const CaregiverDetailInformationScreen: FC<
       service,
       selectedPetIds,
       selectedTime,
+      address,
     })
   }
 

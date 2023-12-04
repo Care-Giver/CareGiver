@@ -67,7 +67,7 @@ import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } f
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
 
-type SelectedTime = {
+export type SelectedTime = {
   start: string
   end: string
 }
@@ -133,12 +133,14 @@ export type CLStackNavigatorParamList = {
     service: VisitingCreche
     selectedPetIds: number[]
     selectedTime: SelectedTime
+    address: string
   }
   "make-booking-screen": {
     key: ServiceType
     service: VisitingCreche
     selectedPetIds: number[]
     selectedTime: SelectedTime
+    address: string
   }
   "payment-screen": {
     key: ServiceType
@@ -146,6 +148,7 @@ export type CLStackNavigatorParamList = {
     selectedPetIds: number[]
     selectedTime: SelectedTime
     bookingRequest: BookingRequest
+    destination: string
   }
 
   "all-reviews-screen": undefined

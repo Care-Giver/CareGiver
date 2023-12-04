@@ -570,6 +570,7 @@ export const SearchResultScreen: FC<
                         start: (방문검색 && startTime) || (위탁검색 && startDate),
                         end: (방문검색 && endTime) || (위탁검색 && endDate),
                       },
+                      address,
                     })
                   }}
                   onLikePress={() => {

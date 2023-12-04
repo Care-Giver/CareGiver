@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -9,12 +9,15 @@ import {
   PreReg12,
   PreBol14,
   PreBol16,
+  RowRoundedButton,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
-import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
+import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, palette } from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
+import { images } from "#images"
+import { alertModal } from "../../../utils/alert-modal"
 
 export type BookingRequest = {
   petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치
@@ -32,10 +35,22 @@ const bondingTip = {
 export const MakeBookingScreen: FC<
   StackScreenProps<NavigatorParamList, "make-booking-screen">
 > = observer(function MakeBookingScreen({ route }) {
-  const { key, service, selectedPetIds, selectedTime } = route.params
+  const { key, service, selectedPetIds, selectedTime, address } = route.params
   const isKeyboardShown = useKeyboardShown()
   const isButtonShown = !isKeyboardShown
   console.log("selectedTime 2", selectedTime)
+  console.log("address", address)
+
+  /**
+   * "방문전용" [유저인풋 텍스트] 주소
+   */
+  const [visitingAddress, setVisitingAddress] = useState<{
+    address: string
+    detailAddress: string
+  }>({
+    address: address,
+    detailAddress: "",
+  })
 
   /**
    * [유저인풋 텍스트] 요청사항들
@@ -122,6 +137,15 @@ export const MakeBookingScreen: FC<
   // }, [is엉덩이Active, is다리Active, is모두Active])
 
   const onPress = () => {
+    if (key === "visiting" && !visitingAddress?.detailAddress) {
+      alertModal("상세 주소 입력", "펫시터님이 방문할 수 있도록 상세 주소도 필수로 입력해주세요!")
+      return
+    }
+
+    let destination = null
+    if (key === "visiting") {
+      destination = `${visitingAddress?.address} ${visitingAddress?.detailAddress}`
+    }
     let avo = ""
     let bond = ""
     if (is없음Active) {
@@ -157,29 +181,43 @@ export const MakeBookingScreen: FC<
           ? `${bookingRequest.cleaningTipsInfo} | ${bookingRequest.request}`
           : bookingRequest.request,
       },
+      destination,
     })
   }
 
   return (
     <Screen testID="MakeBooking" type="View">
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <PreReg12
-          style={{ textAlign: "right" }}
-          color={DISABLED}
-          text={"상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다 :)"}
-        />
+        <View style={styles.topTipBox}>
+          <PreReg12
+            color={palette.black}
+            text={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
+          />
+        </View>
+
+        {/* [방문 ONLY] 펫시터가 방문할 주소 입력 */}
         {key === "visiting" ? (
-          <View>
+          <View style={{ marginBottom: 36 }}>
             <PreBol14
               style={{ marginTop: 24, marginBottom: 8 }}
-              text="펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"
+              text="펫시터님이 방문할 주소를 알려주세요. (필수)"
+            />
+            {/*//* 위치 선택 */}
+            <RowRoundedButton
+              onPress={() => {
+                //
+              }}
+              image={images.location}
+              text={visitingAddress?.address}
+              textColor={HEAD_LINE}
+              style={{ marginVertical: 12 }}
             />
             <PlaceHolderInputBox
-              placeholderText="Ex) 몇 번째 서랍, 몇 번째 칸에 사료가 있고, 신발장 옆에 리드줄이 있어요…"
-              boxHeight={78}
-              text={bookingRequest.petToolsLocInfo}
+              placeholderText="상세주소를 입력해주세요. Ex) 102동 310호"
+              boxHeight={48}
+              text={visitingAddress?.detailAddress}
               setText={(text) => {
-                setBookingRequest((_) => ({ ..._, petToolsLocInfo: text }))
+                setVisitingAddress((_) => ({ ..._, detailAddress: text }))
               }}
             />
           </View>
@@ -187,7 +225,7 @@ export const MakeBookingScreen: FC<
 
         <PreBol14
           style={{ marginTop: 24, marginBottom: 14 }}
-          text={"먹으면 안되는 음식을 알려주세요! (알러지 여부)"}
+          text={"먹으면 안되는 음식을 알려주세요!"}
         />
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
           <ClickToBlueButton
@@ -213,7 +251,7 @@ export const MakeBookingScreen: FC<
           />
         </View>
         <PlaceHolderInputBox
-          placeholderText="주의할 음식을 직접 작성해주세요!"
+          placeholderText="주의할 음식이나 알러지가 있다면, 직접 작성해주세요!"
           boxHeight={78}
           text={bookingRequest.avoidFoodInfo}
           setText={(text) => {
@@ -250,12 +288,30 @@ export const MakeBookingScreen: FC<
           }}
         />
 
+        {/* [방문 ONLY] 펫시팅에 도움을 줄 수 있는 도구/사료 위치  */}
+        {key === "visiting" ? (
+          <View>
+            <PreBol14
+              style={{ marginTop: 24, marginBottom: 8 }}
+              text="펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"
+            />
+            <PlaceHolderInputBox
+              placeholderText="Ex) 신발장 옆 첫번째 서랍, 마지막 칸에 사료가 있어요."
+              boxHeight={78}
+              text={bookingRequest.petToolsLocInfo}
+              setText={(text) => {
+                setBookingRequest((_) => ({ ..._, petToolsLocInfo: text }))
+              }}
+            />
+          </View>
+        ) : null}
+
         <PreBol14
           style={{ marginTop: 16, marginBottom: 11 }}
           text={"배변 처리 방법을 알려주세요"}
         />
         <PlaceHolderInputBox
-          placeholderText="Ex) ..."
+          placeholderText="Ex) 고양이 모래는 절대 변기 안에 넣지 말아주세요!!"
           boxHeight={78}
           text={bookingRequest.cleaningTipsInfo}
           setText={(text) => {
@@ -294,5 +350,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     bottom: BOTTOM_HEIGHT,
+  },
+  topTipBox: {
+    width: "100%",
+    height: 35,
+    justifyContent: "center",
+    paddingHorizontal: 12,
+    marginTop: 10,
+    backgroundColor: "#F1F1F4",
+    borderRadius: 8,
   },
 })
