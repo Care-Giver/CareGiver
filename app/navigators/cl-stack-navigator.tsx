@@ -49,6 +49,9 @@ import {
   AddPetScreen,
   VisitingCreche,
   BookingRequest,
+  TestStreamChatScreen,
+  ChannelListScreen,
+  ChannelScreen,
 } from "#screens"
 import { goBack, navigate } from "./navigation-utilities"
 import {
@@ -60,12 +63,15 @@ import {
   EditPetInfoScreenHeader,
   CgScreenHeader,
   NotificationScreenHeader,
+  ClChatScreenHeader,
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
+import { StreamChat } from "stream-chat"
+import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 
 export type SelectedTime = {
   start: string
@@ -207,7 +213,12 @@ export type CLStackNavigatorParamList = {
     bondingTipsInfo: string
   }
   "test-iamport-payment-result-screen": any
+  // stream-chat 테스트
   "test-stream-chat-screen": any
+  "channel-list-screen": any
+  "channel-screen": {
+    channel: any
+  }
 }
 
 const Stack = createNativeStackNavigator<CLStackNavigatorParamList>()
@@ -507,31 +518,46 @@ export const SearchingStack = () => {
 /**
  * 채팅 스택 || CG - 채팅 스택
  */
-export const ChatsStack = observer(function ChatsStack() {
+const API_KEY = "cyt5mvxvratf"
+const chatClient = StreamChat.getInstance(API_KEY)
+
+export const ChatsStack = () => {
   const {
     userStore: { type },
   } = useStores()
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: true,
-        animation: "slide_from_right",
-      }}
-      initialRouteName="temp-chat-screen"
-    >
-      {/* //* 채팅 메인 */}
-      <Stack.Screen
-        name="temp-chat-screen"
-        component={TempChatScreen}
-        options={{
-          header: (props) =>
-            type === Type.CLIENT ? <HomeScreenHeader {...props} /> : <CgScreenHeader {...props} />,
-        }}
-      />
-    </Stack.Navigator>
+    <OverlayProvider>
+      <Chat client={chatClient}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: true,
+            animation: "slide_from_right",
+          }}
+          initialRouteName="channel-list-screen"
+        >
+          {/*//* stream-chat 테스트 플로우 */}
+
+          <Stack.Screen
+            name="channel-list-screen"
+            component={ChannelListScreen}
+            options={{
+              header: (props) => <HomeScreenHeader {...props} />,
+            }}
+          />
+          <Stack.Screen
+            name="channel-screen"
+            component={ChannelScreen}
+            options={{
+              title: "채팅",
+              header: (props) => <ClChatScreenHeader {...props} />,
+            }}
+          />
+        </Stack.Navigator>
+      </Chat>
+    </OverlayProvider>
   )
-})
+}
 
 /**
  * 내정보 스택

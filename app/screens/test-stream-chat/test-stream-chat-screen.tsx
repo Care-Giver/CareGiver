@@ -8,6 +8,18 @@ import { StreamChat, ConnectionOpen } from "stream-chat"
 import axios from "axios"
 import { GIVER_CASUAL_NAVY } from "#theme"
 
+import {
+  Chat,
+  OverlayProvider,
+  ChannelList,
+  Channel,
+  MessageList,
+  MessageInput,
+  Thread,
+} from "stream-chat-react-native"
+import { getStreamToken } from "../../services/axios/stream"
+import { useStores } from "#models"
+
 const API_KEY = "cyt5mvxvratf"
 const USER_ID = "test_user_230628_cl"
 
@@ -17,14 +29,19 @@ const sampleData = {
 
 export const TestStreamChatScreen: FC<
   StackScreenProps<NavigatorParamList, "test-stream-chat-screen">
-> = observer(function TestStreamChatScreen() {
+> = observer(function TestStreamChatScreen({ navigation }) {
+  const {
+    userStore: { type, userAuth },
+  } = useStores()
+
   const client = StreamChat.getInstance(API_KEY)
 
   const [token, setToken] = useState(null)
   const [connectedUser, setConnectedUser] = useState<ConnectionOpen>(null)
 
   useEffect(() => {
-    generateToken(sampleData)
+    //console.log(generateToken({ userId: USER_ID }))
+    getStreamToken().then((response) => setToken(response.streamToken))
   }, [])
 
   /**
@@ -41,9 +58,22 @@ export const TestStreamChatScreen: FC<
         console.log("generateToken response.data", response.data)
         setToken(response.data?.token)
       })
-      .catch((error) => {
-        console.error("generateToken ERROR", error)
-      })
+  }
+  const parsedEmail = userAuth.email.substring(0, userAuth.email.indexOf("@"))
+
+  // 채널 리스트 만들기 및 불러오기
+  const createChannels = async () => {
+    const chatClient = await StreamChat.getInstance(API_KEY)
+
+    const channel = chatClient.channel("messaging", parsedEmail, {
+      members: ["example", "ky7939"],
+      name: parsedEmail,
+      userType: type,
+    })
+    channel.create()
+
+    const channels = chatClient.queryChannels({ watch: true, state: true })
+    console.log("channels >>>", channels)
   }
 
   /**
@@ -51,11 +81,13 @@ export const TestStreamChatScreen: FC<
    * response 정보 (ConnectionOpen) 속에 채팅에 필요한 유저정보가 담겨있음
    * */
   const connectAndSetUSer = async () => {
+    console.log("email >>>", userAuth.email)
     // Connect user to chat. This establishes a websocket connection between client and server.
     try {
+      console.log("token>>>", token)
       const connectUserResponse = await client.connectUser(
         {
-          id: USER_ID,
+          id: parsedEmail,
           name: "TEST_USER",
           image: "https://i.imgur.com/fR9Jz14.png",
         },
@@ -65,6 +97,8 @@ export const TestStreamChatScreen: FC<
       if (connectUserResponse) {
         setConnectedUser(connectUserResponse)
       }
+      await createChannels()
+      navigation.navigate("channel-list-screen", { parsedEmail: parsedEmail })
     } catch (error) {
       console.error("connectUser ERROR", error)
     }
@@ -88,7 +122,7 @@ export const TestStreamChatScreen: FC<
         <Button
           text="generateToken 테스트"
           onPress={() => {
-            generateToken(sampleData)
+            getStreamToken().then((response) => setToken(response.streamToken))
           }}
         />
         <Button text="connectUser 테스트" onPress={onPress} />
