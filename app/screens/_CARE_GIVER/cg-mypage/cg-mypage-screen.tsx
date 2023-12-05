@@ -48,7 +48,7 @@ export const CgMypageScreen: FC<
     navigate("service-center-screen")
   }
 
-  // "Client 모드로 전환" 버튼 클릭시 실행되는 함수
+  // "보호자 모드로 전환" 버튼 클릭시 실행되는 함수
   const handleMode = async () => {
     switchType()
   }
@@ -204,9 +204,9 @@ export const CgMypageScreen: FC<
             </Row> */}
 
         <DivisionLine color={LIGHT_LINE} />
-        {/* //* Care Giver 모드 전환 버튼 */}
+        {/* //* 보호자 모드 전환 버튼 */}
         <Pressable style={[styles.modeChangeBtn, styles.sidePadding]} onPress={handleMode}>
-          <PreBol16 text="Client 모드로 전환" color={GIVER_CASUAL_NAVY} />
+          <PreBol16 text="보호자 모드로 전환" color={GIVER_CASUAL_NAVY} />
 
           <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
         </Pressable>

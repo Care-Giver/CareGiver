@@ -148,9 +148,9 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           </View>
 
           <DivisionLine color={LIGHT_LINE} />
-          {/* //* Care Giver 모드 전환 버튼 */}
+          {/* //* 펫시터 모드 전환 버튼 */}
           <TouchableOpacity style={[styles.modeChangeBtn, styles.sidePadding]} onPress={handleMode}>
-            <PreBol16 text="Care Giver 모드로 전환" color={GIVER_CASUAL_NAVY} />
+            <PreBol16 text="펫시터 모드로 전환" color={GIVER_CASUAL_NAVY} />
 
             <Image source={images.arrow_change} style={{ marginLeft: 2, width: 28, height: 28 }} />
           </TouchableOpacity>
