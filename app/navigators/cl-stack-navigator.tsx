@@ -68,7 +68,6 @@ import {
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
-import { observer } from "mobx-react-lite"
 import { IMPData } from "iamport-react-native"
 import { StreamChat } from "stream-chat"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
@@ -321,8 +320,7 @@ export const SearchingStack = () => {
         headerShown: true,
         animation: "slide_from_right",
       }}
-      // initialRouteName="search-screen"
-      initialRouteName="search-result-screen"
+      initialRouteName="search-screen"
     >
       {/* //* 홈 ➡️ 원래 시작 스크린이었으나, search-screen 으로 대체되었습니다 */}
       {/*      <Stack.Screen

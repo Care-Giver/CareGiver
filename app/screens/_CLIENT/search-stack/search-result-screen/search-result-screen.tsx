@@ -179,7 +179,7 @@ export const SearchResultScreen: FC<
     extrapolate: "clamp",
   })
 
-  /*   // navigation params 로 넘겨받은 API REQUEST BODY 데이터
+  // navigation params 로 넘겨받은 API REQUEST BODY 데이터
   const {
     lat,
     lng,
@@ -196,9 +196,9 @@ export const SearchResultScreen: FC<
 
     // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
     address, // 검색결과 헤더에 보여줄 주소
-  } = route.params */
+  } = route.params
 
-  const {
+  /* const {
     lat,
     lng,
     petIds,
@@ -214,7 +214,7 @@ export const SearchResultScreen: FC<
 
     // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
     address, // 검색결과 헤더에 보여줄 주소
-  } = TEMP_ROUTE_PARAMS
+  } = TEMP_ROUTE_PARAMS */
 
   const 방문검색 = serviceType === "방문"
   const 위탁검색 = serviceType === "위탁"

@@ -45,7 +45,10 @@ export const ManageBookingScreen: FC<
 
   return (
     <Screen testID="ManageBooking">
-      <BookingCheckButton style={{ zIndex: 1 }} bookingCount={2} />
+      {hasBookings ? (
+        <BookingCheckButton style={{ zIndex: 1 }} bookingCount={bookings?.length} />
+      ) : null}
+
       {hasBookings ? (
         <BookingList bookings={bookings} />
       ) : (

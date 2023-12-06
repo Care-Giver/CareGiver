@@ -45,22 +45,21 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
   ).current
 
   useEffect(() => {
+    const handleBottomTabVisiblity = () => {
+      Animated.timing(animatedBottomTabBarHeight, {
+        toValue: showingBottomTab ? BOTTOM_TAB_BAR_HEIGHT : 0,
+        duration: 300,
+        useNativeDriver: false, // Use `false` for Android support
+      }).start()
+
+      Animated.timing(animatedBottomTabBarItemImageHeight, {
+        toValue: showingBottomTab ? BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT : 0,
+        duration: 300,
+        useNativeDriver: false, // Use `false` for Android support
+      }).start()
+    }
     handleBottomTabVisiblity()
-  }, [showingBottomTab])
-
-  const handleBottomTabVisiblity = () => {
-    Animated.timing(animatedBottomTabBarHeight, {
-      toValue: showingBottomTab ? BOTTOM_TAB_BAR_HEIGHT : 0,
-      duration: 300,
-      useNativeDriver: false, // Use `false` for Android support
-    }).start()
-
-    Animated.timing(animatedBottomTabBarItemImageHeight, {
-      toValue: showingBottomTab ? BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT : 0,
-      duration: 300,
-      useNativeDriver: false, // Use `false` for Android support
-    }).start()
-  }
+  }, [animatedBottomTabBarHeight, animatedBottomTabBarItemImageHeight, showingBottomTab])
 
   // 그림자 효과 - 바텀탭이 보여질 때만 그림자 효과를 줍니다.
   const shadowStyle = {
@@ -137,10 +136,10 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
             //   alertModal("MVP", "채팅 기능은 아직 개발중입니다 🦮")
             //   return
 
-            // 예약관리(CG) 탭
-            case tabLabel.manage_booking:
-              alertModal("MVP", "예약관리 기능은 아직 개발중입니다 🐈")
-              return
+            // // 예약관리(CG) 탭
+            // case tabLabel.manage_booking:
+            //   alertModal("MVP", "예약관리 기능은 아직 개발중입니다 🐈")
+            //   return
 
             // 통계(CG) 탭
             case tabLabel.statistics:
