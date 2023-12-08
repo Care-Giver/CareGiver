@@ -50,7 +50,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
 
         <View style={styles.buttonBox}>
-          {isIOS && (
+          {/* {isIOS && (
             <Button
               onPress={() => {
                 appleLogin(socialLoginHander, logoutHandler)
@@ -60,7 +60,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <Image source={images.apple_icon} style={styles.icon} />
               <PreMed18 text="Apple로 로그인" color={palette.black} />
             </Button>
-          )}
+          )} */}
           <Button
             onPress={() => {
               naverLogin(socialLoginHander, logoutHandler)
@@ -79,15 +79,15 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             <Image source={images.kakao_icon} style={styles.icon} />
             <PreMed18 text="카카오 로그인" color={palette.black} />
           </Button>
-          {loggedIn && (
+          {/* {loggedIn && (
             <Button onPress={logoutHandler} style={styles.logout}>
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
-          )}
-          <DivisionLine mv={20} />
+          )} */}
+          {/* <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
-          </Button>
+          </Button> */}
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button> */}
@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
 
   buttonBox: {
     justifyContent: "space-around",
-    height: 400,
+    // height: 400,
+    height: 160,
     // position: "absolute",
     // bottom: BOTTOM_HEIGHT,
     // left: BASIC_BACKGROUND_PADDING_WIDTH,
