@@ -50,8 +50,9 @@ import {
   disableVisitingAvailableTime,
   getAvailableTimesByDate,
   restoreVisitingAvailableTime,
+  updateVisitingAvailableTime,
 } from "#axios"
-import _ from "lodash"
+import _, { isDate } from "lodash"
 import { alertModal } from "../../../utils/alert-modal"
 import { useKeyboardShown } from "../../../utils/hooks"
 import dayjs from "dayjs"
@@ -120,7 +121,7 @@ export const CARE_GIVER_COMMISION_RATE = 0.06 as const
 export const SetVisitingServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-visiting-service-day-screen">
 > = observer(function SetVisitingServiceDayScreen({ route, navigation }) {
-  const { selectedDates, visitingId, isAvailableDate } = route.params
+  const { selectedDates, visitingId, isAvailableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1
       ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
@@ -139,12 +140,17 @@ export const SetVisitingServiceDayScreen: FC<
     deleted: [],
     added: [],
   })
-  console.log("timeframe 🔷", timeframe)
-  console.log(_.isEqual(timeframe.added, timeframe.selected))
-  const isPOST = _.isEqual(timeframe.added, timeframe.selected) && !isAvailableDate
-  console.log("isPOST", isPOST)
-  const [isAvailable, setIsAvailable] = useState(isAvailableDate)
+  const isInitiallyCreating = _.isEqual(timeframe.added, timeframe.selected) && !isAvailableDate
+  const [isAvailable, setIsAvailable] = useState(isDeleted ? false : isAvailableDate)
   const [isSaveButtonActivated, setIsSaveButtonActivated] = useState(false)
+
+  // console.log("previousSelectedTimeframes ", previousSelectedTimeframes)
+  // console.log("selectedDates", selectedDates)
+  // console.log("isDeleted", isDeleted)
+  // console.log("isAvailableDate", isAvailableDate)
+  // console.log("timeframe 🔷", timeframe)🔷
+  // console.log(_.isEqual(timeframe.added, timeframe.selected))
+  // console.log("isPOST", isPOST)
 
   // 헤더 타이틀 설정
   useLayoutEffect(() => {
@@ -177,28 +183,41 @@ export const SetVisitingServiceDayScreen: FC<
     })
   }, [petsitter.id, selectedDates])
 
+  // 서비스 가능 활성화 핸들링
+  useEffect(() => {
+    if (isDeleted) {
+      setIsAvailable(false)
+    } else {
+      setIsAvailable(timeframe.selected.length !== 0)
+    }
+  }, [timeframe.selected.length, isDeleted])
+
   // 저장하기 버튼 활성화 핸들링
   useEffect(() => {
-    if (isPOST && !isAvailable) {
+    if (isInitiallyCreating && !isAvailable) {
       setIsSaveButtonActivated(false)
       return
     }
 
-    setIsSaveButtonActivated(
-      (previousSelectedTimeframes.length === 0 && timeframe.selected.length !== 0) ||
-        (previousSelectedTimeframes.length !== 0 &&
-          previousSelectedTimeframes !== timeframe.selected) ||
-        (isAvailableDate && !isAvailable) ||
-        (!isAvailableDate && isAvailable),
-    )
-  }, [isAvailable, isAvailableDate, isPOST, previousSelectedTimeframes, timeframe.selected])
-
-  // 서비스 가능 활성화 핸들링
-  useEffect(() => {
-    setIsAvailable(timeframe.selected.length !== 0)
-  }, [timeframe.selected.length])
+    console.log("isDeleted, isAvailable, isAvailableDate", isDeleted, isAvailable, isAvailableDate)
+    if (isDeleted && isAvailable) {
+      setIsSaveButtonActivated(true)
+    } else {
+      setIsSaveButtonActivated(
+        (previousSelectedTimeframes.length === 0 && timeframe.selected.length !== 0) ||
+          (previousSelectedTimeframes.length !== 0 &&
+            previousSelectedTimeframes !== timeframe.selected) ||
+          (isAvailableDate && !isAvailable) ||
+          (!isAvailableDate && isAvailable),
+      )
+    }
+  }, [isAvailable, isAvailableDate, isInitiallyCreating, previousSelectedTimeframes, timeframe.selected, isDeleted])
 
   const toggleSwitch = () => {
+    if (isDeleted) {
+      setIsAvailable((prev) => !prev)
+      return
+    }
     if (!isAvailable && timeframe.selected.length === 0) {
       alertModal("시간대를 선택해주세요", "선택된 시간대가 없습니다.")
       return
@@ -259,6 +278,31 @@ export const SetVisitingServiceDayScreen: FC<
     return isValid
   }, [])
 
+  /**
+   * 1시간 간격으로 잘라서 ISOString 생성
+   * @param beginTime "2023-12-09T08:00:00.000Z"
+   * @param endTime "2023-12-09T13:00:00.000Z"
+   * @returns ["2023-12-09T08:00:00.000Z", "2023-12-09T09:00:00.000Z", "2023-12-09T10:00:00.000Z", "2023-12-09T11:00:00.000Z", "2023-12-09T12:00:00.000Z"]
+   */
+  function create1HourISOStringFrom(beginTime: string, endTime: string) {
+    const resultArray = []
+
+    // Parse the timestamps into Date objects
+    const startTime = new Date(beginTime)
+    const endTimeObj = new Date(endTime)
+    if (!isDate(startTime) || !isDate(endTimeObj)) {
+      return []
+    }
+
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (startTime < endTimeObj) {
+      resultArray.push(startTime.toISOString())
+      startTime.setHours(startTime.getHours() + 1)
+    }
+
+    return resultArray
+  }
+
   // 서비스 시간대 삭제버튼 클릭시 작동
   const onPressDelete = (item: SelectedTimeframe) => {
     if (item.isBooked) {
@@ -290,6 +334,25 @@ export const SetVisitingServiceDayScreen: FC<
 
   // 저장하기 버튼 클릭시 데이터 POST 또는 DELETE
   const onPressSave = () => {
+    //! 비활성화되어 있었다면, 활성화
+    if (isDeleted && isAvailable) {
+      restoreVisitingAvailableTime({
+        visitingId,
+        date: selectedDates[0],
+      }).then(({ isSuccess }) => {
+        if (isSuccess) {
+          setIsSaveButtonActivated(false)
+          setTimeout(() => {
+            navigation.goBack()
+            setIsSaveButtonActivated(true)
+          }, 1000)
+        } else {
+          alertModal("활성화 실패", "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.")
+        }
+      })
+      return
+    }
+
     const isValid = checkIsValidTimeframe(timeframe.selected)
     console.log("🔷 isValid", isValid)
     if (!isValid) {
@@ -298,7 +361,7 @@ export const SetVisitingServiceDayScreen: FC<
     }
 
     // 처음 생성 시나리오
-    if (isPOST) {
+    if (isInitiallyCreating) {
       Promise.all(
         selectedDates.map((dateItem) =>
           timeframe.selected.forEach((tiemItem) =>
@@ -310,70 +373,34 @@ export const SetVisitingServiceDayScreen: FC<
             }),
           ),
         ),
-      )
-        .then((response) => {
-          // console.log("response >>>", response)
-          setIsSaveButtonActivated(false)
-          setTimeout(() => {
-            navigation.goBack()
-            setIsSaveButtonActivated(true)
-          }, 1000)
-        })
-        .catch(console.log)
+      ).then(() => {
+        setIsSaveButtonActivated(false)
+        setTimeout(() => {
+          navigation.goBack()
+          setIsSaveButtonActivated(true)
+        }, 1000)
+      })
     }
-    // 수정 혹은 삭제 시나리오
+    // 수정 시나리오
     else {
-      //! API 리팩토링 대기중이므로, 의도적으로 진행 막음
-      alertModal("개발중🏗️", "현재 방문 펫시팅은 서비스 날짜 수정이 불가능합니다.")
-      return
-
       const added = timeframe.added
       const hasAdded = added.length !== 0
       const trulyDeleted = timeframe.deleted.filter((v) => _.isSafeInteger(v.id))
-      const hasDeleted = trulyDeleted.length !== 0
-      console.log("hasDeleted", hasDeleted)
-      console.log("trulyDeleted", trulyDeleted)
+      const hasTrulyDeleted = trulyDeleted.length !== 0
 
-      // 추가로 CREATE
-      if (hasAdded) {
-        // console.log("added", added)
-        Promise.all(
-          added.map((tiemItem) =>
-            createVisitingAvailableTime({
-              startTime: selectedDates[0].slice(0, 10) + tiemItem.beginTime.slice(10, 19),
-              endTime: selectedDates[0].slice(0, 10) + tiemItem.endTime.slice(10, 19),
-              visitingId,
-              fee: fee,
-            }),
-          ),
-        ).then((res) => console.log("CREATE createVisitingAvailableTime >>>", res))
+      // 시간대 추가 OR 삭제
+      if (hasAdded || hasTrulyDeleted) {
+        updateVisitingAvailableTime(visitingId, {
+          add: create1HourISOStringFrom(added[0]?.beginTime, added[0]?.endTime),
+          delete: trulyDeleted.map((v) => v.beginTime),
+        })
       }
 
-      // DELETE
-      if (hasDeleted) {
-        //! 현재 API 는 알 수 없는 이유로 403 에러 반환 함
-        //TODO: API 업데이트이후 다시 테스트 해야 함
-        Promise.all(trulyDeleted.map((v) => deleteVisitingAvailableTime(v.id)))
-      }
-
-      // 비활성화 (SOFT DELETE)
-      if (!isAvailable) {
+      // 비활성화
+      if (isAvailableDate && !isAvailable) {
         disableVisitingAvailableTime({
           visitingId,
           date: selectedDates[0],
-        }).then((res) => {
-          console.log("disableVisitingAvailableTime >>>", res.isSuccess)
-        })
-      }
-      // 비활성화 해제 (SOFT RESTORE)
-      //! 현재 API 로는 restore 대상을 구별해낼 수가 없음
-      //TODO: API 업데이트시, else if 조건문 변경
-      else if (false) {
-        restoreVisitingAvailableTime({
-          visitingId,
-          date: selectedDates[0],
-        }).then((res) => {
-          console.log("restoreVisitingAvailableTime >>>", res.isSuccess)
         })
       }
 
@@ -436,9 +463,6 @@ export const SetVisitingServiceDayScreen: FC<
     [onPressTimePickerConfirm],
   )
 
-  const keyboardShown = useKeyboardShown()
-  const showSaveButton = !keyboardShown
-
   return (
     <Screen testID="SetVisitingServiceDay" style={styles.root}>
       <ScrollView
@@ -461,106 +485,123 @@ export const SetVisitingServiceDayScreen: FC<
           />
         </View>
 
-        {/* 가능한 서비스 시간대 & 시간 추가하기 */}
-        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-          <DivisionLine height={2} color={LBG} />
-          <PreMed18 text="서비스 시간대" mt={16} mb={12} />
-          {timeframe.selected.length > 0 &&
-            timeframe.selected.map((item) => {
-              // const beginDateText = timeText(beginDate)
-              // const endDateText = timeText(endDate)
-              return (
-                <ServiceTime
-                  key={item.id}
-                  startTimeText={timeTextAMPM(new Date(item.beginTime))}
-                  endTimeText={timeTextAMPM(new Date(item.endTime))}
-                  onPress={() => {
-                    onPressDelete(item)
-                  }}
-                />
-              )
-            })}
-          <TouchableOpacity
-            style={styles.boxTwo}
-            onPress={() => {
-              bottomSheetModalRef.current?.present()
+        {isDeleted ? (
+          <View
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+              paddingVertical: 20,
+              alignItems: "center",
             }}
           >
-            <Image style={styles.image} source={images.plus_grey} />
-            <PreReg16 text="가능한 시간 추가하기" ml={12} color={BODY} />
-          </TouchableOpacity>
-          <DivisionLine height={2} color={LBG} />
-        </View>
-
-        {/* 서비스 요금 설정 시작 */}
-        <View style={[styles.rowText, { marginTop: 20 }]}>
-          <PreMed18 text="서비스 요금 설정" />
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
-            <Image style={styles.image} source={images.more_info_bigger} />
+            <PreBol20 text="비활성화된 날짜입니다." />
+            <PreMed14 text="서비스 가능 토글을 활성화 해주세요." mt={12} />
           </View>
-        </View>
-
-        {/* 서비스 요금 설정 - 시간당 요금 설정 */}
-        <View style={[styles.rowText, { marginTop: 25 }]}>
-          <PreReg16 text="시간 당" />
-          <Pressable
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => setPricemodalOpen(true)}
-          >
-            <PreBol16 text={`${priceFormatter(totalPrice.toString())} 원`} mr={4} />
-            <Image style={styles.image} source={images.arrow_right} />
-          </Pressable>
-        </View>
-
-        {/* 서비스 요금 설정 - 강아지별 크기 추가 요금 설정 */}
-        {hasDogs && (
-          <>
-            <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
-              <PreReg16 text="강아지 크기 별 추가 요금" />
+        ) : (
+          <View>
+            {/* 가능한 서비스 시간대 & 시간 추가하기 */}
+            <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+              <DivisionLine height={2} color={LBG} />
+              <PreMed18 text="서비스 시간대" mt={16} mb={12} />
+              {timeframe.selected.length > 0 &&
+                timeframe.selected.map((item) => {
+                  return (
+                    <ServiceTime
+                      key={item.id}
+                      startTimeText={timeTextAMPM(new Date(item.beginTime))}
+                      endTimeText={timeTextAMPM(new Date(item.endTime))}
+                      onPress={() => {
+                        onPressDelete(item)
+                      }}
+                    />
+                  )
+                })}
               <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
+                style={styles.boxTwo}
                 onPress={() => {
-                  navigate("cg-registration-2-screen", { from: "set-visiting-service-day-screen" })
+                  bottomSheetModalRef.current?.present()
                 }}
               >
-                <PreMed16 text="설정하기" mr={4} />
-                <Image style={styles.image} source={images.arrow_right} />
+                <Image style={styles.image} source={images.plus_grey} />
+                <PreReg16 text="가능한 시간 추가하기" ml={12} color={BODY} />
               </TouchableOpacity>
+              <DivisionLine height={2} color={LBG} />
             </View>
-            <View style={styles.dogSizeBox}>
-              <PricePerSize
-                size="소형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
-              />
-              <View style={styles.verticalLine} />
-              <PricePerSize
-                size="중형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
-              />
-              <View style={styles.verticalLine} />
-              <PricePerSize
-                size="대형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
-              />
-            </View>
-          </>
-        )}
 
-        {/* 시간당 받는 총 금액 */}
-        <View style={styles.totalPriceBox}>
-          <View>
-            <PreBol16 text="내가 시간당 받는 총 금액" mb={4} />
-            <PreReg16 text="(수수료 포함)" color={BODY} />
+            {/* 서비스 요금 설정 시작 */}
+            <View style={[styles.rowText, { marginTop: 20 }]}>
+              <PreMed18 text="서비스 요금 설정" />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
+                <Image style={styles.image} source={images.more_info_bigger} />
+              </View>
+            </View>
+
+            {/* 서비스 요금 설정 - 시간당 요금 설정 */}
+            <View style={[styles.rowText, { marginTop: 25 }]}>
+              <PreReg16 text="시간 당" />
+              <Pressable
+                style={{ flexDirection: "row", alignItems: "center" }}
+                onPress={() => setPricemodalOpen(true)}
+              >
+                <PreBol16 text={`${priceFormatter(totalPrice.toString())} 원`} mr={4} />
+                <Image style={styles.image} source={images.arrow_right} />
+              </Pressable>
+            </View>
+
+            {/* 서비스 요금 설정 - 강아지별 크기 추가 요금 설정 */}
+            {hasDogs && (
+              <>
+                <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
+                  <PreReg16 text="강아지 크기 별 추가 요금" />
+                  <TouchableOpacity
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                    onPress={() => {
+                      //@ts-ignore
+                      navigate("CgMypage", {
+                        screen: "cg-registration-2-screen",
+                        params: { from: "set-visiting-service-day-screen" },
+                      })
+                    }}
+                  >
+                    <PreMed16 text="설정하기" mr={4} />
+                    <Image style={styles.image} source={images.arrow_right} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.dogSizeBox}>
+                  <PricePerSize
+                    size="소형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
+                  />
+                  <View style={styles.verticalLine} />
+                  <PricePerSize
+                    size="중형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
+                  />
+                  <View style={styles.verticalLine} />
+                  <PricePerSize
+                    size="대형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
+                  />
+                </View>
+              </>
+            )}
+
+            {/* 시간당 받는 총 금액 */}
+            <View style={styles.totalPriceBox}>
+              <View>
+                <PreBol16 text="내가 시간당 받는 총 금액" mb={4} />
+                <PreReg16 text="(수수료 포함)" color={BODY} />
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <PopSem24
+                  text={priceFormatter(totalPriceExcludeCommission.toString())}
+                  color={GIVER_CASUAL_NAVY}
+                />
+                <PreBol16 text="원" ml={2} />
+              </View>
+            </View>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <PopSem24
-              text={priceFormatter(totalPriceExcludeCommission.toString())}
-              color={GIVER_CASUAL_NAVY}
-            />
-            <PreBol16 text="원" ml={2} />
-          </View>
-        </View>
+        )}
       </ScrollView>
 
       {/* 저장하기 버튼 클릭시 데이터 POST */}

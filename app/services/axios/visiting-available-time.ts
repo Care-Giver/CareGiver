@@ -2,11 +2,12 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
 export interface GroupedVisitingAvailableTimesByDate {
-  id: number
-  createAt: string // "2023-01-01T11:00:00",
-  updatedAt: string // "2023-01-01T11:00:00",
+  // id: number
+  // createAt: string // "2023-01-01T11:00:00",
+  // updatedAt: string // "2023-01-01T11:00:00",
   date: string // "2023-06-05",
   fee: number
+  isDeleted: boolean // 펫시팅 시간 비활성화 여부
 }
 
 interface VisitingAvailableTimesResponse extends GeneralResponse {
@@ -125,6 +126,44 @@ export const createVisitingAvailableTime = async (
   } catch (error) {
     console.error("catch 에러!!! - createVisitingAvailableTime", error)
     console.error("catch 에러!!! - createVisitingAvailableTime body", body)
+    return { isSuccess: false, reason: error }
+  }
+}
+
+interface UpdateVisitingAvailableTimeRequestBody {
+  delete: string[] // "2022-09-14T22:00:00",
+  add: string[] // "2022-09-14T23:00:00",
+}
+interface UpdateVisitingAvailableTimeResponse extends GeneralResponse {
+  visitingAvailableTimes: VisitingAvailableTime[]
+}
+interface UpdateVisitingAvailableTimeResult {
+  isSuccess: boolean // 성공여부
+  reason?: string // 실패시, 실패이유
+  visitingAvailableTimes?: VisitingAvailableTime[] // 성공시, 생성된 방문 펫시팅 서비스 가능한 날짜 객체들
+}
+/**
+ * [케어기버 전용 API]
+ * 방문 펫시팅 서비스 가능한 특정 날짜의
+ * 가능한 시간대를 수정 한다.
+ */
+export const updateVisitingAvailableTime = async (
+  visitingId: number,
+  body: UpdateVisitingAvailableTimeRequestBody,
+): Promise<UpdateVisitingAvailableTimeResult> => {
+  try {
+    const response = await axios.put<UpdateVisitingAvailableTimeResponse>(
+      `${BASE_URL}/visiting-available-time/${visitingId}`,
+      body,
+    )
+    if (!response?.data.ok) {
+      return { isSuccess: false, reason: response?.data?.error }
+    }
+    return {
+      isSuccess: true,
+      visitingAvailableTimes: response.data.visitingAvailableTimes,
+    }
+  } catch (error) {
     return { isSuccess: false, reason: error }
   }
 }

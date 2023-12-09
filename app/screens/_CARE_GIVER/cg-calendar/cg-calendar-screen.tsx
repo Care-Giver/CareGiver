@@ -40,8 +40,8 @@ export const CgCalendarScreen: FC<
         const getter = serviceType === "visiting" ? getVisitingAvailableTimes : getCrecheDates
         const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
         getter(petsitter.id).then((res) => {
-          // console.log("res 🔷", res)
           setter(res)
+          console.log("res 🔷", res)
         })
       }
 
@@ -81,14 +81,6 @@ export const CgCalendarScreen: FC<
   >([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDate[]>([])
   const [selectedDates, setSelectedDates] = useState<string[]>([])
-  // console.log("selected", selectedDates)
-  // console.log(
-  //   ">>>",
-  //   _.intersection(
-  //     visitingAvailableTimes.map((item) => item.date),
-  //     selectedDates,
-  //   ),
-  // )
 
   return (
     <Screen testID="CgCalendar">
@@ -146,6 +138,9 @@ export const CgCalendarScreen: FC<
                           visitingAvailableTimes.map((item) => item.date),
                           selectedDates,
                         ).length !== 0,
+                      isDeleted:
+                        selectedDates?.length === 1 &&
+                        visitingAvailableTimes.find((v) => v.date === selectedDates[0])?.isDeleted,
                     })
                   : navigate("set-creche-service-day-screen", {
                       selectedDates,

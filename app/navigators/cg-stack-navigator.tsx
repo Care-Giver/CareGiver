@@ -67,6 +67,7 @@ export type CGStackNavigatorParamList = {
     selectedDates: string[]
     visitingId: number
     isAvailableDate: boolean
+    isDeleted?: boolean
   }
 
   /**

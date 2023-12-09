@@ -255,7 +255,11 @@ export const SetCrecheServiceDayScreen: FC<
               <TouchableOpacity
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => {
-                  navigate("cg-registration-2-screen", { from: "set-creche-service-day-screen" })
+                  //@ts-ignore
+                  navigate("CgMypage", {
+                    screen: "cg-registration-2-screen",
+                    params: { from: "set-creche-service-day-screen" },
+                  })
                 }}
               >
                 <PreMed16 text="설정하기" mr={4} />
