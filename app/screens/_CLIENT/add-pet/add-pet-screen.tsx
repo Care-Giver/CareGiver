@@ -78,11 +78,11 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
 
     // 기본 정보 BEGIN ==============================================================
     const [familyType, setFamilyType] = useState<FamilyType>(null) // 종 (고양이 OR 강아지)
-    const [name, setName] = useState("") // 이름
-    const [birthday, setBirthday] = useState("") // 1998-02-16
-    const [speciesName, setSpeciesName] = useState("") // 품종
+    const [name, setName] = useState<string>("") // 이름
+    const [birthday, setBirthday] = useState<string>("") // 1998-02-16
+    const [speciesName, setSpeciesName] = useState<string>("") // 품종
     const [sex, setSex] = useState<PetSex>(null) // 성별
-    const [weight, setWeight] = useState(0) // 무게
+    const [weight, setWeight] = useState<number>(null) // 무게
     const [isNeutralizated, setIsNeutralizated] = useState<boolean>(null) // 중성화여부
     // 기본 정보 ENDED ==============================================================
 
@@ -602,7 +602,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
             isChangeMade()
           }}
           defaultValue={name}
-          placeholderInput="반려동물의 품종을  입력해주세요."
+          placeholderInput="반려동물의 품종을 입력해주세요."
           validateFunction={() => {
             return false
             //TODO : 중복 검출 코드  만들기

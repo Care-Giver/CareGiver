@@ -82,6 +82,7 @@ export const Comment = (props: CommentProps) => {
         <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
+          style={{ width: 10, alignItems: "center" }}
           onPress={() => {
             alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
           }}
