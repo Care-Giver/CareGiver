@@ -537,7 +537,10 @@ export const ChatsStack = () => {
             name="channel-list-screen"
             component={ChannelListScreen}
             options={{
-              header: (props) => <HomeScreenHeader {...props} />,
+              header:
+                type === Type.CARE_GIVER
+                  ? (props) => <CgScreenHeader {...props} />
+                  : (props) => <HomeScreenHeader {...props} />,
             }}
           />
           <Stack.Screen
