@@ -145,7 +145,11 @@ export const CgRegistration3Screen: FC<
     const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
     if (hasDraftPetsitterProfile) {
-      if (_.includes(regState, "todo", undefined)) {
+      if (
+        _.includes(regState, "todo") ||
+        _.includes(regState, "progress") ||
+        _.includes(regState, undefined)
+      ) {
         alertModal("등록 거절", "모든  단계를 작성해주세요.")
         return
       }
