@@ -80,7 +80,7 @@ export const SetCrecheServiceDayScreen: FC<
   }
 
   // 시간당 가격 설정하는 modal 관련 state
-  // 1박당 가격 설정하기 누르면 모달창 뜨게 관리
+  // 1박 당 가격 설정하기 누르면 모달창 뜨게 관리
   const [priceModalOpen, setPricemodalOpen] = useState(false)
   const [fee, setFee] = useState(availableDate ? availableDate.fee : 0)
 
@@ -263,7 +263,7 @@ export const SetCrecheServiceDayScreen: FC<
               </Pressable>
             </View>
 
-            {/* 1박당 가격 설정 */}
+            {/* 1박 당 가격 설정 */}
             <View style={[styles.rowText, { marginTop: 25 }]}>
               <PreReg16 text="1박 당" color={SUB_HEAD_LINE} />
               <Pressable
@@ -313,7 +313,7 @@ export const SetCrecheServiceDayScreen: FC<
               </>
             )}
 
-            {/* 1박당 받는 총 금액 */}
+            {/* 1박 당 받는 총 금액 */}
             <View style={styles.totalPriceBox}>
               <View>
                 <PreBol16 text="내가 1박 당 받는 총 금액" mb={4} />
@@ -332,11 +332,11 @@ export const SetCrecheServiceDayScreen: FC<
         )}
       </ScrollView>
 
-      {/* 1박당 가격 설정  모달 창 */}
+      {/* 1박 당 가격 설정  모달 창 */}
       <CustomInputModal
         visibleState={priceModalOpen}
         handleModalHide={handlepriceModalHide}
-        title="1박당 받을 요금을 입력해주세요(원)"
+        title="1박 당 받을 요금을 입력해주세요(원)"
         placeholderInput={`기본요금 ${priceFormatter(
           petsitter.defaultFee.toString(),
         )}원에 더해집니다.`}

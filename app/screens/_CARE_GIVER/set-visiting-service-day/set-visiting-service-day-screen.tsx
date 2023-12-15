@@ -225,11 +225,11 @@ export const SetVisitingServiceDayScreen: FC<
     setIsAvailable((prev) => !prev)
   }
 
-  // 시간당 가격 설정 모달 관련 state
+  // 시간 당 가격 설정 모달 관련 state
   const [priceModalOpen, setPricemodalOpen] = useState(false)
   const [fee, setFee] = useState(0)
 
-  // 시간당 가격 설정 모달 관련 함수
+  // 시간 당 가격 설정 모달 관련 함수
   const handlepriceModalHide = () => {
     setPricemodalOpen(false)
   }
@@ -536,7 +536,7 @@ export const SetVisitingServiceDayScreen: FC<
               </View>
             </View>
 
-            {/* 서비스 요금 설정 - 시간당 요금 설정 */}
+            {/* 서비스 요금 설정 - 시간 당 요금 설정 */}
             <View style={[styles.rowText, { marginTop: 25 }]}>
               <PreReg16 text="시간 당" />
               <Pressable
@@ -586,10 +586,10 @@ export const SetVisitingServiceDayScreen: FC<
               </>
             )}
 
-            {/* 시간당 받는 총 금액 */}
+            {/* 시간 당 받는 총 금액 */}
             <View style={styles.totalPriceBox}>
               <View>
-                <PreBol16 text="내가 시간당 받는 총 금액" mb={4} />
+                <PreBol16 text="내가 시간 당 받는 총 금액" mb={4} />
                 <PreReg16 text="(수수료 포함)" color={BODY} />
               </View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -620,11 +620,11 @@ export const SetVisitingServiceDayScreen: FC<
         />
       </View>
 
-      {/* 시간당 가격 설정  모달 */}
+      {/* 시간 당 가격 설정  모달 */}
       <CustomInputModal
         visibleState={priceModalOpen}
         handleModalHide={handlepriceModalHide}
-        title="1박당 받을 요금을 입력해주세요(원)"
+        title="시간 당 받을 요금을 입력해주세요(원)"
         placeholderInput={`기본요금 ${priceFormatter(
           petsitter.defaultFee.toString(),
         )}원에 더해집니다.`}
