@@ -1,36 +1,34 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { Screen } from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
-
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
-import { StreamChat, ConnectionOpen } from "stream-chat"
-import { getStreamToken } from "../../services/axios/stream"
+import { getStreamToken, streamChatClient } from "../../services/axios/stream"
 import { useStores } from "#models"
-
-const API_KEY = "cyt5mvxvratf"
 
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
 > = observer(function ChannelListScreen({ navigation }) {
   useShowBottomTab(navigation)
-
   const {
-    userStore: { type, userAuth },
+    userStore: { type, userAuth, userDetail },
   } = useStores()
 
-  const parsedEmail = userAuth.email.substring(0, userAuth.email.indexOf("@"))
-  const client = StreamChat.getInstance(API_KEY)
+  const myStreamUserId =
+    String(userDetail.id) + userAuth.email.toLowerCase().replace(/[^a-z0-9@_]/g, "_") // a-z, 0-9, @, _를 제외한 모든 문자를 _로 대체
 
   // 채널 리스트 만들기 및 불러오기
   const createChannels = async () => {
-    const channel = client.channel("messaging", parsedEmail, {
-      members: ["example", "ky7939"],
-      name: parsedEmail,
-      userType: type,
+    const me = myStreamUserId
+    const other = "ky7939" //TODO: 예약 수락후, 매칭된 상대의 값으로 교체하기
+
+    const channel = streamChatClient.channel("messaging", {
+      members: [me, other],
+      // name: parsedEmail,
+      // userType: type,
     })
     channel.create()
   }
@@ -41,12 +39,19 @@ export const ChannelListScreen: FC<
   const connectAndSetUser = async () => {
     // Connect user to chat. This establishes a websocket connection between client and server.
     try {
-      const streamToken = await getStreamToken().then((response) => response.streamToken)
-      const connectUserResponse = await client.connectUser(
+      let streamToken = userDetail?.clientStreamToken
+
+      // 만약 clientStreamToken 값이 없다면 새로 발행한다.
+      if (!streamToken) {
+        const { streamToken: newStreamToken } = await getStreamToken()
+        streamToken = newStreamToken
+      }
+
+      const connectUserResponse = await streamChatClient.connectUser(
         {
-          id: parsedEmail,
-          name: "TEST_USER",
-          image: "https://i.imgur.com/fR9Jz14.png",
+          id: myStreamUserId,
+          name: userDetail.nickname,
+          image: userDetail?.profileImage || "",
         },
         streamToken,
       )
@@ -62,13 +67,17 @@ export const ChannelListScreen: FC<
   }
 
   useEffect(() => {
-    connectAndSetUser()
-  }, [])
+    // client.connectUser 는 한 번만 실행되도록 한다.
+    if (!streamChatClient?.user) {
+      connectAndSetUser()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamChatClient?.user])
 
   const filters = {
     type: "messaging",
-    members: { $in: [parsedEmail] },
-    userType: "CLIENT",
+    members: { $in: [myStreamUserId] },
   }
 
   const sort = {
@@ -76,7 +85,7 @@ export const ChannelListScreen: FC<
   }
 
   return (
-    <Screen testID="ChannelList">
+    <Screen testID="ChannelList" style={{ paddingHorizontal: 0 }}>
       <ChannelList
         onSelect={(channel) => {
           navigation.navigate("channel-screen", {

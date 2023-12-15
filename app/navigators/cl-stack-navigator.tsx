@@ -69,8 +69,8 @@ import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
-import { StreamChat } from "stream-chat"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
+import { streamChatClient } from "../services/axios/stream"
 
 export type SelectedTime = {
   start: string
@@ -516,9 +516,6 @@ export const SearchingStack = () => {
 /**
  * 채팅 스택 || CG - 채팅 스택
  */
-const API_KEY = "cyt5mvxvratf"
-const chatClient = StreamChat.getInstance(API_KEY)
-
 export const ChatsStack = () => {
   const {
     userStore: { type },
@@ -526,7 +523,7 @@ export const ChatsStack = () => {
 
   return (
     <OverlayProvider>
-      <Chat client={chatClient}>
+      <Chat client={streamChatClient}>
         <Stack.Navigator
           screenOptions={{
             headerShown: true,
@@ -540,7 +537,10 @@ export const ChatsStack = () => {
             name="channel-list-screen"
             component={ChannelListScreen}
             options={{
-              header: (props) => <HomeScreenHeader {...props} />,
+              header:
+                type === Type.CARE_GIVER
+                  ? (props) => <CgScreenHeader {...props} />
+                  : (props) => <HomeScreenHeader {...props} />,
             }}
           />
           <Stack.Screen

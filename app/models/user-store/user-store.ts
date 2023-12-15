@@ -5,6 +5,7 @@ import { navigate } from "#navigators"
 import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
 import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
+import { getStreamToken } from "../../services/axios/stream"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -54,6 +55,7 @@ export const UserStoreModel = types
       profileImage: "",
       pushToken: "",
       nicknameLastUpdated: "",
+      clientStreamToken: "",
     }),
 
     /* 인증된 펫시터인지 여부 */
@@ -161,7 +163,14 @@ export const UserStoreModel = types
         if (!userDetail) {
           return false
         }
-        // 푸시토큰 발급
+
+        // DB에 getStream 토큰이 없으면, 새로 발급
+        if (!userDetail.clientStreamToken) {
+          const { streamToken } = await getStreamToken()
+          userDetail.clientStreamToken = streamToken
+        }
+
+        // 푸시토큰 발급 ❗️주의: 유저가 디바이스를 바꾸었을 경우를 고려하여, DB에 pushToken 값 존재유무에 상관없이, 매번 실행한다.
         const pushToken = await registerForPushNotificationsAsync().then((token) => {
           //? 토큰 발급에 실패한다면 useDetail.pushToken의 type에 맞춰 ""을 return한다.
           if (token === null || token === undefined) return ""
@@ -171,6 +180,7 @@ export const UserStoreModel = types
           //? mst내에서 사용하기 위해 발급받은 푸시토큰 return
           return token
         })
+
         // 유저 상세정보 저장
         this.setUserDetail({
           id: userDetail.id,
@@ -182,6 +192,7 @@ export const UserStoreModel = types
           profileImage: userDetail.profileImage,
           pushToken: pushToken,
           nicknameLastUpdated: userDetail.nicknameLastUpdated,
+          clientStreamToken: userDetail.clientStreamToken,
         })
 
         return true

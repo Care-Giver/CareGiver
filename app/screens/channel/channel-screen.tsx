@@ -29,7 +29,7 @@ export const ChannelScreen: FC<StackScreenProps<NavigatorParamList, "channel-scr
     const channel = route.params.channel
 
     return (
-      <Screen testID="Channel" style={{ top: -33 }}>
+      <Screen testID="Channel" style={{ top: -33, paddingHorizontal: 0 }}>
         <Channel channel={channel}>
           <MessageList />
           <MessageInput />
