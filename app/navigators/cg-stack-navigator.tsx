@@ -62,12 +62,13 @@ export type CGStackNavigatorParamList = {
     crecheId: number
     isAvailableDate: boolean
     availableDate?: CrecheAvailableDate
+    isDeleted: boolean
   }
   "set-visiting-service-day-screen": {
     selectedDates: string[]
     visitingId: number
     isAvailableDate: boolean
-    isDeleted?: boolean
+    isDeleted: boolean
   }
 
   /**

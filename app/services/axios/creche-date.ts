@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
@@ -8,6 +9,10 @@ export interface CrecheAvailableDate {
   startDate: string // "2022-09-14",
   fee: number
   isBooked: boolean
+  deletedAt: string | null // 펫시팅 시간 비활성화 여부. string 이면 비활성화된 상태이며 시각을 저장하고 있고, null 이면 비활성화 되어있지 않은 상태이다.
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  __creche__: object //TODO type 업데이트
+  __has_creche__: boolean
 }
 interface CrecheDatesResponse extends GeneralResponse {
   crecheAvailableDates: CrecheAvailableDate[]
@@ -70,7 +75,6 @@ export const createCrecheDate = async (
 ): Promise<CreateCrecheDateResult> => {
   try {
     const response = await axios.post<CreateCrecheDateResponse>(`${BASE_URL}/creche-date`, body)
-    console.log("response.data 🔷 createCrecheDate", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error

@@ -35,7 +35,7 @@ import {
   SUB_HEAD_LINE,
 } from "#theme"
 import { images } from "#images"
-import { createCrecheDate, disableCrecheDate, updateCrecheDate } from "#axios"
+import { createCrecheDate, disableCrecheDate, restoreCrecheDate, updateCrecheDate } from "#axios"
 import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
@@ -49,7 +49,7 @@ import { useKeyboardShown } from "../../../utils/hooks"
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
 > = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
-  const { selectedDates, crecheId, isAvailableDate, availableDate } = route.params
+  const { selectedDates, crecheId, isAvailableDate, availableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1
       ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
@@ -57,6 +57,7 @@ export const SetCrecheServiceDayScreen: FC<
   const {
     petsitterStore: { hasDogs, petsitter },
   } = useStores()
+  console.log("isDeleted 🔷", isDeleted)
 
   const [isAvailable, setIsAvailable] = useState(isAvailableDate)
   const [isSaveButtonActivated, setIsSaveButtonActivated] = useState(false)
@@ -144,7 +145,7 @@ export const SetCrecheServiceDayScreen: FC<
     else {
       // 비활성화 (SOFT DELETE)
       // TODO: disableCrecheDate() response 수정 필요함 - 백엔드 API 업데이트 대기중
-      if (!isAvailable) {
+      if (!isDeleted && !isAvailable) {
         disableCrecheDate({
           crecheId,
           date: selectedDates[0],
@@ -156,18 +157,32 @@ export const SetCrecheServiceDayScreen: FC<
               setIsSaveButtonActivated(true)
             }, 1000)
           } else {
-            alertModal("비활성화 실패", "잠시 후 다시 시도해주세요.")
+            alertModal(
+              "비활성화 실패",
+              "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.",
+            )
           }
         })
         return
       }
 
       // 비활성화 해제 (SOFT RESTORE)
-      //! 현재 API 로는 restore 대상을 구별해낼 수가 없음
-      //TODO: API 업데이트후, 작업 재개
-      //
-      //
-      //
+      if (isDeleted && isAvailable) {
+        restoreCrecheDate({
+          crecheId,
+          date: selectedDates[0],
+        }).then((res) => {
+          if (res.isSuccess) {
+            setIsSaveButtonActivated(false)
+            setTimeout(() => {
+              navigation.goBack()
+              setIsSaveButtonActivated(true)
+            }, 1000)
+          } else {
+            alertModal("활성화 실패", "예상치 못한 문제가 발생했습니다. 잠시후 다시 시도해주세요.")
+          }
+        })
+      }
 
       // UPDATE
       updateCrecheDate(availableDate?.id, {
@@ -212,116 +227,131 @@ export const SetCrecheServiceDayScreen: FC<
           />
         </View>
 
-        <DivisionLine
-          height={2}
-          color={LBG}
-          style={{
-            width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
-            alignSelf: "center",
-          }}
-        />
-
-        {/* 서비스 요금 설정 , 평균 요금 알아보기 클릭시 bottom sheet 오픈*/}
-        <View style={[styles.rowText, { marginTop: 20 }]}>
-          <PreMed18 text="서비스 요금 설정" />
-          <Pressable
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => {
-              alert("🏗️")
+        {isDeleted ? (
+          <View
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+              paddingVertical: 20,
+              alignItems: "center",
             }}
           >
-            <PreMed14 text="평균 요금 알아보기" color={BODY} />
-            <Image style={styles.image28} source={images.question_mark} />
-          </Pressable>
-        </View>
+            <PreBol20 text="비활성화된 날짜입니다." />
+            <PreMed14 text="서비스 가능 토글을 활성화 해주세요." mt={12} />
+          </View>
+        ) : (
+          <View>
+            <DivisionLine
+              height={2}
+              color={LBG}
+              style={{
+                width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+                alignSelf: "center",
+              }}
+            />
 
-        {/* 1박당 가격 설정 */}
-        <View style={[styles.rowText, { marginTop: 25 }]}>
-          <PreReg16 text="1박 당" color={SUB_HEAD_LINE} />
-          <Pressable
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => setPricemodalOpen(true)}
-          >
-            <PreBol16 text={`${priceFormatter(totalPrice?.toString())} 원`} mr={4} />
-            <Image style={styles.image} source={images.arrow_right} />
-          </Pressable>
-        </View>
-
-        {/* 강아지 크기별 추가요금 설정 */}
-        {hasDogs && (
-          <>
-            <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
-              <PreReg16 text="강아지 크기 별 추가 요금" color={SUB_HEAD_LINE} />
-              <TouchableOpacity
+            {/* 서비스 요금 설정 , 평균 요금 알아보기 클릭시 bottom sheet 오픈*/}
+            <View style={[styles.rowText, { marginTop: 20 }]}>
+              <PreMed18 text="서비스 요금 설정" />
+              <Pressable
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => {
-                  //@ts-ignore
-                  navigate("CgMypage", {
-                    screen: "cg-registration-2-screen",
-                    params: { from: "set-creche-service-day-screen" },
-                  })
+                  alert("🏗️")
                 }}
               >
-                <PreMed16 text="설정하기" mr={4} />
+                <PreMed14 text="평균 요금 알아보기" color={BODY} />
+                <Image style={styles.image28} source={images.question_mark} />
+              </Pressable>
+            </View>
+
+            {/* 1박당 가격 설정 */}
+            <View style={[styles.rowText, { marginTop: 25 }]}>
+              <PreReg16 text="1박 당" color={SUB_HEAD_LINE} />
+              <Pressable
+                style={{ flexDirection: "row", alignItems: "center" }}
+                onPress={() => setPricemodalOpen(true)}
+              >
+                <PreBol16 text={`${priceFormatter(totalPrice?.toString())} 원`} mr={4} />
                 <Image style={styles.image} source={images.arrow_right} />
-              </TouchableOpacity>
+              </Pressable>
             </View>
-            <View style={styles.dogSizeBox}>
-              <PricePerSize
-                size="소형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
-              />
-              <View style={styles.verticalLine} />
-              <PricePerSize
-                size="중형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
-              />
-              <View style={styles.verticalLine} />
-              <PricePerSize
-                size="대형견"
-                price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
-              />
+
+            {/* 강아지 크기별 추가요금 설정 */}
+            {hasDogs && (
+              <>
+                <View style={[styles.rowText, { marginTop: 18, marginBottom: 10 }]}>
+                  <PreReg16 text="강아지 크기 별 추가 요금" color={SUB_HEAD_LINE} />
+                  <TouchableOpacity
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                    onPress={() => {
+                      //@ts-ignore
+                      navigate("CgMypage", {
+                        screen: "cg-registration-2-screen",
+                        params: { from: "set-creche-service-day-screen" },
+                      })
+                    }}
+                  >
+                    <PreMed16 text="설정하기" mr={4} />
+                    <Image style={styles.image} source={images.arrow_right} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.dogSizeBox}>
+                  <PricePerSize
+                    size="소형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
+                  />
+                  <View style={styles.verticalLine} />
+                  <PricePerSize
+                    size="중형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
+                  />
+                  <View style={styles.verticalLine} />
+                  <PricePerSize
+                    size="대형견"
+                    price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
+                  />
+                </View>
+              </>
+            )}
+
+            {/* 1박당 받는 총 금액 */}
+            <View style={styles.totalPriceBox}>
+              <View>
+                <PreBol16 text="내가 1박 당 받는 총 금액" mb={4} />
+                <PreReg16 text="(수수료 포함)" color={BODY} />
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {/* <Text style={styles.totalPrice}>84,600</Text> */}
+                <PopSem24
+                  text={priceFormatter(totalPriceExcludeCommission.toString())}
+                  color={GIVER_CASUAL_NAVY}
+                />
+                <PreBol16 text="원" ml={2} />
+              </View>
             </View>
-          </>
+          </View>
         )}
-
-        {/* 1박당 받는 총 금액 */}
-        <View style={styles.totalPriceBox}>
-          <View>
-            <PreBol16 text="내가 1박 당 받는 총 금액" mb={4} />
-            <PreReg16 text="(수수료 포함)" color={BODY} />
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Text style={styles.totalPrice}>84,600</Text> */}
-            <PopSem24
-              text={priceFormatter(totalPriceExcludeCommission.toString())}
-              color={GIVER_CASUAL_NAVY}
-            />
-            <PreBol16 text="원" ml={2} />
-          </View>
-        </View>
-
-        {/* 1박당 가격 설정  모달 창 */}
-        <CustomInputModal
-          visibleState={priceModalOpen}
-          handleModalHide={handlepriceModalHide}
-          title="1박당 받을 요금을 입력해주세요(원)"
-          placeholderInput={`기본요금 ${priceFormatter(
-            petsitter.defaultFee.toString(),
-          )}원에 더해집니다.`}
-          handleInput={handlePriceInput}
-          textInputProps={{
-            keyboardType: "number-pad",
-          }}
-          rules={{
-            required: true,
-            pattern: {
-              value: /^[0-9]+$/,
-              message: "숫자만 입력해주세요.",
-            },
-          }}
-        />
       </ScrollView>
+
+      {/* 1박당 가격 설정  모달 창 */}
+      <CustomInputModal
+        visibleState={priceModalOpen}
+        handleModalHide={handlepriceModalHide}
+        title="1박당 받을 요금을 입력해주세요(원)"
+        placeholderInput={`기본요금 ${priceFormatter(
+          petsitter.defaultFee.toString(),
+        )}원에 더해집니다.`}
+        handleInput={handlePriceInput}
+        textInputProps={{
+          keyboardType: "number-pad",
+        }}
+        rules={{
+          required: true,
+          pattern: {
+            value: /^[0-9]+$/,
+            message: "숫자만 입력해주세요.",
+          },
+        }}
+      />
 
       {/* 저장하기 버튼 클릭시 데이터 POST */}
       {showSaveButton && (

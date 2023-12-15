@@ -103,6 +103,21 @@ export const CgCalendarScreen: FC<
     }
   }, [visitingAvailableTimes, selectedDates])
 
+  const isDeletedCre = useMemo(() => {
+    if (selectedDates?.length === 1) {
+      const target = crecheDates.find((v) => v.startDate.slice(0, 10) === selectedDates[0])
+      if (target === undefined) {
+        return false
+      } else if (target?.deletedAt === null) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return false
+    }
+  }, [crecheDates, selectedDates])
+
   return (
     <Screen testID="CgCalendar">
       <ScrollView
@@ -172,6 +187,7 @@ export const CgCalendarScreen: FC<
                       availableDate: crecheDates.find(
                         (item) => item.startDate === selectedDates[0],
                       ),
+                      isDeleted: isDeletedCre,
                     })
               }}
             />
