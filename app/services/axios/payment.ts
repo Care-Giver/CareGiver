@@ -2,6 +2,18 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
+interface PaymentColumns {
+  createAt: string // "2023-12-15T19:39:13.387Z"
+  id: number // 114
+  imp_success: boolean // true
+  imp_uid: string //"111"
+  isRefunded: boolean // false
+  isSettled: boolean // false
+  merchant_uid: string //"111"
+  totalFee: number //76320
+  updatedAt: string // "2023-12-15T19:39:13.387Z"
+}
+
 export interface CreatePaymentInput {
   imp_uid: string // 포트원 고유 결제번호
   merchant_uid: string // 주문번호
@@ -10,7 +22,7 @@ export interface CreatePaymentInput {
   totalFee: number
 }
 export interface CreatePaymentResponse extends GeneralResponse {
-  paymentId: number
+  payment: PaymentColumns
 }
 // interface CreatePaymentResult {
 //   isSuccess: boolean // 성공여부
@@ -43,7 +55,7 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
 
     return {
       isSuccess: true,
-      paymentId: response.data.paymentId,
+      paymentId: response.data.payment.id,
     }
   } catch (error) {
     console.error("catch 에러!!!", error)
