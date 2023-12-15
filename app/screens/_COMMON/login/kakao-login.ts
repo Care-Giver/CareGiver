@@ -76,11 +76,13 @@ const signInWithKakao = async (): Promise<string | false> => {
 const getKakaoProfile = async (logoutHandler): Promise<any> => {
   try {
     const profile: KakaoProfile = await getProfile()
-    // console.log("profile >>>", JSON.stringify(profile))
-    // TODO: POST SIGN-UP || SIGN-IN TO SERVER
-    //
-    // setLoggedIn(true)
-    // TODO: 소셜 프로바이더로부터 얻은 정보로부터, email 정보 다음 스크린에 전달하기
+
+    if (!profile) {
+      return {
+        isSuccess: false,
+        reason: "profile is false, null or undefined.",
+      }
+    }
 
     return {
       isSuccess: true,
@@ -110,9 +112,14 @@ export const kakaoLogin = async (socialLoginHander, logoutHandler) => {
   if (!accessToken) return
 
   const { isSuccess, email, reason } = await getKakaoProfile(logoutHandler)
-  if (!isSuccess) return
+  if (!isSuccess) {
+    alertModal("카카오 프로필을 얻어내지 못했습니다.", reason)
+    return
+  }
 
-  const { isAlreadySignedUp, token } = await kakaoServerLogin({ idToken: accessToken })
+  const { isAlreadySignedUp, token, reason: reasonKakaoServerLogin } = await kakaoServerLogin({
+    idToken: accessToken,
+  })
   if (!isAlreadySignedUp) {
     // 회원가입 진행
     navigate("terms-of-service-screen", {
@@ -124,7 +131,7 @@ export const kakaoLogin = async (socialLoginHander, logoutHandler) => {
   }
 
   if (!token) {
-    alertModal("카카오 로그인 진행실패", "토큰값을 얻어내지 못했습니다.")
+    alertModal("카카오 로그인 진행실패", `토큰값을 얻어내지 못했습니다. ${reasonKakaoServerLogin}`)
     return
   }
 

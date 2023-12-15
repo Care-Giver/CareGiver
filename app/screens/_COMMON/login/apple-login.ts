@@ -64,7 +64,9 @@ export const appleLogin = async (socialLoginHander, logoutHandler) => {
   if (!isSuccess) return
 
   // 3. 케어기버 서버에 IdentityToken을 전송하여 토큰을 얻어낸다
-  const { isAlreadySignedUp, token } = await appleServerLogin({ idToken: identityToken })
+  const { isAlreadySignedUp, token, reason: reasonAppleServerLogin } = await appleServerLogin({
+    idToken: identityToken,
+  })
   if (!isAlreadySignedUp) {
     // 회원가입 진행
     navigate("terms-of-service-screen", {
@@ -76,7 +78,7 @@ export const appleLogin = async (socialLoginHander, logoutHandler) => {
   }
 
   if (!token) {
-    alertModal("애플 로그인 진행실패", "토큰값을 얻어내지 못했습니다.")
+    alertModal("애플 로그인 진행실패", `토큰값을 얻어내지 못했습니다. ${reasonAppleServerLogin}`)
     return
   }
 
