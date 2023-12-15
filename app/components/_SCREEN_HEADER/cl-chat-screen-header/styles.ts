@@ -1,19 +1,28 @@
-import { GIVER_CASUAL_NAVY, palette } from "#theme"
-import { StyleSheet } from "react-native"
+import { CARE_SOFT_YELLOW, GIVER_CASUAL_NAVY, palette } from "#theme"
+import { StyleSheet, ViewStyle } from "react-native"
+
+const badge: ViewStyle = {
+  backgroundColor: palette.white,
+  borderColor: GIVER_CASUAL_NAVY,
+  borderWidth: 2,
+  paddingVertical: 3 - 2,
+  paddingHorizontal: 8 - 2,
+}
 
 export const styles = StyleSheet.create({
   goBackButton: {
     width: 28,
     height: 28,
-    marginLeft: 16,
-    // backgroundColor: "orange",
   },
+
   petsitterBadge: {
-    marginLeft: 4,
-    backgroundColor: palette.white,
+    ...badge,
     borderColor: GIVER_CASUAL_NAVY,
-    borderWidth: 2,
-    paddingVertical: 3 - 2,
-    paddingHorizontal: 8 - 2,
+  },
+
+  clientBadge: {
+    ...badge,
+    borderColor: CARE_SOFT_YELLOW,
+    backgroundColor: CARE_SOFT_YELLOW,
   },
 })

@@ -1,6 +1,8 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 
+export const SAME_EMAIL_ERROR_MESSAGE = "There is a user using the same email in server"
+
 type SocialLoginRequestBody = {
   idToken: string
 }
@@ -56,11 +58,17 @@ export const appleServerLogin = async (
     )
 
     if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error - appleServerLogin 에러!!!", error)
+      if (response.data.error?.message === SAME_EMAIL_ERROR_MESSAGE) {
+        return {
+          isAlreadySignedUp: true,
+          reason: "동일한 이메일주소로 회원가입한 유저정보가 있습니다.",
+        }
+      }
+
+      console.error("response.data.error - appleServerLogin 에러!!!", response.data.error?.message)
       return {
         isAlreadySignedUp: false,
-        reason: "유저정보 없음",
+        reason: response.data.error?.message,
       }
     }
 
@@ -102,11 +110,17 @@ export const naverServiceLogin = async (
     )
 
     if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error - naverServiceLogin 에러!!!", error)
+      if (response.data.error?.message === SAME_EMAIL_ERROR_MESSAGE) {
+        return {
+          isAlreadySignedUp: true,
+          reason: "동일한 이메일주소로 회원가입한 유저정보가 있습니다.",
+        }
+      }
+
+      console.error("response.data.error - naverServiceLogin 에러!!!", response.data.error?.message)
       return {
         isAlreadySignedUp: false,
-        reason: "유저정보 없음",
+        reason: response.data.error?.message,
       }
     }
 
@@ -148,11 +162,17 @@ export const kakaoServerLogin = async (
     )
 
     if (!response.data.ok) {
-      const error = response.data.error
-      console.error("response.data.error - kakaoServerLogin 에러!!!", error)
+      if (response.data.error?.message === SAME_EMAIL_ERROR_MESSAGE) {
+        return {
+          isAlreadySignedUp: true,
+          reason: "동일한 이메일주소로 회원가입한 유저정보가 있습니다.",
+        }
+      }
+
+      console.error("response.data.error - kakaoServerLogin 에러!!!", response.data.error?.message)
       return {
         isAlreadySignedUp: false,
-        reason: "유저정보 없음",
+        reason: response.data.error?.message,
       }
     }
 

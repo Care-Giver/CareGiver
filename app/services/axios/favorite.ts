@@ -26,7 +26,9 @@ interface GetFavoritesResponse extends GeneralResponse {
   favoritePetsitters: ProfileCardInfo[] | null[]
   // TODO: 훈련사 추가
 }
-type GetFavoritesResult = { isSuccess: true } | { isSuccess: false }
+type GetFavoritesResult =
+  | { isSuccess: true; favoritePetsitters: any[] }
+  | { isSuccess: false; reason: string }
 /**
  * 현재 유저가 즐겨찾기 한
  * 모든 펫시터 리스트를 받아온다.
@@ -38,9 +40,7 @@ export const getFavorites = async (body: GetFavoritesRequestBody): Promise<GetFa
     const response = await axios.post<GetFavoritesResponse>(`${BASE_URL}/user/favorites`, body)
 
     if (!response.data.ok) {
-      console.error(response.data.error)
-      //@ts-ignore
-      return null
+      return { isSuccess: false, reason: response.data.error }
     }
 
     const favoritePetsitters: ProfileCardInfo[] = response.data.favoritePetsitters.map(
@@ -50,15 +50,9 @@ export const getFavorites = async (body: GetFavoritesRequestBody): Promise<GetFa
       }),
     )
 
-    return {
-      ...response.data,
-      favoritePetsitters,
-    }
+    return { isSuccess: true, favoritePetsitters: response.data.favoritePetsitters }
   } catch (error) {
-    console.error(error)
-    console.error(error?.message)
-    //@ts-ignore
-    return null
+    return { isSuccess: false, reason: error?.message }
   }
 }
 
@@ -69,44 +63,41 @@ export interface UpdateFavoriteBody {
 interface CreateFavoriteResponse extends GeneralResponse {
   favoriteId: number
 }
+type CreateFavoriteResult =
+  | { isSuccess: true; favoriteId: number }
+  | { isSuccess: false; reason: string }
 /**
  * 현재 유저의 찜을 새로 생성한다.
- * @returns {Promise<CreateFavoriteResponse>}
  */
-export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFavoriteResponse> => {
+export const createFavorite = async (body: UpdateFavoriteBody): Promise<CreateFavoriteResult> => {
   try {
     const response = await axios.post<CreateFavoriteResponse>(`${BASE_URL}/user/favorite`, body)
     if (!response.data.ok) {
-      console.error(response.data.error)
-      //@ts-ignore
-      return null
+      return { isSuccess: false, reason: response.data.error }
     }
-    // console.info("[createFavorite] response.data: ", response.data)
-    return response.data
+    return { isSuccess: true, favoriteId: response.data.favoriteId }
   } catch (error) {
-    console.error(error)
-    //@ts-ignore
-    return null
+    return { isSuccess: false, reason: error?.message }
   }
 }
 
+interface DeleteFavoriteResponse extends GeneralResponse {
+  favoriteId: number
+}
+type DeleteFavoriteResult =
+  | { isSuccess: true; favoriteId: number }
+  | { isSuccess: false; reason: string }
 /**
  * 현재 유저의 찜을 삭제한다.
- * @returns {Promise<GeneralResponse>}
  */
-export const deleteFavorite = async (body: UpdateFavoriteBody): Promise<GeneralResponse> => {
+export const deleteFavorite = async (body: UpdateFavoriteBody): Promise<DeleteFavoriteResult> => {
   try {
-    const response = await axios.put<GeneralResponse>(`${BASE_URL}/user/unfavorite`, body)
+    const response = await axios.put<DeleteFavoriteResponse>(`${BASE_URL}/user/unfavorite`, body)
     if (!response.data.ok) {
-      console.error(response.data.error)
-      //@ts-ignore
-      return null
+      return { isSuccess: false, reason: response.data.error }
     }
-    // console.info("[deleteFavorite] response.data: ", response.data)
-    return response.data
+    return { isSuccess: true, favoriteId: response.data.favoriteId }
   } catch (error) {
-    console.error(error)
-    //@ts-ignore
-    return null
+    return { isSuccess: false, reason: error?.message }
   }
 }

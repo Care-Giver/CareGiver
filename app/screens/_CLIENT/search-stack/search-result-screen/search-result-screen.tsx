@@ -71,6 +71,9 @@ import {
   VisitingAmenity,
   VisitingsSearchRequest,
   CrechesSearchRequest,
+  createFavorite,
+  UpdateFavoriteBody,
+  deleteFavorite,
 } from "#axios"
 import {
   SearchRequest,
@@ -574,8 +577,23 @@ export const SearchResultScreen: FC<
                     })
                   }}
                   onLikePress={() => {
-                    alertModal("개발중", "🏗️ 즐겨찾기 추가 기능은 개발중입니다.")
-                    // TODO: 찜하기 기능 구현
+                    const body: UpdateFavoriteBody = {}
+                    switch (serviceType) {
+                      case "위탁":
+                        body.crecheId = petsitter.creche.id
+                        break
+                      case "방문":
+                        body.visitingId = petsitter.visiting.id
+                        break
+                    }
+                    // 즐겨찾기 추가
+                    if (!petsitter.isFavorite) {
+                      createFavorite(body)
+                    }
+                    // 즐겨찾기 삭제
+                    else {
+                      deleteFavorite(body)
+                    }
                   }}
                   style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
                 />

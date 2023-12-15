@@ -93,7 +93,9 @@ export const naverLogin = async (socialLoginHander, logoutHandler) => {
   if (!isSuccess) return
 
   //   const userToken = await naverServiceLogin({ idToken: accessToken })
-  const { isAlreadySignedUp, token } = await naverServiceLogin({ idToken: accessToken })
+  const { isAlreadySignedUp, token, reason: reasonNaverServiceLogin } = await naverServiceLogin({
+    idToken: accessToken,
+  })
   if (!isAlreadySignedUp) {
     // 회원가입 진행
     navigate("terms-of-service-screen", {
@@ -105,7 +107,7 @@ export const naverLogin = async (socialLoginHander, logoutHandler) => {
   }
 
   if (!token) {
-    alertModal("네이버 로그인 진행실패", "토큰값을 얻어내지 못했습니다.")
+    alertModal("네이버 로그인 진행실패", `토큰값을 얻어내지 못했습니다. ${reasonNaverServiceLogin}`)
     return
   }
 

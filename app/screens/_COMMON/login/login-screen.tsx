@@ -3,14 +3,23 @@ import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, DivisionLine, PreMed18, Screen } from "#components"
-import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
+import { Button, DivisionLine, PreMed16, PreMed18, PreReg14, Screen } from "#components"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  KAKAO_YELLOW,
+  NAVER_GREEN,
+  palette,
+} from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import { images } from "#images"
 import { kakaoLogin } from "./kakao-login"
 import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
+import TEST_BUILD_VERSION from "../setting-screen/test-build-version"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -48,9 +57,13 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       <Screen testID="Login">
         {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
+        {/* //* 버전 정보 */}
+        <View style={styles.versionBox}>
+          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
+        </View>
 
         <View style={styles.buttonBox}>
-          {/* {isIOS && (
+          {isIOS && (
             <Button
               onPress={() => {
                 appleLogin(socialLoginHander, logoutHandler)
@@ -60,7 +73,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <Image source={images.apple_icon} style={styles.icon} />
               <PreMed18 text="Apple로 로그인" color={palette.black} />
             </Button>
-          )} */}
+          )}
           <Button
             onPress={() => {
               naverLogin(socialLoginHander, logoutHandler)
@@ -99,10 +112,12 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
   },
 )
 
+const BUTTON_HEIGHT = 54
+
 const button: ViewStyle = {
   flexDirection: "row",
   width: "100%",
-  height: 54,
+  height: BUTTON_HEIGHT,
   borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
@@ -110,6 +125,12 @@ const button: ViewStyle = {
 }
 
 const styles = StyleSheet.create({
+  versionBox: {
+    paddingTop: 20,
+    paddingBottom: 16,
+    alignSelf: "center",
+  },
+
   bannerImage: {
     width: 138,
     height: 108,
@@ -120,8 +141,7 @@ const styles = StyleSheet.create({
 
   buttonBox: {
     justifyContent: "space-around",
-    // height: 400,
-    height: 160,
+    height: (BUTTON_HEIGHT + 20) * 3,
     // position: "absolute",
     // bottom: BOTTOM_HEIGHT,
     // left: BASIC_BACKGROUND_PADDING_WIDTH,

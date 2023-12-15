@@ -226,6 +226,7 @@ export type UserDetail = Pick<
   | "profileImage"
   | "pushToken"
   | "nicknameLastUpdated"
+  | "clientStreamToken"
 >
 
 interface GetMeResult {
@@ -274,6 +275,7 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
         profileImage: response.data.user.profileImage,
         pushToken: response.data.user.pushToken,
         nicknameLastUpdated: response.data.user.nicknameLastUpdated,
+        clientStreamToken: response.data.user?.clientStreamToken,
       },
     }
   } catch (error) {
