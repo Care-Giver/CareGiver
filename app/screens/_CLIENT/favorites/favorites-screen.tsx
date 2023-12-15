@@ -56,9 +56,10 @@ import {
 } from "../../../theme"
 import { Calendar, DateData } from "react-native-calendars"
 import { Pet, useStores } from "../../../models"
-import { petsitters as _petsitters } from "./dummy-data"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { getFavorites } from "#axios"
+import { ratingRound } from "../../../utils/format"
+import { alertModal } from "../../../utils/alert-modal"
 
 const DEFAULT_FILTER_TEXT = "전체"
 const DEFAULT_FILTER_INFO_TEXT = "원하는 조건으로 보기"
@@ -247,15 +248,18 @@ export const FavoritesScreen: FC<
 
   // * load petsitters
   useEffect(() => {
-    setFavorites({})
-    // getFavorites({
-    //   startTime: "2023-11-29T00:00:00",
-    //   endTime: "2023-11-29T01:00:00",
-    //   // petIds: [28, 27, 30],
-    //   petIds: [21, 22, 24],
-    //   sortBy: "rating",
-    //   petSitterType: "visiting",
-    // })
+    // TODO: 필터에 맞게 request Params 수정
+    getFavorites({
+      startTime: null,
+      endTime: null,
+      petIds: null,
+      sortBy: null,
+      petSitterType: null,
+    }).then((res) => {
+      res.isSuccess ? setFavorites(res.favoritePetsitters) : setFavorites({})
+    })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // * 확인 버튼 누를 시 실행되는 함수
@@ -376,35 +380,48 @@ export const FavoritesScreen: FC<
       ) : (
         // TODO: serviceType이 훈련사이면서 훈련사 목록이 존재하는 경우 - 훈련사 목록 띄우기
         //* 펫시터 목록이 존재하는 경우 - 목록 띄우기
-        // <FlatList
-        //   data={favoritePetsitters}
-        //   renderItem={({ item, index }) => {
-        //     const serviceType: Service = item.crecheId ? "creche" : "visiting"
-        //     const id = item.crecheId ? item.crecheId : item.visitingId
+        <FlatList
+          data={favoritePetsitters}
+          renderItem={({ item, index }) => {
+            const serviceType: Service = item.crecheId ? "creche" : "visiting"
+            const id = item.crecheId ? item.crecheId : item.visitingId
 
-        //     const info: OnLikePressProp = {
-        //       serviceType,
-        //       id,
-        //     }
+            const info: OnLikePressProp = {
+              serviceType,
+              id,
+            }
 
-        //     return (
-        //       <SitterProfileCard
-        //         key={item.crecheId ? item.crecheId : item.visitingId}
-        //         sitterData={item}
-        //         onPress={() => {
-        //           //? 상세정보 스크린으로 이동
-        //           navigate("caregiver-detail-information-screen", { sitterData: item })
-        //         }}
-        //         isFavorite={true}
-        //         style={
-        //           index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
-        //         }
-        //         onLikePress={() => onLikePress(info)}
-        //       />
-        //     )
-        //   }}
-        // />
-        <></>
+            console.log("item", item)
+
+            return (
+              <SitterProfileCard
+                isFavorite={true}
+                sitterData={{
+                  crecheId: item?.crecheId || null,
+                  visitingId: item?.visitingId || null,
+                  reviewCount: item.reviewCount,
+                  userNickname: item.userNickname,
+                  title: item.title,
+                  desc: item.desc,
+                  star: ratingRound(item.rating),
+
+                  profileImage: item.image[0],
+                  defaultFee: 10000,
+                }}
+                // sitterData={item}
+                onPress={() => {
+                  alertModal("개발중🏗️", "즐겨찾기 한 펫시터로 바로 이동하는 기능은 개발중입니다.")
+                  //? 상세정보 스크린으로 이동
+                  // navigate("caregiver-detail-information-screen", { sitterData: item })
+                }}
+                style={
+                  index < favoritePetsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }
+                }
+                onLikePress={() => onLikePress(info)}
+              />
+            )
+          }}
+        />
       )}
 
       {/* //* 바텀시트 bottomSheet */}
