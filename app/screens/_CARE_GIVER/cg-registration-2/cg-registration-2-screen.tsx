@@ -48,7 +48,7 @@ export const CgRegistration2Screen: FC<
       regState,
     },
   } = useStores()
-  console.log("petsitter 🔷", petsitter)
+  // console.log("petsitter 🔷", petsitter)
   const isKeyboardShown = useKeyboardShown()
 
   // 이 지역 평균 기본 요금
@@ -178,15 +178,6 @@ export const CgRegistration2Screen: FC<
 
   // 추가요금 설정 && 마지막 단계
   const step3 = async () => {
-    if (hasDogs) {
-      const hasZero = !!handleType.find((value) => additionalPrice[value] === 0)
-      console.log("hasZero", hasZero)
-      if (hasZero) {
-        alertModal("추가요금 설정", "강아지의 크기별 추가 요금을 입력해주세요.")
-        return
-      }
-    }
-
     const data = {
       defaultFee: price,
       dogMaxUnit: familyTypeNumber.DOG,
