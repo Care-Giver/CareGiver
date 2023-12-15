@@ -63,7 +63,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         </View>
 
         <View style={styles.buttonBox}>
-          {/* {isIOS && (
+          {isIOS && (
             <Button
               onPress={() => {
                 appleLogin(socialLoginHander, logoutHandler)
@@ -73,7 +73,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <Image source={images.apple_icon} style={styles.icon} />
               <PreMed18 text="Apple로 로그인" color={palette.black} />
             </Button>
-          )} */}
+          )}
           <Button
             onPress={() => {
               naverLogin(socialLoginHander, logoutHandler)
@@ -112,10 +112,12 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
   },
 )
 
+const BUTTON_HEIGHT = 54
+
 const button: ViewStyle = {
   flexDirection: "row",
   width: "100%",
-  height: 54,
+  height: BUTTON_HEIGHT,
   borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
@@ -139,8 +141,7 @@ const styles = StyleSheet.create({
 
   buttonBox: {
     justifyContent: "space-around",
-    // height: 400,
-    height: 160,
+    height: (BUTTON_HEIGHT + 20) * 3,
     // position: "absolute",
     // bottom: BOTTOM_HEIGHT,
     // left: BASIC_BACKGROUND_PADDING_WIDTH,
