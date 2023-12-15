@@ -3,14 +3,23 @@ import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, DivisionLine, PreMed18, Screen } from "#components"
-import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, KAKAO_YELLOW, NAVER_GREEN, palette } from "#theme"
+import { Button, DivisionLine, PreMed16, PreMed18, PreReg14, Screen } from "#components"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  KAKAO_YELLOW,
+  NAVER_GREEN,
+  palette,
+} from "#theme"
 import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import { images } from "#images"
 import { kakaoLogin } from "./kakao-login"
 import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
+import TEST_BUILD_VERSION from "../setting-screen/test-build-version"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -48,6 +57,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       <Screen testID="Login">
         {/* <ScrollView showsVerticalScrollIndicator={false}> */}
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
+        {/* //* 버전 정보 */}
+        <View style={styles.versionBox}>
+          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
+        </View>
 
         <View style={styles.buttonBox}>
           {/* {isIOS && (
@@ -84,10 +97,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
           )} */}
-          <DivisionLine mv={20} />
+          {/* <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
-          </Button>
+          </Button> */}
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button> */}
@@ -110,6 +123,12 @@ const button: ViewStyle = {
 }
 
 const styles = StyleSheet.create({
+  versionBox: {
+    paddingTop: 20,
+    paddingBottom: 16,
+    alignSelf: "center",
+  },
+
   bannerImage: {
     width: 138,
     height: 108,
