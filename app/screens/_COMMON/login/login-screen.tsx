@@ -97,10 +97,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
           )} */}
-          {/* <DivisionLine mv={20} />
+          <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
-          </Button> */}
+          </Button>
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button> */}
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 
   buttonBox: {
     justifyContent: "space-around",
-    height: (BUTTON_HEIGHT + 20) * 3,
+    height: (BUTTON_HEIGHT + 20) * 4,
     // position: "absolute",
     // bottom: BOTTOM_HEIGHT,
     // left: BASIC_BACKGROUND_PADDING_WIDTH,
