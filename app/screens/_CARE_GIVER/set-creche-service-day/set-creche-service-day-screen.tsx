@@ -1,4 +1,12 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo, useState } from "react"
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import {
   ScrollView,
   StyleSheet,
@@ -18,6 +26,7 @@ import {
   DivisionLine,
   PopSem24,
   PreBol16,
+  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -30,6 +39,7 @@ import {
   BOTTOM_HEIGHT,
   DEVICE_SCREEN_WIDTH,
   GIVER_CASUAL_NAVY,
+  HEAD_LINE,
   LBG,
   LIGHT_LINE,
   SUB_HEAD_LINE,
@@ -45,6 +55,9 @@ import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import _ from "lodash"
 import { useKeyboardShown } from "../../../utils/hooks"
+import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
+import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
 
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
@@ -205,6 +218,36 @@ export const SetCrecheServiceDayScreen: FC<
     }
   }
 
+  // 이 지역 평균 기본 요금
+  const avgPriceData = useFetchAvgPrice("위탁")
+  // 이 지역 평균 요금 바텀시트
+  const standardPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const standardPriceBottomSheetModalFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT}>
+        <ConditionalButton
+          label={"확인"}
+          isActivated
+          onPress={() => {
+            standardPriceBottomSheetModalRef.current?.close()
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [],
+  )
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+        pressBehavior={"close"}
+      />
+    ),
+    [],
+  )
+
   return (
     <Screen testID="SetCrecheServiceDay" style={styles.root}>
       <ScrollView
@@ -252,15 +295,15 @@ export const SetCrecheServiceDayScreen: FC<
             {/* 서비스 요금 설정 , 평균 요금 알아보기 클릭시 bottom sheet 오픈*/}
             <View style={[styles.rowText, { marginTop: 20 }]}>
               <PreMed18 text="서비스 요금 설정" />
-              <Pressable
+              <TouchableOpacity
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => {
-                  alert("🏗️")
+                  standardPriceBottomSheetModalRef.current?.present()
                 }}
               >
                 <PreMed14 text="평균 요금 알아보기" color={BODY} />
                 <Image style={styles.image28} source={images.question_mark} />
-              </Pressable>
+              </TouchableOpacity>
             </View>
 
             {/* 1박 당 가격 설정 */}
@@ -370,6 +413,38 @@ export const SetCrecheServiceDayScreen: FC<
           />
         </View>
       )}
+
+      {/* 이 지역 평균 요금 바텀시트모달 */}
+      <BottomSheetModal
+        ref={standardPriceBottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={["60%"]}
+        enablePanDownToClose
+        footerComponent={standardPriceBottomSheetModalFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <View style={{ paddingTop: 20 }}>
+          <PreBol18 text={`이 지역 위탁 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
+          <PreReg16 mt={32} text="이 지역에서 서비스하는 케어기버 분들은 보통" color={HEAD_LINE} />
+          {/* // ? 적정가 범위 */}
+          <PreBol16
+            mv={6}
+            text={`${
+              avgPriceData ? priceFormatter(avgPriceData.minAvgPrice.toString()) : "?0,000"
+            }원 ~ ${
+              avgPriceData ? priceFormatter(avgPriceData.maxAvgPrice.toString()) : "?0,000"
+            }원`}
+            color={SUB_HEAD_LINE}
+          />
+          <PreReg16 text="사이의 요금을 받습니다." color={HEAD_LINE} />
+          <PreReg16
+            style={{ marginTop: 16, lineHeight: 22 }}
+            text={STANDARD_PRICE_DESC_TEXT}
+            color={BODY}
+          />
+        </View>
+      </BottomSheetModal>
     </Screen>
   )
 })

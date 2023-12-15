@@ -27,6 +27,7 @@ import {
   PopSem16,
   PopSem24,
   PreBol16,
+  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -37,7 +38,15 @@ import {
   TimePicker,
   timeTextAMPM,
 } from "#components"
-import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  LBG,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { addMinutes, isAfter, subMinutes, isEqual } from "date-fns"
@@ -54,8 +63,9 @@ import {
 } from "#axios"
 import _, { isDate } from "lodash"
 import { alertModal } from "../../../utils/alert-modal"
-import { useKeyboardShown } from "../../../utils/hooks"
 import dayjs from "dayjs"
+import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
+import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 
 const nowInUTCZero = new Date()
 const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
@@ -438,10 +448,11 @@ export const SetVisitingServiceDayScreen: FC<
       ),
       added: _.uniqBy(_.sortBy([...timeframe.added, newTimeframe], ["beginTime"]), "beginTime"),
     })
-    bottomSheetModalRef.current?.close()
+    timePickerBottomSheetModalRef.current?.close()
   }, [beginDate, checkIsValidTimeframe, endDate, selectedDates, timeframe])
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  // 시간선택 바텀시트
+  const timePickerBottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ["60%"], [])
   const renderBackdrop = useCallback(
     (props) => (
@@ -454,13 +465,32 @@ export const SetVisitingServiceDayScreen: FC<
     ),
     [],
   )
-  const renderFooter = useCallback(
+  const timePickerBottomSheetModalFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
         <ConditionalButton label={"확인"} isActivated onPress={onPressTimePickerConfirm} />
       </BottomSheetFooter>
     ),
     [onPressTimePickerConfirm],
+  )
+
+  // 이 지역 평균 기본 요금
+  const avgPriceData = useFetchAvgPrice("방문")
+  // 이 지역 평균 요금 바텀시트
+  const standardPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const standardPriceBottomSheetModalFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT}>
+        <ConditionalButton
+          label={"확인"}
+          isActivated
+          onPress={() => {
+            standardPriceBottomSheetModalRef.current?.close()
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [],
   )
 
   return (
@@ -518,7 +548,7 @@ export const SetVisitingServiceDayScreen: FC<
               <TouchableOpacity
                 style={styles.boxTwo}
                 onPress={() => {
-                  bottomSheetModalRef.current?.present()
+                  timePickerBottomSheetModalRef.current?.present()
                 }}
               >
                 <Image style={styles.image} source={images.plus_grey} />
@@ -530,10 +560,15 @@ export const SetVisitingServiceDayScreen: FC<
             {/* 서비스 요금 설정 시작 */}
             <View style={[styles.rowText, { marginTop: 20 }]}>
               <PreMed18 text="서비스 요금 설정" />
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
+                style={{ flexDirection: "row", alignItems: "center" }}
+                onPress={() => {
+                  standardPriceBottomSheetModalRef.current?.present()
+                }}
+              >
                 <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
                 <Image style={styles.image} source={images.more_info_bigger} />
-              </View>
+              </TouchableOpacity>
             </View>
 
             {/* 서비스 요금 설정 - 시간 당 요금 설정 */}
@@ -641,14 +676,46 @@ export const SetVisitingServiceDayScreen: FC<
         }}
       />
 
+      {/* 이 지역 평균 요금 바텀시트모달 */}
+      <BottomSheetModal
+        ref={standardPriceBottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={["60%"]}
+        enablePanDownToClose
+        footerComponent={standardPriceBottomSheetModalFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <View style={{ paddingTop: 20 }}>
+          <PreBol18 text={`이 지역 방문 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
+          <PreReg16 mt={32} text="이 지역에서 서비스하는 케어기버 분들은 보통" color={HEAD_LINE} />
+          {/* // ? 적정가 범위 */}
+          <PreBol16
+            mv={6}
+            text={`${
+              avgPriceData ? priceFormatter(avgPriceData.minAvgPrice.toString()) : "?0,000"
+            }원 ~ ${
+              avgPriceData ? priceFormatter(avgPriceData.maxAvgPrice.toString()) : "?0,000"
+            }원`}
+            color={SUB_HEAD_LINE}
+          />
+          <PreReg16 text="사이의 요금을 받습니다." color={HEAD_LINE} />
+          <PreReg16
+            style={{ marginTop: 16, lineHeight: 22 }}
+            text={STANDARD_PRICE_DESC_TEXT}
+            color={BODY}
+          />
+        </View>
+      </BottomSheetModal>
+
       {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
       <BottomSheetModal
-        ref={bottomSheetModalRef}
+        ref={timePickerBottomSheetModalRef}
         backdropComponent={renderBackdrop}
         index={0}
         snapPoints={snapPoints}
         enablePanDownToClose
-        footerComponent={renderFooter}
+        footerComponent={timePickerBottomSheetModalFooter}
       >
         <TimePicker
           style={{ marginTop: 20 }}
