@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -41,7 +41,7 @@ export const CgCalendarScreen: FC<
         const setter = serviceType === "visiting" ? setVisitingAvailableTimes : setCrecheDates
         getter(petsitter.id).then((res) => {
           setter(res)
-          console.log("res 🔷", res)
+          // console.log("res 🔷", res)
         })
       }
 
@@ -81,6 +81,27 @@ export const CgCalendarScreen: FC<
   >([])
   const [crecheDates, setCrecheDates] = useState<CrecheAvailableDate[]>([])
   const [selectedDates, setSelectedDates] = useState<string[]>([])
+
+  /**
+   * 선택된 날짜 (selectedDates) 가 1개일때
+   * 그 날짜가 이전에 비활성화(disable) 된 적이 있는지를 판별한다.
+   * 현재 여러개의 날짜의 시간대를 동시에 수정할 수 없기 때문에
+   * 선택된 날짜가 여러개라면, 무조건 false 를 리턴한다.
+   */
+  const isDeletedVis = useMemo(() => {
+    if (selectedDates?.length === 1) {
+      const target = visitingAvailableTimes.find((v) => v.date === selectedDates[0])
+      if (target === undefined) {
+        return false
+      } else if (target?.deletedAt === null) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return false
+    }
+  }, [visitingAvailableTimes, selectedDates])
 
   return (
     <Screen testID="CgCalendar">
@@ -138,9 +159,7 @@ export const CgCalendarScreen: FC<
                           visitingAvailableTimes.map((item) => item.date),
                           selectedDates,
                         ).length !== 0,
-                      isDeleted:
-                        selectedDates?.length === 1 &&
-                        visitingAvailableTimes.find((v) => v.date === selectedDates[0])?.isDeleted,
+                      isDeleted: isDeletedVis,
                     })
                   : navigate("set-creche-service-day-screen", {
                       selectedDates,

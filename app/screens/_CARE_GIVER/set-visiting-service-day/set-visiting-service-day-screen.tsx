@@ -146,7 +146,7 @@ export const SetVisitingServiceDayScreen: FC<
 
   // console.log("previousSelectedTimeframes ", previousSelectedTimeframes)
   // console.log("selectedDates", selectedDates)
-  // console.log("isDeleted", isDeleted)
+  console.log("isDeleted 🔷", isDeleted)
   // console.log("isAvailableDate", isAvailableDate)
   // console.log("timeframe 🔷", timeframe)🔷
   // console.log(_.isEqual(timeframe.added, timeframe.selected))

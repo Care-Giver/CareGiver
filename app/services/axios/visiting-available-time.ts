@@ -7,7 +7,7 @@ export interface GroupedVisitingAvailableTimesByDate {
   // updatedAt: string // "2023-01-01T11:00:00",
   date: string // "2023-06-05",
   fee: number
-  isDeleted: boolean // 펫시팅 시간 비활성화 여부
+  deletedAt: string | null // 펫시팅 시간 비활성화 여부. string 이면 비활성화된 상태이며 시각을 저장하고 있고, null 이면 비활성화 되어있지 않은 상태이다.
 }
 
 interface VisitingAvailableTimesResponse extends GeneralResponse {
