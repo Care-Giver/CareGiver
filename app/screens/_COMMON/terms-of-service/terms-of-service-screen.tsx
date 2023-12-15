@@ -47,10 +47,13 @@ export const TermsOfServiceScreen: FC<
   }
   useEffect(() => {
     // 필수 && 선택 동의시 모두 동의 버튼 활성화
-    if (requiredToggle && optionalToggle) setAllToggle(true)
-
+    if (requiredToggle && optionalToggle) {
+      setAllToggle(true)
+    }
     //모두 동의 버튼 활성화되어있을 때, 필수 || 선택 동의 버튼 하나라도 비활성화시, 모두 동의 버튼 비활성화
-    if (!requiredToggle || !optionalToggle) setAllToggle(false)
+    else {
+      setAllToggle(false)
+    }
   }, [requiredToggle, optionalToggle, allToggle])
 
   const openLink = (link: string) => {
