@@ -37,10 +37,11 @@ export const styles = StyleSheet.create({
   },
 
   petListContainer: {
+    width: "100%",
     height: 129,
     marginTop: 8,
     flexDirection: "row",
-    //! justifyContent 값은 여기서 할당하지 말 것! - petListContainerJustfyContent 값 사용.
+    justifyContent: "flex-start",
   },
 
   addPet: {
