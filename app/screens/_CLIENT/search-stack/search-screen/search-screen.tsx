@@ -380,12 +380,17 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               />
               <View style={isDropdownOpen ? styles.hidden : styles.shown}>
                 {/*//* 선택된 반려동물 리스트 */}
-                {selectedPets.map((item, index) => (
+                {selectedPets.map((item, index, array) => (
                   <SelectedPetCard
                     key={index}
                     petData={item}
                     onDeletePress={() => {
                       setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                    }}
+                    style={{
+                      width: "92%",
+                      marginTop: index === 0 ? 4 : null,
+                      marginBottom: index === array.length - 1 ? 4 : null,
                     }}
                   />
                 ))}
