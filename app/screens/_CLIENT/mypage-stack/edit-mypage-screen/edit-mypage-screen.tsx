@@ -168,156 +168,162 @@ export const EditMypageScreen: FC<
 
   return (
     <Screen type="View">
-      {/* //*프사 부분 */}
-      <View style={{ width: 130, alignSelf: "center" }}>
-        <Image
-          style={styles.profileImage}
-          source={profileImageUriHandler(
-            images.default_profile_image_edit_mypage,
-            "medium",
-            profileImage,
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} enableOnAndroid>
+        {/* //*프사 부분 */}
+        <View style={{ width: 130, alignSelf: "center" }}>
+          <Image
+            style={styles.profileImage}
+            source={profileImageUriHandler(
+              images.default_profile_image_edit_mypage,
+              "medium",
+              profileImage,
+            )}
+          ></Image>
+          {/* //*프사 - 수정 가능 상태일때 */}
+          {editable && (
+            <TouchableOpacity
+              onPress={() => {
+                openGallery()
+              }}
+              style={{ position: "absolute", right: 0, bottom: 0 }}
+            >
+              <Image source={images.camera} style={{ width: 42, height: 42 }} />
+            </TouchableOpacity>
           )}
-        ></Image>
-        {/* //*프사 - 수정 가능 상태일때 */}
-        {editable && (
-          <TouchableOpacity
-            onPress={() => {
-              openGallery()
-            }}
-            style={{ position: "absolute", right: 0, bottom: 0 }}
-          >
-            <Image source={images.camera} style={{ width: 42, height: 42 }} />
-          </TouchableOpacity>
-        )}
-      </View>
+        </View>
 
-      {/* //*닉네임 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
-      <View
-        style={{
-          marginTop: 20,
-        }}
-      >
-        <Row style={{ marginBottom: 10 }}>
-          <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
-        </Row>
-        {/* //*editable이 true, 즉 수정 가능 상태일때 -> 닉네임 변환 횟수가 3회 이하면 눌러서 수정가능, 3회면 수정 불가 */}
-        {/* // TODO: API 로 대체해야 함 */}
-        {editable && editableNickname ? (
-          //* 수정중이면서 닉네임 수정 가능 기간(월 1회 조건)일 때
-          <TouchableOpacity
-            onPress={() => {
-              setNicknameTouched(true)
+        {/* //*닉네임 부분. 닉네임 옆의 more info 버튼으로 인해 컴포넌트로 이용하지 않음. 밑의 다른 info 들은 컴포넌트로 뺌.*/}
+        <View
+          style={{
+            marginTop: 20,
+          }}
+        >
+          <Row style={{ marginBottom: 10 }}>
+            <PreMed14 color={BODY} text={`닉네임`} style={{ marginRight: 4 }} />
+          </Row>
+          {/* //*editable이 true, 즉 수정 가능 상태일때 -> 닉네임 변환 횟수가 3회 이하면 눌러서 수정가능, 3회면 수정 불가 */}
+          {/* // TODO: API 로 대체해야 함 */}
+          {editable && editableNickname ? (
+            //* 수정중이면서 닉네임 수정 가능 기간(월 1회 조건)일 때
+            <TouchableOpacity
+              onPress={() => {
+                setNicknameTouched(true)
+              }}
+            >
+              <PreMed16 color={HEAD_LINE} text={nickname} />
+            </TouchableOpacity>
+          ) : (
+            //* 수정중 또는 닉네임 수정 불가능 둘 중 한 조건이라도 해당한다면 클릭 불가능해야함
+            <PreMed16 color={editableNickname ? HEAD_LINE : DISABLED} text={nickname} />
+          )}
+          {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
+          <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
+          {editable && editableNickname && (
+            <PreReg10 color={ERROR_RED} text="닉네임은 월1회 수정 가능합니다" />
+          )}
+        </View>
+
+        {/* //* 생년월일 */}
+        <UserOrPetProfileInfo
+          title={"생년월일"}
+          profileInfo={userDetail.birthday}
+          showOption={editable}
+        />
+
+        {/* //* 성별 */}
+        <UserOrPetProfileInfo title={"성별"} profileInfo={sexInKorean} showOption={editable} />
+
+        {/* //* 이메일 */}
+        <UserOrPetProfileInfo
+          title={"이메일"}
+          profileInfo={userAuth.email}
+          showOption={editable}
+          style={{ marginBottom: 20 }}
+        />
+
+        {/* //* 전화번호 */}
+        {editable ? (
+          // <TouchableOpacity onPress={() => alert("전화번호 수정 플로우 준비중")}>
+          //   <UserOrPetProfileInfo title={"전화번호"} profileInfo={phoneNumber} />
+          // </TouchableOpacity>
+          <SignUpTextInput
+            placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
+            title="휴대폰 번호"
+            value={phoneNumber}
+            setValue={setPhoneNumber}
+            isSendingSMS={isSendingSMS}
+            setIsSendingSMS={setIsSendingSMS}
+            isVerified={isVerified}
+            setIsVerified={setIsVerified}
+            leftTime={totalSeconds}
+            textInputProps={{
+              keyboardType: "number-pad",
+              returnKeyType: "done",
             }}
-          >
-            <PreMed16 color={HEAD_LINE} text={nickname} />
-          </TouchableOpacity>
+            marginBottom={20}
+          />
         ) : (
-          //* 수정중 또는 닉네임 수정 불가능 둘 중 한 조건이라도 해당한다면 클릭 불가능해야함
-          <PreMed16 color={editableNickname ? HEAD_LINE : DISABLED} text={nickname} />
+          <UserOrPetProfileInfo
+            title={"전화번호"}
+            profileInfo={phoneNumber}
+            additionalPadding={0}
+          />
         )}
-        {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
-        <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
-        {editable && editableNickname && (
-          <PreReg10 color={ERROR_RED} text="닉네임은 월1회 수정 가능합니다" />
+
+        {/* //* 인증번호 */}
+        {editable && isSendingSMS && (
+          <SignUpTextInput
+            placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
+            title="인증번호"
+            phoneNumber={phoneNumber}
+            value={certification}
+            setValue={setCertification}
+            isVerified={isVerified}
+            setIsVerified={setIsVerified}
+            textInputProps={{
+              keyboardType: "number-pad",
+              returnKeyType: "done",
+            }}
+            marginBottom={20}
+          />
         )}
-      </View>
 
-      {/* //* 생년월일 */}
-      <UserOrPetProfileInfo
-        title={"생년월일"}
-        profileInfo={userDetail.birthday}
-        showOption={editable}
-      />
-
-      {/* //* 성별 */}
-      <UserOrPetProfileInfo title={"성별"} profileInfo={sexInKorean} showOption={editable} />
-
-      {/* //* 이메일 */}
-      <UserOrPetProfileInfo
-        title={"이메일"}
-        profileInfo={userAuth.email}
-        showOption={editable}
-        style={{ marginBottom: 20 }}
-      />
-
-      {/* //* 전화번호 */}
-      {editable ? (
-        // <TouchableOpacity onPress={() => alert("전화번호 수정 플로우 준비중")}>
-        //   <UserOrPetProfileInfo title={"전화번호"} profileInfo={phoneNumber} />
-        // </TouchableOpacity>
-        <SignUpTextInput
-          placeholder="휴대폰 번호 (숫자만 입력해주세요.)"
-          title="휴대폰 번호"
-          value={phoneNumber}
-          setValue={setPhoneNumber}
-          isSendingSMS={isSendingSMS}
-          setIsSendingSMS={setIsSendingSMS}
-          isVerified={isVerified}
-          setIsVerified={setIsVerified}
-          leftTime={totalSeconds}
-          textInputProps={{
-            keyboardType: "number-pad",
-            returnKeyType: "done",
-          }}
-          marginBottom={20}
-        />
-      ) : (
-        <UserOrPetProfileInfo title={"전화번호"} profileInfo={phoneNumber} additionalPadding={0} />
-      )}
-
-      {/* //* 인증번호 */}
-      {editable && isSendingSMS && (
-        <SignUpTextInput
-          placeholder="문자로 전송된 6자리 인증번호를 입력해주세요."
-          title="인증번호"
-          phoneNumber={phoneNumber}
-          value={certification}
-          setValue={setCertification}
-          isVerified={isVerified}
-          setIsVerified={setIsVerified}
-          textInputProps={{
-            keyboardType: "number-pad",
-            returnKeyType: "done",
-          }}
-          marginBottom={20}
-        />
-      )}
-
-      {/* //*저장하기 버튼 : editable이 true 일때, 즉 수정 가능 화면 일때 화면 하단부 표시  
+        {/* //*저장하기 버튼 : editable이 true 일때, 즉 수정 가능 화면 일때 화면 하단부 표시  
           //* 전화번호도 바꾼다면 인증이 되었을 때 저장하기 버튼이 활성화되도록 로직 추가
       */}
-      {editable ? (
-        isSendingSMS && !isVerified ? null : (
-          <ConditionalButton
-            label="저장하기"
-            isActivated={true}
-            style={{
-              marginTop: "auto",
-              marginBottom: BOTTOM_HEIGHT,
-            }}
-            onPress={() => {
-              showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
-              updateUser({
-                email: userAuth.email,
-                password: null,
-                nickname: nickname,
-                sex: userDetail.sex,
-                birthday: userDetail.birthday,
-                desc: null,
-                profileImage: profileImage,
-                phoneNumber: userDetail.phoneNumber,
-              })
-              //! 1초의 시간차를 두고, 호출합니다.
-              //! 그렇지 않으면, getMe() 호출 시 업데이트 된 정보를 호출받을 수 없습니다. (DB 내 유저객체 수정사항이 반영되는데 필요한 연산시간보다 getMe API 호출 시간이 더 짧기 때문입니다.)
-              // TODO: updateUser() 의 리턴값을 "업데이트된 유저객체" 로 사용할 수 있도록 API 를 수정후,
-              // TODO: updateUser().then(...setUserDetail...) 을 통해 유저객체를 업데이트합니다.
-              setTimeout(() => {
-                userDetailHandler(userAuth.token)
-              }, 1000)
-            }}
-          />
-        )
-      ) : null}
+        {editable ? (
+          isSendingSMS && !isVerified ? null : (
+            <ConditionalButton
+              label="저장하기"
+              isActivated={true}
+              style={{
+                marginTop: "auto",
+                marginBottom: BOTTOM_HEIGHT,
+              }}
+              onPress={() => {
+                showEditButton() //* 저장하기를 누르면, 수정 불가 화면 + 편집버튼 (연필) 보이기
+                updateUser({
+                  email: userAuth.email,
+                  password: null,
+                  nickname: nickname,
+                  sex: userDetail.sex,
+                  birthday: userDetail.birthday,
+                  desc: null,
+                  profileImage: profileImage,
+                  phoneNumber: userDetail.phoneNumber,
+                })
+                //! 1초의 시간차를 두고, 호출합니다.
+                //! 그렇지 않으면, getMe() 호출 시 업데이트 된 정보를 호출받을 수 없습니다. (DB 내 유저객체 수정사항이 반영되는데 필요한 연산시간보다 getMe API 호출 시간이 더 짧기 때문입니다.)
+                // TODO: updateUser() 의 리턴값을 "업데이트된 유저객체" 로 사용할 수 있도록 API 를 수정후,
+                // TODO: updateUser().then(...setUserDetail...) 을 통해 유저객체를 업데이트합니다.
+                setTimeout(() => {
+                  userDetailHandler(userAuth.token)
+                }, 1000)
+              }}
+            />
+          )
+        ) : null}
+      </KeyboardAwareScrollView>
 
       {/* //*새롭게 닉네임 입력하는 모달 창 -> 수정 가능 상태에서 닉네임 눌렀을때 pop up */}
       <CustomInputModal

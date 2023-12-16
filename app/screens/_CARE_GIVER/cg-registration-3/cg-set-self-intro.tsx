@@ -46,6 +46,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
     <KeyboardAwareScrollView
       style={allStyles}
       showsVerticalScrollIndicator={false}
+      enableOnAndroid
       // onKeyboardWillShow={(e) => { // ios 만 지원되는 prop 임
       //   console.log("onKeyboardWillShow", e)
       // }}

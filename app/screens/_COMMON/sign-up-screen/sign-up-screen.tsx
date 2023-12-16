@@ -122,6 +122,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       <Screen testID="Register" type="View">
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
+          enableOnAndroid
           // onKeyboardWillShow={(e) => { // ios 만 지원되는 prop 임
           //   console.log("onKeyboardWillShow", e)
           // }}

@@ -187,7 +187,7 @@ export const MakeBookingScreen: FC<
 
   return (
     <Screen testID="MakeBooking" type="View">
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} enableOnAndroid>
         <View style={styles.topTipBox}>
           <PreReg12
             color={palette.black}
