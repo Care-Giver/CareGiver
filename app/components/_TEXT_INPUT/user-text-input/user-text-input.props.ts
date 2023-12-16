@@ -1,6 +1,6 @@
 import { StyleProp, TextStyle } from "react-native"
 
-export interface TextInputProps {
+export interface UserTextInputProps {
   placeholder?: string
   placeholderColor?: string
   value: string
