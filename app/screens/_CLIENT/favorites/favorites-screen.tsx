@@ -391,8 +391,6 @@ export const FavoritesScreen: FC<
               id,
             }
 
-            console.log("item", item)
-
             return (
               <SitterProfileCard
                 isFavorite={true}
