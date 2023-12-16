@@ -18,9 +18,10 @@ import {
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CheckerInput,
   ConditionalButton,
   CustomInputModal,
   DivisionLine,
@@ -45,7 +46,13 @@ import {
   SUB_HEAD_LINE,
 } from "#theme"
 import { images } from "#images"
-import { createCrecheDate, disableCrecheDate, restoreCrecheDate, updateCrecheDate } from "#axios"
+import {
+  createCrecheDate,
+  disableCrecheDate,
+  restoreCrecheDate,
+  updateCreche,
+  updateCrecheDate,
+} from "#axios"
 import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
@@ -58,6 +65,11 @@ import { useKeyboardShown } from "../../../utils/hooks"
 import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
+import { useAdditionalPriceChecker } from "../set-visiting-service-day/use-additional-price-checker"
+import {
+  ExtraSizeFee,
+  HandleType,
+} from "../../../services/axios/types/creches.visitings.common.types"
 
 export const SetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
@@ -68,7 +80,7 @@ export const SetCrecheServiceDayScreen: FC<
       ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
       : `날짜 ${selectedDates?.length}개`
   const {
-    petsitterStore: { hasDogs, petsitter },
+    petsitterStore: { hasDogs, petsitter, setCrechePetsitter },
   } = useStores()
   console.log("isDeleted 🔷", isDeleted)
 
@@ -248,6 +260,48 @@ export const SetCrecheServiceDayScreen: FC<
     [],
   )
 
+  // 강아지 크기 별 추가 요금
+  const [checker, setChecker, hasChanges] = useAdditionalPriceChecker(petsitter)
+  // 깅아지 크기 별 추가 요금 바텀시트
+  const additionalPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const additionalPriceBottomSheetModalFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT}>
+        <ConditionalButton
+          label={"확인"}
+          isActivated={hasChanges}
+          onPress={() => {
+            const data = {
+              handleType: checker.filter((v) => v.isChecked).map((v) => v.handleType),
+              extraSizeFee: _.reduce(
+                checker,
+                function (obj, param) {
+                  obj[param.handleType] = param.addtionalPrice
+                  return obj
+                },
+                {},
+              ) as ExtraSizeFee,
+            }
+            // 방문 펫시터 업데이트
+            updateCreche(petsitter.id, data).then(({ isSuccess, creche }) => {
+              if (isSuccess) {
+                // MST 업데이트
+                setCrechePetsitter(creche)
+              } else {
+                alertModal(
+                  `강아지 크기 별 추가 요금 업데이트 실패`,
+                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
+                )
+              }
+            })
+            additionalPriceBottomSheetModalRef.current?.close()
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [checker, hasChanges, petsitter.id, setCrechePetsitter],
+  )
+
   return (
     <Screen testID="SetCrecheServiceDay" style={styles.root}>
       <ScrollView
@@ -326,11 +380,7 @@ export const SetCrecheServiceDayScreen: FC<
                   <TouchableOpacity
                     style={{ flexDirection: "row", alignItems: "center" }}
                     onPress={() => {
-                      //@ts-ignore
-                      navigate("CgMypage", {
-                        screen: "cg-registration-2-screen",
-                        params: { from: "set-creche-service-day-screen" },
-                      })
+                      additionalPriceBottomSheetModalRef.current?.present()
                     }}
                   >
                     <PreMed16 text="설정하기" mr={4} />
@@ -339,18 +389,33 @@ export const SetCrecheServiceDayScreen: FC<
                 </View>
                 <View style={styles.dogSizeBox}>
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="소형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.SMALL)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}원`
+                        : "-"
+                    }
                   />
                   <View style={styles.verticalLine} />
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="중형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.MEDIUM)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}원`
+                        : "-"
+                    }
                   />
                   <View style={styles.verticalLine} />
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="대형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.LARGE)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}원`
+                        : "-"
+                    }
                   />
                 </View>
               </>
@@ -445,6 +510,48 @@ export const SetCrecheServiceDayScreen: FC<
           />
         </View>
       </BottomSheetModal>
+
+      {/* 깅아지 크기 별 추가 요금 바텀시트 바텀시트모달 */}
+      <BottomSheetModal
+        ref={additionalPriceBottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={["60%"]}
+        keyboardBehavior="fillParent"
+        enablePanDownToClose
+        footerComponent={additionalPriceBottomSheetModalFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <View style={{ paddingTop: 20 }}>
+          <PreBol18 text={"강아지 크기 별 추가 요금을 설정해주세요."} color={HEAD_LINE} />
+          {_.sortBy(checker, "priority").map((item, _) => (
+            <CheckerInput
+              label={item.label}
+              isChecked={item.isChecked}
+              onCheckPress={() => {
+                setChecker([
+                  { ...item, isChecked: !item.isChecked },
+                  ...checker.filter((compare) => compare.priority !== item.priority),
+                ])
+              }}
+              input={priceFormatter(item.addtionalPrice.toString())}
+              setInput={(text) => {
+                setChecker([
+                  { ...item, addtionalPrice: Number(text.replace(/,/g, "")) },
+                  ...checker.filter((compare) => compare.priority !== item.priority),
+                ])
+              }}
+              textInputProps={{
+                keyboardType: "number-pad",
+                returnKeyType: "done",
+              }}
+              style={{ marginTop: 20 }}
+              inBottomSheet={true}
+              key={item.priority}
+            />
+          ))}
+        </View>
+      </BottomSheetModal>
     </Screen>
   )
 })
@@ -493,7 +600,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "space-between",
     paddingVertical: 18,
-    paddingHorizontal: 42,
   },
   verticalLine: {
     width: 2,

@@ -15,6 +15,13 @@ import { BODY, DISABLED, LIGHT_LINE, SUCCESS_BLUE, palette } from "#theme"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../utils/format"
 import _ from "lodash"
+import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
+
+const SORT_SCORE = {
+  Small: 0,
+  Medium: 1,
+  Large: 2,
+}
 
 export const CgEditProfileScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-edit-profile-screen">
@@ -81,11 +88,25 @@ export const CgEditProfileScreen: FC<
   const 추가요금텍스트 = useMemo(() => {
     if (_petsitter === null) return "-"
     if (!_petsitter.extraSizeFee) return "-"
-    return `소형 +${priceFormatter(
-      String(_petsitter?.extraSizeFee.Small),
-    )}원 | 중형 +${priceFormatter(
-      String(_petsitter?.extraSizeFee.Medium),
-    )}원 | 대형 +${priceFormatter(String(_petsitter?.extraSizeFee.Large))}원`
+
+    return _.cloneDeep(_petsitter?.handleType)
+      .sort((a, b) => SORT_SCORE[a] - SORT_SCORE[b])
+      .map((v) => {
+        let 크기 = ""
+        switch (v) {
+          case HandleType.SMALL:
+            크기 = "소형"
+            break
+          case HandleType.MEDIUM:
+            크기 = "증형"
+            break
+          case HandleType.LARGE:
+            크기 = "대형"
+            break
+        }
+        return `${크기} +${priceFormatter(String(_petsitter?.extraSizeFee[v]))}원`
+      })
+      .join(" | ")
   }, [_petsitter])
 
   const 반려동물 = useMemo(() => {
