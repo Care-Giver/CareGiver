@@ -405,8 +405,8 @@ export const FavoritesScreen: FC<
                   desc: item.desc,
                   star: ratingRound(item.rating),
 
-                  profileImage: item.image[0],
-                  defaultFee: 10000,
+                  profileImage: item?.image,
+                  defaultFee: 10000, //TODO: 실제 값으로 대체
                 }}
                 // sitterData={item}
                 onPress={() => {
