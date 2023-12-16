@@ -26,6 +26,8 @@ import {
   BOTTOM_HEIGHT,
   LIGHT_LINE,
   GIVER_CASUAL_NAVY,
+  DEVICE_SCREEN_HEIGHT,
+  HEIGHT,
 } from "#theme"
 import { images } from "#images"
 import { styles } from "./styles"
@@ -50,6 +52,8 @@ import {
 } from "../../../_CARE_GIVER/cg-registration-1/addressToCoordinates"
 import { isInKorea } from "../../../../utils/is-in-korea"
 import dayjs from "dayjs"
+
+const POSTCODE_HEIGHT = 2200 //TODO: 만약, 우편검색 결과가 짤리는 디바이스가 발견된다면, 크기를 더 늘려야 한다.
 
 const nowInUTCZero = new Date()
 const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
@@ -165,7 +169,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     // 주소입력 바텀시트모달 - ref
     const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)
-
+    const bottomSheetModalRefAddressSnapPoints = useMemo(() => ["60%", "100%"], [])
     const onPressLocation = async () => {
       bottomSheetModalRefAddress.current?.present()
 
@@ -448,23 +452,26 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           ref={bottomSheetModalRefAddress}
           backdropComponent={renderBackdrop}
           index={0}
-          snapPoints={["80%"]}
+          snapPoints={bottomSheetModalRefAddressSnapPoints}
           enablePanDownToClose
           style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          containerStyle={{
+            flex: 1,
+            width: "100%",
+            height: DEVICE_SCREEN_HEIGHT,
+          }}
         >
           <BottomSheetFlatList
-            style={{
-              flex: 1,
-              height: 2000,
-            }}
+            style={{ width: "100%", height: DEVICE_SCREEN_HEIGHT }}
+            contentContainerStyle={{ paddingTop: 20 }}
+            showsVerticalScrollIndicator={false}
             data={[0]}
             renderItem={() => (
               <Postcode
                 style={{
                   flex: 1,
                   width: "100%",
-                  height: 2000,
-                  paddingTop: 20,
+                  height: POSTCODE_HEIGHT,
                 }}
                 jsOptions={{
                   animation: true,
