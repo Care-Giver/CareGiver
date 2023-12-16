@@ -27,6 +27,7 @@ import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-pick
 import dayjs from "dayjs"
 import { useTimer } from "react-timer-hook"
 import { alertModal } from "../../../../utils/alert-modal"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -166,7 +167,7 @@ export const EditMypageScreen: FC<
   }
 
   return (
-    <Screen preset={"fixed"}>
+    <Screen type="View">
       {/* //*프사 부분 */}
       <View style={{ width: 130, alignSelf: "center" }}>
         <Image
@@ -212,12 +213,7 @@ export const EditMypageScreen: FC<
           </TouchableOpacity>
         ) : (
           //* 수정중 또는 닉네임 수정 불가능 둘 중 한 조건이라도 해당한다면 클릭 불가능해야함
-          <PreMed16
-            color={
-              editable === true && currentUser.nicknameChangeCount === 3 ? DISABLED : HEAD_LINE
-            }
-            text={nickname}
-          />
+          <PreMed16 color={editableNickname ? HEAD_LINE : DISABLED} text={nickname} />
         )}
         {/*//? marginRight 를 16으로 조절해야하는지? divisionline 을 적용시 디자인보다 오른쪽이 더 길어보임*/}
         <DivisionLine color={MIDDLE_LINE} style={{ marginTop: 4 }} />
@@ -259,7 +255,10 @@ export const EditMypageScreen: FC<
           isVerified={isVerified}
           setIsVerified={setIsVerified}
           leftTime={totalSeconds}
-          keyboardType="number-pad"
+          textInputProps={{
+            keyboardType: "number-pad",
+            returnKeyType: "done",
+          }}
           marginBottom={20}
         />
       ) : (
@@ -276,7 +275,10 @@ export const EditMypageScreen: FC<
           setValue={setCertification}
           isVerified={isVerified}
           setIsVerified={setIsVerified}
-          keyboardType="number-pad"
+          textInputProps={{
+            keyboardType: "number-pad",
+            returnKeyType: "done",
+          }}
           marginBottom={20}
         />
       )}

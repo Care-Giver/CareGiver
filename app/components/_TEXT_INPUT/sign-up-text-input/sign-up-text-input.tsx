@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { View, StyleSheet, KeyboardTypeOptions, TouchableOpacity } from "react-native"
+import {
+  View,
+  StyleSheet,
+  KeyboardTypeOptions,
+  TouchableOpacity,
+  TextInputProps,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreMed14, PreReg12 } from "../../_BASIC/custom-texts/custom-texts"
 import { DivisionLine } from "../../_BASIC/division-line/division-line"
@@ -7,6 +13,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { DISABLED, BODY, GIVER_CASUAL_NAVY } from "#theme"
 import { sendSMS, verifySMS } from "#axios"
 import { alertModal } from "../../../utils/alert-modal"
+import { POPPINS_REGULAR } from "#fonts"
 
 export interface SignUpTextInputProps {
   /**
@@ -17,16 +24,16 @@ export interface SignUpTextInputProps {
   placeholder: string
   value: string
   setValue: (value: any) => void
-  keyboardType?: KeyboardTypeOptions
+
   phoneNumber?: string
   isSendingSMS?: boolean
   setIsSendingSMS?: (value: boolean) => void
-
   leftTime?: number
   isVerified?: boolean
   setIsVerified?: (value: boolean) => void
 
   marginBottom?: number
+  textInputProps?: TextInputProps
 }
 
 export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTextInputProps) {
@@ -35,14 +42,16 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
     placeholder,
     value,
     setValue,
-    keyboardType = "default",
+
     phoneNumber,
     isSendingSMS,
     setIsSendingSMS,
     leftTime,
     isVerified,
     setIsVerified,
+
     marginBottom,
+    textInputProps,
   } = props
 
   const [onVerifying, setOnVerifying] = useState(false)
@@ -162,13 +171,20 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
 
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TextInput
-          placeholder={placeholder}
           value={value}
           onChange={onChange}
           placeholderTextColor={DISABLED}
-          keyboardType={keyboardType}
           editable={!isVerified}
-          style={isVerified && { color: DISABLED }}
+          style={[
+            {
+              flex: 1,
+              width: "100%",
+              fontFamily: POPPINS_REGULAR,
+            },
+            isVerified && { color: DISABLED },
+          ]}
+          placeholder={placeholder}
+          {...textInputProps}
         />
         {title === "휴대폰 번호" && isValidPhoneNumber && (
           <TouchableOpacity
