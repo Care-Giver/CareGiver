@@ -128,6 +128,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
             minHeight: 278,
           }}
           multiline
+          blurOnSubmit
           maxLength={3000}
           keyboardType="default"
           returnKeyType="done"

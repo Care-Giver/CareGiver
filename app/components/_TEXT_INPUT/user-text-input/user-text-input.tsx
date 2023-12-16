@@ -14,6 +14,7 @@ export const UserTextInput = (props: UserTextInputProps) => {
         onChangeText={handleChange}
         value={value}
         multiline
+        blurOnSubmit
         scrollEnabled
       />
     </View>
