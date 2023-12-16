@@ -67,7 +67,7 @@ export const CgRegistration1Screen: FC<
           (item) => !defaultServices.map((dItem) => dItem.id).includes(item.id),
         )
       : []
-    : petsitter?.serviceVisiting.filter(
+    : petsitter?.[targetService]?.filter(
         (item) => !defaultServices.map((dItem) => dItem.id).includes(item.id),
       )
   const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<

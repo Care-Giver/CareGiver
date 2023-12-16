@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import { Button, DivisionLine, PreMed16, PreMed18, PreReg14, Screen } from "#components"
 import {
   BODY,
@@ -20,6 +20,7 @@ import { kakaoLogin } from "./kakao-login"
 import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
 import TEST_BUILD_VERSION from "../setting-screen/test-build-version"
+import dayjs from "dayjs"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -42,14 +43,14 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       console.log("MST loginHandler 테스트 res >>>", res)
     }
 
-    // // SIGN UP FLOW - UI RENDERING TEST
-    // const signUpTest = async () => {
-    //   navigate("terms-of-service-screen", {
-    //     email: `${dayjs().unix()}@test.com`,
-    //     provider: "naver", // 하드코딩
-    //     idToken: `test-idtoken-${dayjs().unix()}`,
-    //   })
-    // }
+    // SIGN UP FLOW - UI RENDERING TEST
+    const signUpTest = async () => {
+      navigate("terms-of-service-screen", {
+        email: `${dayjs().unix()}@test.com`,
+        provider: "naver", // 하드코딩
+        idToken: `test-idtoken-${dayjs().unix()}`,
+      })
+    }
 
     const isIOS = Platform.OS === "ios"
 
@@ -97,10 +98,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
           )} */}
-          {/* <DivisionLine mv={20} />
+          <DivisionLine mv={20} />
           <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
-          </Button> */}
+          </Button>
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button> */}

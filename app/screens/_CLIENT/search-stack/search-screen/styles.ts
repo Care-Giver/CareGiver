@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-import { HEIGHT, LBG, LIGHT_LINE } from "#theme"
-import { SCREEN_WIDTH } from "@gorhom/bottom-sheet"
+import { LBG, LIGHT_LINE } from "#theme"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
@@ -26,7 +25,6 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderWidth: 2,
-    // backgroundColor: "red",
   },
   hidden: {
     width: 0,

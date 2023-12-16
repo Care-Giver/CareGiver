@@ -107,6 +107,7 @@ export const CancelReservationScreen: FC<
               value={input}
               onChangeText={(text) => setInput(text)}
               multiline
+              blurOnSubmit
               maxLength={30}
             />
           ) : null}

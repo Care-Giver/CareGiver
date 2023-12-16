@@ -14,7 +14,7 @@ import {
   Screen,
 } from "#components"
 import { styles } from "./styles"
-import { STRONG_LINE, GIVER_CASUAL_NAVY, BODY, LIGHT_LINE } from "#theme"
+import { STRONG_LINE, GIVER_CASUAL_NAVY, BODY, LIGHT_LINE, WIDTH } from "#theme"
 import { images } from "#images"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "#navigators"
@@ -52,15 +52,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
     const isActivated = !hasPets
 
-    const petListContainerJustfyContent = useMemo(() => {
-      if (pets.length === 1) {
-        return "flex-start"
-      } else if (pets.length === 2) {
-        return "space-evenly"
-      } else {
-        return "space-between"
-      }
-    }, [pets.length])
+    // 마이페이지에서는 3마리 까지만 표출합니다.
+    const slicedPets = hasPets ? pets.slice(0, 3) : []
 
     return (
       <Screen style={{ paddingHorizontal: 0 }}>
@@ -118,18 +111,13 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
               {/* //? 반려동물 카드 리스트 */}
               {hasPets ? (
-                <View
-                  style={[
-                    styles.petListContainer,
-                    { justifyContent: petListContainerJustfyContent },
-                  ]}
-                >
-                  {/* 마이페이지에서는 3마리 까지만 표출 */}
-                  {pets.slice(0, 3).map((item, index) => (
+                <View style={styles.petListContainer}>
+                  {slicedPets.map((item, index, array) => (
                     <PetImageCard
                       key={index}
                       petImageUri={item?.images ? item.images[0] : null}
                       name={item.name}
+                      style={{ marginLeft: array.length >= 2 && index !== 0 ? 8 * WIDTH : null }}
                     />
                   ))}
                 </View>

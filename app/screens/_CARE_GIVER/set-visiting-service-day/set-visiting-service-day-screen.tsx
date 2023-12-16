@@ -15,18 +15,22 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  StyleProp,
+  ViewStyle,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CheckerInput,
   ConditionalButton,
   CustomInputModal,
   DivisionLine,
   PopSem16,
   PopSem24,
   PreBol16,
+  PreBol18,
   PreBol20,
   PreMed14,
   PreMed16,
@@ -37,7 +41,15 @@ import {
   TimePicker,
   timeTextAMPM,
 } from "#components"
-import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE } from "#theme"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  LBG,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+} from "#theme"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { addMinutes, isAfter, subMinutes, isEqual } from "date-fns"
@@ -50,12 +62,19 @@ import {
   disableVisitingAvailableTime,
   getAvailableTimesByDate,
   restoreVisitingAvailableTime,
+  updateVisiting,
   updateVisitingAvailableTime,
 } from "#axios"
 import _, { isDate } from "lodash"
 import { alertModal } from "../../../utils/alert-modal"
-import { useKeyboardShown } from "../../../utils/hooks"
 import dayjs from "dayjs"
+import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
+import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
+import {
+  ExtraSizeFee,
+  HandleType,
+} from "../../../services/axios/types/creches.visitings.common.types"
+import { useAdditionalPriceChecker } from "./use-additional-price-checker"
 
 const nowInUTCZero = new Date()
 const now = subMinutes(nowInUTCZero, nowInUTCZero.getTimezoneOffset())
@@ -106,12 +125,19 @@ const ServiceTime = (props) => {
   )
 }
 
+interface PricePerSizeProps {
+  size: "소형견" | "중형견" | "대형견"
+  priceText: string
+  style?: StyleProp<ViewStyle>
+}
+
 // 강아지크기별 가격
-export const PricePerSize = (props) => {
+export const PricePerSize = (props: PricePerSizeProps) => {
+  const { size, priceText, style } = props
   return (
-    <View>
-      <PreReg14 text={props.size} mb={8} color={BODY} style={{ textAlign: "center" }} />
-      <PreMed14 text={`+${props.price}원`} style={{ textAlign: "center" }} />
+    <View style={style}>
+      <PreReg14 text={size} mb={8} color={BODY} style={{ textAlign: "center" }} />
+      <PreMed14 text={priceText} style={{ textAlign: "center" }} />
     </View>
   )
 }
@@ -127,7 +153,7 @@ export const SetVisitingServiceDayScreen: FC<
       ? selectedDates[0].slice(5).replace("-", "월 ") + "일"
       : `날짜 ${selectedDates?.length}개`
   const {
-    petsitterStore: { serviceType, serviceTypeKorean, hasPetsitterProfile, hasDogs, petsitter },
+    petsitterStore: { hasDogs, petsitter, setVistingPetsitter },
   } = useStores()
 
   const [beginDate, setBeginDate] = useState<Date>(nearestPastTime) // 시간선택 - TimePicker: `지금 시간으로 부터 가장 가까운 5분단위 과거 시간`으로 초기값 세팅
@@ -225,11 +251,11 @@ export const SetVisitingServiceDayScreen: FC<
     setIsAvailable((prev) => !prev)
   }
 
-  // 시간당 가격 설정 모달 관련 state
+  // 시간 당 가격 설정 모달 관련 state
   const [priceModalOpen, setPricemodalOpen] = useState(false)
   const [fee, setFee] = useState(0)
 
-  // 시간당 가격 설정 모달 관련 함수
+  // 시간 당 가격 설정 모달 관련 함수
   const handlepriceModalHide = () => {
     setPricemodalOpen(false)
   }
@@ -438,10 +464,11 @@ export const SetVisitingServiceDayScreen: FC<
       ),
       added: _.uniqBy(_.sortBy([...timeframe.added, newTimeframe], ["beginTime"]), "beginTime"),
     })
-    bottomSheetModalRef.current?.close()
+    timePickerBottomSheetModalRef.current?.close()
   }, [beginDate, checkIsValidTimeframe, endDate, selectedDates, timeframe])
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  // 시간선택 바텀시트
+  const timePickerBottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ["60%"], [])
   const renderBackdrop = useCallback(
     (props) => (
@@ -454,13 +481,74 @@ export const SetVisitingServiceDayScreen: FC<
     ),
     [],
   )
-  const renderFooter = useCallback(
+  const timePickerBottomSheetModalFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
         <ConditionalButton label={"확인"} isActivated onPress={onPressTimePickerConfirm} />
       </BottomSheetFooter>
     ),
     [onPressTimePickerConfirm],
+  )
+
+  // 이 지역 평균 기본 요금
+  const avgPriceData = useFetchAvgPrice("방문")
+  // 이 지역 평균 요금 바텀시트
+  const standardPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const standardPriceBottomSheetModalFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT}>
+        <ConditionalButton
+          label={"확인"}
+          isActivated
+          onPress={() => {
+            standardPriceBottomSheetModalRef.current?.close()
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [],
+  )
+
+  // 강아지 크기 별 추가 요금
+  const [checker, setChecker, hasChanges] = useAdditionalPriceChecker(petsitter)
+  // 깅아지 크기 별 추가 요금 바텀시트
+  const additionalPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const additionalPriceBottomSheetModalFooter = useCallback(
+    (props) => (
+      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT}>
+        <ConditionalButton
+          label={"확인"}
+          isActivated={hasChanges}
+          onPress={() => {
+            const data = {
+              handleType: checker.filter((v) => v.isChecked).map((v) => v.handleType),
+              extraSizeFee: _.reduce(
+                checker,
+                function (obj, param) {
+                  obj[param.handleType] = param.addtionalPrice
+                  return obj
+                },
+                {},
+              ) as ExtraSizeFee,
+            }
+            // 방문 펫시터 업데이트
+            updateVisiting(petsitter.id, data).then(({ isSuccess, visiting }) => {
+              if (isSuccess) {
+                // MST 업데이트
+                setVistingPetsitter(visiting)
+              } else {
+                alertModal(
+                  `강아지 크기 별 추가 요금 업데이트 실패`,
+                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
+                )
+              }
+            })
+            additionalPriceBottomSheetModalRef.current?.close()
+          }}
+        />
+      </BottomSheetFooter>
+    ),
+    [checker, hasChanges, petsitter.id, setVistingPetsitter],
   )
 
   return (
@@ -518,7 +606,7 @@ export const SetVisitingServiceDayScreen: FC<
               <TouchableOpacity
                 style={styles.boxTwo}
                 onPress={() => {
-                  bottomSheetModalRef.current?.present()
+                  timePickerBottomSheetModalRef.current?.present()
                 }}
               >
                 <Image style={styles.image} source={images.plus_grey} />
@@ -530,13 +618,19 @@ export const SetVisitingServiceDayScreen: FC<
             {/* 서비스 요금 설정 시작 */}
             <View style={[styles.rowText, { marginTop: 20 }]}>
               <PreMed18 text="서비스 요금 설정" />
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.boxTwo}
+                onPress={() => {
+                  standardPriceBottomSheetModalRef.current?.present()
+                }}
+              >
                 <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
                 <Image style={styles.image} source={images.more_info_bigger} />
-              </View>
+              </TouchableOpacity>
+              <DivisionLine height={2} color={LBG} />
             </View>
 
-            {/* 서비스 요금 설정 - 시간당 요금 설정 */}
+            {/* 서비스 요금 설정 - 시간 당 요금 설정 */}
             <View style={[styles.rowText, { marginTop: 25 }]}>
               <PreReg16 text="시간 당" />
               <Pressable
@@ -556,11 +650,7 @@ export const SetVisitingServiceDayScreen: FC<
                   <TouchableOpacity
                     style={{ flexDirection: "row", alignItems: "center" }}
                     onPress={() => {
-                      //@ts-ignore
-                      navigate("CgMypage", {
-                        screen: "cg-registration-2-screen",
-                        params: { from: "set-visiting-service-day-screen" },
-                      })
+                      additionalPriceBottomSheetModalRef.current?.present()
                     }}
                   >
                     <PreMed16 text="설정하기" mr={4} />
@@ -569,27 +659,42 @@ export const SetVisitingServiceDayScreen: FC<
                 </View>
                 <View style={styles.dogSizeBox}>
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="소형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.SMALL)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Small?.toString())}원`
+                        : "-"
+                    }
                   />
                   <View style={styles.verticalLine} />
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="중형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.MEDIUM)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Medium?.toString())}원`
+                        : "-"
+                    }
                   />
                   <View style={styles.verticalLine} />
                   <PricePerSize
+                    style={{ flex: 1 }}
                     size="대형견"
-                    price={priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}
+                    priceText={
+                      _.includes(petsitter?.handleType, HandleType.LARGE)
+                        ? `+${priceFormatter(petsitter?.extraSizeFee?.Large?.toString())}원`
+                        : "-"
+                    }
                   />
                 </View>
               </>
             )}
 
-            {/* 시간당 받는 총 금액 */}
+            {/* 시간 당 받는 총 금액 */}
             <View style={styles.totalPriceBox}>
               <View>
-                <PreBol16 text="내가 시간당 받는 총 금액" mb={4} />
+                <PreBol16 text="내가 시간 당 받는 총 금액" mb={4} />
                 <PreReg16 text="(수수료 포함)" color={BODY} />
               </View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -620,11 +725,11 @@ export const SetVisitingServiceDayScreen: FC<
         />
       </View>
 
-      {/* 시간당 가격 설정  모달 */}
+      {/* 시간 당 가격 설정  모달 */}
       <CustomInputModal
         visibleState={priceModalOpen}
         handleModalHide={handlepriceModalHide}
-        title="1박당 받을 요금을 입력해주세요(원)"
+        title="시간 당 받을 요금을 입력해주세요(원)"
         placeholderInput={`기본요금 ${priceFormatter(
           petsitter.defaultFee.toString(),
         )}원에 더해집니다.`}
@@ -641,14 +746,88 @@ export const SetVisitingServiceDayScreen: FC<
         }}
       />
 
+      {/* 이 지역 평균 요금 바텀시트모달 */}
+      <BottomSheetModal
+        ref={standardPriceBottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={["60%"]}
+        enablePanDownToClose
+        footerComponent={standardPriceBottomSheetModalFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <View style={{ paddingTop: 20 }}>
+          <PreBol18 text={`이 지역 방문 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
+          <PreReg16 mt={32} text="이 지역에서 서비스하는 케어기버 분들은 보통" color={HEAD_LINE} />
+          {/* // ? 적정가 범위 */}
+          <PreBol16
+            mv={6}
+            text={`${
+              avgPriceData ? priceFormatter(avgPriceData.minAvgPrice.toString()) : "?0,000"
+            }원 ~ ${
+              avgPriceData ? priceFormatter(avgPriceData.maxAvgPrice.toString()) : "?0,000"
+            }원`}
+            color={SUB_HEAD_LINE}
+          />
+          <PreReg16 text="사이의 요금을 받습니다." color={HEAD_LINE} />
+          <PreReg16
+            style={{ marginTop: 16, lineHeight: 22 }}
+            text={STANDARD_PRICE_DESC_TEXT}
+            color={BODY}
+          />
+        </View>
+      </BottomSheetModal>
+
+      {/* 깅아지 크기 별 추가 요금 바텀시트 바텀시트모달 */}
+      <BottomSheetModal
+        ref={additionalPriceBottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        index={0}
+        snapPoints={["60%"]}
+        keyboardBehavior="fillParent"
+        enablePanDownToClose
+        footerComponent={additionalPriceBottomSheetModalFooter}
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <View style={{ paddingTop: 20 }}>
+          <PreBol18 text={"강아지 크기 별 추가 요금을 설정해주세요."} color={HEAD_LINE} />
+          {_.sortBy(checker, "priority").map((item, _) => (
+            <CheckerInput
+              label={item.label}
+              isChecked={item.isChecked}
+              onCheckPress={() => {
+                setChecker([
+                  { ...item, isChecked: !item.isChecked },
+                  ...checker.filter((compare) => compare.priority !== item.priority),
+                ])
+              }}
+              input={priceFormatter(item.addtionalPrice.toString())}
+              setInput={(text) => {
+                setChecker([
+                  { ...item, addtionalPrice: Number(text.replace(/,/g, "")) },
+                  ...checker.filter((compare) => compare.priority !== item.priority),
+                ])
+              }}
+              textInputProps={{
+                keyboardType: "number-pad",
+                returnKeyType: "done",
+              }}
+              style={{ marginTop: 20 }}
+              inBottomSheet={true}
+              key={item.priority}
+            />
+          ))}
+        </View>
+      </BottomSheetModal>
+
       {/* 시간 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
       <BottomSheetModal
-        ref={bottomSheetModalRef}
+        ref={timePickerBottomSheetModalRef}
         backdropComponent={renderBackdrop}
         index={0}
         snapPoints={snapPoints}
         enablePanDownToClose
-        footerComponent={renderFooter}
+        footerComponent={timePickerBottomSheetModalFooter}
       >
         <TimePicker
           style={{ marginTop: 20 }}
@@ -730,7 +909,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "space-between",
     paddingVertical: 18,
-    paddingHorizontal: 42,
   },
   verticalLine: {
     width: 2,

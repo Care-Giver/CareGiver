@@ -46,6 +46,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
     <KeyboardAwareScrollView
       style={allStyles}
       showsVerticalScrollIndicator={false}
+      enableOnAndroid
       // onKeyboardWillShow={(e) => { // ios 만 지원되는 prop 임
       //   console.log("onKeyboardWillShow", e)
       // }}
@@ -127,6 +128,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
             minHeight: 278,
           }}
           multiline
+          blurOnSubmit
           maxLength={3000}
           keyboardType="default"
           returnKeyType="done"

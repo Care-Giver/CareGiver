@@ -556,6 +556,7 @@ export const AddPetScreen: FC<StackScreenProps<NavigatorParamList, "add-pet-scre
                   color: HEAD_LINE,
                 }}
                 multiline={true}
+                blurOnSubmit
                 editable={editable !== undefined ? editable : false}
                 value={desc}
                 onChangeText={handleTextChange}

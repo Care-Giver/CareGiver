@@ -18,15 +18,16 @@ import { TODAY_YEAR_MONTH_DATE } from "../../../components/cg-calendar/cg-calend
 type ClientCalendarDayProps = {
   date: string & DateData
   state: DayState
-  selected: string
-  dateRange: DateData[]
+  selected: string // "방문" 캘린더에서 사용되는, 선택된 날짜 입니다.
+  dateRange: DateData[] // "위탁" 캘린더에서 사용되는, 선택된 날짜 범위 입니다.
   onPress: () => void
 }
 
 export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCalendarDayProps) {
   const { date, state, selected, dateRange, onPress } = props
   const isPastDate = new Date(date.dateString) < TODAY_YEAR_MONTH_DATE
-
+  /** 달력상의 날짜가 선택된 날짜와 같은지 확인합니다. "방문" 전용 변수입니다.  */
+  const isSameWithSelectedDate = date.dateString === selected
   const isStartDate = dateRange.length >= 1 && date.dateString === dateRange[0].dateString
   const isEndDate = dateRange.length >= 2 && date.dateString === dateRange[1].dateString
   const isInTheRange =
@@ -39,33 +40,33 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
     date.dateString === dateRange[1].dateString
 
   const backgroundColor = useMemo(() => {
-    if (isStartDate || isEndDate) return GIVER_CASUAL_NAVY_40
-    if (date.dateString === selected) return GIVER_CASUAL_NAVY_40
-    if (isInTheRange) return GIVER_CASUAL_NAVY_20
     if (state === "today") return LBG
+    if (isStartDate || isEndDate) return "white"
+    if (isSameWithSelectedDate) return "white"
+    if (isInTheRange) return "white"
 
     return null
-  }, [date.dateString, isEndDate, isInTheRange, isStartDate, selected, state])
+  }, [isEndDate, isInTheRange, isStartDate, isSameWithSelectedDate, state])
 
   const textBackgroundColor = useMemo(() => {
     if (isStartDate || isEndDate) return GIVER_CASUAL_NAVY
-    if (date.dateString === selected) return GIVER_CASUAL_NAVY
-    if (isInTheRange) return GIVER_CASUAL_NAVY_20
+    if (isSameWithSelectedDate) return GIVER_CASUAL_NAVY
+    if (isInTheRange) return GIVER_CASUAL_NAVY
     if (state === "today") return LBG
 
     return "white"
-  }, [date.dateString, isEndDate, isInTheRange, isStartDate, selected, state])
+  }, [isEndDate, isInTheRange, isSameWithSelectedDate, isStartDate, state])
 
   const textColor = useMemo(() => {
     if (isPastDate) return MIDDLE_LINE
     if (isStartDate || isEndDate) return "white"
-    if (date.dateString === selected) return "white"
-    if (isInTheRange) return "GIVER_CASUAL_NAVY"
+    if (isSameWithSelectedDate) return "white"
+    if (isInTheRange) return "white"
     if (state === "today") return GIVER_CASUAL_NAVY
     if (state === "disabled") return MIDDLE_LINE
 
     return DISABLED
-  }, [date.dateString, selected, state, isEndDate, isInTheRange, isPastDate, isStartDate])
+  }, [isPastDate, isStartDate, isEndDate, isSameWithSelectedDate, isInTheRange, state])
 
   return (
     <Pressable
@@ -77,8 +78,6 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
           backgroundColor: backgroundColor,
           alignItems: "center",
         },
-        isStartDate && { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
-        isEndDate && { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
       ]}
     >
       <View //text를 view로 감싸고 backgroundcolor와 borderradius를 줘야한다.
@@ -88,7 +87,14 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
           style={[
             styles.dayText,
             {
-              fontFamily: POPPINS_REGULAR,
+              fontFamily:
+                state === "today" ||
+                isSameWithSelectedDate ||
+                isStartDate ||
+                isEndDate ||
+                isInTheRange
+                  ? POPPINS_SEMIBOLD
+                  : POPPINS_REGULAR,
               color: textColor,
               backgroundColor: textBackgroundColor,
               borderRadius: 4,
@@ -100,7 +106,7 @@ export const ClientCalendarDay = observer(function CgCalendarDay(props: ClientCa
         </Text>
 
         {/* 방문 시나리오 */}
-        {date.dateString === selected && (
+        {isSameWithSelectedDate && (
           <View style={{ marginTop: 6 }}>
             <Text style={{ fontSize: 10, color: GIVER_CASUAL_NAVY, fontFamily: POPPINS_SEMIBOLD }}>
               방문일

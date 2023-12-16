@@ -132,11 +132,7 @@ export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
                       keyboardType="numeric"
                       returnKeyType="done"
                       placeholder={`${강아지_크기}견 추가 요금을 입력해주세요.`}
-                      value={
-                        additionalPrice[value] === 0
-                          ? null
-                          : priceFormatter(additionalPrice[value].toString())
-                      }
+                      value={priceFormatter(additionalPrice[value].toString())}
                       onChangeText={(text) => {
                         setAdditionalPrice({
                           ...additionalPrice,

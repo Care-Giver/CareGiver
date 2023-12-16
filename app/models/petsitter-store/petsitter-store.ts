@@ -8,7 +8,7 @@ import { StateString } from "#components"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 
-interface PetsitterModel extends VistingPetsitter, CrechePetsitter {}
+export interface PetsitterModel extends VistingPetsitter, CrechePetsitter {}
 
 type DraftPetsitterModel = PetsitterModel
 

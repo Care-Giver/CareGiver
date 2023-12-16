@@ -65,7 +65,12 @@ export const SitterProfileCard = ({
           <RatingReviewBox rating={star} review={reviewCount} style={{ marginTop: 4 }} />
 
           {/* description title */}
-          <PreReg12 text={title} color={SUB_HEAD_LINE} style={{ marginTop: 12 }} />
+          <PreReg12
+            text={title}
+            color={SUB_HEAD_LINE}
+            style={{ marginTop: 12 }}
+            numberOfLines={1}
+          />
 
           {/* description details */}
           <PreReg12

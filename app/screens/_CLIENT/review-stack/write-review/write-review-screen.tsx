@@ -273,6 +273,7 @@ export const WriteReviewScreen: FC<
           placeholder={`후기 작성 시 주의사항\n1. 욕설, 비방, 음란성 등 다른 사용자들에게 불쾌감을 주는 글은 사전고지 없이 삭제될 수 있습니다. \n2. 게시된 글의 저작권은 글을 작성한 사용자에게 있으며, 이로 인해 발생하는 문제는 본인에게 책임이 있습니다. \n3. 후기에 본인의 개인정보가 포함되지 않도록 주의해 주시기 바랍니다.`}
           placeholderTextColor={DISABLED}
           multiline
+          blurOnSubmit
           onChangeText={setReviewText}
           value={reviewText}
           // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료

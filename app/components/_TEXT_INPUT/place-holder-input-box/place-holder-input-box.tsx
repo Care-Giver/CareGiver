@@ -41,6 +41,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         style={[styles.input, { height: boxHeight }]}
         placeholder={placeholderText}
         multiline
+        blurOnSubmit
         maxLength={300}
         autoFocus={true}
         value={text}
