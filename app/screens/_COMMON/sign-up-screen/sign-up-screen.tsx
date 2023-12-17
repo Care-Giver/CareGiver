@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useMemo, useState } from "react"
 import { Image, Platform, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -22,6 +22,7 @@ import { useTimer } from "react-timer-hook"
 import dayjs from "dayjs"
 import { useStores } from "#models"
 import { delay } from "../../../utils/delay"
+import { isBefore, isExists, isFuture } from "date-fns"
 
 type Sex = "MALE" | "FEMALE"
 
@@ -79,8 +80,34 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
     //  - 인증번호가 입력되었으면, 인증번호가 맞는지 확인
     // 생년월일 길이는 8 + 2 (대시 '-' 2개)
     // 휴대폰번호 길이는 11 + 2 (대시 '-' 2개)
-    const isActivated =
-      nickname && birthday.length === 8 + 2 && sex && phoneNumber.length === 11 + 2 && isVerified
+    const isActivated = useMemo(() => {
+      // 생년월일 검증
+      let isValidBirthday = false
+      if (birthday.length === 8 + 2) {
+        const year = Number(String(birthday).substring(0, 4))
+        const month = Number(String(birthday).substring(5, 7)) - 1 //! Date object 에서 month 는 0 부터 시작한다.
+        const date = Number(String(birthday).substring(8, 10))
+
+        // 존재 하지 않는 년/월/일 이면 거른다.
+        if (!isExists(year, month, date)) {
+          return false
+        }
+        // 미래인 경우, 거른다.
+        const birthdayDate = new Date(year, month, date)
+        if (isFuture(birthdayDate)) {
+          return false
+        }
+        // 1900.01.01 보다 과거이면 거른다.
+        if (isBefore(birthdayDate, new Date(1900, 0, 1))) {
+          return false
+        }
+
+        // 모든 걸 다 패스하면, null 리턴 ( === 검증 완료)
+        isValidBirthday = true
+      }
+
+      return nickname && isValidBirthday && sex && phoneNumber.length === 11 + 2 && isVerified
+    }, [birthday, isVerified, nickname, phoneNumber.length, sex])
 
     const nextButtonHandler = async () => {
       // const email = `${dayjs().unix()}@test.com` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
@@ -122,6 +149,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       <Screen testID="Register" type="View">
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
+          enableOnAndroid
           // onKeyboardWillShow={(e) => { // ios 만 지원되는 prop 임
           //   console.log("onKeyboardWillShow", e)
           // }}
@@ -146,6 +174,9 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             title="닉네임(필수)"
             value={nickname}
             setValue={setNickname}
+            textInputProps={{
+              returnKeyType: "done",
+            }}
             marginBottom={36}
           />
 
@@ -155,7 +186,10 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             title="생년월일(필수)"
             value={birthday}
             setValue={setBirthday}
-            keyboardType="number-pad"
+            textInputProps={{
+              keyboardType: "number-pad",
+              returnKeyType: "done",
+            }}
             marginBottom={36}
           />
 
@@ -215,7 +249,10 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             setIsSendingSMS={setIsSendingSMS}
             isVerified={isVerified}
             leftTime={totalSeconds}
-            keyboardType="number-pad"
+            textInputProps={{
+              keyboardType: "number-pad",
+              returnKeyType: "done",
+            }}
             marginBottom={36}
           />
 
@@ -229,7 +266,10 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
               setValue={setCertification}
               isVerified={isVerified}
               setIsVerified={setIsVerified}
-              keyboardType="number-pad"
+              textInputProps={{
+                keyboardType: "number-pad",
+                returnKeyType: "done",
+              }}
               marginBottom={36}
             />
           )}

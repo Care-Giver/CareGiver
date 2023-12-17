@@ -28,7 +28,7 @@ export enum HandleType {
   LARGE = "Large",
 }
 
-type ExtraSizeFee = {
+export type ExtraSizeFee = {
   Small: number
   Medium: number
   Large: number

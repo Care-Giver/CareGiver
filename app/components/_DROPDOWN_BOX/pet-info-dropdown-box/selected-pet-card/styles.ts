@@ -3,11 +3,10 @@ import { palette } from "#theme"
 
 export const styles = StyleSheet.create({
   root: {
-    width: 318,
+    width: "100%",
     height: 78,
     alignSelf: "center",
     backgroundColor: "#FFFFFF",
-    // backgroundColor: "red",
   },
   infoBox: {
     width: "100%",

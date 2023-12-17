@@ -131,6 +131,7 @@ export const WritingCommentScreen: FC<
           height: handleHeight(),
         }}
         multiline
+        blurOnSubmit
         maxLength={300}
         autoFocus={true}
         placeholder={

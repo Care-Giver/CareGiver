@@ -448,6 +448,7 @@ export const EditPetInfoScreen: FC<
                     color: HEAD_LINE,
                   }}
                   multiline={true}
+                  blurOnSubmit
                   editable={editable !== undefined ? editable : false}
                   value={text}
                   onChangeText={handleTextChange}

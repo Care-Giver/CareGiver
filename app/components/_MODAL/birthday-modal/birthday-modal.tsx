@@ -7,7 +7,7 @@ import { HEAD_LINE, MIDDLE_LINE, ERROR_RED, SUCCESS_BLUE, BODY } from "#theme"
 import { DivisionLine, ConditionalButton, PreBol18, PreReg12 } from "#components"
 import { useForm, Controller } from "react-hook-form"
 import Modal from "react-native-modal"
-import { isExists } from "date-fns"
+import { isBefore, isExists, isFuture } from "date-fns"
 
 //*hook form 위한 form 정해놓기
 type BirthdayForm = {
@@ -113,12 +113,21 @@ export const BirthdayModal = observer(function BirthdayModal(props: BirthdayModa
                       const year = Number(String(value).substring(0, 4))
                       const month = Number(String(value).substring(4, 6)) - 1 //! Date object 에서 month 는 0 부터 시작한다.
                       const date = Number(String(value).substring(6, 8))
-                      if (isExists(year, month, date)) {
-                        return null
-                      } else {
+                      // 존재 하지 않는 년/월/일 이면 거른다.
+                      if (!isExists(year, month, date)) {
                         return `* 유효하지 않은 생년월일 입니다: ${year}년 ${month + 1}월 ${date}일`
                       }
-
+                      // 미래인 경우, 거른다.
+                      const birthdayDate = new Date(year, month, date)
+                      if (isFuture(birthdayDate)) {
+                        return `* 유효하지 않은 생년월일 입니다: ${year}년 ${month + 1}월 ${date}일`
+                      }
+                      // 1900.01.01 보다 과거이면 거른다.
+                      if (isBefore(birthdayDate, new Date(1900, 0, 1))) {
+                        return `* 유효하지 않은 생년월일 입니다: ${year}년 ${month + 1}월 ${date}일`
+                      }
+                      // 모든 걸 다 패스하면, null 리턴 ( === 검증 완료)
+                      return null
                     default:
                       return "* 8자리 숫자로 입력해주세요."
                   }

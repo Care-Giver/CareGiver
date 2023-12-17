@@ -17,6 +17,8 @@ import { DivisionLine } from "../../../components/_BASIC/division-line/division-
 import { POPPINS_REGULAR } from "#fonts"
 import { ServiceType } from "#models"
 
+export const STANDARD_PRICE_DESC_TEXT = `- 기본적으로 지역 평균 요금이 적정가로 설정되어있습니다.\n- 적정가는 추천금액일 뿐이며, 원하는 금액으로 직접 설정 가능합니다.\n- 요금은 지역마다, 개인마다 차이가 있을 수 있습니다.`
+
 export interface CgSetPriceProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
@@ -77,7 +79,7 @@ export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
 
         <PreReg12
           style={{ marginTop: 12, lineHeight: 18 }}
-          text={`- 기본적으로 지역 평균 요금이 적정가로 설정되어있습니다.\n- 적정가는 추천금액일 뿐이며, 원하는 금액으로 직접 설정 가능합니다.\n- 요금은 지역마다, 개인마다 차이가 있을 수 있습니다.`}
+          text={STANDARD_PRICE_DESC_TEXT}
           color={BODY}
         />
       </View>
