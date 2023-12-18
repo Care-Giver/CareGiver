@@ -2,7 +2,9 @@
 // react-native-firebase 🔻
 #import <Firebase.h>
 // react-native-firebase 🔺
-
+// react-native-seoul/kakao-login 🔻
+#import <RNKakaoLogins.h>
+// react-native-seoul/kakao-login 🔺
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -107,6 +109,11 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 // Linking API
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  // react-native-seoul/kakao-login 🔻
+  if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+    return [RNKakaoLogins handleOpenUrl: url];
+  }
+  // react-native-seoul/kakao-login 🔺
   return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
 }
 
