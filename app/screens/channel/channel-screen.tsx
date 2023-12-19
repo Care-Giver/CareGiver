@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { StyleSheet, View } from "react-native"
+import { Platform, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -13,6 +13,7 @@ import {
   MessageInput,
   Thread,
 } from "stream-chat-react-native" // Or stream-chat-expo
+import { HEADER_HEIGHT, IOS_NOTCH_STATUS_BAR_HEIGHT } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -29,8 +30,20 @@ export const ChannelScreen: FC<StackScreenProps<NavigatorParamList, "channel-scr
     const channel = route.params.channel
 
     return (
-      <Screen testID="Channel" style={{ top: -33, paddingHorizontal: 0 }}>
-        <Channel channel={channel}>
+      <Screen
+        testID="Channel"
+        style={{
+          top: Platform.select({
+            ios: -24,
+          }),
+        }}
+      >
+        <Channel
+          channel={channel}
+          keyboardVerticalOffset={Platform.select({
+            android: 90,
+          })}
+        >
           <MessageList />
           <MessageInput />
         </Channel>
