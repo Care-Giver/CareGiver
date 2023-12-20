@@ -10,7 +10,7 @@ PODS:
     - ExpoModulesCore
   - EXConstants (13.2.4):
     - ExpoModulesCore
-  - EXDevice (4.3.0):
+  - EXDevice (5.0.0):
     - ExpoModulesCore
   - EXErrorRecovery (3.2.0):
     - ExpoModulesCore
@@ -983,7 +983,7 @@ SPEC CHECKSUMS:
   EASClient: a2581835cf9b97d0defd5d630fc6eb1bf77045e7
   EXApplication: e418d737a036e788510f2c4ad6c10a7d54d18586
   EXConstants: 7c44785d41d8e959d527d23d29444277a4d1ee73
-  EXDevice: 7647ca9b1fd8b269dfd896a7643d659343358054
+  EXDevice: 734a55d8935ea8e075d12df1919a0497153bf55c
   EXErrorRecovery: 74d71ee59f6814315457b09d68e86aa95cc7d05d
   EXFileSystem: 927e0a8885aa9c49e50fc38eaba2c2389f2f1019
   EXFont: 06df627203afcb8a3b3152ec06eb2f11f46f0cff
