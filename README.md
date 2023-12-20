@@ -20,7 +20,18 @@
 2.  `yarn ios` 또는 `yarn android`
 3.  (Metro 서버가 끊긴경우) `yarn start-metro`
 
-## yarn install / pod install 실패시...
+## pod install 실패시...
+
+### The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.
+
+```
+...
+Installing react-native-slider (4.4.2)
+Installing react-native-webview (13.6.3)
+[!] The following Swift pods cannot yet be integrated as static libraries:
+
+The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+```
 
 - yarn install 이후, `node_modules/expo-modules-core/ExpoModulesCore.podspec` 경로로 이동한다.
 - Line 84: `s.dependency 'React-RCTAppDelegate' if reactNativeMinorVersion >= 71` 를 **주석 처리 한다.**
