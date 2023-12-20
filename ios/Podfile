@@ -47,13 +47,13 @@ target 'CareGiver' do
   pod 'GoogleUtilities', :modular_headers => true
 
   config = use_native_modules!
-
+  
   # use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks'] #! Flipper 를 사용하려면, use_frameworks! 를 주석처리해야함
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
   $RNFirebaseAsStaticFramework = true
   
-  ####5.28 묵추가
-  pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
+  # ####5.28 묵추가 #! Expo SDK 49, Node v18.17.0 업데이트 이후, 이 라인이 문제를 일으킨다. 따라서 주석 처리함.
+  # pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
