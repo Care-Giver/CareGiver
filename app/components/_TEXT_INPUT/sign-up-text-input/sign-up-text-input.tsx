@@ -86,7 +86,7 @@ export const SignUpTextInput = observer(function SignUpTextInput(props: SignUpTe
         break
       }
       case "닉네임(필수)": {
-        const nicknameRegex = /^[0-9a-zA-Zㄱ-ㅎ가-힣-_]{0,10}$/
+        const nicknameRegex = /^[0-9a-zA-Zㄱ-ㅎ가-힣-_ㆍᆞᆢ]{0,10}$/
         if (nicknameRegex.test(e.nativeEvent.text)) {
           setValue(e.nativeEvent.text)
         }
