@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 4,
     minWidth: 46,
-    Height: 20,
+    height: 20,
     textAlign: "center",
   },
 
