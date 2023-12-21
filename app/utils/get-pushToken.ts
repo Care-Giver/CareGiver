@@ -3,6 +3,7 @@ import * as Device from "expo-device"
 import * as Notifications from "expo-notifications"
 import { Platform } from "react-native"
 import { alertModal } from "./alert-modal"
+import Constants from "expo-constants"
 
 export async function registerForPushNotificationsAsync(): Promise<string> {
   let token: string
@@ -28,7 +29,11 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
       alertModal("푸시토큰 발급 실패", "푸시토큰을 발급받는데 실패했습니다.")
       return null
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      })
+    ).data
     // console.log("🔷 registerForPushNotificationsAsync - token:", token)
     return token
   }

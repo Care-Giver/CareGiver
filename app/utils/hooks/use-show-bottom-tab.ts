@@ -28,6 +28,7 @@ export const useShowBottomTab = (navigation) => {
       return () => {
         hideBottomTab()
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showingBottomTab]),
   )
 }
