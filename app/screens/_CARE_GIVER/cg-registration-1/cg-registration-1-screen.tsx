@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo, useState } from "react"
 import { FlatList, Pressable, StyleSheet, View, Image, StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList, goBack, navigate } from "#navigators"
 import {
   CgRegisterState,
   CgRegisterStateProps,
@@ -261,7 +261,7 @@ export const CgRegistration1Screen: FC<
           // MST 업데이트
           setVistingPetsitter(visiting)
           /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-          navigation.replace("cg-edit-profile-screen")
+          navigation.goBack()
         } else {
           alertModal(
             "방문 장소 업데이트 실패",
@@ -441,7 +441,7 @@ export const ScreenHeader = (props) => {
           //   return
           // }
 
-          navigate("cg-edit-profile-screen")
+          goBack()
         }}
       >
         <Image style={styles.goBackButton} source={images.go_back} />

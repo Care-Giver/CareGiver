@@ -201,7 +201,7 @@ export const CgRegistration2Screen: FC<
         // MST 업데이트
         mstSetter(updatedData)
         /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-        navigation.replace("cg-edit-profile-screen")
+        navigation.goBack()
       } else {
         alertModal(
           `${serviceTypeKorean} 장소 업데이트 실패`,

@@ -584,9 +584,7 @@ export const MypageStack = () => {
         component={AllPetsScreen}
         options={{
           title: "나의 반려동물",
-          header: (props) => (
-            <GobackAndTitleHeader {...props} onPress={() => navigate("mypage-screen")} />
-          ),
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 
