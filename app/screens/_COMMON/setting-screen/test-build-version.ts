@@ -1,4 +1,4 @@
-const VERSION = "23.12.21.a"
+const VERSION = "23.12.21.b"
 
 const TEST_BUILD_VERSION = `테스트빌드 ${VERSION}`
 
