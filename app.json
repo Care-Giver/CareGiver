@@ -13,11 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://exp.host/@tomtimmy2/CareGiver"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "runtimeVersion": "1.0.0",
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pet.caregiver",
