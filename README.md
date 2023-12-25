@@ -20,9 +20,9 @@
 2.  `yarn ios` 또는 `yarn android`
 3.  (Metro 서버가 끊긴경우) `yarn start-metro`
 
-## pod install 실패시...
+## ~~pod install 실패시...~~
 
-### The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.
+### ~~The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.~~
 
 ```
 ...
@@ -33,10 +33,29 @@ Installing react-native-webview (13.6.3)
 The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
 ```
 
-- yarn install 이후, `node_modules/expo-modules-core/ExpoModulesCore.podspec` 경로로 이동한다.
-- Line 84: `s.dependency 'React-RCTAppDelegate' if reactNativeMinorVersion >= 71` 를 **주석 처리 한다.**
-- 다시, `pod install` 시도 하면 정상적으로 성공한다.
-- 만약 그래도 실패한다면 `rm -rf ~/Library/Developer/Xcode/DerivedData` 이후 다시 `pod install` 해볼 것.
+- ~~yarn install 이후, `node_modules/expo-modules-core/ExpoModulesCore.podspec` 경로로 이동한다.~~
+- ~~Line 84: `s.dependency 'React-RCTAppDelegate' if reactNativeMinorVersion >= 71` 를 **주석 처리 한다.**~~
+- ~~다시, `pod install` 시도 하면 정상적으로 성공한다.~~
+- ~~만약 그래도 실패한다면 `rm -rf ~/Library/Developer/Xcode/DerivedData` 이후 다시 `pod install` 해볼 것.~~
+
+#### 위 에러는 `Podfile` 에 다음과 같은 코드를 추가하여 해결 하였습니다. (2023. 12. 25 , @smnchoi)
+
+```
+...
+pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate' :modular_headers => true
+pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_headers => true
+```
+
+설명:
+
+- 종속관계에 있는 ExpoModulesCore 와 React-RCTAppDelegate 문제를 해결하기 위해선, `modular_headers => true` 각각 값을 할당해주면 됩니다.
+- 하지만, 단순히
+  ```
+  pod 'ExpoModulesCore', :modular_headers => true
+  pod 'React-RCTAppDelegate', :modular_headers => true
+  ```
+  이렇게 추가해주면, `multiple dependencies with different sources` 에러가 발생합니다.
+- 이를 방지하기 위해, **`path`를 꼭 명시해줘야 합니다.**
 
 ## 작업 관련 명령어
 

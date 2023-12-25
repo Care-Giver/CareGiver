@@ -81,6 +81,8 @@ target 'CareGiver' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
+  pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate', :modular_headers => true
+  pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_headers => true
 
   config = use_native_modules!
   
