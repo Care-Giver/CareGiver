@@ -6,19 +6,37 @@
 
 ## 개발환경
 
-- node 16.15.0
-- npm 8.5.5
-- cocoapods 1.12.1
+- node v18.17.0
+- npm 9.6.7
+- cocoapods 1.14.3
 
 ## 주의사항
 
 - 패키지 설치 또는 추가시, npm 대신 _yarn 을 사용주세요_
 
-## 앱 실행 방법
+## 앱 실행 방법 (자동)
 
 1.  `yarn install`
 2.  `yarn ios` 또는 `yarn android`
 3.  (Metro 서버가 끊긴경우) `yarn start-metro`
+
+## pod install 실패시...
+
+### The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.
+
+```
+...
+Installing react-native-slider (4.4.2)
+Installing react-native-webview (13.6.3)
+[!] The following Swift pods cannot yet be integrated as static libraries:
+
+The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+```
+
+- yarn install 이후, `node_modules/expo-modules-core/ExpoModulesCore.podspec` 경로로 이동한다.
+- Line 84: `s.dependency 'React-RCTAppDelegate' if reactNativeMinorVersion >= 71` 를 **주석 처리 한다.**
+- 다시, `pod install` 시도 하면 정상적으로 성공한다.
+- 만약 그래도 실패한다면 `rm -rf ~/Library/Developer/Xcode/DerivedData` 이후 다시 `pod install` 해볼 것.
 
 ## 작업 관련 명령어
 

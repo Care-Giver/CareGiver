@@ -141,6 +141,8 @@
 	<string>Allow $(PRODUCT_NAME) to upload your photos for pet sitting</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to upload your photos for pet sitting</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to play music</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Regular.ttf</string>
@@ -159,6 +161,9 @@
 	<false/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleDefault</string>
+
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+  	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

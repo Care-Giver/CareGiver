@@ -262,14 +262,7 @@ export const CgMypageStack = () => {
         component={CgEditProfileScreen}
         options={{
           title: "펫시터",
-          header: (props) => (
-            <GobackAndTitleHeader
-              {...props}
-              onPress={() => {
-                navigation.navigate("cg-mypage-screen")
-              }}
-            />
-          ),
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
 

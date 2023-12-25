@@ -23,6 +23,7 @@ import { images } from "#images"
 import { dummy } from "./dummy-data"
 import _ from "lodash"
 import { useFocusEffect } from "@react-navigation/native"
+import { alertModal } from "../../../utils/alert-modal"
 
 export const CgCalendarScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-calendar-screen">
@@ -164,6 +165,11 @@ export const CgCalendarScreen: FC<
               }}
               labelTextColor={GIVER_CASUAL_NAVY}
               onPress={() => {
+                if (selectedDates.length === 0) {
+                  alertModal("일정 선택", "한 개 이상의 날짜를 선택 해 주세요.")
+                  return
+                }
+
                 serviceTypeKorean === "방문"
                   ? navigate("set-visiting-service-day-screen", {
                       // TODO - 여러개의 selected 가 넘겨질 경우 처리

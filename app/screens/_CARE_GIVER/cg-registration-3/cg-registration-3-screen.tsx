@@ -195,7 +195,7 @@ export const CgRegistration3Screen: FC<
         const updatedData = 방문펫시터 ? visiting : creche
         mstSetter(updatedData)
         /* 마지막 스텝이므로, 이전 스크린으로 돌아갑니다. */
-        navigation.replace("cg-edit-profile-screen")
+        navigation.goBack()
       } else {
         alertModal(
           `${serviceTypeKorean} 서비스 업데이트 실패`,

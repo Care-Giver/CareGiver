@@ -619,7 +619,7 @@ export const SetVisitingServiceDayScreen: FC<
             <View style={[styles.rowText, { marginTop: 20 }]}>
               <PreMed18 text="서비스 요금 설정" />
               <TouchableOpacity
-                style={styles.boxTwo}
+                style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => {
                   standardPriceBottomSheetModalRef.current?.present()
                 }}
@@ -627,7 +627,6 @@ export const SetVisitingServiceDayScreen: FC<
                 <PreMed14 text="평균 요금 알아보기" mr={4} color={BODY} />
                 <Image style={styles.image} source={images.more_info_bigger} />
               </TouchableOpacity>
-              <DivisionLine height={2} color={LBG} />
             </View>
 
             {/* 서비스 요금 설정 - 시간 당 요금 설정 */}
