@@ -83,7 +83,10 @@ type GetAllBookingsResult =
  */
 export const getAllBookings = async (): Promise<GetAllBookingsResult> => {
   try {
-    const response = await axios.get<GetAllBookingsResponse>(`${BASE_URL}/care-giver/all-bookings`)
+    const response = await axios.get<GetAllBookingsResponse>(
+      `${BASE_URL}/care-giver/all-bookings`,
+      { headers: { "Cache-Control": "no-store" } }, //! DO NOT REMOVE@
+    )
     if (!response.data.ok) {
       alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error}`)
       return { isSuccess: false, receivedBookings: [] }
