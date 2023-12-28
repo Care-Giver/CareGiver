@@ -127,6 +127,7 @@ export const CgSetService = observer(function CgSetService(props: CgSetServicePr
           <Image source={images.question_mark} style={styles.question} />
         </TouchableOpacity>
       </Row>
+      {/* 기본 서비스 목록 */}
       <RegisterButtonsContainer key={0} services={defaultServices} alwaysActive={true} />
 
       {/* 추가 서비스 */}
@@ -141,7 +142,7 @@ export const CgSetService = observer(function CgSetService(props: CgSetServicePr
           <Image source={images.question_mark} style={styles.question} />
         </TouchableOpacity>
       </Row>
-
+      {/* 추가 서비스 목록 */}
       <RegisterButtonsContainer
         key={1}
         services={additionalServices}

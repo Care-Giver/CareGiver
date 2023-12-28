@@ -14,6 +14,8 @@ import { CgSetSelfIntro } from "./cg-set-self-intro"
 import { useKeyboardShown } from "../../../utils/hooks/use-keyboard-shown"
 import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
 
+const DEFAULT_SERVICES_ID = [1, 2, 3] as const
+
 export const CgRegistration3Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-3-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
@@ -164,7 +166,10 @@ export const CgRegistration3Screen: FC<
           "visitingAmenities",
           "crecheAmenities",
         ]),
-        services: draftPetsitter[targetService].map((service) => service.id),
+        services: _.uniq([
+          ...DEFAULT_SERVICES_ID,
+          ...draftPetsitter[targetService].map((service) => service.id),
+        ]),
         amenities: draftPetsitter[targetAmenity].map((amenity) => amenity.id),
         ...data,
         timeWithPet: 0,
