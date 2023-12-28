@@ -1,7 +1,7 @@
 export * from "./axios-config"
 // export * from "./axios-example"
 export * from "./booking"
-export * from "./confirmed-bookings"
+export * from "./care-giver"
 export * from "./creche-date"
 export * from "./creche"
 export * from "./creches"

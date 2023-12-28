@@ -10,7 +10,7 @@ import {
   Screen,
 } from "#components"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { getconfirmedBookings } from "#axios"
+import { getAllBookings, getConfirmedBookings } from "#axios"
 import { images } from "#images"
 import { Image, View } from "react-native"
 import { BODY } from "#theme"
@@ -32,15 +32,12 @@ export const ManageBookingScreen: FC<
 > = observer(function ManageBookingScreen({ navigation }) {
   useShowBottomTab(navigation)
 
-  // 필요시, useNavigation 훅을 사용할 수 있습니다.
-  // const navigation = useNavigation()
-  const [bookings, setBookins] = useState([])
+  const [bookings, setBookings] = useState([])
 
   const hasBookings = bookings?.length > 0
 
   useEffect(() => {
-    //* axios 사용하여 바로 bookings 초기화.
-    getconfirmedBookings().then((res) => setBookins(res))
+    getAllBookings().then((res) => setBookings(res.receivedBookings))
   }, [])
 
   return (
