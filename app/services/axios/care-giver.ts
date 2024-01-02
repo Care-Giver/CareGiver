@@ -13,7 +13,7 @@ export enum BookingStatus {
   REJECT = "Reject", // 예약을 거절한 경우
 }
 
-type ReceivedBooking = {
+export type CgBooking = {
   // 공통 속성
   name: string
   services: string[]
@@ -31,7 +31,21 @@ type ReceivedBooking = {
   startTime: string
   endTime: string
 }
-export type ConfirmedBooking = ReceivedBooking
+
+type ReceivedBooking = CgBooking
+
+export type ConfirmedBooking = Omit<CgBooking, "status"> & {
+  status: BookingStatus.PENDING | BookingStatus.PROCEEDING
+}
+
+export type WaitingBooking = Omit<CgBooking, "status"> & {
+  status: BookingStatus.WAITING
+}
+
+export type RejectedBooking = Omit<CgBooking, "status"> & {
+  status: BookingStatus.REJECT
+}
+
 interface GetConfirmedBookingsResponse extends GeneralResponse {
   confirmedBookings: ConfirmedBooking[] | []
 }
@@ -46,7 +60,8 @@ type GetConfirmedBookingsResult =
     }
 /**
  * [케어기버 전용 API]
- * 현재 로그인한 펫시터 유저가 "수락한" 예약 목록을 읽어옵니다.
+ * 현재 로그인한 펫시터 유저의 예약 목록 중에서,
+ * (Pending - 수락함, Proceeding - 진행중) 에 해당하는 "확정된 예약" 목록을 가져옵니다.
  */
 export const getConfirmedBookings = async (): Promise<GetConfirmedBookingsResult> => {
   try {

@@ -107,16 +107,27 @@ export const BookingList = observer(function BookingList(props: BookingListProps
 
   bookings.forEach((item, idx) => {
     console.log(item.services)
+    // const dataprop = {
+    //   name: item.name,
+    //   serviceType: "creche",
+    //   petname: item.pets[0].pet.name,
+    //   species: item.pets[0].pet.species.name,
+    //   petservices: item.services,
+    //   address: item.address,
+    //   time: item.startTime,
+    //   height: 50,
+    //   day: item.startTime.substring(0, 10),
+    // }
+    // TODO: 실제 data 에서 가져오도록 수정해야 함. 현재는 아래처럼 더미데이터로 하드 코딩되어 있음/
     const dataprop = {
-      name: item.name,
-      serviceType: "creche",
-      petname: item.pets[0].name,
-      species: item.pets[0].species.name,
-      petservices: item.services,
-      address: item.address,
-      time: item.startTime,
-      height: 50,
-      day: item.startTime.substring(0, 10),
+      id: "1",
+      name: "강영묵",
+      serviceType: "visit",
+      caregiverType: "trainer",
+      petname: "봉봉이",
+      species: "푸들",
+      petservices: ["산책, 목욕, 미용"],
+      address: "경기도 성남시 판교동",
     }
     const newData = { title: String(idx), data: [dataprop] }
     sections.push(newData)
