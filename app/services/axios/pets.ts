@@ -36,13 +36,13 @@ export interface Species {
   familyType: FamilyType
 }
 
-export interface Pet {
+interface PetAndFamilyType {
   pet: PetDetail
   familyType: string
 }
 
 interface GetPetsResponse extends GeneralResponse {
-  petResults: Pet[]
+  petResults: PetAndFamilyType[]
 }
 
 interface GetPetsResult {

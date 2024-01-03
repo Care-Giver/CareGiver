@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { alertModal } from "../../utils/alert-modal"
-import { Pet } from "./pets"
+import { Pet } from "#models"
 
 export enum BookingStatus {
   WAITING = "Waiting", // 승인 대기
