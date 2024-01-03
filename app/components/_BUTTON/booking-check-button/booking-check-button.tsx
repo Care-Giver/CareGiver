@@ -16,17 +16,15 @@ export interface BookingCheckButtonProps {
    * 새로 들어온 예약의 개수입니다.
    */
   bookingCount?: number
+
+  onPress: () => void
 }
 
 export const BookingCheckButton = observer(function BookingCheckButton(
   props: BookingCheckButtonProps,
 ) {
-  const { style, bookingCount } = props
+  const { style, bookingCount, onPress } = props
   const allStyles = Object.assign({}, styles.root, style)
-
-  const onPress = () => {
-    alert("클릭됨")
-  }
 
   return (
     <RowRoundedBox style={allStyles}>

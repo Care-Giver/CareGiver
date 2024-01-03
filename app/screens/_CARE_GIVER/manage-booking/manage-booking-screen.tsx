@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
   BookingCheckButton,
   BookingInfoCardProps,
@@ -63,16 +63,17 @@ export const ManageBookingScreen: FC<
 
   return (
     <Screen testID="ManageBooking">
-      {hasWaitingBookings ? (
+      {!hasWaitingBookings ? (
         <BookingCheckButton
           style={{ zIndex: 1, marginTop: 16 }}
           bookingCount={waitingBookings?.length}
+          onPress={() => navigate("cg-booking-list-screen")}
         />
       ) : null}
 
       <PreReg14>모든 예약 개수: {allBookings.length}</PreReg14>
-
       <BookingList bookings={confirmedBookings} />
+
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
         <Image

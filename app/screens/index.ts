@@ -11,6 +11,7 @@ export * from "./_CARE_GIVER/cg-registration-1/cg-registration-1-screen"
 export * from "./_CARE_GIVER/cg-registration-2/cg-registration-2-screen"
 export * from "./_CARE_GIVER/cg-registration-3/cg-registration-3-screen"
 export * from "./_CARE_GIVER/cg-edit-profile/cg-edit-profile-screen"
+export * from "./_CARE_GIVER/cg-booking-list/cg-booking-list-screen"
 
 // _CLIENT
 export * from "./_CLIENT/caregiver-detail-stack/all-comments-screen/all-comments-screen"

@@ -30,6 +30,7 @@ import {
   EditMypageScreen,
   CgRegistration2Screen,
   CgRegistration3Screen,
+  CgBookingListScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -52,6 +53,7 @@ export type CGStackNavigatorParamList = {
    * CgBookingsStack - CG - 예약관리 스택
    */
   "manage-booking-screen": undefined
+  "cg-booking-list-screen": undefined
 
   /**
    * CalendarStack - CG - 달력 스택
@@ -147,12 +149,21 @@ export const CgBookingsStack = () => {
       //  @ts-ignore
       initialRouteName="manage-booking-screen"
     >
-      {/* //* 예약관리 메인 */}
+      {/* CG - 예약관리 메인 */}
       <Stack.Screen
         name="manage-booking-screen"
         component={ManageBookingScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+      {/* CG - 신청/거절 내역 */}
+      <Stack.Screen
+        name="cg-booking-list-screen"
+        component={CgBookingListScreen}
+        options={{
+          title: "신청/거절 내역",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
     </Stack.Navigator>
