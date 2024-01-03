@@ -144,9 +144,9 @@ export const PricePerSize = (props: PricePerSizeProps) => {
 
 export const CARE_GIVER_COMMISION_RATE = 0.06 as const
 
-export const SetVisitingServiceDayScreen: FC<
-  StackScreenProps<NavigatorParamList, "set-visiting-service-day-screen">
-> = observer(function SetVisitingServiceDayScreen({ route, navigation }) {
+export const CgSetVisitingServiceDayScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-set-visiting-service-day-screen">
+> = observer(function CgSetVisitingServiceDayScreen({ route, navigation }) {
   const { selectedDates, visitingId, isAvailableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1

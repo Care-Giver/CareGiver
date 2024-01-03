@@ -32,9 +32,9 @@ const CareGiverReserveDummy: BookingInfoCardProps = {
 // 30초마다 Refetch
 const INTERVAL = 30 * 1000
 
-export const ManageBookingScreen: FC<
-  StackScreenProps<NavigatorParamList, "manage-booking-screen">
-> = observer(function ManageBookingScreen({ navigation }) {
+export const CgManageBookingScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-manage-booking-screen">
+> = observer(function CgManageBookingScreen({ navigation }) {
   useShowBottomTab(navigation)
 
   const {

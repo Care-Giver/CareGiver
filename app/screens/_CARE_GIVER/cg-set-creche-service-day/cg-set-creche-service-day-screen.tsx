@@ -57,7 +57,7 @@ import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
   PricePerSize,
-} from "../set-visiting-service-day/set-visiting-service-day-screen"
+} from "../cg-set-visiting-service-day/cg-set-visiting-service-day-screen"
 import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import _ from "lodash"
@@ -65,15 +65,15 @@ import { useKeyboardShown } from "../../../utils/hooks"
 import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
-import { useAdditionalPriceChecker } from "../set-visiting-service-day/use-additional-price-checker"
+import { useAdditionalPriceChecker } from "../cg-set-visiting-service-day/use-additional-price-checker"
 import {
   ExtraSizeFee,
   HandleType,
 } from "../../../services/axios/types/creches.visitings.common.types"
 
-export const SetCrecheServiceDayScreen: FC<
-  StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
-> = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
+export const CgSetCrecheServiceDayScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-set-creche-service-day-screen">
+> = observer(function CgSetCrecheServiceDayScreen({ route, navigation }) {
   const { selectedDates, crecheId, isAvailableDate, availableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1

@@ -171,7 +171,7 @@ export const CgCalendarScreen: FC<
                 }
 
                 serviceTypeKorean === "방문"
-                  ? navigate("set-visiting-service-day-screen", {
+                  ? navigate("cg-set-visiting-service-day-screen", {
                       // TODO - 여러개의 selected 가 넘겨질 경우 처리
                       selectedDates,
                       visitingId: petsitter.id,
@@ -182,7 +182,7 @@ export const CgCalendarScreen: FC<
                         ).length !== 0,
                       isDeleted: isDeletedVis,
                     })
-                  : navigate("set-creche-service-day-screen", {
+                  : navigate("cg-set-creche-service-day-screen", {
                       selectedDates,
                       crecheId: petsitter.id,
                       isAvailableDate:

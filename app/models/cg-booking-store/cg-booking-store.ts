@@ -8,7 +8,7 @@ import _ from "lodash"
  * - 펫시터 모드일 때 사용됩니다.
  * - 로그인한 펫시터 유저의 모든 예약 객체들을 저장하기 위해 사용됩니다.
  * - 데이터의 "갱신"은 이곳에서 이루어지지 않으며,
- * - manage-booking-screen 에서 30초 마다 한 번씩 갱신됩니다.
+ * - cg-manage-booking-screen 에서 30초 마다 한 번씩 갱신됩니다.
  */
 export const CgBookingStoreModel = types
   .model("CgBookingStore")
