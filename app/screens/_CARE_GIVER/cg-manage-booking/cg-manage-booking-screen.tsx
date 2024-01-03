@@ -63,13 +63,11 @@ export const CgManageBookingScreen: FC<
 
   return (
     <Screen testID="ManageBooking">
-      {!hasWaitingBookings ? (
-        <BookingCheckButton
-          style={{ zIndex: 1, marginTop: 16 }}
-          bookingCount={waitingBookings?.length}
-          onPress={() => navigate("cg-booking-list-screen")}
-        />
-      ) : null}
+      <BookingCheckButton
+        style={{ zIndex: 1, marginTop: 16 }}
+        bookingCount={waitingBookings?.length}
+        onPress={() => navigate("cg-booking-list-screen")}
+      />
 
       <PreReg14>모든 예약 개수: {allBookings.length}</PreReg14>
       <BookingList bookings={confirmedBookings} />
