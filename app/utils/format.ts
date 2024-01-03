@@ -91,3 +91,19 @@ function isEndWithConsonant(korStr: string) {
 export function appendEulReul(korStr: string) {
   return korStr + (isEndWithConsonant(korStr) ? "을" : "를")
 }
+
+/**
+ * Date object 를
+ * YY.MM.DD 형태 날짜 표기의 string 으로 변환 한다.
+ */
+export const formatDate = (date: Date): string => {
+  const formatted =
+    date.getFullYear().toString().slice(2) +
+    "." +
+    (date.getMonth() + 1 < 10 ? "0" : "") +
+    (date.getMonth() + 1).toString() +
+    "." +
+    (date.getDate() < 10 ? "0" : "") +
+    date.getDate().toString()
+  return formatted
+}
