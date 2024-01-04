@@ -8,6 +8,7 @@ import {
   Service,
   UserRelatedData,
 } from "./types/creches.visitings.common.types"
+import { alertModal } from "../../utils/alert-modal"
 
 export interface VisitingsSearchRequest extends SearchRequest {
   startTime: string
@@ -41,18 +42,14 @@ export const getVisitingsSearch = async (
   requestBody: VisitingsSearchRequest,
 ): Promise<Visiting[]> => {
   try {
-    // console.log("creche", creche)
     const response = await axios.post<VisitingsSearchRequestResponse>(
       `${BASE_URL}/visitings/search`,
       requestBody,
     )
-    // console.log("response >>>", response)
-    // console.log("response.data >>>", response.data.visitings)
 
     if (!response.data.ok) {
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
       return []
     }
 
@@ -61,7 +58,7 @@ export const getVisitingsSearch = async (
       star: ratingRound(item.visiting.star),
     }))
   } catch (error) {
-    console.error("catch 에러!!!", error)
+    alertModal("방문 펫시터 검색에 실패했습니다.", `catch: ${error?.message}`)
     return []
   }
 }

@@ -5,6 +5,7 @@ import { Petsitter } from "./types/creches.visitings.common.types"
 import { VisitingAmenity, VisitingService } from "./visitings"
 import { CareGiverEntity } from "./types/entity.types"
 import _ from "lodash"
+import { alertModal } from "../../utils/alert-modal"
 
 interface CreateVisitingRequestBody
   extends Partial<
@@ -92,8 +93,8 @@ export const updateVisiting = async (
     console.log("response.data 🔷 updateVisiting", response.data)
 
     if (!response?.data.ok) {
-      console.error("API 에러!!! - updateVisiting ♦️", response?.data?.error)
-      return { isSuccess: false, reason: response?.data?.error }
+      alertModal("방문 서비스 업데이트에 실패하였습니다.", `${response.data.error.message}`)
+      return { isSuccess: false, reason: response?.data?.error.message }
     }
 
     return {
@@ -106,9 +107,8 @@ export const updateVisiting = async (
       ]),
     }
   } catch (error) {
-    console.error("catch 에러!!! - updateVisiting", error)
-    console.error("catch 에러!!! - updateVisiting id, body", id, body)
-    return { isSuccess: false, reason: error }
+    alertModal("방문 서비스 업데이트에 실패하였습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false, reason: error?.message }
   }
 }
 

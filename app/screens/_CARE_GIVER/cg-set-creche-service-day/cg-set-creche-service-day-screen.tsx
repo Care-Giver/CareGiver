@@ -283,15 +283,12 @@ export const CgSetCrecheServiceDayScreen: FC<
               ) as ExtraSizeFee,
             }
             // 방문 펫시터 업데이트
-            updateCreche(petsitter.id, data).then(({ isSuccess, creche }) => {
+            updateCreche(petsitter.id, data).then(({ isSuccess, creche, reason }) => {
               if (isSuccess) {
                 // MST 업데이트
                 setCrechePetsitter(creche)
               } else {
-                alertModal(
-                  `강아지 크기 별 추가 요금 업데이트 실패`,
-                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
-                )
+                alertModal(`강아지 크기 별 추가 요금 업데이트 실패`, `${reason}`)
               }
             })
             additionalPriceBottomSheetModalRef.current?.close()
