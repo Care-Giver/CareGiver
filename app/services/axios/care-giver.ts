@@ -69,7 +69,7 @@ export const getConfirmedBookings = async (): Promise<GetConfirmedBookingsResult
       `${BASE_URL}/care-giver/confirmed-bookings`,
     )
     if (!response.data.ok) {
-      alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error}`)
+      alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, confirmedBookings: [] }
     }
     return { isSuccess: true, confirmedBookings: response.data.confirmedBookings }
@@ -103,7 +103,7 @@ export const getAllBookings = async (): Promise<GetAllBookingsResult> => {
       { headers: { "Cache-Control": "no-store" } }, //! DO NOT REMOVE@
     )
     if (!response.data.ok) {
-      alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error}`)
+      alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, receivedBookings: [] }
     }
     return { isSuccess: true, receivedBookings: response.data.receivedBookings }

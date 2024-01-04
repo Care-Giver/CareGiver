@@ -2,6 +2,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
+import { alertModal } from "../../utils/alert-modal"
 
 export interface CreateCrecheBookingRequestBody {
   crecheId: number
@@ -342,5 +343,81 @@ export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams |
   } catch (error) {
     console.error("[getFirstPreviousBooking] catch error >>>", error)
     return null
+  }
+}
+
+interface ResponseCrecheBookingRequestBody {
+  response: boolean // true 이면 "수락", false 이면 "거절"
+}
+type ResponseCrecheBookingResult =
+  | {
+      isSuccess: true // 성공
+    }
+  | {
+      isSuccess: false // 실패
+    }
+/**
+ * [케어기버 전용 API]
+ * [펫시터 ➡️ 클라이언트]
+ * 입력받은 "위탁"서비스 예약 id의 수락 여부를  응답한다.
+ */
+export const responseCrecheBooking = async (
+  crecheBookingId: number,
+  post: ResponseCrecheBookingRequestBody,
+): Promise<ResponseCrecheBookingResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(
+      `${BASE_URL}/booking/creche/response/${crecheBookingId}`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response?.data?.ok) {
+      alertModal("위탁 예약 수락에 실패했습니다.", `${response.data?.error?.message}`)
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("위탁 예약 수락에 실패했습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false }
+  }
+}
+
+type ResponseVisitingBookingRequestBody = ResponseCrecheBookingRequestBody
+type ResponseVisitingBookingResult = ResponseCrecheBookingResult
+/**
+ * [케어기버 전용 API]
+ * [펫시터 ➡️ 클라이언트]
+ * 입력받은 id의 "방문" 예약 정보를 응답한다.
+ */
+export const responseVisitingBooking = async (
+  visitingBookingId: number,
+  post: ResponseVisitingBookingRequestBody,
+): Promise<ResponseVisitingBookingResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(
+      `${BASE_URL}/booking/visiting/response/${visitingBookingId}`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response?.data?.ok) {
+      alertModal("방문 예약 수락에 실패했습니다.", `${response.data?.error?.message}`)
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("방문 예약 수락에 실패했습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false }
   }
 }

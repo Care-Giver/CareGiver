@@ -161,10 +161,7 @@ export const CgBookingsStack = () => {
       <Stack.Screen
         name="cg-booking-list-screen"
         component={CgBookingListScreen}
-        options={{
-          title: "신청/거절 내역",
-          header: (props) => <GobackAndTitleHeader {...props} />,
-        }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   )
