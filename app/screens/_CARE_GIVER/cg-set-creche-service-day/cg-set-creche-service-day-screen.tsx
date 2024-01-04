@@ -97,8 +97,12 @@ export const CgSetCrecheServiceDayScreen: FC<
 
   // 저장하기 버튼 활성화 핸들링
   useEffect(() => {
-    setIsSaveButtonActivated((isAvailableDate && !isAvailable) || (!isAvailableDate && isAvailable))
-  }, [isAvailable, isAvailableDate])
+    setIsSaveButtonActivated(
+      (isAvailableDate && !isAvailable) ||
+        (!isAvailableDate && isAvailable) ||
+        (availableDate ? fee !== availableDate.fee : false),
+    )
+  }, [availableDate, fee, isAvailable, isAvailableDate])
 
   const toggleSwitch = () => {
     setIsAvailable((prev) => !prev)
