@@ -52,7 +52,7 @@ export const CgBookingListScreen: FC<
       rejectResponse,
       confirmResponse,
     },
-    petsitterStore: { serviceType },
+    petsitterStore: { serviceType, createChannelWith },
   } = useStores()
 
   const [mode, setMode] = useState<Mode>("신청")
@@ -67,6 +67,7 @@ export const CgBookingListScreen: FC<
         mode={mode}
         onToggle={() => {
           setMode(mode === "신청" ? "거절" : "신청")
+          createChannelWith("")
         }}
       />
       {/* 카드 */}
@@ -101,10 +102,7 @@ export const CgBookingListScreen: FC<
                       responsor(bookingId, { response: true }).then(({ isSuccess }) => {
                         if (isSuccess) {
                           confirmResponse(bookingId)
-                          // createChannel({
-                          //   myStreamUserId,
-                          //   other: item?.보호자_streamUserId
-                          // })
+                          // createChannelWith(item?.보호자_streamUserId)
                         }
                       })
                     }}
