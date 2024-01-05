@@ -8,10 +8,11 @@ import {
   View,
   ViewStyle,
   Image,
+  Alert,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, goBack } from "#navigators"
+import { NavigatorParamList, goBack, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   DeclineOrConfirmButton,
@@ -67,7 +68,6 @@ export const CgBookingListScreen: FC<
         mode={mode}
         onToggle={() => {
           setMode(mode === "신청" ? "거절" : "신청")
-          createChannelWith("")
         }}
       />
       {/* 카드 */}
@@ -102,7 +102,23 @@ export const CgBookingListScreen: FC<
                       responsor(bookingId, { response: true }).then(({ isSuccess }) => {
                         if (isSuccess) {
                           confirmResponse(bookingId)
-                          // createChannelWith(item?.보호자_streamUserId)
+                          createChannelWith(item.clientStreamToken)
+                          Alert.alert(
+                            "예약 수락 완료!",
+                            `보호자와의 채팅방이 생성되었습니다.\n채팅 탭에서 확인해보세요!`,
+                            [
+                              {
+                                text: "취소",
+                                // onPress: () => console.log("취소"),
+                              },
+                              {
+                                text: "이동하기",
+                                //@ts-ignore
+                                onPress: () => navigate("Chats"),
+                              },
+                            ],
+                            { cancelable: true },
+                          )
                         }
                       })
                     }}

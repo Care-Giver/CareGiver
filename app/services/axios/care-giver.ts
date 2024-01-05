@@ -15,7 +15,8 @@ export enum BookingStatus {
 
 export type CgBooking = {
   // 공통 속성
-  name: string
+  name: string // 보호자 이름
+  clientStreamToken: string // 보호자의 streamUserId
   services: string[]
   pets: Pet[]
   address: string

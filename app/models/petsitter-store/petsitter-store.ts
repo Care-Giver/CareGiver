@@ -326,13 +326,13 @@ export const PetsitterStoreModel = types
         )
       }
 
-      // // 채팅방 생성
-      // const channel = streamChatClient.channel("messaging", {
-      //   members: [myStreamUserId, otherStreamUserId],
-      //   // name: parsedEmail,
-      //   // userType: type,
-      // })
-      // channel.create()
+      // 채팅방 생성
+      const channel = streamChatClient.channel("messaging", {
+        members: [myStreamUserId, otherStreamUserId],
+        // name: parsedEmail,
+        // userType: type,
+      })
+      channel.create()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
