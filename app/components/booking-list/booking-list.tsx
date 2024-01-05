@@ -28,7 +28,7 @@ export const CustomDayComponent = ({ date, state, selected }) => {
     return week[new Date(date.timestamp).getDay()]
   }
   const textBgBdSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
+    if (date.dateString === selected) {
       return GIVER_CASUAL_NAVY
     }
     if (state === "today") {
@@ -38,7 +38,7 @@ export const CustomDayComponent = ({ date, state, selected }) => {
   }
 
   const textColorSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
+    if (date.dateString === selected) {
       return GIVER_CASUAL_NAVY
     }
 
@@ -83,30 +83,28 @@ export const CustomDayComponent = ({ date, state, selected }) => {
 }
 
 export const BookingList = observer(function BookingList(props: BookingListProps) {
-  const { style, bookings } = props
+  const { bookings } = props
 
   const sections = [
     {
       /**default */
-      title: "2023-06-25",
+      title: "2023-01-06",
       data: [
         {
-          name: "Meeting",
-          serviceType: "",
-          petname: "",
-          species: "",
-          petservices: ["?"],
-          address: "",
-          time: "10:00 AM",
-          height: 50,
-          day: "2023-06-26",
+          name: "호중",
+          services: [],
+          pets: [],
+          address: "한양대학 1길",
+          status: "Pending",
+          crecheBookingId: 1,
+          startDate: "2024-01-06T17:00:00.000Z",
+          endDate: "2024-01-06T17:00:00.000Z",
         },
       ],
     },
   ]
 
   bookings.forEach((item, idx) => {
-    console.log(item.services)
     // const dataprop = {
     //   name: item.name,
     //   serviceType: "creche",
@@ -120,22 +118,29 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     // }
     // TODO: 실제 data 에서 가져오도록 수정해야 함. 현재는 아래처럼 더미데이터로 하드 코딩되어 있음/
     const dataprop = {
-      id: "1",
-      name: "강영묵",
-      serviceType: "visit",
-      caregiverType: "trainer",
-      petname: "봉봉이",
-      species: "푸들",
-      petservices: ["산책, 목욕, 미용"],
-      address: "경기도 성남시 판교동",
+      id: item.startTime,
+      name: item.name,
+      serviceType: item.services,
+      petname: "",
+      species: "",
+      petservices: ["?"],
+      address: "",
+      startTime: "2024-01-06T17:00:00.000Z",
+      endTime: "2024-01-06T17:00:00.000Z",
+      day: "2024-01-06",
     }
-    const newData = { title: String(idx), data: [dataprop] }
+    const newData = { title: String(idx), data: [item] }
     sections.push(newData)
   })
 
-  const renderItem = ({ item }) => {
-    //console.log(item.petservices)
-    if (item.day === selected) {
+  const renderItem = (prop) => {
+    const { item } = prop
+    const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
+    console.log("item>>>", item)
+    const dateOrTime =
+      visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
+    //console.log("item >>>", item)
+    if (dateOrTime.substring(0, 10) === selected) {
       return (
         <View
           style={{
@@ -153,21 +158,19 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
+            {/* <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16> */}
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
-            name={item.name}
-            petname={item.petname}
-            species={item.species}
-            serviceType={item.serviceType}
-            petservices={item.petservices}
-            address={item.address}
-            caregiverType="petsitter"
+            booking={item}
+            //TODO 방문 or 위탁 판단필요
+            visOrCre={visOrCre}
           />
         </View>
       )
+    } else {
+      return null
     }
   }
 

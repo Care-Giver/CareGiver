@@ -32,12 +32,13 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 const queryClient = new QueryClient()
 
-if (__DEV__) {
-  // @ts-ignore
-  import("react-query-native-devtools").then(({ addPlugin }) => {
-    addPlugin({ queryClient })
-  })
-}
+//* 호중 - 빌드에러로 인한 주석처리
+// if (__DEV__) {
+//   // @ts-ignore
+//   import("react-query-native-devtools").then(({ addPlugin }) => {
+//     addPlugin({ queryClient })
+//   })
+// }
 
 /**
  * This is the root component of our app.
