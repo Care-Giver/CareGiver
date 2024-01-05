@@ -86,10 +86,13 @@ export const CgManageBookingScreen: FC<
           padding: 16,
         }}
       >
-        <PreBol14 text="이곳은 '진행중'과 '완료된' 예약이 표출되는 영역입니다." mv={12} />
+        <PreBol14
+          text={`이곳은 '진행예정, '진행중' 그리고 '완료된'\n예약이 표출되는 영역입니다.`}
+          mv={12}
+        />
         <PreBol14 text="현재 개발중인 영역입니다. 🏗️" />
         <PreReg14
-          text={`모든 예약 개수: ${allBookings.length}\n응답을 기다리는 예약 개수: ${waitingBookings.length}\n거절한 예약 개수: ${rejectedBookings.length}\n수락하거나 진행중인 예약 개수: ${confirmedBookings.length}`}
+          text={`'모든' 예약 개수: ${allBookings.length}\n'응답을 기다리는' 예약 개수: ${waitingBookings.length}\n'거절'한 예약 개수: ${rejectedBookings.length}\n'수락'하거나 '진행중'인 예약 개수: ${confirmedBookings.length}`}
         />
       </View>
 

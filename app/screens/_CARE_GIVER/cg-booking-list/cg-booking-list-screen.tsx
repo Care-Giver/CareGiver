@@ -17,7 +17,6 @@ import {
   DeclineOrConfirmButton,
   DivisionLine,
   PreBol16,
-  PreBol18,
   PreMed12,
   PreMed16,
   PreReg12,
@@ -26,7 +25,7 @@ import {
   Row,
   Screen,
 } from "#components"
-import { ServiceType, ServiceTypeKorean, useStores } from "#models"
+import { ServiceTypeKorean, useStores } from "#models"
 import {
   BODY,
   BOTTOM_HEIGHT,
@@ -36,7 +35,6 @@ import {
   SHADOW_1,
   SUB_HEAD_LINE,
 } from "#theme"
-import { formatDate } from "../../../utils/format"
 import { CgBooking, responseCrecheBooking, responseVisitingBooking } from "#axios"
 import { format, parseISO } from "date-fns"
 import { ko } from "date-fns/locale"
@@ -103,8 +101,10 @@ export const CgBookingListScreen: FC<
                       responsor(bookingId, { response: true }).then(({ isSuccess }) => {
                         if (isSuccess) {
                           confirmResponse(bookingId)
-                          // TODO: 채팅 방 생성
-                          // TODO: 채팅방 생성 알림 표시
+                          // createChannel({
+                          //   myStreamUserId,
+                          //   other: item?.보호자_streamUserId
+                          // })
                         }
                       })
                     }}
@@ -121,11 +121,11 @@ export const CgBookingListScreen: FC<
             style={{
               alignSelf: "center",
               alignItems: "center",
-              paddingTop: 120,
+              marginVertical: "50%",
             }}
           >
             <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
-            <PreMed18 text={`${mode}한 예약이 내역이 없어요 😲`} />
+            <PreMed18 text={`${mode}한 예약이 내역이 없어요.`} />
           </View>
         }
         style={{
