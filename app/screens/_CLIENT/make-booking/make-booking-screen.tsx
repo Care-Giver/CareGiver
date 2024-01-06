@@ -10,6 +10,7 @@ import {
   PreBol14,
   PreBol16,
   RowRoundedButton,
+  TopTipBox,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
 import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, palette } from "#theme"
@@ -18,6 +19,7 @@ import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
 import { images } from "#images"
 import { alertModal } from "../../../utils/alert-modal"
+import { t } from "i18n-js"
 
 export type BookingRequest = {
   petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치
@@ -38,8 +40,6 @@ export const MakeBookingScreen: FC<
   const { key, service, selectedPetIds, selectedTime, address } = route.params
   const isKeyboardShown = useKeyboardShown()
   const isButtonShown = !isKeyboardShown
-  console.log("selectedTime 2", selectedTime)
-  console.log("address", address)
 
   /**
    * "방문전용" [유저인풋 텍스트] 주소
@@ -188,12 +188,10 @@ export const MakeBookingScreen: FC<
   return (
     <Screen testID="MakeBooking" type="View">
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false} enableOnAndroid>
-        <View style={styles.topTipBox}>
-          <PreReg12
-            color={palette.black}
-            text={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
-          />
-        </View>
+        <TopTipBox
+          desc={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
+          style={{ marginTop: 10 }}
+        />
 
         {/* [방문 ONLY] 펫시터가 방문할 주소 입력 */}
         {key === "visiting" ? (
@@ -350,14 +348,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     bottom: BOTTOM_HEIGHT,
-  },
-  topTipBox: {
-    width: "100%",
-    height: 35,
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    marginTop: 10,
-    backgroundColor: "#F1F1F4",
-    borderRadius: 8,
   },
 })
