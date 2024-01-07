@@ -6,6 +6,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CareSummary,
   CustomModal,
   DivisionLine,
   PaymentTool,
@@ -17,7 +18,7 @@ import {
   Screen,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
+import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
@@ -114,34 +115,35 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       })
     }
 
+    const serviceTypeKorean = key === "creche" ? "위탁" : "방문"
+
     return (
       <Screen testID="Payment" style={{ paddingHorizontal: 0 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* CONTENT 시작, paddingHorizontal:16 */}
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <View style={styles.bookingInfo}>
-              <PreBol14 text="예약 정보" />
-              {/* 방문, 펫시터 Box 컴포넌트 가져오기 */}
+              <PreBol16 text="예약 정보" />
             </View>
 
             <DivisionLine mt={12} />
-            <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={24} color={BODY} />
-            {/* 맡길 반려동물 컴포넌트 가져오기 */}
-            <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text={service[key].address} mb={24} color={BODY} />
-            <PreMed14 text="예약 일정" mb={8} />
-            <PreReg14
-              text={`${selectedTime.start.slice(0, 10)} - ${selectedTime.end.slice(0, 10)}`}
-              mb={24}
-              color={BODY}
+            <PreBol14 text="담당 케어기버" color={SUB_HEAD_LINE} mb={8} mt={15} />
+            <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={36} color={BODY} />
+
+            <CareSummary
+              address={service[key].address}
+              start={selectedTime.start.slice(0, 10)}
+              end={selectedTime.end.slice(0, 10)}
+              petIds={selectedPetIds}
+              serviceTypeKorean={serviceTypeKorean}
+              showServiceType={true}
+              // style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
             />
           </View>
 
           <DivisionLine height={6} mb={24} />
 
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-            <PreBol14 text="결제 수단" mb={14} />
+            <PreBol16 text="결제 수단" mb={14} />
             <DivisionLine />
             {/* 결제 수단 컴포넌트 시작 */}
             <View
@@ -209,7 +211,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
           {amount && (
             <View style={styles.priceContainer}>
-              <PreBol14 text="요금 세부 정보" mb={13} />
+              <PreBol16 text="요금 세부 정보" mb={13} />
               <DivisionLine />
               {/* 가격 테이블  */}
               <View style={styles.table}>

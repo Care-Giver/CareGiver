@@ -37,10 +37,11 @@ import {
   SUB_HEAD_LINE,
 } from "#theme"
 import { CgBooking, responseCrecheBooking, responseVisitingBooking } from "#axios"
-import { format, parseISO } from "date-fns"
+import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import { HEADER_ROOT } from "../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
+import { formatSchedule } from "../../../utils/format"
 
 export const CgBookingListScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-booking-list-screen">
@@ -76,11 +77,11 @@ export const CgBookingListScreen: FC<
         data={bookings}
         renderItem={({ item, index }) => {
           const bookingId = item[bookingIdProp]
-          const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
+          const serviceTypeKorean = item?.crecheBookingId ? "위탁" : "방문"
           return (
             <BookingInfoCardWithButton
               booking={item}
-              visOrCre={visOrCre}
+              serviceTypeKorean={serviceTypeKorean}
               style={{
                 marginTop: index === 0 ? 0 : 20,
               }}
@@ -197,14 +198,14 @@ interface BookingInfoCardWithActionButtonProps {
   booking: CgBooking
   buttonComponent?: ReactNode
   index: number
-  visOrCre: ServiceTypeKorean | "ERR"
+  serviceTypeKorean: ServiceTypeKorean
   mode: Mode
   style?: StyleProp<ViewStyle>
 }
 const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionButton(
   props: BookingInfoCardWithActionButtonProps,
 ) {
-  const { booking, buttonComponent, index, visOrCre, mode, style } = props
+  const { booking, buttonComponent, index, serviceTypeKorean, mode, style } = props
   const { pets, address, name } = booking
 
   const names = pets.map((v) => ({
@@ -214,32 +215,14 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
   const postedAt = format(new Date(), "yyyy.MM.dd(eee) HH:mm", { locale: ko }) //TODO: 현재 시간이 아니라, createAt 칼럼 값으로 수정 할 것.
   const petsName = names.map((v) => v.petName).join(" / ")
   const speciesName = names.map((v) => v.speciesName).join(" / ")
-  let schedule = ""
-  switch (visOrCre) {
-    case "위탁":
-      //! replace("Z", "+09:00") 는 현재 케어기버 DB 에 Time Zone Offset 이 없기 때문에 추가해준 것이다.
-      //TODO: DB 규칙 바뀌면, 코드 수정할 것.
-      schedule = `${format(parseISO(booking?.startDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
-        locale: ko,
-      })} - ${format(parseISO(booking?.endDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
-        locale: ko,
-      })}`
-      break
-    case "방문":
-      schedule = `${format(
-        parseISO(booking?.startTime.replace("Z", "+09:00")),
-        "yyyy.MM.dd(eee) HH:mm",
-        {
-          locale: ko,
-        },
-      )} - ${format(parseISO(booking?.endTime.replace("Z", "+09:00")), "HH:mm", {
-        locale: ko,
-      })}`
-      break
-    default:
-      schedule = "ERR"
-      break
-  }
+
+  const startProp = serviceTypeKorean === "위탁" ? "startDate" : "startTime"
+  const endProp = serviceTypeKorean === "위탁" ? "endDate" : "endTime"
+  const schedule = formatSchedule({
+    start: booking[startProp],
+    end: booking[endProp],
+    serviceTypeKorean: serviceTypeKorean,
+  })
 
   const allStyles = Object.assign(
     {},
@@ -271,7 +254,11 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
       <PreBol16 text={`${name} 님`} color={SUB_HEAD_LINE} />
       <PreReg14 text={`펫: ${petsName}`} color={BODY} style={styles2.content} />
       <PreReg14 text={`종: ${speciesName}`} color={BODY} style={styles2.contentDetail} />
-      <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles2.contentDetail} />
+      <PreReg14
+        text={`케어 방식: ${serviceTypeKorean} 펫시팅`}
+        color={BODY}
+        style={styles2.contentDetail}
+      />
       <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles2.contentDetail} />
       <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles2.contentDetail} />
 

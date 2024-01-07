@@ -1,3 +1,7 @@
+import { ServiceType, ServiceTypeKorean } from "#models"
+import { format, parseISO } from "date-fns"
+import { ko } from "date-fns/locale"
+
 /**
  금액(number)을 원화 표기(string)로 바꿔준다
  ex: 27000 -> 27,000원
@@ -106,4 +110,50 @@ export const formatDate = (date: Date): string => {
     (date.getDate() < 10 ? "0" : "") +
     date.getDate().toString()
   return formatted
+}
+
+type FormatScheduleProps = {
+  start: string // 케어 시작 시각 ISO date string: "2022-12-31T23:59:59.999Z"
+  end: string // 케어 종료 시각 ISO date string: "2022-12-31T23:59:59.999Z"
+  serviceType?: ServiceType
+  serviceTypeKorean?: ServiceTypeKorean
+}
+/**
+ * 케어 일정을 변환 해줍니다.
+ * 예)
+ * - 인풋
+ *   start: "2022-09-26T10:00:00.000Z"
+ *   end: "2022-09-26T14:00:00.000Z"
+ *   serviceTypeKorean: "방문"
+ *
+ * - 결과
+ *   23.09.26(월) 10시-14시
+ */
+export const formatSchedule = (props: FormatScheduleProps) => {
+  const { start, end, serviceType, serviceTypeKorean } = props
+  let schedule = ""
+  switch (serviceType || serviceTypeKorean) {
+    case "creche":
+    case "위탁":
+      //! replace("Z", "+09:00") 는 현재 케어기버 DB 에 Time Zone Offset 이 없기 때문에 추가해준 것이다.
+      //TODO: DB 규칙 바뀌면, 코드 수정할 것.
+      schedule = `${format(parseISO(start.replace("Z", "+09:00")), "yy.MM.dd(eee)", {
+        locale: ko,
+      })} - ${format(parseISO(end.replace("Z", "+09:00")), "yy.MM.dd(eee)", {
+        locale: ko,
+      })}`
+      break
+    case "visiting":
+    case "방문":
+      schedule = `${format(parseISO(start.replace("Z", "+09:00")), "yy.MM.dd(eee) HH:mm", {
+        locale: ko,
+      })} - ${format(parseISO(end.replace("Z", "+09:00")), "HH:mm", {
+        locale: ko,
+      })}`
+      break
+    default:
+      schedule = "ERR"
+      break
+  }
+  return schedule
 }
