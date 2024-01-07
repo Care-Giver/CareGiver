@@ -91,7 +91,7 @@ export const createVisitingBooking = async (
   }
 }
 
-interface CrecheBooking {
+export interface CrecheBooking {
   status: string
   services: string
   crecheId: string
@@ -103,7 +103,7 @@ interface CrecheBooking {
   request: string
 }
 
-interface VisitingBooking {
+export interface VisitingBooking {
   id: number
   createAt: string
   updatedAt: string
@@ -195,6 +195,7 @@ interface PreviousBookingResponse extends GeneralResponse {
 }
 
 /**
+ * (보호자 용)
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<CrecheBooking[]>}
  */
@@ -221,7 +222,37 @@ export const getCrechePetsitters = async (userId: number): Promise<CrecheBooking
   }
 }
 
+interface GetCrecheBookingResponse extends GeneralResponse {
+  crecheBooking: CrecheBooking
+}
+export const getCrecheBooking = async (crecheBookingId: number): Promise<CrecheBooking | null> => {
+  try {
+    console.log("♦️ CALLED | getCrecheBooking")
+    const response = await axios.get<GetCrecheBookingResponse>(
+      `${BASE_URL}/booking/creche/${crecheBookingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 위탁 예약을 읽어오는데 실패했습니다. crecheBookingId: ${crecheBookingId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+
+    console.log("response.data.crecheBooking", response.data.crecheBooking)
+    return response.data.crecheBooking
+  } catch (error) {
+    alertModal(
+      `해당 위탁 예약을 읽어오는데 실패했습니다. crecheBookingId: ${crecheBookingId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
+  }
+}
+
 /**
+ * (보호자 용)
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<VisitingBooking[]>}
  */
@@ -247,6 +278,36 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
   }
 }
 
+interface GetVisitingBookingResponse extends GeneralResponse {
+  visitingBooking: VisitingBooking
+}
+export const getVisitingBooking = async (
+  visitingBookingId: number,
+): Promise<VisitingBooking | null> => {
+  try {
+    const response = await axios.get<GetVisitingBookingResponse>(
+      `${BASE_URL}/booking/visiting/${visitingBookingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 방문 예약을 읽어오는데 실패했습니다. visitingBookingId: ${visitingBookingId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+
+    console.log("response.data", response.data)
+    return response.data.visitingBooking
+  } catch (error) {
+    alertModal(
+      `해당 방문 예약을 읽어오는데 실패했습니다. visitingBookingId: ${visitingBookingId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
+  }
+}
+
 /**
  * 로그인한 유저의 진행중인 예약 내역을 읽어온다.
  * @return {Promise<CurrentBooking[]>}
@@ -262,7 +323,7 @@ export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
       return error
     }
 
-    // console.log("[getCurrentBookings] response.data >>> ", response.data)
+    console.log("[getCurrentBookings] response.data >>> ", response.data)
     const currentBookings = response.data.currentBookings.map((value: CurrentBooking) => ({
       ...value,
       ratings: ratingRound(value.ratings),
