@@ -169,9 +169,9 @@ export const PastBooking = (props: PastBookingProps) => {
 
       {/* //* 예약 정보 */}
       <View style={styles.bookingInfo}>
-        {/* //? 케어기버 이름 (*** 펫시터) */}
+        {/* //? 케어기버 이름 */}
         <Row style={{ justifyContent: "space-between" }}>
-          <PreReg14 text={`${petsitterName} 펫시터`} color={DISABLED} />
+          <PreReg14 text={`${petsitterName}`} color={DISABLED} />
           {/* //? 찜 버튼 */}
           <Pressable onPress={handleLikeButton}>
             <Image
