@@ -37,6 +37,7 @@ export const styles = StyleSheet.create({
 
   typeBtn: {
     backgroundColor: "rgba(17, 17, 17, 0.5)",
+    borderWidth: 0,
   },
 
   bookingInfo: {

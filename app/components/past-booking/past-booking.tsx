@@ -11,7 +11,7 @@ import {
   PreReg14,
 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "../../../assets/images"
-import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE } from "../../theme"
+import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE, palette } from "../../theme"
 import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
@@ -159,7 +159,11 @@ export const PastBooking = (props: PastBookingProps) => {
             text={serviceType === "creche" ? "위탁" : "방문"}
             style={styles.typeBtn}
           />
-          <CaregiverTypeButton text={"펫시터"} style={[styles.typeBtn, { marginLeft: 6 }]} />
+          <CaregiverTypeButton
+            text={"펫시터"}
+            textColor={palette.white}
+            style={{ ...styles.typeBtn, marginLeft: 6 }}
+          />
         </Row>
       </ImageBackground>
 
