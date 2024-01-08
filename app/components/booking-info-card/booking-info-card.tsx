@@ -10,6 +10,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   DivisionLine,
   PreReg14,
+  PreMed12,
 } from "#components" //묵 추가
 import {
   SUB_HEAD_LINE,
@@ -85,81 +86,42 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
   }
 
   return (
-    <View style={[styles.container, SHADOW_1, style]}>
-      <Row>
-        <PreBol16
+    <View style={[styles.root, SHADOW_1, style]}>
+      <Row style={styles.header}>
+        <PreMed12
           text={`${booking.name} 님`} // 실제 적용 시에는 props.name으로
           color={SUB_HEAD_LINE}
           style={{ marginRight: 20 }}
         />
+        <TouchableOpacity style={styles.goToDetail}>
+          <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
+        </TouchableOpacity>
       </Row>
 
       <DivisionLine mv={8} />
       <PreBol16 text={`${name} 님`} color={SUB_HEAD_LINE} />
-      <PreReg14 text={`펫: ${petsName}`} color={BODY} style={styles2.content} />
-      <PreReg14 text={`종: ${speciesName}`} color={BODY} style={styles2.contentDetail} />
-      <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles2.contentDetail} />
-      <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles2.contentDetail} />
-      <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles2.contentDetail} />
+      <PreReg14 text={`펫: ${petsName}`} color={BODY} style={styles.content} />
+      <PreReg14 text={`종: ${speciesName}`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles.contentDetail} />
     </View>
   )
 })
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     width: 285,
-    height: 148,
-    paddingLeft: 22,
-    paddingRight: 17,
-    paddingTop: 20,
+    height: "auto",
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 16,
     borderRadius: 8,
     backgroundColor: "white",
   },
 
-  serviceTypeStyle: {
-    width: 36,
-    height: 21,
-    borderRadius: 3,
-    backgroundColor: GIVER_CASUAL_NAVY,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    marginRight: 3,
-  },
-
-  caregiverTypeStyle: {
-    width: 46,
-    height: 21,
-    borderRadius: 3,
-    backgroundColor: GIVER_CASUAL_NAVY,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    marginRight: 3,
-  },
-
-  content: {
-    marginTop: 12,
-  },
-
-  contentDetail: {
-    marginTop: 4,
-  },
-
-  image: {
-    width: 16,
-    height: 16,
-  },
-})
-
-const styles2 = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: "auto",
-    padding: BASIC_BACKGROUND_PADDING_WIDTH,
-    borderRadius: 8,
-    backgroundColor: "white",
+  header: {
+    justifyContent: "space-between",
   },
 
   blueDot: {
