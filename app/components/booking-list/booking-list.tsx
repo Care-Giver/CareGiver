@@ -104,35 +104,13 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     },
   ]
 
+  //* AgendaList컴포넌트의 데이터 형식인 sections을 위한 처리
   bookings.forEach((item, idx) => {
-    // const dataprop = {
-    //   name: item.name,
-    //   serviceType: "creche",
-    //   petname: item.pets[0].pet.name,
-    //   species: item.pets[0].pet.species.name,
-    //   petservices: item.services,
-    //   address: item.address,
-    //   time: item.startTime,
-    //   height: 50,
-    //   day: item.startTime.substring(0, 10),
-    // }
-    // TODO: 실제 data 에서 가져오도록 수정해야 함. 현재는 아래처럼 더미데이터로 하드 코딩되어 있음/
-    const dataprop = {
-      id: item.startTime,
-      name: item.name,
-      serviceType: item.services,
-      petname: "",
-      species: "",
-      petservices: ["?"],
-      address: "",
-      startTime: "2024-01-06T17:00:00.000Z",
-      endTime: "2024-01-06T17:00:00.000Z",
-      day: "2024-01-06",
-    }
     const newData = { title: String(idx), data: [item] }
     sections.push(newData)
   })
 
+  //* AgendaList컴포넌트에서 렌더링을 위한 부분
   const renderItem = (prop) => {
     const { item } = prop
     const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
@@ -158,8 +136,8 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            {/* <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16> */}
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
