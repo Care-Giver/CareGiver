@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { StyleProp, ViewStyle, View, Image, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { images } from "#images"
@@ -104,13 +104,25 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     },
   ]
 
-  //* AgendaList컴포넌트의 데이터 형식인 sections을 위한 처리
+  // useEffect(() => {
+  //   //* AgendaList컴포넌트의 데이터 형식인 sections을 위한 처리
+  //   bookings.forEach((item, idx) => {
+  //     console.log("idx >>>", idx)
+  //     console.log("item >>>", item)
+  //     const newData = { title: String(idx), data: [item] }
+  //     sections.push(newData)
+  //   })
+  //   //@ts-ignore
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
   bookings.forEach((item, idx) => {
+    //console.log("idx >>>", idx)
+    //console.log("item >>>", item)
     const newData = { title: String(idx), data: [item] }
     sections.push(newData)
   })
-
   //* AgendaList컴포넌트에서 렌더링을 위한 부분
+  //TODO 첫 렌더링시 마지막 아이템 인식 못하는 문제
   const renderItem = (prop) => {
     const { item } = prop
     const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
@@ -118,6 +130,8 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     const dateOrTime =
       visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
     //console.log("item >>>", item)
+    //console.log("dateOrTime.substring(0, 10) >>>", dateOrTime.substring(0, 10))
+    //console.log("selected >>>", selected)
     if (dateOrTime.substring(0, 10) === selected) {
       return (
         <View

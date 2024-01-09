@@ -20,6 +20,7 @@ import {
   BODY,
   CARE_NATURAL_BLUE,
   LIGHT_LINE,
+  SUCCESS_BLUE,
 } from "#theme" // 묵 추가
 import { images } from "#images"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -50,14 +51,28 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
   //const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
 
   const { pets, address, name } = booking
-
-  const names = pets.map((v) => ({
-    petName: v.pet?.name,
-    speciesName: v.pet?.species.name,
-  }))
-  const postedAt = format(new Date(), "yyyy.MM.dd(eee) HH:mm", { locale: ko }) //TODO: 현재 시간이 아니라, createAt 칼럼 값으로 수정 할 것.
+  console.log("pets >>>", pets)
+  //* 예약 상태
+  const status =
+    booking.status === "Pending"
+      ? "케어 예정"
+      : booking.status === "Proceeding"
+      ? "케어 진행중"
+      : "ERR"
+  //TODO 객체타입 확인 필요
+  const names = pets.map((v) => {
+    //console.log("pet >>>>", v)
+    return {
+      petName: v?.name,
+      speciesName: v?.species.name,
+    }
+  })
+  console.log("names >>>", names)
   const petsName = names.map((v) => v.petName).join(" / ")
+  console.log("petName >>>", petsName)
   const speciesName = names.map((v) => v.speciesName).join(" / ")
+  console.log("speciesName >>>", speciesName)
+
   let schedule = ""
   switch (visOrCre) {
     case "위탁":
@@ -86,11 +101,27 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
   }
 
   return (
-    <View style={[styles.root, SHADOW_1, style]}>
+    <View
+      style={[
+        styles.root,
+        SHADOW_1,
+        style,
+        {
+          borderWidth: status === "케어 진행중" ? 2 : null,
+          borderColor: status === "케어 진행중" ? CARE_NATURAL_BLUE : palette.white,
+        },
+      ]}
+    >
       <Row style={styles.header}>
         <PreMed12
-          text={`${booking.name} 님`} // 실제 적용 시에는 props.name으로
-          color={SUB_HEAD_LINE}
+          text={status} // 실제 적용 시에는 props.name으로
+          color={
+            status === "케어 예정"
+              ? SUB_HEAD_LINE
+              : status === "케어 진행중"
+              ? SUCCESS_BLUE
+              : palette.white
+          }
           style={{ marginRight: 20 }}
         />
         <TouchableOpacity style={styles.goToDetail}>
