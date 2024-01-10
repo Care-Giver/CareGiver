@@ -125,13 +125,21 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   //TODO 첫 렌더링시 마지막 아이템 인식 못하는 문제
   const renderItem = (prop) => {
     const { item } = prop
+    if (item === null || item === undefined) {
+      //TODO: 빈 날짜일 경우 UI 처리
+      console.log("item is null or undefined", item)
+      return <PreBol16 text={`${JSON.stringify(item)}`} />
+    }
     const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
-    console.log("item>>>", item)
+    // console.log("item>>>", item)
     const dateOrTime =
       visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
     //console.log("item >>>", item)
     //console.log("dateOrTime.substring(0, 10) >>>", dateOrTime.substring(0, 10))
     //console.log("selected >>>", selected)
+    const startProp = visOrCre === "방문" ? "startTime" : "startDate"
+    const endProp = visOrCre === "방문" ? "endTime" : "endDate"
+
     if (dateOrTime.substring(0, 10) === selected) {
       return (
         <View
@@ -150,8 +158,8 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item[startProp].substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item[endProp].substring(11, 16)}</PreBol16>
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
