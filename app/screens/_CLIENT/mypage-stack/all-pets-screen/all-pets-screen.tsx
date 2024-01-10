@@ -15,8 +15,8 @@ import {
 } from "#components"
 import { HEAD_LINE, SUB_HEAD_LINE, LBG, GIVER_CASUAL_NAVY, BOTTOM_HEIGHT } from "#theme"
 import { useFocusEffect } from "@react-navigation/native"
-import { Pet, useStores } from "#models"
-import { deletePet } from "#axios"
+import { useStores } from "#models"
+import { Pet, deletePet } from "#axios"
 import { images } from "#images"
 import { appendEulReul } from "../../../../utils/format"
 

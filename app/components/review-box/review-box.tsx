@@ -15,7 +15,7 @@ import { RatingStars } from "./rating-stars/rating-stars"
 import { MIDDLE_LINE, DISABLED } from "../../theme"
 import { PetInfoDropdownBox } from "../_DROPDOWN_BOX/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
-import { Pet } from "#models"
+import { Pet } from "#axios"
 import { alertModal } from "../../utils/alert-modal"
 
 interface ReviewBoxProps {
