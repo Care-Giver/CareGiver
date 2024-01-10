@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { alertModal } from "../../utils/alert-modal"
-import { Pet, PetDetail } from "./pets"
+import { Pet } from "./pets"
 
 export enum BookingStatus {
   WAITING = "Waiting", // 승인 대기
@@ -17,7 +17,7 @@ export type CgBooking = {
   // 공통 속성
   name: string
   services: string[]
-  pets: PetDetail[]
+  pets: Pet[]
   address: string
   status: BookingStatus
 } & {
