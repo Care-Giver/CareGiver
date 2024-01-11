@@ -40,7 +40,7 @@ import {
 } from "@gorhom/bottom-sheet"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import { subMinutes } from "date-fns"
-import { useStores, Pet, ServiceTypeKorean } from "#models"
+import { useStores, ServiceTypeKorean } from "#models"
 import Geolocation from "react-native-geolocation-service"
 import { getDevicePermission } from "./getDevicePermission"
 import { alertModal } from "../../../../utils/alert-modal"
@@ -52,6 +52,7 @@ import {
 } from "../../../_CARE_GIVER/cg-registration-1/addressToCoordinates"
 import { isInKorea } from "../../../../utils/is-in-korea"
 import dayjs from "dayjs"
+import { Pet } from "#axios"
 
 const POSTCODE_HEIGHT = 2200 //TODO: 만약, 우편검색 결과가 짤리는 디바이스가 발견된다면, 크기를 더 늘려야 한다.
 

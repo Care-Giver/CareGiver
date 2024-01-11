@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { StyleProp, ViewStyle, View, Image, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { images } from "#images"
@@ -28,7 +28,7 @@ export const CustomDayComponent = ({ date, state, selected }) => {
     return week[new Date(date.timestamp).getDay()]
   }
   const textBgBdSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
+    if (date.dateString === selected) {
       return GIVER_CASUAL_NAVY
     }
     if (state === "today") {
@@ -38,7 +38,7 @@ export const CustomDayComponent = ({ date, state, selected }) => {
   }
 
   const textColorSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
+    if (date.dateString === selected) {
       return GIVER_CASUAL_NAVY
     }
 
@@ -83,59 +83,56 @@ export const CustomDayComponent = ({ date, state, selected }) => {
 }
 
 export const BookingList = observer(function BookingList(props: BookingListProps) {
-  const { style, bookings } = props
-
-  const sections = [
+  const { bookings } = props
+  let sections = [
     {
-      /**default */
-      title: "2023-06-25",
+      //* default
+      title: "ID",
       data: [
         {
-          name: "Meeting",
-          serviceType: "",
-          petname: "",
-          species: "",
-          petservices: ["?"],
-          address: "",
-          time: "10:00 AM",
-          height: 50,
-          day: "2023-06-26",
+          name: "호중",
+          services: [],
+          pets: [],
+          address: "주소",
+          status: "예약상태",
+          crecheBookingId: 0,
+          startDate: "시작 날짜 또는 시간",
+          endDate: "끝 날짜 또는 시간",
+          startTime: "시작 날짜 또는 시간",
+          endTime: "끝 날짜 또는 시간",
         },
       ],
     },
   ]
 
-  bookings.forEach((item, idx) => {
-    console.log(item.services)
-    // const dataprop = {
-    //   name: item.name,
-    //   serviceType: "creche",
-    //   petname: item.pets[0].pet.name,
-    //   species: item.pets[0].pet.species.name,
-    //   petservices: item.services,
-    //   address: item.address,
-    //   time: item.startTime,
-    //   height: 50,
-    //   day: item.startTime.substring(0, 10),
-    // }
-    // TODO: 실제 data 에서 가져오도록 수정해야 함. 현재는 아래처럼 더미데이터로 하드 코딩되어 있음/
-    const dataprop = {
-      id: "1",
-      name: "강영묵",
-      serviceType: "visit",
-      caregiverType: "trainer",
-      petname: "봉봉이",
-      species: "푸들",
-      petservices: ["산책, 목욕, 미용"],
-      address: "경기도 성남시 판교동",
-    }
-    const newData = { title: String(idx), data: [dataprop] }
-    sections.push(newData)
+  //* API를 통해 받아온 예약내역으로 sections 업데이트
+  sections = bookings.map((item, idx) => {
+    const newData = { title: String(idx), data: [item] }
+    //console.log("newData >>>", newData)
+    return newData
   })
 
-  const renderItem = ({ item }) => {
-    //console.log(item.petservices)
-    if (item.day === selected) {
+  //* AgendaList컴포넌트에서 렌더링을 위한 부분
+  //TODO 첫 렌더링시 마지막 아이템 인식 못하는 문제
+  const renderItem = (prop) => {
+    const { item } = prop
+    console.log("item>>>", item)
+
+    if (item === null || item === undefined) {
+      //TODO: 빈 날짜일 경우 UI 처리
+      console.log("item is null or undefined", item)
+      return <PreBol16 text={`${JSON.stringify(item)}`} />
+    }
+    const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
+    const dateOrTime =
+      visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
+    //console.log("item >>>", item)
+    //console.log("dateOrTime.substring(0, 10) >>>", dateOrTime.substring(0, 10))
+    //console.log("selected >>>", selected)
+    const startProp = visOrCre === "방문" ? "startTime" : "startDate"
+    const endProp = visOrCre === "방문" ? "endTime" : "endDate"
+
+    if (dateOrTime.substring(0, 10) === selected) {
       return (
         <View
           style={{
@@ -153,21 +150,18 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               borderColor: "#F8F8FA",
             }}
           >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item[startProp].substring(11, 16)}</PreBol16>
+            <PreBol16 color={GIVER_CASUAL_NAVY}>{item[endProp].substring(11, 16)}</PreBol16>
           </View>
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
-            name={item.name}
-            petname={item.petname}
-            species={item.species}
-            serviceType={item.serviceType}
-            petservices={item.petservices}
-            address={item.address}
-            caregiverType="petsitter"
+            booking={item}
+            visOrCre={visOrCre}
           />
         </View>
       )
+    } else {
+      return null
     }
   }
 

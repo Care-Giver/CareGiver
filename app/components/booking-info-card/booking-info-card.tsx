@@ -2,11 +2,33 @@ import * as React from "react"
 //import { useState } from "react"
 import { StyleProp, View, ViewStyle, Image, StyleSheet, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreBol16, PreReg12, PreBol12, Row, BASIC_BACKGROUND_PADDING_WIDTH } from "#components" //묵 추가
-import { SUB_HEAD_LINE, SHADOW_1, GIVER_CASUAL_NAVY, palette, BODY } from "#theme" // 묵 추가
+import {
+  PreBol16,
+  PreReg12,
+  PreBol12,
+  Row,
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  DivisionLine,
+  PreReg14,
+  PreMed12,
+} from "#components" //묵 추가
+import {
+  SUB_HEAD_LINE,
+  SHADOW_1,
+  GIVER_CASUAL_NAVY,
+  palette,
+  BODY,
+  CARE_NATURAL_BLUE,
+  LIGHT_LINE,
+  SUCCESS_BLUE,
+} from "#theme" // 묵 추가
 import { images } from "#images"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { PressableButton } from "../_BUTTON/pressable-button/pressable-button"
+import { CgBooking } from "#axios"
+import { format, parseISO } from "date-fns"
+import { ServiceTypeKorean } from "#models"
+import { ko } from "date-fns/locale"
 
 const ROOT: ViewStyle = {
   justifyContent: "center",
@@ -18,139 +40,145 @@ export interface BookingInfoCardProps {
    */
   style?: StyleProp<ViewStyle>
 
-  id: string
+  booking: CgBooking
 
-  /**
-   * 클라이언트 이름
-   */
-  name: string
-
-  /**
-   * 서비스 형태(방문/위탁)
-   */
-  serviceType: "creche" | "visit"
-
-  /**
-   * 서비스 종류(펫시터/훈련사)
-   */
-  caregiverType: "petsitter" | "trainer"
-
-  /**
-   * 펫 이름
-   */
-  petname: string
-
-  /**
-   * 펫 종
-   */
-  species: string
-
-  /**
-   * 펫 서비스 산책 등
-   */
-  petservices: Array<string>
-
-  /**
-   * 케어 장소
-   */
-  address: string
+  visOrCre: ServiceTypeKorean | "ERR"
 }
 
 export const BookingInfoCard = observer(function BookingInfoCard(props: BookingInfoCardProps) {
-  const { style } = props
+  const { style, booking, visOrCre } = props
   //테스트용 useState
   //const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
 
-  const handlePress = () => {
-    alert("버튼 클릭됨")
+  const { pets, address, name } = booking
+  //* 예약 상태
+  const status =
+    booking.status === "Pending"
+      ? "케어 예정"
+      : booking.status === "Proceeding"
+      ? "케어 진행중"
+      : "ERR"
+  //TODO 객체타입 확인 필요
+  const names = pets.map((v) => {
+    //console.log("pet >>>>", v)
+    return {
+      petName: v?.name,
+      speciesName: v?.species.name,
+    }
+  })
+  const petsName = names.map((v) => v.petName).join(" / ")
+  const speciesName = names.map((v) => v.speciesName).join(" / ")
+
+  let schedule = ""
+  switch (visOrCre) {
+    case "위탁":
+      //! replace("Z", "+09:00") 는 현재 케어기버 DB 에 Time Zone Offset 이 없기 때문에 추가해준 것이다.
+      //TODO: DB 규칙 바뀌면, 코드 수정할 것.
+      schedule = `${format(parseISO(booking?.startDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
+        locale: ko,
+      })} - ${format(parseISO(booking?.endDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
+        locale: ko,
+      })}`
+      break
+    case "방문":
+      schedule = `${format(
+        parseISO(booking?.startTime.replace("Z", "+09:00")),
+        "yyyy.MM.dd(eee) HH:mm",
+        {
+          locale: ko,
+        },
+      )} - ${format(parseISO(booking?.endTime.replace("Z", "+09:00")), "HH:mm", {
+        locale: ko,
+      })}`
+      break
+    default:
+      schedule = "ERR"
+      break
   }
 
   return (
-    <View style={[styles.container, SHADOW_1, style]}>
-      <Row>
-        <PreBol16
-          text={`${props.name} 님`} // 실제 적용 시에는 props.name으로
-          color={SUB_HEAD_LINE}
+    <View
+      style={[
+        styles.root,
+        SHADOW_1,
+        style,
+        {
+          borderWidth: status === "케어 진행중" ? 2 : null,
+          borderColor: status === "케어 진행중" ? CARE_NATURAL_BLUE : palette.white,
+        },
+      ]}
+    >
+      <Row style={styles.header}>
+        <PreMed12
+          text={status} // 실제 적용 시에는 props.name으로
+          color={
+            status === "케어 예정"
+              ? SUB_HEAD_LINE
+              : status === "케어 진행중"
+              ? SUCCESS_BLUE
+              : palette.white
+          }
           style={{ marginRight: 20 }}
         />
-
-        <PressableButton
-          defaultViewStyle={styles.serviceTypeStyle}
-          children={() => (
-            <PreBol12
-              color={palette.white}
-              text={props.serviceType === "creche" ? "방문" : "위탁"}
-            />
-          )}
-        />
-
-        <PressableButton
-          defaultViewStyle={styles.caregiverTypeStyle}
-          children={() => (
-            <PreBol12
-              color={palette.white}
-              text={props.caregiverType === "petsitter" ? "펫시터" : "훈련사"}
-            />
-          )}
-        />
-
-        <Pressable onPress={handlePress} style={{ marginLeft: "auto" }}>
-          <Image source={images.arrow_right} style={styles.image} />
-        </Pressable>
+        <TouchableOpacity style={styles.goToDetail}>
+          <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
+        </TouchableOpacity>
       </Row>
 
-      <PreReg12 text={`펫: ${props.petname}`} color={BODY} style={styles.content} />
-      <PreReg12 text={`종: ${props.species}`} color={BODY} style={styles.contentDetail} />
-      <PreReg12 text={`서비스: ${props.petservices}`} color={BODY} style={styles.contentDetail} />
-      <PreReg12 text={`케어 장소: ${props.address}`} color={BODY} style={styles.contentDetail} />
+      <DivisionLine mv={8} />
+      <PreBol16 text={`${name} 님`} color={SUB_HEAD_LINE} />
+      <PreReg14 text={`펫: ${petsName}`} color={BODY} style={styles.content} />
+      <PreReg14 text={`종: ${speciesName}`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles.contentDetail} />
+      <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles.contentDetail} />
     </View>
   )
 })
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     width: 285,
-    height: 148,
-    paddingLeft: 22,
-    paddingRight: 17,
-    paddingTop: 20,
+    height: "auto",
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 16,
     borderRadius: 8,
     backgroundColor: "white",
   },
 
-  serviceTypeStyle: {
-    width: 36,
-    height: 21,
-    borderRadius: 3,
-    backgroundColor: GIVER_CASUAL_NAVY,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    marginRight: 3,
+  header: {
+    justifyContent: "space-between",
   },
 
-  caregiverTypeStyle: {
-    width: 46,
-    height: 21,
-    borderRadius: 3,
-    backgroundColor: GIVER_CASUAL_NAVY,
+  blueDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 6,
+    backgroundColor: CARE_NATURAL_BLUE,
+
+    position: "absolute",
+    left: 10,
+    top: 10,
+    zIndex: 2,
+  },
+
+  goToDetail: {
+    width: "auto",
+    height: 24,
+    paddingHorizontal: 8,
+    borderColor: LIGHT_LINE,
+    borderWidth: 2,
+    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
-    color: "white",
-    marginRight: 3,
+    marginLeft: "auto",
   },
 
   content: {
     marginTop: 12,
   },
-
   contentDetail: {
-    marginTop: 4,
-  },
-
-  image: {
-    width: 16,
-    height: 16,
+    marginTop: 6,
   },
 })

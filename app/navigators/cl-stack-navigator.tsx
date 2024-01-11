@@ -67,10 +67,11 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
+import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/axios/stream"
+import { Pet } from "#axios"
 
 export type SelectedTime = {
   start: string

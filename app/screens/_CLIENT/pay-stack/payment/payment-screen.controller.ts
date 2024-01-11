@@ -129,6 +129,7 @@ export const createBooking = async (props: CreateBookingProps) => {
           "예약 객체 생성 실패",
           "알 수 없는 이유로, 예약 객체 생성에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
         )
+        console.log(bookingResponse)
       }
     }
     // 결제 실패시

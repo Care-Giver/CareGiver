@@ -57,7 +57,10 @@ export const CgManageBookingScreen: FC<
     // Refetch 주기 (milliseconds)
     refetchInterval: INTERVAL,
   })
-  console.log(status, data, error, isFetching)
+
+  //console.log("cgManageBookingScreen >>> ", status, data, error, isFetching)
+  //console.log("cgManageBookingScreen allBookings >>> ", allBookings)
+  //console.log("cgManageBookingScreen confirmedBookings >>> ", confirmedBookings)
 
   useEffect(() => {
     if (!isFetching) {

@@ -25,6 +25,7 @@ type CreateCrecheBookingResult =
     }
   | {
       isSuccess: false // 실패
+      reason?: string // 실패시, 실패이유
       // TODO: 실패시...
     }
 /**
@@ -82,7 +83,7 @@ export const createVisitingBooking = async (
       body,
     )
     if (!response.data.ok) {
-      return { isSuccess: false }
+      return { isSuccess: false, reason: response?.data?.error }
     }
     return { isSuccess: true }
   } catch (error) {

@@ -55,9 +55,9 @@ import {
   palette,
 } from "../../../theme"
 import { Calendar, DateData } from "react-native-calendars"
-import { Pet, useStores } from "../../../models"
+import { useStores } from "../../../models"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { getFavorites } from "#axios"
+import { Pet, getFavorites } from "#axios"
 import { ratingRound } from "../../../utils/format"
 import { alertModal } from "../../../utils/alert-modal"
 
