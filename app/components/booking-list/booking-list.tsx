@@ -84,54 +84,46 @@ export const CustomDayComponent = ({ date, state, selected }) => {
 
 export const BookingList = observer(function BookingList(props: BookingListProps) {
   const { bookings } = props
-
-  const sections = [
+  let sections = [
     {
-      /**default */
-      title: "2023-01-06",
+      //* default
+      title: "ID",
       data: [
         {
           name: "호중",
           services: [],
           pets: [],
-          address: "한양대학 1길",
-          status: "Pending",
-          crecheBookingId: 1,
-          startDate: "2024-01-06T17:00:00.000Z",
-          endDate: "2024-01-06T17:00:00.000Z",
+          address: "주소",
+          status: "예약상태",
+          crecheBookingId: 0,
+          startDate: "시작 날짜 또는 시간",
+          endDate: "끝 날짜 또는 시간",
+          startTime: "시작 날짜 또는 시간",
+          endTime: "끝 날짜 또는 시간",
         },
       ],
     },
   ]
 
-  // useEffect(() => {
-  //   //* AgendaList컴포넌트의 데이터 형식인 sections을 위한 처리
-  //   bookings.forEach((item, idx) => {
-  //     console.log("idx >>>", idx)
-  //     console.log("item >>>", item)
-  //     const newData = { title: String(idx), data: [item] }
-  //     sections.push(newData)
-  //   })
-  //   //@ts-ignore
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
-  bookings.forEach((item, idx) => {
-    //console.log("idx >>>", idx)
-    //console.log("item >>>", item)
+  //* API를 통해 받아온 예약내역으로 sections 업데이트
+  sections = bookings.map((item, idx) => {
     const newData = { title: String(idx), data: [item] }
-    sections.push(newData)
+    //console.log("newData >>>", newData)
+    return newData
   })
+
   //* AgendaList컴포넌트에서 렌더링을 위한 부분
   //TODO 첫 렌더링시 마지막 아이템 인식 못하는 문제
   const renderItem = (prop) => {
     const { item } = prop
+    console.log("item>>>", item)
+
     if (item === null || item === undefined) {
       //TODO: 빈 날짜일 경우 UI 처리
       console.log("item is null or undefined", item)
       return <PreBol16 text={`${JSON.stringify(item)}`} />
     }
     const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
-    // console.log("item>>>", item)
     const dateOrTime =
       visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
     //console.log("item >>>", item)
@@ -164,7 +156,6 @@ export const BookingList = observer(function BookingList(props: BookingListProps
           <BookingInfoCard
             style={{ marginVertical: 8, marginHorizontal: 6 }}
             booking={item}
-            //TODO 방문 or 위탁 판단필요
             visOrCre={visOrCre}
           />
         </View>

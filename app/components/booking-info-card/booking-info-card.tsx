@@ -51,7 +51,6 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
   //const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
 
   const { pets, address, name } = booking
-  console.log("pets >>>", pets)
   //* 예약 상태
   const status =
     booking.status === "Pending"
@@ -67,11 +66,8 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
       speciesName: v?.species.name,
     }
   })
-  console.log("names >>>", names)
   const petsName = names.map((v) => v.petName).join(" / ")
-  console.log("petName >>>", petsName)
   const speciesName = names.map((v) => v.speciesName).join(" / ")
-  console.log("speciesName >>>", speciesName)
 
   let schedule = ""
   switch (visOrCre) {
