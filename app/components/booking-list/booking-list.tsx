@@ -5,7 +5,7 @@ import { images } from "#images"
 import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
 import { GIVER_CASUAL_NAVY } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
-import { PreBol16, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
+import { PreBol16, PreMed18, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { ConfirmedBooking } from "#axios"
 
 export interface BookingListProps {
@@ -113,33 +113,25 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   })
 
   //* AgendaList컴포넌트에서 렌더링을 위한 부분
-  //TODO 첫 렌더링시 마지막 아이템 인식 못하는 문제
   const renderItem = (prop) => {
     const { item } = prop
     console.log("item>>>", item)
 
     if (item === null || item === undefined) {
       //TODO: 빈 날짜일 경우 UI 처리
-      console.log("item is null or undefined", item)
-      return <PreBol16 text={`${JSON.stringify(item)}`} />
+      console.log("item is null or undefined:", `${JSON.stringify(item)}`)
+      return <PreBol16 text={JSON.stringify(item)} />
     }
     const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
     const dateOrTime =
       visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
-    //console.log("item >>>", item)
-    //console.log("dateOrTime.substring(0, 10) >>>", dateOrTime.substring(0, 10))
-    //console.log("selected >>>", selected)
     const startProp = visOrCre === "방문" ? "startTime" : "startDate"
     const endProp = visOrCre === "방문" ? "endTime" : "endDate"
 
+    // 선택된 날짜에 예약 객체 존재
     if (dateOrTime.substring(0, 10) === selected) {
       return (
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
+        <View style={{ display: "flex", flexDirection: "row" }}>
           <View
             style={{
               marginVertical: 16,
@@ -160,8 +152,16 @@ export const BookingList = observer(function BookingList(props: BookingListProps
           />
         </View>
       )
-    } else {
-      return null
+    }
+    // 선택된 날짜에 예약 객체 존재하지 않음
+    else {
+      // TODO - FIXME: 한 개만 렌더링.
+      return (
+        <View style={{ alignSelf: "center", alignItems: "center" }}>
+          <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+          <PreMed18 text={`해당 날짜에는 예약이 없습니다`} />
+        </View>
+      )
     }
   }
 

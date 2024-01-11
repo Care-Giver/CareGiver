@@ -83,14 +83,14 @@ export const CgManageBookingScreen: FC<
           backgroundColor: "rgba(255, 0, 0, 0.2);",
           position: "absolute",
           alignSelf: "center",
-          top: 220,
+          bottom: 80,
           zIndex: 5,
           //
           padding: 16,
         }}
       >
         <PreBol14
-          text={`이곳은 '진행예정, '진행중' 그리고 '완료된'\n예약이 표출되는 영역입니다.`}
+          text={`⬆️ 이곳은 '진행예정, '진행중' 그리고 '완료된'\n예약이 표출되는 영역입니다.`}
           mv={12}
         />
         <PreBol14 text="현재 개발중인 영역입니다. 🏗️" />
