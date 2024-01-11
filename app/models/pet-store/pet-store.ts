@@ -53,6 +53,11 @@ export const PetStoreModel = types
         return false
       }
     },
+
+    getPetsByIds(petIds: number[]) {
+      if (!self.pets) return []
+      return self.pets.filter((pet) => petIds.includes(pet.id))
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type PetStoreType = Instance<typeof PetStoreModel>

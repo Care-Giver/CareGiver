@@ -13,7 +13,11 @@ import _ from "lodash"
 export const CgBookingStoreModel = types
   .model("CgBookingStore")
   .props({
+    // 모든 예약 객체입니다.
     allBookings: types.frozen<CgBooking[]>([]),
+    //
+    // 예약 상태에 따라 분류된 예약 객체들을 저장합니다.
+    // 모두 allBookings 로 부터 유도된 값들입니다.
     confirmedBookings: types.frozen<ConfirmedBooking[]>([]),
     waitingBookings: types.frozen<WaitingBooking[]>([]),
     rejectedBookings: types.frozen<RejectedBooking[]>([]),
@@ -50,6 +54,44 @@ export const CgBookingStoreModel = types
         (booking) => booking.status === BookingStatus.REJECT,
       ) as RejectedBooking[]
       self.setProp("rejectedBookings", rejectedBookings)
+    },
+
+    /**
+     * 보호자로 부터 신청받은 예약 객체를
+     * "거절" 합니다.
+     */
+    rejectResponse(bookingId: number) {
+      const target = _.find(
+        self.waitingBookings,
+        (b) => b?.crecheBookingId === bookingId || b?.visitingBookingId === bookingId,
+      )
+      const newWaitingBookings = _.without(self.waitingBookings, target)
+      self.setProp("waitingBookings", newWaitingBookings)
+
+      const newRejectedBookings = [
+        ...self.rejectedBookings,
+        { ...target, status: BookingStatus.REJECT },
+      ] as RejectedBooking[]
+      self.setProp("rejectedBookings", newRejectedBookings)
+    },
+
+    /**
+     * 보호자로 부터 신청받은 예약 객체를
+     * "수락" 합니다.
+     */
+    confirmResponse(bookingId: number) {
+      const target = _.find(
+        self.waitingBookings,
+        (b) => b?.crecheBookingId === bookingId || b?.visitingBookingId === bookingId,
+      )
+      const newWaitingBookings = _.without(self.waitingBookings, target)
+      self.setProp("waitingBookings", newWaitingBookings)
+
+      const newConfirmedBookings = [
+        ...self.confirmedBookings,
+        { ...target, status: BookingStatus.PENDING },
+      ] as ConfirmedBooking[]
+      self.setProp("confirmedBookings", newConfirmedBookings)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

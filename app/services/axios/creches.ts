@@ -8,6 +8,7 @@ import {
   Service,
   UserRelatedData,
 } from "./types/creches.visitings.common.types"
+import { alertModal } from "../../utils/alert-modal"
 
 export interface CrechesSearchRequest extends SearchRequest {
   startDate: string // "2023-07-29T00:00:00"
@@ -39,19 +40,15 @@ interface CrechesSearchRequestResponse extends GeneralResponse {
  */
 export const getCrechesSearch = async (requestBody: CrechesSearchRequest): Promise<Creche[]> => {
   try {
-    console.log("creche!!")
-    console.log("requestBody", requestBody)
     const response = await axios.post<CrechesSearchRequestResponse>(
       `${BASE_URL}/creches/search`,
       requestBody,
     )
-    // console.log("response >>>", response)
-    // console.log("response.data >>>", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error
       console.error("response.data.error 에러!!!", error)
-      // @ts-ignore
+      alertModal("위탁 펫시터 검색에 실패했습니다.", `${response.data.error}`)
       return []
     }
 
@@ -60,7 +57,7 @@ export const getCrechesSearch = async (requestBody: CrechesSearchRequest): Promi
       star: ratingRound(item.creche.star),
     }))
   } catch (error) {
-    console.error("catch 에러!!!", error)
+    alertModal("위탁 펫시터 검색에 실패했습니다.", `catch: ${error?.message}`)
     return []
   }
 }

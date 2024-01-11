@@ -532,15 +532,12 @@ export const CgSetVisitingServiceDayScreen: FC<
               ) as ExtraSizeFee,
             }
             // 방문 펫시터 업데이트
-            updateVisiting(petsitter.id, data).then(({ isSuccess, visiting }) => {
+            updateVisiting(petsitter.id, data).then(({ isSuccess, visiting, reason }) => {
               if (isSuccess) {
                 // MST 업데이트
                 setVistingPetsitter(visiting)
               } else {
-                alertModal(
-                  `강아지 크기 별 추가 요금 업데이트 실패`,
-                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
-                )
+                alertModal(`강아지 크기 별 추가 요금 업데이트 실패`, `${reason}`)
               }
             })
             additionalPriceBottomSheetModalRef.current?.close()

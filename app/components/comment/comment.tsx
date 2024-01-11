@@ -7,6 +7,7 @@ import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
 import { DivisionLine } from "../_BASIC/division-line/division-line"
 import { alertModal } from "../../utils/alert-modal"
+import { formatDate } from "../../utils/format"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -55,19 +56,6 @@ export const Comment = (props: CommentProps) => {
   const { style: viewStyle, numberOfLines, commentData } = props
   const { userId, desc, createdAt, updatedAt, reply, profileImg } = commentData
   const _numberOfLines = numberOfLines || undefined
-
-  // ? 날짜 표기를 YY.MM.DD 형태로 변환
-  const formatDate = (date: Date) => {
-    const formatted =
-      date.getFullYear().toString().slice(2) +
-      "." +
-      (date.getMonth() + 1 < 10 ? "0" : "") +
-      (date.getMonth() + 1).toString() +
-      "." +
-      (date.getDate() < 10 ? "0" : "") +
-      date.getDate().toString()
-    return formatted
-  }
 
   const _createdAt = new Date(createdAt)
   const date = formatDate(_createdAt)

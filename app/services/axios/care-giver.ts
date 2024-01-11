@@ -1,7 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { alertModal } from "../../utils/alert-modal"
-import { Pet } from "./pets"
+import { Pet } from "#models"
 
 export enum BookingStatus {
   WAITING = "Waiting", // 승인 대기
@@ -15,7 +15,8 @@ export enum BookingStatus {
 
 export type CgBooking = {
   // 공통 속성
-  name: string
+  name: string // 보호자 이름
+  clientStreamToken: string // 보호자의 streamUserId
   services: string[]
   pets: Pet[]
   address: string
@@ -69,7 +70,7 @@ export const getConfirmedBookings = async (): Promise<GetConfirmedBookingsResult
       `${BASE_URL}/care-giver/confirmed-bookings`,
     )
     if (!response.data.ok) {
-      alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error}`)
+      alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, confirmedBookings: [] }
     }
     return { isSuccess: true, confirmedBookings: response.data.confirmedBookings }
@@ -103,7 +104,7 @@ export const getAllBookings = async (): Promise<GetAllBookingsResult> => {
       { headers: { "Cache-Control": "no-store" } }, //! DO NOT REMOVE@
     )
     if (!response.data.ok) {
-      alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error}`)
+      alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, receivedBookings: [] }
     }
     return { isSuccess: true, receivedBookings: response.data.receivedBookings }

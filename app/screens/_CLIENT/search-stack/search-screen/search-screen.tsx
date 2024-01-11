@@ -224,7 +224,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
       if (serviceType === "위탁" && dateRange.length !== 2) return false
 
-      if (!address) return false
+      if (address === "주소를 입력해주세요") return false
 
       if (selectedPets.length === 0) return false
 

@@ -2,6 +2,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
+import { alertModal } from "../../utils/alert-modal"
 
 export interface CreateCrecheBookingRequestBody {
   crecheId: number
@@ -91,7 +92,7 @@ export const createVisitingBooking = async (
   }
 }
 
-interface CrecheBooking {
+export interface CrecheBooking {
   status: string
   services: string
   crecheId: string
@@ -103,7 +104,7 @@ interface CrecheBooking {
   request: string
 }
 
-interface VisitingBooking {
+export interface VisitingBooking {
   id: number
   createAt: string
   updatedAt: string
@@ -195,6 +196,7 @@ interface PreviousBookingResponse extends GeneralResponse {
 }
 
 /**
+ * (보호자 용)
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<CrecheBooking[]>}
  */
@@ -221,7 +223,37 @@ export const getCrechePetsitters = async (userId: number): Promise<CrecheBooking
   }
 }
 
+interface GetCrecheBookingResponse extends GeneralResponse {
+  crecheBooking: CrecheBooking
+}
+export const getCrecheBooking = async (crecheBookingId: number): Promise<CrecheBooking | null> => {
+  try {
+    console.log("♦️ CALLED | getCrecheBooking")
+    const response = await axios.get<GetCrecheBookingResponse>(
+      `${BASE_URL}/booking/creche/${crecheBookingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 위탁 예약을 읽어오는데 실패했습니다. crecheBookingId: ${crecheBookingId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+
+    console.log("response.data.crecheBooking", response.data.crecheBooking)
+    return response.data.crecheBooking
+  } catch (error) {
+    alertModal(
+      `해당 위탁 예약을 읽어오는데 실패했습니다. crecheBookingId: ${crecheBookingId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
+  }
+}
+
 /**
+ * (보호자 용)
  * 로그인한 유저의 모든 위탁 예약을 읽어온다.
  * @returns {Promise<VisitingBooking[]>}
  */
@@ -247,6 +279,36 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
   }
 }
 
+interface GetVisitingBookingResponse extends GeneralResponse {
+  visitingBooking: VisitingBooking
+}
+export const getVisitingBooking = async (
+  visitingBookingId: number,
+): Promise<VisitingBooking | null> => {
+  try {
+    const response = await axios.get<GetVisitingBookingResponse>(
+      `${BASE_URL}/booking/visiting/${visitingBookingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 방문 예약을 읽어오는데 실패했습니다. visitingBookingId: ${visitingBookingId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+
+    console.log("response.data", response.data)
+    return response.data.visitingBooking
+  } catch (error) {
+    alertModal(
+      `해당 방문 예약을 읽어오는데 실패했습니다. visitingBookingId: ${visitingBookingId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
+  }
+}
+
 /**
  * 로그인한 유저의 진행중인 예약 내역을 읽어온다.
  * @return {Promise<CurrentBooking[]>}
@@ -262,7 +324,7 @@ export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
       return error
     }
 
-    // console.log("[getCurrentBookings] response.data >>> ", response.data)
+    console.log("[getCurrentBookings] response.data >>> ", response.data)
     const currentBookings = response.data.currentBookings.map((value: CurrentBooking) => ({
       ...value,
       ratings: ratingRound(value.ratings),
@@ -343,5 +405,81 @@ export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams |
   } catch (error) {
     console.error("[getFirstPreviousBooking] catch error >>>", error)
     return null
+  }
+}
+
+interface ResponseCrecheBookingRequestBody {
+  response: boolean // true 이면 "수락", false 이면 "거절"
+}
+type ResponseCrecheBookingResult =
+  | {
+      isSuccess: true // 성공
+    }
+  | {
+      isSuccess: false // 실패
+    }
+/**
+ * [케어기버 전용 API]
+ * [펫시터 ➡️ 클라이언트]
+ * 입력받은 "위탁"서비스 예약 id의 수락 여부를  응답한다.
+ */
+export const responseCrecheBooking = async (
+  crecheBookingId: number,
+  post: ResponseCrecheBookingRequestBody,
+): Promise<ResponseCrecheBookingResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(
+      `${BASE_URL}/booking/creche/response/${crecheBookingId}`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response?.data?.ok) {
+      alertModal("위탁 예약 수락에 실패했습니다.", `${response.data?.error?.message}`)
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("위탁 예약 수락에 실패했습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false }
+  }
+}
+
+type ResponseVisitingBookingRequestBody = ResponseCrecheBookingRequestBody
+type ResponseVisitingBookingResult = ResponseCrecheBookingResult
+/**
+ * [케어기버 전용 API]
+ * [펫시터 ➡️ 클라이언트]
+ * 입력받은 id의 "방문" 예약 정보를 응답한다.
+ */
+export const responseVisitingBooking = async (
+  visitingBookingId: number,
+  post: ResponseVisitingBookingRequestBody,
+): Promise<ResponseVisitingBookingResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(
+      `${BASE_URL}/booking/visiting/response/${visitingBookingId}`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response?.data?.ok) {
+      alertModal("방문 예약 수락에 실패했습니다.", `${response.data?.error?.message}`)
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("방문 예약 수락에 실패했습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false }
   }
 }

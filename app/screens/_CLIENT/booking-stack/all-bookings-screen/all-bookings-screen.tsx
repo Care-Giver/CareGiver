@@ -74,7 +74,17 @@ export const AllBookingsScreen: FC<
               }}
               data={currentBookings}
               renderItem={({ index, item }) => (
-                <InProgressBooking currentBooking={item} key={index} />
+                <InProgressBooking
+                  currentBooking={item}
+                  key={index}
+                  onPress={() => {
+                    navigate("booking-detail-screen", {
+                      crecheBookingId: item?.crecheBookingId,
+                      visitingBookingId: item?.visitingBookingId,
+                      serviceType: item?.crecheBookingId ? "creche" : "visiting",
+                    })
+                  }}
+                />
               )}
               horizontal={true}
               showsHorizontalScrollIndicator={false}

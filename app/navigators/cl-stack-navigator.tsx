@@ -88,7 +88,11 @@ export type CLStackNavigatorParamList = {
    * BookingsStack - 예약내역 스택
    */
   "all-bookings-screen": undefined
-  "booking-detail-screen": undefined
+  "booking-detail-screen": {
+    crecheBookingId: number
+    visitingBookingId: number
+    serviceType: ServiceType
+  }
   "past-bookings-screen": undefined
   // * review stack
   "write-review-screen": {
@@ -273,7 +277,7 @@ export const BookingsStack = () => {
         name="booking-detail-screen"
         component={BookingDetailScreen}
         options={{
-          title: "예약내역 상세",
+          title: "예약 내역 상세",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

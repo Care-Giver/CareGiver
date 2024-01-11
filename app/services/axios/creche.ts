@@ -1,7 +1,8 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { Petsitter } from "./types/creches.visitings.common.types"
-import { CrecheAmenity, CrecheService } from "./creches"
+import { Petsitter, UserRelatedData } from "./types/creches.visitings.common.types"
+import { Creche, CrecheAmenity, CrecheService } from "./creches"
+import { alertModal } from "../../utils/alert-modal"
 
 interface CreateCrecheRequestBody
   extends Partial<
@@ -80,8 +81,8 @@ export const updateCreche = async (
     console.log("response.data 🔷 updateCreche", response.data)
 
     if (!response?.data.ok) {
-      console.error("API 에러!!! - updateCreche ♦️", response?.data?.error)
-      return { isSuccess: false, reason: response?.data?.error }
+      alertModal("위탁 서비스 업데이트에 실패하였습니다.", `${response.data.error.message}`)
+      return { isSuccess: false, reason: response?.data?.error.message }
     }
 
     return {
@@ -89,9 +90,35 @@ export const updateCreche = async (
       creche: response.data.creche,
     }
   } catch (error) {
-    console.error("catch 에러!!! - updateCreche", error)
-    console.error("catch 에러!!! - updateCreche id, body", id, body)
-    return { isSuccess: false, reason: error }
+    alertModal("위탁 서비스 업데이트에 실패하였습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false, reason: error?.message }
+  }
+}
+
+interface GetCrecheResponse extends GeneralResponse {
+  creche: Creche
+}
+export const getCreche = async (crecheId: number): Promise<Creche | null> => {
+  try {
+    console.log("♦️ CALLED | getCreche")
+    const response = await axios.get<GetCrecheResponse>(`${BASE_URL}/creche/${crecheId}`)
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 위탁 펫시터 정보를 읽어오는데 실패했습니다. crecheId: ${crecheId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+
+    console.log("response.data.creche.data", response.data.creche)
+    return response.data.creche
+  } catch (error) {
+    alertModal(
+      `해당 위탁 펫시터 정보를 읽어오는데 실패했습니다. crecheId: ${crecheId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
   }
 }
 

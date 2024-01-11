@@ -6,6 +6,9 @@ import {
   BookingCheckButton,
   BookingInfoCardProps,
   BookingList,
+  PreBol12,
+  PreBol14,
+  PreBol18,
   PreReg14,
   Screen,
 } from "#components"
@@ -43,6 +46,7 @@ export const CgManageBookingScreen: FC<
       allBookings,
       confirmedBookings,
       waitingBookings,
+      rejectedBookings,
       hasWaitingBookings,
     },
   } = useStores()
@@ -66,15 +70,35 @@ export const CgManageBookingScreen: FC<
 
   return (
     <Screen testID="ManageBooking">
-      {!hasWaitingBookings ? (
-        <BookingCheckButton
-          style={{ zIndex: 1, marginTop: 16 }}
-          bookingCount={waitingBookings?.length}
-          onPress={() => navigate("cg-booking-list-screen")}
-        />
-      ) : null}
+      <BookingCheckButton
+        style={{ zIndex: 1, marginTop: 16 }}
+        bookingCount={waitingBookings?.length}
+        onPress={() => navigate("cg-booking-list-screen")}
+      />
 
-      <PreReg14>모든 예약 개수: {allBookings.length}</PreReg14>
+      <View
+        style={{
+          width: "90%",
+          height: 200,
+          backgroundColor: "rgba(255, 0, 0, 0.2);",
+          position: "absolute",
+          alignSelf: "center",
+          top: 220,
+          zIndex: 5,
+          //
+          padding: 16,
+        }}
+      >
+        <PreBol14
+          text={`이곳은 '진행예정, '진행중' 그리고 '완료된'\n예약이 표출되는 영역입니다.`}
+          mv={12}
+        />
+        <PreBol14 text="현재 개발중인 영역입니다. 🏗️" />
+        <PreReg14
+          text={`'모든' 예약 개수: ${allBookings.length}\n'응답을 기다리는' 예약 개수: ${waitingBookings.length}\n'거절'한 예약 개수: ${rejectedBookings.length}\n'수락'하거나 '진행중'인 예약 개수: ${confirmedBookings.length}`}
+        />
+      </View>
+
       <BookingList bookings={confirmedBookings} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}

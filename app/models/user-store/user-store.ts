@@ -5,7 +5,8 @@ import { navigate } from "#navigators"
 import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
 import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
-import { getStreamToken } from "../../services/axios/stream"
+import { getStreamToken, streamChatClient } from "../../services/axios/stream"
+import { alertModal } from "../../utils/alert-modal"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -87,6 +88,14 @@ export const UserStoreModel = types
           return "오류"
       }
     },
+
+    get myStreamUserId() {
+      if (!self.userDetail?.id) return ""
+      if (!self.userAuth?.email) return ""
+      return (
+        String(self.userDetail.id) + self.userAuth.email.toLowerCase().replace(/[^a-z0-9@_]/g, "_")
+      ) // a-z, 0-9, @, _를 제외한 모든 문자를 _로 대체
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     reset() {
@@ -146,6 +155,41 @@ export const UserStoreModel = types
     setUserDetail(value: UserDetail) {
       // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임 .
       self.userDetail = value
+    },
+
+    /**
+     * Stream 에 연결하고, 유저정보를 셋업합니다.
+     */
+    async connectToStream() {
+      // Connect user to chat. This establishes a websocket connection between client and server.
+      try {
+        let streamToken = self.userDetail?.clientStreamToken
+        // 만약 clientStreamToken 값이 없다면 새로 발행한다.
+        if (!streamToken) {
+          const { streamToken: newStreamToken } = await getStreamToken()
+          streamToken = newStreamToken
+        }
+
+        const myStreamUserId =
+          String(self.userDetail.id) +
+          self.userAuth.email.toLowerCase().replace(/[^a-z0-9@_]/g, "_") // a-z, 0-9, @, _를 제외한 모든 문자를 _로 대체
+
+        const connectUserResponse = await streamChatClient.connectUser(
+          {
+            id: myStreamUserId,
+            name: self.userDetail.nickname,
+            image: self.userDetail?.profileImage || "",
+          },
+          streamToken,
+        )
+        return !!connectUserResponse
+      } catch (error) {
+        alertModal("채팅 서버 연결 실패", `catch: ${error?.message}`)
+        return false
+      }
+
+      // To disconnect a user
+      // await client.disconnect()
     },
 
     /**
@@ -231,6 +275,8 @@ export const UserStoreModel = types
           email: loginRequestBody.email,
         })
 
+        this.connectToStream()
+
         this.setLoggedIn(true)
 
         await delay(500)
@@ -272,6 +318,8 @@ export const UserStoreModel = types
           provider,
           email,
         })
+
+        this.connectToStream()
 
         this.setLoggedIn(true)
 
