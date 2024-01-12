@@ -17,6 +17,8 @@ import {
   BOTTOM_TAB_BAR_HEIGHT,
   timeText,
   BASIC_BACKGROUND_PADDING_WIDTH,
+  Footer,
+  FOOTER_CONTENT_GAP,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -232,221 +234,227 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     }, [serviceType, selectedTimeText, date, dateRange, address, selectedPets])
 
     return (
-      <Screen testID="SearchScreen" preset="fixed">
-        <ScrollView
-          ref={scrollViewRef}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 + 2 * BOTTOM_TAB_BAR_HEIGHT }}
-        >
-          {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
-          <Image source={images.search_screen_header_image} style={styles.headerImage} />
-
-          {/* //* 방문 | 위탁 */}
-          <Row style={{ marginTop: 44, justifyContent: "space-between" }}>
-            <ServiceTypeIndicatorHeader
-              onPress={() => {
-                setServiceType("방문")
-              }}
-              label={"방문"}
-              state={serviceType}
-            />
-            <ServiceTypeIndicatorHeader
-              onPress={() => {
-                setServiceType("위탁")
-              }}
-              style={{ marginLeft: 10 }}
-              label={"위탁"}
-              state={serviceType}
-            />
-          </Row>
-          <Row style={{ marginTop: 16 }}>
-            <Image source={images.right_arrow_grey} style={styles.image} />
-            <PreReg14
-              text={
-                serviceType === "방문"
-                  ? "케어기버가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
-                  : "케어기버가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
-              }
-              color={DISABLED}
-              style={styles.text}
-            />
-          </Row>
-
-          {/* //* 날짜 선택 */}
-          {/* //? 날짜 선택 버튼 */}
-          <RowRoundedButton
-            onPress={() => {
-              setIsDropdownOpen(false)
-              setIsCalendarOpen(!isCalendarOpen)
-              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
-              // TODO: 아이폰 디바이스에서 제대로 된 QA 필요함
-              scrollViewRef.current?.scrollTo({
-                x: 0,
-                y: 200,
-                animated: true,
-              })
-            }}
-            image={images.calendar}
-            // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
-            text={calendarButtonText()}
-            textColor={HEAD_LINE}
-            style={{ marginTop: 36 }}
-            borderColor={isCalendarOpen ? GIVER_CASUAL_NAVY : LIGHT_LINE}
-          />
-          {/* 캘린더 */}
-          {isCalendarOpen &&
-            (serviceType === "방문" ? (
-              // 방문 캘린더: 한 개의 날짜만 선택
-              <ClientCalendar
-                style={{ alignSelf: "center", marginTop: 12 }}
-                onDayPress={(date) => {
-                  setDate(date)
-                  setIsCalendarOpen(false)
-                  LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+      <Screen testID="SearchScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
+        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+            {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
+            <Image source={images.search_screen_header_image} style={styles.headerImage} />
+            {/* //* 방문 | 위탁 */}
+            <Row style={{ marginTop: 44, justifyContent: "space-between" }}>
+              <ServiceTypeIndicatorHeader
+                onPress={() => {
+                  setServiceType("방문")
                 }}
-                selectedDate={date ? date.dateString : now.toISOString().substring(0, 10)}
-                dateRange={[]} //? 방문인 경우, dateRange 는 사용하지 않음
+                label={"방문"}
+                state={serviceType}
               />
-            ) : (
-              // 위탁 캘린더: 날짜 범위(시작일, 종료일)를 선택
-              <ClientCalendar
-                style={{ alignSelf: "center", marginTop: 12 }}
-                onDayPress={(date) => {
-                  switch (dateRange.length) {
-                    case 0:
-                      // 첫번째 날짜 (시작일) 설정
-                      setDateRange([date])
-                      break
-                    case 1:
-                      // 두번째 날짜 (종료일) 추가후, 시간순으로 날짜 정렬
-                      setDateRange((pre) =>
-                        [...pre, date].sort((a, b) => a.timestamp - b.timestamp),
-                      )
-                      break
-                    case 2:
-                      // 날짜 초기화후, 선택한 날짜를 새로운 첫번째 날짜(시작일)로 설정
-                      setDateRange([date])
-                      break
-                  }
+              <ServiceTypeIndicatorHeader
+                onPress={() => {
+                  setServiceType("위탁")
                 }}
-                selectedDate={""} //? 위탁 경우, selectedDate 는 사용하지 않음
-                dateRange={dateRange}
+                style={{ marginLeft: 10 }}
+                label={"위탁"}
+                state={serviceType}
               />
-            ))}
+            </Row>
+            <Row style={{ marginTop: 16 }}>
+              <Image source={images.right_arrow_grey} style={styles.image} />
+              <PreReg14
+                text={
+                  serviceType === "방문"
+                    ? "케어기버가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
+                    : "케어기버가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
+                }
+                color={DISABLED}
+                style={styles.text}
+              />
+            </Row>
 
-          {/* //* 시간 선택 */}
-          {serviceType === "방문" && (
+            {/* //* 날짜 선택 */}
+            {/* //? 날짜 선택 버튼 */}
             <RowRoundedButton
               onPress={() => {
-                // handleBottomSheet(true)
-                bottomSheetModalRefTimePicker.current?.present()
-                setIsCalendarOpen(false)
+                setIsDropdownOpen(false)
+                setIsCalendarOpen(!isCalendarOpen)
+                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+                // TODO: 아이폰 디바이스에서 제대로 된 QA 필요함
+                scrollViewRef.current?.scrollTo({
+                  x: 0,
+                  y: 200,
+                  animated: true,
+                })
               }}
-              image={images.timer}
-              text={selectedTimeText}
+              image={images.calendar}
+              // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
+              text={calendarButtonText()}
+              textColor={HEAD_LINE}
+              style={{ marginTop: 36 }}
+              borderColor={isCalendarOpen ? GIVER_CASUAL_NAVY : LIGHT_LINE}
+            />
+            {/* 캘린더 */}
+            {isCalendarOpen &&
+              (serviceType === "방문" ? (
+                // 방문 캘린더: 한 개의 날짜만 선택
+                <ClientCalendar
+                  style={{ alignSelf: "center", marginTop: 12 }}
+                  onDayPress={(date) => {
+                    setDate(date)
+                    setIsCalendarOpen(false)
+                    LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeIn", "opacity"))
+                  }}
+                  selectedDate={date ? date.dateString : now.toISOString().substring(0, 10)}
+                  dateRange={[]} //? 방문인 경우, dateRange 는 사용하지 않음
+                />
+              ) : (
+                // 위탁 캘린더: 날짜 범위(시작일, 종료일)를 선택
+                <ClientCalendar
+                  style={{ alignSelf: "center", marginTop: 12 }}
+                  onDayPress={(date) => {
+                    switch (dateRange.length) {
+                      case 0:
+                        // 첫번째 날짜 (시작일) 설정
+                        setDateRange([date])
+                        break
+                      case 1:
+                        // 두번째 날짜 (종료일) 추가후, 시간순으로 날짜 정렬
+                        setDateRange((pre) =>
+                          [...pre, date].sort((a, b) => a.timestamp - b.timestamp),
+                        )
+                        break
+                      case 2:
+                        // 날짜 초기화후, 선택한 날짜를 새로운 첫번째 날짜(시작일)로 설정
+                        setDateRange([date])
+                        break
+                    }
+                  }}
+                  selectedDate={""} //? 위탁 경우, selectedDate 는 사용하지 않음
+                  dateRange={dateRange}
+                />
+              ))}
+
+            {/* //* 시간 선택 */}
+            {serviceType === "방문" && (
+              <RowRoundedButton
+                onPress={() => {
+                  // handleBottomSheet(true)
+                  bottomSheetModalRefTimePicker.current?.present()
+                  setIsCalendarOpen(false)
+                }}
+                image={images.timer}
+                text={selectedTimeText}
+                style={{ marginTop: 12 }}
+              />
+            )}
+
+            {/*//* 위치 선택 */}
+            <RowRoundedButton
+              onPress={onPressLocation}
+              image={images.location}
+              text={address}
+              textColor={HEAD_LINE}
               style={{ marginTop: 12 }}
             />
-          )}
 
-          {/*//* 위치 선택 */}
-          <RowRoundedButton
-            onPress={onPressLocation}
-            image={images.location}
-            text={address}
-            textColor={HEAD_LINE}
-            style={{ marginTop: 12 }}
-          />
+            {/*//* 반려동물 선택 */}
+            <SelectPetDropdownBox
+              style={{ marginTop: 12 }}
+              isOpen={isDropdownOpen}
+              onPress={() => {
+                setIsCalendarOpen(false)
+                setIsDropdownOpen(!isDropdownOpen)
+                scrollViewRef.current?.scrollToEnd({
+                  animated: true,
+                })
+                // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
+                //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
+                LayoutAnimation.configureNext(
+                  LayoutAnimation.create(170, "easeInEaseOut", "opacity"),
+                )
+              }}
+              selectedPets={selectedPets}
+              setSelectedPets={setSelectedPets}
+            />
 
-          {/*//* 반려동물 선택 */}
-          <SelectPetDropdownBox
-            style={{ marginTop: 12 }}
-            isOpen={isDropdownOpen}
-            onPress={() => {
-              setIsCalendarOpen(false)
-              setIsDropdownOpen(!isDropdownOpen)
-              scrollViewRef.current?.scrollToEnd({
-                animated: true,
-              })
-              // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
-              //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
-              LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
-            }}
-            selectedPets={selectedPets}
-            setSelectedPets={setSelectedPets}
-          />
-
-          {/*//* 선택된 반려동물 */}
-          {hasSelectedPetsAndDropdownClosed && (
-            <View>
-              <PreBol14
-                text="선택된 반려동물"
-                color={SUB_HEAD_LINE}
-                style={{ marginTop: 18, marginLeft: 16 }}
-              />
-              <View style={isDropdownOpen ? styles.hidden : styles.shown}>
-                {/*//* 선택된 반려동물 리스트 */}
-                {selectedPets.map((item, index, array) => (
-                  <SelectedPetCard
-                    key={index}
-                    petData={item}
-                    onDeletePress={() => {
-                      setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
-                    }}
-                    style={{
-                      width: "92%",
-                      marginTop: index === 0 ? 4 : null,
-                      marginBottom: index === array.length - 1 ? 4 : null,
-                    }}
-                  />
-                ))}
+            {/*//* 선택된 반려동물 */}
+            {hasSelectedPetsAndDropdownClosed && (
+              <View>
+                <PreBol14
+                  text="선택된 반려동물"
+                  color={SUB_HEAD_LINE}
+                  style={{ marginTop: 18, marginLeft: 16 }}
+                />
+                <View style={isDropdownOpen ? styles.hidden : styles.shown}>
+                  {/*//* 선택된 반려동물 리스트 */}
+                  {selectedPets.map((item, index, array) => (
+                    <SelectedPetCard
+                      key={index}
+                      petData={item}
+                      onDeletePress={() => {
+                        setSelectedPets((pets) => pets.filter((pet) => pet.id !== item.id))
+                      }}
+                      style={{
+                        width: "92%",
+                        marginTop: index === 0 ? 4 : null,
+                        marginBottom: index === array.length - 1 ? 4 : null,
+                      }}
+                    />
+                  ))}
+                </View>
               </View>
-            </View>
-          )}
+            )}
+          </View>
+
+          <Footer mt={FOOTER_CONTENT_GAP + BOTTOM_TAB_BAR_HEIGHT + 16} />
         </ScrollView>
 
         {/*//* 펫시터 찾기 */}
-        <ConditionalButton
-          label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
-          isActivated={isActivated}
+        <View
           style={{
+            width: "100%",
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             alignSelf: "center",
             position: "absolute",
             bottom: BOTTOM_TAB_BAR_HEIGHT + 16,
           }}
-          onPress={() => {
-            //? 펫시터 검색결과 스크린으로 이동
-            navigate("search-result-screen", {
-              service,
-              serviceType,
-              petIds: selectedPets.map((item) => item.id),
-              // "방문"인 경우 사용될 값
-              startTime:
-                serviceType === "방문"
-                  ? startTime
-                      .toISOString()
-                      .substring(0, 19)
-                      .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
-                  : null,
-              endTime:
-                serviceType === "방문"
-                  ? endTime
-                      .toISOString()
-                      .substring(0, 19)
-                      .replace(endTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
-                  : null,
+        >
+          <ConditionalButton
+            label={service === "펫시팅" ? " 펫시터 찾기" : "훈련사 찾기"}
+            isActivated={isActivated}
+            onPress={() => {
+              //? 펫시터 검색결과 스크린으로 이동
+              navigate("search-result-screen", {
+                service,
+                serviceType,
+                petIds: selectedPets.map((item) => item.id),
+                // "방문"인 경우 사용될 값
+                startTime:
+                  serviceType === "방문"
+                    ? startTime
+                        .toISOString()
+                        .substring(0, 19)
+                        .replace(startTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                    : null,
+                endTime:
+                  serviceType === "방문"
+                    ? endTime
+                        .toISOString()
+                        .substring(0, 19)
+                        .replace(endTime.toISOString().substring(0, 10), date.dateString) // 날짜만 선택한 "날짜"로 변경 (시/분/초 는 유지)
+                    : null,
 
-              // "위탁"인 경우 사용될 값
-              startDate: serviceType === "위탁" ? `${dateRange[0].dateString}T00:00:00` : null,
-              endDate: serviceType === "위탁" ? `${dateRange[1].dateString}T00:00:00` : null,
+                // "위탁"인 경우 사용될 값
+                startDate: serviceType === "위탁" ? `${dateRange[0].dateString}T00:00:00` : null,
+                endDate: serviceType === "위탁" ? `${dateRange[1].dateString}T00:00:00` : null,
 
-              // 위치 값
-              ...location,
+                // 위치 값
+                ...location,
 
-              // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
-              address, // 검색결과 헤더에 보여줄 주소
-            })
-          }}
-        />
+                // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
+                address, // 검색결과 헤더에 보여줄 주소
+              })
+            }}
+          />
+        </View>
 
         {/* 위치 선택 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
         <BottomSheetModal

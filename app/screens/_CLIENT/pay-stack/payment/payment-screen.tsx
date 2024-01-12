@@ -9,6 +9,8 @@ import {
   CareSummary,
   CustomModal,
   DivisionLine,
+  FOOTER_CONTENT_GAP,
+  Footer,
   PaymentTool,
   PreBol14,
   PreBol16,
@@ -18,7 +20,7 @@ import {
   Screen,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
+import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
@@ -246,6 +248,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               </View>
             </View>
           )}
+          <Footer mt={FOOTER_CONTENT_GAP} />
         </ScrollView>
 
         <CustomModal
@@ -343,7 +346,7 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   paymentButton: {
-    bottom: 40,
+    bottom: BOTTOM_HEIGHT,
     marginHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
     backgroundColor: GIVER_CASUAL_NAVY,
     flexDirection: "row",

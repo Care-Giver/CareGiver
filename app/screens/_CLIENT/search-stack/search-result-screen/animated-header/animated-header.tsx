@@ -1,6 +1,6 @@
 import { View, Animated } from "react-native"
 import React from "react"
-import { Row, RowRoundedButton } from "#components"
+import { BASIC_BACKGROUND_PADDING_WIDTH, Row, RowRoundedButton } from "#components"
 
 import { images } from "#images"
 import { HEADER_HEIGHT, HEADER_AREA, OPACITY_MIN } from "./header-property"
@@ -55,6 +55,7 @@ export const AnimatedHeader = (props: AnimatedHeaderProps) => {
     <Animated.View
       style={{
         height: HEADER_HEIGHT,
+        paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
         opacity: headerOpacity,
         transform: [{ translateY: headerTranslateY }],
       }}
