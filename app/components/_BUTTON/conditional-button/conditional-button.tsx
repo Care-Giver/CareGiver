@@ -12,7 +12,7 @@ interface ConditionalButtonProps {
   isActivated: boolean
   label: string
   labelTextColor?: string
-  onPress: () => void
+  onPress?: () => void
 }
 
 export const ConditionalButton = (props: ConditionalButtonProps) => {

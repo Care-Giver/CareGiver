@@ -91,6 +91,7 @@ export type CLStackNavigatorParamList = {
   "booking-detail-screen": {
     crecheBookingId: number
     visitingBookingId: number
+    paymentId: number
     serviceType: ServiceType
   }
   "past-bookings-screen": undefined

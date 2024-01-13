@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
-import { FlatList, Pressable, View, StyleSheet, Image, ViewStyle, Linking } from "react-native"
+import React, { FC, useEffect, useMemo, useState } from "react"
+import { Pressable, View, StyleSheet, Image, ViewStyle, Linking, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -7,6 +7,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   CareSummary,
   CaregiverTypeButton,
+  ConditionalButton,
   DivisionLine,
   DivisionLineVertical,
   PreBol14,
@@ -16,43 +17,55 @@ import {
   PreReg14,
   Row,
   Screen,
-  SelectedPetCard,
 } from "#components"
-import { SHADOW_1, DBG, GIVER_CASUAL_NAVY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
+import {
+  SHADOW_1,
+  DBG,
+  GIVER_CASUAL_NAVY,
+  HEAD_LINE,
+  LIGHT_LINE,
+  SUB_HEAD_LINE,
+  DISABLED,
+  LBG,
+} from "#theme"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import {
+  BookingStatus,
   Creche,
-  CrecheBooking,
+  PaymentColumns,
+  RenamedCrecheBooking,
+  RenamedVisitingBooking,
   Visiting,
-  VisitingBooking,
   getCreche,
   getCrecheBooking,
+  getPaymentById,
   getVisiting,
   getVisitingBooking,
 } from "#axios"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
-
-const paymentData = {
-  price: 42000,
-  discount: -8000,
-  totalPrice: 34000,
-}
+import { price as priceFormatter } from "../../../../utils/format"
+import { alertModal } from "../../../../utils/alert-modal"
 
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
 > = observer(function BookingDetailScreen({ navigation, route }) {
-  const { serviceType, crecheBookingId, visitingBookingId } = route.params
+  const { serviceType, crecheBookingId, visitingBookingId, paymentId } = route.params
 
-  const [booking, setBooking] = useState<CrecheBooking & VisitingBooking>(null)
+  const [booking, setBooking] = useState<RenamedCrecheBooking & RenamedVisitingBooking>(null)
   const [petsitter, setPetsitter] = useState<Creche & Visiting>(null)
-  const [payment, setPayment] = useState(null)
+  const [payment, setPayment] = useState<PaymentColumns>(null)
 
   useEffect(() => {
     const id = serviceType === "creche" ? crecheBookingId : visitingBookingId
     const getBooking = serviceType === "creche" ? getCrecheBooking : getVisitingBooking
     //@ts-ignore
     getBooking(id).then(setBooking)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    getPaymentById(paymentId).then(setPayment)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -67,136 +80,251 @@ export const BookingDetailScreen: FC<
 
   const serviceTypeKorean = serviceType === "creche" ? "방문" : "위탁"
 
+  const isPhoneAndChatActivated =
+    booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.PROCEEDING
+
+  const byStatus = useMemo(() => {
+    switch (booking?.status) {
+      case BookingStatus.PROCEEDING:
+      case BookingStatus.COMPLETE:
+        return { borderColor: DBG } as ViewStyle
+      case BookingStatus.WAITING:
+        return { borderColor: GIVER_CASUAL_NAVY } as ViewStyle
+      default:
+        return { width: 0, height: 0 } as ViewStyle
+    }
+  }, [booking?.status])
+  const buttonStyle = Object.assign({}, styles.button, byStatus)
+  const labelTextColor = useMemo(() => {
+    switch (booking?.status) {
+      case BookingStatus.PROCEEDING:
+      case BookingStatus.COMPLETE:
+        return DISABLED
+      case BookingStatus.WAITING:
+        return GIVER_CASUAL_NAVY
+      default:
+        return ""
+    }
+  }, [booking?.status])
+  const label = useMemo(() => {
+    switch (booking?.status) {
+      case BookingStatus.PROCEEDING:
+        return "케어 진행중"
+      case BookingStatus.COMPLETE:
+        return "케어 완료"
+      case BookingStatus.WAITING:
+        return "예약 취소하기"
+      default:
+        return ""
+    }
+  }, [booking?.status])
+
   return (
     <Screen testID="BookingDetail" style={{ paddingHorizontal: 0 }}>
-      {booking && (
-        <View>
-          <Row style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-            <Image
-              style={styles.profileImage}
-              source={profileImageUriHandler(
-                images.default_pet_image_60,
-                "small",
-                petsitter?.userProfile,
-              )}
-            />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={
+          {
+            // paddingBottom: 4 * BOTTOM_HEIGHT,
+          }
+        }
+      >
+        {booking && petsitter && (
+          <View>
+            <Row style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+              <Image
+                style={styles.profileImage}
+                source={profileImageUriHandler(
+                  images.default_pet_image_60,
+                  "small",
+                  petsitter?.userProfile,
+                )}
+              />
 
-            <View
-              style={{
-                height: "100%",
-                width: "74%",
-                marginLeft: 12,
-              }}
-            >
-              <Row>
-                <PreMed16 text={petsitter?.userNickname} color={HEAD_LINE} />
-                <Row
-                  style={{
-                    width: "auto",
-                    marginLeft: "auto",
-                  }}
-                >
-                  <CaregiverTypeButton text={serviceTypeKorean} />
-                  <CaregiverTypeButton text={"펫시터"} style={{ marginLeft: 4 }} />
+              <View
+                style={{
+                  height: "100%",
+                  width: "74%",
+                  marginLeft: 12,
+                }}
+              >
+                <Row>
+                  <PreMed16 text={petsitter?.userNickname} color={HEAD_LINE} />
+                  <Row
+                    style={{
+                      width: "auto",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    <CaregiverTypeButton text={serviceTypeKorean} />
+                    <CaregiverTypeButton text={"펫시터"} style={{ marginLeft: 4 }} />
+                  </Row>
                 </Row>
-              </Row>
 
-              <Row mt={4}>
-                <Image style={styles.star} source={images.rating_star} />
+                <Row mt={4}>
+                  <Image style={styles.star} source={images.rating_star} />
 
-                <PreReg12
-                  text={`(${booking?.ratings})`}
-                  color={SUB_HEAD_LINE}
-                  style={{ marginLeft: 4 }}
-                />
+                  <PreReg12
+                    text={`(${petsitter[serviceType].star})`}
+                    color={SUB_HEAD_LINE}
+                    style={{ marginLeft: 4 }}
+                  />
 
-                <DivisionLineVertical
-                  color={DBG}
-                  width={1}
-                  height={14}
-                  style={{ marginLeft: 8, marginRight: 8 }}
-                />
+                  <DivisionLineVertical
+                    color={DBG}
+                    width={1}
+                    height={14}
+                    style={{ marginLeft: 8, marginRight: 8 }}
+                  />
 
-                <PreReg12
-                  text={`후기 ${petsitter?.reviewCount}개`}
-                  color={GIVER_CASUAL_NAVY}
-                  // style={{ marginLeft: 4 }}
-                />
-              </Row>
+                  <PreReg12
+                    text={`후기 ${petsitter?.reviewCount}개`}
+                    color={GIVER_CASUAL_NAVY}
+                    // style={{ marginLeft: 4 }}
+                  />
+                </Row>
 
-              <Row mt={12} style={{ justifyContent: "space-between" }}>
-                <Pressable
-                  style={[$pressableBox, SHADOW_1]}
-                  onPress={() => {
-                    Linking.openURL(
-                      `tel:+${petsitter[serviceType].__careGiver__.__user__.phoneNumber}`,
-                    )
-                  }}
-                >
-                  <PreReg14 text={"전화하기"} color={HEAD_LINE} />
-                </Pressable>
-                <Pressable
-                  style={[$pressableBox, SHADOW_1]}
-                  onPress={() => {
-                    //@ts-ignore
-                    navigate("Chats")
-                  }}
-                >
-                  <PreReg14 text={"메시지 보내기"} color={HEAD_LINE} />
-                </Pressable>
+                <Row mt={12} style={{ justifyContent: "space-between" }}>
+                  <Pressable
+                    style={[$pressableBox, SHADOW_1]}
+                    onPress={() => {
+                      if (!isPhoneAndChatActivated) {
+                        alertModal(
+                          "예약이 시작되기 전에는 전화할 수 없습니다.",
+                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
+                        )
+                        return
+                      }
+                      Linking.openURL(
+                        `tel:+${petsitter[serviceType].__careGiver__.__user__.phoneNumber}`,
+                      )
+                    }}
+                  >
+                    <PreReg14
+                      text={"전화하기"}
+                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
+                    />
+                  </Pressable>
+                  <Pressable
+                    style={[$pressableBox, SHADOW_1]}
+                    onPress={() => {
+                      if (!isPhoneAndChatActivated) {
+                        alertModal(
+                          "예약이 시작되기 전에는 메시지를 보낼 수 없습니다.",
+                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
+                        )
+                        return
+                      }
+                      //@ts-ignore
+                      navigate("Chats")
+                    }}
+                  >
+                    <PreReg14
+                      text={"메시지 보내기"}
+                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
+                    />
+                  </Pressable>
 
-                <Pressable
-                  style={[$pressableAlarmBox, SHADOW_1]}
-                  onPress={() => {
-                    alert("신고 기능은 준비중입니다.")
-                  }}
-                >
-                  <MaterialCommunityIcons name="alarm-light-outline" size={24} color={"#707070"} />
-                </Pressable>
-              </Row>
-            </View>
-          </Row>
+                  <Pressable
+                    style={[$pressableAlarmBox, SHADOW_1]}
+                    onPress={() => {
+                      alertModal("개발중 🏗️", "신고 기능은 준비중입니다.")
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="alarm-light-outline"
+                      size={24}
+                      color={"#707070"}
+                    />
+                  </Pressable>
+                </Row>
+              </View>
+            </Row>
 
-          <DivisionLine mv={16} />
+            <DivisionLine mv={16} />
 
-          <CareSummary
-            address={booking?.location}
-            start={booking.createAt}
-            end={booking.createAt}
-            petIds={booking?.petIds}
-            serviceTypeKorean={serviceTypeKorean}
-            showServiceType={true}
-            style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
-          />
-        </View>
-      )}
-
-      {/* // TODO: paymentId 로 fetch 한 response 로 결제 정보 UI 완성 */}
-      {/* {payment && (
-        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-          <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={36} />
-
-          <Row style={{ justifyContent: "space-between" }} mt={16}>
-            <PreReg14
-              text={`상품합계(${serviceTypeKorean}-${펫시터})`}
-              color={SUB_HEAD_LINE}
+            <CareSummary
+              address={booking?.location}
+              start={booking.start}
+              end={booking.end}
+              petIds={booking?.petIds}
+              serviceTypeKorean={serviceTypeKorean}
+              showServiceType={true}
+              style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
             />
-            <PreReg14 text={won(price)} color={SUB_HEAD_LINE} />
-          </Row>
+          </View>
+        )}
 
-          <Row style={{ justifyContent: "space-between" }} mt={10}>
-            <PreReg14 text={"할인 합계"} color={SUB_HEAD_LINE} />
-            <PreReg14 text={won(discount)} color={SUB_HEAD_LINE} />
-          </Row>
+        {/* // TODO: 할인 합계 정보 구현*/}
+        {payment && (
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+            <PreBol14 text={"결제 정보"} color={SUB_HEAD_LINE} mt={36} />
 
-          <DivisionLine mv={12} />
+            <Row style={{ justifyContent: "space-between" }} mt={16}>
+              <PreReg14 text={`상품합계(${serviceTypeKorean}-펫시터)`} color={SUB_HEAD_LINE} />
+              <PreReg14
+                text={`${priceFormatter(payment?.totalFee?.toString())}원`}
+                color={SUB_HEAD_LINE}
+              />
+            </Row>
 
-          <Row style={{ justifyContent: "space-between" }}>
-            <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
-            <PreBol16 text={won(totalPrice)} color={SUB_HEAD_LINE} />
-          </Row>
-        </View>
-      )} */}
+            <Row style={{ justifyContent: "space-between" }} mt={10}>
+              <PreReg14 text={"할인 합계"} color={SUB_HEAD_LINE} />
+              <PreReg14
+                // text={`${priceFormatter(payment?.totalFee?.toString())}원`}
+                text={`0원`}
+                color={SUB_HEAD_LINE}
+              />
+            </Row>
+
+            <DivisionLine mv={12} />
+
+            <Row style={{ justifyContent: "space-between" }}>
+              <PreBol16 text={"총 결제 금액"} color={SUB_HEAD_LINE} />
+              <PreBol16
+                text={`${priceFormatter(payment?.totalFee?.toString())}원`}
+                color={SUB_HEAD_LINE}
+              />
+            </Row>
+          </View>
+        )}
+
+        {booking && (
+          <View
+            style={{
+              width: "100%",
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <ConditionalButton
+              label={label}
+              style={buttonStyle}
+              labelTextColor={labelTextColor}
+              isActivated={false}
+              onPress={() => {
+                // TODO: WAITING 일때 예약 취소 기능 구현
+              }}
+            />
+            <View style={styles.refundFooter}>
+              <PreReg14 color={SUB_HEAD_LINE} style={{ lineHeight: 20 }}>
+                - 케어 시작 <PreBol14 color={HEAD_LINE}>72~24시간 전</PreBol14>까지:{" "}
+                <PreBol14 color={HEAD_LINE}>70%</PreBol14> 환불
+                {"\n"}- 케어 시작 <PreBol14 color={HEAD_LINE}>24~12시간 전</PreBol14>까지:{" "}
+                <PreBol14 color={HEAD_LINE}>20%</PreBol14> 환불
+                {"\n"}- 케어 시작 <PreBol14 color={HEAD_LINE}>12시간 이내</PreBol14>:{" "}
+                <PreBol14 color={GIVER_CASUAL_NAVY}>환불 불가</PreBol14>
+                {"\n\n"}※ 케어기버가 예약을 취소한 경우{" "}
+                <PreBol14 color={GIVER_CASUAL_NAVY}>100% 환불</PreBol14>을 받으실 수 있습니다.
+                {"\n"}※ 케어기버의 돌봄 진행에 문제가 발생한 경우, 케어 종료 후 24시 간 이내에
+                케어기버 고객센터에 신고를 진행해주셔야 합니다.{"\n"}※ 케어기버 고객센터에서 문제
+                파악 후, 심사를 통해 최종적으로 환불 및 보상 방안이 결정됩니다.
+              </PreReg14>
+            </View>
+          </View>
+        )}
+      </ScrollView>
     </Screen>
   )
 })
@@ -237,4 +365,19 @@ const styles = StyleSheet.create({
     height: 12,
   },
   rightArrow: { width: 16, height: 16 },
+  button: {
+    width: "100%",
+    backgroundColor: "white",
+    borderWidth: 2,
+    marginBottom: 42,
+  },
+  refundFooter: {
+    width: "100%",
+    paddingTop: 8,
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+    paddingBottom: 20,
+    backgroundColor: LBG,
+    borderRadius: 8,
+    marginBottom: 148,
+  },
 })

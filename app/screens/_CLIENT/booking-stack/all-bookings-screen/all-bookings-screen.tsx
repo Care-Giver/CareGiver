@@ -81,6 +81,7 @@ export const AllBookingsScreen: FC<
                     navigate("booking-detail-screen", {
                       crecheBookingId: item?.crecheBookingId,
                       visitingBookingId: item?.visitingBookingId,
+                      paymentId: item?.paymentId,
                       serviceType: item?.crecheBookingId ? "creche" : "visiting",
                     })
                   }}

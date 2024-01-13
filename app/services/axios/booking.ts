@@ -3,6 +3,18 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PetsitterType, ServiceType } from "../../models"
 import { ratingRound } from "../../utils/format"
 import { alertModal } from "../../utils/alert-modal"
+import { BookingStatus, CgBooking } from "./care-giver"
+import _ from "lodash"
+
+type Rename<
+  T,
+  R extends { [K in keyof R]: K extends keyof T ? PropertyKey : "Error: key not in T" }
+> = Omit<T, keyof R> &
+  UnionToIntersection<{ [P in keyof R & keyof T]: { [PP in R[P]]: T[P] } }[keyof R & keyof T]>
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
+  ? I
+  : never
 
 export interface CreateCrecheBookingRequestBody {
   crecheId: number
@@ -92,26 +104,82 @@ export const createVisitingBooking = async (
   }
 }
 
-export interface CrecheBooking {
-  status: string
-  services: string
-  crecheId: string
-  startDate: string
-  endDate: string
-  totalFee: string
-  defalutFee: string
-  reviewStatus: string
-  request: string
-}
-
-export interface VisitingBooking {
+type BookingKeys = {
   id: number
   createAt: string
   updatedAt: string
-  status: string
-  reviewStatus: string
+  status: BookingStatus
+  reviewStatus: ReviewStatus
   visitingId: number
   request: string
+}
+
+export type CrecheBooking = BookingKeys & { crecheId: number } & {
+  // example: '김지우',
+  // description: '펫시터의 이름입니다.',
+  name?: string
+
+  // example: '프로필 이미지',
+  // description: '펫시터 프로필 이미지입니다.',
+  image?: string
+
+  // example: 3,
+  // description: '위탁 장소에 달린 리뷰의 개수',
+  reviewCount?: number
+
+  // example: '경기도 안산시 한양대학로 55',
+  // description: '위탁 펫시팅 장소입니다.',
+  location?: string
+
+  // example: '2023-03-13T00:00:00',
+  // description: '위탁 예약 시작 날짜 입니다.',
+  startDate?: string
+
+  // example: '2023-03-13T00:00:00',
+  // description: '위탁 예약 종료 날짜 입니다.',
+  endDate?: string
+
+  // example: [1, 2],
+  // description: '예약을 받은 반려동물 id 배열입니다.',
+  petIds?: number[]
+
+  // example: 18000,
+  // description: '펫시터에게 지불한 금액입니다.',
+  fee?: number
+}
+
+export type VisitingBooking = BookingKeys & { visitingId: number } & {
+  // example: '김지우',
+  // description: '펫시터의 이름입니다.',
+  name?: string
+
+  // example: '프로필 이미지',
+  // description: '펫시터 프로필 이미지입니다.',
+  image?: string
+
+  // example: 3,
+  // description: '방문 펫시터에게 달린 리뷰의 개수',
+  reviewCount?: number
+
+  // example: '경기도 안산시 한양대학로 55',
+  // description: '방문 펫시팅 장소입니다.',
+  location?: string
+
+  // example: '2023-03-13T00:00:00',
+  // description: '방문 예약 시작 시각 입니다.',
+  startTime?: string
+
+  // example: '2023-03-13T00:00:00',
+  // description: '방문 예약 종료 시각 입니다.',
+  endTime?: string
+
+  // example: [1, 2],
+  // description: '예약을 받은 반려동물 id 배열입니다.',
+  petIds?: number[]
+
+  // example: 18000,
+  // description: '펫시터에게 지불한 금액입니다.',
+  fee?: number
 }
 
 export interface CurrentBooking {
@@ -119,6 +187,7 @@ export interface CurrentBooking {
   crecheBookingId?: number
   visitingId?: number
   crecheId?: number
+  paymentId: number
 
   // ? visiting인 경우 time
   startTime?: string
@@ -144,6 +213,7 @@ interface PreviousBooking {
   crecheBookingId?: number
   visitingId?: number
   crecheId?: number
+  paymentId: number
 
   // ? visiting인 경우 time
   startTime?: string
@@ -226,7 +296,11 @@ export const getCrechePetsitters = async (userId: number): Promise<CrecheBooking
 interface GetCrecheBookingResponse extends GeneralResponse {
   crecheBooking: CrecheBooking
 }
-export const getCrecheBooking = async (crecheBookingId: number): Promise<CrecheBooking | null> => {
+export type RenamedCrecheBooking = Rename<CrecheBooking, { startDate: "start"; endDate: "end" }>
+type GetCrecheBookingResult = RenamedCrecheBooking | null
+export const getCrecheBooking = async (
+  crecheBookingId: number,
+): Promise<GetCrecheBookingResult> => {
   try {
     console.log("♦️ CALLED | getCrecheBooking")
     const response = await axios.get<GetCrecheBookingResponse>(
@@ -241,8 +315,16 @@ export const getCrecheBooking = async (crecheBookingId: number): Promise<CrecheB
       return null
     }
 
-    console.log("response.data.crecheBooking", response.data.crecheBooking)
-    return response.data.crecheBooking
+    return _.mapKeys(response.data.crecheBooking, (value, key) => {
+      switch (key) {
+        case "startDate":
+          return "start"
+        case "endDate":
+          return "end"
+        default:
+          return key
+      }
+    }) as RenamedCrecheBooking
   } catch (error) {
     alertModal(
       `해당 위탁 예약을 읽어오는데 실패했습니다. crecheBookingId: ${crecheBookingId}`,
@@ -282,9 +364,11 @@ export const getVisitingPetsitters = async (userId: number): Promise<VisitingBoo
 interface GetVisitingBookingResponse extends GeneralResponse {
   visitingBooking: VisitingBooking
 }
+export type RenamedVisitingBooking = Rename<VisitingBooking, { startTime: "start"; endTime: "end" }>
+type GetVisitingBookingResult = RenamedVisitingBooking | null
 export const getVisitingBooking = async (
   visitingBookingId: number,
-): Promise<VisitingBooking | null> => {
+): Promise<GetVisitingBookingResult> => {
   try {
     const response = await axios.get<GetVisitingBookingResponse>(
       `${BASE_URL}/booking/visiting/${visitingBookingId}`,
@@ -298,8 +382,16 @@ export const getVisitingBooking = async (
       return null
     }
 
-    console.log("response.data", response.data)
-    return response.data.visitingBooking
+    return _.mapKeys(response.data.visitingBooking, (value, key) => {
+      switch (key) {
+        case "startTime":
+          return "start"
+        case "endTime":
+          return "end"
+        default:
+          return key
+      }
+    }) as RenamedVisitingBooking
   } catch (error) {
     alertModal(
       `해당 방문 예약을 읽어오는데 실패했습니다. visitingBookingId: ${visitingBookingId}`,
