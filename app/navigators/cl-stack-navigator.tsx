@@ -72,6 +72,7 @@ import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/axios/stream"
 import { Pet } from "#axios"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {
   start: string
@@ -374,6 +375,8 @@ export const SearchingStack = () => {
           headerTitle: "",
           headerTitleStyle: {
             color: "white",
+            fontFamily: PRETENDARD_MEDIUM,
+            fontSize: 18,
           },
         }}
       />

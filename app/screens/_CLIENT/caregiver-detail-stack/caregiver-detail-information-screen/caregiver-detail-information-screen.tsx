@@ -44,6 +44,7 @@ import { delay } from "../../../../utils/delay"
 import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -154,6 +155,8 @@ export const CaregiverDetailInformationScreen: FC<
             },
             headerTitleStyle: {
               color: headerOpacity < 0.3 ? "white" : "black",
+              fontFamily: PRETENDARD_MEDIUM,
+              fontSize: 18,
             },
           })
         }}
