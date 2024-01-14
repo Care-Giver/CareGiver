@@ -117,6 +117,109 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       })
     }
 
+    /**
+     * 포트원(아임포트) 심사 제출용 함수.
+     * onPressPay 를 임시로 대체한다.
+     */
+    const onPressPayIamportSubmit = () => {
+      if (!selectedTool) {
+        alertModal("결제 수단", "결제 수단을 선택해주세요.")
+        return
+      }
+
+      if (!amount?.totalFee) {
+        alertModal(
+          "결제 금액 계산 실패",
+          "알 수 없는 이유로 결제 금액 계산에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+        )
+      }
+
+      let _pg = ""
+      let _method = ""
+      switch (selectedTool) {
+        case "카카오페이":
+          _pg = "kakaopay"
+          _method = "kakaopay"
+          break
+        case "네이버페이":
+          _pg = "naverpay"
+          _method = "naverpay"
+          break
+        case "토스":
+          _pg = "tosspay"
+          _method = "tosspay"
+          break
+        case "신용/체크카드":
+          _pg = "kcp"
+          _method = "card"
+          break
+      }
+
+      const data: PaymentParams = {
+        params: {
+          pg: _pg,
+          pay_method: _method,
+          currency: undefined,
+          notice_url: undefined,
+          display: undefined,
+          merchant_uid: merchantUid,
+          name,
+          amount: amount?.totalFee,
+          app_scheme: "exampleforrn",
+          tax_free: undefined,
+          buyer_name: buyerName,
+          buyer_tel: buyerTel,
+          buyer_email: buyerEmail,
+          buyer_addr: undefined,
+          buyer_postcode: undefined,
+          custom_data: undefined,
+          vbank_due: undefined,
+          digital: undefined,
+          language: undefined,
+          biz_num: undefined,
+          customer_uid: undefined,
+          naverPopupMode: undefined,
+          naverUseCfm: undefined,
+          naverProducts: undefined,
+          m_redirect_url: IMPConst.M_REDIRECT_URL,
+          niceMobileV2: true,
+          escrow,
+        },
+        tierCode,
+      }
+
+      // 신용카드의 경우, 할부기한 추가
+      if (_method === "card" && cardQuota !== 0) {
+        data.params.display = {
+          card_quota: cardQuota === 1 ? [] : [cardQuota],
+        }
+      }
+
+      if (pg === "naverpay") {
+        const today = new Date()
+        const oneMonthLater = new Date(today.setMonth(today.getMonth() + 1))
+        const dd = String(oneMonthLater.getDate()).padStart(2, "0")
+        const mm = String(oneMonthLater.getMonth() + 1).padStart(2, "0") // January is 0!
+        const yyyy = oneMonthLater.getFullYear()
+
+        data.params.naverPopupMode = false
+        data.params.naverUseCfm = `${yyyy}${mm}${dd}`
+        data.params.naverProducts = [
+          {
+            categoryType: "TEST",
+            categoryId: "BOOKING",
+            uid: "107922211",
+            name: `${service[key].__careGiver__.__user__.nickname}-${userDetail?.nickname}`,
+            payReferrer: "CARE_GIVER",
+            count: 10,
+          },
+        ]
+      }
+
+      console.log("Payment data >>>", data)
+      navigate("test-iamport-payment-screen", data)
+    }
+
     const serviceTypeKorean = key === "creche" ? "위탁" : "방문"
 
     return (
@@ -274,7 +377,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           imageHeight={66}
         />
 
-        <TouchableOpacity style={styles.paymentButton} onPress={onPressPay}>
+        <TouchableOpacity style={styles.paymentButton} onPress={onPressPayIamportSubmit}>
           <PreBol16
             text={amount?.totalFee ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
             color="white"

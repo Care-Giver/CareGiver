@@ -65,7 +65,7 @@ export const TestIamportPaymentScreen: FC<
   }
 
   return (
-    <Screen testID="TestIamportPayment">
+    <Screen testID="TestIamportPayment" style={{ paddingHorizontal: 0 }}>
       <IMP.Payment
         userCode={userCode}
         tierCode={tierCode}
