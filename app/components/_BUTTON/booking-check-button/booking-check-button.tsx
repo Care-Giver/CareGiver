@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleProp, ViewStyle, View, StyleSheet, Pressable, Image } from "react-native"
+import { StyleProp, ViewStyle, StyleSheet, Pressable, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { RowRoundedBox } from "../../_BASIC/row-rounded-box/row-rounded-box"
 import { PreBol16, PreMed16 } from "../../_BASIC/custom-texts/custom-texts"
@@ -29,10 +29,10 @@ export const BookingCheckButton = observer(function BookingCheckButton(
   return (
     <RowRoundedBox style={allStyles}>
       <PreMed16
-        style={{ marginLeft: 15, letterSpacing: -0.5 }}
+        style={{ letterSpacing: -0.5 }}
         text={`${bookingCount}개의 새로 들어온 신청이 있어요!`}
       />
-      <Pressable style={{ flexDirection: "row", marginLeft: 55 }} onPress={onPress}>
+      <Pressable style={{ flexDirection: "row" }} onPress={onPress}>
         <PreBol16 color={GIVER_CASUAL_NAVY} text="확인하기" />
         <Image
           source={images.arrow_right_navy}
@@ -44,5 +44,11 @@ export const BookingCheckButton = observer(function BookingCheckButton(
 })
 
 const styles = StyleSheet.create({
-  root: { borderColor: CARE_NATURAL_BLUE, flexDirection: "row", display: "flex" },
+  root: {
+    borderColor: CARE_NATURAL_BLUE,
+    flexDirection: "row",
+    display: "flex",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+  },
 })
