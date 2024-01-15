@@ -80,6 +80,9 @@ export const CgBookingListScreen: FC<
           const serviceTypeKorean = item?.crecheBookingId ? "위탁" : "방문"
           return (
             <BookingInfoCardWithButton
+              onPressBookingDetail={() => {
+                navigate("cg-booking-detail-screen", { booking: item, serviceTypeKorean })
+              }}
               booking={item}
               serviceTypeKorean={serviceTypeKorean}
               style={{
@@ -200,12 +203,21 @@ interface BookingInfoCardWithActionButtonProps {
   index: number
   serviceTypeKorean: ServiceTypeKorean
   mode: Mode
+  onPressBookingDetail: () => void
   style?: StyleProp<ViewStyle>
 }
 const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionButton(
   props: BookingInfoCardWithActionButtonProps,
 ) {
-  const { booking, buttonComponent, index, serviceTypeKorean, mode, style } = props
+  const {
+    booking,
+    buttonComponent,
+    index,
+    serviceTypeKorean,
+    mode,
+    onPressBookingDetail,
+    style,
+  } = props
   const { pets, address, name } = booking
 
   const names = pets.map((v) => ({
@@ -245,7 +257,7 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
 
       <Row>
         <PreReg12 text={`${postedAt}`} color={DISABLED} />
-        <TouchableOpacity style={styles2.goToDetail}>
+        <TouchableOpacity style={styles2.goToDetail} onPress={onPressBookingDetail}>
           <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
         </TouchableOpacity>
       </Row>

@@ -31,6 +31,7 @@ import {
   CgRegistration2Screen,
   CgRegistration3Screen,
   CgBookingListScreen,
+  CgBookingDetailScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -41,7 +42,8 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { useNavigation } from "@react-navigation/native"
-import { CrecheAvailableDate } from "#axios"
+import { CgBooking, CrecheAvailableDate } from "#axios"
+import { ServiceTypeKorean } from "#models"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -54,6 +56,10 @@ export type CGStackNavigatorParamList = {
    */
   "cg-manage-booking-screen": undefined
   "cg-booking-list-screen": undefined
+  "cg-booking-detail-screen": {
+    booking: CgBooking
+    serviceTypeKorean: ServiceTypeKorean
+  }
 
   /**
    * CalendarStack - CG - 달력 스택
@@ -162,6 +168,15 @@ export const CgBookingsStack = () => {
         name="cg-booking-list-screen"
         component={CgBookingListScreen}
         options={{ headerShown: false }}
+      />
+      {/* CG - 예약 내역 상세 (신청, 거절, 진행중, 완료 - 전부.) */}
+      <Stack.Screen
+        name="cg-booking-detail-screen"
+        component={CgBookingDetailScreen}
+        options={{
+          title: "예약 내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
       />
     </Stack.Navigator>
   )
