@@ -22,6 +22,7 @@ export interface BookingListProps {
 }
 
 export const CustomDayComponent = ({ date, state, selected }) => {
+  console.log("date >>>", date)
   const translateWeekText = ({ date }) => {
     const week = ["일", "월", "화", "수", "목", "금", "토"]
 
@@ -114,8 +115,9 @@ export const BookingList = observer(function BookingList(props: BookingListProps
 
   //* AgendaList컴포넌트에서 렌더링을 위한 부분
   const renderItem = (prop) => {
+    console.log("prop >>>", prop)
     const { item } = prop
-    console.log("item>>>", item)
+    //console.log("item>>>", item)
 
     if (item === null || item === undefined) {
       //TODO: 빈 날짜일 경우 UI 처리
@@ -187,6 +189,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
                 <CustomDayComponent date={date} state={state} selected={selected} />
               </Pressable>
             )}
+            maxDate="2024-01-15"
             onDayPress={onDayPress}
             headerStyle={{
               marginTop: 25, // default headertitle(week)을 지우기 위함
