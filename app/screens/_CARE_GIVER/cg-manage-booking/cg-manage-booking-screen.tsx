@@ -99,7 +99,12 @@ export const CgManageBookingScreen: FC<
         />
       </View>
 
-      <BookingList bookings={confirmedBookings} />
+      <BookingList
+        sections={confirmedBookings.map((item, idx) => {
+          const newData = { title: String(idx), data: [item] }
+          return newData
+        })}
+      />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
