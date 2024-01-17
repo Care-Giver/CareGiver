@@ -19,6 +19,7 @@ import { Image, View } from "react-native"
 import { BODY } from "#theme"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
+import EventSource, { EventSourceListener } from "react-native-sse"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -67,6 +68,39 @@ export const CgManageBookingScreen: FC<
       setBookings(data?.receivedBookings)
     }
   }, [isFetching, data, setBookings])
+
+  useEffect(() => {
+    // const url = new URL("https://your-sse-server.com/.well-known/mercure");
+    // url.searchParams.append("topic", "/book/{bookId}");
+    const url = "https://realtime.ably.io/sse"
+    const es = new EventSource(url)
+
+    const listener: EventSourceListener = (event) => {
+      if (event.type === "open") {
+        console.log("Open SSE connection.")
+      } else if (event.type === "message") {
+        const book = JSON.parse(event.data) as any
+
+        // setBooks((prevBooks) => [...prevBooks, book]);
+        console.log(`Received book ${book.title}, ISBN: ${book.isbn}`)
+      } else if (event.type === "error") {
+        console.error("Connection error:", event.message)
+      } else if (event.type === "exception") {
+        console.error("Error:", event.message, event.error)
+      } else {
+        console.error("else:", event)
+      }
+    }
+
+    es.addEventListener("open", listener)
+    es.addEventListener("message", listener)
+    es.addEventListener("error", listener)
+
+    return () => {
+      es.removeAllEventListeners()
+      es.close()
+    }
+  }, [])
 
   return (
     <Screen testID="ManageBooking">
