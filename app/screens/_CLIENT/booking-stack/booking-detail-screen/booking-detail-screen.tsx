@@ -91,7 +91,7 @@ export const BookingDetailScreen: FC<
       case BookingStatus.WAITING:
         return { borderColor: GIVER_CASUAL_NAVY } as ViewStyle
       default:
-        return { width: 0, height: 0 } as ViewStyle
+        return { width: 0, height: 0, borderWidth: 0 } as ViewStyle
     }
   }, [booking?.status])
   const buttonStyle = Object.assign({}, styles.button, byStatus)
