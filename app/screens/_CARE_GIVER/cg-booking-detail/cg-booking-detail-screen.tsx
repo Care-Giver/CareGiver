@@ -56,7 +56,7 @@ export const CgBookingDetailScreen: FC<
 
   const requestedMessage =
     (booking?.services && booking?.services.length !== 0 && booking?.services.join("\n")) ||
-    "보호자가 요청한 사항이 없습니다."
+    `보호자가 요청한 사항이 없어요.\n케어 진행 관련 궁금한 점이 있으면 보호자님께 메시지를 보내보세요!`
 
   const { buttonStyle, labelTextColor, label } = useMemo(() => {
     let byStatus = {} as ViewStyle
@@ -109,7 +109,12 @@ export const CgBookingDetailScreen: FC<
               showServiceType={true}
             />
             <PreBol14 text={"요청 사항"} color={SUB_HEAD_LINE} mt={36} />
-            <PreReg14 text={requestedMessage} color={SUB_HEAD_LINE} mt={8} />
+            <PreReg14
+              text={requestedMessage}
+              color={SUB_HEAD_LINE}
+              mt={8}
+              style={{ lineHeight: 20 }}
+            />
           </View>
         )}
         ListFooterComponentStyle={{
