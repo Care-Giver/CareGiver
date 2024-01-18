@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleProp, ViewStyle, View, Image, Pressable } from "react-native"
-import { observer } from "mobx-react-lite"
+import { observer, useLocalObservable, useObserver } from "mobx-react-lite"
 import { images } from "#images"
 import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
 import { GIVER_CASUAL_NAVY } from "#theme"
@@ -8,6 +8,8 @@ import { BookingInfoCard } from "../booking-info-card/booking-info-card"
 import { PreBol16, PreMed18, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { ConfirmedBooking } from "#axios"
 import { DateData, DayState } from "react-native-calendars/src/types"
+import { UpdateSources } from "react-native-calendars/src/expandableCalendar/commons"
+import { autorun, observable } from "mobx"
 
 export interface BookingListProps {
   /**
@@ -25,86 +27,115 @@ export interface BookingListProps {
 interface CustomDayComponentProps {
   date: string & DateData
   state: DayState
+  selected: any
 }
-export const CustomDayComponent = observer(function CustomDayComponent(
-  props: CustomDayComponentProps,
-) {
-  const { date, state } = props
-  console.log("date >>>", state, date.dateString)
+export const CustomDayComponent = observer(
+  function BookingList(props: CustomDayComponentProps) {
+    const { date, state, selected } = props
 
-  const { translateWeekText, textBgBdSelectior, textColorSelectior } = useMemo(() => {
-    const res = {
-      translateWeekText: "",
-      textBgBdSelectior: "#FFFFFF",
-      textColorSelectior: "#999999",
-    }
+    //* test
+    // const myObservableRef = observable({
+    //   value: selected.current,
+    // })
 
-    const week = ["일", "월", "화", "수", "목", "금", "토"]
-    res.translateWeekText = week[new Date(date.timestamp).getDay()] //FIXME: 더 나은 방법?
+    // useEffect(() => {
+    //   const dispose = autorun(() => {
+    //     console.log("Value changed:", myObservableRef.value)
+    //   })
 
-    if (state === "selected") {
-      res.textBgBdSelectior = GIVER_CASUAL_NAVY
-    }
-    if (state === "today") {
-      res.textBgBdSelectior = "#F8F8FA"
-    }
+    //   return () => {
+    //     dispose()
+    //   }
+    // }, [myObservableRef])
 
-    if (state === "selected") {
-      res.textColorSelectior = GIVER_CASUAL_NAVY
-    }
-    return res
-  }, [date, state])
+    const { translateWeekText, textBgBdSelectior, textColorSelectior } = useMemo(() => {
+      const res = {
+        translateWeekText: "",
+        textBgBdSelectior: "#FFFFFF",
+        textColorSelectior: "#999999",
+      }
 
-  console.log({ translateWeekText, textBgBdSelectior, textColorSelectior })
-  return (
-    <View
-      style={{
-        width: 48,
-        height: 48,
-        marginRight: 80,
-        borderColor: textBgBdSelectior,
-        backgroundColor: state === "today" ? "#F8F8FA" : "white",
-        borderRadius: 8,
-        borderWidth: 2,
-        borderStyle: "solid",
-      }}
-    >
-      <PreReg14
+      const week = ["일", "월", "화", "수", "목", "금", "토"]
+      res.translateWeekText = week[new Date(date.timestamp).getDay()] //FIXME: 더 나은 방법?
+
+      if (date.dateString === selected.current) {
+        res.textBgBdSelectior = GIVER_CASUAL_NAVY
+        res.textColorSelectior = GIVER_CASUAL_NAVY
+      } else {
+        res.textBgBdSelectior = "#FFFFFF"
+        res.textColorSelectior = "#999999"
+      }
+      if (state === "today") {
+        res.textBgBdSelectior = "#F8F8FA"
+      }
+
+      return res
+    }, [date, state, selected])
+
+    // const textBgBdSelectior = () => {
+    //   if (date.dateString === selected) return GIVER_CASUAL_NAVY
+    //   return "#FFFFFF"
+    // }
+    // const textColorSelectior = () => {
+    //   if (date.dateString === selected) return GIVER_CASUAL_NAVY
+    //   return "#FFFFFF"
+    // }
+    // const translateWeekText = () => {
+    //   return week[new Date(date.timestamp).getDay()]
+    // }
+
+    return (
+      <View
         style={{
-          height: 20,
-          alignSelf: "center",
-          marginTop: 5,
-          fontWeight: "600",
+          width: 48,
+          height: 48,
+          marginRight: 80,
+          borderColor: textBgBdSelectior,
+          backgroundColor: state === "today" ? "#F8F8FA" : "white",
+          borderRadius: 8,
+          borderWidth: 2,
+          borderStyle: "solid",
         }}
-        color={textColorSelectior}
       >
-        {date.day}
-      </PreReg14>
-      <PreReg12
-        style={{
-          alignSelf: "center",
-          fontWeight: "600",
-        }}
-        color={textColorSelectior}
-      >
-        {translateWeekText}
-      </PreReg12>
-    </View>
-  )
-})
+        <PreReg14
+          style={{
+            height: 20,
+            alignSelf: "center",
+            marginTop: 5,
+            fontWeight: "600",
+          }}
+          color={textColorSelectior}
+        >
+          {date.day}
+        </PreReg14>
+        <PreReg12
+          style={{
+            alignSelf: "center",
+            fontWeight: "600",
+          }}
+          color={textColorSelectior}
+        >
+          {translateWeekText}
+        </PreReg12>
+      </View>
+    )
+  },
+  { forwardRef: true },
+)
 
 export const BookingList = observer(function BookingList(props: BookingListProps) {
   const { sections } = props
 
   //* 선택된 날짜
-  const selected = useRef("")
+  const selected = useRef<string>("")
   //const [selected, setSelected] = useState("")
 
   const onDayPress = ({ date }) => {
     console.log("PRESSED 🔷", date)
-    console.log("SELECTED 🔷", selected)
 
     selected.current = date.dateString
+    console.log("SELECTED 🔷", selected)
+
     //setSelected(date.dateString)
   }
 
@@ -124,7 +155,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
       const endProp = visOrCre === "방문" ? "endTime" : "endDate"
 
       // 선택된 날짜에 예약 객체 존재
-      if (dateOrTime.substring(0, 10) === selected) {
+      if (dateOrTime.substring(0, 10) === selected.current) {
         return (
           <View style={{ display: "flex", flexDirection: "row" }}>
             <View
@@ -183,13 +214,15 @@ export const BookingList = observer(function BookingList(props: BookingListProps
             dayComponent={({ date, state }) => (
               <Pressable onPress={(e) => onDayPress({ date })}>
                 {/**
-                 //* 호중 - 불필요한 날짜를 줄이기 위한 방법으로 state 조건을 거는 것을 생각했습니다.
-                 //* 하지만 CustomDayComponent 리렌더링이 일어나지않습니다.
+                 //* observer로 감싼 CustomDayComponent가 리렌더링되지 않음.
+                 //* selected는 분명 바뀜
+                 //? BookingList자체가 리렌더링 되어야 CustomDayComponent가 리렌더링 될지 기회가 생기는 것 아닌가?
                  */}
-                {state !== "disabled" && <CustomDayComponent date={date} state={state} />}
+                <CustomDayComponent date={date} state={state} selected={selected} />
               </Pressable>
             )}
-            //onDayPress={onDayPress}
+            //? 이걸 선언하지 않으면 CustomDayComponent가 정상적인 렌더링이 안됨,,,
+            //onDayPress={(date) => onDayPress({ date })}
             headerStyle={{
               marginTop: 25, // default headertitle(week)을 지우기 위함
             }}
