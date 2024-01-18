@@ -1,11 +1,12 @@
 import React, { FC, useLayoutEffect, useMemo } from "react"
-import { FlatList, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { Alert, FlatList, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import {
   CareSummary,
   ConditionalButton,
+  DeclineOrConfirmButton,
   DivisionLine,
   PreBol14,
   PreBol18,
@@ -14,7 +15,7 @@ import {
   Row,
   Screen,
 } from "#components"
-import { BookingStatus } from "#axios"
+import { BookingStatus, responseCrecheBooking, responseVisitingBooking } from "#axios"
 import {
   BOTTOM_HEIGHT,
   DBG,
@@ -25,10 +26,16 @@ import {
   SUB_HEAD_LINE,
   SUCCESS_BLUE,
 } from "#theme"
+import { useStores } from "#models"
 
 export const CgBookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-booking-detail-screen">
 > = observer(function CgBookingDetailScreen({ route, navigation }) {
+  const {
+    cgBookingStore: { rejectResponse, confirmResponse },
+    petsitterStore: { createChannelWith },
+  } = useStores()
+
   const { booking, serviceTypeKorean } = route.params
 
   // ? 헤더 타이틀 설정
@@ -121,17 +128,107 @@ export const CgBookingDetailScreen: FC<
           marginTop: "auto",
           marginBottom: BOTTOM_HEIGHT,
         }}
-        ListFooterComponent={() => (
-          <ConditionalButton
-            label={label}
-            style={buttonStyle}
-            labelTextColor={labelTextColor}
-            isActivated={false}
-            onPress={() => {
-              // TODO: PENDING 일때 예약 취소 기능 구현
-            }}
-          />
-        )}
+        ListFooterComponent={() => {
+          // "신청 내역 상세" 일때
+          if (booking?.status === BookingStatus.WAITING) {
+            const responsor =
+              serviceTypeKorean === "위탁" ? responseCrecheBooking : responseVisitingBooking
+            const idProp = serviceTypeKorean === "위탁" ? "crecheBookingId" : "visitingBookingId"
+            const bookingId = booking[idProp]
+            return (
+              <DeclineOrConfirmButton
+                size="l"
+                declineText={"거절하기"}
+                onDeclinePress={() => {
+                  // 거절
+                  Alert.alert(
+                    "해당 신청을 정말 거절하시겠어요?",
+                    `예약을 거절하면 해당 예약을 진행하실 수 없어요.\n(UI 개발중🏗️ - TODO: Modal, BottomSheet 으로 수정)`,
+                    [
+                      {
+                        text: "취소",
+                        // onPress: () => console.log("취소"),
+                      },
+                      {
+                        text: "거절하기",
+                        //@ts-ignore
+                        onPress: () => {
+                          responsor(bookingId, { response: false }).then(({ isSuccess }) => {
+                            if (isSuccess) {
+                              rejectResponse(bookingId)
+                              navigation.goBack()
+                            }
+                          })
+                        },
+                      },
+                    ],
+                    { cancelable: true },
+                  )
+                }}
+                confirmText={"수락하기"}
+                onConfirmPress={() => {
+                  // 수락
+                  responsor(bookingId, { response: true }).then(({ isSuccess }) => {
+                    if (isSuccess) {
+                      confirmResponse(bookingId)
+                      createChannelWith(booking?.clientStreamToken)
+                      Alert.alert(
+                        "예약 수락 완료!",
+                        `보호자와의 채팅방이 생성되었습니다.\n채팅 탭에서 확인해보세요!`,
+                        [
+                          {
+                            text: "취소",
+                            // onPress: () => console.log("취소"),
+                          },
+                          {
+                            text: "이동하기",
+                            //@ts-ignore
+                            onPress: () => navigate("Chats"),
+                          },
+                        ],
+                        { cancelable: true },
+                      )
+                    }
+                  })
+                }}
+                style={{ alignSelf: "flex-end", marginTop: 20 }}
+              />
+            )
+          }
+
+          // 그 외 전부
+          return (
+            <ConditionalButton
+              label={label}
+              style={buttonStyle}
+              labelTextColor={labelTextColor}
+              isActivated={false}
+              onPress={() => {
+                if (booking?.status === BookingStatus.PENDING) {
+                  // 예약 취소
+                  Alert.alert(
+                    "수락한 예약을 정말 취소하시겠어요?",
+                    `예약을 취소할 경우 정책에 따라 패널티가 부과됩니다.\n자세한 내용은 FAQ를 참조해주세요.\n(기능 개발중🏗️) - TODO: API 연결)`,
+                    [
+                      {
+                        text: "취소",
+                        // onPress: () => console.log("취소"),
+                      },
+                      {
+                        text: "예약 취소하기",
+                        //@ts-ignore
+                        onPress: () => {
+                          // TODO: PENDING 일때 예약 취소 기능 구현
+                        },
+                      },
+                    ],
+                    { cancelable: true },
+                  )
+                }
+              }}
+            />
+          )
+        }}
       />
     </Screen>
   )

@@ -21,6 +21,7 @@ export type CgBooking = {
   pets: Pet[]
   address: string
   status: BookingStatus
+  createAt: string
 } & {
   // 위탁 전용
   crecheBookingId: number

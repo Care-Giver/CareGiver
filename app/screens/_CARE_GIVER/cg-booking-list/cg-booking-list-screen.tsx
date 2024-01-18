@@ -42,6 +42,7 @@ import { ko } from "date-fns/locale"
 import { HEADER_ROOT } from "../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
 import { formatSchedule } from "../../../utils/format"
+import _ from "lodash"
 
 export const CgBookingListScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-booking-list-screen">
@@ -73,8 +74,7 @@ export const CgBookingListScreen: FC<
       />
       {/* 카드 */}
       <FlatList
-        //@ts-ignore
-        data={bookings}
+        data={_.orderBy<CgBooking>(bookings, ["createAt"], ["desc"])}
         renderItem={({ item, index }) => {
           const bookingId = item[bookingIdProp]
           const serviceTypeKorean = item?.crecheBookingId ? "위탁" : "방문"
@@ -96,9 +96,26 @@ export const CgBookingListScreen: FC<
                     declineText={"거절하기"}
                     onDeclinePress={() => {
                       // 거절
-                      responsor(bookingId, { response: false }).then(({ isSuccess }) => {
-                        isSuccess && rejectResponse(bookingId)
-                      })
+                      Alert.alert(
+                        "해당 신청을 정말 거절하시겠어요?",
+                        `예약을 거절하면 해당 예약을 진행하실 수 없어요.\n(UI 개발중🏗️ - TODO: Modal, BottomSheet 으로 수정)`,
+                        [
+                          {
+                            text: "취소",
+                            // onPress: () => console.log("취소"),
+                          },
+                          {
+                            text: "거절하기",
+                            //@ts-ignore
+                            onPress: () => {
+                              responsor(bookingId, { response: false }).then(({ isSuccess }) => {
+                                isSuccess && rejectResponse(bookingId)
+                              })
+                            },
+                          },
+                        ],
+                        { cancelable: true },
+                      )
                     }}
                     confirmText={"수락하기"}
                     onConfirmPress={() => {
@@ -162,7 +179,7 @@ export const CgBookingListScreen: FC<
   )
 })
 const styles = StyleSheet.create({
-  root: {},
+  // root: {},
   goBackButton: {
     width: 28,
     height: 28,
@@ -218,13 +235,13 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
     onPressBookingDetail,
     style,
   } = props
-  const { pets, address, name } = booking
+  const { pets, address, name, createAt } = booking
 
   const names = pets.map((v) => ({
     petName: v.name,
     speciesName: v.species.name,
   }))
-  const postedAt = format(new Date(), "yyyy.MM.dd(eee) HH:mm", { locale: ko }) //TODO: 현재 시간이 아니라, createAt 칼럼 값으로 수정 할 것.
+  const postedAt = format(new Date(createAt), "yyyy.MM.dd(eee) HH:mm", { locale: ko })
   const petsName = names.map((v) => v.petName).join(" / ")
   const speciesName = names.map((v) => v.speciesName).join(" / ")
 
