@@ -33,11 +33,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       alertModal("구글 로그인", "개발중")
     }
 
-    const noAuthLogin = async () => {
+    const noAuthLogin = async ({ email, provider }) => {
       const res = await loginHander({
-        email: "example@google.com",
-        nickname: "테스트8",
-        provider: "naver",
+        email,
+        nickname: "just-test-nickname",
+        provider,
         OAuthId: "just-test-id",
       })
       console.log("MST loginHandler 테스트 res >>>", res)
@@ -98,8 +98,23 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="테스트용 로그아웃" color={palette.white} />
             </Button>
           )} */}
-          <Button onPress={noAuthLogin} style={styles.noAuthLogin}>
-            <PreMed18 text="테스트용 로그인 (테스트9)" color={palette.white} />
+          <Button
+            onPress={() => noAuthLogin({ email: "blah@test.com", provider: "kakao" })}
+            style={[styles.noAuthLogin, { bottom: 360 }]}
+          >
+            <PreMed18 text="테스트용 로그인 (blah@test.com)" color={palette.white} />
+          </Button>
+          <Button
+            onPress={() => noAuthLogin({ email: "blah2@test.com", provider: "naver" })}
+            style={[styles.noAuthLogin, { bottom: 300 }]}
+          >
+            <PreMed18 text="테스트용 로그인 (blah2@test.com)" color={palette.white} />
+          </Button>
+          <Button
+            onPress={() => noAuthLogin({ email: "example@google.com", provider: "naver" })}
+            style={[styles.noAuthLogin, { bottom: 240 }]}
+          >
+            <PreMed18 text="테스트용 로그인 (example@google.com)" color={palette.white} />
           </Button>
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
@@ -178,7 +193,6 @@ const styles = StyleSheet.create({
     ...button,
     backgroundColor: GIVER_CASUAL_NAVY,
     position: "absolute",
-    bottom: 300,
   },
 
   logout: {
