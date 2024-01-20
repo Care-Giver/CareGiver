@@ -33,14 +33,6 @@ export interface CgSetSelfIntroProps {
 export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfIntroProps) {
   const { style, title, setTitle, desc, setDesc } = props
   const allStyles = Object.assign({}, styles.root, style)
-  const {
-    petsitterStore: {
-      hasDraftPetsitterProfile,
-      draftPetsitter,
-      draftServiceType,
-      setDraftPetsitter,
-    },
-  } = useStores()
 
   return (
     <KeyboardAwareScrollView
@@ -97,16 +89,6 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
               setTitle(text)
             }}
             value={title}
-            onBlur={(e) => {
-              //! FIXME: onBlur 가 작동하지 않으면, regState 충족이 안 되기 때문에, 펫시터 생성에 실패 한다!
-              console.log("e.nativeEvent.text", e.nativeEvent.text)
-              if (hasDraftPetsitterProfile) {
-                setDraftPetsitter(
-                  { ...draftPetsitter, title: e.nativeEvent.text },
-                  draftServiceType,
-                )
-              }
-            }}
           />
         </View>
         <DivisionLine color={MIDDLE_LINE} />
@@ -143,13 +125,6 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
             setDesc(text)
           }}
           value={desc}
-          onBlur={(e) => {
-            //! FIXME: onBlur 가 작동하지 않으면, regState 충족이 안 되기 때문에, 펫시터 생성에 실패 한다!
-            console.log("e.nativeEvent.text", e.nativeEvent.text)
-            if (hasDraftPetsitterProfile) {
-              setDraftPetsitter({ ...draftPetsitter, desc: e.nativeEvent.text }, draftServiceType)
-            }
-          }}
         />
       </View>
     </KeyboardAwareScrollView>
