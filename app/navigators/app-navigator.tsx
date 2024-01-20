@@ -167,15 +167,9 @@ const AllTabs = observer(function AllTabs() {
   const {
     userStore: { type, onSwitchingType, userAuth },
     petStore: { petsHandler },
-    petsitterStore: { fetchPetsitter, regState, draftPetsitter },
+    petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
   } = useStores()
-
-  useEffect(() => {
-    console.log("🔷 regState >>>:", regState)
-    console.log("🔷 draftPetsitter >>>:", draftPetsitter)
-    console.log(`\n`)
-  }, [regState, draftPetsitter])
 
   useEffect(() => {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
