@@ -13,33 +13,38 @@ import { alertModal } from "../../../../utils/alert-modal"
 import { VisitingCreche } from "../../search-stack/search-result-screen/search-result-screen"
 import { BookingRequest } from "../../make-booking/make-booking-screen"
 import { SelectedTime } from "#navigators"
+import { PaymentAdaptor, RawPayment } from "./payment-adaptor"
 
 /**
  * 총 결제 금액을 계산합니다.
  */
-export const useCalculator = ({ key, selectedPetIds, selectedTime, service }) => {
+export const useCalculator = ({ key, selectedPetIds, selectedTime, service }: RawPayment) => {
   const [amount, setAmount] = useState<FeeResponse>(null)
 
   // totalFee 계산
   useEffect(() => {
-    const idProp = key === "visiting" ? "visitingId" : "crecheId"
-    const startProp = key === "visiting" ? "startTime" : "startDate"
-    const endProp = key === "visiting" ? "endTime" : "endDate"
-    const req = {
-      petIds: selectedPetIds,
-      [startProp]: selectedTime.start,
-      [endProp]: selectedTime.end,
-      [idProp]: service[key].id,
-    }
+    const req = new PaymentAdaptor({ key, selectedPetIds, selectedTime, service }).adapt()
+
+    // const idProp = key === "visiting" ? "visitingId" : "crecheId"
+    // const startProp = key === "visiting" ? "startTime" : "startDate"
+    // const endProp = key === "visiting" ? "endTime" : "endDate"
+    // const req = {
+    //   petIds: selectedPetIds,
+    //   [startProp]: selectedTime.start,
+    //   [endProp]: selectedTime.end,
+    //   [idProp]: service[key].id,
+    // }
+
     const calculator = key === "visiting" ? calculateVisitingBooking : calculateCrecheBooking
     //@ts-ignore
     calculator(req).then((res) =>
       setAmount({
         subTotalFee: res?.subTotalFee,
         totalFee: res?.totalFee,
+        petTypeExtraFee: res?.petTypeExtraFee,
       }),
     )
-  }, [key, selectedPetIds, selectedTime.end, selectedTime.start, service])
+  }, [key, selectedPetIds, selectedTime, service])
 
   return amount
 }
