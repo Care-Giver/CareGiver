@@ -1,9 +1,18 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { HandleType } from "./types/creches.visitings.common.types"
+
+interface PetTypeExtraFee {
+  petId: number
+  petName: string
+  petType: HandleType
+  extraFee: number
+}
 
 export interface FeeResponse {
   subTotalFee: number // 수수료 포함 이전, 원가
   totalFee: number // 수수료 포함 가격
+  petTypeExtraFee: PetTypeExtraFee[]
 }
 
 //* 방문 totalFee
