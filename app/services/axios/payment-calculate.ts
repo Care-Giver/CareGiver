@@ -1,16 +1,15 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { HandleType } from "./types/creches.visitings.common.types"
 
-interface PetTypeExtraFee {
+export interface PetTypeExtraFee {
   petId: number
   petName: string
-  petType: HandleType
+  petType: "Small" | "Medium" | "Large"
   extraFee: number
 }
 
 export interface FeeResponse {
-  subTotalFee: number // 수수료 포함 이전, 원가
+  subTotalFee: number // 수수료 포함 이전, 원가 - 이 가격은 petExtraFee도 포함된 가격
   totalFee: number // 수수료 포함 가격
   petTypeExtraFee: PetTypeExtraFee[]
 }
@@ -24,6 +23,7 @@ export interface CalculateVisitingBookingRequestBody {
 }
 interface CalculateVisitingBookingResponse extends GeneralResponse, FeeResponse {}
 /**
+ *
  * @returns {Promise<CalculateVisitingBookingResponse>}
  */
 //TODO 이런 식으로 response 잡아도 되는지??? 우선 test해보기
@@ -60,6 +60,7 @@ export interface CalculateCrecheBookingRequestBody {
 }
 interface CalculateCrecheBookingResponse extends GeneralResponse, FeeResponse {}
 /**
+ *
  * @returns {Promise<CalculateCrecheBookingRequestBody>}
  */
 export const calculateCrecheBooking = async (
