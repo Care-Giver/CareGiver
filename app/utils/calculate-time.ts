@@ -8,7 +8,7 @@ import { SelectedTime } from "#navigators"
 export const calculateHour = (selectedTime: SelectedTime): number => {
   const endTime = new Date(selectedTime.end).getTime()
   const startTime = new Date(selectedTime.start).getTime()
-  return Math.ceil(endTime - startTime) / (1000 * 60 * 60)
+  return Math.ceil((endTime - startTime) / (1000 * 60 * 60))
 }
 
 /**
@@ -19,5 +19,5 @@ export const calculateHour = (selectedTime: SelectedTime): number => {
 export const calculateDay = (selectedTime: SelectedTime): number => {
   const endTime = new Date(selectedTime.end).getTime()
   const startTime = new Date(selectedTime.start).getTime()
-  return Math.ceil(endTime - startTime) / (1000 * 60 * 60 * 24) + 1
+  return Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24)) + 1
 }
