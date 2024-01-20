@@ -23,6 +23,8 @@ import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 import { useCalculator, createBooking } from "./payment-screen.controller"
+import { PaymentFeeInfo } from "../../../../components/payment-fee-info/payment-fee-info"
+import { calculateDay, calculateHour } from "../../../../utils/calculate-time"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
@@ -75,6 +77,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
     // totalFee 계산
     const amount = useCalculator({ key, selectedPetIds, selectedTime, service })
+    const duration = key === "visiting" ? calculateHour(selectedTime) : calculateDay(selectedTime)
+
+    console.log("amount >>>", amount)
 
     /**
      * [개발중 🏗️]
@@ -207,43 +212,26 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
           <DivisionLine height={6} mv={24} />
 
-          {amount && (
-            <View style={styles.priceContainer}>
-              <PreBol14 text="요금 세부 정보" mb={13} />
-              <DivisionLine />
-              {/* 가격 테이블  */}
-              <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <PreReg14 text="서비스 이용료" style={{ flex: 3 }} />
-                  {/* <PreReg14 text="50,000" style={{ flex: 2 }} />
-                <PreReg14 text="8시간" style={{ flex: 1 }} /> */}
-                  <PreReg14
-                    text={`${priceFormatter(String(amount?.subTotalFee))} 원`}
-                    style={{ flex: 3, textAlign: "right" }}
-                  />
-                </View>
-                <View style={styles.tableRow}>
-                  <PreReg14 text="수수료" style={{ flex: 3 }} />
-                  {/* <PreReg14 text="40,000" style={{ flex: 3 }} /> */}
-                  <PreReg14
-                    text={`${priceFormatter(String(amount?.totalFee - amount?.subTotalFee))} 원`}
-                    style={{ flex: 3, textAlign: "right" }}
-                  />
-                </View>
-                <View style={styles.tableRow}>
-                  {/* // TODO: 쿠폰 기능 구현완료후, 주석 해제할 것.  */}
-                  {/* <PreReg14 text="할인 쿠폰" style={{ flex: 5 }} />
-                <PreReg14 text="1" style={{ flex: 1, textAlign: "center" }} />
-                <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} /> */}
-                </View>
-              </View>
-              <DivisionLine />
-              <View style={styles.totalPrice}>
-                <PreBol16 text="결제 금액" />
-                <PreBol18 text={`${priceFormatter(String(amount?.totalFee))} 원`} />
-              </View>
-            </View>
-          )}
+          {/* //* 결제 요금 */}
+          <View
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
+          >
+            <PreBol18 text="요금 세부 정보" />
+            {amount && (
+              <PaymentFeeInfo
+                style={{ marginTop: 10, marginBottom: 160 }}
+                serviceType={key}
+                serviceFee={amount.serviceFee}
+                duration={duration}
+                petTypeExtraFee={amount.petTypeExtraFee}
+                wage={Math.ceil(amount.serviceFee / duration)}
+                totalFee={amount.totalFee}
+                totalExtraFee={amount.totalExtraFee}
+              />
+            )}
+          </View>
         </ScrollView>
 
         <CustomModal
