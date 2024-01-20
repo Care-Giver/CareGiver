@@ -98,6 +98,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
             }}
             value={title}
             onBlur={(e) => {
+              //! FIXME: onBlur 가 작동하지 않으면, regState 충족이 안 되기 때문에, 펫시터 생성에 실패 한다!
               console.log("e.nativeEvent.text", e.nativeEvent.text)
               if (hasDraftPetsitterProfile) {
                 setDraftPetsitter(
@@ -143,6 +144,7 @@ export const CgSetSelfIntro = observer(function CgSetSelfIntro(props: CgSetSelfI
           }}
           value={desc}
           onBlur={(e) => {
+            //! FIXME: onBlur 가 작동하지 않으면, regState 충족이 안 되기 때문에, 펫시터 생성에 실패 한다!
             console.log("e.nativeEvent.text", e.nativeEvent.text)
             if (hasDraftPetsitterProfile) {
               setDraftPetsitter({ ...draftPetsitter, desc: e.nativeEvent.text }, draftServiceType)

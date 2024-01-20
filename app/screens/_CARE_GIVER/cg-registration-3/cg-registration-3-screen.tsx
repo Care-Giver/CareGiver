@@ -36,7 +36,6 @@ export const CgRegistration3Screen: FC<
       resetDraftPetsitter,
     },
   } = useStores()
-  console.log("petsitter 🔷", petsitter)
 
   const isKeyboardShown = useKeyboardShown()
 
@@ -147,6 +146,10 @@ export const CgRegistration3Screen: FC<
     const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
     if (hasDraftPetsitterProfile) {
+      console.log("♦️ FINAL regState >>>:", regState)
+      console.log("♦️ FINAL draftPetsitter >>>:", draftPetsitter)
+      return
+
       if (
         _.includes(regState, "todo") ||
         _.includes(regState, "progress") ||
