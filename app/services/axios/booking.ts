@@ -575,3 +575,83 @@ export const responseVisitingBooking = async (
     return { isSuccess: false }
   }
 }
+
+interface CancelCrecheBookingRequestBody {
+  crecheBookingId: number // 1,
+  reason: string // "단순 변심으로 인한 취소",
+  isPetSitterCancel: boolean // 펫시터가 취소하는 경우 true, 보호자가 취소하는 경우는 false
+}
+interface CancelCrecheBookingResponse extends GeneralResponse {}
+type CancelCrecheBookingResult =
+  | {
+      isSuccess: true // 성공
+    }
+  | {
+      isSuccess: false // 실패
+      reason: string
+    }
+/**
+ * [공통 API]
+ * 수락한 위탁 예약을 취소한다.
+ */
+export const cancelCrecheBooking = async (
+  body: CancelCrecheBookingRequestBody,
+): Promise<CancelCrecheBookingResult> => {
+  try {
+    const response = await axios.patch<CancelCrecheBookingResponse>(
+      `${BASE_URL}/booking/creche/cancel`,
+      body,
+    )
+    console.log("response.data 🔷 cancelCrecheBooking", response.data)
+
+    if (!response?.data.ok) {
+      alertModal("위탁 예약 취소에 실패하였습니다.", `${response.data.error.message}`)
+      return { isSuccess: false, reason: response?.data?.error.message }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("위탁 예약 취소에 실패하였습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false, reason: error?.message }
+  }
+}
+
+interface CancelVisitingBookingRequestBody {
+  visitingBookingId: number // 1,
+  reason: string // "단순 변심으로 인한 취소",
+  isPetSitterCancel: boolean // 펫시터가 취소하는 경우 true, 보호자가 취소하는 경우는 false
+}
+interface CancelVisitingBookingResponse extends GeneralResponse {}
+type CancelVisitingBookingResult =
+  | {
+      isSuccess: true // 성공
+    }
+  | {
+      isSuccess: false // 실패
+      reason: string
+    }
+/**
+ * [공통 API]
+ * 수락한 방문 예약을 취소한다.
+ */
+export const cancelVisitingBooking = async (
+  body: CancelVisitingBookingRequestBody,
+): Promise<CancelVisitingBookingResult> => {
+  try {
+    const response = await axios.patch<CancelVisitingBookingResponse>(
+      `${BASE_URL}/booking/visiting/cancel`,
+      body,
+    )
+    console.log("response.data 🔷 cancelVisitingBooking", response.data)
+
+    if (!response?.data.ok) {
+      alertModal("방문 예약 취소에 실패하였습니다.", `${response.data.error.message}`)
+      return { isSuccess: false, reason: response?.data?.error.message }
+    }
+
+    return { isSuccess: true }
+  } catch (error) {
+    alertModal("방문 예약 취소에 실패하였습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false, reason: error?.message }
+  }
+}
