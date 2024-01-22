@@ -150,7 +150,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           _method = "tosspay"
           break
         case "신용/체크카드":
-          _pg = "kcp"
+          _pg = "nice" // nice.{상점ID} - 참고: https://developers.portone.io/docs/ko/sdk/javascript-sdk/payrq?v=v1#%EA%B2%B0%EC%A0%9C%EC%9A%94%EC%B2%AD-%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0-%EC%A0%95%EC%9D%98
           _method = "card"
           break
       }
