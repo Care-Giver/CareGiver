@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useMemo } from "react"
+import React, { FC, useLayoutEffect, useMemo, useState } from "react"
 import { Alert, FlatList, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -15,7 +15,13 @@ import {
   Row,
   Screen,
 } from "#components"
-import { BookingStatus, responseCrecheBooking, responseVisitingBooking } from "#axios"
+import {
+  BookingStatus,
+  cancelCrecheBooking,
+  cancelVisitingBooking,
+  responseCrecheBooking,
+  responseVisitingBooking,
+} from "#axios"
 import {
   BOTTOM_HEIGHT,
   DBG,
@@ -37,6 +43,10 @@ export const CgBookingDetailScreen: FC<
   } = useStores()
 
   const { booking, serviceTypeKorean } = route.params
+
+  const [isCancelBookingActivated, setIsCancelBookingActivated] = useState(
+    booking?.status === BookingStatus.PENDING,
+  )
 
   // ? 헤더 타이틀 설정
   useLayoutEffect(() => {
@@ -94,6 +104,11 @@ export const CgBookingDetailScreen: FC<
     }
   }, [booking?.status])
 
+  const responsor = serviceTypeKorean === "위탁" ? responseCrecheBooking : responseVisitingBooking
+  const idProp = serviceTypeKorean === "위탁" ? "crecheBookingId" : "visitingBookingId"
+  const bookingId = booking[idProp]
+  const canceler = serviceTypeKorean === "위탁" ? cancelCrecheBooking : cancelVisitingBooking
+
   return (
     <Screen testID="CgBookingDetail">
       <FlatList
@@ -131,10 +146,6 @@ export const CgBookingDetailScreen: FC<
         ListFooterComponent={() => {
           // "신청 내역 상세" 일때
           if (booking?.status === BookingStatus.WAITING) {
-            const responsor =
-              serviceTypeKorean === "위탁" ? responseCrecheBooking : responseVisitingBooking
-            const idProp = serviceTypeKorean === "위탁" ? "crecheBookingId" : "visitingBookingId"
-            const bookingId = booking[idProp]
             return (
               <DeclineOrConfirmButton
                 size="l"
@@ -202,10 +213,10 @@ export const CgBookingDetailScreen: FC<
               label={label}
               style={buttonStyle}
               labelTextColor={labelTextColor}
-              isActivated={false}
+              isActivated={isCancelBookingActivated}
               onPress={() => {
+                // 예약 취소
                 if (booking?.status === BookingStatus.PENDING) {
-                  // 예약 취소
                   Alert.alert(
                     "수락한 예약을 정말 취소하시겠어요?",
                     `예약을 취소할 경우 정책에 따라 패널티가 부과됩니다.\n자세한 내용은 FAQ를 참조해주세요.\n(기능 개발중🏗️) - TODO: API 연결)`,
@@ -216,9 +227,18 @@ export const CgBookingDetailScreen: FC<
                       },
                       {
                         text: "예약 취소하기",
-                        //@ts-ignore
                         onPress: () => {
-                          // TODO: PENDING 일때 예약 취소 기능 구현
+                          //@ts-ignore
+                          canceler({
+                            [idProp]: bookingId,
+                            reason: "API 작동 테스트",
+                            isPetSitterCancel: true,
+                          }).then((res) => {
+                            if (res?.isSuccess) {
+                              setIsCancelBookingActivated(false)
+                              // TODO: 예약취소 성공 모달
+                            }
+                          })
                         },
                       },
                     ],
