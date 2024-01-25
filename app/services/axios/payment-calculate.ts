@@ -1,10 +1,11 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { HandleType } from "./types/creches.visitings.common.types"
 
 export interface PetTypeExtraFee {
   petId: number
   petName: string
-  petType: "Small" | "Medium" | "Large"
+  petType: HandleType
   extraFee: number
 }
 

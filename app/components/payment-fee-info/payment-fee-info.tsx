@@ -7,8 +7,25 @@ import { PetTypeExtraFee } from "#axios"
 import { DivisionLine } from "../_BASIC/division-line/division-line"
 import { images } from "#images"
 import { ServiceType } from "#models"
+import _ from "lodash"
+import { price } from "../../utils/format"
 
 type PetExtraFee = Omit<PetTypeExtraFee, "petName">
+
+type SizeFee = {
+  Small: {
+    number: number // 소형 개체 수
+    fee: number // 소형 추가 가격
+  }
+  Medium: {
+    number: number // 중형 개체 수
+    fee: number // 중형 추가 가격
+  }
+  Large: {
+    number: number // 대형 개체 수
+    fee: number // 대형 추가 가격
+  }
+}
 
 interface PaymentFeeInfoProps {
   /**
@@ -42,9 +59,9 @@ interface PaymentFeeInfoProps {
   totalFee: number
 
   /**
-   * 반려동물 추가금액 총합
+   * 반려동물 추가금액 총합. (서비스 시간 값이 곱해진 값.)
    */
-  totalExtraFee: number
+  petTypeExtraFeeSumByTime: number
 
   /**
    * 반려동물 추가요금 배열
@@ -62,7 +79,7 @@ export const PaymentFeeInfo = observer(function PaymentFeeInfo(props: PaymentFee
     duration,
     wage,
     totalFee,
-    totalExtraFee,
+    petTypeExtraFeeSumByTime,
     petTypeExtraFee,
   } = props
 
@@ -77,97 +94,93 @@ export const PaymentFeeInfo = observer(function PaymentFeeInfo(props: PaymentFee
 
   // const totalPetExtraFee = petTypeExtraFee.reduce((prev, current) => prev + current.extraFee, 0)
 
-  //! 더 좋은 방법 없을까? - 굳이 똑같은 값을 배열로 여러개씩 저장하는 방식이 비효율적으로 보임
   /**
-   * 소형견 추가 금액
+   * 크기별 추가 금액 및 개체수 정보
    */
-  const smallFees = petTypeExtraFee
-    .filter((value) => value.petType === "Small")
-    .map((value) => value.extraFee)
-  /**
-   * 중형견 추가 금액
-   */
-  const mediumFees = petTypeExtraFee
-    .filter((value) => value.petType === "Medium")
-    .map((value) => value.extraFee)
-  /**
-   * 대형견 추가 금액
-   */
-  const largeFees = petTypeExtraFee
-    .filter((value) => value.petType === "Large")
-    .map((value) => value.extraFee)
+  const sizeFee: SizeFee = _.reduce(
+    petTypeExtraFee,
+    (res, current) => {
+      const petType = current.petType
+
+      res[petType].number++
+      res[petType].fee = current.extraFee
+      return res
+    },
+    {
+      Small: { number: 0, fee: 0 },
+      Medium: { number: 0, fee: 0 },
+      Large: { number: 0, fee: 0 },
+    },
+  )
 
   return (
     <View style={_style}>
       {/* //* 서비스 이용료 */}
       <View style={styles.feeRow}>
         <PreReg14 text="서비스 이용료" color={SUB_HEAD_LINE} />
-        <PreReg16 text={`${serviceFee.toLocaleString()}원`} color={SUB_HEAD_LINE} />
+        <PreReg16 text={`${price(`${serviceFee}`)}원`} color={SUB_HEAD_LINE} />
       </View>
       {/* //? 서비스 이용료 상세내역 */}
       <View style={styles.feeDetailContainer}>
         <View style={styles.feeDetailRow}>
           <View style={styles.feeDetailCalculate}>
             <Image source={images.indent_icon} style={styles.indentIcon} />
-            <PreReg14
-              text={`${wage.toLocaleString()}원 X ${duration}${durationUnit}`}
-              color={BODY}
-            />
+            <PreReg14 text={`${price(`${wage}`)}원 X ${duration}${durationUnit}`} color={BODY} />
           </View>
-          <PreReg14 text={`${serviceFee.toLocaleString()}원`} color={BODY} />
+          <PreReg14 text={`${price(`${serviceFee}`)}원`} color={BODY} />
         </View>
       </View>
 
       {/* //* 반려동물 추가요금 */}
       <View style={styles.feeRow}>
         <PreReg14 text="반려동물 추가요금" color={SUB_HEAD_LINE} />
-        <PreReg16 text={`+${totalExtraFee.toLocaleString()}원`} color={SUB_HEAD_LINE} />
+        <PreReg16 text={`+${price(`${petTypeExtraFeeSumByTime}`)}원`} color={SUB_HEAD_LINE} />
       </View>
       {/* //? 반려동물 추가요금 상세내역 */}
       <View style={styles.feeDetailContainer}>
         {/* 소형견 */}
-        {smallFees.length > 0 && (
+        {sizeFee.Small.number > 0 && (
           <View style={styles.feeDetailRow}>
             <View style={styles.feeDetailCalculate}>
               <Image source={images.indent_icon} style={styles.indentIcon} />
-              <PreReg14 text={`소형견 X ${smallFees.length}마리`} color={BODY} />
+              <PreReg14 text={`소형견 X ${sizeFee.Small.number}마리`} color={BODY} />
             </View>
             <PreReg14
-              text={`${(smallFees[0] * smallFees.length).toLocaleString()}원`}
+              text={`${price(`${sizeFee.Small.fee * sizeFee.Small.number}`)}원`}
               color={BODY}
             />
           </View>
         )}
         {/* 중형견 */}
-        {mediumFees.length > 0 && (
+        {sizeFee.Medium.number > 0 && (
           <View style={styles.feeDetailRow}>
             <View style={styles.feeDetailCalculate}>
-              {smallFees.length === 0 ? (
+              {sizeFee.Small.number === 0 ? (
                 <Image source={images.indent_icon} style={styles.indentIcon} />
               ) : (
                 <View style={styles.indentBox} />
               )}
-              <PreReg14 text={`중형견 X ${mediumFees.length}마리`} color={BODY} />
+              <PreReg14 text={`중형견 X ${sizeFee.Medium.number}마리`} color={BODY} />
             </View>
             <PreReg14
-              text={`${(mediumFees[0] * mediumFees.length).toLocaleString()}원`}
+              text={`${price(`${sizeFee.Medium.fee * sizeFee.Medium.number}`)}원`}
               color={BODY}
             />
           </View>
         )}
         {/* 대형견 */}
-        {largeFees.length > 0 && (
+        {sizeFee.Large.number > 0 && (
           <View style={styles.feeDetailRow}>
             <View style={styles.feeDetailCalculate}>
-              {smallFees.length === 0 && mediumFees.length === 0 ? (
+              {sizeFee.Small.number === 0 && sizeFee.Medium.number === 0 ? (
                 <Image source={images.indent_icon} style={styles.indentIcon} />
               ) : (
                 <View style={styles.indentBox} />
               )}
-              <PreReg14 text={`대형견 X ${largeFees.length}마리`} color={BODY} />
+              <PreReg14 text={`대형견 X ${sizeFee.Large.number}마리`} color={BODY} />
             </View>
             <PreReg14
-              text={`${(largeFees[0] * largeFees.length).toLocaleString()}원`}
+              text={`${price(`${sizeFee.Large.fee * sizeFee.Large.number}`)}원`}
               color={BODY}
             />
           </View>
@@ -178,7 +191,7 @@ export const PaymentFeeInfo = observer(function PaymentFeeInfo(props: PaymentFee
       <View style={styles.feeRow}>
         <PreReg14 text="수수료" color={SUB_HEAD_LINE} />
         <PreReg16
-          text={`+${(totalFee - serviceFee - totalExtraFee).toLocaleString()}원`}
+          text={`+${price(`${totalFee - serviceFee - petTypeExtraFeeSumByTime}`)}원`}
           color={SUB_HEAD_LINE}
         />
       </View>
@@ -188,7 +201,7 @@ export const PaymentFeeInfo = observer(function PaymentFeeInfo(props: PaymentFee
       {/* //* 총 결제금액 */}
       <View style={styles.feeRow}>
         <PreBol16 text="총 결제 금액" color={HEAD_LINE} />
-        <PreBol18 text={`${totalFee.toLocaleString()}원`} color={HEAD_LINE} />
+        <PreBol18 text={`${price(`${totalFee}`)}원`} color={HEAD_LINE} />
       </View>
     </View>
   )

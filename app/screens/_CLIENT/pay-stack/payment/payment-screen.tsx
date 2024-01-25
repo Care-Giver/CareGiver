@@ -24,7 +24,7 @@ import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 import { useCalculator, createBooking } from "./payment-screen.controller"
 import { PaymentFeeInfo } from "../../../../components/payment-fee-info/payment-fee-info"
-import { calculateDay, calculateHour } from "../../../../utils/calculate-time"
+import { differenceInDays, differenceInHours } from "date-fns"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
@@ -77,9 +77,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
     // totalFee 계산
     const amount = useCalculator({ key, selectedPetIds, selectedTime, service })
-    const duration = key === "visiting" ? calculateHour(selectedTime) : calculateDay(selectedTime)
-
-    console.log("amount >>>", amount)
+    const duration =
+      key === "visiting"
+        ? differenceInHours(new Date(selectedTime.end), new Date(selectedTime.start))
+        : differenceInDays(new Date(selectedTime.end), new Date(selectedTime.start))
 
     /**
      * [개발중 🏗️]
@@ -228,7 +229,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                 petTypeExtraFee={amount.petTypeExtraFee}
                 wage={Math.ceil(amount.serviceFee / duration)}
                 totalFee={amount.totalFee}
-                totalExtraFee={amount.totalExtraFee}
+                petTypeExtraFeeSumByTime={amount.totalExtraFee}
               />
             )}
           </View>

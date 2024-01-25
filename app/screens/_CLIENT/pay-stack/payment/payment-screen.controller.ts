@@ -13,8 +13,8 @@ import { alertModal } from "../../../../utils/alert-modal"
 import { VisitingCreche } from "../../search-stack/search-result-screen/search-result-screen"
 import { BookingRequest } from "../../make-booking/make-booking-screen"
 import { SelectedTime } from "#navigators"
-import { PaymentAdaptor, RawPayment } from "./payment-adaptor"
-import { calculateDay, calculateHour } from "../../../../utils/calculate-time"
+import { PaymentRequestAdaptor, RawPayment } from "./payment-adaptor"
+import { differenceInDays, differenceInHours } from "date-fns"
 
 /**
  * API 에서 불러온 subTotalFee 는 반려동물 추가요금이 포함된 가격이므로,
@@ -39,13 +39,17 @@ export const useCalculator = ({ key, selectedPetIds, selectedTime, service }: Ra
 
   // totalFee 계산
   useEffect(() => {
-    const req = new PaymentAdaptor({ key, selectedPetIds, selectedTime, service }).adapt()
+    const req = new PaymentRequestAdaptor({ key, selectedPetIds, selectedTime, service }).adapt()
 
     const calculator = key === "visiting" ? calculateVisitingBooking : calculateCrecheBooking
     //@ts-ignore
     calculator(req).then((res) => {
       const serviceTime =
-        key === "visiting" ? calculateHour(selectedTime) : calculateDay(selectedTime)
+        key === "visiting"
+          ? differenceInHours(new Date(selectedTime.end), new Date(selectedTime.start))
+          : differenceInDays(new Date(selectedTime.end), new Date(selectedTime.start))
+
+      console.log(serviceTime)
 
       //? 반려동물 추가요금 총 금액
       const totalExtraFee =

@@ -9,7 +9,7 @@ export type RawPayment = {
   service: VisitingCreche
 }
 
-export class PaymentAdaptor {
+export class PaymentRequestAdaptor {
   private value: RawPayment
 
   constructor(obj: RawPayment) {
