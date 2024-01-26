@@ -8,6 +8,7 @@ import {
   ConditionalButton,
   CustomModal,
   DivisionLine,
+  PaymentList,
   PlaceHolderInputBox,
   PopSem24,
   PreBol14,
@@ -36,6 +37,7 @@ import { l } from "i18n-js"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { 외부링크 } from "../../services/external-web-link"
 import { ScrollToBottomButton } from "stream-chat-react-native"
+import { bookings } from "./dummy"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -44,7 +46,7 @@ import { ScrollToBottomButton } from "stream-chat-react-native"
 // @ts-ignore
 export const CgRequestEarningScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-request-earning-screen">
-> = observer(function CgRequestEarningScreen() {
+> = observer(function CgRequestEarningScreen({ navigation }) {
   //* 정산 관련 정보
   const [bank, setBank] = useState<string>("")
   const [account, setAccount] = useState<string>("")
@@ -153,7 +155,7 @@ export const CgRequestEarningScreen: FC<
         ) : (
           <View>
             <RowRoundedBox
-              style={styles.placeholderBoxClosed}
+              style={(styles.placeholderBoxClosed, { marginBottom: 28 })}
               preset="Pressable"
               onPress={() => setIsOpen(!isOpen)}
             >
@@ -165,6 +167,9 @@ export const CgRequestEarningScreen: FC<
                 style={[styles.image, { marginLeft: 3 }]}
               />
             </RowRoundedBox>
+            {bookings.map((item, idx) => (
+              <PaymentList key={idx} date={item.date} payments={item.bookings} />
+            ))}
           </View>
         )}
       </ScrollView>
@@ -184,8 +189,11 @@ export const CgRequestEarningScreen: FC<
         imageHeight={120}
         title="입금은 다음 달 1일에 돼요!"
         subtitle="정산 요청이 정상적으로 완료되었어요."
-        handleNoPress={() => setModalOpen(false)}
         handleYesPress={() => setModalOpen(false)}
+        handleNoPress={() => {
+          setModalOpen(false)
+          navigation.navigate("cg-earning-list-screen")
+        }}
       />
     </Screen>
   )
