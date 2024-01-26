@@ -48,7 +48,7 @@ export const CgRegistration2Screen: FC<
       regState,
     },
   } = useStores()
-  // console.log("petsitter 🔷", petsitter)
+
   const isKeyboardShown = useKeyboardShown()
 
   // 이 지역 평균 기본 요금

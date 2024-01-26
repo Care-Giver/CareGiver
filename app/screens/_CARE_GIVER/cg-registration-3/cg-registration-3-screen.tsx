@@ -36,7 +36,6 @@ export const CgRegistration3Screen: FC<
       resetDraftPetsitter,
     },
   } = useStores()
-  console.log("petsitter 🔷", petsitter)
 
   const isKeyboardShown = useKeyboardShown()
 
@@ -147,14 +146,16 @@ export const CgRegistration3Screen: FC<
     const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
     if (hasDraftPetsitterProfile) {
+      const regStateWithoutState3 = _.omit(regState, ["state3"])
       if (
-        _.includes(regState, "todo") ||
-        _.includes(regState, "progress") ||
-        _.includes(regState, undefined)
+        _.includes(regStateWithoutState3, "todo") ||
+        _.includes(regStateWithoutState3, "progress") ||
+        _.includes(regStateWithoutState3, undefined)
       ) {
-        alertModal("등록 거절", "모든  단계를 작성해주세요.")
+        alertModal("등록 거절", "모든 단계를 작성해주세요.")
         return
       }
+
       const creator = 방문펫시터 ? createVisiting : createCreche
       const targetService = 방문펫시터 ? "serviceVisiting" : "serviceCreche"
       const targetAmenity = 방문펫시터 ? "visitingAmenities" : "crecheAmenities"
