@@ -9,11 +9,15 @@ import {
   Screen,
   PastBooking,
   PreReg14,
+  DivisionLine,
+  PreMed18,
+  PreMed14,
+  BOTTOM_TAB_BAR_HEIGHT,
 } from "../../../../components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "../../../../navigators"
 import { observer } from "mobx-react-lite"
-import { GIVER_CASUAL_NAVY, DISABLED, BODY, DEVICE_WINDOW_WIDTH } from "../../../../theme"
+import { DISABLED, BODY, DEVICE_WINDOW_WIDTH, HEAD_LINE, BOTTOM_HEIGHT } from "../../../../theme"
 import { FlatList, Pressable, View, Image, ScrollView } from "react-native"
 import { styles } from "./styles"
 import { images } from "../../../../../assets/images"
@@ -41,9 +45,23 @@ export const AllBookingsScreen: FC<
     }
   }, [])
 
-  // * 진행중인 예약 내역
+  /**
+   * [확정된 예약내역]
+   *  PENDING = "Pending", // 승인 허가 이후 서비스 전까지
+   *  PROCEEDING = "Proceeding", // 서비스 진행중
+   */
   const [currentBookings, setCurrentBookings] = useState<CurrentBooking[]>([])
-  // * 지난 예약 내역
+  /**
+   * [신청한 예약내역]
+   *  WAITING = "Waiting", // 승인 대기
+   */
+  const [waitingBookings, setWaitingBookings] = useState<CurrentBooking[]>([])
+  /**
+   * [지난 예약내역]
+   *  COMPLETE = "Complete", // 서비스 완료
+   *  CANCEL = "Cancel", // 유저가 예약 승낙 이후 취소한 경우
+   *  REJECT = "Reject", // 예약을 거절한 경우
+   */
   const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>()
 
   useLayoutEffect(() => {
@@ -56,97 +74,164 @@ export const AllBookingsScreen: FC<
         setFirstPreviousBooking(res)
       })
       .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
+
+    // TODO: setWaitingBookings
   }, [])
 
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* // * 진행중인 예약 */}
-        <PreBol16 text="진행 중인 예약" color={GIVER_CASUAL_NAVY} style={{ marginTop: 20 }} />
+    <Screen style={{ paddingHorizontal: 0 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT }}
+      >
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          {/* // * 확정된 예약*/}
+          <PreBol16 text="확정된 예약" color={HEAD_LINE} style={{ marginTop: 20 }} />
 
-        {/* // * 진행중인 예약 리스트 */}
-        {currentBookings.length > 0 ? (
-          <View>
-            <FlatList
-              style={{ marginTop: 10 }}
-              contentContainerStyle={{
-                paddingVertical: 10,
+          {/* // * 확정된 예약리스트 */}
+          {currentBookings.length > 0 ? (
+            <View>
+              <FlatList
+                style={{ marginTop: 10 }}
+                contentContainerStyle={{
+                  paddingVertical: 10,
+                }}
+                data={currentBookings}
+                renderItem={({ index, item }) => (
+                  <InProgressBooking
+                    currentBooking={item}
+                    key={index}
+                    onPress={() => {
+                      navigate("booking-detail-screen", {
+                        crecheBookingId: item?.crecheBookingId,
+                        visitingBookingId: item?.visitingBookingId,
+                        paymentId: item?.paymentId,
+                        serviceType: item?.crecheBookingId ? "creche" : "visiting",
+                      })
+                    }}
+                  />
+                )}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+                viewabilityConfig={{
+                  viewAreaCoveragePercentThreshold: 51,
+                }}
+                onViewableItemsChanged={onViewableChange}
+                decelerationRate={"fast"}
+              />
+              <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
+                {currentBookings.map((item, index) => (
+                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                ))}
+              </Row>
+            </View>
+          ) : (
+            <View
+              style={{
+                height: 220,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              data={currentBookings}
-              renderItem={({ index, item }) => (
-                <InProgressBooking
-                  currentBooking={item}
-                  key={index}
-                  onPress={() => {
-                    navigate("booking-detail-screen", {
-                      crecheBookingId: item?.crecheBookingId,
-                      visitingBookingId: item?.visitingBookingId,
-                      paymentId: item?.paymentId,
-                      serviceType: item?.crecheBookingId ? "creche" : "visiting",
-                    })
-                  }}
-                />
-              )}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
-              viewabilityConfig={{
-                viewAreaCoveragePercentThreshold: 51,
+            >
+              <PreMed18 text="아직 확정된 예약이 없어요." color={BODY} />
+            </View>
+          )}
+
+          {/* // * 신청한 예약*/}
+
+          <PreBol16 text="신청한 예약" color={HEAD_LINE} style={{ marginTop: 20 }} />
+
+          {/* // * 신청한 예약리스트 */}
+          {waitingBookings.length > 0 ? (
+            <View>
+              <FlatList
+                style={{ marginTop: 10 }}
+                contentContainerStyle={{
+                  paddingVertical: 10,
+                }}
+                data={currentBookings}
+                renderItem={({ index, item }) => (
+                  // TODO: waitingBookings 객체를 담을 수 있도록,
+                  // TODO: PastBooking 컴포넌트 업데이트 하기.
+                  // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
+                  <PastBooking
+                    currentBooking={item}
+                    key={index}
+                    onPress={() => {
+                      navigate("booking-detail-screen", {
+                        crecheBookingId: item?.crecheBookingId,
+                        visitingBookingId: item?.visitingBookingId,
+                        paymentId: item?.paymentId,
+                        serviceType: item?.crecheBookingId ? "creche" : "visiting",
+                      })
+                    }}
+                  />
+                )}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH}
+                viewabilityConfig={{
+                  viewAreaCoveragePercentThreshold: 51,
+                }}
+                onViewableItemsChanged={onViewableChange}
+                decelerationRate={"fast"}
+              />
+              <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
+                {currentBookings.map((item, index) => (
+                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                ))}
+              </Row>
+            </View>
+          ) : (
+            <View
+              style={{
+                paddingTop: 20,
+                paddingBottom: 48,
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              onViewableItemsChanged={onViewableChange}
-              decelerationRate={"fast"}
-            />
-            <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
-              {currentBookings.map((item, index) => (
-                <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
-              ))}
-            </Row>
-          </View>
-        ) : (
-          // ! 임시 empty view
-          // TODO : empty view 디자인 요청 후 수정
-          <View
-            style={{
-              height: 241,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PreReg14 text="현재 진행중인 예약이 없습니다." />
-          </View>
-        )}
+            >
+              <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+              <PreMed18 text="아직 신청한 예약이 없어요." color={BODY} />
+              <PreMed14 text="검색으로 원하는 펫시터를 찾아서 신청해보세요!" color={BODY} mt={6} />
+            </View>
+          )}
+        </View>
+
+        <DivisionLine height={8} />
 
         {/* // * 지난 예약 */}
-        <Row style={{ marginTop: 60, justifyContent: "space-between" }}>
-          <PreReg16 text="지난 예약" color={DISABLED} />
-          {firstPreviousBooking && (
-            <Pressable
-              style={{ flexDirection: "row", alignItems: "center" }}
-              onPress={() => navigate("past-bookings-screen")}
-            >
-              <PreMed16 text="더보기" color={BODY} />
-              <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
-            </Pressable>
-          )}
-        </Row>
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          <Row style={{ marginTop: 16, justifyContent: "space-between" }}>
+            <PreReg16 text="지난 예약" color={DISABLED} />
+            {firstPreviousBooking && (
+              <Pressable
+                style={{ flexDirection: "row", alignItems: "center" }}
+                onPress={() => navigate("past-bookings-screen")}
+              >
+                <PreMed16 text="더보기" color={BODY} />
+                <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
+              </Pressable>
+            )}
+          </Row>
 
-        {firstPreviousBooking ? (
-          <PastBooking style={{ marginTop: 13 }} {...firstPreviousBooking} />
-        ) : (
-          // ! 임시 empty view
-          // TODO : empty view 디자인 요청 후 수정
-          <View
-            style={{
-              height: 358,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PreReg14 text="지난 예약이 없습니다." />
-          </View>
-        )}
+          {firstPreviousBooking ? (
+            <PastBooking style={{ marginTop: 13 }} {...firstPreviousBooking} />
+          ) : (
+            <View
+              style={{
+                height: 220,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <PreMed18 text="지난 예약이 없어요." color={BODY} />
+            </View>
+          )}
+        </View>
       </ScrollView>
     </Screen>
   )
