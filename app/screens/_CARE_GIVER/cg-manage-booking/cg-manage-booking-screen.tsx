@@ -16,7 +16,7 @@ import { useShowBottomTab } from "../../../utils/hooks"
 import { getAllBookings, getConfirmedBookings } from "#axios"
 import { images } from "#images"
 import { Image, View } from "react-native"
-import { BODY } from "#theme"
+import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_HEIGHT } from "#theme"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 
@@ -60,7 +60,7 @@ export const CgManageBookingScreen: FC<
 
   //console.log("cgManageBookingScreen >>> ", status, data, error, isFetching)
   //console.log("cgManageBookingScreen allBookings >>> ", allBookings)
-  //console.log("cgManageBookingScreen confirmedBookings >>> ", confirmedBookings)
+  console.log("cgManageBookingScreen confirmedBookings >>> ", confirmedBookings)
 
   useEffect(() => {
     if (!isFetching) {
@@ -78,33 +78,24 @@ export const CgManageBookingScreen: FC<
 
       <View
         style={{
-          width: "90%",
-          height: 200,
+          width: "100%",
+          height: "auto",
           backgroundColor: "rgba(255, 0, 0, 0.2);",
-          position: "absolute",
           alignSelf: "center",
-          bottom: 80,
-          zIndex: 5,
-          //
           padding: 16,
+          marginTop: 10,
         }}
       >
-        <PreBol14
-          text={`⬆️ 이곳은 '진행예정, '진행중' 그리고 '완료된'\n예약이 표출되는 영역입니다.`}
-          mv={12}
-        />
+        <PreBol14 text={`이곳은 추후에 달력 UI 가 표출되는 영역입니다.`} />
         <PreBol14 text="현재 개발중인 영역입니다. 🏗️" />
         <PreReg14
+          mt={10}
           text={`'모든' 예약 개수: ${allBookings.length}\n'응답을 기다리는' 예약 개수: ${waitingBookings.length}\n'거절'한 예약 개수: ${rejectedBookings.length}\n'수락'하거나 '진행중'인 예약 개수: ${confirmedBookings.length}`}
         />
       </View>
 
-      <BookingList
-        sections={confirmedBookings.map((item, idx) => {
-          const newData = { title: String(idx), data: [item] }
-          return newData
-        })}
-      />
+      {/* 모든 예약 목록 */}
+      <BookingList bookings={confirmedBookings} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
