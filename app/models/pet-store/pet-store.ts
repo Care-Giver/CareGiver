@@ -1,51 +1,5 @@
-import { HandleType } from "../../services/axios/types/creches.visitings.common.types"
-import { getPets } from "../../services/axios/pets"
+import { Pet, getPets } from "../../services/axios/pets"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-
-export enum PetSex {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-}
-
-export enum FamilyType {
-  DOG = "DOG",
-  CAT = "CAT",
-}
-
-export interface Species {
-  id: number
-  createAt: Date
-  updatedAt: Date
-  name: string
-  familyType: FamilyType
-}
-
-export interface Pet {
-  id: number
-  createAt: Date
-  updatedAt: Date
-  name: string
-  species: Species
-  age: number
-  sex: PetSex
-  images: string[]
-  weight: number
-  petType: HandleType
-  isNeutralizated: boolean
-  birthday: string
-  desc: string
-}
-
-/* 
-현재 Pet 더미 데이터는 낡았음 (업데이트 필요)
-{
-  "age": 3, 
-  "id": "3", 
-  "name": "자두", 
-  "sex": "남", 
-  "size": "소형", 
-  "species": "여섯글자가넘어가"
-} */
 
 /**
  * Model description here for TypeScript hints.
@@ -98,6 +52,11 @@ export const PetStoreModel = types
         console.error("catch 에러!!! - petsDetailHandler", error)
         return false
       }
+    },
+
+    getPetsByIds(petIds: number[]) {
+      if (!self.pets) return []
+      return self.pets.filter((pet) => petIds.includes(pet.id))
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

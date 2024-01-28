@@ -15,14 +15,10 @@ interface InProgressBookingProps {
 }
 
 export const InProgressBooking = (props: InProgressBookingProps) => {
-  const { currentBooking, style } = props
-
-  const handlePress = () => {
-    navigate("booking-detail-screen")
-  }
+  const { currentBooking, onPress, style } = props
 
   return (
-    <Pressable style={style} onPress={handlePress}>
+    <Pressable style={style} onPress={onPress}>
       <ImageBackground
         source={images.in_progress_booking_background}
         resizeMode="stretch"

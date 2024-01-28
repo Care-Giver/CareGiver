@@ -57,7 +57,7 @@ import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
   PricePerSize,
-} from "../set-visiting-service-day/set-visiting-service-day-screen"
+} from "../cg-set-visiting-service-day/cg-set-visiting-service-day-screen"
 import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import _ from "lodash"
@@ -65,15 +65,15 @@ import { useKeyboardShown } from "../../../utils/hooks"
 import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
-import { useAdditionalPriceChecker } from "../set-visiting-service-day/use-additional-price-checker"
+import { useAdditionalPriceChecker } from "../cg-set-visiting-service-day/use-additional-price-checker"
 import {
   ExtraSizeFee,
   HandleType,
 } from "../../../services/axios/types/creches.visitings.common.types"
 
-export const SetCrecheServiceDayScreen: FC<
-  StackScreenProps<NavigatorParamList, "set-creche-service-day-screen">
-> = observer(function SetCrecheServiceDayScreen({ route, navigation }) {
+export const CgSetCrecheServiceDayScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-set-creche-service-day-screen">
+> = observer(function CgSetCrecheServiceDayScreen({ route, navigation }) {
   const { selectedDates, crecheId, isAvailableDate, availableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1
@@ -97,8 +97,12 @@ export const SetCrecheServiceDayScreen: FC<
 
   // 저장하기 버튼 활성화 핸들링
   useEffect(() => {
-    setIsSaveButtonActivated((isAvailableDate && !isAvailable) || (!isAvailableDate && isAvailable))
-  }, [isAvailable, isAvailableDate])
+    setIsSaveButtonActivated(
+      (isAvailableDate && !isAvailable) ||
+        (!isAvailableDate && isAvailable) ||
+        (availableDate ? fee !== availableDate.fee : false),
+    )
+  }, [availableDate, fee, isAvailable, isAvailableDate])
 
   const toggleSwitch = () => {
     setIsAvailable((prev) => !prev)
@@ -283,15 +287,12 @@ export const SetCrecheServiceDayScreen: FC<
               ) as ExtraSizeFee,
             }
             // 방문 펫시터 업데이트
-            updateCreche(petsitter.id, data).then(({ isSuccess, creche }) => {
+            updateCreche(petsitter.id, data).then(({ isSuccess, creche, reason }) => {
               if (isSuccess) {
                 // MST 업데이트
                 setCrechePetsitter(creche)
               } else {
-                alertModal(
-                  `강아지 크기 별 추가 요금 업데이트 실패`,
-                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
-                )
+                alertModal(`강아지 크기 별 추가 요금 업데이트 실패`, `${reason}`)
               }
             })
             additionalPriceBottomSheetModalRef.current?.close()

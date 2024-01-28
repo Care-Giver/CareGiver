@@ -37,6 +37,8 @@ import {
   PopReg14,
   PreMed18,
   BOTTOM_TAB_BAR_HEIGHT,
+  Footer,
+  FOOTER_CONTENT_GAP,
 } from "../../../../components"
 import {
   palette,
@@ -420,7 +422,7 @@ export const SearchResultScreen: FC<
   }, [draftSearchRequest])
 
   return (
-    <Screen>
+    <Screen style={{ paddingHorizontal: 0 }}>
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -460,6 +462,7 @@ export const SearchResultScreen: FC<
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: "transparent",
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
           {/* //? title */}
@@ -497,6 +500,7 @@ export const SearchResultScreen: FC<
             justifyContent: "space-between",
             backgroundColor: "transparent",
             paddingVertical: 12,
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
           <SearchSortingButton
@@ -537,9 +541,7 @@ export const SearchResultScreen: FC<
               // height: "100%",
               // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
             }}
-            contentContainerStyle={{
-              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
-            }}
+            contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + 2.5 * 110 }}
             showsVerticalScrollIndicator={false}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
@@ -595,7 +597,11 @@ export const SearchResultScreen: FC<
                       deleteFavorite(body)
                     }
                   }}
-                  style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
+                  style={
+                    index < petsitters.length - 1
+                      ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                      : { marginVertical: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                  }
                 />
               )
             }}
@@ -611,6 +617,7 @@ export const SearchResultScreen: FC<
                 <PreMed18 text="검색된 펫시터가 없어요 😢" />
               </View>
             }
+            ListFooterComponent={() => <Footer mt={FOOTER_CONTENT_GAP} />}
           />
         </View>
       </Animated.View>

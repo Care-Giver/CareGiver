@@ -67,10 +67,12 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
+import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/axios/stream"
+import { Pet } from "#axios"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {
   start: string
@@ -87,7 +89,12 @@ export type CLStackNavigatorParamList = {
    * BookingsStack - 예약내역 스택
    */
   "all-bookings-screen": undefined
-  "booking-detail-screen": undefined
+  "booking-detail-screen": {
+    crecheBookingId: number
+    visitingBookingId: number
+    paymentId: number
+    serviceType: ServiceType
+  }
   "past-bookings-screen": undefined
   // * review stack
   "write-review-screen": {
@@ -272,7 +279,7 @@ export const BookingsStack = () => {
         name="booking-detail-screen"
         component={BookingDetailScreen}
         options={{
-          title: "예약내역 상세",
+          title: "예약 내역 상세",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
@@ -368,6 +375,8 @@ export const SearchingStack = () => {
           headerTitle: "",
           headerTitleStyle: {
             color: "white",
+            fontFamily: PRETENDARD_MEDIUM,
+            fontSize: 18,
           },
         }}
       />

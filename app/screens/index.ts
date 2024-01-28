@@ -3,14 +3,16 @@ export * from "./ignite-basics/error/error-boundary"
 
 // _CARE_GIVER
 export * from "./_CARE_GIVER/cg-calendar/cg-calendar-screen"
-export * from "./_CARE_GIVER/manage-booking/manage-booking-screen"
+export * from "./_CARE_GIVER/cg-manage-booking/cg-manage-booking-screen"
 export * from "./_CARE_GIVER/cg-mypage/cg-mypage-screen"
-export * from "./_CARE_GIVER/set-visiting-service-day/set-visiting-service-day-screen"
-export * from "./_CARE_GIVER/set-creche-service-day/set-creche-service-day-screen"
+export * from "./_CARE_GIVER/cg-set-visiting-service-day/cg-set-visiting-service-day-screen"
+export * from "./_CARE_GIVER/cg-set-creche-service-day/cg-set-creche-service-day-screen"
 export * from "./_CARE_GIVER/cg-registration-1/cg-registration-1-screen"
 export * from "./_CARE_GIVER/cg-registration-2/cg-registration-2-screen"
 export * from "./_CARE_GIVER/cg-registration-3/cg-registration-3-screen"
 export * from "./_CARE_GIVER/cg-edit-profile/cg-edit-profile-screen"
+export * from "./_CARE_GIVER/cg-booking-list/cg-booking-list-screen"
+export * from "./_CARE_GIVER/cg-booking-detail/cg-booking-detail-screen"
 
 // _CLIENT
 export * from "./_CLIENT/caregiver-detail-stack/all-comments-screen/all-comments-screen"

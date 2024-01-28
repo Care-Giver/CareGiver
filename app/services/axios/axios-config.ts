@@ -26,5 +26,5 @@ type Error = {
 
 export interface GeneralResponse {
   ok: boolean
-  error?: string & Error
+  error?: Error
 }

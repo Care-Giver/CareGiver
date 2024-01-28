@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { alertModal } from "../../utils/alert-modal"
 
-interface PaymentColumns {
+export interface PaymentColumns {
   createAt: string // "2023-12-15T19:39:13.387Z"
   id: number // 114
   imp_success: boolean // true
@@ -24,11 +25,6 @@ export interface CreatePaymentInput {
 export interface CreatePaymentResponse extends GeneralResponse {
   payment: PaymentColumns
 }
-// interface CreatePaymentResult {
-//   isSuccess: boolean // 성공여부
-//   reason?: string // 실패시, 실패이유
-//   paymentId?: number // 성공시, 생성된 결제 객체의 id
-// }
 type CreatePaymentResult =
   | {
       isSuccess: true // 성공
@@ -39,8 +35,7 @@ type CreatePaymentResult =
       reason?: string // 실패시, 실패이유
     }
 /**
- * 로그인한 유저의 모든 위탁 예약을 읽어온다.
- * @returns {Promise<CreatePaymentResponse>}
+ * 결제 객체를 생성합니다.
  */
 export const createPayment = async (body: CreatePaymentInput): Promise<CreatePaymentResult> => {
   try {
@@ -63,5 +58,33 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
       isSuccess: false,
       reason: error?.message,
     }
+  }
+}
+
+/**
+ * 주어진 id 에 해당하는 결제 객체를 불러옵니다.
+ */
+interface GetPaymentByIdResponse extends GeneralResponse {
+  payment: PaymentColumns
+}
+export const getPaymentById = async (paymentId: number): Promise<PaymentColumns | null> => {
+  try {
+    console.log("♦️ CALLED | getPaymentById")
+    const response = await axios.get<GetPaymentByIdResponse>(`${BASE_URL}/payment/${paymentId}`)
+
+    if (!response.data.ok) {
+      alertModal(
+        `해당 결제 객체를 읽어오는데 실패했습니다. getPaymentById: ${paymentId}`,
+        `${response.data.error.message}`,
+      )
+      return null
+    }
+    return response.data.payment
+  } catch (error) {
+    alertModal(
+      `해당 결제 객체를 읽어오는데 실패했습니다. getPaymentById: ${paymentId}`,
+      `catch: ${error?.message}`,
+    )
+    return null
   }
 }

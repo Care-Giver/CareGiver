@@ -144,9 +144,9 @@ export const PricePerSize = (props: PricePerSizeProps) => {
 
 export const CARE_GIVER_COMMISION_RATE = 0.06 as const
 
-export const SetVisitingServiceDayScreen: FC<
-  StackScreenProps<NavigatorParamList, "set-visiting-service-day-screen">
-> = observer(function SetVisitingServiceDayScreen({ route, navigation }) {
+export const CgSetVisitingServiceDayScreen: FC<
+  StackScreenProps<NavigatorParamList, "cg-set-visiting-service-day-screen">
+> = observer(function CgSetVisitingServiceDayScreen({ route, navigation }) {
   const { selectedDates, visitingId, isAvailableDate, isDeleted } = route.params
   const 날짜 =
     selectedDates?.length === 1
@@ -532,15 +532,12 @@ export const SetVisitingServiceDayScreen: FC<
               ) as ExtraSizeFee,
             }
             // 방문 펫시터 업데이트
-            updateVisiting(petsitter.id, data).then(({ isSuccess, visiting }) => {
+            updateVisiting(petsitter.id, data).then(({ isSuccess, visiting, reason }) => {
               if (isSuccess) {
                 // MST 업데이트
                 setVistingPetsitter(visiting)
               } else {
-                alertModal(
-                  `강아지 크기 별 추가 요금 업데이트 실패`,
-                  `요금 업데이트에 실패했습니다. 잠시 후 다시 시도해주세요.`,
-                )
+                alertModal(`강아지 크기 별 추가 요금 업데이트 실패`, `${reason}`)
               }
             })
             additionalPriceBottomSheetModalRef.current?.close()

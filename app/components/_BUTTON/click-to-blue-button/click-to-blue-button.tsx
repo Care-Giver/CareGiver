@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleProp, TouchableOpacity, ViewStyle, View, StyleSheet } from "react-native"
+import { StyleProp, TouchableOpacity, ViewStyle, View, StyleSheet, FlexStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreMed14, PreReg14 } from "#components"
 import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
@@ -23,12 +23,12 @@ export interface ClickToBlueButtonProps {
   /**
    * 버튼의 Height을 사용자 마음대로 설정할 수 있음
    */
-  buttonHeight: number
+  buttonHeight: FlexStyle["height"]
 
   /**
    * 버튼의 Width을 사용자 마음대로 설정할 수 있음
    */
-  buttonWidth: number
+  buttonWidth: FlexStyle["width"]
 
   /**
    * 클릭시 적용되는 함수를 설정, Default 값은 setIsActive(!isActive)

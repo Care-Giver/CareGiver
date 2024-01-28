@@ -20,7 +20,9 @@ import {
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
   CustomModal,
-  PreMed16, // modal test
+  PreMed16,
+  FOOTER_CONTENT_GAP,
+  Footer,
 } from "../../../../components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../../navigators"
@@ -42,6 +44,7 @@ import { delay } from "../../../../utils/delay"
 import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -152,6 +155,8 @@ export const CaregiverDetailInformationScreen: FC<
             },
             headerTitleStyle: {
               color: headerOpacity < 0.3 ? "white" : "black",
+              fontFamily: PRETENDARD_MEDIUM,
+              fontSize: 18,
             },
           })
         }}
@@ -274,6 +279,7 @@ export const CaregiverDetailInformationScreen: FC<
             ))}
           </View>
         </View>
+        <Footer mt={FOOTER_CONTENT_GAP} />
       </ScrollView>
 
       {/* //? 예약 신청하기 버튼 */}
@@ -284,10 +290,7 @@ export const CaregiverDetailInformationScreen: FC<
             opacity: buttonOpacity,
             transform: [{ scale: buttonScale }],
             paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-            bottom: Platform.select({
-              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-              android: 8,
-            }),
+            bottom: BOTTOM_HEIGHT,
           }}
         >
           {/* //* 예약 신청하기 버튼*/}

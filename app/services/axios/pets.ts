@@ -12,21 +12,6 @@ export enum FamilyType {
   DOG = "DOG",
   CAT = "CAT",
 }
-export interface PetDetail {
-  id: number
-  createAt: Date
-  updatedAt: Date
-  name: string
-  species: Species
-  age: number
-  sex: PetSex
-  images: string[]
-  weight: number
-  petType: HandleType
-  isNeutralizated: boolean
-  birthday: string // "2019-09-03"
-  desc: string
-}
 
 export interface Species {
   id: number
@@ -37,17 +22,34 @@ export interface Species {
 }
 
 export interface Pet {
-  pet: PetDetail
+  id: number
+  createAt: Date
+  updatedAt: Date
+  name: string
+  speciesId: number
+  species: Species
+  age: number
+  sex: PetSex
+  images: string[]
+  weight: number
+  petType: HandleType
+  isNeutralizated: boolean
+  birthday: string
+  desc: string
+}
+
+export interface PetAndFamilyType {
+  pet: Pet
   familyType: string
 }
 
 interface GetPetsResponse extends GeneralResponse {
-  petResults: Pet[]
+  petResults: PetAndFamilyType[]
 }
 
 interface GetPetsResult {
   isSuccess: boolean // 성공여부
-  petsDetail?: PetDetail[] // 성공시, 펫 상세정보 리스트
+  petsDetail?: Pet[] // 성공시, 펫 상세정보 리스트
   reason?: string // 실패시, 실패이유
 }
 
@@ -89,7 +91,7 @@ export const getPets = async (): Promise<GetPetsResult> => {
   }
 }
 interface GetPetResponse extends GeneralResponse {
-  pet: PetDetail
+  pet: Pet
   familyType: FamilyType
 }
 interface UpdatePetRequestBody {
@@ -140,7 +142,7 @@ interface CreatePetRequestBody extends UpdatePetRequestBody {
   userId: number // 현재 로그인한 유저의 userId
 }
 interface CreatePetResponse extends GeneralResponse {
-  pet: PetDetail
+  pet: Pet
 }
 interface CreatePetResult {
   isSuccess: boolean // 성공여부

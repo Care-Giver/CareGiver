@@ -21,15 +21,17 @@ import {
   SettingScreen,
   ServiceCenterScreen,
   CgCalendarScreen,
-  ManageBookingScreen,
+  CgManageBookingScreen,
   CgMypageScreen,
-  SetVisitingServiceDayScreen,
-  SetCrecheServiceDayScreen,
+  CgSetVisitingServiceDayScreen,
+  CgSetCrecheServiceDayScreen,
   CgRegistration1Screen,
   CgEditProfileScreen,
   EditMypageScreen,
   CgRegistration2Screen,
   CgRegistration3Screen,
+  CgBookingListScreen,
+  CgBookingDetailScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -40,7 +42,8 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { useNavigation } from "@react-navigation/native"
-import { CrecheAvailableDate } from "#axios"
+import { CgBooking, CrecheAvailableDate } from "#axios"
+import { ServiceTypeKorean } from "#models"
 
 export type CGStackNavigatorParamList = {
   /**
@@ -51,20 +54,25 @@ export type CGStackNavigatorParamList = {
   /**
    * CgBookingsStack - CG - 예약관리 스택
    */
-  "manage-booking-screen": undefined
+  "cg-manage-booking-screen": undefined
+  "cg-booking-list-screen": undefined
+  "cg-booking-detail-screen": {
+    booking: CgBooking
+    serviceTypeKorean: ServiceTypeKorean
+  }
 
   /**
    * CalendarStack - CG - 달력 스택
    */
   "cg-calendar-screen": undefined
-  "set-creche-service-day-screen": {
+  "cg-set-creche-service-day-screen": {
     selectedDates: string[]
     crecheId: number
     isAvailableDate: boolean
     availableDate?: CrecheAvailableDate
     isDeleted: boolean
   }
-  "set-visiting-service-day-screen": {
+  "cg-set-visiting-service-day-screen": {
     selectedDates: string[]
     visitingId: number
     isAvailableDate: boolean
@@ -145,14 +153,29 @@ export const CgBookingsStack = () => {
         animation: "slide_from_right",
       }}
       //  @ts-ignore
-      initialRouteName="manage-booking-screen"
+      initialRouteName="cg-manage-booking-screen"
     >
-      {/* //* 예약관리 메인 */}
+      {/* CG - 예약관리 메인 */}
       <Stack.Screen
-        name="manage-booking-screen"
-        component={ManageBookingScreen}
+        name="cg-manage-booking-screen"
+        component={CgManageBookingScreen}
         options={{
           header: (props) => <CgScreenHeader {...props} />,
+        }}
+      />
+      {/* CG - 신청/거절 내역 */}
+      <Stack.Screen
+        name="cg-booking-list-screen"
+        component={CgBookingListScreen}
+        options={{ headerShown: false }}
+      />
+      {/* CG - 예약 내역 상세 (신청, 거절, 진행중, 완료 - 전부.) */}
+      <Stack.Screen
+        name="cg-booking-detail-screen"
+        component={CgBookingDetailScreen}
+        options={{
+          title: "예약 내역 상세",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
     </Stack.Navigator>
@@ -182,8 +205,8 @@ export const CalendarStack = () => {
 
       {/* CG - 위탁, 날짜 별 서비스 수정 */}
       <Stack.Screen
-        name="set-creche-service-day-screen"
-        component={SetCrecheServiceDayScreen}
+        name="cg-set-creche-service-day-screen"
+        component={CgSetCrecheServiceDayScreen}
         options={{
           title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
@@ -192,8 +215,8 @@ export const CalendarStack = () => {
 
       {/* CG - 방문, 날짜 별 서비스 수정 */}
       <Stack.Screen
-        name="set-visiting-service-day-screen"
-        component={SetVisitingServiceDayScreen}
+        name="cg-set-visiting-service-day-screen"
+        component={CgSetVisitingServiceDayScreen}
         options={{
           title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
