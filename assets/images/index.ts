@@ -39,6 +39,7 @@ export const images = {
   google_icon: require("../images/google_icon.png"),
   gps: require("../images/gps.png"),
   in_progress_booking_background: require("../images/in_progress_booking_background.png"),
+  indent_icon: require("../images/indent_icon.png"),
   kakao_icon: require("../images/kakao_icon.png"),
   list_bars: require("../images/list_bars.png"),
   location: require("../images/location.png"),

@@ -14,6 +14,8 @@ import { CgSetSelfIntro } from "./cg-set-self-intro"
 import { useKeyboardShown } from "../../../utils/hooks/use-keyboard-shown"
 import { ScreenHeader, StateHeader } from "../cg-registration-1/cg-registration-1-screen"
 
+const DEFAULT_SERVICES_ID = [1, 2, 3] as const
+
 export const CgRegistration3Screen: FC<
   StackScreenProps<NavigatorParamList, "cg-registration-3-screen">
 > = observer(function CgSetAddressTempScreen({ navigation, route }) {
@@ -34,7 +36,6 @@ export const CgRegistration3Screen: FC<
       resetDraftPetsitter,
     },
   } = useStores()
-  console.log("petsitter 🔷", petsitter)
 
   const isKeyboardShown = useKeyboardShown()
 
@@ -145,14 +146,16 @@ export const CgRegistration3Screen: FC<
     const mstSetter = 방문펫시터 ? setVistingPetsitter : setCrechePetsitter
 
     if (hasDraftPetsitterProfile) {
+      const regStateWithoutState3 = _.omit(regState, ["state3"])
       if (
-        _.includes(regState, "todo") ||
-        _.includes(regState, "progress") ||
-        _.includes(regState, undefined)
+        _.includes(regStateWithoutState3, "todo") ||
+        _.includes(regStateWithoutState3, "progress") ||
+        _.includes(regStateWithoutState3, undefined)
       ) {
-        alertModal("등록 거절", "모든  단계를 작성해주세요.")
+        alertModal("등록 거절", "모든 단계를 작성해주세요.")
         return
       }
+
       const creator = 방문펫시터 ? createVisiting : createCreche
       const targetService = 방문펫시터 ? "serviceVisiting" : "serviceCreche"
       const targetAmenity = 방문펫시터 ? "visitingAmenities" : "crecheAmenities"
@@ -164,7 +167,10 @@ export const CgRegistration3Screen: FC<
           "visitingAmenities",
           "crecheAmenities",
         ]),
-        services: draftPetsitter[targetService].map((service) => service.id),
+        services: _.uniq([
+          ...DEFAULT_SERVICES_ID,
+          ...draftPetsitter[targetService].map((service) => service.id),
+        ]),
         amenities: draftPetsitter[targetAmenity].map((amenity) => amenity.id),
         ...data,
         timeWithPet: 0,

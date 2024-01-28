@@ -1,6 +1,6 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { Petsitter, UserRelatedData } from "./types/creches.visitings.common.types"
+import { Petsitter } from "./types/creches.visitings.common.types"
 import { Creche, CrecheAmenity, CrecheService } from "./creches"
 import { alertModal } from "../../utils/alert-modal"
 
@@ -42,6 +42,10 @@ export const createCreche = async (body: CreateCrecheRequestBody): Promise<Creat
     console.log("response.data 🔷 createCreche", response.data)
 
     if (!response?.data.ok) {
+      alertModal(
+        "위탁 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        `${response.data?.error}`,
+      )
       console.error("API 에러!!! - createCreche ♦️", response?.data?.error)
       return { isSuccess: false, reason: response?.data?.error }
     }
@@ -51,6 +55,10 @@ export const createCreche = async (body: CreateCrecheRequestBody): Promise<Creat
       creche: response.data.creche,
     }
   } catch (error) {
+    alertModal(
+      "위탁 펫시터 등록에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      `catch: ${error?.message}`,
+    )
     console.error("catch 에러!!! - createCreche", error)
     console.error("catch 에러!!! - createCreche body", body)
     return { isSuccess: false, reason: error }
