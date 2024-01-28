@@ -29,6 +29,7 @@ import { CgBooking } from "#axios"
 import { format, parseISO } from "date-fns"
 import { ServiceTypeKorean } from "#models"
 import { ko } from "date-fns/locale"
+import { navigate } from "#navigators"
 
 const ROOT: ViewStyle = {
   justifyContent: "center",
@@ -120,7 +121,15 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
           }
           style={{ marginRight: 20 }}
         />
-        <TouchableOpacity style={styles.goToDetail}>
+        <TouchableOpacity
+          style={styles.goToDetail}
+          onPress={() => {
+            navigate("cg-booking-detail-screen", {
+              booking,
+              serviserviceTypeKoreanceTypeKorean: visOrCre,
+            })
+          }}
+        >
           <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
         </TouchableOpacity>
       </Row>
