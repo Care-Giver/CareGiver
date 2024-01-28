@@ -147,7 +147,7 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
 
 const styles = StyleSheet.create({
   root: {
-    width: 285,
+    width: "100%",
     height: "auto",
     paddingHorizontal: 16,
     paddingTop: 12,
