@@ -87,6 +87,7 @@ export const BookingDetailScreen: FC<
     switch (booking?.status) {
       case BookingStatus.PROCEEDING:
       case BookingStatus.COMPLETE:
+      case BookingStatus.PENDING:
         return { borderColor: DBG } as ViewStyle
       case BookingStatus.WAITING:
         return { borderColor: GIVER_CASUAL_NAVY } as ViewStyle
@@ -99,6 +100,7 @@ export const BookingDetailScreen: FC<
     switch (booking?.status) {
       case BookingStatus.PROCEEDING:
       case BookingStatus.COMPLETE:
+      case BookingStatus.PENDING:
         return DISABLED
       case BookingStatus.WAITING:
         return GIVER_CASUAL_NAVY
@@ -112,6 +114,8 @@ export const BookingDetailScreen: FC<
         return "케어 진행중"
       case BookingStatus.COMPLETE:
         return "케어 완료"
+      case BookingStatus.PENDING:
+        return "케어 예정"
       case BookingStatus.WAITING:
         return "예약 취소하기"
       default:
