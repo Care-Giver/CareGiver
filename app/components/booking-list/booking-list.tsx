@@ -43,6 +43,7 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     <FlatList
       style={allStyles}
       contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
+      showsVerticalScrollIndicator={false}
       data={bookings}
       renderItem={({ item, index }) => {
         if (item === null || item === undefined) {
