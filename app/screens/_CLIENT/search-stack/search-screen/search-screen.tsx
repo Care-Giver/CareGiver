@@ -240,30 +240,32 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
             <Image source={images.search_screen_header_image} style={styles.headerImage} />
             {/* //* 방문 | 위탁 */}
-            <Row style={{ marginTop: 44, justifyContent: "space-between" }}>
+            <Row style={{ marginTop: 44, justifyContent: "space-between", width: "100%" }}>
               <ServiceTypeIndicatorHeader
                 onPress={() => {
                   setServiceType("방문")
                 }}
-                label={"방문"}
+                label={"방문 펫시팅 서비스"}
                 state={serviceType}
+                isActivated={serviceType === "방문"}
               />
-              <ServiceTypeIndicatorHeader
+              {/* <ServiceTypeIndicatorHeader
                 onPress={() => {
                   setServiceType("위탁")
                 }}
                 style={{ marginLeft: 10 }}
                 label={"위탁"}
                 state={serviceType}
-              />
+                isActivated={serviceType === "위탁"}
+              /> */}
             </Row>
             <Row style={{ marginTop: 16 }}>
               <Image source={images.right_arrow_grey} style={styles.image} />
               <PreReg14
                 text={
                   serviceType === "방문"
-                    ? "케어기버가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
-                    : "케어기버가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
+                    ? "펫시터가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
+                    : "펫시터가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
                 }
                 color={DISABLED}
                 style={styles.text}
