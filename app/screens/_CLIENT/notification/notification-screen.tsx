@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { FlatList, View, StyleSheet, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { Button, CustomModal, NotificationCard, Screen } from "#components"
+import { Button, CustomModal, NotificationCard, PreMed18, Screen } from "#components"
 import { useStores } from "#models"
 import { useFocusEffect } from "@react-navigation/native"
 import { alertModal } from "../../../utils/alert-modal"
@@ -72,35 +72,53 @@ export const NotificationScreen: FC<
 
   return (
     <Screen testID="Notification">
-      <Button
+      {/* <Button
         onPress={() => {
           console.log("🔻초기화 전 self", self)
           reset()
           console.log("🔺초기화 후self", self)
         }}
         text="notificationStore 초기화"
-      />
-      <ScrollView
+      /> */}
+
+      <FlatList
         showsVerticalScrollIndicator={false}
+        style={{ flex: 1, width: "100%", height: "100%" }}
         contentContainerStyle={{
+          flex: 1,
+          width: "100%",
+          height: "100%",
           paddingBottom: BOTTOM_HEIGHT,
         }}
-      >
-        {notifications &&
-          notifications.map((item) => {
-            return (
-              !item.isDeleted && (
-                <NotificationCard
-                  key={item.id}
-                  title={item.title}
-                  subtitle={item.content}
-                  time={item.title}
-                  isChecked={item.isChecked}
-                />
-              )
+        data={notifications || []}
+        renderItem={({ item }) => {
+          return (
+            !item.isDeleted && (
+              <NotificationCard
+                key={item.id}
+                title={item.title}
+                subtitle={item.content}
+                time={item.title}
+                isChecked={item.isChecked}
+              />
             )
-          })}
-      </ScrollView>
+          )
+        }}
+        ListEmptyComponent={() => (
+          <View
+            style={{
+              flex: 1,
+              height: "100%",
+              alignSelf: "center",
+              alignItems: "center",
+              marginTop: 200,
+            }}
+          >
+            <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+            <PreMed18 text={`알림이 없습니다`} />
+          </View>
+        )}
+      />
 
       <CustomModal
         image={images.error_profile_medium}
@@ -123,5 +141,5 @@ export const NotificationScreen: FC<
 })
 
 const styles = StyleSheet.create({
-  root: {},
+  // root: {},
 })

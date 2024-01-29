@@ -32,6 +32,7 @@ import {
   CgRegistration3Screen,
   CgBookingListScreen,
   CgBookingDetailScreen,
+  NotificationScreen,
 } from "#screens"
 import {
   GobackAndTitleHeader,
@@ -39,6 +40,7 @@ import {
   PreReg18,
   CgScreenHeader,
   EditMypageScreenHeader,
+  NotificationScreenHeader,
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { useNavigation } from "@react-navigation/native"
@@ -78,6 +80,7 @@ export type CGStackNavigatorParamList = {
     isAvailableDate: boolean
     isDeleted: boolean
   }
+  "notification-screen": { removeAllToggle: boolean }
 
   /**
    * ChatsStack - 채팅 스택 || CG - 채팅 스택
@@ -221,6 +224,15 @@ export const CalendarStack = () => {
           title: "날짜 별 서비스 수정",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
+      />
+
+      {/* 알림 스크린 */}
+      <Stack.Screen
+        name="notification-screen"
+        component={NotificationScreen}
+        options={({ navigation, route }) => ({
+          header: (props) => <NotificationScreenHeader {...props} />,
+        })}
       />
     </Stack.Navigator>
   )
