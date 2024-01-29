@@ -99,7 +99,7 @@ export const FavoritesScreen: FC<
   const [serviceType, setServiceType] = useState<"펫시터" | "훈련사">("펫시터")
 
   // * filter states
-  const [filterServiceType, setFilterServiceType] = useState<Service | null>(null)
+  const [filterServiceType, setFilterServiceType] = useState<Service | null>("visiting")
   const [startDate, setStartDate] = useState<DateData | null>(null)
   const [endDate, setEndDate] = useState<DateData | null>(null)
   const [filterPet, setFilterPet] = useState<Pet[]>([])
@@ -473,8 +473,7 @@ export const FavoritesScreen: FC<
             <View style={styles.divisionLine} />
 
             {/* //* 위탁 | 방문 버튼 */}
-            <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
-              {/* // ? 방문 버튼 */}
+            {/* <Row style={{ marginTop: 12, justifyContent: "space-between" }}>
               <Pressable
                 style={[
                   styles.radioContainer,
@@ -499,7 +498,6 @@ export const FavoritesScreen: FC<
                 </View>
               </Pressable>
 
-              {/* // ? 위탁 버튼 */}
               <Pressable
                 style={[
                   styles.radioContainer,
@@ -523,7 +521,7 @@ export const FavoritesScreen: FC<
                   />
                 </View>
               </Pressable>
-            </Row>
+            </Row> */}
 
             {/* //* 날짜 선택 */}
             {isCalendarOpen ? (
