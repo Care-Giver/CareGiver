@@ -43,7 +43,7 @@ export const CgEditProfileScreen: FC<
     navigation.setOptions({
       //@ts-ignore
       title: hasDraftPetsitterProfile
-        ? `${draftServiceTypeKorean} 펫시터 [등록중]`
+        ? `${draftServiceTypeKorean} 펫시터 [작성중]`
         : `${serviceTypeKorean} 펫시터`,
     })
   }, [navigation, serviceTypeKorean, draftServiceTypeKorean, hasDraftPetsitterProfile])
