@@ -15,12 +15,15 @@ import {
   PreBol16,
   PreBol20,
   PreMed12,
+  PreMed14,
   PreMed16,
   PreReg14,
   PreReg16,
+  RegistrationNoticeNote,
   Row,
   RowRoundedBox,
   Screen,
+  UnderlineText,
 } from "#components"
 import {
   BODY,
@@ -75,51 +78,69 @@ export const CgRequestEarningScreen: FC<
   const openLink = (link: string) => {
     Linking.openURL(link)
   }
+  const onSelect = (selected: string) => {
+    setIsOpen(false)
+    setBank(selected)
+  }
   const banks = [
-    {
-      name: "국민은행",
-    },
-    { name: "신한은행" },
+    { id: 1, name: "국민은행" },
+    { id: 2, name: "신한은행" },
   ]
   return (
     <Screen testID="CgRequestEarning">
       <ScrollView scrollEnabled={isConfirmed}>
         <PreBol20 mt={15} text={isConfirmed ? "다음 달 1일에" : "정산 받을"} />
-        <PreBol20 mt={6} text={isConfirmed ? "받을 금액을 확인해주세요." : "계좌를 알려주세요"} />
-        <View style={styles.underBar} />
+        <Row mb={37}>
+          <UnderlineText>
+            <PreBol20 text="받을" />
+          </UnderlineText>
+          <PreBol20 text={isConfirmed ? " 금액을 확인해주세요." : "계좌를 알려주세요"} />
+        </Row>
 
         {!isConfirmed ? (
           <View>
-            <View style={styles.notificationBox}>
-              <PreBol14 text="정산 요청 전, 잠깐!" color={GIVER_CASUAL_NAVY} mb={8} />
-              <PreMed12 text="펫시팅 요금의 경우 매달 1일에 정산하여 등록해주신 계좌로 입금해드립니다. 연휴나 공휴일에는 지급이 지연될 수 있는 점 양해 부탁드립니다." />
-            </View>
+            <RegistrationNoticeNote
+              title="정산 요청 전, 잠깐!"
+              desc="펫시팅 요금의 경우 매달 1일에 정산하여 등록해주신 계좌로 입금해드립니다. 연휴나 공휴일에는 지급이 지연될 수 있는 점 양해 부탁드립니다."
+              boldTexts={["매달", "1일", "연휴나", "공휴일에는", "지급이", "지연"]}
+            />
             <RowRoundedBox
               style={placeholderBoxStyle}
               preset="Pressable"
               onPress={() => setIsOpen(!isOpen)}
             >
-              <PreReg16 text={"은행 선택"} color={HEAD_LINE} />
+              <PreReg16 text={bank || "은행 선택"} color={HEAD_LINE} />
               <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
             </RowRoundedBox>
             {isOpen && (
               <View
                 style={{
                   height: "auto",
-                  borderColor: GIVER_CASUAL_NAVY,
+                  borderColor: LIGHT_LINE,
                   borderWidth: 2,
                   borderBottomLeftRadius: 8,
                   borderBottomRightRadius: 8,
                 }}
               >
-                <BottomSheetFlatList
+                {banks.map(({ name, id }) => {
+                  return (
+                    <Pressable
+                      style={[styles.bankItem, { borderBottomWidth: id === banks.length ? 0 : 2 }]}
+                      onPress={() => onSelect(name)}
+                      key={id}
+                    >
+                      <PreMed16>{name}</PreMed16>
+                    </Pressable>
+                  )
+                })}
+                {/* <BottomSheetFlatList
                   data={banks}
                   renderItem={({ item }) => (
                     <View>
                       <Text>{item.name}</Text>
                     </View>
                   )}
-                />
+                /> */}
               </View>
             )}
             <PlaceHolderInputBox
@@ -154,8 +175,9 @@ export const CgRequestEarningScreen: FC<
           </View>
         ) : (
           <View>
+            <PreMed14 text="계좌: 국민은행 53710204111019 유혜린" color={BODY} mb={12} />
             <RowRoundedBox
-              style={(styles.placeholderBoxClosed, { marginBottom: 28 })}
+              style={(styles.placeholderBoxClosed, { marginBottom: 28, paddingHorizontal: 15 })}
               preset="Pressable"
               onPress={() => setIsOpen(!isOpen)}
             >
@@ -167,9 +189,10 @@ export const CgRequestEarningScreen: FC<
                 style={[styles.image, { marginLeft: 3 }]}
               />
             </RowRoundedBox>
-            {bookings.map((item, idx) => (
-              <PaymentList key={idx} date={item.date} payments={item.bookings} />
-            ))}
+            {isOpen &&
+              bookings.map((item, idx) => (
+                <PaymentList key={idx} date={item.date} payments={item.bookings} />
+              ))}
           </View>
         )}
       </ScrollView>
@@ -229,6 +252,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     height: 46, //? borderBottomWidth = 0 이 되므로 이것을 고려하여 높이도 조정
-    borderColor: GIVER_CASUAL_NAVY,
+  },
+  bankItem: {
+    padding: 15,
+    borderBottomColor: LIGHT_LINE,
   },
 })

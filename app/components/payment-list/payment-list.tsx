@@ -43,7 +43,7 @@ export const PaymentList = observer(function PaymentList(props: PaymentListProps
             <PreMed14 text={convertedTime} color={SUB_HEAD_LINE} />
             <View style={styles.divider} />
             <PreMed14 text={item.visOrCre} color={SUB_HEAD_LINE} />
-            <PopSem16 style={styles.fee} text={item.fee.toString() + "원"} color={BODY} />
+            <PopSem16 style={styles.fee} text={item.fee.toString() + "원"} />
           </Row>
         )
       })}
