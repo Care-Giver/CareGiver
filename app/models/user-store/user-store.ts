@@ -340,8 +340,11 @@ export const UserStoreModel = types
      * - UserStoreModel 초기화
      * */
     logoutHandler() {
-      //! 중요: 로그인시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
+      //! 중요: 로그아웃시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
       axios.defaults.headers.common["x-jwt"] = ""
+
+      //! 중요: 로그아웃시, stream chat 유저와의 연결을 끊어야 합니다. 그렇지 않으면 다른 계정으로 로그인시, 정상적으로 stream chat 을 사용할 수 없습니다.
+      streamChatClient.disconnectUser()
 
       // UserStoreModel 모델 초기화
       this.reset()
