@@ -197,8 +197,8 @@ export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
     })
 
     if (!response.data || !response?.data?.ok) {
-      // if (!response.data) {
       console.error("/login API 에러!!! ♦️", response?.data?.error)
+      alertModal("로그인 실패", `${response?.data?.error?.message}`)
       return { isSuccess: false, reason: response.data.error }
     }
 
@@ -207,6 +207,7 @@ export const login = async (post: LoginRequestBody): Promise<LoginResult> => {
     return { isSuccess: true, token }
   } catch (error) {
     console.error("catch 에러!!! - login", error.toJSON())
+    alertModal("로그인 실패", `catch: ${error?.message}`)
     return { isSuccess: false, reason: error.toJSON() }
   }
 }

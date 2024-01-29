@@ -1,16 +1,29 @@
-import React, { FC } from "react"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { Button, DivisionLine, PreMed16, PreMed18, PreReg14, Screen } from "#components"
+import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  Button,
+  ConditionalButton,
+  DivisionLine,
+  PreMed16,
+  PreMed18,
+  PreReg14,
+  Screen,
+} from "#components"
 import {
   BODY,
   BOTTOM_HEIGHT,
+  DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
   KAKAO_YELLOW,
+  LIGHT_LINE,
+  MIDDLE_LINE,
   NAVER_GREEN,
+  color,
   palette,
 } from "#theme"
 import { useStores } from "#models"
@@ -21,6 +34,16 @@ import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
 import TEST_BUILD_VERSION from "../setting-screen/test-build-version"
 import dayjs from "dayjs"
+import {
+  BottomSheetBackdrop,
+  BottomSheetFooter,
+  BottomSheetModal,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet"
+
+const PASSWORD_PASSKEY = "caregiver123"
+
+const isIOS = Platform.OS === "ios"
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -28,20 +51,28 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       userStore: { loggedIn, setLoggedIn, logoutHandler, userAuth, loginHander, socialLoginHander },
     } = useStores()
 
+    const [emailAuth, setEmailAuth] = useState<{ email: string; password: string }>({
+      email: null,
+      password: null,
+    })
+
     const googleLogin = async () => {
       //
       alertModal("구글 로그인", "개발중")
     }
 
-    const noAuthLogin = async ({ email, provider }) => {
-      const res = await loginHander({
-        email,
-        nickname: "just-test-nickname",
-        provider,
-        OAuthId: "just-test-id",
-      })
-      console.log("MST loginHandler 테스트 res >>>", res)
-    }
+    const noAuthLogin = useCallback(
+      async ({ email, provider }) => {
+        const res = await loginHander({
+          email,
+          nickname: "just-test-nickname",
+          provider,
+          OAuthId: "just-test-id",
+        })
+        console.log("MST loginHandler 테스트 res >>>", res)
+      },
+      [loginHander],
+    )
 
     // SIGN UP FLOW - UI RENDERING TEST
     const signUpTest = async () => {
@@ -52,18 +83,71 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       })
     }
 
-    const isIOS = Platform.OS === "ios"
+    // 이메일 로그인 바텀시트모달 BEGIN =======================================================
+    // 이메일 로그인 바텀시트모달 - ref
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+    // 이메일 로그인 바텀시트모달 - snapPoints
+    const snapPoints = useMemo(() => ["40%", "80%"], [])
+
+    /** 이메일 로그인 바텀시트모달 backdrop */
+    const renderBackdrop = useCallback(
+      (props) => (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+          disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+          pressBehavior={"close"}
+        />
+      ),
+      [],
+    )
+
+    /** 이메일 로그인 바텀시트모달 Footer - 확인 버튼 렌더링 */
+    const renderFooter = useCallback(
+      (props) => (
+        <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+          <ConditionalButton
+            label={"로그인"}
+            isActivated={!!emailAuth.email && !!emailAuth.password}
+            onPress={() => {
+              if (emailAuth.password !== PASSWORD_PASSKEY) {
+                alertModal("비밀번호가 틀렸습니다.", "비밀번호를 다시 한 번 확인해보세요.")
+                return
+              }
+
+              let _provider = ""
+              switch (emailAuth.email) {
+                case "blah@test.com":
+                  _provider = "kakao"
+                  break
+                case "blah2@test.com":
+                  _provider = "naver"
+                  break
+                case "example@google.com":
+                  _provider = "naver"
+                  break
+              }
+              noAuthLogin({ email: emailAuth.email, provider: _provider })
+              bottomSheetModalRef.current?.close()
+              //
+            }}
+          />
+        </BottomSheetFooter>
+      ),
+      [emailAuth.email, emailAuth.password, noAuthLogin],
+    )
+    // 이메일 로그인 바텀시트모달 ENDED =======================================================
 
     return (
-      <Screen testID="Login">
-        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+      <Screen testID="Login" type="View">
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
           <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
         </View>
 
-        <View style={styles.buttonBox}>
+        <View style={buttonBox}>
           {isIOS && (
             <Button
               onPress={() => {
@@ -99,29 +183,120 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             </Button>
           )} */}
           <Button
-            onPress={() => noAuthLogin({ email: "blah@test.com", provider: "kakao" })}
-            style={[styles.noAuthLogin, { bottom: 360 }]}
-          >
-            <PreMed18 text="테스트용 로그인 (blah@test.com)" color={palette.white} />
-          </Button>
-          <Button
-            onPress={() => noAuthLogin({ email: "blah2@test.com", provider: "naver" })}
+            onPress={() => {
+              bottomSheetModalRef.current.present()
+            }}
             style={[styles.noAuthLogin, { bottom: 300 }]}
           >
-            <PreMed18 text="테스트용 로그인 (blah2@test.com)" color={palette.white} />
-          </Button>
-          <Button
-            onPress={() => noAuthLogin({ email: "example@google.com", provider: "naver" })}
-            style={[styles.noAuthLogin, { bottom: 240 }]}
-          >
-            <PreMed18 text="테스트용 로그인 (example@google.com)" color={palette.white} />
+            <PreMed18 text="이메일 로그인" color={palette.white} />
           </Button>
           {/* <Button onPress={signUpTest} style={styles.noAuthLogin}>
             <PreMed18 text="테스트용 회원가입" color={palette.white} />
           </Button> */}
         </View>
 
-        {/* </ScrollView> */}
+        {/* 이메일 로그인 바텀시트모달 */}
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          backdropComponent={renderBackdrop}
+          index={0}
+          snapPoints={snapPoints}
+          keyboardBehavior="extend"
+          enablePanDownToClose
+          footerComponent={renderFooter}
+          style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        >
+          {/* 이메일 */}
+          <View>
+            <View
+              style={[
+                styles.textInputOuter,
+                { borderColor: emailAuth.email ? GIVER_CASUAL_NAVY : MIDDLE_LINE },
+              ]}
+            >
+              <Image
+                source={emailAuth.email ? images.check_navy : images.check_grey}
+                style={styles.image}
+              />
+              <PreMed16
+                ml={4}
+                text={"이메일"}
+                color={emailAuth.email ? GIVER_CASUAL_NAVY : DISABLED}
+              />
+            </View>
+            <View
+              style={[
+                styles.textInputInner,
+                {
+                  borderColor: emailAuth.email ? GIVER_CASUAL_NAVY : LIGHT_LINE,
+                },
+              ]}
+            >
+              <BottomSheetTextInput
+                onChangeText={(text) => {
+                  setEmailAuth((prev) => ({
+                    ...prev,
+                    email: text,
+                  }))
+                }}
+                value={emailAuth.email}
+                placeholder={"hello@caregiver.pet"}
+                placeholderTextColor={DISABLED}
+                underlineColorAndroid={color.transparent}
+                keyboardType="email-address"
+                returnKeyType="done"
+                style={{ flex: 1 }}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+
+          {/* 비밀번호 */}
+          <View>
+            <View
+              style={[
+                styles.textInputOuter,
+                { borderColor: emailAuth.password ? GIVER_CASUAL_NAVY : MIDDLE_LINE },
+              ]}
+            >
+              <Image
+                source={emailAuth.password ? images.check_navy : images.check_grey}
+                style={styles.image}
+              />
+              <PreMed16
+                ml={4}
+                text={"비밀번호"}
+                color={emailAuth.password ? GIVER_CASUAL_NAVY : DISABLED}
+              />
+            </View>
+            <View
+              style={[
+                styles.textInputInner,
+                {
+                  borderColor: emailAuth.password ? GIVER_CASUAL_NAVY : LIGHT_LINE,
+                },
+              ]}
+            >
+              <BottomSheetTextInput
+                onChangeText={(text) => {
+                  setEmailAuth((prev) => ({
+                    ...prev,
+                    password: text,
+                  }))
+                }}
+                value={emailAuth.password}
+                secureTextEntry
+                placeholder={"*********"}
+                placeholderTextColor={DISABLED}
+                underlineColorAndroid={color.transparent}
+                keyboardType="default"
+                returnKeyType="done"
+                style={{ flex: 1 }}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+        </BottomSheetModal>
       </Screen>
     )
   },
@@ -139,6 +314,17 @@ const button: ViewStyle = {
   backgroundColor: "red",
 }
 
+const buttonBox: ViewStyle = {
+  justifyContent: "space-around",
+  height: (BUTTON_HEIGHT + 20) * (isIOS ? 3 : 2),
+  // position: "absolute",
+  // bottom: BOTTOM_HEIGHT,
+  // left: BASIC_BACKGROUND_PADDING_WIDTH,
+  // right: BASIC_BACKGROUND_PADDING_WIDTH,
+  marginTop: "auto",
+  marginBottom: BOTTOM_HEIGHT,
+}
+
 const styles = StyleSheet.create({
   versionBox: {
     paddingTop: 20,
@@ -152,17 +338,6 @@ const styles = StyleSheet.create({
     // top: 200,
     alignSelf: "center",
     marginTop: 174,
-  },
-
-  buttonBox: {
-    justifyContent: "space-around",
-    height: (BUTTON_HEIGHT + 20) * 3,
-    // position: "absolute",
-    // bottom: BOTTOM_HEIGHT,
-    // left: BASIC_BACKGROUND_PADDING_WIDTH,
-    // right: BASIC_BACKGROUND_PADDING_WIDTH,
-    marginTop: "auto",
-    marginBottom: BOTTOM_HEIGHT,
   },
 
   icon: {
@@ -199,5 +374,34 @@ const styles = StyleSheet.create({
     ...button,
     backgroundColor: GIVER_CASUAL_NAVY,
     marginTop: "auto",
+  },
+
+  image: { width: 16, height: 16 },
+
+  btnContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: 0,
+    right: 0,
+  },
+
+  textInputOuter: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    // backgroundColor: "red",
+  },
+
+  textInputInner: {
+    height: 44,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+    borderWidth: 2,
+    borderColor: LIGHT_LINE,
+    borderRadius: 8,
+    marginTop: 10,
+    marginBottom: 10,
   },
 })
