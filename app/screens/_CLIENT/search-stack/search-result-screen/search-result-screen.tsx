@@ -167,7 +167,7 @@ export const SearchResultScreen: FC<
   useLayoutEffect(() => {
     navigation.setOptions({
       //@ts-ignore
-      title: `펫시팅 - ${serviceType}`,
+      title: `${serviceType} 펫시팅`,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

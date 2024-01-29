@@ -4,7 +4,7 @@ import { PreBol12 } from "../../_BASIC/custom-texts/custom-texts"
 import { GIVER_CASUAL_NAVY, palette } from "#theme"
 
 interface CaregiverTypeButtonPros {
-  text: "방문" | "위탁" | "펫시터"
+  text: "방문" | "위탁" | "펫시터" | "작성중.."
   textColor?: string
   style?: StyleProp<ViewStyle>
 }

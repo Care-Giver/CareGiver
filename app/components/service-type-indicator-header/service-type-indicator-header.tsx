@@ -15,11 +15,11 @@ interface ServiceTypeIndicatorHeaderProps {
   label: ServiceType
   state: string
   onPress: () => void
+  isActivated: boolean
 }
 
 export const ServiceTypeIndicatorHeader = (props: ServiceTypeIndicatorHeaderProps) => {
-  const { label, state, onPress, style } = props
-  const isActivated = label === state
+  const { label, state, onPress, isActivated, style } = props
 
   const _styles = Object.assign({}, styles.root, style)
 
