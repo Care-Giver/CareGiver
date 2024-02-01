@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { getDevicePermission } from "../../_CLIENT/search-stack/search-screen/getDevicePermission"
 import Geolocation from "react-native-geolocation-service"
-import { getCrecheAvgPrice, getVisitingAvgPrice } from "#axios"
+import { getCrecheAvgPrice, getVisitingAvgPrice } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { ServiceTypeKorean } from "#models"
 

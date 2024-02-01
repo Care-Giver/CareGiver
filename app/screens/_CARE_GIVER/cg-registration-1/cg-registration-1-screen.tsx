@@ -28,7 +28,7 @@ import {
   CrecheService,
   VisitingAmenity,
   CrecheAmenity,
-} from "#axios"
+} from "#api"
 import { CgSetService } from "./cg-set-service"
 import { CgSetAmenity } from "./cg-set-amenity"
 import { useKeyboardShown } from "../../../utils/hooks"

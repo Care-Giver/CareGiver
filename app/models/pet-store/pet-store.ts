@@ -1,4 +1,4 @@
-import { Pet, getPets } from "../../services/axios/pets"
+import { Pet, getPets } from "../../services/api/pets"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**

@@ -27,7 +27,7 @@ import {
   PreviousBookingParams,
   getCurrentBookings,
   getFirstPreviousBooking,
-} from "../../../../services/axios"
+} from "../../../../services/api"
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">

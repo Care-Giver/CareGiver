@@ -70,8 +70,8 @@ import { MinseonTest } from "../screens/test/minseon-test"
 import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
-import { streamChatClient } from "../services/axios/stream"
-import { Pet } from "#axios"
+import { streamChatClient } from "../services/api/stream"
+import { Pet } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {

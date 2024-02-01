@@ -16,7 +16,7 @@ import { BODY, BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#
 import { images } from "#images"
 import { styles } from "./styles"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import { signUp } from "#axios"
+import { signUp } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { useTimer } from "react-timer-hook"
 import dayjs from "dayjs"

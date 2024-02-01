@@ -1,4 +1,4 @@
-import { Api } from "#api"
+import { Api } from "#LEGACY_api"
 import { Instance, SnapshotOut, types, IStateTreeNode, SnapshotIn } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 

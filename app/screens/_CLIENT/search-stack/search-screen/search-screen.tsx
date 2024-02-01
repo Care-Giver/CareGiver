@@ -54,7 +54,7 @@ import {
 } from "../../../_CARE_GIVER/cg-registration-1/addressToCoordinates"
 import { isInKorea } from "../../../../utils/is-in-korea"
 import dayjs from "dayjs"
-import { Pet } from "#axios"
+import { Pet } from "#api"
 
 const POSTCODE_HEIGHT = 2200 //TODO: 만약, 우편검색 결과가 짤리는 디바이스가 발견된다면, 크기를 더 늘려야 한다.
 

@@ -11,7 +11,7 @@ import { PreMed14, PreReg12 } from "../../_BASIC/custom-texts/custom-texts"
 import { DivisionLine } from "../../_BASIC/division-line/division-line"
 import { TextInput } from "react-native-gesture-handler"
 import { DISABLED, BODY, GIVER_CASUAL_NAVY } from "#theme"
-import { sendSMS, verifySMS } from "#axios"
+import { sendSMS, verifySMS } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { POPPINS_REGULAR } from "#fonts"
 

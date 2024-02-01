@@ -44,7 +44,7 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../utils/hooks"
 import { useNavigation } from "@react-navigation/native"
-import { CgBooking, CrecheAvailableDate } from "#axios"
+import { CgBooking, CrecheAvailableDate } from "#api"
 import { ServiceTypeKorean } from "#models"
 
 export type CGStackNavigatorParamList = {

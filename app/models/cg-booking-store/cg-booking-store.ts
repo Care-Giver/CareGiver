@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { BookingStatus, CgBooking, ConfirmedBooking, RejectedBooking, WaitingBooking } from "#axios"
+import { BookingStatus, CgBooking, ConfirmedBooking, RejectedBooking, WaitingBooking } from "#api"
 import _ from "lodash"
 
 /**

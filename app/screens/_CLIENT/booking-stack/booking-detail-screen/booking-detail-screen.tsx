@@ -42,7 +42,7 @@ import {
   getPaymentById,
   getVisiting,
   getVisitingBooking,
-} from "#axios"
+} from "#api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"

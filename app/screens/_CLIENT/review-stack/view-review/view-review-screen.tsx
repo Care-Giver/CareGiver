@@ -11,7 +11,7 @@ import {
   Row,
   Screen,
 } from "../../../../components"
-import { Review, getCrecheReview, getVisitingReview } from "../../../../services/axios/review"
+import { Review, getCrecheReview, getVisitingReview } from "../../../../services/api/review"
 import { reviewStyles } from "../styles"
 import { images } from "../../../../../assets/images"
 import { GIVER_CASUAL_NAVY, HEAD_LINE, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "../../../../theme"

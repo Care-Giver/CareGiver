@@ -7,7 +7,7 @@ import { Button, CustomModal, NotificationCard, PreMed18, Screen } from "#compon
 import { useStores } from "#models"
 import { useFocusEffect } from "@react-navigation/native"
 import { alertModal } from "../../../utils/alert-modal"
-import { NotificationColumns, getNotifications } from "../../../services/axios/notification"
+import { NotificationColumns, getNotifications } from "../../../services/api/notification"
 import { images } from "#images"
 import { BOTTOM_HEIGHT } from "#theme"
 

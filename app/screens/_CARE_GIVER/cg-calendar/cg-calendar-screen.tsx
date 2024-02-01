@@ -16,8 +16,8 @@ import { BODY, GIVER_CASUAL_NAVY } from "#theme"
 import {
   GroupedVisitingAvailableTimesByDate,
   getVisitingAvailableTimes,
-} from "../../../services/axios/visiting-available-time"
-import { CrecheAvailableDate, getCrecheDates } from "../../../services/axios/creche-date"
+} from "../../../services/api/visiting-available-time"
+import { CrecheAvailableDate, getCrecheDates } from "../../../services/api/creche-date"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { images } from "#images"
 import { dummy } from "./dummy-data"

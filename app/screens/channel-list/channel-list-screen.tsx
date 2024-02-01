@@ -6,7 +6,7 @@ import { NavigatorParamList } from "#navigators"
 import { Screen } from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
-import { streamChatClient } from "../../services/axios/stream"
+import { streamChatClient } from "../../services/api/stream"
 import { useStores } from "#models"
 
 export const ChannelListScreen: FC<

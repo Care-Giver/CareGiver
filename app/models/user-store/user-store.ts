@@ -2,10 +2,10 @@ import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
+import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#api"
 import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
-import { getStreamToken, streamChatClient } from "../../services/axios/stream"
+import { getStreamToken, streamChatClient } from "../../services/api/stream"
 import { alertModal } from "../../utils/alert-modal"
 
 export enum Type {

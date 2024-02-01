@@ -9,7 +9,7 @@ import {
   getCrecheServices,
   getVisitingAmenities,
   getVisitingServices,
-} from "#axios"
+} from "#api"
 import { alertModal } from "../../utils/alert-modal"
 import _ from "lodash"
 

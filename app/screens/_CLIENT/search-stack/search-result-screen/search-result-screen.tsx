@@ -76,11 +76,11 @@ import {
   createFavorite,
   UpdateFavoriteBody,
   deleteFavorite,
-} from "#axios"
+} from "#api"
 import {
   SearchRequest,
   SearchResultSortOrder,
-} from "../../../../services/axios/types/creches.visitings.common.types"
+} from "../../../../services/api/types/creches.visitings.common.types"
 import {
   BottomSheetBackdrop,
   BottomSheetFooter,

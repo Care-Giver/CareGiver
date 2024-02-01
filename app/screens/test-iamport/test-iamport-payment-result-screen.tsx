@@ -7,8 +7,8 @@ import { NavigatorParamList } from "#navigators"
 import { Button, PreReg18, Screen } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
-import { createPayment } from "../../services/axios/payment"
-import { createCrecheBooking, createVisitingBooking } from "../../services/axios/booking"
+import { createPayment } from "../../services/api/payment"
+import { createCrecheBooking, createVisitingBooking } from "../../services/api/booking"
 
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value

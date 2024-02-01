@@ -6,7 +6,7 @@ import { images } from "#images"
 import { DivisionLine } from "../../_BASIC/division-line/division-line"
 import { LBG } from "#theme"
 import { SelectedPetCard } from "#components"
-import { Pet } from "#axios"
+import { Pet } from "#api"
 
 interface PetInfoDropdownBoxProps {
   isOpen: boolean

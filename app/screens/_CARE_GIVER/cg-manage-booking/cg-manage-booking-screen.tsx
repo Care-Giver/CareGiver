@@ -13,7 +13,7 @@ import {
   Screen,
 } from "#components"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { getAllBookings, getConfirmedBookings } from "#axios"
+import { getAllBookings, getConfirmedBookings } from "#api"
 import { images } from "#images"
 import { Image, View } from "react-native"
 import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_HEIGHT } from "#theme"

@@ -6,7 +6,7 @@ import {
   createCrecheBooking,
   createPayment,
   createVisitingBooking,
-} from "#axios"
+} from "#api"
 import { ServiceType } from "#models"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { alertModal } from "../../../../utils/alert-modal"

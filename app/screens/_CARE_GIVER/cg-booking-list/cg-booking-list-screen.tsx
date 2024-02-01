@@ -36,7 +36,7 @@ import {
   SHADOW_1,
   SUB_HEAD_LINE,
 } from "#theme"
-import { CgBooking, responseCrecheBooking, responseVisitingBooking } from "#axios"
+import { CgBooking, responseCrecheBooking, responseVisitingBooking } from "#api"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import { HEADER_ROOT } from "../../../components/_SCREEN_HEADER/common-styles"

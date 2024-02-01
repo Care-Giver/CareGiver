@@ -5,7 +5,7 @@ import {
   KakaoProfile,
   logout,
 } from "@react-native-seoul/kakao-login"
-import { kakaoServerLogin } from "#axios"
+import { kakaoServerLogin } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 
