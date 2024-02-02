@@ -1,4 +1,4 @@
-import { Pet } from "#axios"
+import { Pet } from "#api"
 import { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 

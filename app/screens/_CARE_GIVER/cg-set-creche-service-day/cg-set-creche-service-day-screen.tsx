@@ -52,7 +52,7 @@ import {
   restoreCrecheDate,
   updateCreche,
   updateCrecheDate,
-} from "#axios"
+} from "#api"
 import { price as priceFormatter } from "../../../utils/format"
 import {
   CARE_GIVER_COMMISION_RATE,
@@ -69,7 +69,7 @@ import { useAdditionalPriceChecker } from "../cg-set-visiting-service-day/use-ad
 import {
   ExtraSizeFee,
   HandleType,
-} from "../../../services/axios/types/creches.visitings.common.types"
+} from "../../../services/api/types/creches.visitings.common.types"
 
 export const CgSetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-creche-service-day-screen">

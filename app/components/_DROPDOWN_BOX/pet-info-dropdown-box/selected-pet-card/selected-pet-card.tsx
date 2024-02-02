@@ -6,8 +6,8 @@ import { BODY, DBG, LBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { DivisionLine } from "../../../_BASIC/division-line/division-line"
 import { Row } from "../../../_BASIC/row/row"
-import { Pet, PetSex } from "#axios"
-import { HandleType } from "../../../../services/axios/types/creches.visitings.common.types"
+import { Pet, PetSex } from "#api"
+import { HandleType } from "../../../../services/api/types/creches.visitings.common.types"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 
 interface SelectedPetCardProps {

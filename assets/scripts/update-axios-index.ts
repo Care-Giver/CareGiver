@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-const dirPath = "../../app/services/axios" // replace with your directory path
+const dirPath = "../../app/services/api" // replace with your directory path
 const files = fs
   .readdirSync(dirPath)
   .filter((file) => file !== "index.ts")

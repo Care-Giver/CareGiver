@@ -1,12 +1,12 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { VistingPetsitter, getVisitingCareGiver } from "../../services/axios/visiting"
+import { VistingPetsitter, getVisitingCareGiver } from "../../services/api/visiting"
 import { alertModal } from "../../utils/alert-modal"
 import { ServiceType } from "../review/review"
-import { CrechePetsitter, getCrecheCareGiver } from "#axios"
+import { CrechePetsitter, getCrecheCareGiver } from "#api"
 import { StateString } from "#components"
 import { getRootStore } from "../extensions/get-root-store"
-import { streamChatClient } from "../../services/axios/stream"
+import { streamChatClient } from "../../services/api/stream"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 

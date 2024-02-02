@@ -17,7 +17,7 @@ import {
   MessageInput,
   Thread,
 } from "stream-chat-react-native"
-import { getStreamToken } from "../../services/axios/stream"
+import { getStreamToken } from "../../services/api/stream"
 import { useStores } from "#models"
 
 const API_KEY = "cyt5mvxvratf"

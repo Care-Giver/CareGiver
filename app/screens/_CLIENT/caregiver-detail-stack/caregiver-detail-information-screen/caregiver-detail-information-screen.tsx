@@ -41,7 +41,7 @@ import {
 } from "../../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../../utils/delay"
-import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
+import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#api"
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"

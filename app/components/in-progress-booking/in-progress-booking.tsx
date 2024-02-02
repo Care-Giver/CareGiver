@@ -6,7 +6,7 @@ import { ReserveDateBox } from "./reserve-date-box/reserve-date-box"
 import { images } from "#images"
 import { navigate } from "#navigators"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "../_BASIC/screen/screen"
-import { CurrentBooking } from "#axios"
+import { CurrentBooking } from "#api"
 
 interface InProgressBookingProps {
   currentBooking: CurrentBooking

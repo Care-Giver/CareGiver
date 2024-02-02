@@ -25,7 +25,7 @@ import {
 import { images } from "#images"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { PressableButton } from "../_BUTTON/pressable-button/pressable-button"
-import { CgBooking } from "#axios"
+import { CgBooking } from "#api"
 import { format, parseISO } from "date-fns"
 import { ServiceTypeKorean } from "#models"
 import { ko } from "date-fns/locale"

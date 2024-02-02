@@ -41,7 +41,7 @@ import {
 } from "#theme"
 import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
-import { uploadURIS, PetSex, FamilyType, createPet } from "#axios"
+import { uploadURIS, PetSex, FamilyType, createPet } from "#api"
 import { useStores } from "#models"
 import { alertModal } from "../../../utils/alert-modal"
 import { useKeyboardShown } from "../../../utils/hooks"

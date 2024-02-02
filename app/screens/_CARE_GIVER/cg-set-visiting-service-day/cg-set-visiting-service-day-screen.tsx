@@ -64,7 +64,7 @@ import {
   restoreVisitingAvailableTime,
   updateVisiting,
   updateVisitingAvailableTime,
-} from "#axios"
+} from "#api"
 import _, { isDate } from "lodash"
 import { alertModal } from "../../../utils/alert-modal"
 import dayjs from "dayjs"
@@ -73,7 +73,7 @@ import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import {
   ExtraSizeFee,
   HandleType,
-} from "../../../services/axios/types/creches.visitings.common.types"
+} from "../../../services/api/types/creches.visitings.common.types"
 import { useAdditionalPriceChecker } from "./use-additional-price-checker"
 
 const nowInUTCZero = new Date()

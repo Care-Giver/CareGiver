@@ -21,7 +21,7 @@ import {
   cancelVisitingBooking,
   responseCrecheBooking,
   responseVisitingBooking,
-} from "#axios"
+} from "#api"
 import {
   BOTTOM_HEIGHT,
   DBG,

@@ -15,7 +15,7 @@ import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE, palette } from "..
 import { CaregiverTypeButton } from "../../components"
 import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
-import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/axios/favorite"
+import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 type ServiceType = "visiting" | "creche"

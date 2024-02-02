@@ -5,8 +5,8 @@ import { PreBol16, PreReg14 } from "../../../_BASIC/custom-texts/custom-texts"
 import { BODY } from "#theme"
 import { Row } from "../../../_BASIC/row/row"
 import { BlueCheckbox } from "../../../blue-checkbox/blue-checkbox"
-import { Pet, PetSex } from "#axios"
-import { HandleType } from "../../../../services/axios/types/creches.visitings.common.types"
+import { Pet, PetSex } from "#api"
+import { HandleType } from "../../../../services/api/types/creches.visitings.common.types"
 
 interface SelectPetItemProps {
   style?: StyleProp<ViewStyle>

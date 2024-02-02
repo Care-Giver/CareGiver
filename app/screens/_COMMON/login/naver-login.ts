@@ -1,5 +1,5 @@
 import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
-import { naverServiceLogin } from "#axios"
+import { naverServiceLogin } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 

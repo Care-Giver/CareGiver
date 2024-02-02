@@ -11,7 +11,7 @@ import {
   UnderlineText,
   RegisterButtonsContainer,
 } from "#components"
-import { CrecheAmenity, VisitingAmenity } from "#axios"
+import { CrecheAmenity, VisitingAmenity } from "#api"
 
 export interface CgSetAmenityProps {
   /**

@@ -1,5 +1,5 @@
 import appleAuth from "@invertase/react-native-apple-authentication"
-import { appleServerLogin } from "#axios"
+import { appleServerLogin } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 

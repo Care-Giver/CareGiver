@@ -57,7 +57,7 @@ import {
 import { Calendar, DateData } from "react-native-calendars"
 import { useStores } from "../../../models"
 import { useShowBottomTab } from "../../../utils/hooks"
-import { Pet, getFavorites } from "#axios"
+import { Pet, getFavorites } from "#api"
 import { ratingRound } from "../../../utils/format"
 import { alertModal } from "../../../utils/alert-modal"
 

@@ -7,7 +7,7 @@ import { CgRegisterStateProps, GoBackSaveNext, Screen, TextSaveNextString } from
 import { useStores } from "#models"
 import { BOTTOM_HEIGHT } from "#theme"
 import { alertModal } from "../../../utils/alert-modal"
-import { updateVisiting, updateCreche, createVisiting, createCreche } from "#axios"
+import { updateVisiting, updateCreche, createVisiting, createCreche } from "#api"
 import _ from "lodash"
 import { CgSetSelfIntro } from "./cg-set-self-intro"
 // import { CgSetCertificate } from "./cg-set-certificate"
