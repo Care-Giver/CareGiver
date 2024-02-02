@@ -65,3 +65,54 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
     }
   }
 }
+
+export interface settlementDetail {
+  serviceType: string
+  start: string
+  end: string
+  isCanceled: boolean
+  settlementFee: number
+}
+export interface GetSettlementInput {
+  startDate: string
+  endDate: string
+}
+export interface GetSettlementResponse extends GeneralResponse {
+  totalSettlementFee: number
+  settlementDetails: settlementDetail[]
+}
+type GetSettlementResult =
+  | {
+      isSuccess: true // 성공
+      totalSettlementFee?: number // 성공시, 생성된 결제 객체의 id
+      settlementDetails: settlementDetail[]
+    }
+  | {
+      isSuccess: false // 실패
+      reason?: string // 실패시, 실패이유
+    }
+
+export const getSettlement = async (body: GetSettlementInput): Promise<GetSettlementResult> => {
+  try {
+    const response = await axios.post<GetSettlementResponse>(`${BASE_URL}/payment/settlement`, body)
+
+    if (!response.data.ok) {
+      return {
+        isSuccess: false,
+        reason: response.data?.error,
+      }
+    }
+
+    return {
+      isSuccess: true,
+      totalSettlementFee: response.data.totalSettlementFee,
+      settlementDetails: response.data.settlementDetails,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return {
+      isSuccess: false,
+      reason: error?.message,
+    }
+  }
+}
