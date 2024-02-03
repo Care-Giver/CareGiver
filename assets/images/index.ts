@@ -48,6 +48,8 @@ export const images = {
   more_info: require("../images/more_info.png"),
   more_info_bigger: require("../images/more_info_bigger.png"),
   naver_icon: require("../images/naver_icon.png"),
+  password_hide: require("../images/password_hide.png"),
+  password_show: require("../images/password_show.png"),
   payment_kakao: require("../images/payment_kakao.png"),
   payment_naver: require("../images/payment_naver.png"),
   payment_toss: require("../images/payment_toss.png"),

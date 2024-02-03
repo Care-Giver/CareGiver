@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
-import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
+import { Image, Platform, StyleSheet, View, ViewStyle, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -55,6 +55,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       email: null,
       password: null,
     })
+    const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
     const googleLogin = async () => {
       //
@@ -285,7 +286,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                   }))
                 }}
                 value={emailAuth.password}
-                secureTextEntry
+                secureTextEntry={isPasswordHidden}
                 placeholder={"*********"}
                 placeholderTextColor={DISABLED}
                 underlineColorAndroid={color.transparent}
@@ -294,6 +295,17 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                 style={{ flex: 1 }}
                 autoCapitalize="none"
               />
+              <Pressable
+                onPress={() => {
+                  setIsPasswordHidden(!isPasswordHidden)
+                }}
+                style={{ alignSelf: "center" }}
+              >
+                <Image
+                  source={isPasswordHidden ? images.password_hide : images.password_show}
+                  style={{ width: 24, height: 24 }}
+                />
+              </Pressable>
             </View>
           </View>
         </BottomSheetModal>
