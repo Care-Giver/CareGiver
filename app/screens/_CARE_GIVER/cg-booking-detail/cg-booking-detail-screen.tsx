@@ -236,6 +236,7 @@ export const CgBookingDetailScreen: FC<
                           }).then((res) => {
                             if (res?.isSuccess) {
                               setIsCancelBookingActivated(false)
+                              navigation.goBack()
                               // TODO: 예약취소 성공 모달
                             }
                           })
