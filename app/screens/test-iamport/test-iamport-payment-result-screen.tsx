@@ -149,7 +149,9 @@ export const TestIamportPaymentResultScreen: FC<
       <TouchableOpacity
         style={styles.button} /* @ts-ignore */
         onPress={
-          () => (isSuccess ? goBack() : navigation.popToTop())
+          // 성공하면, 처음 화면으로.
+          // 실패하면, 이전 화면으로.
+          () => (isSuccess ? navigation.popToTop() : goBack())
           // navigation.navigate("test-iamport-screen")
         }
       >
