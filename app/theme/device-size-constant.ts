@@ -9,6 +9,7 @@ export const DEVICE_SCREEN_WIDTH = Dimensions.get("screen").width
 export const DEVICE_SCREEN_HEIGHT = Dimensions.get("screen").height
 
 export const DEVICE_WINDOW_WIDTH = Dimensions.get("window").width
+export const DEVICE_WINDOW_HEIGHT = Dimensions.get("window").height
 
 const isWeb = Platform.OS === "web"
 

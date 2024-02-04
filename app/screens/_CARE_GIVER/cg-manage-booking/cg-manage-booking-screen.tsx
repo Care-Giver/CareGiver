@@ -1,24 +1,13 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import {
-  BookingCheckButton,
-  BookingInfoCardProps,
-  BookingList,
-  PreBol12,
-  PreBol14,
-  PreBol18,
-  PreReg14,
-  Screen,
-} from "#components"
+import { BookingCheckButton, BookingInfoCardProps, BookingList, Screen } from "#components"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { getAllBookings, getConfirmedBookings } from "#api"
-import { images } from "#images"
-import { Image, View } from "react-native"
-import { BODY, BOTTOM_HEIGHT, DEVICE_SCREEN_HEIGHT } from "#theme"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
+import _ from "lodash"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -71,31 +60,13 @@ export const CgManageBookingScreen: FC<
   return (
     <Screen testID="ManageBooking">
       <BookingCheckButton
-        style={{ zIndex: 1, marginTop: 16 }}
+        style={{ zIndex: 1, marginVertical: 16 }}
         bookingCount={waitingBookings?.length}
         onPress={() => navigate("cg-booking-list-screen")}
       />
 
-      <View
-        style={{
-          width: "100%",
-          height: "auto",
-          backgroundColor: "rgba(255, 0, 0, 0.2);",
-          alignSelf: "center",
-          padding: 16,
-          marginTop: 10,
-        }}
-      >
-        <PreBol14 text={`이곳은 추후에 달력 UI 가 표출되는 영역입니다.`} />
-        <PreBol14 text="현재 개발중인 영역입니다. 🏗️" />
-        <PreReg14
-          mt={10}
-          text={`'모든' 예약 개수: ${allBookings.length}\n'응답을 기다리는' 예약 개수: ${waitingBookings.length}\n'거절'한 예약 개수: ${rejectedBookings.length}\n'수락'하거나 '진행중'인 예약 개수: ${confirmedBookings.length}`}
-        />
-      </View>
-
       {/* 모든 예약 목록 */}
-      <BookingList bookings={confirmedBookings} />
+      <BookingList bookings={_.orderBy(confirmedBookings, "createAt", "desc")} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
