@@ -260,7 +260,14 @@ export const CaregiverDetailInformationScreen: FC<
           />
 
           {/* //* 댓글 */}
-          <Row style={{ marginTop: 60 }}>
+          <Row
+            style={{
+              marginTop: 60,
+
+              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              display: "none",
+            }}
+          >
             <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
@@ -274,7 +281,16 @@ export const CaregiverDetailInformationScreen: FC<
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
 
-          <View style={{ paddingVertical: -1, marginBottom: BOTTOM_HEIGHT, alignItems: "center" }}>
+          <View
+            style={{
+              paddingVertical: -1,
+              marginBottom: BOTTOM_HEIGHT,
+              alignItems: "center",
+
+              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              display: "none",
+            }}
+          >
             {commentsDummy.slice(0, 3).map((item, index) => (
               <Comment commentData={item} numberOfLines={2} style={{ marginTop: -1 }} key={index} />
             ))}
