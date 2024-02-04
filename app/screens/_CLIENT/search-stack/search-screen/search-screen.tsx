@@ -363,9 +363,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               onPress={() => {
                 setIsCalendarOpen(false)
                 setIsDropdownOpen(!isDropdownOpen)
-                scrollViewRef.current?.scrollToEnd({
-                  animated: true,
-                })
+
+                // TODO FIXME: 안드로이드에서 애니메이션이 너무 과장 됨
+                // scrollViewRef.current?.scrollToEnd({
+                //   animated: true,
+                // })
                 // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
                 //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
                 LayoutAnimation.configureNext(
