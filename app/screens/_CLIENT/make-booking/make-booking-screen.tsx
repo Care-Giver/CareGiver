@@ -16,7 +16,14 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
-import { BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, DISABLED, GIVER_CASUAL_NAVY, palette } from "#theme"
+import {
+  BOTTOM_HEIGHT,
+  DEVICE_SCREEN_WIDTH,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  WIDTH,
+  palette,
+} from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
@@ -233,21 +240,21 @@ export const MakeBookingScreen: FC<
             <ClickToBlueButton
               buttonText={"없음"}
               buttonHeight={45}
-              buttonWidth={115}
+              buttonWidth={115 * WIDTH}
               isActiving={is없음Active}
               onPress={() => onPress먹으면안되는음식("없음")}
             />
             <ClickToBlueButton
               buttonText={"치즈"}
               buttonHeight={45}
-              buttonWidth={115}
+              buttonWidth={115 * WIDTH}
               isActiving={is치즈Active}
               onPress={() => onPress먹으면안되는음식("치즈")}
             />
             <ClickToBlueButton
               buttonText={"닭고기"}
               buttonHeight={45}
-              buttonWidth={115}
+              buttonWidth={115 * WIDTH}
               isActiving={is닭고기Active}
               onPress={() => onPress먹으면안되는음식("닭고기")}
             />
