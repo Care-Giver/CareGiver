@@ -173,7 +173,8 @@ export const PastBooking = (props: PastBookingProps) => {
         <Row style={{ justifyContent: "space-between" }}>
           <PreReg14 text={`${petsitterName}`} color={DISABLED} />
           {/* //? 찜 버튼 */}
-          <Pressable onPress={handleLikeButton}>
+          {/* //TODO: 즐겨찾기 기능 재정립 이후 다시 활성화 할 것. */}
+          {/* <Pressable onPress={handleLikeButton}>
             <Image
               style={styles.likeBtn}
               source={
@@ -184,7 +185,7 @@ export const PastBooking = (props: PastBookingProps) => {
                   : images.empty_heart
               }
             />
-          </Pressable>
+          </Pressable> */}
         </Row>
 
         {/* //* 체크인, 체크아웃 */}
