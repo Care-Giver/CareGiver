@@ -84,6 +84,7 @@ export interface Petsitter {
   star: number //5
   /* location: string // "(127, 38)" */
   location: LocationResponse
+  distance: string // "0.01": search reqeust 의 위치로 부터 펫시터 위치와의 떨어진 거리 입니다.
   dogMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
   catMaxUnit: number // 필수값입니다. 없을 경우 0 기입.
   handleType: HandleType[]
