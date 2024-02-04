@@ -246,7 +246,7 @@ export const SearchResultScreen: FC<
 
   /** 펫시터 */
   const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", petsitters)
+  console.log("petsitters ♦️", JSON.stringify(petsitters))
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {
@@ -541,7 +541,10 @@ export const SearchResultScreen: FC<
               // height: "100%",
               // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
             }}
-            contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + 2.5 * 110 }}
+            contentContainerStyle={{
+              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+              // paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
             showsVerticalScrollIndicator={false}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
@@ -600,8 +603,12 @@ export const SearchResultScreen: FC<
                   style={
                     index < petsitters.length - 1
                       ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
-                      : { marginVertical: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                      : {
+                          marginVertical: 20,
+                          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+                        }
                   }
+                  likeStyle={{ right: BASIC_BACKGROUND_PADDING_WIDTH }}
                 />
               )
             }}
