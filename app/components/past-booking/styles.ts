@@ -1,15 +1,13 @@
-import { GIVER_CASUAL_NAVY, LIGHT_LINE, palette } from "../../theme"
+import { GIVER_CASUAL_NAVY, LIGHT_LINE, WIDTH, palette } from "../../theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
+    width: "100%",
     paddingHorizontal: 16,
     paddingVertical: 16,
 
     flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "space-between",
-
     borderRadius: 8,
     borderColor: LIGHT_LINE,
     borderWidth: 1,
@@ -29,9 +27,10 @@ export const styles = StyleSheet.create({
   },
 
   profileImg: {
-    width: 142,
+    // width: 12 * WIDTH,
+    // width: "auto",
     height: 108,
-
+    flex: 1,
     padding: 8,
   },
 
@@ -41,12 +40,11 @@ export const styles = StyleSheet.create({
   },
 
   bookingInfo: {
-    // width: 164,
-    flex: 1,
-    marginLeft: 16,
+    width: "auto",
+    flex: 2,
+    marginLeft: 16 * WIDTH,
     flexDirection: "column",
     justifyContent: "space-between",
-
     paddingVertical: 7.5,
   },
 
