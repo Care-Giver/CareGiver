@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -41,15 +41,33 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { 외부링크 } from "../../services/external-web-link"
 import { ScrollToBottomButton } from "stream-chat-react-native"
 import { bookings } from "./dummy"
+import { GetSettlementResponse, getSettlement, settlementDetail } from "#axios"
+import axios from "axios"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
+export type SettlementType = {
+  totalSettlementFee: number
+  settlementDetails: settlementDetail[]
+}
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
 // 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
 // @ts-ignore
 export const CgRequestEarningScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-request-earning-screen">
 > = observer(function CgRequestEarningScreen({ navigation }) {
+  // //* 금융 결제원 api TEST
+  // useEffect(() => {
+  //   axios
+  //     .post("https://testapi.openbanking.or.kr/oauth/2.0/token", {
+  //       client_id: "54b3f6c3-a25f-4fcd-aba6-8c0eb931f6fa",
+  //       client_secret: "b4c379b8-eb28-4083-b0e4-a59961752480",
+  //       scope: "oob",
+  //       grant_type: "client_credentials",
+  //     })
+  //     .then((res) => console.log(res.data))
+  // }, [])
+
   //* 정산 관련 정보
   const [bank, setBank] = useState<string>("")
   const [account, setAccount] = useState<string>("")
@@ -64,14 +82,31 @@ export const CgRequestEarningScreen: FC<
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
+  const [settlementInfo, setSettlementInfo] = useState<SettlementType>()
   /**
    * 표출할 스크린 상태
    * false  = 정산정보 입력 스크린
    * true = 정산 요청  스크린
    */
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false)
-  const onPressBottomButton = () => {
-    if (isConfirmed === false) setIsConfirmed(true)
+
+  const onPressBottomButton = async () => {
+    //? 정산 요청 스크린일 때
+    if (isConfirmed === false) {
+      setIsConfirmed(true)
+      const settlementResponse = await getSettlement({
+        startDate: "2024-01-01",
+        endDate: "2024-01-31",
+      })
+      //? 정산 내역 api 불러와 저장
+      if (settlementResponse.isSuccess) {
+        setSettlementInfo({
+          ...settlementInfo,
+          totalSettlementFee: settlementResponse.totalSettlementFee,
+          settlementDetails: settlementResponse.settlementDetails,
+        })
+      }
+    }
     if (isConfirmed === true) setModalOpen(true)
   }
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
@@ -189,10 +224,7 @@ export const CgRequestEarningScreen: FC<
                 style={[styles.image, { marginLeft: 3 }]}
               />
             </RowRoundedBox>
-            {isOpen &&
-              bookings.map((item, idx) => (
-                <PaymentList key={idx} date={item.date} payments={item.bookings} />
-              ))}
+            {isOpen && <PaymentList settlementDetails={settlementInfo.settlementDetails} />}
           </View>
         )}
       </ScrollView>
@@ -200,7 +232,6 @@ export const CgRequestEarningScreen: FC<
         label={isConfirmed ? "정산 요청하기" : "다음"}
         isActivated={isCheck}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-        //TODO navigation추가 필요
         onPress={onPressBottomButton}
       />
       <CustomModal

@@ -5,6 +5,7 @@ import { PopSem16, PreMed14, PreReg14 } from "../_BASIC/custom-texts/custom-text
 import { Row } from "../_BASIC/row/row"
 import { BookingType, PaymentType } from "app/screens/cg-request-earning/dummy"
 import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
+import { settlementDetail } from "#axios"
 
 export interface PaymentListProps {
   /**
@@ -13,37 +14,34 @@ export interface PaymentListProps {
   style?: StyleProp<ViewStyle>
 
   /**
-   * 해당하는 날짜 yyyy-mm-dd
-   */
-  date: string
-
-  /**
    * 해당하는 날짜의 정산내역
    */
-  payments: BookingType[]
+  settlementDetails: settlementDetail[]
 }
 
 export const PaymentList = observer(function PaymentList(props: PaymentListProps) {
   const { style } = props
-  const { date, payments } = props
+  const { settlementDetails } = props
   const allStyles = Object.assign({}, styles.root, style)
 
+  //TODO api의 resBody가 수정되어야함. 또는 프론트측에서 날짜별로 묶은 뒤 다시 뿌리는 작업이 필요함.
   return (
     <View style={allStyles}>
-      <PreReg14 mb={17} text={date} color={BODY} />
+      {/* //TODO 방문에 대해서만 구현되었습니다. */}
 
-      {payments.map((item, idx) => {
+      {settlementDetails.map((item, idx) => {
         const convertedTime =
-          item.visOrCre === "위탁"
+          item.serviceType === "위탁"
             ? "종일"
-            : `${item.startTime.substring(11, 13)}시-${item.endTime.substring(11, 13)}시`
+            : `${item.start.substring(11, 13)}시-${item.end.substring(11, 13)}시`
 
         return (
           <Row mb={19} key={idx}>
+            <PreReg14 text={item.start.substring(0, 10)} color={BODY} />
             <PreMed14 text={convertedTime} color={SUB_HEAD_LINE} />
             <View style={styles.divider} />
-            <PreMed14 text={item.visOrCre} color={SUB_HEAD_LINE} />
-            <PopSem16 style={styles.fee} text={item.fee.toString() + "원"} />
+            <PreMed14 text={item.serviceType} color={SUB_HEAD_LINE} />
+            <PopSem16 style={styles.fee} text={item.settlementFee.toString() + "원"} />
           </Row>
         )
       })}
