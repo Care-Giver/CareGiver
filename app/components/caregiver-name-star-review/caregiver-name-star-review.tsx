@@ -61,7 +61,8 @@ export const CaregiverNameStarReview = observer(function CaregiverNameStarReview
                   color={GIVER_CASUAL_NAVY}
                   // style={{ marginLeft: 4 }}
                 />
-                <Image source={images.arrow_right_navy} style={styles.rightArrow} />
+                {/* //TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기 */}
+                {/* <Image source={images.arrow_right_navy} style={styles.rightArrow} /> */}
               </Row>
             </Pressable>
           </Row>
