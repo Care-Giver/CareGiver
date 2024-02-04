@@ -1,14 +1,15 @@
 /* eslint-disable camelcase */
 import React, { FC, useEffect } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
-import { Button, PreReg18, Screen } from "#components"
+import { NavigatorParamList, goBack } from "#navigators"
+import { BASIC_BACKGROUND_PADDING_WIDTH, Button, PreBol16, PreReg18, Screen } from "#components"
 import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
 import { createPayment } from "../../services/api/payment"
 import { createCrecheBooking, createVisitingBooking } from "../../services/api/booking"
+import { BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, GIVER_CASUAL_NAVY } from "#theme"
 
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
@@ -144,16 +145,32 @@ export const TestIamportPaymentResultScreen: FC<
           </View>
         )}
       </View>
-      <Button
-        /* @ts-ignore */
-        onPress={() => navigation.navigate("test-iamport-screen")}
+
+      <TouchableOpacity
+        style={styles.button} /* @ts-ignore */
+        onPress={
+          () => (isSuccess ? goBack() : navigation.popToTop())
+          // navigation.navigate("test-iamport-screen")
+        }
       >
-        <PreReg18 text="결제하기" />
-      </Button>
+        <PreBol16 text={"돌아가기"} color="white" />
+      </TouchableOpacity>
     </Screen>
   )
 })
 
 const styles = StyleSheet.create({
   root: {},
+  button: {
+    position: "absolute",
+    bottom: BOTTOM_HEIGHT,
+    width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
+    alignSelf: "center",
+    backgroundColor: GIVER_CASUAL_NAVY,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 56,
+    borderRadius: 10,
+  },
 })
