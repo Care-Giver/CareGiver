@@ -9,6 +9,7 @@ import { RootStackParamList } from "./navigation.types"
 import { FontAwesome } from "@expo/vector-icons"
 import { createPayment } from "../../services/api/payment"
 import { createCrecheBooking, createVisitingBooking } from "../../services/api/booking"
+import { BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, GIVER_CASUAL_NAVY } from "#theme"
 
 function getBoolean(value: string | boolean | undefined) {
   if (typeof value === "boolean") return value
