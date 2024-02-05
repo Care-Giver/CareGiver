@@ -87,6 +87,7 @@ import {
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 import Slider from "@react-native-community/slider"
 import _ from "lodash"
 import { ratingRound } from "../../../../utils/format"
@@ -352,6 +353,8 @@ export const SearchResultScreen: FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [petsitters, optionLabel],
   )
+
+  const reducedMotion = useReducedMotion()
 
   // 필터 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -643,6 +646,7 @@ export const SearchResultScreen: FC<
         snapPoints={snapPoints}
         enablePanDownToClose={false}
         footerComponent={renderFooter}
+        animateOnMount={!reducedMotion}
       >
         <BottomSheetScrollView contentContainerStyle={styles.bottomSheetContainer}>
           <Row style={{ height: 30 }}>

@@ -52,6 +52,7 @@ import {
 } from "#theme"
 import { images } from "#images"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 import { addMinutes, isAfter, subMinutes, isEqual } from "date-fns"
 import { price as priceFormatter } from "../../../utils/format"
 import { useStores } from "#models"
@@ -467,6 +468,8 @@ export const CgSetVisitingServiceDayScreen: FC<
     timePickerBottomSheetModalRef.current?.close()
   }, [beginDate, checkIsValidTimeframe, endDate, selectedDates, timeframe])
 
+  const reducedMotion = useReducedMotion()
+
   // 시간선택 바텀시트
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => ["60%"], [])
@@ -751,6 +754,7 @@ export const CgSetVisitingServiceDayScreen: FC<
         enablePanDownToClose
         footerComponent={standardPriceBottomSheetModalFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        animateOnMount={!reducedMotion}
       >
         <View style={{ paddingTop: 20 }}>
           <PreBol18 text={`이 지역 방문 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
@@ -784,6 +788,7 @@ export const CgSetVisitingServiceDayScreen: FC<
         enablePanDownToClose
         footerComponent={additionalPriceBottomSheetModalFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        animateOnMount={!reducedMotion}
       >
         <View style={{ paddingTop: 20 }}>
           <PreBol18 text={"강아지 크기 별 추가 요금을 설정해주세요."} color={HEAD_LINE} />
@@ -824,6 +829,7 @@ export const CgSetVisitingServiceDayScreen: FC<
         snapPoints={snapPoints}
         enablePanDownToClose
         footerComponent={timePickerBottomSheetModalFooter}
+        animateOnMount={!reducedMotion}
       >
         <TimePicker
           style={{ marginTop: 20 }}

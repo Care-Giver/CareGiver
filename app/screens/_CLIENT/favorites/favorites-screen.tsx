@@ -43,6 +43,7 @@ import {
   BottomSheetScrollView,
   BottomSheetFooter,
 } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 import {
   DEVICE_SCREEN_HEIGHT,
   DISABLED,
@@ -115,6 +116,7 @@ export const FavoritesScreen: FC<
   const hasSelectedPetsAndDropdownClosed = filterPet.length > 0 && !isPetDropdownOpen
 
   // * BottomSheet Modal
+  const reducedMotion = useReducedMotion()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(
     () => [
@@ -431,6 +433,7 @@ export const FavoritesScreen: FC<
         enablePanDownToClose={false}
         style={styles.bottomSheetContainer}
         footerComponent={renderFooter}
+        animateOnMount={!reducedMotion}
       >
         <PreReg12
           text="선택한 조건에 예약이 가능한 펫시터만 보여집니다."

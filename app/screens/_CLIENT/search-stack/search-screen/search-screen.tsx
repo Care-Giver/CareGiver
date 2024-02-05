@@ -40,6 +40,7 @@ import {
   BottomSheetFooter,
   BottomSheetModal,
 } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import { subMinutes } from "date-fns"
 import { useStores, ServiceTypeKorean } from "#models"
@@ -168,6 +169,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     //* 위치선택
     const [address, setAddress] = useState(cachedSearchRequest?.address || "주소를 입력해주세요") // 주소
     const [location, setLocation] = useState<AddressLocation>(cachedSearchRequest?.location) // 좌표
+
+    const reducedMotion = useReducedMotion()
 
     // 주소입력 바텀시트모달 - ref
     const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)
@@ -478,6 +481,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             width: "100%",
             height: DEVICE_SCREEN_HEIGHT,
           }}
+          animateOnMount={!reducedMotion}
         >
           <BottomSheetFlatList
             style={{ width: "100%", height: DEVICE_SCREEN_HEIGHT }}
@@ -516,6 +520,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
           snapPoints={["60%"]}
           enablePanDownToClose
           footerComponent={renderFooter}
+          animateOnMount={!reducedMotion}
         >
           <TimePicker
             style={{ marginTop: 20 }}

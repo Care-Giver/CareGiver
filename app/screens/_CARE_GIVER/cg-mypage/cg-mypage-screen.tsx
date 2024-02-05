@@ -24,6 +24,7 @@ import { images } from "#images"
 import { ServiceTypeKorean, useStores } from "#models"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
 import _ from "lodash"
@@ -62,6 +63,8 @@ export const CgMypageScreen: FC<
 
   // 펫시터 등록하기 바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["40%"], [])
+
+  const reducedMotion = useReducedMotion()
 
   /** 펫시터 등록하기 바텀시트모달 backdrop */
   // const renderBackdrop = useCallback(
@@ -246,6 +249,7 @@ export const CgMypageScreen: FC<
         enablePanDownToClose
         footerComponent={renderFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+        animateOnMount={!reducedMotion}
       >
         <CgSetServiceType serviceType={serviceType} setServiceType={setServiceType} />
       </BottomSheetModal> */}

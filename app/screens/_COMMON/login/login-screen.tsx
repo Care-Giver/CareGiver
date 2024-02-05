@@ -40,6 +40,7 @@ import {
   BottomSheetModal,
   BottomSheetTextInput,
 } from "@gorhom/bottom-sheet"
+import { useReducedMotion } from "react-native-reanimated"
 
 const PASSWORD_PASSKEY = "caregiver123"
 const isIOS = Platform.OS === "ios"
@@ -86,6 +87,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     }
 
     // 이메일 로그인 바텀시트모달 BEGIN =======================================================
+    const reducedMotion = useReducedMotion()
+
     // 이메일 로그인 바텀시트모달 - ref
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
@@ -208,6 +211,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           enablePanDownToClose
           footerComponent={renderFooter}
           style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+          animateOnMount={!reducedMotion}
         >
           {/* 이메일 */}
           <View>
