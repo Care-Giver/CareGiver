@@ -35,7 +35,6 @@ import { FamilyTypeNumber } from "./cg-registration-2-screen"
 import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
 import _ from "lodash"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useReducedMotion } from "react-native-reanimated"
 
 const numberOnly = /[0-9]/g
 
@@ -62,8 +61,6 @@ export interface CgSetFamilyTypeProps {
 export const CgSetFamilyType = observer(function CgSetFamilyType(props: CgSetFamilyTypeProps) {
   const { style, familyTypeNumber, setFamilyTypeNumber, handleType, setHandleType } = props
   const allStyles = Object.assign({}, styles.root, style)
-
-  const reducedMotion = useReducedMotion()
 
   // 강아지 크기 구분 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -249,7 +246,6 @@ export const CgSetFamilyType = observer(function CgSetFamilyType(props: CgSetFam
         enablePanDownToClose
         footerComponent={renderFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
-        animateOnMount={!reducedMotion}
       >
         <PreBol18 text="반려동물 몸무게에 따라 크기가 결정됩니다." color={HEAD_LINE} mt={28} />
         <Row mt={32}>

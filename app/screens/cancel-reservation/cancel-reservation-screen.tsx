@@ -6,7 +6,6 @@ import { NavigatorParamList } from "#navigators"
 import { PreBol16, PreBol18, PreMed16, Screen } from "#components"
 import { useShowBottomTab } from "app/utils/hooks"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useReducedMotion } from "react-native-reanimated"
 import { images } from "#images"
 import { GIVER_CASUAL_NAVY, LIGHT_LINE } from "#theme"
 // import { useNavigation } from "@react-navigation/native"
@@ -70,8 +69,6 @@ export const CancelReservationScreen: FC<
   }
 
   // * BottomSheet Modal
-  const reducedMotion = useReducedMotion()
-
   // ref
   const bottomSheetModalRef = useRef(null)
   // vaiables
@@ -92,7 +89,6 @@ export const CancelReservationScreen: FC<
         snapPoints={snapPoints}
         backgroundStyle={{ borderRadius: 20 }}
         style={{ flex: 1 }}
-        animateOnMount={!reducedMotion}
       >
         <View style={styles.bottomSheetContainer}>
           <PreBol18

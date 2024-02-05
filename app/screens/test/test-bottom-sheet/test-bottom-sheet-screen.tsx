@@ -5,15 +5,12 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { Screen, TimePicker } from "#components"
 import BottomSheet from "@gorhom/bottom-sheet"
-import { useReducedMotion } from "react-native-reanimated"
 
 export const TestBottomSheetScreen: FC<
   StackScreenProps<NavigatorParamList, "test-bottom-sheet">
 > = observer(function TestBottomSheetScreen() {
   const [beginDate, setBeginDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
-
-  const reducedMotion = useReducedMotion()
 
   // ref
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -34,7 +31,6 @@ export const TestBottomSheetScreen: FC<
         // snapPoints={snapPoints}
         snapPoints={["60%"]}
         // onChange={handleSheetChanges}
-        animateOnMount={!reducedMotion}
       >
         <TimePicker
           beginDate={beginDate}

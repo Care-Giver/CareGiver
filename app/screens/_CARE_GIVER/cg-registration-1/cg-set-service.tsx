@@ -29,7 +29,6 @@ import {
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
-import { useReducedMotion } from "react-native-reanimated"
 import { images } from "#images"
 
 export interface CgSetServiceProps {
@@ -61,8 +60,6 @@ export const CgSetService = observer(function CgSetService(props: CgSetServicePr
     services: typeof defaultServices | typeof additionalServices
     type: "default" | "additional"
   }>({ services: defaultServices, type: "default" })
-
-  const reducedMotion = useReducedMotion()
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -163,7 +160,6 @@ export const CgSetService = observer(function CgSetService(props: CgSetServicePr
         enablePanDownToClose
         footerComponent={renderFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
-        animateOnMount={!reducedMotion}
       >
         <BottomSheetScrollView
           contentContainerStyle={styles.bottomSheetContainer}

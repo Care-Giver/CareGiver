@@ -64,7 +64,6 @@ import _ from "lodash"
 import { useKeyboardShown } from "../../../utils/hooks"
 import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
-import { useReducedMotion } from "react-native-reanimated"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
 import { useAdditionalPriceChecker } from "../cg-set-visiting-service-day/use-additional-price-checker"
 import {
@@ -237,9 +236,6 @@ export const CgSetCrecheServiceDayScreen: FC<
 
   // 이 지역 평균 기본 요금
   const avgPriceData = useFetchAvgPrice("위탁")
-
-  const reducedMotion = useReducedMotion()
-
   // 이 지역 평균 요금 바텀시트
   const standardPriceBottomSheetModalRef = useRef<BottomSheetModal>(null)
   const standardPriceBottomSheetModalFooter = useCallback(
@@ -493,7 +489,6 @@ export const CgSetCrecheServiceDayScreen: FC<
         enablePanDownToClose
         footerComponent={standardPriceBottomSheetModalFooter}
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
-        animateOnMount={!reducedMotion}
       >
         <View style={{ paddingTop: 20 }}>
           <PreBol18 text={`이 지역 위탁 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
