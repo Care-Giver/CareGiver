@@ -14,6 +14,11 @@ export interface PaymentListProps {
   style?: StyleProp<ViewStyle>
 
   /**
+   * 해당 날짜
+   */
+  date: string
+
+  /**
    * 해당하는 날짜의 정산내역
    */
   settlementDetails: settlementDetail[]
@@ -21,27 +26,28 @@ export interface PaymentListProps {
 
 export const PaymentList = observer(function PaymentList(props: PaymentListProps) {
   const { style } = props
-  const { settlementDetails } = props
+  const { date, settlementDetails } = props
   const allStyles = Object.assign({}, styles.root, style)
 
+  console.log("settlementDetails >>>", settlementDetails)
   //TODO api의 resBody가 수정되어야함. 또는 프론트측에서 날짜별로 묶은 뒤 다시 뿌리는 작업이 필요함.
   return (
     <View style={allStyles}>
-      {/* //TODO 방문에 대해서만 구현되었습니다. */}
+      <PreReg14 mb={17} text={date.substring(0, 10)} color={BODY} />
 
       {settlementDetails.map((item, idx) => {
+        console.log("item >>>", item)
         const convertedTime =
-          item.serviceType === "위탁"
-            ? "종일"
-            : `${item.start.substring(11, 13)}시-${item.end.substring(11, 13)}시`
-
+          item.serviceType === "Visiting"
+            ? `${item.start.substring(11, 13)}시-${item.end.substring(11, 13)}시`
+            : "종일"
+        const convertedServiceType = item.serviceType === "Visiting" ? "방문 펫시팅" : "위탁 펫시팅"
         return (
-          <Row mb={19} key={idx}>
-            <PreReg14 text={item.start.substring(0, 10)} color={BODY} />
+          <Row mb={settlementDetails.length - 1 === idx ? 0 : 19} key={item.end}>
             <PreMed14 text={convertedTime} color={SUB_HEAD_LINE} />
             <View style={styles.divider} />
-            <PreMed14 text={item.serviceType} color={SUB_HEAD_LINE} />
-            <PopSem16 style={styles.fee} text={item.settlementFee.toString() + "원"} />
+            <PreMed14 text={convertedServiceType} color={SUB_HEAD_LINE} />
+            <PopSem16 style={styles.fee} text={item.settlementFee.toString() + "원"} color={BODY} />
           </Row>
         )
       })}

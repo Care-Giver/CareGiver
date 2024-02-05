@@ -47,7 +47,7 @@ import axios from "axios"
 // import { useStores } from "#models"
 
 export type SettlementType = {
-  totalSettlementFee: number
+  date: string
   settlementDetails: settlementDetail[]
 }
 // [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
@@ -82,7 +82,7 @@ export const CgRequestEarningScreen: FC<
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
-  const [settlementInfo, setSettlementInfo] = useState<SettlementType>()
+  const [settlementInfo, setSettlementInfo] = useState<SettlementType[]>()
   /**
    * 표출할 스크린 상태
    * false  = 정산정보 입력 스크린
@@ -100,11 +100,20 @@ export const CgRequestEarningScreen: FC<
       })
       //? 정산 내역 api 불러와 저장
       if (settlementResponse.isSuccess) {
-        setSettlementInfo({
-          ...settlementInfo,
-          totalSettlementFee: settlementResponse.totalSettlementFee,
-          settlementDetails: settlementResponse.settlementDetails,
-        })
+        //* 정렬
+        const sortedSettlemtents = bookings.sort((a, b) => a.start.localeCompare(b.start))
+        //* date별로 그룹화
+        const groupedSettlements = sortedSettlemtents.reduce((acc, cur) => {
+          const categoryIndex = acc.findIndex((item) => item.date === cur.start)
+          if (categoryIndex === -1) {
+            acc.push({ date: cur.start, settlementDetails: [cur] })
+          } else {
+            acc[categoryIndex].settlementDetails.push(cur)
+          }
+          return acc
+        }, [])
+
+        setSettlementInfo(groupedSettlements)
       }
     }
     if (isConfirmed === true) setModalOpen(true)
@@ -209,7 +218,12 @@ export const CgRequestEarningScreen: FC<
             </Row>
           </View>
         ) : (
-          <View>
+          <View
+            style={{
+              //* 바텀버튼으로 스크롤 뷰 가려지는 영역
+              paddingBottom: 50,
+            }}
+          >
             <PreMed14 text="계좌: 국민은행 53710204111019 유혜린" color={BODY} mb={12} />
             <RowRoundedBox
               style={(styles.placeholderBoxClosed, { marginBottom: 28, paddingHorizontal: 15 })}
@@ -224,7 +238,10 @@ export const CgRequestEarningScreen: FC<
                 style={[styles.image, { marginLeft: 3 }]}
               />
             </RowRoundedBox>
-            {isOpen && <PaymentList settlementDetails={settlementInfo.settlementDetails} />}
+            {isOpen &&
+              settlementInfo.map(({ date, settlementDetails }) => {
+                return <PaymentList key={date} date={date} settlementDetails={settlementDetails} />
+              })}
           </View>
         )}
       </ScrollView>
