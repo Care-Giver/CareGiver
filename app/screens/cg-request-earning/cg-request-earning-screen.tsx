@@ -43,6 +43,8 @@ import { ScrollToBottomButton } from "stream-chat-react-native"
 import { bookings } from "./dummy"
 import { GetSettlementResponse, getSettlement, settlementDetail } from "#axios"
 import axios from "axios"
+import { useStores } from "#models"
+import { postSettlement } from "../../services/axios/notion"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -89,6 +91,19 @@ export const CgRequestEarningScreen: FC<
    * true = 정산 요청  스크린
    */
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false)
+
+  //* 노션 api: userInfoContent, settlementInfoContent
+  const {
+    userStore: { userDetail },
+  } = useStores()
+  const userId = userDetail.id.toString()
+  const userInfoContent = {
+    userId: userId,
+    bank,
+    account,
+    name,
+  }
+  const settlementInfoContent = { ...settlementInfo }
 
   const onPressBottomButton = async () => {
     //? 정산 요청 스크린일 때
@@ -260,7 +275,15 @@ export const CgRequestEarningScreen: FC<
         imageHeight={120}
         title="입금은 다음 달 1일에 돼요!"
         subtitle="정산 요청이 정상적으로 완료되었어요."
-        handleYesPress={() => setModalOpen(false)}
+        handleYesPress={() => {
+          postSettlement({
+            userId,
+            months: ["1", "2"],
+            userInfoContent,
+            settlementInfoContent,
+          })
+          setModalOpen(false)
+        }}
         handleNoPress={() => {
           setModalOpen(false)
           navigation.navigate("cg-earning-list-screen")
