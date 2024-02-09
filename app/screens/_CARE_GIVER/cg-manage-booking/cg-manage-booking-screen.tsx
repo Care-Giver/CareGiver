@@ -8,6 +8,7 @@ import { getAllBookings, getConfirmedBookings } from "#api"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
+import CalendarComponent from "./cal"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -58,7 +59,9 @@ export const CgManageBookingScreen: FC<
   }, [isFetching, data, setBookings])
 
   return (
-    <Screen testID="ManageBooking">
+    <Screen testID="ManageBooking" style={{ paddingHorizontal: 0 }}>
+      <CalendarComponent />
+
       <BookingCheckButton
         style={{ zIndex: 1, marginVertical: 16 }}
         bookingCount={waitingBookings?.length}
