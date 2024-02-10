@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
-import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
+import { Image, Platform, StyleSheet, View, ViewStyle, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -42,8 +42,9 @@ import {
 } from "@gorhom/bottom-sheet"
 
 const PASSWORD_PASSKEY = "caregiver123"
-
 const isIOS = Platform.OS === "ios"
+const SHOW_APPLE_LOGIN = false
+const isShownAppleLogin = isIOS && SHOW_APPLE_LOGIN
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -55,6 +56,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       email: null,
       password: null,
     })
+    const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
     const googleLogin = async () => {
       //
@@ -88,7 +90,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
     // 이메일 로그인 바텀시트모달 - snapPoints
-    const snapPoints = useMemo(() => ["40%", "80%"], [])
+    const snapPoints = useMemo(() => ["50%", "80%"], [])
 
     /** 이메일 로그인 바텀시트모달 backdrop */
     const renderBackdrop = useCallback(
@@ -148,7 +150,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         </View>
 
         <View style={buttonBox}>
-          {isIOS && (
+          {isShownAppleLogin && (
             <Button
               onPress={() => {
                 appleLogin(socialLoginHander, logoutHandler)
@@ -159,6 +161,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="Apple로 로그인" color={palette.black} />
             </Button>
           )}
+
           <Button
             onPress={() => {
               naverLogin(socialLoginHander, logoutHandler)
@@ -186,7 +189,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             onPress={() => {
               bottomSheetModalRef.current.present()
             }}
-            style={[styles.noAuthLogin, { bottom: 300 }]}
+            style={[styles.noAuthLogin, { bottom: 200 }]}
           >
             <PreMed18 text="이메일 로그인" color={palette.white} />
           </Button>
@@ -285,7 +288,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                   }))
                 }}
                 value={emailAuth.password}
-                secureTextEntry
+                secureTextEntry={isPasswordHidden}
                 placeholder={"*********"}
                 placeholderTextColor={DISABLED}
                 underlineColorAndroid={color.transparent}
@@ -294,6 +297,17 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                 style={{ flex: 1 }}
                 autoCapitalize="none"
               />
+              <Pressable
+                onPress={() => {
+                  setIsPasswordHidden(!isPasswordHidden)
+                }}
+                style={{ alignSelf: "center" }}
+              >
+                <Image
+                  source={isPasswordHidden ? images.password_hide : images.password_show}
+                  style={{ width: 24, height: 24 }}
+                />
+              </Pressable>
             </View>
           </View>
         </BottomSheetModal>
@@ -316,7 +330,7 @@ const button: ViewStyle = {
 
 const buttonBox: ViewStyle = {
   justifyContent: "space-around",
-  height: (BUTTON_HEIGHT + 20) * (isIOS ? 3 : 2),
+  height: (BUTTON_HEIGHT + 20) * (isShownAppleLogin ? 3 : 2),
   // position: "absolute",
   // bottom: BOTTOM_HEIGHT,
   // left: BASIC_BACKGROUND_PADDING_WIDTH,

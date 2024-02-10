@@ -1,5 +1,5 @@
-const VERSION = "23.12.21.b"
+const VERSION = "0.0.1.c"
 
-const TEST_BUILD_VERSION = `테스트빌드 ${VERSION}`
+const TEST_BUILD_VERSION = `Version ${VERSION}`
 
 export default TEST_BUILD_VERSION

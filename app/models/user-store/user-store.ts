@@ -7,6 +7,7 @@ import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 import { getStreamToken, streamChatClient } from "../../services/api/stream"
 import { alertModal } from "../../utils/alert-modal"
+import { AddressLocation } from "#screens"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -27,14 +28,25 @@ interface UserAuth {
 
 type SocialLoginHanderParams = UserAuth
 
+interface SearchRequest {
+  address: string
+  location: AddressLocation
+  // TODO: 위치 말고도 또 어떤 걸 저장하면 UX 경험이 나아질까?
+}
+
+const 한양대에리카제5공학관 = {
+  lat: 37.2955072, // 위도
+  lng: 126.83539, // 경도
+} as const
+
 /**
- * User Model is for both CareGiver and Client.
+ * [보호자] 모드와 [펫시터] 모드
+ * 둘 다 사용되는 모델입니다.
  */
 export const UserStoreModel = types
   .model("UserStore")
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
-    // onSwitchingType: types.optional(types.boolean, false),
     onSwitchingType: false,
     loggedIn: false,
 
@@ -61,6 +73,12 @@ export const UserStoreModel = types
 
     /* 인증된 펫시터인지 여부 */
     isCertified: false,
+
+    /* [보호자 모드]에서 사용자가 입력했던 검색 정보 */
+    cachedSearchRequest: types.frozen<SearchRequest>({
+      address: "",
+      location: { ...한양대에리카제5공학관 },
+    }),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -370,6 +388,14 @@ export const UserStoreModel = types
             break
         } 
         */
+    },
+
+    /**
+     * [보호자] 모드에서,
+     * 사용자가 입력했던 검색 정보를 저장합니다.
+     * */
+    cacheSearchRequest(value: SearchRequest) {
+      self.setProp("cachedSearchRequest", value)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

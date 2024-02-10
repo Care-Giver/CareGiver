@@ -26,7 +26,7 @@ export const InProgressBookingProfile = ({
       />
 
       {/* //? 케어기버 정보 컨테이너 */}
-      <View style={{ marginLeft: 18 }}>
+      <View style={styles.infoRoot}>
         {/* //* 예약 유형 - 방문or위탁 / 펫시터or훈련사 */}
         <Row>
           <CaregiverTypeButton text={caregiverData.visitingId ? "방문" : "위탁"} />
@@ -34,7 +34,7 @@ export const InProgressBookingProfile = ({
         </Row>
 
         {/* //? 케어기버 정보 박스 - 이름, 별점, 후기, 자기소개 */}
-        <View style={[styles.infoBox, { marginTop: 10 }]}>
+        <View style={styles.infoBox}>
           {/* //* 케어기버 이름 */}
           <PreReg14 text={caregiverData.petSitterName} />
           {/* //* 별점 & 리뷰 박스 */}
@@ -49,7 +49,6 @@ export const InProgressBookingProfile = ({
             numberOfLines={1}
             ellipsizeMode="tail"
             // TODO: width(글 길이 제한) 몇으로 할 건지?
-            style={{ width: 168 }}
           />
         </View>
       </View>
