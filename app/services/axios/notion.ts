@@ -65,17 +65,33 @@ export interface PostSettlementInputParams {
   }
   settlementInfoContent: SettlementType[]
 }
-
-export type GetSettlementResponse =
+export type PostSettlementResult =
   | {
       isSuccess: true
-      results: PageObjectResponse[]
+    }
+  | {
+      isSuccess: false
+    }
+
+export type GetSettlementResult =
+  | {
+      isSuccess: true
+      /**
+       * 정산 완료된 최근 달
+       */
+      maxMonth: string
+      /**
+       * 현재 달
+       */
+      currentMonth: string
     }
   | {
       isSuccess: false
       reason?: string
     }
-export const postNotionSettlement = async (params: PostSettlementInputParams): Promise<any> => {
+export const postNotionSettlement = async (
+  params: PostSettlementInputParams,
+): Promise<PostSettlementResult> => {
   const { userId, months, userInfoContent, settlementInfoContent } = params
   const body: CreatePageParameters = {
     parent: {
@@ -154,7 +170,7 @@ export const postNotionSettlement = async (params: PostSettlementInputParams): P
 
   try {
     const response = await notion.pages.create(body)
-    if (!response.object) {
+    if (!response) {
       return {
         isSuccess: false,
       }
@@ -162,42 +178,60 @@ export const postNotionSettlement = async (params: PostSettlementInputParams): P
 
     return {
       isSuccess: true,
-      response: response.object,
     }
   } catch (error) {
     console.error("catch 에러!!!", error)
     return {
       isSuccess: false,
-      reason: error?.message,
     }
   }
 }
 
-export const getNotionSettlement = async (): Promise<GetSettlementResponse> => {
+export const getNotionSettlement = async (userId: string): Promise<GetSettlementResult> => {
   try {
-    const response = await notion.databases.query<QueryDatabaseResponse>({
+    const response = await notion.databases.query({
+      /**
+       * (필수)특정 databaseId
+       */
       database_id: NOTION_DATABASE_ID,
+      /**
+       * (선택)특정 database내 page중 필터링
+       */
       filter: {
         or: [
           {
             property: "userId",
             rich_text: {
-              contains: "46",
+              contains: userId,
             },
           },
         ],
       },
     })
-    if (!response.object) {
+    if (!response) {
       return {
         isSuccess: false,
       }
     }
 
+    //* 정산 요청할 달을 구하기 위한 로직
     const results = response.results as PageObjectResponse[]
+    let maxMonth = "0"
+    const currentMonth = (new Date().getMonth() + 1).toString()
+    const responseProperties = results.map((item) => item.properties.month.multi_select)
+    const responseMonths = responseProperties.map((item) => {
+      const month = item.map(({ name }) => name)
+      return month
+    })
+    const sortedMonth = [].concat(...responseMonths).sort()
+    maxMonth = sortedMonth[sortedMonth.length - 1] || "0"
+    maxMonth = (Number(maxMonth) + 1).toString()
+    //* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
     return {
       isSuccess: true,
-      results: results,
+      maxMonth: maxMonth,
+      currentMonth: currentMonth,
     }
   } catch (error) {
     console.error("catch 에러!!!", error)

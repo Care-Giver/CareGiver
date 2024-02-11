@@ -45,6 +45,7 @@ import { GetSettlementResponse, getSettlement, settlementDetail } from "#axios"
 import axios from "axios"
 import { useStores } from "#models"
 import { postNotionSettlement, getNotionSettlement } from "../../services/axios/notion"
+import { alertModal } from "../../utils/alert-modal"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -109,30 +110,24 @@ export const CgRequestEarningScreen: FC<
 
   //* 노션 db를 조회하여 몇월까지 정산을 신청했는지 조사 후 그에 따른 정산 달 리턴
   const checkSettlementMonth = async () => {
-    const response = await getNotionSettlement()
-    let maxMonth = "0"
-    const currentMonth = (new Date().getMonth() + 1).toString()
+    const response = await getNotionSettlement(userId)
 
     if (response.isSuccess) {
-      const responseProperties = response.results.map((item) => item.properties.month.multi_select)
-      const responseMonths = responseProperties.map((item) => {
-        const month = item.map(({ name }) => name)
-        return month
-      })
-      const sortedMonth = [].concat(...responseMonths).sort()
-      maxMonth = sortedMonth[sortedMonth.length - 1] || "0"
-      maxMonth = (Number(maxMonth) + 1).toString()
+      const { maxMonth, currentMonth } = response
+      return { maxMonth, currentMonth }
+    } else {
+      alertModal(
+        "정산 완료 내역 조회 실패",
+        "알 수 없는 이유로, 정산 완료 내역 조회에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+      )
     }
-
-    return { maxMonth, currentMonth }
   }
 
   const onPressBottomButton = async () => {
     const { maxMonth, currentMonth } = await checkSettlementMonth()
 
-    //? 정산 요청 스크린일 때
+    //* 정산 정보 입력 스크린
     if (isConfirmed === false) {
-      setIsConfirmed(true)
       // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
       const settlementResponse = await getSettlement({
         startDate: `2024-${maxMonth}-01`,
@@ -141,25 +136,18 @@ export const CgRequestEarningScreen: FC<
 
       //? 정산 내역 api 불러와 저장
       if (settlementResponse.isSuccess) {
-        // 정렬
-        const sortedSettlemtents = settlementResponse.settlementDetails.sort((a, b) =>
-          a.start.localeCompare(b.start),
-        )
-        // date별로 그룹화
-        const groupedSettlements = sortedSettlemtents.reduce((acc, cur) => {
-          const categoryIndex = acc.findIndex((item) => item.date === cur.start)
-          if (categoryIndex === -1) {
-            acc.push({ date: cur.start, settlementDetails: [cur] })
-          } else {
-            acc[categoryIndex].settlementDetails.push(cur)
-          }
-          return acc
-        }, [])
         setTotalFee(settlementResponse.totalSettlementFee)
-        setSettlementInfo(groupedSettlements)
+        setSettlementInfo(settlementResponse.settlementDetails)
+        setIsConfirmed(true)
+      } else {
+        alertModal(
+          "정산 내역 조회 실패",
+          "알 수 없는 이유로, 정산 내역 조회에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+        )
       }
     }
 
+    //* 정산 내역 확인 및 요청 스크린
     if (isConfirmed === true) {
       // 정산 요청할 달의 범위
       const monthRange = []
@@ -167,16 +155,24 @@ export const CgRequestEarningScreen: FC<
         monthRange.push(i.toString())
       }
 
-      if (monthRange.length > 0) {
-        await postNotionSettlement({
-          userId,
-          months: monthRange,
-          userInfoContent,
-          settlementInfoContent,
-        })
+      if (totalFee === 0) {
+        alertModal("정산 요청 실패", "정산을 요청할 내역이 없습니다.")
       }
 
-      setModalOpen(true)
+      const response = await postNotionSettlement({
+        userId,
+        months: monthRange,
+        userInfoContent,
+        settlementInfoContent,
+      })
+      if (response.isSuccess) {
+        setModalOpen(true)
+      } else {
+        alertModal(
+          "정산 요청 실패",
+          "알 수 없는 이유로, 정산 요청에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+        )
+      }
     }
   }
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
