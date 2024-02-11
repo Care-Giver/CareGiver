@@ -2,10 +2,15 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { SettlementType } from "#screens"
 import { Client } from "@notionhq/client"
-import { CreatePageParameters } from "@notionhq/client/build/src/api-endpoints"
+import {
+  CreatePageParameters,
+  PageObjectResponse,
+  QueryDatabaseResponse,
+} from "@notionhq/client/build/src/api-endpoints"
 
-const notion = new Client({ auth: "secret_T6mOPFNkp3e7EUGqqpV14d1jw6V2W2LNqhzqCntdrli" })
-//TODO 이거 사용해서 다시 axios작성
+const NOTION_API_KEY = "secret_T6mOPFNkp3e7EUGqqpV14d1jw6V2W2LNqhzqCntdrli"
+const NOTION_DATABASE_ID = "a453e770df8b42d78605b17565bea560"
+const notion = new Client({ auth: NOTION_API_KEY })
 
 type TextType = {
   type?: "text"
@@ -53,19 +58,29 @@ export interface PostSettlementInputParams {
   userId: string
   months: MonthType[]
   userInfoContent: {
-    userId: number
+    userId: string
     bank: string
     account: string
     name: string
   }
   settlementInfoContent: SettlementType[]
 }
-export const postSettlement = async (params: PostSettlementInputParams): Promise<any> => {
+
+export type GetSettlementResponse =
+  | {
+      isSuccess: true
+      results: PageObjectResponse[]
+    }
+  | {
+      isSuccess: false
+      reason?: string
+    }
+export const postNotionSettlement = async (params: PostSettlementInputParams): Promise<any> => {
   const { userId, months, userInfoContent, settlementInfoContent } = params
   const body: CreatePageParameters = {
     parent: {
       type: "database_id",
-      database_id: "a453e770df8b42d78605b17565bea560",
+      database_id: NOTION_DATABASE_ID,
     },
     properties: {
       userId: {
@@ -136,28 +151,56 @@ export const postSettlement = async (params: PostSettlementInputParams): Promise
       },
     ],
   }
+
   try {
-    // const response = await axios.post<any>(`https://api.notion.com/v1/pages`, body, {
-    //   headers: {
-    //     Authorization: `Bearer secret_T6mOPFNkp3e7EUGqqpV14d1jw6V2W2LNqhzqCntdrli`,
-    //     "Notion-Version": "2022-06-28",
-    //     "Content-Type": "application/json",
-    //   },
-    // })
     const response = await notion.pages.create(body)
     if (!response.object) {
       return {
         isSuccess: false,
-        reason: response.data?.error,
       }
     }
 
     return {
       isSuccess: true,
-      paymentId: response.object,
+      response: response.object,
     }
   } catch (error) {
-    console.error("settlement catch 에러!!!", error)
+    console.error("catch 에러!!!", error)
+    return {
+      isSuccess: false,
+      reason: error?.message,
+    }
+  }
+}
+
+export const getNotionSettlement = async (): Promise<GetSettlementResponse> => {
+  try {
+    const response = await notion.databases.query<QueryDatabaseResponse>({
+      database_id: NOTION_DATABASE_ID,
+      filter: {
+        or: [
+          {
+            property: "userId",
+            rich_text: {
+              contains: "46",
+            },
+          },
+        ],
+      },
+    })
+    if (!response.object) {
+      return {
+        isSuccess: false,
+      }
+    }
+
+    const results = response.results as PageObjectResponse[]
+    return {
+      isSuccess: true,
+      results: results,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
     return {
       isSuccess: false,
       reason: error?.message,

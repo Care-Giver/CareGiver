@@ -44,7 +44,7 @@ import { bookings } from "./dummy"
 import { GetSettlementResponse, getSettlement, settlementDetail } from "#axios"
 import axios from "axios"
 import { useStores } from "#models"
-import { postSettlement } from "../../services/axios/notion"
+import { postNotionSettlement, getNotionSettlement } from "../../services/axios/notion"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -85,6 +85,7 @@ export const CgRequestEarningScreen: FC<
   const [modalOpen, setModalOpen] = useState<boolean>(false)
 
   const [settlementInfo, setSettlementInfo] = useState<SettlementType[]>()
+  const [totalFee, setTotalFee] = useState<number>(0)
   /**
    * 표출할 스크린 상태
    * false  = 정산정보 입력 스크린
@@ -94,8 +95,9 @@ export const CgRequestEarningScreen: FC<
 
   //* 노션 api: userInfoContent, settlementInfoContent
   const {
-    userStore: { userDetail },
+    userStore: { userDetail, userAuth },
   } = useStores()
+  console.log(userAuth.token)
   const userId = userDetail.id.toString()
   const userInfoContent = {
     userId: userId,
@@ -105,19 +107,45 @@ export const CgRequestEarningScreen: FC<
   }
   const settlementInfoContent = { ...settlementInfo }
 
+  //* 노션 db를 조회하여 몇월까지 정산을 신청했는지 조사 후 그에 따른 정산 달 리턴
+  const checkSettlementMonth = async () => {
+    const response = await getNotionSettlement()
+    let maxMonth = "0"
+    const currentMonth = (new Date().getMonth() + 1).toString()
+
+    if (response.isSuccess) {
+      const responseProperties = response.results.map((item) => item.properties.month.multi_select)
+      const responseMonths = responseProperties.map((item) => {
+        const month = item.map(({ name }) => name)
+        return month
+      })
+      const sortedMonth = [].concat(...responseMonths).sort()
+      maxMonth = sortedMonth[sortedMonth.length - 1] || "0"
+      maxMonth = (Number(maxMonth) + 1).toString()
+    }
+
+    return { maxMonth, currentMonth }
+  }
+
   const onPressBottomButton = async () => {
+    const { maxMonth, currentMonth } = await checkSettlementMonth()
+
     //? 정산 요청 스크린일 때
     if (isConfirmed === false) {
       setIsConfirmed(true)
+      // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
       const settlementResponse = await getSettlement({
-        startDate: "2024-01-01",
-        endDate: "2024-01-31",
+        startDate: `2024-${maxMonth}-01`,
+        endDate: `2024-${currentMonth}-01`,
       })
+
       //? 정산 내역 api 불러와 저장
       if (settlementResponse.isSuccess) {
-        //* 정렬
-        const sortedSettlemtents = bookings.sort((a, b) => a.start.localeCompare(b.start))
-        //* date별로 그룹화
+        // 정렬
+        const sortedSettlemtents = settlementResponse.settlementDetails.sort((a, b) =>
+          a.start.localeCompare(b.start),
+        )
+        // date별로 그룹화
         const groupedSettlements = sortedSettlemtents.reduce((acc, cur) => {
           const categoryIndex = acc.findIndex((item) => item.date === cur.start)
           if (categoryIndex === -1) {
@@ -127,11 +155,29 @@ export const CgRequestEarningScreen: FC<
           }
           return acc
         }, [])
-
+        setTotalFee(settlementResponse.totalSettlementFee)
         setSettlementInfo(groupedSettlements)
       }
     }
-    if (isConfirmed === true) setModalOpen(true)
+
+    if (isConfirmed === true) {
+      // 정산 요청할 달의 범위
+      const monthRange = []
+      for (let i = Number(maxMonth); i < Number(currentMonth); i++) {
+        monthRange.push(i.toString())
+      }
+
+      if (monthRange.length > 0) {
+        await postNotionSettlement({
+          userId,
+          months: monthRange,
+          userInfoContent,
+          settlementInfoContent,
+        })
+      }
+
+      setModalOpen(true)
+    }
   }
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const openLink = (link: string) => {
@@ -192,14 +238,6 @@ export const CgRequestEarningScreen: FC<
                     </Pressable>
                   )
                 })}
-                {/* <BottomSheetFlatList
-                  data={banks}
-                  renderItem={({ item }) => (
-                    <View>
-                      <Text>{item.name}</Text>
-                    </View>
-                  )}
-                /> */}
               </View>
             )}
             <PlaceHolderInputBox
@@ -239,13 +277,13 @@ export const CgRequestEarningScreen: FC<
               paddingBottom: 50,
             }}
           >
-            <PreMed14 text="계좌: 국민은행 53710204111019 유혜린" color={BODY} mb={12} />
+            <PreMed14 text={`계좌: ${bank} ${account} ${name}`} color={BODY} mb={12} />
             <RowRoundedBox
               style={(styles.placeholderBoxClosed, { marginBottom: 28, paddingHorizontal: 15 })}
               preset="Pressable"
               onPress={() => setIsOpen(!isOpen)}
             >
-              <PopSem24 text="25000" color={GIVER_CASUAL_NAVY} />
+              <PopSem24 text={totalFee.toString()} color={GIVER_CASUAL_NAVY} />
               <PreBol16 text="원" />
               <PreMed16 style={{ marginLeft: "auto" }} text="자세히" color={BODY} />
               <Image
@@ -254,7 +292,7 @@ export const CgRequestEarningScreen: FC<
               />
             </RowRoundedBox>
             {isOpen &&
-              settlementInfo.map(({ date, settlementDetails }) => {
+              settlementInfo?.map(({ date, settlementDetails }) => {
                 return <PaymentList key={date} date={date} settlementDetails={settlementDetails} />
               })}
           </View>
@@ -262,7 +300,7 @@ export const CgRequestEarningScreen: FC<
       </ScrollView>
       <ConditionalButton
         label={isConfirmed ? "정산 요청하기" : "다음"}
-        isActivated={isCheck}
+        isActivated={isConfirmed ? true : isCheck && !!bank && !!name && !!account}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         onPress={onPressBottomButton}
       />
@@ -273,16 +311,11 @@ export const CgRequestEarningScreen: FC<
         image={images.cat_with_heart}
         imageWidth={154}
         imageHeight={120}
-        title="입금은 다음 달 1일에 돼요!"
-        subtitle="정산 요청이 정상적으로 완료되었어요."
+        title={totalFee ? "입금은 다음 달 1일에 돼요!" : "정산 내역이 없어요!"}
+        subtitle={totalFee ? "정산 요청이 정상적으로 완료되었어요." : "정산 요청에 실패했어요."}
         handleYesPress={() => {
-          postSettlement({
-            userId,
-            months: ["1", "2"],
-            userInfoContent,
-            settlementInfoContent,
-          })
           setModalOpen(false)
+          navigation.goBack()
         }}
         handleNoPress={() => {
           setModalOpen(false)
