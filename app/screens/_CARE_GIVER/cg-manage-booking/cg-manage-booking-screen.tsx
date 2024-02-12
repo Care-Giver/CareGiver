@@ -2,13 +2,19 @@ import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { BookingCheckButton, BookingInfoCardProps, BookingList, Screen } from "#components"
+import {
+  BookingCheckButton,
+  BookingInfoCardProps,
+  BookingList,
+  DateInfo,
+  Screen,
+  SimpleCalendar,
+} from "#components"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { getAllBookings, getConfirmedBookings } from "#api"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
-import CalendarComponent, { DateInfo } from "./cal"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -69,7 +75,7 @@ export const CgManageBookingScreen: FC<
         onPress={() => navigate("cg-booking-list-screen")}
       />
 
-      <CalendarComponent
+      <SimpleCalendar
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         month={month}

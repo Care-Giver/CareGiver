@@ -25,7 +25,7 @@ import { ko } from "date-fns/locale"
 import { DISABLED, GIVER_CASUAL_NAVY, LBG, WIDTH } from "#theme"
 import { images } from "#images"
 import { PopSem14, PreBol20, PreMed18, PreReg12, PreBol14, PopReg14 } from "#components"
-import { alertModal } from "../../../utils/alert-modal"
+import { alertModal } from "../../utils/alert-modal"
 import { observer } from "mobx-react-lite"
 
 const MULTIPLY_5_PADDING = 30
@@ -40,7 +40,7 @@ export type DateInfo = {
   isToday: boolean // true
 }
 
-interface CalendarComponentProps {
+interface SimpleCalendarProps {
   /**
    * @description 현재 선택된 날짜 정보. `DateInfo` 타입을 가지며, 날짜, 요일명, 전체 날짜 문자열, 오늘이면 true 값을 포함한다.
    */
@@ -90,7 +90,7 @@ interface CalendarComponentProps {
    */
   style?: StyleProp<ViewStyle>
 }
-const CalendarComponent = observer(function CalendarComponent(props: CalendarComponentProps) {
+export const SimpleCalendar = observer(function SimpleCalendar(props: SimpleCalendarProps) {
   const {
     selectedDate,
     setSelectedDate,
@@ -354,5 +354,3 @@ const DayComponent = observer(
   },
   { forwardRef: true },
 )
-
-export default CalendarComponent
