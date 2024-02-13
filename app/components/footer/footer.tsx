@@ -37,7 +37,7 @@ export const Footer = observer(function Footer(props: FooterProps) {
       </View>
       <View style={styles.row}>
         <PreMed12 text="전화번호" color={SUB_HEAD_LINE} style={styles.col1} />
-        <PreReg10 text="0507-0177-5778" color={SUB_HEAD_LINE} style={styles.col2} />
+        <PreReg10 text="050-6667-1542" color={SUB_HEAD_LINE} style={styles.col2} />
       </View>
       <View style={styles.row}>
         <PreMed12 text="사업장 주소지" color={SUB_HEAD_LINE} style={styles.col1} />
