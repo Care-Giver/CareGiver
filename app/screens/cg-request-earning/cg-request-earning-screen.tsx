@@ -157,6 +157,7 @@ export const CgRequestEarningScreen: FC<
 
       if (totalFee === 0) {
         alertModal("정산 요청 실패", "정산을 요청할 내역이 없습니다.")
+        return
       }
 
       const response = await postNotionSettlement({
