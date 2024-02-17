@@ -5,9 +5,9 @@ import {
   PageObjectResponse,
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints"
+// import { NOTION_API_KEY, NOTION_DATABASE_ID } from "react-native-dotenv"
+import { NOTION_API_KEY, NOTION_DATABASE_ID } from "@env"
 
-const NOTION_API_KEY = "secret_T6mOPFNkp3e7EUGqqpV14d1jw6V2W2LNqhzqCntdrli"
-const NOTION_DATABASE_ID = "a453e770df8b42d78605b17565bea560"
 const notion = new Client({ auth: NOTION_API_KEY })
 
 type TextType = {
@@ -187,6 +187,7 @@ export const postNotionSettlement = async (
 
 export const getNotionSettlement = async (userId: string): Promise<GetSettlementResult> => {
   try {
+    console.log("userId >>>", userId)
     const response = await notion.databases.query({
       /**
        * (필수)특정 databaseId
@@ -206,6 +207,7 @@ export const getNotionSettlement = async (userId: string): Promise<GetSettlement
         ],
       },
     })
+    console.log("response >>> ", response, NOTION_DATABASE_ID)
     if (!response) {
       return {
         isSuccess: false,
