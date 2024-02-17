@@ -41,10 +41,10 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { 외부링크 } from "../../services/external-web-link"
 import { ScrollToBottomButton } from "stream-chat-react-native"
 import { bookings } from "./dummy"
-import { GetSettlementResponse, getSettlement, settlementDetail } from "#axios"
+import { GetSettlementResponse, getSettlement, settlementDetail } from "../../services/api/payment"
 import axios from "axios"
 import { useStores } from "#models"
-import { postNotionSettlement, getNotionSettlement } from "../../services/axios/notion"
+import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -98,7 +98,6 @@ export const CgRequestEarningScreen: FC<
   const {
     userStore: { userDetail, userAuth },
   } = useStores()
-  console.log(userAuth.token)
   const userId = userDetail.id.toString()
   const userInfoContent = {
     userId: userId,
@@ -125,7 +124,7 @@ export const CgRequestEarningScreen: FC<
 
   const onPressBottomButton = async () => {
     const { maxMonth, currentMonth } = await checkSettlementMonth()
-
+    console.log("result >>>", maxMonth, currentMonth)
     //* 정산 정보 입력 스크린
     if (isConfirmed === false) {
       // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
