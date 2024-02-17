@@ -2,6 +2,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      /*
+      //* @env경로를 못찾는 문제 발생
+      > 해당 경로 추가
+      > 근거 자료는 구글링하다 한 질문자의 코드를 보고 판단
+      > 정환한 근거가 아니므로 검토 필요
+      > //?출처: https://stackoverflow.com/questions/71712037/cannot-find-module-env-or-its-corresponding-type-declarations
+      */
+      "@env": ["node_modules/react-native-dotenv"], // this mapping is relative to "baseUrl"
+
       "#components": ["./app/components/index"],
       "#models": ["./app/models/index"],
       "#navigators": ["./app/navigators/index"],
