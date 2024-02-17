@@ -1,10 +1,12 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { VistingPetsitter, getVisitingCareGiver } from "../../services/axios/visiting"
+import { VistingPetsitter, getVisitingCareGiver } from "../../services/api/visiting"
 import { alertModal } from "../../utils/alert-modal"
 import { ServiceType } from "../review/review"
-import { CrechePetsitter, getCrecheCareGiver } from "#axios"
+import { CrechePetsitter, getCrecheCareGiver } from "#api"
 import { StateString } from "#components"
+import { getRootStore } from "../extensions/get-root-store"
+import { streamChatClient } from "../../services/api/stream"
 
 export type ServiceTypeKorean = "방문" | "위탁"
 
@@ -307,6 +309,30 @@ export const PetsitterStoreModel = types
       } else {
         return false
       }
+    },
+
+    /**
+     * [케어기버 전용]
+     * 보호자와의 채팅방(Channel)을 생성합니다.
+     */
+    async createChannelWith(otherStreamUserId: string) {
+      const rootStore = getRootStore(self)
+      const myStreamUserId = rootStore.userStore?.myStreamUserId
+      console.log("myStreamUserId >>>", myStreamUserId)
+      if (!myStreamUserId) {
+        return alertModal(
+          "채팅방 생성 실패",
+          `myStreamUserId 가 존재하지 않습니다. myStreamUserId: ${myStreamUserId}`,
+        )
+      }
+
+      // 채팅방 생성
+      const channel = streamChatClient.channel("messaging", {
+        members: [myStreamUserId, otherStreamUserId],
+        // name: parsedEmail,
+        // userType: type,
+      })
+      channel.create()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

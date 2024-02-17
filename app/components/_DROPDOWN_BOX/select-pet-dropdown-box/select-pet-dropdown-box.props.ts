@@ -1,4 +1,4 @@
-import { Pet } from "app/models"
+import { Pet } from "#api"
 import { Dispatch, SetStateAction } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 

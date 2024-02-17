@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { getNotifications, NotificationColumns } from "../../services/axios/notification"
+import { getNotifications, NotificationColumns } from "../../services/api/notification"
 import { id } from "date-fns/locale"
 interface Notification extends NotificationColumns {
   isChecked?: boolean // 유저가 해당 notification 을 확인했는지 안했는지를 판단한다.

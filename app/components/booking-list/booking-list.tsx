@@ -1,270 +1,181 @@
-import React from "react"
-import { StyleProp, ViewStyle, View, Image, Pressable } from "react-native"
+import React, { useMemo, useRef } from "react"
+import { StyleProp, ViewStyle, View, FlatList, Image, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { images } from "#images"
-import { CalendarProvider, AgendaList, ExpandableCalendar } from "react-native-calendars"
-import { GIVER_CASUAL_NAVY } from "#theme"
+import { DEVICE_WINDOW_HEIGHT, GIVER_CASUAL_NAVY, HEIGHT } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
-import { PreBol16, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
-import { ConfirmedBookings } from "../../services/axios/confirmed-bookings"
+import { PreBol16, PreMed18, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
+import { CgBooking, ConfirmedBooking } from "#api"
+import { DateData, DayState } from "react-native-calendars/src/types"
+import { BOTTOM_TAB_BAR_HEIGHT } from "../_BOTTOM_TAB_BAR/custom-tab-bar/custom-tab-bar"
+import { images } from "#images"
 
 export interface BookingListProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
+  style?: StyleProp<ViewStyle>
 
   /**
    * 예약 객체 배열
    */
-  bookings: ConfirmedBookings[]
-
-  style?: StyleProp<ViewStyle>
-}
-
-export const CustomDayComponent = ({ date, state, selected }) => {
-  const translateWeekText = ({ date }) => {
-    const week = ["일", "월", "화", "수", "목", "금", "토"]
-
-    return week[new Date(date.timestamp).getDay()]
-  }
-  const textBgBdSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
-      return GIVER_CASUAL_NAVY
-    }
-    if (state === "today") {
-      return "#F8F8FA"
-    }
-    return "white"
-  }
-
-  const textColorSelectior = ({ date, state }) => {
-    if (date.dateString == selected) {
-      return GIVER_CASUAL_NAVY
-    }
-
-    return "#999999"
-  }
-
-  return (
-    <View
-      style={{
-        width: 48,
-        height: 48,
-        marginRight: 80,
-        borderColor: textBgBdSelectior({ date, state }),
-        backgroundColor: state === "today" ? "#F8F8FA" : "white",
-        borderRadius: 8,
-        borderWidth: 2,
-        borderStyle: "solid",
-      }}
-    >
-      <PreReg14
-        style={{
-          height: 20,
-          alignSelf: "center",
-          marginTop: 5,
-          fontWeight: "600",
-        }}
-        color={textColorSelectior({ date, state })}
-      >
-        {date.day}
-      </PreReg14>
-      <PreReg12
-        style={{
-          alignSelf: "center",
-          fontWeight: "600",
-        }}
-        color={textColorSelectior({ date, state })}
-      >
-        {translateWeekText({ date })}
-      </PreReg12>
-    </View>
-  )
+  bookings: CgBooking[]
 }
 
 export const BookingList = observer(function BookingList(props: BookingListProps) {
-  const { style, bookings } = props
+  const { bookings = [], style } = props
 
-  const sections = [
-    {
-      /**default */
-      title: "2023-06-25",
-      data: [
-        {
-          name: "Meeting",
-          serviceType: "",
-          petname: "",
-          species: "",
-          petservices: ["?"],
-          address: "",
-          time: "10:00 AM",
-          height: 50,
-          day: "2023-06-26",
-        },
-      ],
-    },
-  ]
+  //* 선택된 날짜
+  const selected = useRef<string>("")
+  //const [selected, setSelected] = useState("")
 
-  bookings.forEach((item, idx) => {
-    console.log(item.services)
-    const dataprop = {
-      name: item.name,
-      serviceType: "creche",
-      petname: item.pets[0].name,
-      species: item.pets[0].species.name,
-      petservices: item.services,
-      address: item.address,
-      time: item.startTime,
-      height: 50,
-      day: item.startTime.substring(0, 10),
-    }
-    const newData = { title: String(idx), data: [dataprop] }
-    sections.push(newData)
-  })
+  const onDayPress = ({ date }) => {
+    console.log("PRESSED 🔷", date)
+    selected.current = date.dateString
+    console.log("SELECTED 🔷", selected)
+    //setSelected(date.dateString)
+  }
 
-  const renderItem = ({ item }) => {
-    //console.log(item.petservices)
-    if (item.day === selected) {
-      return (
+  // console.log("bookings", bookings)
+
+  const allStyles = Object.assign({}, styles.root, style)
+
+  return (
+    <FlatList
+      style={allStyles}
+      contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
+      showsVerticalScrollIndicator={false}
+      data={bookings}
+      renderItem={({ item, index }) => {
+        if (item === null || item === undefined) {
+          //TODO: 빈 날짜일 경우 UI 처리
+          console.log("item is null or undefined:", `${JSON.stringify(item)}`)
+          return <PreBol16 text={JSON.stringify(item)} />
+        }
+        const visOrCre = item?.crecheBookingId ? "위탁" : item?.visitingBookingId ? "방문" : "ERR"
+        const dateOrTime =
+          visOrCre === "방문" ? item.startTime : visOrCre === "위탁" ? item.startDate : null
+        const startProp = visOrCre === "방문" ? "startTime" : "startDate"
+        const endProp = visOrCre === "방문" ? "endTime" : "endDate"
+
+        return (
+          <View
+            style={{ display: "flex", flexDirection: "row" }}
+            key={(item?.crecheBookingId || item?.visitingBookingId) + 100 * index}
+          >
+            {/* 좌측 시간대 표기 UI */}
+            {/* <View
+                style={{
+                  marginVertical: 16,
+                  marginRight: 8,
+                  paddingRight: 5,
+                  justifyContent: "space-between",
+                  borderRightWidth: 2,
+                  borderColor: "#F8F8FA",
+                }}
+              >
+                <PreBol16 color={GIVER_CASUAL_NAVY}>{item[startProp].substring(11, 16)}</PreBol16>
+                <PreBol16 color={GIVER_CASUAL_NAVY}>{item[endProp].substring(11, 16)}</PreBol16>
+              </View> */}
+
+            {/* 예약 요약 카드 */}
+            <BookingInfoCard
+              style={{ marginVertical: 8, marginTop: index === 0 ? 0 : 8 }}
+              booking={item}
+              visOrCre={visOrCre}
+            />
+          </View>
+        )
+      }}
+      ListEmptyComponent={() => (
         <View
           style={{
-            display: "flex",
-            flexDirection: "row",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: (DEVICE_WINDOW_HEIGHT - BOTTOM_TAB_BAR_HEIGHT - 200) * HEIGHT,
           }}
         >
-          <View
-            style={{
-              marginVertical: 16,
-              marginRight: 8,
-              paddingRight: 5,
-              justifyContent: "space-between",
-              borderRightWidth: 2,
-              borderColor: "#F8F8FA",
-            }}
-          >
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.startTime.substring(11, 16)}</PreBol16>
-            <PreBol16 color={GIVER_CASUAL_NAVY}>{item.endTime.substring(11, 16)}</PreBol16>
-          </View>
-          <BookingInfoCard
-            style={{ marginVertical: 8, marginHorizontal: 6 }}
-            name={item.name}
-            petname={item.petname}
-            species={item.species}
-            serviceType={item.serviceType}
-            petservices={item.petservices}
-            address={item.address}
-            caregiverType="petsitter"
-          />
+          <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+          <PreMed18 text={`진행 중 이거나 완료한 예약이 없습니다`} />
         </View>
-      )
-    }
-  }
-
-  const [currentDate, setCurrentDate] = React.useState(new Date().toISOString().split("T")[0]) // 현재 날짜를 문자열로 변환
-  const [selected, setSelected] = React.useState("")
-  const onDayPress = (date) => {
-    setSelected(date.date.dateString)
-    console.log(date.date.dateString)
-  }
-  return (
-    <View style={{ flex: 1, marginTop: -20 }}>
-      <CalendarProvider numberOfDays={5} date={currentDate}>
-        <View style={{ display: "flex", alignItems: "flex-end" }}>
-          <ExpandableCalendar
-            monthFormat={"MMMM"}
-            theme={{
-              monthTextColor: GIVER_CASUAL_NAVY,
-              textMonthFontSize: 20,
-              textMonthFontWeight: "bold",
-            }}
-            dayComponent={({ date, state }) => (
-              <Pressable onPress={(e) => onDayPress({ date })}>
-                <CustomDayComponent date={date} state={state} selected={selected} />
-              </Pressable>
-            )}
-            onDayPress={onDayPress}
-            headerStyle={{
-              marginTop: 25, // default headertitle(week)을 지우기 위함
-            }}
-            calendarStyle={{
-              paddingBottom: 8,
-              borderStyle: "solid",
-              borderBottomWidth: 2,
-              borderBottomColor: "#F8F8FA",
-            }}
-            style={{
-              alignSelf: "center",
-              width: "109%",
-            }}
-            renderArrow={(direction) =>
-              direction === "left" ? (
-                <Image
-                  source={images.arrow_left_navy}
-                  style={{ width: 18, height: 18, marginLeft: 90 }}
-                />
-              ) : (
-                <Image
-                  source={images.arrow_right_navy}
-                  style={{ width: 18, height: 18, marginRight: 90 }}
-                />
-              )
-            }
-          />
-
-          <AgendaList
-            sectionStyle={{ display: "none" }}
-            style={{
-              marginTop: 32,
-              marginHorizontal: -6,
-            }}
-            sections={sections}
-            renderItem={renderItem}
-            scrollToNextEvent={true}
-          />
-        </View>
-      </CalendarProvider>
-
-      {/**test components */}
-      {/*<CalendarProvider date={"2023-06-26"} showTodayButton>
-        <CalendarHeader
-          renderArrow={(direction) =>
-            direction === "left" ? (
-              <Image
-                source={images.arrow_left_navy}
-                style={{ marginLeft: 40, width: 18, height: 18 }}
-              />
-            ) : (
-              <Image
-                source={images.arrow_right_navy}
-                style={{ marginRight: 40, width: 18, height: 18 }}
-              />
-            )
-          }
-          onPressArrowLeft={onPressArrowLeft}
-          onPressArrowRight={onPressArrowRight}
-          style={{ backgroundColor: "#FFFFFF" }}
-          hideDayNames
-          customHeaderTitle={
-            // headerMonth
-            <View>
-              <Text>{month + "월"}</Text>
-            </View>
-          }
-        />
-        <WeekCalendar
-          current={currentDate}
-          month={month}
-          allowShadow={false}
-          style={{ backgroundColor: "#FFFFFF", marginVertical: 0 }}
-          hideDayNames
-          onMonthChange={onMonthChange}
-          numberOfDays={5}
-          staticHeader={true}
-          dayComponent={CustomDayComponent}
-        />
-
-        <AgendaList sections={sections} renderItem={renderItem} />
-        </CalendarProvider>*/}
-    </View>
+      )}
+    />
   )
 })
+
+const styles = StyleSheet.create({
+  root: { flex: 1, width: "100%", height: "100%" },
+})
+
+// TODO: 월 일 달력 UI 구현시 CustomDayComponent 를 일 UI 구현때 사용할 것
+interface CustomDayComponentProps {
+  date: string & DateData
+  state: DayState
+  selected: any
+}
+const CustomDayComponent = observer(
+  function CustomDayComponent(props: CustomDayComponentProps) {
+    const { date, state, selected } = props
+
+    const { translateWeekText, textBgBdSelectior, textColorSelectior } = useMemo(() => {
+      const res = {
+        translateWeekText: "",
+        textBgBdSelectior: "#FFFFFF",
+        textColorSelectior: "#999999",
+      }
+
+      const week = ["일", "월", "화", "수", "목", "금", "토"]
+      res.translateWeekText = week[new Date(date.timestamp).getDay()] //FIXME: 더 나은 방법?
+
+      if (date.dateString === selected.current) {
+        res.textBgBdSelectior = GIVER_CASUAL_NAVY
+        res.textColorSelectior = GIVER_CASUAL_NAVY
+      } else {
+        res.textBgBdSelectior = "#FFFFFF"
+        res.textColorSelectior = "#999999"
+      }
+      if (state === "today") {
+        res.textBgBdSelectior = "#F8F8FA"
+      }
+
+      return res
+    }, [date, state, selected])
+
+    return (
+      <View
+        style={{
+          width: 48,
+          height: 48,
+          marginRight: 80,
+          borderColor: textBgBdSelectior,
+          backgroundColor: state === "today" ? "#F8F8FA" : "white",
+          borderRadius: 8,
+          borderWidth: 2,
+          borderStyle: "solid",
+        }}
+      >
+        <PreReg14
+          style={{
+            height: 20,
+            alignSelf: "center",
+            marginTop: 5,
+            fontWeight: "600",
+          }}
+          color={textColorSelectior}
+        >
+          {date.day}
+        </PreReg14>
+        <PreReg12
+          style={{
+            alignSelf: "center",
+            fontWeight: "600",
+          }}
+          color={textColorSelectior}
+        >
+          {translateWeekText}
+        </PreReg12>
+      </View>
+    )
+  },
+  { forwardRef: true },
+)

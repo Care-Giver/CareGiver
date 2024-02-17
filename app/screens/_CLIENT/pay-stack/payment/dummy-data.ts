@@ -1,4 +1,4 @@
-import { User as UserType } from "../../../../services/axios/user"
+import { User as UserType } from "../../../../services/api/user"
 
 export const userinfo: UserType[] = [
   {

@@ -5,8 +5,8 @@ import { PreBol16, PreReg14 } from "../../_BASIC/custom-texts/custom-texts"
 import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { Row } from "../../_BASIC/row/row"
-import { Pet, PetSex } from "#models"
-import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
+import { Pet, PetSex } from "#api"
+import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
 
 interface PetProfileCardProps {
   /**

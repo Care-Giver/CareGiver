@@ -85,20 +85,21 @@ const ClientTabs = () => {
       initialRouteName="Searching"
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
-      <Tab.Screen
+      {/* // TODO: 즐겨찾기 기능 재정립 이후 복구 */}
+      {/* <Tab.Screen
         name="Favorites"
         component={FavoritesStack}
         options={{ tabBarLabel: tabLabel.favortie }}
+      /> */}
+      <Tab.Screen
+        name="Searching"
+        component={SearchingStack}
+        options={{ tabBarLabel: tabLabel.search }}
       />
       <Tab.Screen
         name="Bookings"
         component={BookingsStack}
         options={{ tabBarLabel: tabLabel.schedule }}
-      />
-      <Tab.Screen
-        name="Searching"
-        component={SearchingStack}
-        options={{ tabBarLabel: tabLabel.search }}
       />
       <Tab.Screen
         name="Chats"

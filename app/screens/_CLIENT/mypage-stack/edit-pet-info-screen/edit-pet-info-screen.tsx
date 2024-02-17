@@ -34,10 +34,10 @@ import { images } from "#images"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { styles } from "./styles"
 import { ScrollView } from "react-native-gesture-handler"
-import { updatePet } from "../../../../services/axios/pets"
-import { uploadURIS } from "#axios"
+import { updatePet } from "../../../../services/api/pets"
+import { uploadURIS } from "#api"
 import { useKeyboardShown } from "../../../../utils/hooks"
-import { HandleType } from "../../../../services/axios/types/creches.visitings.common.types"
+import { HandleType } from "../../../../services/api/types/creches.visitings.common.types"
 
 export type 훅전용NavigatiorParamList<스크린이름들 extends keyof NavigatorParamList> = RouteProp<
   NavigatorParamList,

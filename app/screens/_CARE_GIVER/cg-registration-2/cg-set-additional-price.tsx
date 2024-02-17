@@ -23,7 +23,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { price as priceFormatter } from "../../../utils/format"
 import { DivisionLine } from "../../../components/_BASIC/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
-import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
 import _ from "lodash"
 
 export type AdditionalPrice = {
@@ -132,7 +132,11 @@ export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
                       keyboardType="numeric"
                       returnKeyType="done"
                       placeholder={`${강아지_크기}견 추가 요금을 입력해주세요.`}
-                      value={priceFormatter(additionalPrice[value].toString())}
+                      value={
+                        additionalPrice[value]
+                          ? priceFormatter(additionalPrice[value].toString())
+                          : null
+                      }
                       onChangeText={(text) => {
                         setAdditionalPrice({
                           ...additionalPrice,

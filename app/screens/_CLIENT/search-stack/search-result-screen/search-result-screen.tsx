@@ -37,6 +37,8 @@ import {
   PopReg14,
   PreMed18,
   BOTTOM_TAB_BAR_HEIGHT,
+  Footer,
+  FOOTER_CONTENT_GAP,
 } from "../../../../components"
 import {
   palette,
@@ -74,11 +76,11 @@ import {
   createFavorite,
   UpdateFavoriteBody,
   deleteFavorite,
-} from "#axios"
+} from "#api"
 import {
   SearchRequest,
   SearchResultSortOrder,
-} from "../../../../services/axios/types/creches.visitings.common.types"
+} from "../../../../services/api/types/creches.visitings.common.types"
 import {
   BottomSheetBackdrop,
   BottomSheetFooter,
@@ -165,7 +167,7 @@ export const SearchResultScreen: FC<
   useLayoutEffect(() => {
     navigation.setOptions({
       //@ts-ignore
-      title: `펫시팅 - ${serviceType}`,
+      title: `${serviceType} 펫시팅`,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -244,7 +246,7 @@ export const SearchResultScreen: FC<
 
   /** 펫시터 */
   const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", petsitters)
+  console.log("petsitters ♦️", JSON.stringify(petsitters))
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {
@@ -281,7 +283,13 @@ export const SearchResultScreen: FC<
   const handleSorting = useCallback(
     (optionValue: SearchResultSortingOption) => {
       switch (optionValue) {
-        // 1. 최근 등록순
+        // 1. 가까운 거리순
+        // 오름차순 정렬 -> 거리가 가까울 수록 상위 노출
+        case optionLabel.distance:
+          setPetsitters(_.orderBy(petsitters, "distance", "asc"))
+          break
+
+        // 2. 최근 등록순
         // 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
         case optionLabel.recent:
           if (방문검색) {
@@ -300,7 +308,7 @@ export const SearchResultScreen: FC<
           }
           break
 
-        // 2. 별점 높은 순
+        // 3. 별점 높은 순
         // 내림차순 정렬 -> 높은 별점을 상위 노출
         case optionLabel.ratings:
           if (방문검색) {
@@ -319,7 +327,7 @@ export const SearchResultScreen: FC<
           }
           break
 
-        // 후기 많은 순
+        // 4. 후기 많은 순
         // 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
         case optionLabel.reviews:
           if (방문검색) {
@@ -420,7 +428,7 @@ export const SearchResultScreen: FC<
   }, [draftSearchRequest])
 
   return (
-    <Screen>
+    <Screen style={{ paddingHorizontal: 0 }}>
       <Animated.View
         style={{
           height: HEADER_MARGIN_TOP,
@@ -460,6 +468,7 @@ export const SearchResultScreen: FC<
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: "transparent",
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
           {/* //? title */}
@@ -497,6 +506,7 @@ export const SearchResultScreen: FC<
             justifyContent: "space-between",
             backgroundColor: "transparent",
             paddingVertical: 12,
+            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
           }}
         >
           <SearchSortingButton
@@ -539,6 +549,7 @@ export const SearchResultScreen: FC<
             }}
             contentContainerStyle={{
               paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+              // paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
             }}
             showsVerticalScrollIndicator={false}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
@@ -595,7 +606,15 @@ export const SearchResultScreen: FC<
                       deleteFavorite(body)
                     }
                   }}
-                  style={index < petsitters.length - 1 ? { marginTop: 20 } : { marginVertical: 20 }}
+                  style={
+                    index < petsitters.length - 1
+                      ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                      : {
+                          marginVertical: 20,
+                          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+                        }
+                  }
+                  likeStyle={{ right: BASIC_BACKGROUND_PADDING_WIDTH }}
                 />
               )
             }}
@@ -611,6 +630,7 @@ export const SearchResultScreen: FC<
                 <PreMed18 text="검색된 펫시터가 없어요 😢" />
               </View>
             }
+            ListFooterComponent={() => <Footer mt={FOOTER_CONTENT_GAP} />}
           />
         </View>
       </Animated.View>

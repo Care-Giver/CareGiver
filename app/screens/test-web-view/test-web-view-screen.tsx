@@ -4,7 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { Screen } from "#components"
 import { WebView } from "react-native-webview"
-import { Api } from "#api"
+// import { Api } from "#LEGACY_api"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -19,12 +19,12 @@ export const TestWebViewScreen: FC<
   // const navigation = useNavigation()
   const [html, setHtml] = useState(null)
 
-  const api = new Api()
+  // const api = new Api()
   useEffect(() => {
     const set = async () => {
-      api.setup()
-      const data = await api.getAuthGoogle()
-      setHtml(data)
+      // api.setup()
+      // const data = await api.getAuthGoogle()
+      // setHtml(data)
     }
 
     set()

@@ -10,14 +10,26 @@ import {
   PreBol14,
   PreBol16,
   RowRoundedButton,
+  TopTipBox,
+  FOOTER_CONTENT_GAP,
+  Footer,
+  BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
-import { BOTTOM_HEIGHT, DISABLED, GIVER_CASUAL_NAVY, palette } from "#theme"
+import {
+  BOTTOM_HEIGHT,
+  DEVICE_SCREEN_WIDTH,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  WIDTH,
+  palette,
+} from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
 import { images } from "#images"
 import { alertModal } from "../../../utils/alert-modal"
+import { t } from "i18n-js"
 
 export type BookingRequest = {
   petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치
@@ -38,8 +50,6 @@ export const MakeBookingScreen: FC<
   const { key, service, selectedPetIds, selectedTime, address } = route.params
   const isKeyboardShown = useKeyboardShown()
   const isButtonShown = !isKeyboardShown
-  console.log("selectedTime 2", selectedTime)
-  console.log("address", address)
 
   /**
    * "방문전용" [유저인풋 텍스트] 주소
@@ -186,148 +196,149 @@ export const MakeBookingScreen: FC<
   }
 
   return (
-    <Screen testID="MakeBooking" type="View">
+    <Screen testID="MakeBooking" type="View" style={{ paddingHorizontal: 0 }}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false} enableOnAndroid>
-        <View style={styles.topTipBox}>
-          <PreReg12
-            color={palette.black}
-            text={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
+        <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+          <TopTipBox
+            desc={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
+            style={{ marginTop: 10 }}
           />
-        </View>
 
-        {/* [방문 ONLY] 펫시터가 방문할 주소 입력 */}
-        {key === "visiting" ? (
-          <View style={{ marginBottom: 36 }}>
-            <PreBol14
-              style={{ marginTop: 24, marginBottom: 8 }}
-              text="펫시터님이 방문할 주소를 알려주세요. (필수)"
-            />
-            {/*//* 위치 선택 */}
-            <RowRoundedButton
-              onPress={() => {
-                //
-              }}
-              image={images.location_disabled}
-              text={visitingAddress?.address}
-              textColor={DISABLED}
-              style={{ marginVertical: 12 }}
-            />
-            <PlaceHolderInputBox
-              placeholderText="상세주소를 입력해주세요. Ex) 102동 310호"
-              boxHeight={48}
-              text={visitingAddress?.detailAddress}
-              setText={(text) => {
-                setVisitingAddress((_) => ({ ..._, detailAddress: text }))
-              }}
-            />
-          </View>
-        ) : null}
+          {/* [방문 ONLY] 펫시터가 방문할 주소 입력 */}
+          {key === "visiting" ? (
+            <View style={{ marginBottom: 36 }}>
+              <PreBol14
+                style={{ marginTop: 24, marginBottom: 8 }}
+                text="펫시터님이 방문할 주소를 알려주세요. (필수)"
+              />
+              {/*//* 위치 선택 */}
+              <RowRoundedButton
+                onPress={() => {
+                  //
+                }}
+                image={images.location_disabled}
+                text={visitingAddress?.address}
+                textColor={DISABLED}
+                style={{ marginVertical: 12 }}
+              />
+              <PlaceHolderInputBox
+                placeholderText="상세주소를 입력해주세요. Ex) 102동 310호"
+                boxHeight={48}
+                text={visitingAddress?.detailAddress}
+                setText={(text) => {
+                  setVisitingAddress((_) => ({ ..._, detailAddress: text }))
+                }}
+              />
+            </View>
+          ) : null}
 
-        <PreBol14
-          style={{ marginTop: 24, marginBottom: 14 }}
-          text={"먹으면 안되는 음식을 알려주세요!"}
-        />
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
-          <ClickToBlueButton
-            buttonText={"없음"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is없음Active}
-            onPress={() => onPress먹으면안되는음식("없음")}
+          <PreBol14
+            style={{ marginTop: 24, marginBottom: 14 }}
+            text={"먹으면 안되는 음식을 알려주세요!"}
           />
-          <ClickToBlueButton
-            buttonText={"치즈"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is치즈Active}
-            onPress={() => onPress먹으면안되는음식("치즈")}
-          />
-          <ClickToBlueButton
-            buttonText={"닭고기"}
-            buttonHeight={45}
-            buttonWidth={115}
-            isActiving={is닭고기Active}
-            onPress={() => onPress먹으면안되는음식("닭고기")}
-          />
-        </View>
-        <PlaceHolderInputBox
-          placeholderText="주의할 음식이나 알러지가 있다면, 직접 작성해주세요!"
-          boxHeight={78}
-          text={bookingRequest.avoidFoodInfo}
-          setText={(text) => {
-            is없음Active && setIs없음Active(false)
-            setBookingRequest((_) => ({ ..._, avoidFoodInfo: text }))
-          }}
-        />
-
-        <PreBol14
-          style={{ marginTop: 24, marginBottom: 14 }}
-          text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
-        />
-        <View style={{ justifyContent: "space-between", marginBottom: 11, height: 151 }}>
-          {_.map(bondingTip, (item, index) => (
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 11 }}>
             <ClickToBlueButton
-              key={index}
-              buttonText={bondingTip[Number(index)]}
+              buttonText={"없음"}
               buttonHeight={45}
-              buttonWidth={358}
-              isActiving={꿀팁 === Number(index)}
-              onPress={() =>
-                // @ts-ignore
-                set꿀팁(Number(index))
-              }
+              buttonWidth={115 * WIDTH}
+              isActiving={is없음Active}
+              onPress={() => onPress먹으면안되는음식("없음")}
             />
-          ))}
-        </View>
-        <PlaceHolderInputBox
-          placeholderText="꿀팁을 자유롭게 작성해주세요"
-          boxHeight={78}
-          text={bookingRequest.bondingTipsInfo}
-          setText={(text) => {
-            setBookingRequest((_) => ({ ..._, bondingTipsInfo: text }))
-          }}
-        />
-
-        {/* [방문 ONLY] 펫시팅에 도움을 줄 수 있는 도구/사료 위치  */}
-        {key === "visiting" ? (
-          <View>
-            <PreBol14
-              style={{ marginTop: 24, marginBottom: 8 }}
-              text="펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"
+            <ClickToBlueButton
+              buttonText={"치즈"}
+              buttonHeight={45}
+              buttonWidth={115 * WIDTH}
+              isActiving={is치즈Active}
+              onPress={() => onPress먹으면안되는음식("치즈")}
             />
-            <PlaceHolderInputBox
-              placeholderText="Ex) 신발장 옆 첫번째 서랍, 마지막 칸에 사료가 있어요."
-              boxHeight={78}
-              text={bookingRequest.petToolsLocInfo}
-              setText={(text) => {
-                setBookingRequest((_) => ({ ..._, petToolsLocInfo: text }))
-              }}
+            <ClickToBlueButton
+              buttonText={"닭고기"}
+              buttonHeight={45}
+              buttonWidth={115 * WIDTH}
+              isActiving={is닭고기Active}
+              onPress={() => onPress먹으면안되는음식("닭고기")}
             />
           </View>
-        ) : null}
+          <PlaceHolderInputBox
+            placeholderText="주의할 음식이나 알러지가 있다면, 직접 작성해주세요!"
+            boxHeight={78}
+            text={bookingRequest.avoidFoodInfo}
+            setText={(text) => {
+              is없음Active && setIs없음Active(false)
+              setBookingRequest((_) => ({ ..._, avoidFoodInfo: text }))
+            }}
+          />
 
-        <PreBol14
-          style={{ marginTop: 16, marginBottom: 11 }}
-          text={"배변 처리 방법을 알려주세요"}
-        />
-        <PlaceHolderInputBox
-          placeholderText="Ex) 고양이 모래는 절대 변기 안에 넣지 말아주세요!!"
-          boxHeight={78}
-          text={bookingRequest.cleaningTipsInfo}
-          setText={(text) => {
-            setBookingRequest((_) => ({ ..._, cleaningTipsInfo: text }))
-          }}
-        />
+          <PreBol14
+            style={{ marginTop: 24, marginBottom: 14 }}
+            text={"반려동물과 친해질 수 있는 꿀팁을 알려주세요."}
+          />
+          <View style={{ justifyContent: "space-between", marginBottom: 11, height: 151 }}>
+            {_.map(bondingTip, (item, index) => (
+              <ClickToBlueButton
+                key={index}
+                buttonText={bondingTip[Number(index)]}
+                buttonHeight={45}
+                buttonWidth={"100%"}
+                isActiving={꿀팁 === Number(index)}
+                onPress={() =>
+                  // @ts-ignore
+                  set꿀팁(Number(index))
+                }
+              />
+            ))}
+          </View>
+          <PlaceHolderInputBox
+            placeholderText="꿀팁을 자유롭게 작성해주세요"
+            boxHeight={78}
+            text={bookingRequest.bondingTipsInfo}
+            setText={(text) => {
+              setBookingRequest((_) => ({ ..._, bondingTipsInfo: text }))
+            }}
+          />
 
-        <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
-        <PlaceHolderInputBox
-          placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
-          boxHeight={161}
-          text={bookingRequest.request}
-          setText={(text) => {
-            setBookingRequest((_) => ({ ..._, request: text }))
-          }}
-        />
+          {/* [방문 ONLY] 펫시팅에 도움을 줄 수 있는 도구/사료 위치  */}
+          {key === "visiting" ? (
+            <View>
+              <PreBol14
+                style={{ marginTop: 24, marginBottom: 8 }}
+                text="펫시팅에 도움을 줄 수 있는 도구, 사료는 어디에 위치해있나요?"
+              />
+              <PlaceHolderInputBox
+                placeholderText="Ex) 신발장 옆 첫번째 서랍, 마지막 칸에 사료가 있어요."
+                boxHeight={78}
+                text={bookingRequest.petToolsLocInfo}
+                setText={(text) => {
+                  setBookingRequest((_) => ({ ..._, petToolsLocInfo: text }))
+                }}
+              />
+            </View>
+          ) : null}
+
+          <PreBol14
+            style={{ marginTop: 16, marginBottom: 11 }}
+            text={"배변 처리 방법을 알려주세요"}
+          />
+          <PlaceHolderInputBox
+            placeholderText="Ex) 고양이 모래는 절대 변기 안에 넣지 말아주세요!!"
+            boxHeight={78}
+            text={bookingRequest.cleaningTipsInfo}
+            setText={(text) => {
+              setBookingRequest((_) => ({ ..._, cleaningTipsInfo: text }))
+            }}
+          />
+
+          <PreBol14 style={{ marginTop: 24, marginBottom: 8 }} text={"자유 요청 사항"} />
+          <PlaceHolderInputBox
+            placeholderText="요청 사항을 자유롭게 작성해주세요. (300자 이내)"
+            boxHeight={161}
+            text={bookingRequest.request}
+            setText={(text) => {
+              setBookingRequest((_) => ({ ..._, request: text }))
+            }}
+          />
+        </View>
+        <Footer mt={FOOTER_CONTENT_GAP} />
       </KeyboardAwareScrollView>
 
       {isButtonShown && (
@@ -341,7 +352,7 @@ export const MakeBookingScreen: FC<
 
 const styles = StyleSheet.create({
   pressableContainer: {
-    width: "100%",
+    width: DEVICE_SCREEN_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH,
     height: 56,
     borderRadius: 8,
     borderWidth: 1,
@@ -350,14 +361,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     bottom: BOTTOM_HEIGHT,
-  },
-  topTipBox: {
-    width: "100%",
-    height: 35,
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    marginTop: 10,
-    backgroundColor: "#F1F1F4",
-    borderRadius: 8,
+    alignSelf: "center",
   },
 })

@@ -15,8 +15,9 @@ import { RatingStars } from "./rating-stars/rating-stars"
 import { MIDDLE_LINE, DISABLED } from "../../theme"
 import { PetInfoDropdownBox } from "../_DROPDOWN_BOX/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
-import { Pet } from "#models"
+import { Pet } from "#api"
 import { alertModal } from "../../utils/alert-modal"
+import { formatDate } from "../../utils/format"
 
 interface ReviewBoxProps {
   style?: StyleProp<ViewStyle>
@@ -48,18 +49,6 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const profileImg = user.profileImg ? user.profileImg : images.profile_default
   const reviewImages = reviewData?.images || []
 
-  // ? 날짜 표기를 YY.MM.DD 형태로 변환
-  const formatDate = (date: Date) => {
-    const formatted =
-      date.getFullYear().toString().slice(2) +
-      "." +
-      (date.getMonth() + 1 < 10 ? "0" : "") +
-      (date.getMonth() + 1).toString() +
-      "." +
-      (date.getDate() < 10 ? "0" : "") +
-      date.getDate().toString()
-    return formatted
-  }
   const date = formatDate(createdAt)
 
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false)

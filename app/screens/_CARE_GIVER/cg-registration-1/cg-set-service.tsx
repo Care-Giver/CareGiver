@@ -22,7 +22,7 @@ import {
   PreReg16,
   PreMed16,
 } from "#components"
-import { CrecheService, VisitingService } from "#axios"
+import { CrecheService, VisitingService } from "#api"
 import {
   BottomSheetBackdrop,
   BottomSheetFooter,

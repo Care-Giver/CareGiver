@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { GIVER_CASUAL_NAVY, SHADOW_1 } from "#theme"
 import { images } from "#images"
 import { HEADER_ROOT } from "../common-styles"
-import { PopReg12 } from "#components"
+import { navigate } from "#navigators"
 
 export const CgScreenHeader = observer(function CgScreenHeader(props) {
   return (
@@ -17,7 +17,7 @@ export const CgScreenHeader = observer(function CgScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            alert("알림 기능은 준비중입니다.")
+            navigate("notification-screen")
           }}
           style={{
             marginLeft: "auto",

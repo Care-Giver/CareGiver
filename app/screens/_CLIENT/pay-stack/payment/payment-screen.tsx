@@ -6,8 +6,11 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
+  CareSummary,
   CustomModal,
   DivisionLine,
+  FOOTER_CONTENT_GAP,
+  Footer,
   PaymentTool,
   PreBol14,
   PreBol16,
@@ -17,12 +20,14 @@ import {
   Screen,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
-import { BODY, GIVER_CASUAL_NAVY, MIDDLE_LINE } from "#theme"
+import { BODY, BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 import { useCalculator, createBooking } from "./payment-screen.controller"
+import { PaymentFeeInfo } from "../../../../components/payment-fee-info/payment-fee-info"
+import { differenceInDays, differenceInHours } from "date-fns"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
@@ -75,6 +80,10 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
     // totalFee 계산
     const amount = useCalculator({ key, selectedPetIds, selectedTime, service })
+    const duration =
+      key === "visiting"
+        ? differenceInHours(new Date(selectedTime.end), new Date(selectedTime.start))
+        : differenceInDays(new Date(selectedTime.end), new Date(selectedTime.start))
 
     /**
      * [개발중 🏗️]
@@ -114,34 +123,35 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       })
     }
 
+    const serviceTypeKorean = key === "creche" ? "위탁" : "방문"
+
     return (
       <Screen testID="Payment" style={{ paddingHorizontal: 0 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* CONTENT 시작, paddingHorizontal:16 */}
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
             <View style={styles.bookingInfo}>
-              <PreBol14 text="예약 정보" />
-              {/* 방문, 펫시터 Box 컴포넌트 가져오기 */}
+              <PreBol16 text="예약 정보" />
             </View>
 
             <DivisionLine mt={12} />
-            <PreMed14 text="담당 Care Giver" mb={8} mt={15} />
-            <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={24} color={BODY} />
-            {/* 맡길 반려동물 컴포넌트 가져오기 */}
-            <PreMed14 text="방문 장소" mb={8} />
-            <PreReg14 text={service[key].address} mb={24} color={BODY} />
-            <PreMed14 text="예약 일정" mb={8} />
-            <PreReg14
-              text={`${selectedTime.start.slice(0, 10)} - ${selectedTime.end.slice(0, 10)}`}
-              mb={24}
-              color={BODY}
+            <PreBol14 text="담당 케어기버" color={SUB_HEAD_LINE} mb={8} mt={15} />
+            <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={36} color={BODY} />
+
+            <CareSummary
+              address={service[key].address}
+              start={selectedTime.start.slice(0, 10)}
+              end={selectedTime.end.slice(0, 10)}
+              petIds={selectedPetIds}
+              serviceTypeKorean={serviceTypeKorean}
+              showServiceType={true}
+              // style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
             />
           </View>
 
           <DivisionLine height={6} mb={24} />
 
           <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-            <PreBol14 text="결제 수단" mb={14} />
+            <PreBol16 text="결제 수단" mb={14} />
             <DivisionLine />
             {/* 결제 수단 컴포넌트 시작 */}
             <View
@@ -207,43 +217,26 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
           <DivisionLine height={6} mv={24} />
 
-          {amount && (
-            <View style={styles.priceContainer}>
-              <PreBol14 text="요금 세부 정보" mb={13} />
-              <DivisionLine />
-              {/* 가격 테이블  */}
-              <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <PreReg14 text="서비스 이용료" style={{ flex: 3 }} />
-                  {/* <PreReg14 text="50,000" style={{ flex: 2 }} />
-                <PreReg14 text="8시간" style={{ flex: 1 }} /> */}
-                  <PreReg14
-                    text={`${priceFormatter(String(amount?.subTotalFee))} 원`}
-                    style={{ flex: 3, textAlign: "right" }}
-                  />
-                </View>
-                <View style={styles.tableRow}>
-                  <PreReg14 text="수수료" style={{ flex: 3 }} />
-                  {/* <PreReg14 text="40,000" style={{ flex: 3 }} /> */}
-                  <PreReg14
-                    text={`${priceFormatter(String(amount?.totalFee - amount?.subTotalFee))} 원`}
-                    style={{ flex: 3, textAlign: "right" }}
-                  />
-                </View>
-                <View style={styles.tableRow}>
-                  {/* // TODO: 쿠폰 기능 구현완료후, 주석 해제할 것.  */}
-                  {/* <PreReg14 text="할인 쿠폰" style={{ flex: 5 }} />
-                <PreReg14 text="1" style={{ flex: 1, textAlign: "center" }} />
-                <PreReg14 text="-10,000원" style={{ flex: 3, textAlign: "right" }} /> */}
-                </View>
-              </View>
-              <DivisionLine />
-              <View style={styles.totalPrice}>
-                <PreBol16 text="결제 금액" />
-                <PreBol18 text={`${priceFormatter(String(amount?.totalFee))} 원`} />
-              </View>
-            </View>
-          )}
+          {/* //* 결제 요금 */}
+          <View
+            style={{
+              paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
+          >
+            <PreBol18 text="요금 세부 정보" />
+            {amount && (
+              <PaymentFeeInfo
+                style={{ marginTop: 10, marginBottom: 160 }}
+                serviceType={key}
+                serviceFee={amount.serviceFee}
+                duration={duration}
+                petTypeExtraFee={amount.petTypeExtraFee}
+                wage={Math.ceil(amount.serviceFee / duration)}
+                totalFee={amount.totalFee}
+                petTypeExtraFeeSumByTime={amount.totalExtraFee}
+              />
+            )}
+          </View>
         </ScrollView>
 
         <CustomModal
@@ -341,7 +334,7 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   paymentButton: {
-    bottom: 40,
+    bottom: BOTTOM_HEIGHT,
     marginHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
     backgroundColor: GIVER_CASUAL_NAVY,
     flexDirection: "row",

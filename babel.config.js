@@ -14,8 +14,8 @@ module.exports = {
           "#navigators": "./app/navigators/index",
           "#screens": "./app/screens/index",
           "#theme": "./app/theme/index",
+          "#LEGACY_api": "./app/services/LEGACY_api/index",
           "#api": "./app/services/api/index",
-          "#axios": "./app/services/axios/index",
           "#images": "./assets/images/index",
           "#fonts": "./assets/fonts/index",
 

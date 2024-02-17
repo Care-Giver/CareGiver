@@ -5,7 +5,7 @@ import {
   GetFavoritesRequestBody,
   deleteFavorite,
   getFavorites,
-} from "../../services/axios/favorite"
+} from "../../services/api/favorite"
 
 interface UpdateInput {
   serviceType: "creche" | "visiting"

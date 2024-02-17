@@ -20,6 +20,7 @@ export function BlueCheckbox(props: BlueCheckboxProps) {
       // disabled={!props.onToggle}
       onPress={onPress}
       style={allStyles}
+      hitSlop={4} // 터치 영역 개선
     >
       <Image
         style={{ width: imageSize, height: imageSize }}

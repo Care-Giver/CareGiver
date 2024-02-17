@@ -2,10 +2,12 @@ import { applySnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { delay } from "../../utils/delay"
 import { navigate } from "#navigators"
-import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#axios"
+import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#api"
 import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
-import { getStreamToken } from "../../services/axios/stream"
+import { getStreamToken, streamChatClient } from "../../services/api/stream"
+import { alertModal } from "../../utils/alert-modal"
+import { AddressLocation } from "#screens"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -26,14 +28,25 @@ interface UserAuth {
 
 type SocialLoginHanderParams = UserAuth
 
+interface SearchRequest {
+  address: string
+  location: AddressLocation
+  // TODO: 위치 말고도 또 어떤 걸 저장하면 UX 경험이 나아질까?
+}
+
+const 한양대에리카제5공학관 = {
+  lat: 37.2955072, // 위도
+  lng: 126.83539, // 경도
+} as const
+
 /**
- * User Model is for both CareGiver and Client.
+ * [보호자] 모드와 [펫시터] 모드
+ * 둘 다 사용되는 모델입니다.
  */
 export const UserStoreModel = types
   .model("UserStore")
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
-    // onSwitchingType: types.optional(types.boolean, false),
     onSwitchingType: false,
     loggedIn: false,
 
@@ -60,6 +73,12 @@ export const UserStoreModel = types
 
     /* 인증된 펫시터인지 여부 */
     isCertified: false,
+
+    /* [보호자 모드]에서 사용자가 입력했던 검색 정보 */
+    cachedSearchRequest: types.frozen<SearchRequest>({
+      address: "",
+      location: { ...한양대에리카제5공학관 },
+    }),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -86,6 +105,14 @@ export const UserStoreModel = types
         default:
           return "오류"
       }
+    },
+
+    get myStreamUserId() {
+      if (!self.userDetail?.id) return ""
+      if (!self.userAuth?.email) return ""
+      return (
+        String(self.userDetail.id) + self.userAuth.email.toLowerCase().replace(/[^a-z0-9@_]/g, "_")
+      ) // a-z, 0-9, @, _를 제외한 모든 문자를 _로 대체
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -146,6 +173,41 @@ export const UserStoreModel = types
     setUserDetail(value: UserDetail) {
       // 반드시 새 객체를 만들어서 넣어야 합니다. - Immutability 를 지키기 위함임 .
       self.userDetail = value
+    },
+
+    /**
+     * Stream 에 연결하고, 유저정보를 셋업합니다.
+     */
+    async connectToStream() {
+      // Connect user to chat. This establishes a websocket connection between client and server.
+      try {
+        let streamToken = self.userDetail?.clientStreamToken
+        // 만약 clientStreamToken 값이 없다면 새로 발행한다.
+        if (!streamToken) {
+          const { streamToken: newStreamToken } = await getStreamToken()
+          streamToken = newStreamToken
+        }
+
+        const myStreamUserId =
+          String(self.userDetail.id) +
+          self.userAuth.email.toLowerCase().replace(/[^a-z0-9@_]/g, "_") // a-z, 0-9, @, _를 제외한 모든 문자를 _로 대체
+
+        const connectUserResponse = await streamChatClient.connectUser(
+          {
+            id: myStreamUserId,
+            name: self.userDetail.nickname,
+            image: self.userDetail?.profileImage || "",
+          },
+          streamToken,
+        )
+        return !!connectUserResponse
+      } catch (error) {
+        alertModal("채팅 서버 연결 실패", `catch: ${error?.message}`)
+        return false
+      }
+
+      // To disconnect a user
+      // await client.disconnect()
     },
 
     /**
@@ -231,6 +293,8 @@ export const UserStoreModel = types
           email: loginRequestBody.email,
         })
 
+        this.connectToStream()
+
         this.setLoggedIn(true)
 
         await delay(500)
@@ -273,6 +337,8 @@ export const UserStoreModel = types
           email,
         })
 
+        this.connectToStream()
+
         this.setLoggedIn(true)
 
         await delay(500)
@@ -292,8 +358,11 @@ export const UserStoreModel = types
      * - UserStoreModel 초기화
      * */
     logoutHandler() {
-      //! 중요: 로그인시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
+      //! 중요: 로그아웃시, axios 기본 설정에 넣어줬던 토큰을 초기화 해야 한다.
       axios.defaults.headers.common["x-jwt"] = ""
+
+      //! 중요: 로그아웃시, stream chat 유저와의 연결을 끊어야 합니다. 그렇지 않으면 다른 계정으로 로그인시, 정상적으로 stream chat 을 사용할 수 없습니다.
+      streamChatClient.disconnectUser()
 
       // UserStoreModel 모델 초기화
       this.reset()
@@ -319,6 +388,14 @@ export const UserStoreModel = types
             break
         } 
         */
+    },
+
+    /**
+     * [보호자] 모드에서,
+     * 사용자가 입력했던 검색 정보를 저장합니다.
+     * */
+    cacheSearchRequest(value: SearchRequest) {
+      self.setProp("cachedSearchRequest", value)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

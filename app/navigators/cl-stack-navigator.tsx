@@ -67,10 +67,12 @@ import {
 } from "#components"
 import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
-import { Pet, PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
+import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
-import { streamChatClient } from "../services/axios/stream"
+import { streamChatClient } from "../services/api/stream"
+import { Pet } from "#api"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {
   start: string
@@ -87,7 +89,12 @@ export type CLStackNavigatorParamList = {
    * BookingsStack - 예약내역 스택
    */
   "all-bookings-screen": undefined
-  "booking-detail-screen": undefined
+  "booking-detail-screen": {
+    crecheBookingId: number
+    visitingBookingId: number
+    paymentId: number
+    serviceType: ServiceType
+  }
   "past-bookings-screen": undefined
   // * review stack
   "write-review-screen": {
@@ -272,7 +279,7 @@ export const BookingsStack = () => {
         name="booking-detail-screen"
         component={BookingDetailScreen}
         options={{
-          title: "예약내역 상세",
+          title: "예약 내역 상세",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
@@ -368,6 +375,8 @@ export const SearchingStack = () => {
           headerTitle: "",
           headerTitleStyle: {
             color: "white",
+            fontFamily: PRETENDARD_MEDIUM,
+            fontSize: 18,
           },
         }}
       />
@@ -441,6 +450,15 @@ export const SearchingStack = () => {
         }}
       />
 
+      {/* 알림 스크린 */}
+      <Stack.Screen
+        name="notification-screen"
+        component={NotificationScreen}
+        options={({ navigation, route }) => ({
+          header: (props) => <NotificationScreenHeader {...props} />,
+        })}
+      />
+
       {/* =========================================================================================================== */}
       {/* 테스트 스크린들은 아래에다가 추가해주세요 */}
       {/* =========================================================================================================== */}
@@ -459,14 +477,6 @@ export const SearchingStack = () => {
 
       {/* //? 푸시알림 테스트 화면 */}
       <Stack.Screen name="test-push-notification-screen" component={TestPushNotificationScreen} />
-      <Stack.Screen
-        name="notification-screen"
-        component={NotificationScreen}
-        options={({ navigation, route }) => ({
-          //! FEEDBACK: 컴포넌트로 따로 빼는 방법은 매우 간단합니다. 만드신 컴포넌트를 header prop 에 리턴값이 있는 함수 형태 `() => ()` 로 넣어주면 됩니다. header prop을 그대로 컴포넌트에 넘겨주기위해, spread operator (...) 를 사용해서 {...props} 을 써줘야하는 것을 잊지 마세요!
-          header: (props) => <NotificationScreenHeader {...props} />,
-        })}
-      />
 
       {/* //? bottom-sheet 테스트 화면 */}
       <Stack.Screen name="test-bottom-sheet" component={TestBottomSheetScreen} />

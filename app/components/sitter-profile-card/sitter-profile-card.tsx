@@ -1,4 +1,4 @@
-import { View, Pressable, Image, FlexStyle } from "react-native"
+import { View, Pressable, Image, ViewStyle, StyleProp } from "react-native"
 import React from "react"
 import { styles } from "./styles"
 import { PreMed16, PreReg12 } from "../_BASIC/custom-texts/custom-texts"
@@ -6,8 +6,8 @@ import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
 import { images } from "../../../assets/images"
 import { RatingReviewBox } from "../rating-review-box/rating-review-box"
 import { VisitingCreche } from "../../screens/_CLIENT/search-stack/search-result-screen/search-result-screen"
-import { UserEntity } from "../../services/axios/types/entity.types"
-import { CareGiverPetsitter } from "../../services/axios/types/creches.visitings.common.types"
+import { UserEntity } from "../../services/api/types/entity.types"
+import { CareGiverPetsitter } from "../../services/api/types/creches.visitings.common.types"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 export type PetsitterProfileCardPetsitterData = {
@@ -19,10 +19,11 @@ export type PetsitterProfileCardPetsitterData = {
 
 interface SitterProfileCardProps {
   sitterData: PetsitterProfileCardPetsitterData
-  style?: FlexStyle
   isFavorite: boolean
   onPress: () => void
   onLikePress: () => void
+  style?: StyleProp<ViewStyle>
+  likeStyle?: StyleProp<ViewStyle>
 }
 
 export const SitterProfileCard = ({
@@ -31,6 +32,7 @@ export const SitterProfileCard = ({
   onPress,
   isFavorite,
   onLikePress,
+  likeStyle,
 }: SitterProfileCardProps) => {
   const {
     crecheId,
@@ -47,7 +49,7 @@ export const SitterProfileCard = ({
   } = sitterData
 
   return (
-    <Pressable style={[styles.container, style]} onPress={onPress}>
+    <Pressable style={[styles.root, style]} onPress={onPress}>
       {/* <Pressable style={[styles.container, {}]}> */}
 
       <View style={styles.infoContainer}>
@@ -83,15 +85,14 @@ export const SitterProfileCard = ({
         </View>
       </View>
       {/* like button */}
-      <View style={styles.likeContainer}>
+      {/* <View style={[styles.likeContainer, likeStyle]}>
         <Pressable onPress={onLikePress}>
-          {/* // TODO: 유저의 찜상태에 따라 하트 채우기 */}
           <Image
             style={styles.likeBtn}
             source={isFavorite ? images.filled_heart : images.empty_heart}
           />
         </Pressable>
-      </View>
+      </View> */}
     </Pressable>
   )
 }

@@ -63,7 +63,7 @@ export const CgMypageScreen: FC<
 
   // 처음 펫시터를 등록하는 경우 보여지는 BottomSheetModal BEGIN =======================================================
   // 서비스 타입
-  const [serviceType, setServiceType] = useState<ServiceTypeKorean>(null)
+  const [serviceType, setServiceType] = useState<ServiceTypeKorean>("방문")
 
   // 펫시터 등록하기 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -72,37 +72,37 @@ export const CgMypageScreen: FC<
   const snapPoints = useMemo(() => ["40%"], [])
 
   /** 펫시터 등록하기 바텀시트모달 backdrop */
-  const renderBackdrop = useCallback(
-    (props) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
-        disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
-        pressBehavior={"close"}
-      />
-    ),
-    [],
-  )
+  // const renderBackdrop = useCallback(
+  //   (props) => (
+  //     <BottomSheetBackdrop
+  //       {...props}
+  //       appearsOnIndex={0} // backdrop이 등장할 때의 snap point -> snap point가 0이면 backdrop 나타남
+  //       disappearsOnIndex={-1} // backdrop이 사라질 때의 snap point -> snap point가 -1이면 backdrop 사라짐
+  //       pressBehavior={"close"}
+  //     />
+  //   ),
+  //   [],
+  // )
 
   /** 펫시터 등록하기 바텀시트모달 Footer - 확인 버튼 렌더링 */
-  const renderFooter = useCallback(
-    (props) => (
-      <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
-        <ConditionalButton
-          label={
-            !serviceType ? "방문과 위탁 중에서 선택해주세요." : `${serviceType} 펫시터 시작하기`
-          }
-          isActivated={!!serviceType}
-          onPress={() => {
-            bottomSheetModalRef.current?.close()
-            setDraftPetsitter({}, serviceType === "방문" ? "visiting" : "creche")
-            navigate("cg-registration-1-screen")
-          }}
-        />
-      </BottomSheetFooter>
-    ),
-    [bottomSheetModalRef, serviceType, setDraftPetsitter],
-  )
+  // const renderFooter = useCallback(
+  //   (props) => (
+  //     <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
+  //       <ConditionalButton
+  //         label={
+  //           !serviceType ? "방문과 위탁 중에서 선택해주세요." : `${serviceType} 펫시터 시작하기`
+  //         }
+  //         isActivated={!!serviceType}
+  //         onPress={() => {
+  //           bottomSheetModalRef.current?.close()
+  //           setDraftPetsitter({}, serviceType === "방문" ? "visiting" : "creche")
+  //           navigate("cg-registration-1-screen")
+  //         }}
+  //       />
+  //     </BottomSheetFooter>
+  //   ),
+  //   [bottomSheetModalRef, serviceType, setDraftPetsitter],
+  // )
   // 처음 펫시터를 등록하는 경우 보여지는 BottomSheetModal ENDED =======================================================
 
   return (
@@ -140,7 +140,7 @@ export const CgMypageScreen: FC<
               </Row>
 
               <Row>
-                <CaregiverTypeButton text={serviceTypeKorean} />
+                <CaregiverTypeButton text={serviceTypeKorean || "작성중.."} />
                 <CaregiverTypeButton
                   text={"펫시터"}
                   textColor={GIVER_CASUAL_NAVY}
@@ -170,7 +170,9 @@ export const CgMypageScreen: FC<
             <TouchableOpacity
               style={{ marginTop: 16, marginBottom: 28, alignItems: "center" }}
               onPress={() => {
-                bottomSheetModalRef.current?.present()
+                // bottomSheetModalRef.current?.present()
+                setDraftPetsitter({}, serviceType === "방문" ? "visiting" : "creche")
+                navigate("cg-registration-1-screen")
               }}
             >
               <Image
@@ -251,7 +253,7 @@ export const CgMypageScreen: FC<
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
-      <BottomSheetModal
+      {/* <BottomSheetModal
         ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
         index={0}
@@ -261,7 +263,7 @@ export const CgMypageScreen: FC<
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
         <CgSetServiceType serviceType={serviceType} setServiceType={setServiceType} />
-      </BottomSheetModal>
+      </BottomSheetModal> */}
     </Screen>
   )
 })

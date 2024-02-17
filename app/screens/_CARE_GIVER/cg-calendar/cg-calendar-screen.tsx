@@ -16,8 +16,8 @@ import { BODY, GIVER_CASUAL_NAVY } from "#theme"
 import {
   GroupedVisitingAvailableTimesByDate,
   getVisitingAvailableTimes,
-} from "../../../services/axios/visiting-available-time"
-import { CrecheAvailableDate, getCrecheDates } from "../../../services/axios/creche-date"
+} from "../../../services/api/visiting-available-time"
+import { CrecheAvailableDate, getCrecheDates } from "../../../services/api/creche-date"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { images } from "#images"
 import { dummy } from "./dummy-data"
@@ -171,7 +171,7 @@ export const CgCalendarScreen: FC<
                 }
 
                 serviceTypeKorean === "방문"
-                  ? navigate("set-visiting-service-day-screen", {
+                  ? navigate("cg-set-visiting-service-day-screen", {
                       // TODO - 여러개의 selected 가 넘겨질 경우 처리
                       selectedDates,
                       visitingId: petsitter.id,
@@ -182,7 +182,7 @@ export const CgCalendarScreen: FC<
                         ).length !== 0,
                       isDeleted: isDeletedVis,
                     })
-                  : navigate("set-creche-service-day-screen", {
+                  : navigate("cg-set-creche-service-day-screen", {
                       selectedDates,
                       crecheId: petsitter.id,
                       isAvailableDate:

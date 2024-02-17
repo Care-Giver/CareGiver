@@ -20,7 +20,9 @@ import {
   DivisionLineVertical,
   BASIC_BACKGROUND_PADDING,
   CustomModal,
-  PreMed16, // modal test
+  PreMed16,
+  FOOTER_CONTENT_GAP,
+  Footer,
 } from "../../../../components"
 import { StackScreenProps } from "@react-navigation/stack"
 import { navigate, NavigatorParamList } from "../../../../navigators"
@@ -39,9 +41,10 @@ import {
 } from "../../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../../utils/delay"
-import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#axios"
+import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#api"
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
+import { PRETENDARD_MEDIUM } from "#fonts"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -152,6 +155,8 @@ export const CaregiverDetailInformationScreen: FC<
             },
             headerTitleStyle: {
               color: headerOpacity < 0.3 ? "white" : "black",
+              fontFamily: PRETENDARD_MEDIUM,
+              fontSize: 18,
             },
           })
         }}
@@ -179,8 +184,9 @@ export const CaregiverDetailInformationScreen: FC<
             }}
             onPress={() => {
               //? 후기 전체보기 화면으로 이동
-              //TODO: params 값 추가해줘야 함
-              navigate("all-reviews-screen", null)
+              // TODO: params 값 추가해줘야 함
+              // TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기
+              // navigate("all-reviews-screen", null)
             }}
             text={`후기 ${reviewCount}개`}
           />
@@ -254,7 +260,14 @@ export const CaregiverDetailInformationScreen: FC<
           />
 
           {/* //* 댓글 */}
-          <Row style={{ marginTop: 60 }}>
+          <Row
+            style={{
+              marginTop: 60,
+
+              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              display: "none",
+            }}
+          >
             <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
@@ -268,12 +281,22 @@ export const CaregiverDetailInformationScreen: FC<
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
 
-          <View style={{ paddingVertical: -1, marginBottom: BOTTOM_HEIGHT, alignItems: "center" }}>
+          <View
+            style={{
+              paddingVertical: -1,
+              marginBottom: BOTTOM_HEIGHT,
+              alignItems: "center",
+
+              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              display: "none",
+            }}
+          >
             {commentsDummy.slice(0, 3).map((item, index) => (
               <Comment commentData={item} numberOfLines={2} style={{ marginTop: -1 }} key={index} />
             ))}
           </View>
         </View>
+        <Footer mt={FOOTER_CONTENT_GAP} />
       </ScrollView>
 
       {/* //? 예약 신청하기 버튼 */}
@@ -284,10 +307,7 @@ export const CaregiverDetailInformationScreen: FC<
             opacity: buttonOpacity,
             transform: [{ scale: buttonScale }],
             paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-            bottom: Platform.select({
-              ios: IOS_BOTTOM_HOME_BAR_HEIGHT,
-              android: 8,
-            }),
+            bottom: BOTTOM_HEIGHT,
           }}
         >
           {/* //* 예약 신청하기 버튼*/}

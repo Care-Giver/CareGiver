@@ -23,12 +23,22 @@ import { images } from "#images"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
+
+const queryClient = new QueryClient()
+
+//* 호중 - 빌드에러로 인한 주석처리
+// if (__DEV__) {
+//   // @ts-ignore
+//   import("react-query-native-devtools").then(({ addPlugin }) => {
+//     addPlugin({ queryClient })
+//   })
+// }
 
 /**
  * This is the root component of our app.
@@ -62,26 +72,28 @@ function App() {
 
   // otherwise, we're ready to render the app
   return (
-    <ToggleStorybook>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <ErrorBoundary catchErrors={"always"}>
-            <KeyboardProvider>
-              {/* // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android */}
-              {/* // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818 */}
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <BottomSheetModalProvider>
-                  <AppNavigator
-                  // initialState={initialNavigationState} //* Do NOT use before the deployment
-                  // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
-                  />
-                </BottomSheetModalProvider>
-              </GestureHandlerRootView>
-            </KeyboardProvider>
-          </ErrorBoundary>
-        </SafeAreaProvider>
-      </RootStoreProvider>
-    </ToggleStorybook>
+    <QueryClientProvider client={queryClient}>
+      <ToggleStorybook>
+        <RootStoreProvider value={rootStore}>
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <ErrorBoundary catchErrors={"always"}>
+              <KeyboardProvider>
+                {/* // ! "GestureHandlerRootView" is added to fix Bottom Sheet problems on Android */}
+                {/* // ? ref: https://github.com/gorhom/react-native-bottom-sheet/issues/895#issuecomment-1103363818 */}
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                  <BottomSheetModalProvider>
+                    <AppNavigator
+                    // initialState={initialNavigationState} //* Do NOT use before the deployment
+                    // onStateChange={onNavigationStateChange} //* Do NOT use before the deployment
+                    />
+                  </BottomSheetModalProvider>
+                </GestureHandlerRootView>
+              </KeyboardProvider>
+            </ErrorBoundary>
+          </SafeAreaProvider>
+        </RootStoreProvider>
+      </ToggleStorybook>
+    </QueryClientProvider>
   )
 }
 

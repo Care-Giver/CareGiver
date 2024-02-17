@@ -1,11 +1,10 @@
+import { WIDTH } from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-  container: {
+  root: {
     width: "100%",
-    maxWidth: 358,
     height: 110,
-
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -15,22 +14,19 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   infoContainer: {
-    // width: 214,
-    height: 102,
-
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },
   infoWrapper: {
-    marginLeft: 16,
-
-    width: 166,
-    height: 102,
+    marginLeft: 16 * WIDTH,
+    height: "100%",
+    flex: 1,
+    paddingTop: 8,
   },
   reviewContainer: {
     flexDirection: "row",
     alignItems: "center",
-
     marginTop: 4,
   },
   star: {
@@ -38,7 +34,9 @@ export const styles = StyleSheet.create({
     height: 12,
   },
   likeContainer: {
-    height: 102,
+    position: "absolute",
+    top: 4,
+    right: 4,
   },
   likeBtn: {
     width: 28,

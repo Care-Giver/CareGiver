@@ -3,9 +3,8 @@ import { View, Image, Pressable, StatusBar, Platform } from "react-native"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
-import { CARE_SOFT_YELLOW, GIVER_CASUAL_NAVY, SHADOW_1, palette } from "#theme"
+import { SHADOW_1, palette } from "#theme"
 import { observer } from "mobx-react-lite"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { navigate } from "#navigators"
 
 export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
@@ -38,17 +37,6 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         >
           <Image style={styles.bell} source={images.bell} />
         </Pressable>
-
-        {/* // iamport 테스트 바로가기 */}
-        <MaterialCommunityIcons
-          name="credit-card-settings-outline"
-          size={24}
-          style={{ marginRight: 16 }}
-          color={GIVER_CASUAL_NAVY}
-          onPress={() => {
-            navigate("test-iamport-screen")
-          }}
-        />
       </View>
     </>
   )

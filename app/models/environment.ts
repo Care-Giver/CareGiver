@@ -1,4 +1,4 @@
-import { Api } from "#api"
+// import { Api } from "#LEGACY_api"
 
 let ReactotronDev
 if (__DEV__) {
@@ -17,7 +17,7 @@ export class Environment {
       // dev-only services
       this.reactotron = new ReactotronDev()
     }
-    this.api = new Api()
+    // this.api = new Api()
   }
 
   async setup() {
@@ -25,7 +25,7 @@ export class Environment {
     if (__DEV__) {
       await this.reactotron.setup()
     }
-    await this.api.setup()
+    // await this.api.setup()
   }
 
   /**
@@ -36,5 +36,5 @@ export class Environment {
   /**
    * Our api.
    */
-  api: Api
+  // api: Api
 }

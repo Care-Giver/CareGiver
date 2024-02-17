@@ -13,11 +13,11 @@ import {
 import { useStores } from "#models"
 import { BOTTOM_HEIGHT, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_20, palette } from "#theme"
 import { alertModal } from "../../../utils/alert-modal"
-import { updateVisiting, updateCreche } from "#axios"
+import { updateVisiting, updateCreche } from "#api"
 import { AdditionalPrice, CgSetAdditionalPrice } from "./cg-set-additional-price"
 import { CgSetPrice } from "./cg-set-price"
 import { CgSetFamilyType } from "./cg-set-pet-family-type"
-import { HandleType } from "../../../services/axios/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
 import { useKeyboardShown } from "../../../utils/hooks/use-keyboard-shown"
 import { LinearGradient } from "expo-linear-gradient"
 import { price as priceFormatter } from "../../../utils/format"
@@ -48,7 +48,7 @@ export const CgRegistration2Screen: FC<
       regState,
     },
   } = useStores()
-  // console.log("petsitter 🔷", petsitter)
+
   const isKeyboardShown = useKeyboardShown()
 
   // 이 지역 평균 기본 요금
