@@ -46,6 +46,8 @@ import axios from "axios"
 import { useStores } from "#models"
 import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
+import { getBanksHolder } from "../../services/api/port-one"
+import { bankCodeList } from "./constant"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -73,7 +75,7 @@ export const CgRequestEarningScreen: FC<
 
   //* 정산 관련 정보
   const [bank, setBank] = useState<string>("")
-  const [account, setAccount] = useState<string>("")
+  const [accountNum, setAccountNum] = useState<string>("")
   const [name, setName] = useState<string>("")
 
   //* 은행 선택 버튼
@@ -102,7 +104,7 @@ export const CgRequestEarningScreen: FC<
   const userInfoContent = {
     userId: userId,
     bank,
-    account,
+    accountNum,
     name,
   }
   const settlementInfoContent = { ...settlementInfo }
@@ -127,6 +129,25 @@ export const CgRequestEarningScreen: FC<
     console.log("result >>>", maxMonth, currentMonth)
     //* 정산 정보 입력 스크린
     if (isConfirmed === false) {
+      const bankCode = Object.keys(bankCodeList).find((key) => bankCodeList[key] === bank)
+      const verifyAccountResponse = await getBanksHolder({
+        bank_code: bankCode,
+        bank_num: accountNum,
+      })
+
+      // 계좌 정보 인증 절차
+      if (!verifyAccountResponse.isSuccess) {
+        return alertModal(
+          "계좌 조회 실패",
+          "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
+        )
+      } else {
+        if (name !== verifyAccountResponse.response.bank_holder)
+          return alertModal(
+            "계좌 조회 실패",
+            "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
+          )
+      }
       // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
       const settlementResponse = await getSettlement({
         startDate: `2024-${maxMonth}-01`,
@@ -183,10 +204,9 @@ export const CgRequestEarningScreen: FC<
     setIsOpen(false)
     setBank(selected)
   }
-  const banks = [
-    { id: 1, name: "국민은행" },
-    { id: 2, name: "신한은행" },
-  ]
+  const banks = Object.keys(bankCodeList).map((key) => {
+    return { id: key, name: bankCodeList[key] }
+  })
   return (
     <Screen testID="CgRequestEarning">
       <ScrollView scrollEnabled={isConfirmed}>
@@ -205,66 +225,66 @@ export const CgRequestEarningScreen: FC<
               desc="펫시팅 요금의 경우 매달 1일에 정산하여 등록해주신 계좌로 입금해드립니다. 연휴나 공휴일에는 지급이 지연될 수 있는 점 양해 부탁드립니다."
               boldTexts={["매달", "1일", "연휴나", "공휴일에는", "지급이", "지연"]}
             />
-            <RowRoundedBox
-              style={placeholderBoxStyle}
-              preset="Pressable"
-              onPress={() => setIsOpen(!isOpen)}
-            >
-              <PreReg16 text={bank || "은행 선택"} color={HEAD_LINE} />
-              <Image source={!isOpen ? images.arrow_down : images.arrow_up} style={styles.image} />
-            </RowRoundedBox>
-            {isOpen && (
-              <View
-                style={{
-                  height: "auto",
-                  borderColor: LIGHT_LINE,
-                  borderWidth: 2,
-                  borderBottomLeftRadius: 8,
-                  borderBottomRightRadius: 8,
-                }}
+
+            <View style={{ marginTop: 28 }}>
+              <RowRoundedBox
+                style={placeholderBoxStyle}
+                preset="Pressable"
+                onPress={() => setIsOpen(!isOpen)}
               >
-                {banks.map(({ name, id }) => {
-                  return (
-                    <Pressable
-                      style={[styles.bankItem, { borderBottomWidth: id === banks.length ? 0 : 2 }]}
-                      onPress={() => onSelect(name)}
-                      key={id}
-                    >
-                      <PreMed16>{name}</PreMed16>
-                    </Pressable>
-                  )
-                })}
-              </View>
-            )}
-            <PlaceHolderInputBox
-              backgroundColor="white"
-              borderColor={LIGHT_LINE}
-              style={{ marginTop: 12 }}
-              boxHeight={48}
-              placeholderText="계좌번호를 입력해주세요."
-              text={account}
-              setText={setAccount}
-            />
-            <PlaceHolderInputBox
-              backgroundColor="white"
-              borderColor={LIGHT_LINE}
-              style={{ marginTop: 12 }}
-              boxHeight={48}
-              placeholderText="예금주명을 입력해주세요."
-              text={name}
-              setText={setName}
-            />
-            <DivisionLine mt={20} mb={20} />
-            <Row mb={12}>
-              <BlueCheckbox value={isCheck} onPress={onCheckPress}></BlueCheckbox>
-              <PreMed16 text="개인정보 수집 이용 동의(필수)" ml={8} />
-              <Pressable
-                style={{ marginLeft: "auto" }}
-                onPress={() => openLink(외부링크.개인정보_수집_이용_동의)}
-              >
-                <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
-              </Pressable>
-            </Row>
+                <PreReg16 text={bank || "은행 선택"} color={HEAD_LINE} />
+                <Image
+                  source={!isOpen ? images.arrow_down : images.arrow_up}
+                  style={styles.image}
+                />
+              </RowRoundedBox>
+
+              <PlaceHolderInputBox
+                backgroundColor="white"
+                borderColor={LIGHT_LINE}
+                style={{ marginTop: 12 }}
+                boxHeight={48}
+                placeholderText="계좌번호를 입력해주세요."
+                text={accountNum}
+                setText={setAccountNum}
+              />
+              <PlaceHolderInputBox
+                backgroundColor="white"
+                borderColor={LIGHT_LINE}
+                style={{ marginTop: 12 }}
+                boxHeight={48}
+                placeholderText="예금주명을 입력해주세요."
+                text={name}
+                setText={setName}
+              />
+              <DivisionLine mt={20} mb={20} />
+              <Row mb={12}>
+                <BlueCheckbox value={isCheck} onPress={onCheckPress}></BlueCheckbox>
+                <PreMed16 text="개인정보 수집 이용 동의(필수)" ml={8} />
+                <Pressable
+                  style={{ marginLeft: "auto" }}
+                  onPress={() => openLink(외부링크.개인정보_수집_이용_동의)}
+                >
+                  <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
+                </Pressable>
+              </Row>
+
+              {isOpen && (
+                <ScrollView style={styles.bankList}>
+                  {banks.map(({ name, id }) => {
+                    return (
+                      <Pressable
+                        style={[styles.bankItem, { borderBottomWidth: 2 }]}
+                        onPress={() => onSelect(name)}
+                        key={id}
+                      >
+                        <PreMed16>{name}</PreMed16>
+                      </Pressable>
+                    )
+                  })}
+                </ScrollView>
+              )}
+            </View>
           </View>
         ) : (
           <View
@@ -273,7 +293,7 @@ export const CgRequestEarningScreen: FC<
               paddingBottom: 50,
             }}
           >
-            <PreMed14 text={`계좌: ${bank} ${account} ${name}`} color={BODY} mb={12} />
+            <PreMed14 text={`계좌: ${bank} ${accountNum} ${name}`} color={BODY} mb={12} />
             <RowRoundedBox
               style={(styles.placeholderBoxClosed, { marginBottom: 28, paddingHorizontal: 15 })}
               preset="Pressable"
@@ -296,7 +316,7 @@ export const CgRequestEarningScreen: FC<
       </ScrollView>
       <ConditionalButton
         label={isConfirmed ? "정산 요청하기" : "다음"}
-        isActivated={isConfirmed ? true : isCheck && !!bank && !!name && !!account}
+        isActivated={isConfirmed ? true : isCheck && !!bank && !!name && !!accountNum}
         style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
         onPress={onPressBottomButton}
       />
@@ -342,11 +362,9 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
   },
   placeholderBoxClosed: {
-    marginTop: 28,
     paddingHorizontal: 16,
   },
   placeholderBoxOpen: {
-    marginTop: 28,
     paddingHorizontal: 16,
     borderBottomWidth: 0,
     borderBottomLeftRadius: 0,
@@ -356,5 +374,18 @@ const styles = StyleSheet.create({
   bankItem: {
     padding: 15,
     borderBottomColor: LIGHT_LINE,
+  },
+  bankList: {
+    height: "auto",
+    borderColor: LIGHT_LINE,
+    borderWidth: 2,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    maxHeight: 212,
+    position: "absolute",
+    zIndex: 100,
+    top: 48,
+    width: "100%",
+    backgroundColor: "white",
   },
 })

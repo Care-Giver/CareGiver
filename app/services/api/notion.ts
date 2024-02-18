@@ -58,7 +58,7 @@ export interface PostSettlementInputParams {
   userInfoContent: {
     userId: string
     bank: string
-    account: string
+    accountNum: string
     name: string
   }
   settlementInfoContent: SettlementType[]
