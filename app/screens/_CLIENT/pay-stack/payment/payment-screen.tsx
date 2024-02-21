@@ -139,8 +139,8 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <CareSummary
               address={service[key].address}
-              start={selectedTime.start.slice(0, 10)}
-              end={selectedTime.end.slice(0, 10)}
+              start={selectedTime?.start}
+              end={selectedTime?.end}
               petIds={selectedPetIds}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
