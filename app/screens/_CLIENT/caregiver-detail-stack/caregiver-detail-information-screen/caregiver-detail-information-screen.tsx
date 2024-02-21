@@ -72,7 +72,6 @@ export const CaregiverDetailInformationScreen: FC<
         ? service.visiting.visitingAmenities
         : service.creche.crecheAmenities,
   }
-  console.log("selectedTime 1", selectedTime)
 
   const [post, setPost] = useState(null)
 
