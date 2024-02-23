@@ -5,7 +5,7 @@ import { PopSem16, PreMed14, PreReg14 } from "../_BASIC/custom-texts/custom-text
 import { Row } from "../_BASIC/row/row"
 import { BookingType, PaymentType } from "app/screens/cg-request-earning/dummy"
 import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
-import { settlementDetail } from "#axios"
+import { settlementDetail } from "#api"
 
 export interface PaymentListProps {
   /**
