@@ -246,7 +246,7 @@ export const SearchResultScreen: FC<
 
   /** 펫시터 */
   const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", JSON.stringify(petsitters))
+  // console.log("petsitters ♦️", JSON.stringify(petsitters))
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {

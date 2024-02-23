@@ -52,7 +52,6 @@ export type SimplePayment = "카카오페이" | "네이버페이" | "토스"
 export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-screen">> = observer(
   function PaymentScreen({ route, navigation }) {
     const { key, service, selectedPetIds, selectedTime, bookingRequest, destination } = route.params
-    console.log("selectedTime 3", selectedTime)
     console.log("bookingRequest", bookingRequest)
     const {
       userStore: { userDetail },
@@ -139,8 +138,8 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
 
             <CareSummary
               address={service[key].address}
-              start={selectedTime.start.slice(0, 10)}
-              end={selectedTime.end.slice(0, 10)}
+              start={selectedTime?.start}
+              end={selectedTime?.end}
               petIds={selectedPetIds}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
