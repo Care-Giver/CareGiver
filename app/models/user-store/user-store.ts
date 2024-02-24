@@ -328,6 +328,7 @@ export const UserStoreModel = types
 
         const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
         if (!isUserDatailHandlerSuccess) {
+          alertModal("로그인 실패", `유저 상세정보 저장 실패`) //TODO: 이 모달은 삭제하고, userDetailHandler 내에서 각각의 예외상황에서 모달을 표시할 것
           return false
         }
 
@@ -347,6 +348,7 @@ export const UserStoreModel = types
         return true
         //
       } catch (error) {
+        alertModal("로그인 실패", `catch: ${error?.message}`)
         console.error("catch 에러!!! - loginHander", error)
         return false
         //
