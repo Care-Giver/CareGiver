@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
-import { NotificationColumns } from "../../services/api/notification"
+import { NotificationMessage } from "../../services/api/notification"
 import { NotificationModel } from "../notification/notification"
 
 /**
@@ -30,8 +30,11 @@ export const NotificationStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     //* 새로운 notification 객체 추가
-    addNotification(value: NotificationColumns) {
+    addNotification(value: NotificationMessage) {
+      const id =
+        self.notifications.reduce((maxId, notification) => Math.max(maxId, notification.id), 0) + 1
       self.notifications.push({
+        id,
         ...value,
         isChecked: false,
         isDeleted: false,
@@ -39,15 +42,15 @@ export const NotificationStoreModel = types
     },
     //* 서버에서 받아온 notification 객체들에 isChecked 프로퍼티를 추가하여 저장한다.
     //* MST가 비어있을 때만 사용한다.
-    setNotifications(value: NotificationColumns[]) {
-      value.forEach((item) => {
-        this.addNotification(item)
-      })
-    },
+    // setNotifications(value: NotificationMessage[]) {
+    //   value.forEach((item) => {
+    //     this.addNotification(item)
+    //   })
+    // },
     //* 모든 notification을 isDeleted 처리한다.
     deleteAllNotifications() {
       self.notifications.forEach((item) => {
-        if (item.isDeleted === false) {
+        if (!item.isDeleted) {
           item.isDeleted = true
         }
       })
@@ -55,7 +58,7 @@ export const NotificationStoreModel = types
     //* 확인하지 않았던 notification 객체를 확인한 상태로 바꾼다
     setIsChecked() {
       self.notifications.forEach((item) => {
-        if (item.isChecked === false) {
+        if (!item.isChecked) {
           item.isChecked = true
         }
       })

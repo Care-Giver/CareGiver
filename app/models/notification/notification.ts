@@ -8,16 +8,16 @@ export const NotificationModel = types
   .model("Notification")
   .props({
     id: types.identifierNumber,
-    createAt: types.Date,
-    updatedAt: types.Date,
     title: types.string,
     content: types.string,
     senderName: types.string,
     needToPush: types.boolean,
     adAtNight: types.boolean,
     //? maybe / maybeNull 중에 고민 (maybe는 undefined로, maybeNull은 null로 판단하는 것으로 이해했음)
-    isChecked: types.maybe(types.boolean),
-    isDeleted: types.maybe(types.boolean),
+    careGiverReceiverId: types.maybe(types.number),
+    clientReceiverId: types.maybe(types.number),
+    isChecked: types.boolean,
+    isDeleted: types.boolean,
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

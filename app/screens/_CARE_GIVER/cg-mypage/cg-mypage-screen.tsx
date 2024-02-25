@@ -27,6 +27,7 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
 import _ from "lodash"
+import { subscribeNotification } from "../../../services/api/notification"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -235,6 +236,8 @@ export const CgMypageScreen: FC<
         <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
         <DivisionLine color={LIGHT_LINE} />
+
+        <MypageButton text="알림구독 테스트" onPress={() => subscribeNotification()} />
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}

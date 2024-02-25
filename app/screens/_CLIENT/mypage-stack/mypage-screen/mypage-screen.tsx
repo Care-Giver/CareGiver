@@ -22,6 +22,7 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "#models"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
+import { subscribeNotification } from "../../../../services/api/notification"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   function MypageScreen({ navigation, route }) {
@@ -165,6 +166,8 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
           <DivisionLine color={LIGHT_LINE} />
+
+          <MypageButton text="알림구독 테스트" onPress={subscribeNotification} />
         </ScrollView>
       </Screen>
     )
