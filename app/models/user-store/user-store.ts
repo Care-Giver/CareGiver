@@ -311,8 +311,8 @@ export const UserStoreModel = types
 
     /**
      * 카카오 - 구현완료
-     * 네이버 [개발중]
-     * 애플 [개발중]
+     * 네이버 - 구현완료
+     * 애플 - 구현완료, AppStore 심사시에만 사용할 예정.
      *
      * 소셜 로그인 인증 성공시, 유저 Auth정보를 저장합니다.
      * - 유저 Auth정보: token, provider, email
@@ -322,13 +322,16 @@ export const UserStoreModel = types
      *  */
     async socialLoginHander({ token, provider, email }: SocialLoginHanderParams) {
       try {
-        if (!token) {
-          return false
-        }
+        if (!token || !provider || !email) return false
+
+        //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+        axios.defaults.headers.common["x-jwt"] = token
+        axios.defaults.headers.common.Accept = "Application/json"
 
         const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
         if (!isUserDatailHandlerSuccess) {
           alertModal("로그인 실패", `유저 상세정보 저장 실패`) //TODO: 이 모달은 삭제하고, userDetailHandler 내에서 각각의 예외상황에서 모달을 표시할 것
+          axios.defaults.headers.common["x-jwt"] = ""
           return false
         }
 
@@ -337,11 +340,8 @@ export const UserStoreModel = types
           provider,
           email,
         })
-
         this.connectToStream()
-
         this.setLoggedIn(true)
-
         await delay(500)
         // @ts-ignore
         navigate("Searching", { screen: "search-screen" })

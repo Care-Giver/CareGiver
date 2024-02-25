@@ -414,9 +414,6 @@ export const checkUserExists = async (
       return { ok: false }
     }
 
-    //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
-    axios.defaults.headers.common["x-jwt"] = response.data.token
-    axios.defaults.headers.common.Accept = "Application/json"
     return {
       ok: true,
       token: response.data.token,
