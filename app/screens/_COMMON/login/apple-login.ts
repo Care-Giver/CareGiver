@@ -1,5 +1,5 @@
 import appleAuth from "@invertase/react-native-apple-authentication"
-import { appleServerLogin } from "#api"
+import { checkUserExists } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 
@@ -11,11 +11,18 @@ import { navigate } from "#navigators"
  * - 해당 아이디에 비밀번호 입력 후, 로그인 완료 처리됨
  */
 
+export type SignInWithAppleGetAppleProfileResult =
+  | {
+      isSuccess: true
+      identityToken: string
+      email: string
+    }
+  | { isSuccess: false }
 /**
  * 애플 로그인을 진행한 뒤,
  * 애플 서버에서 받아온 유저 정보를 가져온다.
  */
-const signInWithAppleGetAppleProfile = async (): Promise<any> => {
+const signInWithAppleGetAppleProfile = async (): Promise<SignInWithAppleGetAppleProfileResult> => {
   try {
     // 1. 로그인 요청을 애플 서버에 보낸다.
     const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -25,11 +32,15 @@ const signInWithAppleGetAppleProfile = async (): Promise<any> => {
 
     // 2. 만약 유저가 로그인을 취소했다면 response를 null로 처리한다.
     if (!appleAuthRequestResponse) {
-      console.log("로그인 취소함.")
-      return
+      alertModal("애플 로그인 실패", "로그인을 취소했습니다.")
+      return { isSuccess: false }
     }
 
-    console.log("appleAuthRequestResponse ➡️", appleAuthRequestResponse)
+    if (!appleAuthRequestResponse.email) {
+      alertModal("애플 프로필 가져오기 실패", `이메일 정보가 존재하지 않습니다.`)
+      return { isSuccess: false }
+    }
+
     return {
       isSuccess: true,
       identityToken: appleAuthRequestResponse.identityToken,
@@ -39,15 +50,11 @@ const signInWithAppleGetAppleProfile = async (): Promise<any> => {
     if (error.code === "1001") {
       console.log("Apple sign-in was cancelled by the user.")
       alertModal("애플 로그인 실패", "Apple sign-in was cancelled by the user.")
-      return {
-        isSuccess: false,
-      }
+      return { isSuccess: false }
     } else {
       console.error("Apple sign-in error", error)
-      alertModal("애플 로그인 실패", error?.message)
-      return {
-        isSuccess: false,
-      }
+      alertModal("애플 로그인 실패", `catch: ${error?.message}`)
+      return { isSuccess: false }
     }
   }
 }
@@ -60,32 +67,26 @@ const signInWithAppleGetAppleProfile = async (): Promise<any> => {
  * @returns {Promise<null>}
  */
 export const appleLogin = async (socialLoginHander, logoutHandler) => {
-  const { isSuccess, identityToken, email } = await signInWithAppleGetAppleProfile()
-  if (!isSuccess) return
+  const appleResult = await signInWithAppleGetAppleProfile()
+  if (!appleResult.isSuccess) return
 
-  // 3. 케어기버 서버에 IdentityToken을 전송하여 토큰을 얻어낸다
-  const { isAlreadySignedUp, token, reason: reasonAppleServerLogin } = await appleServerLogin({
-    idToken: identityToken,
-  })
-  if (!isAlreadySignedUp) {
-    // 회원가입 진행
-    navigate("terms-of-service-screen", {
-      email,
-      provider: "apple",
-      idToken: identityToken,
-    })
-    return
-  }
-
-  if (!token) {
-    alertModal("애플 로그인 진행실패", `토큰값을 얻어내지 못했습니다. ${reasonAppleServerLogin}`)
-    return
-  }
+  const result = await checkUserExists({ idToken: appleResult.identityToken }, "apple")
+  if (!result.ok) return
 
   // MST 로그인 진행
-  await socialLoginHander({
-    token,
-    provider: "apple",
-    email,
-  })
+  if (result.isUserExists) {
+    await socialLoginHander({
+      token: result.token,
+      provider: "apple",
+      email: appleResult.email,
+    })
+  }
+  // 회원가입 진행
+  else {
+    navigate("terms-of-service-screen", {
+      email: appleResult.email,
+      provider: "apple",
+      idToken: appleResult.identityToken,
+    })
+  }
 }

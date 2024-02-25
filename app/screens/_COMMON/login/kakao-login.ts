@@ -5,7 +5,7 @@ import {
   KakaoProfile,
   logout,
 } from "@react-native-seoul/kakao-login"
-import { checkUserExistsKakao } from "#api"
+import { checkUserExists } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 
@@ -67,7 +67,7 @@ const signInWithKakao = async (): Promise<string | false> => {
  *  name: "null",
  * } */
 
-type GetKakaoProfileResult =
+export type GetKakaoProfileResult =
   | {
       isSuccess: true
       email: string
@@ -118,9 +118,7 @@ export const kakaoLogin = async (socialLoginHander, logoutHandler) => {
   const kakaoResult = await getKakaoProfile(logoutHandler)
   if (!kakaoResult.isSuccess) return
 
-  const result = await checkUserExistsKakao({
-    idToken: accessToken,
-  })
+  const result = await checkUserExists({ idToken: accessToken }, "kakao")
   if (!result.ok) return
 
   // MST 로그인 진행
