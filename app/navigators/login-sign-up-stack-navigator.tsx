@@ -23,13 +23,13 @@ export type LoginSignUpStackNavigatorParamList = {
   "login-screen": undefined
   "terms-of-service-screen": {
     email: string
-    provider: AuthProvider
+    provider: Exclude<AuthProvider, "google">
     idToken: string
   }
   "sign-up-screen": {
     consentList: ConsentList
     email: string
-    provider: AuthProvider
+    provider: Exclude<AuthProvider, "google">
     idToken: string
   }
   "sign-up-success-screen": undefined
