@@ -23,6 +23,7 @@ import dayjs from "dayjs"
 import { useStores } from "#models"
 import { delay } from "../../../utils/delay"
 import { isBefore, isExists, isFuture } from "date-fns"
+import { toKoreanAuthProvider } from "../../../utils/format"
 
 type Sex = "MALE" | "FEMALE"
 
@@ -110,12 +111,22 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
     }, [birthday, isVerified, nickname, phoneNumber.length, sex])
 
     const nextButtonHandler = async () => {
-      // const email = `${dayjs().unix()}@test.com` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
-      // const provider = "naver" // 일단 하드코딩함 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
-      // const idToken = `test-idtoken-${dayjs().unix()}` //일단 하드코딩 - TODO: 이전 스크린에서 받아온 값으로 대체할 것
+      if (!provider) {
+        alertModal("회원가입 실패", `다시 ${toKoreanAuthProvider(provider)} 로그인을 진행해주세요.`)
+        navigation.goBack()
+        return
+      }
+
+      if (!email) {
+        alertModal(
+          "회원가입 실패",
+          `${toKoreanAuthProvider(provider)}로 부터 이메일 정보를 불러올 수 없습니다.`,
+        )
+        navigation.goBack()
+        return
+      }
 
       // 회원가입 진행
-      // TODO: 각각의 소셜 Provider 에서 얻은 데이터들을 넣어줘야 함
       const signUpResult = await signUp({
         email,
         nickname,
@@ -281,7 +292,6 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             label="계정 생성하기"
             isActivated={isActivated}
             style={{ position: "absolute", bottom: BOTTOM_HEIGHT, alignSelf: "center" }}
-            //TODO navigation추가 필요
             onPress={nextButtonHandler}
           />
         )}
