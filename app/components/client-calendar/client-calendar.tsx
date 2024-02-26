@@ -7,6 +7,8 @@ import "./localeConfig"
 import { ClientCalendarDay } from "./client-calendar-day/client-calendar-day"
 import { GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_40, SHADOW_1 } from "#theme"
 import { POPPINS_SEMIBOLD } from "#fonts"
+import { addDays, isAfter, parseISO, subDays } from "date-fns"
+import { alertModal } from "../../utils/alert-modal"
 
 interface ClientCalendarProps {
   style: ViewStyle
@@ -18,9 +20,11 @@ interface ClientCalendarProps {
 export const ClientCalendar = observer(function CgCalendar(props: ClientCalendarProps) {
   const { style, selectedDate, onDayPress: onDayPressProp, dateRange } = props
   const $allStyles = Object.assign({}, styles.root, style)
+  const maxDate = addDays(Date.now(), 58)
   return (
     <View style={$allStyles}>
       <Calendar
+        maxDate={maxDate.toISOString()}
         headerStyle={{ height: 94, marginBottom: 0, marginTop: -5 }}
         renderArrow={(direction) => (
           <Image
@@ -38,6 +42,12 @@ export const ClientCalendar = observer(function CgCalendar(props: ClientCalendar
         dayComponent={({ date, state }) => (
           <ClientCalendarDay
             onPress={() => {
+              // 최대 날짜 초과시, 선택 불가
+              if (isAfter(parseISO(date.dateString), addDays(maxDate, 1))) {
+                alertModal("날짜 선택 범위 초과", "최대 60일 이내 날짜만 선택 가능합니다.")
+                return
+              }
+
               onDayPressProp(date)
             }}
             date={date}
