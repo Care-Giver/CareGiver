@@ -236,6 +236,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               />
             )}
           </View>
+          <Footer mt={FOOTER_CONTENT_GAP} />
         </ScrollView>
 
         <CustomModal
