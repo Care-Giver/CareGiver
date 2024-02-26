@@ -176,6 +176,7 @@ const AllTabs = observer(function AllTabs() {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
     axios.defaults.headers.common.Accept = "Application/json"
+    axios.defaults.headers.common["Cache-Control"] = "no-cache"
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
