@@ -265,7 +265,10 @@ export const UserStoreModel = types
     },
 
     /**
-     * 로그인 (혹은 회원가입) 성공시, 유저 Auth정보를 저장합니다.
+     * 회원가입 직후 혹은,
+     * noAuthLogin 테스트 시에만 사용되는 메서드입니다.
+     *
+     * 회원가입 성공시, 유저 Auth정보를 저장합니다.
      * - 유저 Auth정보: token, provider, email
      *
      * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
@@ -274,16 +277,16 @@ export const UserStoreModel = types
     async loginHander(loginRequestBody: LoginRequestBody) {
       try {
         const { isSuccess, token } = await login(loginRequestBody)
-        if (!isSuccess) {
-          return false
-        }
+        if (!isSuccess || !token) return false
 
-        if (!token) {
-          return false
-        }
+        //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+        axios.defaults.headers.common["x-jwt"] = token
+        axios.defaults.headers.common.Accept = "Application/json"
 
         const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
         if (!isUserDatailHandlerSuccess) {
+          alertModal("로그인 실패", `유저 상세정보 저장 실패`) //TODO: 이 모달은 삭제하고, userDetailHandler 내에서 각각의 예외상황에서 모달을 표시할 것
+          axios.defaults.headers.common["x-jwt"] = ""
           return false
         }
 
@@ -292,17 +295,15 @@ export const UserStoreModel = types
           provider: loginRequestBody.provider,
           email: loginRequestBody.email,
         })
-
         this.connectToStream()
-
         this.setLoggedIn(true)
-
         await delay(500)
         // @ts-ignore
         navigate("Searching", { screen: "search-screen" })
         return true
         //
       } catch (error) {
+        alertModal("로그인 실패", `catch: ${error?.message}`)
         console.error("catch 에러!!! - loginHander", error)
         return false
         //
@@ -310,6 +311,9 @@ export const UserStoreModel = types
     },
 
     /**
+     * 이미 회원가입한 유저가,
+     * 앱에 로그인할 때 사용되는 메서드입니다.
+     *
      * 카카오 - 구현완료
      * 네이버 - 구현완료
      * 애플 - 구현완료, AppStore 심사시에만 사용할 예정.
@@ -349,7 +353,7 @@ export const UserStoreModel = types
         //
       } catch (error) {
         alertModal("로그인 실패", `catch: ${error?.message}`)
-        console.error("catch 에러!!! - loginHander", error)
+        console.error("catch 에러!!! - socialLoginHander", error)
         return false
         //
       }
