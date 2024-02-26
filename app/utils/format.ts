@@ -1,4 +1,4 @@
-import { ServiceType, ServiceTypeKorean } from "#models"
+import { AuthProvider, ServiceType, ServiceTypeKorean } from "#models"
 import { format, parseISO } from "date-fns"
 import { ko } from "date-fns/locale"
 
@@ -138,4 +138,17 @@ export const formatSchedule = (props: FormatScheduleProps) => {
       break
   }
   return schedule
+}
+
+export const toKoreanAuthProvider = (provider: Exclude<AuthProvider, "google">) => {
+  switch (provider) {
+    case "naver":
+      return "네이버"
+    case "kakao":
+      return "카카오"
+    case "apple":
+      return "애플"
+    default:
+      return "(알수없음)"
+  }
 }

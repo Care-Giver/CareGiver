@@ -1,7 +1,9 @@
+/* eslint-disable no-case-declarations */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { AuthProvider } from "#models"
 import { alertModal } from "../../utils/alert-modal"
+import { toKoreanAuthProvider } from "../../utils/format"
 
 export enum Sex {
   MALE = "MALE",
@@ -344,8 +346,10 @@ export const postPushToken = async (
   }
 }
 
-const SAME_EMAIL_ERROR_MESSAGE = "There is a user using the same email in server" as const
-const USER_NOT_EXISTS_ERROR_MESSAGE = "Could not find user" as const
+const errorCode = {
+  NotFindObjectError: 404,
+  ExistUserError: 409,
+}
 type SocialLoginRequestBody = {
   idToken: string
 }
@@ -397,12 +401,17 @@ export const checkUserExists = async (
     )
 
     if (!response.data.ok) {
-      switch (response.data.error?.message) {
-        case SAME_EMAIL_ERROR_MESSAGE:
-          alertModal("유저 확인 실패", `동일한 이메일주소로 회원가입한 유저정보가 있습니다.`)
-          return { ok: false }
-        case USER_NOT_EXISTS_ERROR_MESSAGE:
+      switch (response.data.error?.errorCode) {
+        case errorCode.NotFindObjectError:
           return { ok: true, isUserExists: false }
+        case errorCode.ExistUserError:
+          alertModal(
+            "유저 확인 실패",
+            `이미 ${toKoreanAuthProvider(
+              response.data.error.message.split(":")[1] as Exclude<AuthProvider, "google">,
+            )} 로그인으로 동일한 이메일주소를 사용 중인 유저 정보가 있습니다.`,
+          )
+          return { ok: false }
         default:
           alertModal("유저 확인 실패", `${response.data.error?.message}`)
           return { ok: false }
