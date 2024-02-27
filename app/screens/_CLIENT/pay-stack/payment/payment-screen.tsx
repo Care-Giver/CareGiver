@@ -17,6 +17,7 @@ import {
   PreBol18,
   PreMed14,
   PreReg14,
+  RefundNote,
   Screen,
 } from "#components"
 import { ScrollView } from "react-native-gesture-handler"
@@ -328,7 +329,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             <PreBol18 text="요금 세부 정보" />
             {amount && (
               <PaymentFeeInfo
-                style={{ marginTop: 10, marginBottom: 160 }}
+                style={{ marginTop: 10, marginBottom: 42 }}
                 serviceType={key}
                 serviceFee={amount.serviceFee}
                 duration={duration}
@@ -339,6 +340,12 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               />
             )}
           </View>
+
+          {/* 환불 안내 */}
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+            <RefundNote />
+          </View>
+
           <Footer mt={FOOTER_CONTENT_GAP} />
         </ScrollView>
 
