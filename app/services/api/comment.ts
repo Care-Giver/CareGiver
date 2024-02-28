@@ -10,10 +10,10 @@ export interface CreateCommentInput {
   //TODO 기획상 '공개'만 가능
   isPrivate: false
 }
-export interface CreateCommentInputResponse extends GeneralResponse {
+export interface CreateCommentResponse extends GeneralResponse {
   visitingCommentId: number
 }
-type CreateCommentInputResult =
+type CreateCommentResult =
   | {
       isSuccess: true // 성공
       visitingCommentId?: number // 성공시, 생성된 결제 객체의 id
@@ -28,12 +28,9 @@ type CreateCommentInputResult =
  */
 export const createVisitingComment = async (
   body: CreateCommentInput,
-): Promise<CreateCommentInputResult> => {
+): Promise<CreateCommentResult> => {
   try {
-    const response = await axios.post<CreateCommentInputResponse>(
-      `${BASE_URL}/comment/visiting`,
-      body,
-    )
+    const response = await axios.post<CreateCommentResponse>(`${BASE_URL}/comment/visiting`, body)
 
     if (!response.data.ok) {
       return {
@@ -58,7 +55,7 @@ export const createVisitingComment = async (
 /**
  * 주어진 id 에 해당하는 댓글 객체를 불러옵니다.
  */
-interface CommentColmns {
+export interface CommentColmns {
   id: number
   createAt: string
   updatedAt: string
@@ -80,17 +77,18 @@ type GetCommentsInputResult =
   | {
       isSuccess: true // 성공
       visitingComments?: CommentColmns[]
-      totalpages: number
-      totalItems: number
+      totalpages?: number
+      totalItems?: number
     }
   | {
       isSuccess: false // 실패
       reason?: string // 실패시, 실패이유
     }
-export const getVisitingComments = async (id: number): Promise<GetCommentsInputResult> => {
+export const getVisitingComments = async (visitingId: number): Promise<GetCommentsInputResult> => {
   try {
-    console.log("♦️ CALLED | getPaymentById")
-    const response = await axios.get<GetCommentsResponse>(`${BASE_URL}/comment/visiting/${id}`)
+    const response = await axios.get<GetCommentsResponse>(
+      `${BASE_URL}/comment/visiting/${visitingId}`,
+    )
 
     if (!response.data.ok) {
       return {
@@ -102,8 +100,6 @@ export const getVisitingComments = async (id: number): Promise<GetCommentsInputR
     return {
       isSuccess: true,
       visitingComments: response.data.visitingComments,
-      totalItems: response.data.totalItems,
-      totalpages: response.data.totalpages,
     }
   } catch (error) {
     console.error("catch 에러!!!", error)
