@@ -41,7 +41,14 @@ import {
 } from "../../../../theme"
 import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../../utils/delay"
-import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "#api"
+import {
+  CommentColmns,
+  CrecheAmenity,
+  CrecheService,
+  VisitingAmenity,
+  VisitingService,
+  getVisitingComments,
+} from "#api"
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
@@ -73,8 +80,10 @@ export const CaregiverDetailInformationScreen: FC<
         : service.creche.crecheAmenities,
   }
   console.log("selectedTime 1", selectedTime)
-
+  console.log("userId >>>", userDetail.id)
+  console.log("visitingId >>>", service.visiting.id)
   const [post, setPost] = useState(null)
+  const [comments, setComments] = useState<CommentColmns[]>([])
 
   const [isMounted, setIsMounted] = useState(false)
 
@@ -103,6 +112,13 @@ export const CaregiverDetailInformationScreen: FC<
       }).start()
     }
   }, [animationValue, isMounted])
+  useEffect(() => {
+    getVisitingComments(service.visiting.id).then((res) => {
+      if (res.isSuccess === true) {
+        setComments(res.visitingComments)
+      }
+    })
+  }, [])
 
   const buttonOpacity = animationValue.interpolate({
     inputRange: [0, 1],
@@ -263,9 +279,6 @@ export const CaregiverDetailInformationScreen: FC<
           <Row
             style={{
               marginTop: 60,
-
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
             }}
           >
             <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
@@ -275,7 +288,7 @@ export const CaregiverDetailInformationScreen: FC<
               style={{ marginLeft: "auto" }}
               onPress={() => {
                 //? 댓글 전체보기 화면으로 이동
-                navigate("all-comments-screen", commentsDummy)
+                navigate("all-comments-screen", { comments: comments })
               }}
             />
           </Row>
@@ -286,12 +299,9 @@ export const CaregiverDetailInformationScreen: FC<
               paddingVertical: -1,
               marginBottom: BOTTOM_HEIGHT,
               alignItems: "center",
-
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
             }}
           >
-            {commentsDummy.slice(0, 3).map((item, index) => (
+            {comments.slice(0, 3).map((item, index) => (
               <Comment commentData={item} numberOfLines={2} style={{ marginTop: -1 }} key={index} />
             ))}
           </View>
