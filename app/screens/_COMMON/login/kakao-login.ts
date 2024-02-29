@@ -88,6 +88,7 @@ const getKakaoProfile = async (logoutHandler): Promise<GetKakaoProfileResult> =>
 
     if (!profile.email) {
       alertModal("카카오 프로필 가져오기 실패", "이메일 정보가 존재하지 않습니다.")
+      alertModal("디버깅", JSON.stringify(profile))
       return { isSuccess: false }
     }
 
