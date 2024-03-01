@@ -19,6 +19,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   Footer,
   FOOTER_CONTENT_GAP,
+  CautionModal,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -525,6 +526,9 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             setEndDate={setEndTime}
           />
         </BottomSheetModal>
+
+        {/* 테스트 용 */}
+        <CautionModal title="제목" message="내용" image="caution" />
       </Screen>
     )
   },
