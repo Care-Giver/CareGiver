@@ -30,6 +30,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
     const {
       userStore: { switchType, userDetailHandler, userAuth, loggedIn, userDetail },
       petStore: { pets, hasPets },
+      notificationStore: { addNotification },
     } = useStores()
 
     // * 나의 반려동물 -> 전체보기 버튼 클릭할 때 실행되는 함수
@@ -167,7 +168,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
           <DivisionLine color={LIGHT_LINE} />
 
-          <MypageButton text="알림구독 테스트" onPress={subscribeNotification} />
+          <MypageButton
+            text="알림구독 테스트"
+            onPress={() => subscribeNotification(addNotification)}
+          />
         </ScrollView>
       </Screen>
     )

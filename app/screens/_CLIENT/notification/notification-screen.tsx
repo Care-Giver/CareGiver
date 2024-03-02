@@ -22,7 +22,7 @@ export const NotificationScreen: FC<
     return () => {
       setIsChecked()
     }
-  }, [])
+  }, [setIsChecked])
 
   //* 알림 관련
   // useEffect(() => {

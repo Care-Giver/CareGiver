@@ -59,8 +59,10 @@ export interface NotificationMessage {
 
 /**
  * 로그인 유저의 알림 푸시를 구독시킨다.
+ * @param addNotification - notification store 메서드
+ * @returns
  */
-export const subscribeNotification = () => {
+export const subscribeNotification = (addNotification: (value: NotificationMessage) => void) => {
   const token = axios.defaults.headers.common["x-jwt"]
 
   console.log("token >>>", token)
@@ -84,16 +86,24 @@ export const subscribeNotification = () => {
 
   eventSource.addEventListener("message", (event) => {
     console.log("New message event:", event.data)
+    // const SSEMessage: {
+    //   message: NotificationMessage
+    // } = JSON.parse(event.data)
+
     const SSEMessage: {
-      message: NotificationMessage
+      message: string
     } = JSON.parse(event.data)
 
-    const {
-      notificationStore: { addNotification },
-    } = useStores()
+    console.log("JSONed message >>>", SSEMessage.message)
 
     // 공지 알림이 새로 들어올 때마다 store에 추가
-    addNotification(SSEMessage.message)
+    addNotification({
+      title: SSEMessage.message,
+      content: "test",
+      senderName: "test",
+      needToPush: false,
+      adAtNight: false,
+    })
   })
 
   eventSource.addEventListener("error", (event) => {

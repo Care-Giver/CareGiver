@@ -37,6 +37,7 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, userDetail },
     petsitterStore: { serviceTypeKorean, petsitter, isFirstPetsitter, setDraftPetsitter },
+    notificationStore: { addNotification },
   } = useStores()
 
   // 환경설정 버튼 클릭시 실행되는 함수
@@ -237,7 +238,10 @@ export const CgMypageScreen: FC<
 
         <DivisionLine color={LIGHT_LINE} />
 
-        <MypageButton text="알림구독 테스트" onPress={() => subscribeNotification()} />
+        <MypageButton
+          text="알림구독 테스트"
+          onPress={() => subscribeNotification(addNotification)}
+        />
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
