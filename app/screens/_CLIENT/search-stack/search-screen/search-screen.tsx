@@ -89,6 +89,7 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
     const {
       userStore: { cacheSearchRequest, cachedSearchRequest },
+      uiStore: { setCaution },
     } = useStores()
 
     //* 서비스 형태
@@ -276,15 +277,22 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             {/* //? 날짜 선택 버튼 */}
             <RowRoundedButton
               onPress={() => {
-                setIsDropdownOpen(false)
-                setIsCalendarOpen(!isCalendarOpen)
-                LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
-                // TODO: 아이폰 디바이스에서 제대로 된 QA 필요함
-                scrollViewRef.current?.scrollTo({
-                  x: 0,
-                  y: 200,
-                  animated: true,
+                // 테스트용
+                setCaution({
+                  title: "제목",
+                  message: "내용",
+                  image: "caution",
                 })
+
+                // setIsDropdownOpen(false)
+                // setIsCalendarOpen(!isCalendarOpen)
+                // LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeOut", "opacity"))
+                // // TODO: 아이폰 디바이스에서 제대로 된 QA 필요함
+                // scrollViewRef.current?.scrollTo({
+                //   x: 0,
+                //   y: 200,
+                //   animated: true,
+                // })
               }}
               image={images.calendar}
               // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
@@ -526,9 +534,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
             setEndDate={setEndTime}
           />
         </BottomSheetModal>
-
-        {/* 테스트 용 */}
-        <CautionModal title="제목" message="내용" image="caution" />
       </Screen>
     )
   },
