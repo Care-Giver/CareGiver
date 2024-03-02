@@ -4,6 +4,7 @@ import {
   KakaoOAuthToken,
   KakaoProfile,
   logout,
+  unlink,
 } from "@react-native-seoul/kakao-login"
 import { checkUserExists } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
@@ -82,12 +83,19 @@ const getKakaoProfile = async (logoutHandler): Promise<GetKakaoProfileResult> =>
     const profile: KakaoProfile = await getProfile()
 
     if (!profile) {
-      alertModal("카카오 프로필 가져오기 실패", "profile is false, null or undefined.")
+      alertModal(
+        "카카오 프로필 가져오기 실패",
+        "프로필 정보가 없습니다. 잠시 후, 다시 시도해주세요.",
+      )
       return { isSuccess: false }
     }
 
     if (!profile.email) {
-      alertModal("카카오 프로필 가져오기 실패", "이메일 정보가 존재하지 않습니다.")
+      alertModal(
+        "카카오 프로필 가져오기 실패",
+        "이메일 정보가 존재하지 않습니다. 이메일 정보 사용에 동의해주세요.",
+      )
+      unlinkKakao()
       return { isSuccess: false }
     }
 
@@ -162,5 +170,24 @@ const signOutWithKakao = async (logoutHandler): Promise<void> => {
   } catch (err) {
     logoutHandler()
     console.error("signOut error", err)
+  }
+}
+
+/**
+ * [테스트 결과]
+ * unlink:
+ * - 케어기버 앱과 유저의 카카오로그인 정보 연결을 끊어버림
+ * - unlink 이후 로그인 시도시, 개인정보 [동의하고 계속하기] 버튼부터 처음부터 다시 시작함
+ */
+const unlinkKakao = async (): Promise<boolean> => {
+  try {
+    const res = await unlink()
+    console.log("res", res)
+    // TODO: res 값에 따라, unlink 성공 여부 판단 후, 성공한 경우에만 true 값 반환
+    return true
+  } catch (err) {
+    console.error("unlinkKakao error", err)
+    alertModal("카카오 계정 unlink 실패", `${err?.message}`)
+    return false
   }
 }
