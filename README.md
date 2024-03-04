@@ -1,4 +1,4 @@
-# 케어기버 프론트 앱 개발 가이드 - v230602 (최수민 작성)
+# 케어기버 프론트 앱 개발 가이드 - v2024-03-05 (최수민 작성)
 
 ![CG 헤더](https://cdn.myportfolio.com/dd18ab34-b0c4-483d-8da5-b3f0b4e33fa4/d4362c69-bc87-4a9e-9969-6ca662882061_rwc_16x0x1886x728x4096.png?h=90d6074126a6c3b537cae45b61fbf85a "CG 헤더")
 
@@ -6,25 +6,41 @@
 
 ## 개발환경
 
-- node v18.17.0
-- npm 9.6.7
-- cocoapods 1.14.3
+- node `v18.17.0`
+- npm `9.6.7`
+- cocoapods `1.14.3`
 
 ## 주의사항
 
-- 패키지 설치 또는 추가시, npm 대신 _yarn 을 사용주세요_
+- 패키지 설치 또는 추가시, `npm` 대신 _`yarn` 을 사용주세요_
 
-## 앱 실행 방법 (자동)
+## 📱 앱 실행 (디버그 빌드)
 
-1.  `yarn install`
-2.  `yarn ios` 또는 `yarn android`
-3.  (Metro 서버가 끊긴경우) `yarn start-metro`
+`yarn install` 이후:
 
-## ~~pod install 실패시...~~
+### iOS
 
-### ~~The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.~~
+`yarn ios`
 
-```
+### Android
+
+`yarn android`
+
+## 🛠️ 디버그 빌드에서 문제 상황 발생시, 해결 방법 | Troubleshooting
+
+### Metro 서버가 끊긴 경우:
+
+`yarn start`
+
+### 8081 포트가 이미 사용중인 경우:
+
+`kill $(lsof -ti:8081)`
+
+### pod install 실패시:
+
+```shell
+The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.
+
 ...
 Installing react-native-slider (4.4.2)
 Installing react-native-webview (13.6.3)
@@ -40,7 +56,7 @@ The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does 
 
 #### 위 에러는 `Podfile` 에 다음과 같은 코드를 추가하여 해결 하였습니다. (2023. 12. 25 , @smnchoi)
 
-```
+```ruby
 ...
 pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate' :modular_headers => true
 pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_headers => true
@@ -67,16 +83,20 @@ pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_he
 
 - 캐시 삭제: `yarn c `
 
----
+<br/>
+<br/>
+<br/>
 
-# 카카오 로그인 Android 오류 해결 (Feat. Upload Key and Signing Key)
+# 🛠️ 배포 관련 문제 상황 해결법
 
-## 문제 상황
+### 카카오 로그인 Android 오류 해결 (Feat. Upload Key and Signing Key)
+
+#### 문제 상황
 
 - debug 빌드 에서는 정상적으로 작동하던 카카오 로그인이, release 빌드에서는 작동하지 않음.
 - `invalid android_key_hash or ios_bundle_id or web_site_url`
 
-## 원인 및 해결 방법
+#### 원인 및 해결 방법
 
 - `Kakao Developers > 내 애플리케이션 > 앱 설정 > 플랫폼` 에서, Android 의 "키 해시" 목록에 "release" 빌드 용 해시키가 존재하지 않았음.
 - 구글은 **"Signing Key" (앱 서명 키)** 를 "직접" 관리 함. 즉, 내 환경에 있는 것이 아니라 Google Play Console 에서 확인 해야 함.
@@ -84,16 +104,16 @@ pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_he
 - `Google Play Console > 내부 테스트` 를 통해 배포된 release 빌드 에서, 카카오 SDK 는 Upload Key 를 사용해서 키를 대조하는 것이 아니라, 배포 과정중에서 구글이 자체적으로 서명한 Signing Key 를 사용하여 대조하게 되기 때문임.
 - 따라서, 이 Signing Key 를 Base64 인코딩 한 값을 Kakao Developers 대시보드에 등록해주어야 함.
 
-## 참고 자료
+#### 참고 자료
 
-Signing Key 와 Upload Key
+**Signing Key 와 Upload Key**
 
 - https://github.com/crossplatformkorea/react-native-kakao-login/issues/244
 - https://developer.android.com/studio/publish/app-signing#enroll (이거 한글로 보면 용어가 번역되어 있어서 오히려 더 헷갈림. 걍 영어로 볼 것.)
   > - **App signing key**: The key that is used to sign APKs that are installed on a user's device.
   > - **Upload key**: The key you use to sign the app bundle or APK before you upload it for app [signing with Google Play](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
 
-Base64 인코딩 방법
+**Base64 인코딩 방법**
 
 - https://devtalk.kakao.com/t/topic/130144/2
 - https://kakao-tam.tistory.com/53
