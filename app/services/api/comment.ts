@@ -30,6 +30,7 @@ export const createVisitingComment = async (
   body: CreateCommentInput,
 ): Promise<CreateCommentResult> => {
   try {
+    console.log(body)
     const response = await axios.post<CreateCommentResponse>(`${BASE_URL}/comment/visiting`, body)
 
     if (!response.data.ok) {

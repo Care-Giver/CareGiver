@@ -1,7 +1,7 @@
 import { FlatList, Image, Platform, Pressable, StyleSheet, View } from "react-native"
 import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList, goBack, navigate } from "#navigators"
 import { observer } from "mobx-react-lite"
 import { Comment, DivisionLine, Screen, FilterHeader, PreMed18 } from "#components"
 import { allComments } from "./dummy-data"
@@ -13,13 +13,16 @@ import { alertModal } from "../../../../utils/alert-modal"
 export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
 > = observer(({ navigation, route }) => {
-  const allComments = route.params.comments
-  console.log("allComments>>>", allComments)
+  const { comments, visitingId } = route.params
+
+  console.log("allComments>>>", comments)
+  console.log("visitingId>>>", visitingId)
   return (
     <Screen preset={"fixed"}>
+      <AllCommentsScreenHeader visitingId={visitingId} />
       <FilterHeader
         title={"전체"}
-        number={allComments?.length < 1000 ? `${allComments?.length}` : "999+"}
+        number={comments?.length < 1000 ? `${comments?.length}` : "999+"}
         // seletedOption={seletedOption}
       />
 
@@ -33,7 +36,7 @@ export const AllCommentsScreen: FC<
 
       {/* //? 댓글 리스트 */}
       <FlatList
-        data={allComments}
+        data={comments}
         renderItem={({ item, index }) => <Comment commentData={item} style={{ marginTop: -1 }} />}
         keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
@@ -48,13 +51,18 @@ export const AllCommentsScreen: FC<
   )
 })
 
-export const AllCommentsScreenHeader = (props) => {
+interface AllCommentsScreenHeaderProps {
+  visitingId: number
+}
+
+export const AllCommentsScreenHeader = (props: AllCommentsScreenHeaderProps) => {
+  const { visitingId } = props
   return (
-    <View {...props} style={HEADER_ROOT}>
+    <View style={HEADER_ROOT}>
       {/* //* 뒤로가기 버튼 */}
       <Pressable
         onPress={() => {
-          props.navigation.goBack()
+          goBack()
         }}
       >
         <Image style={styles.goBackButton} source={images.go_back} />
@@ -82,7 +90,7 @@ export const AllCommentsScreenHeader = (props) => {
           // props.navigation.goBack()
           // alert("댓글 작성으로 이동")
           //TODO: params 값 추가해줘야 함
-          navigate("writing-comment-screen", null)
+          navigate("writing-comment-screen", { visitingId })
         }}
       >
         <Image style={styles.writeComment} source={images.write_comment} />
@@ -95,7 +103,6 @@ const styles = StyleSheet.create({
   goBackButton: {
     width: 28,
     height: 28,
-    marginLeft: 16,
   },
   search: {
     width: 28,

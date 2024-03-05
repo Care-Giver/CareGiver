@@ -39,6 +39,7 @@ import { PRETENDARD_REGULAR } from "#fonts"
 import { createVisitingComment } from "#api"
 import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
+import { useStores } from "#models"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -54,6 +55,10 @@ export const WritingCommentScreen: FC<
   //*키보드
   const keyboard = useKeyboard()
 
+  const { visitingId } = route.params
+  const {
+    userStore: { userDetail },
+  } = useStores()
   if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true)
   }
@@ -134,14 +139,15 @@ export const WritingCommentScreen: FC<
     <Screen preset="fixed">
       <WritingCommentScreenHeader
         title={"댓글 작성"}
-        onPress={() =>
-          createVisitingComment({
-            userId: 42,
-            visitingId: 30,
+        onPress={async () => {
+          await createVisitingComment({
+            userId: userDetail.id,
+            visitingId: visitingId,
             desc: comment,
             isPrivate: false,
           })
-        }
+          navigation.pop(2)
+        }}
         wordsCount={wordLength}
       />
       {/*//*댓글 입력할 수 있는 textInput box */}

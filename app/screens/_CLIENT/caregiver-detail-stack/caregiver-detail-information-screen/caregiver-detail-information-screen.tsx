@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from "react"
+import React, { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Platform, Pressable, ScrollView, View, Modal, Text, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
@@ -52,6 +52,7 @@ import {
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
+import { useFocusEffect } from "@react-navigation/native"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -112,13 +113,16 @@ export const CaregiverDetailInformationScreen: FC<
       }).start()
     }
   }, [animationValue, isMounted])
-  useEffect(() => {
-    getVisitingComments(service.visiting.id).then((res) => {
-      if (res.isSuccess === true) {
-        setComments(res.visitingComments)
-      }
-    })
-  }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      getVisitingComments(service.visiting.id).then((res) => {
+        if (res.isSuccess === true) {
+          setComments(res.visitingComments)
+        }
+      })
+    }, []),
+  )
 
   const buttonOpacity = animationValue.interpolate({
     inputRange: [0, 1],
