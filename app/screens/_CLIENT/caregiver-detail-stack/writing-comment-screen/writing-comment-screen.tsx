@@ -1,7 +1,18 @@
-import { Keyboard, TextInput, LayoutAnimation, Platform, UIManager } from "react-native"
+import {
+  Keyboard,
+  TextInput,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  View,
+  Pressable,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native"
 import React, { FC, useLayoutEffect, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, goBack } from "#navigators"
 import { observer } from "mobx-react-lite"
 import {
   BODY,
@@ -10,10 +21,24 @@ import {
   HEADER_HEIGHT,
   ADNROID_STATUS_BAR_HEIGHT,
   ADNROID_BOTTOM_NAVIGATION_HEIGHT,
+  GIVER_CASUAL_NAVY,
+  DISABLED,
 } from "#theme"
-import { PublicPrivateSwitchButton, Screen, PopSem14, PopReg14, Row } from "#components"
+import {
+  PublicPrivateSwitchButton,
+  Screen,
+  PopSem14,
+  PopReg14,
+  Row,
+  PreMed16,
+  PreMed20,
+  PreBol16,
+} from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "#fonts"
+import { createVisitingComment } from "#api"
+import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles"
+import { images } from "#images"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -21,25 +46,17 @@ export const WritingCommentScreen: FC<
   //*키보드 나타남 여부 판단 변수
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   //*공개 / 비공개 컴포넌트에 쓰임
-  const [isPublicComment, setIsPublicComment] = useState(true)
+  const [isPublicComment, setIsPublicComment] = useState<boolean>(true)
   //* textInput 안의 입력되는 댓글 저장용
-  const [comment, setComment] = useState("")
+  const [comment, setComment] = useState<string>("")
   //*입력된 댓글의 단어 수 세는 변수
-  const [wordLength, setWordLength] = useState(0)
+  const [wordLength, setWordLength] = useState<number>(0)
   //*키보드
   const keyboard = useKeyboard()
 
   if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true)
   }
-
-  // * 헤더 타이틀 설정 (사용자가 댓글을 입력할때마다 단어수에 따라 헤더의 등록 글자 색 달라짐.)
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "댓글 작성",
-      wordsCount: wordLength,
-    })
-  }, [wordLength])
 
   //* 에니메이션 쓸 때 android용 처리
 
@@ -115,6 +132,18 @@ export const WritingCommentScreen: FC<
 
   return (
     <Screen preset="fixed">
+      <WritingCommentScreenHeader
+        title={"댓글 작성"}
+        onPress={() =>
+          createVisitingComment({
+            userId: 42,
+            visitingId: 30,
+            desc: comment,
+            isPrivate: false,
+          })
+        }
+        wordsCount={wordLength}
+      />
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
         style={{
@@ -163,4 +192,51 @@ export const WritingCommentScreen: FC<
       </Row>
     </Screen>
   )
+})
+
+interface WritingCommentScreenHeaderProps {
+  onPress?: () => void
+  wordsCount?: number
+  title: string
+}
+/**
+ * 리액트 네비게이션 스크린 헤더 대신 사용하는 컴포넌트입니다.
+ * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
+ */
+export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProps) => {
+  const { onPress, wordsCount, title } = props
+
+  const ableToRegister = wordsCount || 0
+
+  return (
+    <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
+      {/* 뒤로가기 버튼 */}
+      <Pressable
+        onPress={() => {
+          goBack()
+        }}
+      >
+        <Image style={styles.goBackButton} source={images.go_back} />
+      </Pressable>
+
+      {/* //* 타이틀 */}
+      <PreMed20 style={{ marginLeft: 8 }}> {title}</PreMed20>
+      {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
+      <Pressable
+        onPress={onPress}
+        style={{
+          marginLeft: "auto",
+          marginRight: 16,
+        }}
+      >
+        <PreBol16 color={ableToRegister > 0 ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
+      </Pressable>
+    </View>
+  )
+}
+const styles = StyleSheet.create({
+  goBackButton: {
+    width: 28,
+    height: 28,
+  },
 })

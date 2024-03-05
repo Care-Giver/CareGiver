@@ -288,7 +288,10 @@ export const CaregiverDetailInformationScreen: FC<
               style={{ marginLeft: "auto" }}
               onPress={() => {
                 //? 댓글 전체보기 화면으로 이동
-                navigate("all-comments-screen", { comments: comments })
+                navigate("all-comments-screen", {
+                  comments: comments,
+                  visitingId: service.visiting.id,
+                })
               }}
             />
           </Row>

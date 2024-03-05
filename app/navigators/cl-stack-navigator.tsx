@@ -167,8 +167,11 @@ export type CLStackNavigatorParamList = {
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": {
     comments: CommentColmns[]
+    visitindId: string
   }
-  "writing-comment-screen": undefined
+  "writing-comment-screen": {
+    visitingId: string
+  }
   "payment-request-screen": undefined
 
   /**
@@ -428,7 +431,7 @@ export const SearchingStack = () => {
         name="writing-comment-screen"
         component={WritingCommentScreen}
         options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 

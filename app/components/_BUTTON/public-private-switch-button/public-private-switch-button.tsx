@@ -1,12 +1,12 @@
 import React from "react"
 import { ViewStyle, View } from "react-native"
-import { palette } from "#theme"
-import { DISABLED, GIVER_CASUAL_NAVY } from "#theme"
+import { palette, DISABLED, GIVER_CASUAL_NAVY } from "#theme"
+
 import { PreBol12 } from "../../_BASIC/custom-texts/custom-texts"
 import { PressableButton } from "../pressable-button/pressable-button"
 
 const ROOT: ViewStyle = {
-  width: 82,
+  width: 36,
   height: 21,
   borderRadius: 4,
   backgroundColor: "#F1F1F4",
@@ -47,7 +47,8 @@ export const PublicPrivateSwitchButton = ({ state: isPublic, setState: setIsPubl
       />
 
       {/*//* 비공개 버튼 (디자인에 따라 width 는 override ) */}
-      <PressableButton
+      {/* //TODO MVP단계까지 '공개'로 한정 */}
+      {/* <PressableButton
         defaultViewStyle={[DEFAULT_VIEW_STYLE, { width: 46 }]}
         pressedViewStyle={[PRESSED_VIEW_STYLE, { width: 46 }]}
         children={() => <PreBol12 color={!isPublic ? palette.white : DISABLED} text="비공개" />}
@@ -55,7 +56,7 @@ export const PublicPrivateSwitchButton = ({ state: isPublic, setState: setIsPubl
         onPress={() => {
           setIsPublic(false)
         }}
-      />
+      /> */}
     </View>
   )
 }
