@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import axios from "axios"
 import { PORTONE_API_KEY, PORTONE_SERCRET_KEY } from "@env"
+import { BASE_URL, GeneralResponse } from "./axios-config"
+import { alertModal } from "../../utils/alert-modal"
 
 const PORTONE_BASE_URL = "https://api.iamport.kr"
 
@@ -118,5 +120,49 @@ export const getBanksHolder = async (params: QueryType): Promise<GetBanksHolderR
       isSuccess: false,
       reason: error.message,
     }
+  }
+}
+
+interface VerifyBankHolderRequestBody {
+  // description: '은행 코드 (포트원 API 명세서 참고: https://faq.portone.io/1dae5145-1feb-4ef2-87ef-4b0e8a984945)',
+  // example: '001',
+  bankCode: string
+
+  // description: '계좌 번호',
+  // example: '1234567890',
+  bankNum: string
+
+  // description: '예금주 이름',
+  // example: '홍길동',
+  bankHolder: string
+
+  // description: '은행 이름. 에러 발생시, 에러메시지에 포함됩니다.',
+  // example: '국민은행',
+  bankName?: string
+}
+interface VerifyBankHolderResponse extends GeneralResponse {
+  // ok: true 이면 유효한 계좌입니다.
+}
+/**
+ * 계좌번호와 예금주명을 검증합니다.
+ * 실제 존재하는 계좌일 경우, true 를 반환합니다.
+ * // TODO: verifyBankHolder 관련 코드 전부 payment.ts 로 이전
+ */
+export const verifyBankHolder = async (body: VerifyBankHolderRequestBody): Promise<boolean> => {
+  try {
+    const response = await axios.post<VerifyBankHolderResponse>(
+      `${BASE_URL}/payment/bank-verification`,
+      body,
+    )
+    console.log("🔷 response", JSON.stringify(response.data))
+    if (!response.data.ok) {
+      alertModal(`예금주 인증에 실패했습니다.`, `${response.data.error.message}`)
+      return false
+    }
+
+    return true
+  } catch (error) {
+    alertModal(`예금주 인증에 실패했습니다.`, `catch: ${error?.message}`)
+    return false
   }
 }

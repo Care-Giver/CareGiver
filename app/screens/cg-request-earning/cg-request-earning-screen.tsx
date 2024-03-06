@@ -46,7 +46,7 @@ import axios from "axios"
 import { useStores } from "#models"
 import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
-import { getBanksHolder } from "../../services/api/port-one"
+import { verifyBankHolder } from "../../services/api/port-one"
 import { bankCodeList } from "./constant"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
@@ -125,77 +125,71 @@ export const CgRequestEarningScreen: FC<
   }
 
   const onPressBottomButton = async () => {
-    const { maxMonth, currentMonth } = await checkSettlementMonth()
-    console.log("result >>>", maxMonth, currentMonth)
+    // const { maxMonth, currentMonth } = await checkSettlementMonth()
+    // console.log("result >>>", maxMonth, currentMonth)
     //* 정산 정보 입력 스크린
     if (isConfirmed === false) {
       const bankCode = Object.keys(bankCodeList).find((key) => bankCodeList[key] === bank)
-      const verifyAccountResponse = await getBanksHolder({
-        bank_code: bankCode,
-        bank_num: accountNum,
-      })
 
       // 계좌 정보 인증 절차
-      if (!verifyAccountResponse.isSuccess) {
-        return alertModal(
-          "계좌 조회 실패",
-          "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
-        )
-      } else {
-        if (name !== verifyAccountResponse.response.bank_holder)
-          return alertModal(
-            "계좌 조회 실패",
-            "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
-          )
-      }
-      // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
-      const settlementResponse = await getSettlement({
-        startDate: `2024-${maxMonth}-01`,
-        endDate: `2024-${currentMonth}-01`,
+      const isVerified = await verifyBankHolder({
+        bankCode: bankCode,
+        bankNum: accountNum,
+        bankHolder: name,
+        bankName: bank,
       })
 
-      //? 정산 내역 api 불러와 저장
-      if (settlementResponse.isSuccess) {
-        setTotalFee(settlementResponse.totalSettlementFee)
-        setSettlementInfo(settlementResponse.settlementDetails)
-        setIsConfirmed(true)
-      } else {
-        alertModal(
-          "정산 내역 조회 실패",
-          "알 수 없는 이유로, 정산 내역 조회에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
-        )
-      }
-    }
+      if (!isVerified) return
 
-    //* 정산 내역 확인 및 요청 스크린
-    if (isConfirmed === true) {
-      // 정산 요청할 달의 범위
-      const monthRange = []
-      for (let i = Number(maxMonth); i < Number(currentMonth); i++) {
-        monthRange.push(i.toString())
-      }
+      //   // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
+      //   const settlementResponse = await getSettlement({
+      //     startDate: `2024-${maxMonth}-01`,
+      //     endDate: `2024-${currentMonth}-01`,
+      //   })
 
-      if (totalFee === 0) {
-        alertModal("정산 요청 실패", "정산을 요청할 내역이 없습니다.")
-        return
-      }
+      //   //? 정산 내역 api 불러와 저장
+      //   if (settlementResponse.isSuccess) {
+      //     setTotalFee(settlementResponse.totalSettlementFee)
+      //     setSettlementInfo(settlementResponse.settlementDetails)
+      //     setIsConfirmed(true)
+      //   } else {
+      //     alertModal(
+      //       "정산 내역 조회 실패",
+      //       "알 수 없는 이유로, 정산 내역 조회에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+      //     )
+      //   }
+      // }
 
-      const response = await postNotionSettlement({
-        userId,
-        months: monthRange,
-        userInfoContent,
-        settlementInfoContent,
-      })
-      if (response.isSuccess) {
-        setModalOpen(true)
-      } else {
-        alertModal(
-          "정산 요청 실패",
-          "알 수 없는 이유로, 정산 요청에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
-        )
-      }
+      // //* 정산 내역 확인 및 요청 스크린
+      // if (isConfirmed === true) {
+      //   // 정산 요청할 달의 범위
+      //   const monthRange = []
+      //   for (let i = Number(maxMonth); i < Number(currentMonth); i++) {
+      //     monthRange.push(i.toString())
+      //   }
+
+      //   if (totalFee === 0) {
+      //     alertModal("정산 요청 실패", "정산을 요청할 내역이 없습니다.")
+      //     return
+      //   }
+
+      //   const response = await postNotionSettlement({
+      //     userId,
+      //     months: monthRange,
+      //     userInfoContent,
+      //     settlementInfoContent,
+      //   })
+      //   if (response.isSuccess) {
+      //     setModalOpen(true)
+      //   } else {
+      //     alertModal(
+      //       "정산 요청 실패",
+      //       "알 수 없는 이유로, 정산 요청에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+      //     )
+      //   }
     }
   }
+
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const openLink = (link: string) => {
     Linking.openURL(link)
