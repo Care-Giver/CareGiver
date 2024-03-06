@@ -168,6 +168,7 @@ export type CLStackNavigatorParamList = {
   "all-comments-screen": {
     comments: CommentColmns[]
     visitingId: number
+    userId: number
   }
   "writing-comment-screen": {
     visitingId: number

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Dispatch, Ref, SetStateAction, forwardRef } from "react"
 import { View, Image, Pressable } from "react-native"
 import { styles } from "./styles"
 import { PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
@@ -9,6 +9,8 @@ import { DivisionLine } from "../_BASIC/division-line/division-line"
 import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
 import { CommentColmns } from "#api"
+import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -51,11 +53,22 @@ interface CommentProps {
   style?: any
   numberOfLines?: number
   commentData: CommentColmns
+  testRef: React.MutableRefObject<BottomSheetModalMethods>
+  userId: number
+  setIsUserComment: Dispatch<SetStateAction<boolean>>
 }
 
-export const Comment = (props: CommentProps) => {
-  const { style: viewStyle, numberOfLines, commentData } = props
-  const { id, desc, createAt, updatedAt, hasReply, visitingCommentReply } = commentData
+export const Comment = forwardRef((props: CommentProps) => {
+  const { style: viewStyle, numberOfLines, commentData, testRef, userId, setIsUserComment } = props
+  const {
+    id,
+    desc,
+    createAt,
+    updatedAt,
+    hasReply,
+    visitingCommentReply,
+    __commentator__,
+  } = commentData
   const _numberOfLines = numberOfLines || undefined
 
   const _createAt = new Date(createAt)
@@ -75,7 +88,10 @@ export const Comment = (props: CommentProps) => {
           style={{ width: 10, alignItems: "center" }}
           onPress={() => {
             //TODO 유저 id에 따라 수정 및 답글 기능 추가
-            alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
+            //alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
+            if (userId === __commentator__.id) setIsUserComment(true)
+            if (userId !== __commentator__.id) setIsUserComment(false)
+            testRef.current.present()
           }}
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />
@@ -87,4 +103,4 @@ export const Comment = (props: CommentProps) => {
       <DivisionLine height={1} color={LIGHT_LINE} style={{ marginTop: 32 }} />
     </View>
   )
-}
+})

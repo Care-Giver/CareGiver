@@ -56,6 +56,12 @@ export const createVisitingComment = async (
 /**
  * 주어진 id 에 해당하는 댓글 객체를 불러옵니다.
  */
+
+export interface CommentatorType {
+  id: number
+  nickname: string
+  profileImage: string
+}
 export interface CommentColmns {
   id: number
   createAt: string
@@ -67,6 +73,7 @@ export interface CommentColmns {
   visitingId: number
   //TODO resBody 소통 후 type명시
   visitingCommentReply: any
+  __commentator__: CommentatorType
 }
 interface GetCommentsResponse extends GeneralResponse {
   visitingComments: CommentColmns[]
