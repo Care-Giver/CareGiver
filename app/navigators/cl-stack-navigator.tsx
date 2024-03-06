@@ -171,7 +171,10 @@ export type CLStackNavigatorParamList = {
     userId: number
   }
   "writing-comment-screen": {
-    visitingId: number
+    visitingId?: number
+    defaultComment?: string
+    updateOrCreate: "update" | "create"
+    commentId?: number
   }
   "payment-request-screen": undefined
 

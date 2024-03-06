@@ -74,7 +74,6 @@ export const CaregiverDetailInformationScreen: FC<
   const {
     userStore: { userDetail },
   } = useStores()
-
   const { serviceTypeKorean, service, selectedPetIds, selectedTime, address } = route.params
   const { userProfile: profileImage, userNickname, reviewCount } = service
   const key: ServiceType = serviceTypeKorean === "방문" ? "visiting" : "creche"
@@ -98,6 +97,8 @@ export const CaregiverDetailInformationScreen: FC<
    * 선택한 댓글이 로그인한 유저가 작성한 댓글인지 구분하는 state
    */
   const [isUserComment, setIsUserComment] = useState<boolean>(false)
+  const [selectedCommentId, setSelectedCommentId] = useState<number>()
+  const [selectedComment, setSelectedComment] = useState<string>("")
   const [isMounted, setIsMounted] = useState(false)
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
@@ -118,6 +119,19 @@ export const CaregiverDetailInformationScreen: FC<
     ),
     [],
   )
+  const onPressCommentOption = () => {
+    if (isUserComment) {
+      bottomSheetModalRef.current.close()
+      navigate("writing-comment-screen", {
+        updateOrCreate: "update",
+        commentId: selectedCommentId,
+        defaultComment: selectedComment,
+      })
+    }
+    if (!isUserComment) {
+      alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
+    }
+  }
 
   const animationValue = useRef(new Animated.Value(0)).current
 
@@ -346,9 +360,11 @@ export const CaregiverDetailInformationScreen: FC<
                 numberOfLines={2}
                 style={{ marginTop: -1 }}
                 key={index}
-                testRef={bottomSheetModalRef}
+                bottomSheetModalRef={bottomSheetModalRef}
                 userId={userDetail.id}
                 setIsUserComment={setIsUserComment}
+                setSelectedCommentId={setSelectedCommentId}
+                setSelectedComment={setSelectedComment}
               />
             ))}
           </View>
@@ -370,6 +386,7 @@ export const CaregiverDetailInformationScreen: FC<
             marginBottom: 16,
             alignItems: "center",
           }}
+          onPress={onPressCommentOption}
         >
           <PreMed16 text={isUserComment ? "수정하기" : "답글달기"} />
         </Pressable>

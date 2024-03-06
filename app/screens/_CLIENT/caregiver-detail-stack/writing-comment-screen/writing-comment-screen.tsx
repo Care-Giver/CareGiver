@@ -36,26 +36,28 @@ import {
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "#fonts"
-import { createVisitingComment } from "#api"
+import { createVisitingComment, updateVisitingComment } from "#api"
 import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
 import { useStores } from "#models"
+import { alertModal } from "../../../../utils/alert-modal"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
 > = observer(({ navigation, route }) => {
+  const { visitingId, updateOrCreate, commentId, defaultComment } = route.params
+
   //*키보드 나타남 여부 판단 변수
   const [keyboardStatus, setKeyboardStatus] = useState(undefined)
   //*공개 / 비공개 컴포넌트에 쓰임
   const [isPublicComment, setIsPublicComment] = useState<boolean>(true)
   //* textInput 안의 입력되는 댓글 저장용
-  const [comment, setComment] = useState<string>("")
+  const [comment, setComment] = useState<string>(defaultComment || "")
   //*입력된 댓글의 단어 수 세는 변수
   const [wordLength, setWordLength] = useState<number>(0)
   //*키보드
   const keyboard = useKeyboard()
 
-  const { visitingId } = route.params
   const {
     userStore: { userDetail },
   } = useStores()
@@ -134,20 +136,32 @@ export const WritingCommentScreen: FC<
         return height
     }
   }
+  const onPressSubmit = async () => {
+    //* 해당 스크린으로 들어온 경로(수정 or 작성)에따라 기능을 달리합니다.
+    //TODO 네비게이션 메서드,,
+    if (updateOrCreate === "create") {
+      const response = await createVisitingComment({
+        userId: userDetail.id,
+        visitingId: visitingId,
+        desc: comment,
+        isPrivate: false,
+      })
+      if (response.isSuccess) navigation.pop(2)
+      else alertModal("댓글 작성 실패", "댓글 작성에 실패했습니다. 다시 시도해주세요.")
+    }
+    if (updateOrCreate === "update") {
+      const response = await updateVisitingComment(commentId, { desc: comment, isPrivate: false })
+      if (response.isSuccess) navigation.pop(0)
+      else alertModal("댓글 수정 실패", "댓글 수정에 실패했습니다. 다시 시도해주세요.")
+    }
 
+    navigation.pop(2)
+  }
   return (
     <Screen preset="fixed">
       <WritingCommentScreenHeader
         title={"댓글 작성"}
-        onPress={async () => {
-          await createVisitingComment({
-            userId: userDetail.id,
-            visitingId: visitingId,
-            desc: comment,
-            isPrivate: false,
-          })
-          navigation.pop(2)
-        }}
+        onPress={onPressSubmit}
         wordsCount={wordLength}
       />
       {/*//*댓글 입력할 수 있는 textInput box */}

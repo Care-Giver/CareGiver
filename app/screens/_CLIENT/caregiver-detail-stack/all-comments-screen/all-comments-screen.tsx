@@ -28,7 +28,8 @@ export const AllCommentsScreen: FC<
    * 선택한 댓글이 로그인한 유저가 작성한 댓글인지 구분하는 state
    */
   const [isUserComment, setIsUserComment] = useState<boolean>(false)
-  const [isMounted, setIsMounted] = useState(false)
+  const [selectedCommentId, setSelectedCommentId] = useState<number>()
+  const [selectedComment, setSelectedComment] = useState<string>("")
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -48,8 +49,20 @@ export const AllCommentsScreen: FC<
     ),
     [],
   )
-  console.log("allComments>>>", comments)
-  console.log("visitingId>>>", visitingId)
+  const onPressCommentOption = () => {
+    if (isUserComment) {
+      bottomSheetModalRef.current.close()
+      navigate("writing-comment-screen", {
+        updateOrCreate: "update",
+        commentId: selectedCommentId,
+        defaultComment: selectedComment,
+      })
+    }
+    if (!isUserComment) {
+      alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
+    }
+  }
+
   return (
     <Screen preset={"fixed"}>
       <AllCommentsScreenHeader visitingId={visitingId} />
@@ -74,9 +87,11 @@ export const AllCommentsScreen: FC<
           <Comment
             commentData={item}
             style={{ marginTop: -1 }}
-            testRef={bottomSheetModalRef}
+            bottomSheetModalRef={bottomSheetModalRef}
             userId={userId}
             setIsUserComment={setIsUserComment}
+            setSelectedCommentId={setSelectedCommentId}
+            setSelectedComment={setSelectedComment}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -102,6 +117,7 @@ export const AllCommentsScreen: FC<
             marginBottom: 16,
             alignItems: "center",
           }}
+          onPress={onPressCommentOption}
         >
           <PreMed16 text={isUserComment ? "수정하기" : "답글달기"} />
         </Pressable>
@@ -148,8 +164,7 @@ export const AllCommentsScreenHeader = (props: AllCommentsScreenHeaderProps) => 
         onPress={() => {
           // props.navigation.goBack()
           // alert("댓글 작성으로 이동")
-          //TODO: params 값 추가해줘야 함
-          navigate("writing-comment-screen", { visitingId })
+          navigate("writing-comment-screen", { visitingId, updateOrCreate: "create" })
         }}
       >
         <Image style={styles.writeComment} source={images.write_comment} />

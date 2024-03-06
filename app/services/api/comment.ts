@@ -117,3 +117,37 @@ export const getVisitingComments = async (visitingId: number): Promise<GetCommen
     }
   }
 }
+
+export interface UpdateVisitingCommentInput {
+  desc: string
+  //TODO 기획상 '공개'만 가능
+  isPrivate: false
+}
+
+export type UpdateVisitingCommentResult =
+  | { isSuccess: true }
+  | { isSuccess: false; reason?: string }
+export const updateVisitingComment = async (
+  id: number,
+  body: UpdateVisitingCommentInput,
+): Promise<UpdateVisitingCommentResult> => {
+  try {
+    const response = await axios.patch<GeneralResponse>(`${BASE_URL}/comment/visiting/${id}`, body)
+    if (!response.data.ok) {
+      return {
+        isSuccess: false,
+        reason: response.data?.error.message,
+      }
+    }
+
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return {
+      isSuccess: false,
+      reason: error?.message,
+    }
+  }
+}

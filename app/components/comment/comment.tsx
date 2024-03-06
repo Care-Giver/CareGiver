@@ -53,13 +53,24 @@ interface CommentProps {
   style?: any
   numberOfLines?: number
   commentData: CommentColmns
-  testRef: React.MutableRefObject<BottomSheetModalMethods>
+  bottomSheetModalRef: React.MutableRefObject<BottomSheetModalMethods>
   userId: number
   setIsUserComment: Dispatch<SetStateAction<boolean>>
+  setSelectedCommentId: Dispatch<SetStateAction<number>>
+  setSelectedComment: Dispatch<SetStateAction<string>>
 }
 
 export const Comment = forwardRef((props: CommentProps) => {
-  const { style: viewStyle, numberOfLines, commentData, testRef, userId, setIsUserComment } = props
+  const {
+    style: viewStyle,
+    numberOfLines,
+    commentData,
+    bottomSheetModalRef,
+    userId,
+    setIsUserComment,
+    setSelectedCommentId,
+    setSelectedComment,
+  } = props
   const {
     id,
     desc,
@@ -73,7 +84,6 @@ export const Comment = forwardRef((props: CommentProps) => {
 
   const _createAt = new Date(createAt)
   const date = formatDate(_createAt)
-
   return (
     <View style={[styles.root, viewStyle]}>
       <DivisionLine height={1} color={LIGHT_LINE} />
@@ -81,8 +91,13 @@ export const Comment = forwardRef((props: CommentProps) => {
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: 12 }}>
         {/* //TODO 백엔드측 대응 후 이미지, 닉네임 교체 필요 */}
-        <Image source={{ uri: images.profile_default }} style={styles.profileImage} />
-        <PreReg14 text={"이용자 닉네임"} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
+        <Image
+          source={{
+            uri: __commentator__.profileImage || images.profile_default,
+          }}
+          style={styles.profileImage}
+        />
+        <PreReg14 text={__commentator__.nickname} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}
@@ -91,7 +106,9 @@ export const Comment = forwardRef((props: CommentProps) => {
             //alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
             if (userId === __commentator__.id) setIsUserComment(true)
             if (userId !== __commentator__.id) setIsUserComment(false)
-            testRef.current.present()
+            setSelectedCommentId(id)
+            setSelectedComment(desc)
+            bottomSheetModalRef.current.present()
           }}
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />
