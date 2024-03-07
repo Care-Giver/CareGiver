@@ -146,16 +146,17 @@ export const WritingCommentScreen: FC<
         desc: comment,
         isPrivate: false,
       })
-      if (response.isSuccess) navigation.pop(2)
-      else alertModal("댓글 작성 실패", "댓글 작성에 실패했습니다. 다시 시도해주세요.")
+      response.isSuccess && navigation.pop(2)
+
+      // 선 결론: alertModal 의 "위치" 를 바꿔야 함.
+      //  1. 왜? -> 소프트웨어 디자인 패턴: 케어기버 프로젝트는 "MVP" / (진실... "MVVM" 을 완전히 벗어날 순 없다.) ... MVC...
+      //          Presenter vs. ViewModel
+      //  2. 어떻게?
     }
     if (updateOrCreate === "update") {
       const response = await updateVisitingComment(commentId, { desc: comment, isPrivate: false })
-      if (response.isSuccess) navigation.pop(0)
-      else alertModal("댓글 수정 실패", "댓글 수정에 실패했습니다. 다시 시도해주세요.")
+      response.isSuccess && navigation.pop(2)
     }
-
-    navigation.pop(2)
   }
   return (
     <Screen preset="fixed">

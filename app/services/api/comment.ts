@@ -25,15 +25,19 @@ type CreateCommentResult =
 
 /**
  * 댓글 객체를 생성합니다.
+ *
  */
 export const createVisitingComment = async (
   body: CreateCommentInput,
 ): Promise<CreateCommentResult> => {
   try {
+    // Model
+    // ViewModel - View (View 가 너무 작아서)
     console.log(body)
     const response = await axios.post<CreateCommentResponse>(`${BASE_URL}/comment/visiting`, body)
 
     if (!response.data.ok) {
+      alertModal("댓글 작성 실패", "댓글 작성에 실패했습니다. 다시 시도해주세요.")
       return {
         isSuccess: false,
         reason: response.data?.error.message,
@@ -46,6 +50,7 @@ export const createVisitingComment = async (
     }
   } catch (error) {
     console.error("catch 에러!!!", error)
+    alertModal("댓글 작성 실패", "댓글 작성에 실패했습니다. 다시 시도해주세요.")
     return {
       isSuccess: false,
       reason: error?.message,
