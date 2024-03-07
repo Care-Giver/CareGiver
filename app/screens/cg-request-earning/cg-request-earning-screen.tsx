@@ -61,18 +61,6 @@ export type SettlementType = {
 export const CgRequestEarningScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-request-earning-screen">
 > = observer(function CgRequestEarningScreen({ navigation }) {
-  // //* 금융 결제원 api TEST
-  // useEffect(() => {
-  //   axios
-  //     .post("https://testapi.openbanking.or.kr/oauth/2.0/token", {
-  //       client_id: "54b3f6c3-a25f-4fcd-aba6-8c0eb931f6fa",
-  //       client_secret: "b4c379b8-eb28-4083-b0e4-a59961752480",
-  //       scope: "oob",
-  //       grant_type: "client_credentials",
-  //     })
-  //     .then((res) => console.log(res.data))
-  // }, [])
-
   //* 정산 관련 정보
   const [bank, setBank] = useState<string>("")
   const [accountNum, setAccountNum] = useState<string>("")
@@ -145,7 +133,7 @@ export const CgRequestEarningScreen: FC<
         if (name !== verifyAccountResponse.response.bank_holder)
           return alertModal(
             "계좌 조회 실패",
-            "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
+            "입력하신 예금주명과 일치하는 계좌번호가 아닙니다. 입력한 정보를 다시 확인해주세요.",
           )
       }
       // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회

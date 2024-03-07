@@ -38,10 +38,10 @@ export const PaymentList = observer(function PaymentList(props: PaymentListProps
       {settlementDetails.map((item, idx) => {
         console.log("item >>>", item)
         const convertedTime =
-          item.serviceType === "Visiting"
+          item.serviceType === "visiting"
             ? `${item.start.substring(11, 13)}시-${item.end.substring(11, 13)}시`
             : "종일"
-        const convertedServiceType = item.serviceType === "Visiting" ? "방문 펫시팅" : "위탁 펫시팅"
+        const convertedServiceType = item.serviceType === "visiting" ? "방문 펫시팅" : "위탁 펫시팅"
         return (
           <Row mb={settlementDetails.length - 1 === idx ? 0 : 19} key={item.end}>
             <PreMed14 text={convertedTime} color={SUB_HEAD_LINE} />

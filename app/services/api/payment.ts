@@ -3,6 +3,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { SettlementType } from "#screens"
 import { alertModal } from "../../utils/alert-modal"
+import { ServiceType } from "#models"
 
 export interface PaymentColumns {
   createAt: string // "2023-12-15T19:39:13.387Z"
@@ -63,7 +64,7 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
 }
 
 export interface settlementDetail {
-  serviceType: string
+  serviceType: ServiceType
   start: string
   end: string
   isCanceled: boolean
