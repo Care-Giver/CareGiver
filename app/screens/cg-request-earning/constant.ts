@@ -1,3 +1,7 @@
+/**
+ * 포트원 문서상에 있는 가상계좌 목록입니다.
+ * 출처: https://faq.portone.io/1dae5145-1feb-4ef2-87ef-4b0e8a984945
+ */
 export const bankCodeList = {
   "001": "한국은행",
   "002": "산업은행",
