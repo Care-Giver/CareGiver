@@ -2655,6 +2655,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notionhq/client@^2.2.14":
+  version "2.2.14"
+  resolved "https://registry.yarnpkg.com/@notionhq/client/-/client-2.2.14.tgz#6807ec27ee89584529abfd28d058b2661f828b74"
+  integrity sha512-oqUefZtCiJPCX+74A1Os9OVTef3fSnVWe2eVQtU1HJSD+nsfxfhwvDKnzJTh2Tw1ZHKLxpieHB/nzGdY+Uo12A==
+  dependencies:
+    "@types/node-fetch" "^2.5.10"
+    node-fetch "^2.6.1"
+
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.1.1.tgz#72f719fe935e687c56a4faecf3c03d06ba593257"
@@ -3774,6 +3782,14 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-5.1.2.tgz#07508b45797cb81ec3f273011b054cd0755eddca"
   integrity sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==
 
+"@types/node-fetch@^2.5.10":
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.11.tgz#9b39b78665dae0e82a08f02f4967d62c66f95d24"
+  integrity sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==
+  dependencies:
+    "@types/node" "*"
+    form-data "^4.0.0"
+
 "@types/node-forge@^1.3.0":
   version "1.3.10"
   resolved "https://registry.yarnpkg.com/@types/node-forge/-/node-forge-1.3.10.tgz#62a19d4f75a8b03290578c2b04f294b1a5a71b07"
@@ -3850,6 +3866,11 @@
   integrity sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==
   dependencies:
     "@types/react" "*"
+
+"@types/react-native-dotenv@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-dotenv/-/react-native-dotenv-0.2.2.tgz#14af0d8fdddb46c01a26d7cbd562a6455002487e"
+  integrity sha512-YDgO2hdTK5PaxZrIFtVXrjeFOhJ+7A9a8VDUK4QmHCPGIB5i6DroLG9IpItX5qCshz7aPsQfgy9X3w82Otd4HA==
 
 "@types/react-native@~0.69.1":
   version "0.69.26"
@@ -8200,6 +8221,11 @@ dotenv-webpack@^1.7.0:
   integrity sha512-o8pq6NLBehtrqA8Jv8jFQNtG9nhRtVqmoD4yWbgUyoU3+9WBlPe+c2EAiaJok9RB28QvrWvdWLZGeTT5aATDMg==
   dependencies:
     dotenv-defaults "^1.0.2"
+
+dotenv@^16.4.1:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 dotenv@^6.2.0:
   version "6.2.0"
@@ -16782,6 +16808,13 @@ react-native-date-picker@^4.2.9:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.3.5.tgz#81797f874a34a75ce2ff57d2bb1519ee2ac062dd"
   integrity sha512-jKOGCM2AUkRJb+tXYiwFHLfbB1Jh7OWXH4TxhLsuh7DWMXpWgUN3cGlFr3vl7G4wy45raAyPqmsZNSqmMr/98g==
+
+react-native-dotenv@^3.4.10:
+  version "3.4.10"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.10.tgz#b7142f50fa72d1ad5b9ae8064d4e486b774b30f2"
+  integrity sha512-GADCAx3qJ9pjnRYMzQVliTnQto5W+38qoQyZGvo4snTv08cT/EQ7/2iyuwVPd/jms1rzVSra5QC/F+lbNWOAKQ==
+  dependencies:
+    dotenv "^16.4.1"
 
 react-native-dropdown-picker@^5.4.2:
   version "5.4.6"

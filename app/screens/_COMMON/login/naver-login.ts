@@ -1,24 +1,29 @@
 import NaverLogin, { NaverLoginResponse, GetProfileResponse } from "@react-native-seoul/naver-login"
-import { naverServiceLogin } from "#api"
+import { checkUserExists } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
+import { GetKakaoProfileResult } from "./kakao-login"
 
+type GetNaverProfileResult = GetKakaoProfileResult
 /**
  * 네이버 프로필을 가져온다 - 이 함수는 네이버 로그인이 완료된 상태에서만 사용 가능하다.
  * @param logoutHandler MST userStore 의 action 이다
  *
  * @returns 성공여부와 이메일 || 성공여부와 실패사유
  */
-const getNaverProfile = async (token, logoutHandler): Promise<any> => {
+const getNaverProfile = async (token, logoutHandler): Promise<GetNaverProfileResult> => {
   try {
     const profile: GetProfileResponse = await NaverLogin.getProfile(token)
     console.log("profile >>>", JSON.stringify(profile))
 
     if (profile.message !== "success") {
-      return {
-        isSuccess: false,
-        reason: profile.message,
-      }
+      alertModal("네이버 프로필 가져오기 실패", `${profile.message}`)
+      return { isSuccess: false }
+    }
+
+    if (!profile.response.email) {
+      alertModal("네이버 프로필 가져오기 실패", `이메일 정보가 존재하지 않습니다.`)
+      return { isSuccess: false }
     }
 
     return {
@@ -28,12 +33,9 @@ const getNaverProfile = async (token, logoutHandler): Promise<any> => {
   } catch (err) {
     logoutHandler()
     console.error("getNaverProfile error", err)
-    alertModal("네이버 프로필 실패", err?.message)
+    alertModal("네이버 프로필 가져오기 실패", err?.message)
 
-    return {
-      isSuccess: false,
-      reason: err?.message,
-    }
+    return { isSuccess: false }
   }
 }
 
@@ -89,34 +91,28 @@ export const naverLogin = async (socialLoginHander, logoutHandler) => {
   const accessToken = await signInWithNaver()
   if (!accessToken) return
 
-  const { isSuccess, email, reason } = await getNaverProfile(accessToken, logoutHandler)
-  if (!isSuccess) return
+  const naverResult = await getNaverProfile(accessToken, logoutHandler)
+  if (!naverResult.isSuccess) return
 
-  //   const userToken = await naverServiceLogin({ idToken: accessToken })
-  const { isAlreadySignedUp, token, reason: reasonNaverServiceLogin } = await naverServiceLogin({
-    idToken: accessToken,
-  })
-  if (!isAlreadySignedUp) {
-    // 회원가입 진행
+  const result = await checkUserExists({ idToken: accessToken }, "naver")
+  if (!result.ok) return
+
+  // MST 로그인 진행
+  if (result.isUserExists) {
+    await socialLoginHander({
+      token: result.token,
+      provider: "naver",
+      email: naverResult.email,
+    })
+  }
+  // 회원가입 진행
+  else {
     navigate("terms-of-service-screen", {
-      email,
+      email: naverResult.email,
       provider: "naver",
       idToken: accessToken,
     })
-    return
   }
-
-  if (!token) {
-    alertModal("네이버 로그인 진행실패", `토큰값을 얻어내지 못했습니다. ${reasonNaverServiceLogin}`)
-    return
-  }
-
-  // MST 로그인 진행
-  await socialLoginHander({
-    token,
-    provider: "naver",
-    email,
-  })
 }
 
 // TODO: 나중에 사용될 함수들은 아래에다 작성해놓음 ==============================================================================================================

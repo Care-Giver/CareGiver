@@ -11,6 +11,15 @@ export interface PlaceHolderInputBoxProps {
   style?: StyleProp<ViewStyle>
 
   /**
+   * TextInput의 배경색을 지정합니다.
+   */
+  backgroundColor?: string
+
+  /**
+   * TextInput의 테두리색을 지정합니다.
+   */
+  borderColor?: string
+  /**
    * 입력하기 전에 연하게 적혀져 있는 Text를 props로 추가하여 사용할 수 있습니다.
    */
   placeholderText: string
@@ -30,7 +39,13 @@ export interface PlaceHolderInputBoxProps {
 export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   props: PlaceHolderInputBoxProps,
 ) {
-  const { style, placeholderText = "예시입니다.", boxHeight = 78 } = props
+  const {
+    style,
+    placeholderText = "예시입니다.",
+    boxHeight = 78,
+    backgroundColor = LBG,
+    borderColor = LBG,
+  } = props
   const text = props.text
   const setText = props.setText
   const allStyles = Object.assign({}, styles.root, style)
@@ -38,7 +53,10 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   return (
     <View style={allStyles}>
       <TextInput
-        style={[styles.input, { height: boxHeight }]}
+        style={[
+          styles.input,
+          { height: boxHeight, backgroundColor: backgroundColor, borderColor: borderColor },
+        ]}
         placeholder={placeholderText}
         multiline
         blurOnSubmit
@@ -64,8 +82,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderWidth: 1,
     opacity: 1,
-    borderColor: LBG,
-    backgroundColor: LBG,
+
     color: "black",
     fontFamily: PRETENDARD_REGULAR,
     fontSize: 14,

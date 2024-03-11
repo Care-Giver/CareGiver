@@ -155,7 +155,7 @@ export const TestIamportPaymentResultScreen: FC<
           // navigation.navigate("test-iamport-screen")
         }
       >
-        <PreReg18 text="결제하기" />
+        <PreBol16 text={`${isSuccess ? "처음" : "이전 "} 화면으로 돌아가기`} color="white" />
       </TouchableOpacity>
     </Screen>
   )

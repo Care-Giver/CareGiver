@@ -88,9 +88,11 @@ export const CaregiverDetailInformationScreen: FC<
         ? service.visiting.visitingAmenities
         : service.creche.crecheAmenities,
   }
+
   console.log("selectedTime 1", selectedTime)
   console.log("userId >>>", userDetail.id)
   console.log("visitingId >>>", service.visiting.id)
+
   const [post, setPost] = useState(null)
   const [comments, setComments] = useState<CommentColmns[]>([])
   /**

@@ -19,6 +19,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   Footer,
   FOOTER_CONTENT_GAP,
+  CautionModal,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {

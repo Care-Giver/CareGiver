@@ -3,7 +3,7 @@ import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
-import { Loading, CustomTabBar } from "#components"
+import { Loading, CustomTabBar, CautionModal } from "#components"
 import { GIVER_CASUAL_NAVY } from "../theme"
 import { Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
@@ -170,12 +170,14 @@ const AllTabs = observer(function AllTabs() {
     petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
+    uiStore: { hasCaution },
   } = useStores()
 
   useEffect(() => {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
     axios.defaults.headers.common.Accept = "Application/json"
+    axios.defaults.headers.common["Cache-Control"] = "no-cache"
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -204,6 +206,7 @@ const AllTabs = observer(function AllTabs() {
       {type === Type.CLIENT && <ClientTabs />}
       {type === Type.CARE_GIVER && <CareGiverTabs />}
       {onSwitchingType && <Loading text={"모드 전환중"} duration={1000} />}
+      {hasCaution ? <CautionModal /> : null}
     </>
   )
 })

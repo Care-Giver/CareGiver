@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { SettlementType } from "#screens"
 import { alertModal } from "../../utils/alert-modal"
+import { ServiceType } from "#models"
 
 export interface PaymentColumns {
   createAt: string // "2023-12-15T19:39:13.387Z"
@@ -61,6 +63,73 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
   }
 }
 
+export interface settlementDetail {
+  serviceType: ServiceType
+  start: string
+  end: string
+  isCanceled: boolean
+  settlementFee: number
+}
+export interface GetSettlementInput {
+  startDate: string
+  endDate: string
+}
+export interface GetSettlementResponse extends GeneralResponse {
+  totalSettlementFee: number
+  settlementDetails: settlementDetail[]
+}
+type GetSettlementResult =
+  | {
+      isSuccess: true // 성공
+      totalSettlementFee?: number // 성공시, 생성된 결제 객체의 id
+      settlementDetails: SettlementType[]
+    }
+  | {
+      isSuccess: false // 실패
+      reason?: string // 실패시, 실패이유
+    }
+
+export const getSettlement = async (body: GetSettlementInput): Promise<GetSettlementResult> => {
+  try {
+    const response = await axios.post<GetSettlementResponse>(`${BASE_URL}/payment/settlement`, body)
+
+    if (!response.data.ok) {
+      return {
+        isSuccess: false,
+        reason: response.data?.error,
+      }
+    }
+
+    //* 백엔드측 응답 형태 ui에 맞게 변환
+    // 정렬
+    const sortedSettlemtents = response.data.settlementDetails.sort((a, b) =>
+      a.start.localeCompare(b.start),
+    )
+    // date별로 그룹화
+    const groupedSettlements = sortedSettlemtents.reduce((acc, cur) => {
+      const categoryIndex = acc.findIndex((item) => item.date === cur.start)
+      if (categoryIndex === -1) {
+        acc.push({ date: cur.start, settlementDetails: [cur] })
+      } else {
+        acc[categoryIndex].settlementDetails.push(cur)
+      }
+      return acc
+    }, [])
+    //* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    return {
+      isSuccess: true,
+      totalSettlementFee: response.data.totalSettlementFee,
+      settlementDetails: groupedSettlements,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return {
+      isSuccess: false,
+      reason: error?.message,
+    }
+  }
+}
 /**
  * 주어진 id 에 해당하는 결제 객체를 불러옵니다.
  */
