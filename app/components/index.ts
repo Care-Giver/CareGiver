@@ -44,6 +44,7 @@ export * from "./_MODAL/custom-modal/custom-modal"
 export * from "./_MODAL/custom-input-modal/custom-input-modal"
 export * from "./_MODAL/weight-modal/weight-modal"
 export * from "./_MODAL/birthday-modal/birthday-modal"
+export * from "./_MODAL/caution-modal/caution-modal"
 
 // _SCREEN_HEADER
 export * from "./_SCREEN_HEADER/all-comments-screen-header/all-comments-screen-header"

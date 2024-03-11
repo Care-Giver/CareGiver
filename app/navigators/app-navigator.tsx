@@ -3,7 +3,7 @@ import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
-import { Loading, CustomTabBar } from "#components"
+import { Loading, CustomTabBar, CautionModal } from "#components"
 import { GIVER_CASUAL_NAVY } from "../theme"
 import { Type, useStores } from "../models"
 import { observer } from "mobx-react-lite"
@@ -170,6 +170,7 @@ const AllTabs = observer(function AllTabs() {
     petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
+    uiStore: { hasCaution },
   } = useStores()
 
   useEffect(() => {
@@ -205,6 +206,7 @@ const AllTabs = observer(function AllTabs() {
       {type === Type.CLIENT && <ClientTabs />}
       {type === Type.CARE_GIVER && <CareGiverTabs />}
       {onSwitchingType && <Loading text={"모드 전환중"} duration={1000} />}
+      {hasCaution ? <CautionModal /> : null}
     </>
   )
 })
