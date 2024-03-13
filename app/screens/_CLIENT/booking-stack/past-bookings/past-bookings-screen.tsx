@@ -6,6 +6,7 @@ import { NavigatorParamList } from "../../../../navigators"
 import { PastBooking, Screen } from "../../../../components"
 import { PreviousBookingParams, getPreviousBookings } from "../../../../services/api"
 import { useFocusEffect } from "@react-navigation/native"
+import { useStores } from "#models"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -16,15 +17,21 @@ export const PastBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "past-bookings-screen">
 > = observer(function PastBookingsScreen({ route, navigation }) {
   const [previousBookings, setPreviousBookings] = useState<PreviousBookingParams[]>([])
-
+  const {
+    reviewStoreModel: { reviews },
+  } = useStores()
   // * 찜 버튼을 누를 시 강제로 화면 전체를 리렌더링하기 위한 함수
   const forceUpdate = useCallback(() => {
     navigation.setParams(undefined)
   }, [])
 
   const fetchBookings = useCallback(async () => {
-    getPreviousBookings()
+    console.log("focused!! - 2")
+
+    await getPreviousBookings()
       .then((res) => {
+        console.log("focused!! - 3")
+
         const previousBookings: PreviousBookingParams[] = []
         res.forEach((booking, index) => {
           const type = booking.crecheId ? "creche" : "visiting"
@@ -49,13 +56,18 @@ export const PastBookingsScreen: FC<
           })
         })
         setPreviousBookings(previousBookings)
+        console.log("focused!! - 4")
       })
       .catch((err) => console.log("[past bookings screen] get previous bookings error >>>", err))
   }, [])
 
-  useLayoutEffect(() => {
-    fetchBookings()
-  }, [route.params])
+  useFocusEffect(
+    useCallback(() => {
+      console.log("focused!! - 1")
+      fetchBookings()
+      console.log("focused!! - 5")
+    }, [reviews]),
+  )
 
   return (
     <Screen testID="PastBookings">

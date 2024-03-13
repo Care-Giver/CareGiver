@@ -29,6 +29,8 @@ import {
   getFirstPreviousBooking,
   getMyWaitingBookings,
 } from "../../../../services/api"
+import { useStores } from "#models"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -65,21 +67,23 @@ export const AllBookingsScreen: FC<
    */
   const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>()
 
-  useLayoutEffect(() => {
-    getCurrentBookings()
-      .then((res) => setCurrentBookings(res))
-      .catch((err) => console.log("[all bookings screen] get current bookings error >>>", err))
+  useFocusEffect(
+    useCallback(() => {
+      getCurrentBookings()
+        .then((res) => setCurrentBookings(res))
+        .catch((err) => console.log("[all bookings screen] get current bookings error >>>", err))
 
-    getFirstPreviousBooking()
-      .then((res) => {
-        setFirstPreviousBooking(res)
+      getFirstPreviousBooking()
+        .then((res) => {
+          setFirstPreviousBooking(res)
+        })
+        .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
+
+      getMyWaitingBookings().then(({ waitingBookings }) => {
+        setWaitingBookings(waitingBookings)
       })
-      .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
-
-    getMyWaitingBookings().then(({ waitingBookings }) => {
-      setWaitingBookings(waitingBookings)
-    })
-  }, [])
+    }, []),
+  )
 
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
