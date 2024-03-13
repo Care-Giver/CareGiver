@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useState } from "react"
+import React, { FC, useEffect, useLayoutEffect, useState } from "react"
 import { FlatList, View } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
@@ -7,17 +7,21 @@ import { DivisionLine, Screen, ReviewBox, FilterHeader } from "../../../../compo
 import { reviews as _reviews } from "./dummy-data"
 import { LBG } from "../../../../theme"
 import { alertModal } from "../../../../utils/alert-modal"
+import { Review, getVisitingReviews } from "#api"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
+  const visitingId = route.params.visitingId
   // ? 리뷰 리스트
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState<Review[]>([])
   // ? 선택된 정렬 옵션
   const [seletedOption, setSelectedOption] = useState("최신순")
 
-  useLayoutEffect(() => {
-    setReviews(_reviews)
+  useEffect(() => {
+    getVisitingReviews(visitingId).then((res) => {
+      if (res.isSuccess) setReviews(res.visitingReviews)
+    })
   }, [])
 
   return (

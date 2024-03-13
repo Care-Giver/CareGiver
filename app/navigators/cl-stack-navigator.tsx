@@ -163,7 +163,7 @@ export type CLStackNavigatorParamList = {
     destination: string
   }
 
-  "all-reviews-screen": undefined
+  "all-reviews-screen": { visitingId: number }
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": undefined
   "writing-comment-screen": undefined

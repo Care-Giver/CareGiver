@@ -112,12 +112,15 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[] | []> 
  * @param params 방문 리뷰를 post하기 위해 필요한 params
  * @returns post 성공 | 실패 여부
  */
-export const postVisitingReview = async (params: PostReviewParams): Promise<boolean> => {
+export const postVisitingReview = async (
+  userId: number,
+  params: PostReviewParams,
+): Promise<boolean> => {
   // ! undefined 추가 안할 시 에러 뜸 ... 왜?
   try {
     // * 서버에 이미지를 upload 하는 과정
     const postParams: PostReviewToServerParams = {
-      userId: USER_ID,
+      userId: userId,
       ...params,
       images: [],
     }
@@ -135,10 +138,18 @@ export const postVisitingReview = async (params: PostReviewParams): Promise<bool
       if (response.data.ok) {
         return true
       }
+      alertModal(
+        "리뷰 작성에 실패했습니다.",
+        "알 수 없는 이유로 리뷰 작성에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+      )
     }
-    throw new Error("[PostVisitingReview] image upload | review post 과정 오류")
+    return false
   } catch (error) {
     console.error("[review axios] >>>", error)
+    alertModal(
+      "리뷰 작성에 실패했습니다. (axios)",
+      "알 수 없는 이유로 리뷰 작성에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+    )
     return false
   }
 }
@@ -225,5 +236,47 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
   } catch (error) {
     console.error("[getCrecheReview] catch error >>>", error)
     return null
+  }
+}
+
+interface GetVisitingReviewsResponse extends GeneralResponse {
+  visitingReviews: Review[]
+}
+
+type getVisitingReviewsResult =
+  | {
+      isSuccess: true
+      visitingReviews: Review[]
+    }
+  | {
+      isSuccess: false
+    }
+
+/**
+ * 특정 방문 서비스의 모든 리뷰를 불러온다.
+ */
+export const getVisitingReviews = async (visitingId: number): Promise<getVisitingReviewsResult> => {
+  // ! undefined 추가 안할 시 에러 뜸 ... 왜?
+  try {
+    const response = await axios.get<GetVisitingReviewsResponse>(
+      `${BASE_URL}/visiting-review/visiting/${visitingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        "리뷰 조회 실패했습니다.",
+        "알 수 없는 이유로 리뷰 조회에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+      )
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true, visitingReviews: response.data.visitingReviews }
+  } catch (error) {
+    console.error("[review axios] >>>", error)
+    alertModal(
+      "리뷰 조회에 실패했습니다. (axios)",
+      "알 수 없는 이유로 리뷰 조회에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+    )
+    return { isSuccess: false }
   }
 }

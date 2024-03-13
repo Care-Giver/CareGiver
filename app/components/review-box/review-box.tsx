@@ -15,22 +15,13 @@ import { RatingStars } from "./rating-stars/rating-stars"
 import { MIDDLE_LINE, DISABLED } from "../../theme"
 import { PetInfoDropdownBox } from "../_DROPDOWN_BOX/pet-info-dropdown-box/pet-info-dropdown-box"
 import { styles } from "./styles"
-import { Pet } from "#api"
+import { Pet, Review } from "#api"
 import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
 
 interface ReviewBoxProps {
   style?: StyleProp<ViewStyle>
-  //TODO: 이미지 url 주소로 넘겨받는 것 맞겠지..?
-  profileImg: string
-  userName: string
-  ratings: number
-  createdAt: Date
-  images: Array<string>
-  review: string
-  pets: Array<Pet>
-
-  reviewData: any // TODO
+  reviewData: Review
 }
 
 export const ReviewBox = (props: ReviewBoxProps) => {
@@ -44,21 +35,17 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const { style: viewStyle, reviewData } = props
 
   // ? 리뷰 정보
-  const { user, ratings, createdAt, review, pets } = reviewData
-  const userName = user.name
-  const profileImg = user.profileImg ? user.profileImg : images.profile_default
+  const { id, createAt, desc, star } = reviewData
+  // const userName = user.name
+  // const profileImg = user.profileImg ? user.profileImg : images.profile_default
   const reviewImages = reviewData?.images || []
 
-  const date = formatDate(createdAt)
+  const date = formatDate(new Date(createAt))
 
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 
   const handlePress = () => {
     alertModal("개발중 🏗️", "후기 펫정보는 (더미) 데이터에서 제공되지 않습니다.")
-    return
-
-    setDropdownIsOpen(!dropdownIsOpen)
-    LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
   }
 
   return (
@@ -71,10 +58,10 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       >
         <View style={styles.profileContainer}>
           {/* //? 프로필 사진 */}
-          <Image source={profileImg} style={styles.profileImg} />
+          <Image source={images.profile_default} style={styles.profileImg} />
           {/* //? 사용자 이름 */}
           <PreReg14
-            text={userName}
+            text={"userName"}
             style={{
               marginLeft: 8,
             }}
@@ -103,7 +90,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
         }}
       >
         {/* //? 평점 */}
-        <RatingStars ratings={ratings} key={Math.random()} />
+        <RatingStars ratings={star} key={Math.random()} />
         {/* //? vertical divider */}
         <PreReg12 text="|" color={MIDDLE_LINE} style={{ marginHorizontal: 4 }} />
         {/* //? 날짜 */}
@@ -134,15 +121,15 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       )}
 
       {/* //* 리뷰 내용 */}
-      <PreReg14 text={review} />
+      <PreReg14 text={desc} />
 
       {/* //* 펫 정보 */}
-      <PetInfoDropdownBox
+      {/* <PetInfoDropdownBox
         isOpen={dropdownIsOpen}
         onPress={handlePress}
         pets={pets}
         style={{ marginTop: 20 }}
-      />
+      /> */}
     </View>
   )
 }

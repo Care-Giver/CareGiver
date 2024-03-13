@@ -185,7 +185,7 @@ export const CaregiverDetailInformationScreen: FC<
               //? 후기 전체보기 화면으로 이동
               // TODO: params 값 추가해줘야 함
               // TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기
-              // navigate("all-reviews-screen", null)
+              navigate("all-reviews-screen", { visitingId: service.visiting.id })
             }}
             text={`후기 ${reviewCount}개`}
           />
