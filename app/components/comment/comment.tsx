@@ -6,10 +6,8 @@ import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
 import { DivisionLine } from "../_BASIC/division-line/division-line"
-import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
-import { CommentColmns } from "#api"
-import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
+import { CommentColumns } from "#api"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 /* @Entity()
@@ -52,7 +50,7 @@ export class PetSitterReview extends CoreEntity {
 interface CommentProps {
   style?: any
   numberOfLines?: number
-  commentData: CommentColmns
+  commentData: CommentColumns
   bottomSheetModalRef: React.MutableRefObject<BottomSheetModalMethods>
   userId: number
   setIsUserComment: Dispatch<SetStateAction<boolean>>
@@ -90,7 +88,6 @@ export const Comment = forwardRef((props: CommentProps) => {
 
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: 12 }}>
-        {/* //TODO 백엔드측 대응 후 이미지, 닉네임 교체 필요 */}
         <Image
           source={{
             uri: __commentator__.profileImage || images.profile_default,
@@ -104,8 +101,7 @@ export const Comment = forwardRef((props: CommentProps) => {
           onPress={() => {
             //TODO 유저 id에 따라 수정 및 답글 기능 추가
             //alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
-            if (userId === __commentator__.id) setIsUserComment(true)
-            if (userId !== __commentator__.id) setIsUserComment(false)
+            setIsUserComment(userId === __commentator__.id)
             setSelectedCommentId(id)
             setSelectedComment(desc)
             bottomSheetModalRef.current.present()

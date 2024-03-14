@@ -54,7 +54,7 @@ export const WritingCommentScreen: FC<
   //* textInput 안의 입력되는 댓글 저장용
   const [comment, setComment] = useState<string>(defaultComment || "")
   //*입력된 댓글의 단어 수 세는 변수
-  const [wordLength, setWordLength] = useState<number>(0)
+  const wordLength = comment.length
   //*키보드
   const keyboard = useKeyboard()
 
@@ -137,33 +137,27 @@ export const WritingCommentScreen: FC<
     }
   }
   const onPressSubmit = async () => {
+    let response
     //* 해당 스크린으로 들어온 경로(수정 or 작성)에따라 기능을 달리합니다.
     //TODO 네비게이션 메서드,,
     if (updateOrCreate === "create") {
-      const response = await createVisitingComment({
+      response = await createVisitingComment({
         userId: userDetail.id,
         visitingId: visitingId,
         desc: comment,
         isPrivate: false,
       })
-      response.isSuccess && navigation.pop(2)
-
-      // 선 결론: alertModal 의 "위치" 를 바꿔야 함.
-      //  1. 왜? -> 소프트웨어 디자인 패턴: 케어기버 프로젝트는 "MVP" / (진실... "MVVM" 을 완전히 벗어날 순 없다.) ... MVC...
-      //          Presenter vs. ViewModel
-      //  2. 어떻게?
+    } else if (updateOrCreate === "update") {
+      response = await updateVisitingComment(commentId, { desc: comment, isPrivate: false })
     }
-    if (updateOrCreate === "update") {
-      const response = await updateVisitingComment(commentId, { desc: comment, isPrivate: false })
-      response.isSuccess && navigation.pop(2)
-    }
+    response.isSuccess && navigation.pop(2)
   }
   return (
     <Screen preset="fixed">
       <WritingCommentScreenHeader
         title={"댓글 작성"}
         onPress={onPressSubmit}
-        wordsCount={wordLength}
+        ableToRegister={wordLength > 0}
       />
       {/*//*댓글 입력할 수 있는 textInput box */}
       <TextInput
@@ -191,7 +185,6 @@ export const WritingCommentScreen: FC<
         //*사용자가 댓글 입력시 입력 내용 저장, 입력 길이 계산
         onChangeText={(texts) => {
           setComment(texts)
-          setWordLength(texts.length)
         }}
         value={comment}
       />
@@ -217,7 +210,7 @@ export const WritingCommentScreen: FC<
 
 interface WritingCommentScreenHeaderProps {
   onPress?: () => void
-  wordsCount?: number
+  ableToRegister?: boolean
   title: string
 }
 /**
@@ -225,9 +218,7 @@ interface WritingCommentScreenHeaderProps {
  * 상단에 뒤로가기 이미지 버튼과 "저장 후 나가기" 버튼을 렌더링 합니다.
  */
 export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProps) => {
-  const { onPress, wordsCount, title } = props
-
-  const ableToRegister = wordsCount || 0
+  const { onPress, ableToRegister, title } = props
 
   return (
     <View style={[HEADER_ROOT, { justifyContent: "space-between" }]}>
@@ -241,7 +232,7 @@ export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProp
       </Pressable>
 
       {/* //* 타이틀 */}
-      <PreMed20 style={{ marginLeft: 8 }}> {title}</PreMed20>
+      <PreMed20 ml={8}> {title}</PreMed20>
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
       <Pressable
         onPress={onPress}
@@ -250,7 +241,7 @@ export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProp
           marginRight: 16,
         }}
       >
-        <PreBol16 color={ableToRegister > 0 ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
+        <PreBol16 color={ableToRegister ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
       </Pressable>
     </View>
   )

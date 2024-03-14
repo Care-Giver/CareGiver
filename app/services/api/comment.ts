@@ -67,7 +67,7 @@ export interface CommentatorType {
   nickname: string
   profileImage: string
 }
-export interface CommentColmns {
+export interface CommentColumns {
   id: number
   createAt: string
   updatedAt: string
@@ -81,32 +81,33 @@ export interface CommentColmns {
   __commentator__: CommentatorType
 }
 interface GetCommentsResponse extends GeneralResponse {
-  visitingComments: CommentColmns[]
+  visitingComments: CommentColumns[]
   totalpages: number
   totalItems: number
 }
 
-type GetCommentsInputResult =
+type GetCommentsResult =
   | {
       isSuccess: true // 성공
-      visitingComments?: CommentColmns[]
+      visitingComments?: CommentColumns[]
       totalpages?: number
       totalItems?: number
     }
   | {
       isSuccess: false // 실패
-      reason?: string // 실패시, 실패이유
+      visitingComments?: []
     }
-export const getVisitingComments = async (visitingId: number): Promise<GetCommentsInputResult> => {
+export const getVisitingComments = async (visitingId: number): Promise<GetCommentsResult> => {
   try {
     const response = await axios.get<GetCommentsResponse>(
       `${BASE_URL}/comment/visiting/${visitingId}`,
     )
 
     if (!response.data.ok) {
+      alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
       return {
         isSuccess: false,
-        reason: response.data?.error.message,
+        visitingComments: [],
       }
     }
 
@@ -116,9 +117,10 @@ export const getVisitingComments = async (visitingId: number): Promise<GetCommen
     }
   } catch (error) {
     console.error("catch 에러!!!", error)
+    alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
+
     return {
       isSuccess: false,
-      reason: error?.message,
     }
   }
 }
@@ -129,9 +131,7 @@ export interface UpdateVisitingCommentInput {
   isPrivate: false
 }
 
-export type UpdateVisitingCommentResult =
-  | { isSuccess: true }
-  | { isSuccess: false; reason?: string }
+export type UpdateVisitingCommentResult = { isSuccess: true } | { isSuccess: false }
 export const updateVisitingComment = async (
   id: number,
   body: UpdateVisitingCommentInput,
@@ -139,9 +139,10 @@ export const updateVisitingComment = async (
   try {
     const response = await axios.patch<GeneralResponse>(`${BASE_URL}/comment/visiting/${id}`, body)
     if (!response.data.ok) {
+      alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
+
       return {
         isSuccess: false,
-        reason: response.data?.error.message,
       }
     }
 
@@ -149,10 +150,10 @@ export const updateVisitingComment = async (
       isSuccess: true,
     }
   } catch (error) {
+    alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
     console.error("catch 에러!!!", error)
     return {
       isSuccess: false,
-      reason: error?.message,
     }
   }
 }

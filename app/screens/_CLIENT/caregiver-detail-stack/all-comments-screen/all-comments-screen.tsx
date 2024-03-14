@@ -1,4 +1,12 @@
-import { FlatList, Image, Platform, Pressable, StyleSheet, View } from "react-native"
+import {
+  FlatList,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack, navigate } from "#navigators"
@@ -12,7 +20,6 @@ import {
   PreMed16,
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
-import { allComments } from "./dummy-data"
 import { DEVICE_SCREEN_WIDTH, IOS_BOTTOM_HOME_BAR_HEIGHT, LBG } from "#theme"
 import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
@@ -50,17 +57,15 @@ export const AllCommentsScreen: FC<
     [],
   )
   const onPressCommentOption = () => {
-    if (isUserComment) {
-      bottomSheetModalRef.current.close()
-      navigate("writing-comment-screen", {
-        updateOrCreate: "update",
-        commentId: selectedCommentId,
-        defaultComment: selectedComment,
-      })
-    }
     if (!isUserComment) {
       alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
     }
+    bottomSheetModalRef.current.close()
+    navigate("writing-comment-screen", {
+      updateOrCreate: "update",
+      commentId: selectedCommentId,
+      defaultComment: selectedComment,
+    })
   }
 
   return (
@@ -159,8 +164,9 @@ export const AllCommentsScreenHeader = (props: AllCommentsScreenHeaderProps) => 
       </Pressable>
 
       {/* //*  댓글 작성 */}
-      <Pressable
+      <TouchableOpacity
         style={{ marginLeft: 12, marginRight: 16 }}
+        hitSlop={4}
         onPress={() => {
           // props.navigation.goBack()
           // alert("댓글 작성으로 이동")
@@ -168,7 +174,7 @@ export const AllCommentsScreenHeader = (props: AllCommentsScreenHeaderProps) => 
         }}
       >
         <Image style={styles.writeComment} source={images.write_comment} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   )
 }

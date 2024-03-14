@@ -47,7 +47,6 @@ import {
   STANDARD_WIDTH,
   BOTTOM_HEIGHT,
 } from "../../../../theme"
-import { commentsDummy } from "../all-comments-screen/dummy-data"
 import { delay } from "../../../../utils/delay"
 import {
   CommentColmns,
@@ -61,7 +60,7 @@ import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { useFocusEffect } from "@react-navigation/native"
-import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -164,9 +163,7 @@ export const CaregiverDetailInformationScreen: FC<
   useFocusEffect(
     useCallback(() => {
       getVisitingComments(service.visiting.id).then((res) => {
-        if (res.isSuccess === true) {
-          setComments(res.visitingComments)
-        }
+        setComments(res.visitingComments)
       })
     }, []),
   )
