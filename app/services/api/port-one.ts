@@ -154,12 +154,10 @@ export const verifyBankHolder = async (body: VerifyBankHolderRequestBody): Promi
       `${BASE_URL}/payment/bank-verification`,
       body,
     )
-    console.log("🔷 response", JSON.stringify(response.data))
     if (!response.data.ok) {
       alertModal(`예금주 인증에 실패했습니다.`, `${response.data.error.message}`)
       return false
     }
-
     return true
   } catch (error) {
     alertModal(`예금주 인증에 실패했습니다.`, `catch: ${error?.message}`)
