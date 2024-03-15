@@ -228,7 +228,8 @@ export const CgRequestEarningScreen: FC<
                 boxHeight={48}
                 placeholderText="계좌번호를 입력해주세요."
                 text={accountNum}
-                setText={setAccountNum}
+                setText={(text: string) => setAccountNum(text.replace(/[^0-9]/g, ""))} //! 숫자만 입력
+                keyboardType="number-pad"
               />
               <PlaceHolderInputBox
                 backgroundColor="white"
