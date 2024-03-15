@@ -18,10 +18,11 @@ import { styles } from "./styles"
 import { Pet, Review } from "#api"
 import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
+import { visitingReview } from "../../services/api"
 
 interface ReviewBoxProps {
   style?: StyleProp<ViewStyle>
-  reviewData: Review
+  reviewData: visitingReview
 }
 
 export const ReviewBox = (props: ReviewBoxProps) => {
@@ -35,7 +36,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const { style: viewStyle, reviewData } = props
 
   // ? 리뷰 정보
-  const { id, createAt, desc, star } = reviewData
+  const { id, createAt, desc, star, __visitingBooking__, __user__ } = reviewData
   // const userName = user.name
   // const profileImg = user.profileImg ? user.profileImg : images.profile_default
   const reviewImages = reviewData?.images || []
@@ -45,9 +46,9 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 
   const handlePress = () => {
-    alertModal("개발중 🏗️", "후기 펫정보는 (더미) 데이터에서 제공되지 않습니다.")
+    setDropdownIsOpen(!dropdownIsOpen)
   }
-
+  console.log(__visitingBooking__.__pets__)
   return (
     <View style={[styles.root, viewStyle]}>
       {/* //* 유저 프로필 + 더보기 버튼 */}
@@ -58,10 +59,13 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       >
         <View style={styles.profileContainer}>
           {/* //? 프로필 사진 */}
-          <Image source={images.profile_default} style={styles.profileImg} />
+          <Image
+            source={__user__.profileImage || images.profile_default}
+            style={styles.profileImg}
+          />
           {/* //? 사용자 이름 */}
           <PreReg14
-            text={"userName"}
+            text={__user__.nickname}
             style={{
               marginLeft: 8,
             }}
@@ -124,12 +128,12 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       <PreReg14 text={desc} />
 
       {/* //* 펫 정보 */}
-      {/* <PetInfoDropdownBox
+      <PetInfoDropdownBox
         isOpen={dropdownIsOpen}
         onPress={handlePress}
-        pets={pets}
+        pets={__visitingBooking__.__pets__}
         style={{ marginTop: 20 }}
-      /> */}
+      />
     </View>
   )
 }

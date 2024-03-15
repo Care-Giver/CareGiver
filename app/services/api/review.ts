@@ -4,6 +4,7 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
 import { ratingRound } from "../../utils/format"
 import { alertModal } from "../../utils/alert-modal"
+import { Pet } from "./pets"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
@@ -239,14 +240,35 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
   }
 }
 
+export interface visitingReview extends Review {
+  __visitingBooking__: {
+    id: number
+    createAt: string
+    updatedAt: string
+    status: string
+    reviewStatus: string
+    destination: string
+    visitingId: number
+    request: string
+    petToolsLocInfo: string
+    avoidFoodInfo: string
+    bondingTipsInfo: string
+    __pets__: Array<Omit<Pet, "species">>
+  }
+  __user__: {
+    id: number
+    nickname: string
+    profileImage: string
+  }
+}
 interface GetVisitingReviewsResponse extends GeneralResponse {
-  visitingReviews: Review[]
+  visitingReviews: visitingReview[]
 }
 
 type getVisitingReviewsResult =
   | {
       isSuccess: true
-      visitingReviews: Review[]
+      visitingReviews: visitingReview[]
     }
   | {
       isSuccess: false

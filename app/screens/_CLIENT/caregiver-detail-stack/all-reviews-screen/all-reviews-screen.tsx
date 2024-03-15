@@ -8,13 +8,14 @@ import { reviews as _reviews } from "./dummy-data"
 import { LBG } from "../../../../theme"
 import { alertModal } from "../../../../utils/alert-modal"
 import { Review, getVisitingReviews } from "#api"
+import { visitingReview } from "../../../../services/api"
 
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
   const visitingId = route.params.visitingId
-  // ? 리뷰 리스트
-  const [reviews, setReviews] = useState<Review[]>([])
+  //TODO MVP단계 한정 방문리뷰만을 다룹니다
+  const [reviews, setReviews] = useState<visitingReview[]>([])
   // ? 선택된 정렬 옵션
   const [seletedOption, setSelectedOption] = useState("최신순")
 
