@@ -59,6 +59,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
           { height: boxHeight, backgroundColor: backgroundColor, borderColor: borderColor },
         ]}
         placeholder={placeholderText}
+        placeholderTextColor={DISABLED}
         multiline
         blurOnSubmit
         maxLength={300}
@@ -77,7 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    placeholderTextColor: DISABLED,
     width: "100%",
     borderRadius: 8,
     paddingTop: 15,
