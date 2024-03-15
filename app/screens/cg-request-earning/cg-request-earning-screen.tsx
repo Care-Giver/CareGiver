@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
-import { Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import React, { FC, useState } from "react"
+import { Image, Linking, Pressable, ScrollView, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -11,13 +11,10 @@ import {
   PaymentList,
   PlaceHolderInputBox,
   PopSem24,
-  PreBol14,
   PreBol16,
   PreBol20,
-  PreMed12,
   PreMed14,
   PreMed16,
-  PreReg14,
   PreReg16,
   RegistrationNoticeNote,
   Row,
@@ -29,35 +26,25 @@ import {
   BODY,
   BOTTOM_HEIGHT,
   CARE_NATURAL_BLUE,
-  DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
   LBG,
   LIGHT_LINE,
 } from "#theme"
 import { images } from "#images"
-import { l } from "i18n-js"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { 외부링크 } from "../../services/external-web-link"
-import { ScrollToBottomButton } from "stream-chat-react-native"
-import { bookings } from "./dummy"
-import { GetSettlementResponse, getSettlement, settlementDetail } from "../../services/api/payment"
-import axios from "axios"
+import { getSettlement, settlementDetail } from "../../services/api/payment"
 import { useStores } from "#models"
 import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
-import { verifyBankHolder } from "../../services/api/port-one"
+import { verifyBankHolder } from "#api"
 import { bankCodeList } from "./constant"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
 
 export type SettlementType = {
   date: string
   settlementDetails: settlementDetail[]
 }
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
+
 export const CgRequestEarningScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-request-earning-screen">
 > = observer(function CgRequestEarningScreen({ navigation }) {
