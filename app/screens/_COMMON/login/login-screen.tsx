@@ -1,5 +1,13 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
-import { Image, Platform, StyleSheet, View, ViewStyle } from "react-native"
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+  ViewStyle,
+  Pressable,
+  ActivityIndicator,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -16,6 +24,7 @@ import {
 import {
   BODY,
   BOTTOM_HEIGHT,
+  DEVICE_WINDOW_HEIGHT,
   DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
@@ -42,8 +51,9 @@ import {
 } from "@gorhom/bottom-sheet"
 
 const PASSWORD_PASSKEY = "caregiver123"
-
 const isIOS = Platform.OS === "ios"
+const SHOW_APPLE_LOGIN = false
+const isShownAppleLogin = isIOS && SHOW_APPLE_LOGIN
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
   function LoginScreen() {
@@ -55,6 +65,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       email: null,
       password: null,
     })
+    const [isPasswordHidden, setIsPasswordHidden] = useState(true)
+    const [onLoggingIn, setOnLoggingIn] = useState(false)
 
     const googleLogin = async () => {
       //
@@ -88,7 +100,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
     // 이메일 로그인 바텀시트모달 - snapPoints
-    const snapPoints = useMemo(() => ["40%", "80%"], [])
+    const snapPoints = useMemo(() => ["50%", "80%"], [])
 
     /** 이메일 로그인 바텀시트모달 backdrop */
     const renderBackdrop = useCallback(
@@ -128,7 +140,10 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                   _provider = "naver"
                   break
               }
-              noAuthLogin({ email: emailAuth.email, provider: _provider })
+              setOnLoggingIn(true)
+              noAuthLogin({ email: emailAuth.email, provider: _provider }).finally(() =>
+                setOnLoggingIn(false),
+              )
               bottomSheetModalRef.current?.close()
               //
             }}
@@ -138,9 +153,16 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       [emailAuth.email, emailAuth.password, noAuthLogin],
     )
     // 이메일 로그인 바텀시트모달 ENDED =======================================================
-
     return (
       <Screen testID="Login" type="View">
+        {onLoggingIn ? (
+          <ActivityIndicator
+            size={"large"}
+            color={GIVER_CASUAL_NAVY}
+            style={{ position: "absolute", left: 0, right: 0, top: DEVICE_WINDOW_HEIGHT / 2 }}
+          />
+        ) : null}
+
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
@@ -148,10 +170,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         </View>
 
         <View style={buttonBox}>
-          {isIOS && (
+          {isShownAppleLogin && (
             <Button
               onPress={() => {
-                appleLogin(socialLoginHander, logoutHandler)
+                setOnLoggingIn(true)
+                appleLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
               }}
               style={styles.appleGoogleLogin}
             >
@@ -159,9 +182,11 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
               <PreMed18 text="Apple로 로그인" color={palette.black} />
             </Button>
           )}
+
           <Button
             onPress={() => {
-              naverLogin(socialLoginHander, logoutHandler)
+              setOnLoggingIn(true)
+              naverLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
             }}
             style={styles.naverLogin}
           >
@@ -170,7 +195,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           </Button>
           <Button
             onPress={() => {
-              kakaoLogin(socialLoginHander, logoutHandler)
+              setOnLoggingIn(true)
+              kakaoLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
             }}
             style={styles.kakaoLogin}
           >
@@ -186,7 +212,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             onPress={() => {
               bottomSheetModalRef.current.present()
             }}
-            style={[styles.noAuthLogin, { bottom: 300 }]}
+            style={[styles.noAuthLogin, { bottom: 200 }]}
           >
             <PreMed18 text="이메일 로그인" color={palette.white} />
           </Button>
@@ -285,7 +311,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                   }))
                 }}
                 value={emailAuth.password}
-                secureTextEntry
+                secureTextEntry={isPasswordHidden}
                 placeholder={"*********"}
                 placeholderTextColor={DISABLED}
                 underlineColorAndroid={color.transparent}
@@ -294,6 +320,17 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                 style={{ flex: 1 }}
                 autoCapitalize="none"
               />
+              <Pressable
+                onPress={() => {
+                  setIsPasswordHidden(!isPasswordHidden)
+                }}
+                style={{ alignSelf: "center" }}
+              >
+                <Image
+                  source={isPasswordHidden ? images.password_hide : images.password_show}
+                  style={{ width: 24, height: 24 }}
+                />
+              </Pressable>
             </View>
           </View>
         </BottomSheetModal>
@@ -316,7 +353,7 @@ const button: ViewStyle = {
 
 const buttonBox: ViewStyle = {
   justifyContent: "space-around",
-  height: (BUTTON_HEIGHT + 20) * (isIOS ? 3 : 2),
+  height: (BUTTON_HEIGHT + 20) * (isShownAppleLogin ? 3 : 2),
   // position: "absolute",
   // bottom: BOTTOM_HEIGHT,
   // left: BASIC_BACKGROUND_PADDING_WIDTH,

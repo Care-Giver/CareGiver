@@ -1,4 +1,4 @@
-import { Api } from "#LEGACY_api"
+// import { Api } from "#LEGACY_api"
 import { Instance, SnapshotOut, types, IStateTreeNode, SnapshotIn } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 
@@ -47,10 +47,10 @@ export const SpeciesStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     async setSpecies() {
-      const api = new Api()
-      api.setup()
-      const formattedData = await api.getSpeciesNames()
-      self.species = formattedData
+      // const api = new Api()
+      // api.setup()
+      // const formattedData = await api.getSpeciesNames()
+      // self.species = formattedDatar
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

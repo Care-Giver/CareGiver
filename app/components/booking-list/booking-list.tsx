@@ -1,11 +1,10 @@
-import React, { useMemo, useRef } from "react"
-import { StyleProp, ViewStyle, View, FlatList, Image } from "react-native"
+import React, { useRef } from "react"
+import { StyleProp, ViewStyle, View, FlatList, Image, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
-import { BOTTOM_HEIGHT, BOTTOM_TAB_NAVIGATOR, GIVER_CASUAL_NAVY } from "#theme"
+import { DEVICE_WINDOW_HEIGHT, HEIGHT } from "#theme"
 import { BookingInfoCard } from "../booking-info-card/booking-info-card"
-import { PreBol16, PreMed18, PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
-import { CgBooking, ConfirmedBooking } from "#api"
-import { DateData, DayState } from "react-native-calendars/src/types"
+import { PreBol16, PreMed18 } from "../_BASIC/custom-texts/custom-texts"
+import { CgBooking } from "#api"
 import { BOTTOM_TAB_BAR_HEIGHT } from "../_BOTTOM_TAB_BAR/custom-tab-bar/custom-tab-bar"
 import { images } from "#images"
 
@@ -35,9 +34,9 @@ export const BookingList = observer(function BookingList(props: BookingListProps
     //setSelected(date.dateString)
   }
 
-  console.log("bookings", bookings)
+  // console.log("bookings", bookings)
 
-  const allStyles = Object.assign({}, { flex: 1, width: "100%", height: "100%" }, style)
+  const allStyles = Object.assign({}, styles.root, style)
 
   return (
     <FlatList
@@ -78,12 +77,23 @@ export const BookingList = observer(function BookingList(props: BookingListProps
               </View> */}
 
             {/* 예약 요약 카드 */}
-            <BookingInfoCard style={{ marginVertical: 8 }} booking={item} visOrCre={visOrCre} />
+            <BookingInfoCard
+              style={{ marginVertical: 8, marginTop: index === 0 ? 0 : 8 }}
+              booking={item}
+              visOrCre={visOrCre}
+            />
           </View>
         )
       }}
       ListEmptyComponent={() => (
-        <View style={{ alignSelf: "center", alignItems: "center" }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: (DEVICE_WINDOW_HEIGHT - BOTTOM_TAB_BAR_HEIGHT - 200) * HEIGHT,
+          }}
+        >
           <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
           <PreMed18 text={`진행 중 이거나 완료한 예약이 없습니다`} />
         </View>
@@ -92,75 +102,6 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   )
 })
 
-// TODO: 월 일 달력 UI 구현시 CustomDayComponent 를 일 UI 구현때 사용할 것
-interface CustomDayComponentProps {
-  date: string & DateData
-  state: DayState
-  selected: any
-}
-const CustomDayComponent = observer(
-  function CustomDayComponent(props: CustomDayComponentProps) {
-    const { date, state, selected } = props
-
-    const { translateWeekText, textBgBdSelectior, textColorSelectior } = useMemo(() => {
-      const res = {
-        translateWeekText: "",
-        textBgBdSelectior: "#FFFFFF",
-        textColorSelectior: "#999999",
-      }
-
-      const week = ["일", "월", "화", "수", "목", "금", "토"]
-      res.translateWeekText = week[new Date(date.timestamp).getDay()] //FIXME: 더 나은 방법?
-
-      if (date.dateString === selected.current) {
-        res.textBgBdSelectior = GIVER_CASUAL_NAVY
-        res.textColorSelectior = GIVER_CASUAL_NAVY
-      } else {
-        res.textBgBdSelectior = "#FFFFFF"
-        res.textColorSelectior = "#999999"
-      }
-      if (state === "today") {
-        res.textBgBdSelectior = "#F8F8FA"
-      }
-
-      return res
-    }, [date, state, selected])
-
-    return (
-      <View
-        style={{
-          width: 48,
-          height: 48,
-          marginRight: 80,
-          borderColor: textBgBdSelectior,
-          backgroundColor: state === "today" ? "#F8F8FA" : "white",
-          borderRadius: 8,
-          borderWidth: 2,
-          borderStyle: "solid",
-        }}
-      >
-        <PreReg14
-          style={{
-            height: 20,
-            alignSelf: "center",
-            marginTop: 5,
-            fontWeight: "600",
-          }}
-          color={textColorSelectior}
-        >
-          {date.day}
-        </PreReg14>
-        <PreReg12
-          style={{
-            alignSelf: "center",
-            fontWeight: "600",
-          }}
-          color={textColorSelectior}
-        >
-          {translateWeekText}
-        </PreReg12>
-      </View>
-    )
-  },
-  { forwardRef: true },
-)
+const styles = StyleSheet.create({
+  root: { flex: 1, width: "100%", height: "100%" },
+})

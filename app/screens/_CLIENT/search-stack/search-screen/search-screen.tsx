@@ -19,6 +19,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   Footer,
   FOOTER_CONTENT_GAP,
+  CautionModal,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -77,19 +78,18 @@ const nearestPastTime = dayjs(new Date(now)).minute(0).second(0).millisecond(0).
 // "지금 시간으로 부터 가장 가까운 정시" 에서 딱 1시간 뒤
 const oneHourAfterNearestPastTime = new Date(nearestPastTime.getTime() + 60 * 60 * 1000)
 
-interface Location {
+export interface AddressLocation {
   lat: number
   lng: number
-}
-
-const 한양대에리카제5공학관 = {
-  lat: 37.2955072, // 위도
-  lng: 126.83539, // 경도
 }
 
 export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-screen">> = observer(
   ({ navigation, route }) => {
     useShowBottomTab(navigation)
+
+    const {
+      userStore: { cacheSearchRequest, cachedSearchRequest },
+    } = useStores()
 
     //* 서비스 형태
     const [serviceType, setServiceType] = useState<ServiceTypeKorean>("방문") //? 방문 or 위탁
@@ -167,8 +167,8 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     )
 
     //* 위치선택
-    const [address, setAddress] = useState("주소를 입력해주세요") // 주소
-    const [location, setLocation] = useState<Location>({ ...한양대에리카제5공학관 }) // 좌표
+    const [address, setAddress] = useState(cachedSearchRequest?.address || "주소를 입력해주세요") // 주소
+    const [location, setLocation] = useState<AddressLocation>(cachedSearchRequest?.location) // 좌표
 
     // 주소입력 바텀시트모달 - ref
     const bottomSheetModalRefAddress = useRef<BottomSheetModal>(null)
@@ -364,9 +364,11 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               onPress={() => {
                 setIsCalendarOpen(false)
                 setIsDropdownOpen(!isDropdownOpen)
-                scrollViewRef.current?.scrollToEnd({
-                  animated: true,
-                })
+
+                // TODO FIXME: 안드로이드에서 애니메이션이 너무 과장 됨
+                // scrollViewRef.current?.scrollToEnd({
+                //   animated: true,
+                // })
                 // LayoutAnimation.create(300, "easeInEaseOut", "opacity")
                 //? 드롭박스 열고 닫을 때 애니메이션 효과: https://docs.expo.dev/versions/latest/react-native/layoutanimation/ https://reactnative.dev/docs/layoutanimation  https://qcoding.tistory.com/17
                 LayoutAnimation.configureNext(
@@ -453,6 +455,12 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
 
                 // ---- API REQUEST BODY 와는 상관 없는 데이터 ----
                 address, // 검색결과 헤더에 보여줄 주소
+              })
+
+              // 검색 정보 저장
+              cacheSearchRequest({
+                address: address,
+                location: location,
               })
             }}
           />

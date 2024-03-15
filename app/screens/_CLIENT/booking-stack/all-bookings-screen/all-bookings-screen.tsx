@@ -27,6 +27,7 @@ import {
   PreviousBookingParams,
   getCurrentBookings,
   getFirstPreviousBooking,
+  getMyWaitingBookings,
 } from "../../../../services/api"
 
 export const AllBookingsScreen: FC<
@@ -75,7 +76,9 @@ export const AllBookingsScreen: FC<
       })
       .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
 
-    // TODO: setWaitingBookings
+    getMyWaitingBookings().then(({ waitingBookings }) => {
+      setWaitingBookings(waitingBookings)
+    })
   }, [])
 
   return (
@@ -151,7 +154,7 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={currentBookings}
+                data={waitingBookings}
                 renderItem={({ index, item }) => (
                   // TODO: waitingBookings 객체를 담을 수 있도록,
                   // TODO: PastBooking 컴포넌트 업데이트 하기.
@@ -179,7 +182,7 @@ export const AllBookingsScreen: FC<
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
-                {currentBookings.map((item, index) => (
+                {waitingBookings.map((item, index) => (
                   <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
                 ))}
               </Row>

@@ -246,7 +246,7 @@ export const SearchResultScreen: FC<
 
   /** 펫시터 */
   const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", petsitters)
+  // console.log("petsitters ♦️", JSON.stringify(petsitters))
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {
@@ -283,7 +283,13 @@ export const SearchResultScreen: FC<
   const handleSorting = useCallback(
     (optionValue: SearchResultSortingOption) => {
       switch (optionValue) {
-        // 1. 최근 등록순
+        // 1. 가까운 거리순
+        // 오름차순 정렬 -> 거리가 가까울 수록 상위 노출
+        case optionLabel.distance:
+          setPetsitters(_.orderBy(petsitters, "distance", "asc"))
+          break
+
+        // 2. 최근 등록순
         // 내림차순 정렬 -> 최근 등록된 펫시터 상위 노출
         case optionLabel.recent:
           if (방문검색) {
@@ -302,7 +308,7 @@ export const SearchResultScreen: FC<
           }
           break
 
-        // 2. 별점 높은 순
+        // 3. 별점 높은 순
         // 내림차순 정렬 -> 높은 별점을 상위 노출
         case optionLabel.ratings:
           if (방문검색) {
@@ -321,7 +327,7 @@ export const SearchResultScreen: FC<
           }
           break
 
-        // 후기 많은 순
+        // 4. 후기 많은 순
         // 내림차순 정렬 -> 리뷰 많은 펫시터 상위 노출
         case optionLabel.reviews:
           if (방문검색) {
@@ -541,7 +547,10 @@ export const SearchResultScreen: FC<
               // height: "100%",
               // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
             }}
-            contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + 2.5 * 110 }}
+            contentContainerStyle={{
+              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+              // paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+            }}
             showsVerticalScrollIndicator={false}
             // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
             onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
@@ -600,8 +609,12 @@ export const SearchResultScreen: FC<
                   style={
                     index < petsitters.length - 1
                       ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
-                      : { marginVertical: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                      : {
+                          marginVertical: 20,
+                          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+                        }
                   }
+                  likeStyle={{ right: BASIC_BACKGROUND_PADDING_WIDTH }}
                 />
               )
             }}

@@ -500,6 +500,61 @@ export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams |
   }
 }
 
+type WaitingBooking = {
+  paymentId: number // 16,
+  petSitterName: string // "지우",
+  ratings: number // 3.5714285714285716,
+  reviewCount: number // 0,
+  desc: string // "강아지 3년 기른 경력으로 보살핍니다.",
+  profileImage: string | null // null
+} & (
+  | {
+      visitingBookingId: number // 1,
+      visitingId: number // 1,
+      startTime: string // "2022-09-15T04:00:00.000Z",
+      endTime: string // "2022-09-15T06:00:00.000Z",
+    }
+  | {
+      crecheBookingId: number //3,
+      crecheId: number //1,
+      startDate: string //"2023-09-14T00:00:00.000Z",
+      endDate: string //"2023-09-16T00:00:00.000Z",
+    }
+)
+interface WaitingBookingResponse extends GeneralResponse {
+  waitingBookings: WaitingBooking[]
+}
+type GetMyWaitingBookingsResult =
+  | {
+      isSuccess: true // 성공
+      waitingBookings: WaitingBooking[]
+    }
+  | {
+      isSuccess: false // 실패
+      waitingBookings: []
+    }
+/**
+ * [보호자 전용 API]
+ * 현재 로그인한 보호자 유저가 신청한 예약 중에서
+ * 펫시터가 아직 수락 혹은 거절을 하지 않은 상태 즉,
+ * {@link BookingStatus.WAITING} 상태에 있는 예약들만 불러옵니다.
+ */
+export const getMyWaitingBookings = async (): Promise<GetMyWaitingBookingsResult> => {
+  try {
+    const response = await axios.get<WaitingBookingResponse>(`${BASE_URL}/user/my-waiting-bookings`)
+    console.log("response🔷", response.data)
+    if (!response.data.ok) {
+      alertModal("신청한 예약 내역을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
+      return { isSuccess: false, waitingBookings: [] }
+    }
+    return { isSuccess: true, waitingBookings: response.data.waitingBookings }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    alertModal("신청한 예약 내역을 읽어오는데 실패했습니다.", `catch: ${error?.message}`)
+    return { isSuccess: false, waitingBookings: [] }
+  }
+}
+
 interface ResponseCrecheBookingRequestBody {
   response: boolean // true 이면 "수락", false 이면 "거절"
 }

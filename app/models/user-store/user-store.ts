@@ -7,6 +7,7 @@ import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 import { getStreamToken, streamChatClient } from "../../services/api/stream"
 import { alertModal } from "../../utils/alert-modal"
+import { AddressLocation } from "#screens"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -27,14 +28,25 @@ interface UserAuth {
 
 type SocialLoginHanderParams = UserAuth
 
+interface SearchRequest {
+  address: string
+  location: AddressLocation
+  // TODO: 위치 말고도 또 어떤 걸 저장하면 UX 경험이 나아질까?
+}
+
+const 한양대에리카제5공학관 = {
+  lat: 37.2955072, // 위도
+  lng: 126.83539, // 경도
+} as const
+
 /**
- * User Model is for both CareGiver and Client.
+ * [보호자] 모드와 [펫시터] 모드
+ * 둘 다 사용되는 모델입니다.
  */
 export const UserStoreModel = types
   .model("UserStore")
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
-    // onSwitchingType: types.optional(types.boolean, false),
     onSwitchingType: false,
     loggedIn: false,
 
@@ -61,6 +73,12 @@ export const UserStoreModel = types
 
     /* 인증된 펫시터인지 여부 */
     isCertified: false,
+
+    /* [보호자 모드]에서 사용자가 입력했던 검색 정보 */
+    cachedSearchRequest: types.frozen<SearchRequest>({
+      address: "",
+      location: { ...한양대에리카제5공학관 },
+    }),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -247,7 +265,10 @@ export const UserStoreModel = types
     },
 
     /**
-     * 로그인 (혹은 회원가입) 성공시, 유저 Auth정보를 저장합니다.
+     * 회원가입 직후 혹은,
+     * noAuthLogin 테스트 시에만 사용되는 메서드입니다.
+     *
+     * 회원가입 성공시, 유저 Auth정보를 저장합니다.
      * - 유저 Auth정보: token, provider, email
      *
      * 이후, 유저 상세정보를 저장하는 함수 userDetailHandler 를 호출합니다.
@@ -256,16 +277,16 @@ export const UserStoreModel = types
     async loginHander(loginRequestBody: LoginRequestBody) {
       try {
         const { isSuccess, token } = await login(loginRequestBody)
-        if (!isSuccess) {
-          return false
-        }
+        if (!isSuccess || !token) return false
 
-        if (!token) {
-          return false
-        }
+        //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+        axios.defaults.headers.common["x-jwt"] = token
+        axios.defaults.headers.common.Accept = "Application/json"
 
         const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
         if (!isUserDatailHandlerSuccess) {
+          alertModal("로그인 실패", `유저 상세정보 저장 실패`) //TODO: 이 모달은 삭제하고, userDetailHandler 내에서 각각의 예외상황에서 모달을 표시할 것
+          axios.defaults.headers.common["x-jwt"] = ""
           return false
         }
 
@@ -274,17 +295,15 @@ export const UserStoreModel = types
           provider: loginRequestBody.provider,
           email: loginRequestBody.email,
         })
-
         this.connectToStream()
-
         this.setLoggedIn(true)
-
         await delay(500)
         // @ts-ignore
         navigate("Searching", { screen: "search-screen" })
         return true
         //
       } catch (error) {
+        alertModal("로그인 실패", `catch: ${error?.message}`)
         console.error("catch 에러!!! - loginHander", error)
         return false
         //
@@ -292,9 +311,12 @@ export const UserStoreModel = types
     },
 
     /**
+     * 이미 회원가입한 유저가,
+     * 앱에 로그인할 때 사용되는 메서드입니다.
+     *
      * 카카오 - 구현완료
-     * 네이버 [개발중]
-     * 애플 [개발중]
+     * 네이버 - 구현완료
+     * 애플 - 구현완료, AppStore 심사시에만 사용할 예정.
      *
      * 소셜 로그인 인증 성공시, 유저 Auth정보를 저장합니다.
      * - 유저 Auth정보: token, provider, email
@@ -304,12 +326,16 @@ export const UserStoreModel = types
      *  */
     async socialLoginHander({ token, provider, email }: SocialLoginHanderParams) {
       try {
-        if (!token) {
-          return false
-        }
+        if (!token || !provider || !email) return false
+
+        //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
+        axios.defaults.headers.common["x-jwt"] = token
+        axios.defaults.headers.common.Accept = "Application/json"
 
         const isUserDatailHandlerSuccess = await this.userDetailHandler(token)
         if (!isUserDatailHandlerSuccess) {
+          alertModal("로그인 실패", `유저 상세정보 저장 실패`) //TODO: 이 모달은 삭제하고, userDetailHandler 내에서 각각의 예외상황에서 모달을 표시할 것
+          axios.defaults.headers.common["x-jwt"] = ""
           return false
         }
 
@@ -318,18 +344,16 @@ export const UserStoreModel = types
           provider,
           email,
         })
-
         this.connectToStream()
-
         this.setLoggedIn(true)
-
         await delay(500)
         // @ts-ignore
         navigate("Searching", { screen: "search-screen" })
         return true
         //
       } catch (error) {
-        console.error("catch 에러!!! - loginHander", error)
+        alertModal("로그인 실패", `catch: ${error?.message}`)
+        console.error("catch 에러!!! - socialLoginHander", error)
         return false
         //
       }
@@ -370,6 +394,14 @@ export const UserStoreModel = types
             break
         } 
         */
+    },
+
+    /**
+     * [보호자] 모드에서,
+     * 사용자가 입력했던 검색 정보를 저장합니다.
+     * */
+    cacheSearchRequest(value: SearchRequest) {
+      self.setProp("cachedSearchRequest", value)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

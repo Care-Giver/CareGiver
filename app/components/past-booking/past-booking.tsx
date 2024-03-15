@@ -173,7 +173,8 @@ export const PastBooking = (props: PastBookingProps) => {
         <Row style={{ justifyContent: "space-between" }}>
           <PreReg14 text={`${petsitterName}`} color={DISABLED} />
           {/* //? 찜 버튼 */}
-          <Pressable onPress={handleLikeButton}>
+          {/* //TODO: 즐겨찾기 기능 재정립 이후 다시 활성화 할 것. */}
+          {/* <Pressable onPress={handleLikeButton}>
             <Image
               style={styles.likeBtn}
               source={
@@ -184,7 +185,7 @@ export const PastBooking = (props: PastBookingProps) => {
                   : images.empty_heart
               }
             />
-          </Pressable>
+          </Pressable> */}
         </Row>
 
         {/* //* 체크인, 체크아웃 */}
@@ -216,7 +217,9 @@ export const PastBooking = (props: PastBookingProps) => {
         </Row>
 
         {/* //* 다시 예약하기 | 후기 작성하기 */}
-        <Row style={{}}>
+        {/* // TODO: "후기 작성" 기능 테스트 완료 후 다시 표출하기 */}
+        {/* // FIXME: "다시 예약하기"는 유저 플로우가 어떻게 되는 건가? */}
+        <Row style={{ display: "none" }}>
           {/* //? 다시 예약하기 버튼 */}
           <Pressable onPress={handleAgainPress}>
             <PreMed14 text={"다시 예약하기"} color={HEAD_LINE} />

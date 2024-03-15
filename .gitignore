@@ -149,3 +149,7 @@ dist/
 
 # 지우님 빌드 해결을 위해 개인적으로 추가함 - 프로젝트 에서는 필요없음
 .watchmanconfig
+
+# evn 관련 파일
+.env
+.env*
