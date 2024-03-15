@@ -35,6 +35,7 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
 import _ from "lodash"
+import { subscribeNotification } from "../../../services/api/notification"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -44,6 +45,7 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, userDetail },
     petsitterStore: { serviceTypeKorean, petsitter, isFirstPetsitter, setDraftPetsitter },
+    notificationStore: { addNotification },
   } = useStores()
 
   // 환경설정 버튼 클릭시 실행되는 함수
@@ -243,6 +245,11 @@ export const CgMypageScreen: FC<
         <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
         <DivisionLine color={LIGHT_LINE} />
+        
+        <MypageButton
+          text="알림구독 테스트"
+          onPress={() => subscribeNotification(addNotification)}
+        />
 
         <Pressable
           style={{ margin: 20, backgroundColor: "black", width: "auto" }}

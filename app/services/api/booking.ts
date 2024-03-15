@@ -89,7 +89,7 @@ export const createVisitingBooking = async (
   body: CreateVisitingBookingRequestBody,
 ): Promise<CreateVisitingBookingResult> => {
   try {
-    console.log(body)
+    console.log("booking/visiting request body >>>", body)
     const response = await axios.post<CreateVisitingBookingResponse>(
       `${BASE_URL}/booking/visiting`,
       body,
