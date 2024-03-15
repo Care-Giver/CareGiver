@@ -46,6 +46,8 @@ import {
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
+import Popover from "react-native-popover-view"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
@@ -55,6 +57,7 @@ export const BookingDetailScreen: FC<
   const [booking, setBooking] = useState<RenamedCrecheBooking & RenamedVisitingBooking>(null)
   const [petsitter, setPetsitter] = useState<Creche & Visiting>(null)
   const [payment, setPayment] = useState<PaymentColumns>(null)
+  const [showPopover, setShowPopover] = useState<boolean>(false)
 
   useEffect(() => {
     const id = serviceType === "creche" ? crecheBookingId : visitingBookingId
@@ -189,45 +192,73 @@ export const BookingDetailScreen: FC<
                 </Row>
 
                 <Row mt={12} style={{ justifyContent: "space-between" }}>
-                  <Pressable
-                    style={[$pressableBox, SHADOW_1]}
-                    onPress={() => {
-                      if (!isPhoneAndChatActivated) {
-                        alertModal(
-                          "예약이 시작되기 전에는 전화할 수 없습니다.",
-                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
-                        )
-                        return
+                  {booking?.status === BookingStatus.WAITING ? (
+                    <Popover
+                      isVisible={showPopover}
+                      onRequestClose={() => setShowPopover(false)}
+                      from={
+                        <>
+                          <Pressable
+                            onPress={() => setShowPopover(true)}
+                            style={[$pressableBox, SHADOW_1]}
+                          >
+                            <PreReg14 text={"전화하기"} color={DISABLED} />
+                          </Pressable>
+
+                          <Pressable
+                            style={[$pressableBox, SHADOW_1]}
+                            onPress={() => setShowPopover(true)}
+                          >
+                            <PreReg14 text={"메시지 보내기"} color={DISABLED} />
+                          </Pressable>
+                        </>
                       }
-                      Linking.openURL(
-                        `tel:+${petsitter[serviceType].__careGiver__.__user__.phoneNumber}`,
-                      )
-                    }}
-                  >
-                    <PreReg14
-                      text={"전화하기"}
-                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
-                    />
-                  </Pressable>
-                  <Pressable
-                    style={[$pressableBox, SHADOW_1]}
-                    onPress={() => {
-                      if (!isPhoneAndChatActivated) {
-                        alertModal(
-                          "예약이 시작되기 전에는 메시지를 보낼 수 없습니다.",
-                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
-                        )
-                        return
-                      }
-                      //@ts-ignore
-                      navigate("Chats")
-                    }}
-                  >
-                    <PreReg14
-                      text={"메시지 보내기"}
-                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
-                    />
-                  </Pressable>
+                    >
+                      <PreReg12 text="케어기버가 예약을 승인하면 활성화됩니다." />
+                    </Popover>
+                  ) : (
+                    <>
+                      <Pressable
+                        style={[$pressableBox, SHADOW_1]}
+                        onPress={() => {
+                          if (!isPhoneAndChatActivated) {
+                            alertModal(
+                              "예약이 시작되기 전에는 전화할 수 없습니다.",
+                              "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
+                            )
+                            return
+                          }
+                          Linking.openURL(
+                            `tel:+${petsitter[serviceType].__careGiver__.__user__.phoneNumber}`,
+                          )
+                        }}
+                      >
+                        <PreReg14
+                          text={"전화하기"}
+                          color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
+                        />
+                      </Pressable>
+                      <Pressable
+                        style={[$pressableBox, SHADOW_1]}
+                        onPress={() => {
+                          if (!isPhoneAndChatActivated) {
+                            alertModal(
+                              "예약이 시작되기 전에는 메시지를 보낼 수 없습니다.",
+                              "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
+                            )
+                            return
+                          }
+                          //@ts-ignore
+                          navigate("Chats")
+                        }}
+                      >
+                        <PreReg14
+                          text={"메시지 보내기"}
+                          color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
+                        />
+                      </Pressable>
+                    </>
+                  )}
 
                   <Pressable
                     style={[$pressableAlarmBox, SHADOW_1]}
