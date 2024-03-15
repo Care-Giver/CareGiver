@@ -359,11 +359,12 @@ export const CaregiverDetailInformationScreen: FC<
                 numberOfLines={2}
                 style={{ marginTop: -1 }}
                 key={index}
-                bottomSheetModalRef={bottomSheetModalRef}
-                userId={userDetail.id}
-                setIsUserComment={setIsUserComment}
-                setSelectedCommentId={setSelectedCommentId}
-                setSelectedComment={setSelectedComment}
+                onPress={() => {
+                  setIsUserComment(userDetail.id === item.__commentator__.id)
+                  setSelectedCommentId(item.__commentator__.id)
+                  setSelectedComment(item.__commentator__.desc)
+                  bottomSheetModalRef.current.present()
+                }}
               />
             ))}
           </View>

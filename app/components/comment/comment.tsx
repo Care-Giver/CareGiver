@@ -51,33 +51,12 @@ interface CommentProps {
   style?: any
   numberOfLines?: number
   commentData: CommentColumns
-  bottomSheetModalRef: React.MutableRefObject<BottomSheetModalMethods>
-  userId: number
-  setIsUserComment: Dispatch<SetStateAction<boolean>>
-  setSelectedCommentId: Dispatch<SetStateAction<number>>
-  setSelectedComment: Dispatch<SetStateAction<string>>
+  onPress?: () => void
 }
 
 export const Comment = forwardRef((props: CommentProps) => {
-  const {
-    style: viewStyle,
-    numberOfLines,
-    commentData,
-    bottomSheetModalRef,
-    userId,
-    setIsUserComment,
-    setSelectedCommentId,
-    setSelectedComment,
-  } = props
-  const {
-    id,
-    desc,
-    createAt,
-    updatedAt,
-    hasReply,
-    visitingCommentReply,
-    __commentator__,
-  } = commentData
+  const { style: viewStyle, numberOfLines, commentData, onPress } = props
+  const { desc, createAt, __commentator__ } = commentData
   const _numberOfLines = numberOfLines || undefined
 
   const _createAt = new Date(createAt)
@@ -98,14 +77,10 @@ export const Comment = forwardRef((props: CommentProps) => {
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}
-          onPress={() => {
+          onPress={
+            onPress
             //TODO 유저 id에 따라 수정 및 답글 기능 추가
-            //alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
-            setIsUserComment(userId === __commentator__.id)
-            setSelectedCommentId(id)
-            setSelectedComment(desc)
-            bottomSheetModalRef.current.present()
-          }}
+          }
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />
         </Pressable>

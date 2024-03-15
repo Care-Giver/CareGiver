@@ -58,7 +58,7 @@ export const AllCommentsScreen: FC<
   )
   const onPressCommentOption = () => {
     if (!isUserComment) {
-      alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
+      return alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
     }
     bottomSheetModalRef.current.close()
     navigate("writing-comment-screen", {
@@ -92,11 +92,12 @@ export const AllCommentsScreen: FC<
           <Comment
             commentData={item}
             style={{ marginTop: -1 }}
-            bottomSheetModalRef={bottomSheetModalRef}
-            userId={userId}
-            setIsUserComment={setIsUserComment}
-            setSelectedCommentId={setSelectedCommentId}
-            setSelectedComment={setSelectedComment}
+            onPress={() => {
+              setIsUserComment(userId === item.__commentator__.id)
+              setSelectedCommentId(item.__commentator__.id)
+              setSelectedComment(item.__commentator__.desc)
+              bottomSheetModalRef.current.present()
+            }}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
