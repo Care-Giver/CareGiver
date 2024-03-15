@@ -7,6 +7,8 @@ import {
 } from "@notionhq/client/build/src/api-endpoints"
 // import { NOTION_API_KEY, NOTION_DATABASE_ID } from "react-native-dotenv"
 import { NOTION_API_KEY, NOTION_DATABASE_ID } from "@env"
+console.log("NOTION_API_KEY >>> ", NOTION_API_KEY) //! DO_NOT_REMOVE_THIS_LINE - 이거 지우면 작동 안 함
+console.log("NOTION_DATABASE_ID >>> ", NOTION_DATABASE_ID) //! DO_NOT_REMOVE_THIS_LINE - 이거 지우면 작동 안 함
 
 const notion = new Client({ auth: NOTION_API_KEY })
 
