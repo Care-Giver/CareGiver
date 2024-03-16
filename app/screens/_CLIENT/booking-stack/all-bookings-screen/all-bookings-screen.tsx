@@ -63,7 +63,9 @@ export const AllBookingsScreen: FC<
    *  CANCEL = "Cancel", // 유저가 예약 승낙 이후 취소한 경우
    *  REJECT = "Reject", // 예약을 거절한 경우
    */
-  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>()
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
+    null,
+  )
 
   useLayoutEffect(() => {
     getCurrentBookings()
@@ -209,7 +211,7 @@ export const AllBookingsScreen: FC<
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
           <Row style={{ marginTop: 16, justifyContent: "space-between" }}>
             <PreReg16 text="지난 예약" color={DISABLED} />
-            {firstPreviousBooking && (
+            {firstPreviousBooking ? (
               <Pressable
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => navigate("past-bookings-screen")}
@@ -217,7 +219,7 @@ export const AllBookingsScreen: FC<
                 <PreMed16 text="더보기" color={BODY} />
                 <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
               </Pressable>
-            )}
+            ) : null}
           </Row>
 
           {firstPreviousBooking ? (

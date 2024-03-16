@@ -2,7 +2,6 @@ import { View, Pressable, Image, ImageBackground, ImageSourcePropType } from "re
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../_BASIC/row/row"
-
 import {
   PreBol14,
   PreMed14,
@@ -17,6 +16,10 @@ import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
+
+// FIXME: PastBooking 완전 리팩토링
+// handleAgainPress, handlePress 함수를 PastBooking 밖으로 빼서 사용하도록 수정
+// setDateText 를 useMemo 로 변경
 
 type ServiceType = "visiting" | "creche"
 
