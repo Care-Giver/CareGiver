@@ -445,7 +445,7 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
       const error = response.data.error
       console.error("[getPreviousBookings] error >>>", error)
       // @ts-ignore
-      return error
+      return []
     }
 
     // console.log("[getPreviousBookings] response.data >>> ", response.data)
