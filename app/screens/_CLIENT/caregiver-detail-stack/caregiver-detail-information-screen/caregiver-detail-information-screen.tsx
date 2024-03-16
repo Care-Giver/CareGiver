@@ -264,11 +264,11 @@ export const CaregiverDetailInformationScreen: FC<
             style={{
               marginTop: 60,
 
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
+              // // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              // display: "none",
             }}
           >
-            <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
+            <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
               color={BODY}
@@ -287,8 +287,8 @@ export const CaregiverDetailInformationScreen: FC<
               marginBottom: BOTTOM_HEIGHT,
               alignItems: "center",
 
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
+              // // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              // display: "none",
             }}
           >
             {commentsDummy.slice(0, 3).map((item, index) => (
