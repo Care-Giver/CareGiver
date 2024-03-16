@@ -45,6 +45,7 @@ import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
+import { ratingRound } from "../../../../utils/format"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -179,7 +180,7 @@ export const CaregiverDetailInformationScreen: FC<
             profileImage={profileImage}
             caregiverData={{
               name: userNickname,
-              ratings: star,
+              ratings: ratingRound(star),
             }}
             onPress={() => {
               //? 후기 전체보기 화면으로 이동
