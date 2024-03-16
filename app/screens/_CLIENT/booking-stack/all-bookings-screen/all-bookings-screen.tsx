@@ -182,6 +182,16 @@ export const AllBookingsScreen: FC<
                   // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
                   <PastBooking
                     currentBooking={item}
+                    profileImage={item?.profileImage}
+                    serviceType={"visiting"}
+                    petsitterType={"visiting"}
+                    petsitterId={item?.visitingId}
+                    bookingId={item?.visitingBookingId}
+                    petsitterName={item?.petSitterName}
+                    desc={item?.desc}
+                    startDate={item?.startTime}
+                    endDate={item?.endTime}
+                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
                     key={index}
                     onPress={() => {
                       navigate("booking-detail-screen", {
@@ -202,7 +212,7 @@ export const AllBookingsScreen: FC<
                 onViewableItemsChanged={onViewableChange}
                 decelerationRate={"fast"}
               />
-              <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
+              <Row style={[styles.dotsContainer, { marginBottom: 14 }]}>
                 {waitingBookings.map((item, index) => (
                   <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
                 ))}

@@ -16,6 +16,7 @@ import { navigate } from "../../navigators"
 import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
+import { alertModal } from "../../utils/alert-modal"
 
 // FIXME: PastBooking 완전 리팩토링
 // handleAgainPress, handlePress 함수를 PastBooking 밖으로 빼서 사용하도록 수정
@@ -28,7 +29,7 @@ const handleAgainPress = () => {
 }
 
 const handlePress = () => {
-  alert("아직 개발중인 기능입니다 😉")
+  alertModal("상세 내역 보기", "아직 개발중인 기능입니다 😉")
 }
 
 const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
