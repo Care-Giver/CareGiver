@@ -149,7 +149,7 @@ export const CgMypageScreen: FC<
                   style={styles.petsitterBadge}
                 />
                 <PreReg14
-                  text={_.truncate(petsitter?.desc || "", { length: 18 })}
+                  text={_.truncate(petsitter?.title || "", { length: 18 })}
                   color={SUB_HEAD_LINE}
                   ml={8}
                 />
