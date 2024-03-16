@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useColorScheme } from "react-native"
+import { Alert, AppState, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
@@ -28,6 +28,9 @@ import {
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
 import { TestStreamChatScreen } from "#screens"
+import { alertModal } from "../utils/alert-modal"
+import { BASE_URL } from "#api"
+import EventSource from "react-native-sse"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -166,13 +169,14 @@ const CareGiverTabs = () => {
  */
 const AllTabs = observer(function AllTabs() {
   const {
-    userStore: { type, onSwitchingType, userAuth },
+    userStore: { type, onSwitchingType, userAuth, userDetail },
     petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
   } = useStores()
 
+  // 로그인한 유저 토큰값 axios 객체에 할당
   useEffect(() => {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
@@ -181,6 +185,7 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // 모드별 데이터 요청
   useEffect(() => {
     if (type === Type.CARE_GIVER) {
       fetchPetsitter() //! 중요: CARE_GIVER 모드이면, petsitter 정보를 불러온다.
@@ -194,6 +199,60 @@ const AllTabs = observer(function AllTabs() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
+
+  // 알림 객체 SSE 수신 - 모드별 상관 없이 하나의 eventSource 인스턴스만 사용 함
+  useEffect(() => {
+    if (!axios.defaults.headers.common["x-jwt"]) {
+      alertModal("유저 정보가 존재하지 않습니다.", "로그인 후 다시 시도해주세요.")
+      return
+    }
+
+    const eventSource = new EventSource(`${BASE_URL}/notification/subscribe`, {
+      headers: { "x-jwt": axios.defaults.headers.common["x-jwt"] },
+      debug: true,
+    })
+
+    // SSE 연결
+    eventSource.addEventListener("open", () => {
+      console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 시작")
+    })
+
+    // SSE 수신
+    eventSource.addEventListener("message", (event) => {
+      const SSEMessage: { message: string } = JSON.parse(event.data)
+      if (SSEMessage.message === "Heartbeat") {
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
+        return
+      }
+
+      switch (SSEMessage.message) {
+        case "Notification connection established":
+          console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
+          return
+        default:
+          console.log(`🔷SSEMessage ${userDetail.nickname}:`, SSEMessage.message)
+          Alert.alert("새로운 알림이 도착했습니다.", SSEMessage.message)
+      }
+    })
+
+    // 로그아웃 시 (= AllTabs 컴포넌트가 unmount 될 때)
+    // eventSource.close() 호출 (= SSE 연결 종료)
+    return () => {
+      // SSE 연결 종료
+      eventSource.close()
+      console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 종료")
+      // TODO Background 상태에서는 어떻게 처리해야 하는게 맞는걸까?
+      // TODO [참고] AppState 로 Foreground, Background 상태를 구분 가능.
+      // TODO   1. Background 상태에서는 알림을 받지 않는다. -> eventSource.close()
+      // TODO   2. Foreground 상태에서는 알림을 받는다. -> eventSource.open() 다시?
+
+      //! 이걸로하면 연결 종료가 안됨. 왜지?
+      // eventSource.addEventListener("close", () => {
+      //   console.log(`[SSE Close event] ${type}`)
+      // })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
