@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   InProgressBooking,
@@ -8,7 +8,6 @@ import {
   Row,
   Screen,
   PastBooking,
-  PreReg14,
   DivisionLine,
   PreMed18,
   PreMed14,
@@ -29,6 +28,10 @@ import {
   getFirstPreviousBooking,
   getMyWaitingBookings,
 } from "../../../../services/api"
+import { useQuery } from "@tanstack/react-query"
+
+// Define the refetch interval (30 seconds)
+const REFETCH_INTERVAL = 30 * 1000
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -67,22 +70,38 @@ export const AllBookingsScreen: FC<
     null,
   )
 
-  useLayoutEffect(() => {
-    getCurrentBookings()
-      .then((res) => setCurrentBookings(res))
-      .catch((err) => console.log("[all bookings screen] get current bookings error >>>", err))
+  // Use useQuery to fetch current bookings with a refetch interval
+  const { data: currentBookingsData } = useQuery({
+    queryKey: ["currentBookings"],
+    queryFn: getCurrentBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
-    getFirstPreviousBooking()
-      .then((res) => {
-        setFirstPreviousBooking(res)
-      })
-      .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
+  // Use useQuery to fetch first previous booking with a refetch interval
+  const { data: firstPreviousBookingData } = useQuery({
+    queryKey: ["firstPreviousBooking"],
+    queryFn: getFirstPreviousBooking,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
-    getMyWaitingBookings().then(({ waitingBookings }) => {
-      setWaitingBookings(waitingBookings)
-    })
-  }, [])
+  // Use useQuery to fetch waiting bookings with a refetch interval
+  const { data: waitingBookingsData } = useQuery({
+    queryKey: ["waitingBookings"],
+    queryFn: getMyWaitingBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
+  useEffect(() => {
+    if (currentBookingsData) {
+      setCurrentBookings(currentBookingsData)
+    }
+    if (firstPreviousBookingData) {
+      setFirstPreviousBooking(firstPreviousBookingData)
+    }
+    if (waitingBookingsData) {
+      setWaitingBookings(waitingBookingsData.waitingBookings)
+    }
+  }, [currentBookingsData, firstPreviousBookingData, waitingBookingsData])
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <ScrollView
