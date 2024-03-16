@@ -139,6 +139,15 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                 case "example@google.com":
                   _provider = "naver"
                   break
+                case "choi@naver.com": // 최정혁 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
+                case "park@naver.com": // 박승현 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
+                case "horse@naver.com": // 이영민 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
               }
               setOnLoggingIn(true)
               noAuthLogin({ email: emailAuth.email, provider: _provider }).finally(() =>
