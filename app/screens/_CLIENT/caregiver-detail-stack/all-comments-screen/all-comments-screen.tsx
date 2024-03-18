@@ -25,6 +25,7 @@ import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles
 import { images } from "#images"
 import { alertModal } from "../../../../utils/alert-modal"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
+import _ from "lodash"
 
 export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
@@ -87,7 +88,8 @@ export const AllCommentsScreen: FC<
 
       {/* //? 댓글 리스트 */}
       <FlatList
-        data={comments}
+        // 최신순 정렬
+        data={_.sortBy(comments, "createAt").reverse()}
         renderItem={({ item, index }) => (
           <Comment
             commentData={item}

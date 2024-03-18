@@ -61,7 +61,7 @@ import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { useFocusEffect } from "@react-navigation/native"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
-
+import _ from "lodash"
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
   amenities: CrecheAmenity[] | VisitingAmenity[]
@@ -353,20 +353,23 @@ export const CaregiverDetailInformationScreen: FC<
               alignItems: "center",
             }}
           >
-            {comments.slice(0, 3).map((item, index) => (
-              <Comment
-                commentData={item}
-                numberOfLines={2}
-                style={{ marginTop: -1 }}
-                key={index}
-                onPress={() => {
-                  setIsUserComment(userDetail.id === item.__commentator__.id)
-                  setSelectedCommentId(item.__commentator__.id)
-                  setSelectedComment(item.__commentator__.desc)
-                  bottomSheetModalRef.current.present()
-                }}
-              />
-            ))}
+            {_.sortBy(comments, "createAt")
+              .reverse()
+              .slice(0, 3)
+              .map((item, index) => (
+                <Comment
+                  commentData={item}
+                  numberOfLines={2}
+                  style={{ marginTop: -1 }}
+                  key={index}
+                  onPress={() => {
+                    setIsUserComment(userDetail.id === item.__commentator__.id)
+                    setSelectedCommentId(item.__commentator__.id)
+                    setSelectedComment(item.__commentator__.desc)
+                    bottomSheetModalRef.current.present()
+                  }}
+                />
+              ))}
           </View>
         </View>
         <Footer mt={FOOTER_CONTENT_GAP} />
