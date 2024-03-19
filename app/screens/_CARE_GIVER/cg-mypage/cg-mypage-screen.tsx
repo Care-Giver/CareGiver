@@ -149,7 +149,7 @@ export const CgMypageScreen: FC<
                   style={styles.petsitterBadge}
                 />
                 <PreReg14
-                  text={_.truncate(petsitter?.desc || "", { length: 18 })}
+                  text={_.truncate(petsitter?.title || "", { length: 18 })}
                   color={SUB_HEAD_LINE}
                   ml={8}
                 />
@@ -245,18 +245,18 @@ export const CgMypageScreen: FC<
         <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
         <DivisionLine color={LIGHT_LINE} />
-        
-        <MypageButton
+
+        {/* <MypageButton
           text="알림구독 테스트"
           onPress={() => subscribeNotification(addNotification)}
-        />
+        /> */}
 
-        <Pressable
+        {/* <Pressable
           style={{ margin: 20, backgroundColor: "black", width: "auto" }}
           onPress={() => navigation.navigate("cg-request-earning-screen")}
         >
           <Text style={{ fontSize: 25, color: "white" }}>(정산요청스크린)</Text>
-        </Pressable>
+        </Pressable> */}
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}

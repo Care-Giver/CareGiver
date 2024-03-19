@@ -372,7 +372,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           imageHeight={66}
         />
 
-        <TouchableOpacity style={styles.paymentButton} onPress={onPressPayIamportSubmit}>
+        <TouchableOpacity style={styles.paymentButton} onPress={onPressPay}>
           <PreBol16
             text={amount?.totalFee ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
             color="white"

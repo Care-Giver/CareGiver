@@ -60,15 +60,15 @@ export const BookingInfoCard = observer(function BookingInfoCard(props: BookingI
       ? "케어 진행중"
       : "ERR"
   //TODO 객체타입 확인 필요
-  const names = pets.map((v) => {
+  const names = pets?.map((v) => {
     //console.log("pet >>>>", v)
     return {
       petName: v?.name,
       speciesName: v?.species.name,
     }
   })
-  const petsName = names.map((v) => v.petName).join(" / ")
-  const speciesName = names.map((v) => v.speciesName).join(" / ")
+  const petsName = names?.map((v) => v.petName).join(" / ")
+  const speciesName = names?.map((v) => v.speciesName).join(" / ")
 
   let schedule = ""
   switch (visOrCre) {

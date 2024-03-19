@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Pressable, Image, ViewStyle, StyleProp } from "react-native"
+import { View, Image, ViewStyle, StyleProp, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
 import { PreBol14, PreMed16 } from "../_BASIC/custom-texts/custom-texts"
 import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
@@ -54,7 +54,7 @@ export const CaregiverNameStarReview = observer(function CaregiverNameStarReview
               style={{ marginLeft: 8, marginRight: 8 }}
             />
 
-            <Pressable onPress={onPress}>
+            <TouchableOpacity onPress={onPress} hitSlop={4}>
               <Row>
                 <PreBol14
                   text={text}
@@ -64,7 +64,7 @@ export const CaregiverNameStarReview = observer(function CaregiverNameStarReview
                 {/* //TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기 */}
                 {/* <Image source={images.arrow_right_navy} style={styles.rightArrow} /> */}
               </Row>
-            </Pressable>
+            </TouchableOpacity>
           </Row>
         </View>
       </Row>

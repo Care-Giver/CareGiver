@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle, View, StyleSheet, TextInput } from "react-native"
 import { observer } from "mobx-react-lite"
 import { BODY, HEAD_LINE, LIGHT_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
-import { PreBol16, PreMed14, PreReg12, PreReg14, Row } from "#components"
+import { PreBol16, PreMed14, PreReg12, PreReg14, RegistrationNoticeNote, Row } from "#components"
 import MapView, { LatLng, Marker } from "react-native-maps"
 import { images } from "#images"
 import { ServiceTypeKorean } from "#models"
@@ -68,6 +68,12 @@ export const CgConfirmAddress = observer(function CgConfirmAddress(props: CgConf
 
   return (
     <View style={allStyles}>
+      <RegistrationNoticeNote
+        style={{ marginTop: 16 }}
+        title="위치 등록 전, 잠깐!"
+        desc="등록해주신 위치를 기반으로 최대 30km 이내의 반려인 분들이 펫시터님을 검색할 수 있습니다!"
+      />
+
       <PreBol16
         text={`${address.sido} ${address.sigungu} ${address.bname}`}
         style={styles.address1}
