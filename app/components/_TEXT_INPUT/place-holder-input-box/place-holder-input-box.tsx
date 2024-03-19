@@ -1,15 +1,24 @@
 import React from "react"
-import { StyleProp, ViewStyle, TextInput, StyleSheet, View } from "react-native"
+import { StyleProp, ViewStyle, TextInput, StyleSheet, View, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
 import { DISABLED, LBG } from "#theme"
 import { PRETENDARD_REGULAR } from "#fonts"
 
-export interface PlaceHolderInputBoxProps {
+export interface PlaceHolderInputBoxProps extends TextInputProps {
   /**
    * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
    */
   style?: StyleProp<ViewStyle>
 
+  /**
+   * TextInput의 배경색을 지정합니다.
+   */
+  backgroundColor?: string
+
+  /**
+   * TextInput의 테두리색을 지정합니다.
+   */
+  borderColor?: string
   /**
    * 입력하기 전에 연하게 적혀져 있는 Text를 props로 추가하여 사용할 수 있습니다.
    */
@@ -30,7 +39,14 @@ export interface PlaceHolderInputBoxProps {
 export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   props: PlaceHolderInputBoxProps,
 ) {
-  const { style, placeholderText = "예시입니다.", boxHeight = 78 } = props
+  const {
+    style,
+    placeholderText = "예시입니다.",
+    boxHeight = 78,
+    backgroundColor = LBG,
+    borderColor = LBG,
+    ...textInputProps
+  } = props
   const text = props.text
   const setText = props.setText
   const allStyles = Object.assign({}, styles.root, style)
@@ -38,8 +54,12 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
   return (
     <View style={allStyles}>
       <TextInput
-        style={[styles.input, { height: boxHeight }]}
+        style={[
+          styles.input,
+          { height: boxHeight, backgroundColor: backgroundColor, borderColor: borderColor },
+        ]}
         placeholder={placeholderText}
+        placeholderTextColor={DISABLED}
         multiline
         blurOnSubmit
         maxLength={300}
@@ -47,6 +67,7 @@ export const PlaceHolderInputBox = observer(function PlaceHolderInputBox(
         value={text}
         onChangeText={setText}
         //*scrollEnabled={false}
+        {...textInputProps}
       />
     </View>
   )
@@ -57,15 +78,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    placeholderTextColor: DISABLED,
     width: "100%",
     borderRadius: 8,
     paddingTop: 15,
     paddingHorizontal: 18,
     borderWidth: 1,
     opacity: 1,
-    borderColor: LBG,
-    backgroundColor: LBG,
+
     color: "black",
     fontFamily: PRETENDARD_REGULAR,
     fontSize: 14,

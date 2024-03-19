@@ -1,7 +1,9 @@
+/* eslint-disable no-case-declarations */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { AuthProvider } from "#models"
 import { alertModal } from "../../utils/alert-modal"
+import { toKoreanAuthProvider } from "../../utils/format"
 
 export enum Sex {
   MALE = "MALE",
@@ -341,5 +343,93 @@ export const postPushToken = async (
   } catch (error) {
     console.error("catch 에러!!! - postPushToken", error.toJSON())
     return { isSuccess: false, reason: error.toJSON() }
+  }
+}
+
+const errorCode = {
+  NotFindObjectError: 404,
+  ExistUserError: 409,
+}
+type SocialLoginRequestBody = {
+  idToken: string
+}
+interface SocialLoginResponse extends GeneralResponse {
+  token?: string
+}
+/**
+ * DB 내 유저정보가 있는지 여부.
+ * 이미 존재할 경우, true
+ * 존재하지 않을경우, false 입니다.
+ *
+ * - 유저정보가 존재할 경우, 이미 이전에 회원가입을 한 유저임.
+ * - token 값 리턴함. 소셜 로그인 플로우 진행
+ */
+type SocialLoginReturn =
+  | // DB에 유저가 존재하는 경우
+  {
+      ok: true
+      token: string
+      isUserExists: true
+    }
+  // DB에 유저가 존재하지 않는 경우
+  | {
+      ok: true
+      isUserExists: false
+    }
+  // 예외 상황
+  | {
+      ok: false
+    }
+
+/**
+ * token 값을 서버에 전송하여,
+ * email 과 provider="kakao" 정보를 대조하여 DB 에 유저 객체가 존재하는지 확인한다.
+ */
+export const checkUserExists = async (
+  post: SocialLoginRequestBody,
+  provider: Exclude<AuthProvider, "google">,
+): Promise<SocialLoginReturn> => {
+  try {
+    const response = await axios.post<SocialLoginResponse>(
+      `${BASE_URL}/user/login/${provider}`,
+      post,
+      {
+        headers: {
+          Accept: "Application/json",
+        },
+      },
+    )
+
+    if (!response.data.ok) {
+      switch (response.data.error?.errorCode) {
+        case errorCode.NotFindObjectError:
+          return { ok: true, isUserExists: false }
+        case errorCode.ExistUserError:
+          alertModal(
+            "유저 확인 실패",
+            `이미 ${toKoreanAuthProvider(
+              response.data.error.message.split(":")[1] as Exclude<AuthProvider, "google">,
+            )} 로그인으로 동일한 이메일주소를 사용 중인 유저 정보가 있습니다.`,
+          )
+          return { ok: false }
+        default:
+          alertModal("유저 확인 실패", `${response.data.error?.message}`)
+          return { ok: false }
+      }
+    }
+
+    if (!response.data.token) {
+      alertModal("유저 확인 실패", `토큰값을 얻어내지 못했습니다. ${response.data.error?.message}`)
+      return { ok: false }
+    }
+
+    return {
+      ok: true,
+      token: response.data.token,
+      isUserExists: true,
+    }
+  } catch (error) {
+    alertModal("유저 확인 실패", `catch: ${error?.message}`)
+    return { ok: false }
   }
 }

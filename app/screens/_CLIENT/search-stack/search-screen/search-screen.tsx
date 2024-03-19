@@ -19,6 +19,7 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   Footer,
   FOOTER_CONTENT_GAP,
+  CautionModal,
 } from "#components"
 import { navigate, NavigatorParamList } from "#navigators"
 import {
@@ -235,42 +236,10 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
     return (
       <Screen testID="SearchScreen" preset="fixed" style={{ paddingHorizontal: 0 }}>
         <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-            {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
-            <Image source={images.search_screen_header_image} style={styles.headerImage} />
-            {/* //* 방문 | 위탁 */}
-            <Row style={{ marginTop: 44, justifyContent: "space-between", width: "100%" }}>
-              <ServiceTypeIndicatorHeader
-                onPress={() => {
-                  setServiceType("방문")
-                }}
-                label={"방문 펫시팅 서비스"}
-                state={serviceType}
-                isActivated={serviceType === "방문"}
-              />
-              {/* <ServiceTypeIndicatorHeader
-                onPress={() => {
-                  setServiceType("위탁")
-                }}
-                style={{ marginLeft: 10 }}
-                label={"위탁"}
-                state={serviceType}
-                isActivated={serviceType === "위탁"}
-              /> */}
-            </Row>
-            <Row style={{ marginTop: 16 }}>
-              <Image source={images.right_arrow_grey} style={styles.image} />
-              <PreReg14
-                text={
-                  serviceType === "방문"
-                    ? "펫시터가 직접 당신의 집을 방문합니다. \n날짜와 시간을 선택해주세요."
-                    : "펫시터가 있는 곳으로 아이를 맡기러 갑니다. \n날짜 범위를 선택해주세요."
-                }
-                color={DISABLED}
-                style={styles.text}
-              />
-            </Row>
+          {/* 펫시팅 헤더 이미지 - "나에게 딱맞는 펫시터 찾아보기" */}
+          <Image source={images.search_screen_header_image} style={styles.headerImage} />
 
+          <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, marginTop: 36 }}>
             {/* //* 날짜 선택 */}
             {/* //? 날짜 선택 버튼 */}
             <RowRoundedButton
@@ -289,7 +258,6 @@ export const SearchScreen: FC<StackScreenProps<NavigatorParamList, "search-scree
               // text={date ? `${date?.dateString?.replace(/-/g, ".")}` : "날짜를 선택해주세요"} // 주의! replaceAll() 은 RN 에서 사용불가 (안드로이드에서 작동 불능 😂) - https://stackoverflow.com/q/69297024/16673541
               text={calendarButtonText()}
               textColor={HEAD_LINE}
-              style={{ marginTop: 36 }}
               borderColor={isCalendarOpen ? GIVER_CASUAL_NAVY : LIGHT_LINE}
             />
             {/* 캘린더 */}

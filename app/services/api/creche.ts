@@ -119,7 +119,6 @@ export const getCreche = async (crecheId: number): Promise<Creche | null> => {
       return null
     }
 
-    console.log("response.data.creche.data", response.data.creche)
     return response.data.creche
   } catch (error) {
     alertModal(
