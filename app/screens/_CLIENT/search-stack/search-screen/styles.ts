@@ -4,9 +4,9 @@ import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
   headerImage: {
-    width: "100%",
-    height: 109,
+    height: 111,
     resizeMode: "contain",
+    alignSelf: "flex-end",
   },
   image: { width: 16, height: 16, alignSelf: "flex-start" },
   text: { marginLeft: 8, lineHeight: 20 },

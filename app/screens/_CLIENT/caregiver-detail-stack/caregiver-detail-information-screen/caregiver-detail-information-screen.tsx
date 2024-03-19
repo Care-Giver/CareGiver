@@ -45,6 +45,7 @@ import { CrecheAmenity, CrecheService, VisitingAmenity, VisitingService } from "
 import { ServiceType, useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
 import { PRETENDARD_MEDIUM } from "#fonts"
+import { ratingRound } from "../../../../utils/format"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -179,13 +180,14 @@ export const CaregiverDetailInformationScreen: FC<
             profileImage={profileImage}
             caregiverData={{
               name: userNickname,
-              ratings: star,
+              ratings: ratingRound(star),
             }}
             onPress={() => {
               //? 후기 전체보기 화면으로 이동
               // TODO: params 값 추가해줘야 함
               // TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기
               // navigate("all-reviews-screen", null)
+              alertModal("후기 전체보기", "개발중...")
             }}
             text={`후기 ${reviewCount}개`}
           />
@@ -263,11 +265,11 @@ export const CaregiverDetailInformationScreen: FC<
             style={{
               marginTop: 60,
 
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
+              // // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              // display: "none",
             }}
           >
-            <PreBol16 text={"댓글 (더미)"} color={SUB_HEAD_LINE} />
+            <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
             <PreBol14
               text={"전체보기 >"}
               color={BODY}
@@ -286,8 +288,8 @@ export const CaregiverDetailInformationScreen: FC<
               marginBottom: BOTTOM_HEIGHT,
               alignItems: "center",
 
-              // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
-              display: "none",
+              // // TODO: "댓글 작성" 기능 테스트 완료한 뒤 복구하기
+              // display: "none",
             }}
           >
             {commentsDummy.slice(0, 3).map((item, index) => (

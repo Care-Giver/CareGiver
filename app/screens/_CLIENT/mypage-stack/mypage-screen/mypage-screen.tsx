@@ -168,10 +168,10 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
 
           <DivisionLine color={LIGHT_LINE} />
 
-          <MypageButton
+          {/* <MypageButton
             text="알림구독 테스트"
             onPress={() => subscribeNotification(addNotification)}
-          />
+          /> */}
         </ScrollView>
       </Screen>
     )

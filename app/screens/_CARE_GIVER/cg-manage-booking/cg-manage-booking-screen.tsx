@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
   BookingCheckButton,
   BookingInfoCardProps,
   BookingList,
@@ -15,6 +16,7 @@ import { getAllBookings, getConfirmedBookings } from "#api"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
+import { View } from "react-native"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -69,11 +71,13 @@ export const CgManageBookingScreen: FC<
 
   return (
     <Screen testID="ManageBooking" style={{ paddingHorizontal: 0 }}>
-      <BookingCheckButton
-        style={{ zIndex: 1, marginVertical: 16 }}
-        bookingCount={waitingBookings?.length}
-        onPress={() => navigate("cg-booking-list-screen")}
-      />
+      <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+        <BookingCheckButton
+          style={{ zIndex: 1, marginVertical: 16 }}
+          bookingCount={waitingBookings?.length}
+          onPress={() => navigate("cg-booking-list-screen")}
+        />
+      </View>
 
       <SimpleCalendar
         selectedDate={selectedDate}
