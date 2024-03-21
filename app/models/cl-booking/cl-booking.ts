@@ -1,12 +1,13 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
-import { BookingStatus } from "../../services/api"
+import { BookingStatus, ReviewStatus } from "../../services/api"
 
 /**
- * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
+ * 보호자 입장에서 사용하게 되는 예약 정보 객체
  */
 export const ClBookingModel = types
   .model("ClBooking")
+  //TODO frozen 메서드에 대해 고민(검증) 필요
   .props({
     visitingBookingId: types.identifierNumber,
     visitingId: types.number,
@@ -14,15 +15,22 @@ export const ClBookingModel = types
     startTime: types.Date,
     endTime: types.Date,
     petSitterName: types.string,
-    ratings: types.number,
-    reviewCount: types.number,
     profileImage: types.string,
     desc: types.string,
     status: types.frozen<BookingStatus>(),
+    ratings: types.optional(types.number, 0),
+    reviewCount: types.optional(types.number, 0),
+    isCanceled: types.optional(types.boolean, false),
+    isFavorite: types.optional(types.boolean, false),
+    reviewStatus: types.optional(types.frozen<ReviewStatus>(), "Waiting"),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    completeReview() {
+      self.reviewStatus = "Complete"
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type ClBookingType = Instance<typeof ClBookingModel>
 export interface ClBooking extends ClBookingType {}

@@ -202,7 +202,12 @@ export interface CurrentBooking {
   desc: string
   profileImage: string | null
 }
-
+/**
+ * "Waiting" // 아직 서비스가 완료되지 않아 리뷰 작성 불가
+ * "Possible" // 서비스 완료 이후 리뷰 작성 가능 시기
+ * "Complete" // 리뷰 작성 완료.
+ * "Expired" // 리뷰 작성 기한이 지나 리뷰 생성 및 수정 불가능
+ */
 export type ReviewStatus = "Waiting" | "Possible" | "Complete" | "Expired"
 
 /**
