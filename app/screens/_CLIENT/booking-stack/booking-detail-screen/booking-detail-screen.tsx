@@ -44,7 +44,7 @@ import {
   getVisitingBooking,
 } from "#api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
-import { price as priceFormatter } from "../../../../utils/format"
+import { price as priceFormatter, ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 
 export const BookingDetailScreen: FC<
@@ -169,7 +169,7 @@ export const BookingDetailScreen: FC<
                   <Image style={styles.star} source={images.rating_star} />
 
                   <PreReg12
-                    text={`(${petsitter[serviceType].star})`}
+                    text={`(${ratingRound(petsitter[serviceType].star)})`}
                     color={SUB_HEAD_LINE}
                     style={{ marginLeft: 4 }}
                   />
