@@ -78,7 +78,7 @@ export const BookingDetailScreen: FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booking])
 
-  const serviceTypeKorean = serviceType === "creche" ? "방문" : "위탁"
+  const serviceTypeKorean = serviceType === "creche" ? "위탁" : "방문"
 
   const isPhoneAndChatActivated =
     booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.PROCEEDING
