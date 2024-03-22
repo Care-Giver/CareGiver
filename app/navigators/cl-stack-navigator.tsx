@@ -69,7 +69,7 @@ import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
-import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
+import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
 import { Pet } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
@@ -531,9 +531,13 @@ export const ChatsStack = () => {
     userStore: { type },
   } = useStores()
 
+  const streami18n = new Streami18n({ language: "ko" })
+  streami18n.registerTranslation("ko", {
+    "Send a message": "메시지를 입력해주세요 :)",
+  })
   return (
     <OverlayProvider>
-      <Chat client={streamChatClient}>
+      <Chat client={streamChatClient} i18nInstance={streami18n}>
         <Stack.Navigator
           screenOptions={{
             headerShown: true,

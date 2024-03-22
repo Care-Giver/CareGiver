@@ -36,6 +36,7 @@ export const ChannelScreen: FC<StackScreenProps<NavigatorParamList, "channel-scr
           top: Platform.select({
             ios: -24,
           }),
+          paddingHorizontal: 0,
         }}
       >
         <Channel
@@ -43,9 +44,10 @@ export const ChannelScreen: FC<StackScreenProps<NavigatorParamList, "channel-scr
           keyboardVerticalOffset={Platform.select({
             android: 90,
           })}
+          giphyEnabled={false}
         >
           <MessageList />
-          <MessageInput />
+          <MessageInput giphyActive={false} />
         </Channel>
       </Screen>
     )
