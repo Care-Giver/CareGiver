@@ -1,8 +1,9 @@
+/* eslint-disable no-case-declarations */
 import React, { useEffect } from "react"
 import { Alert, AppState, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import { navigate, navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import { Loading, CustomTabBar, CautionModal } from "#components"
 import { GIVER_CASUAL_NAVY } from "../theme"
 import { Type, useStores } from "../models"
@@ -11,7 +12,7 @@ import {
   BookingsStack,
   CLStackNavigatorParamList,
   ChatsStack,
-  FavoritesStack,
+  // FavoritesStack,
   MypageStack,
   SearchingStack,
 } from "./cl-stack-navigator"
@@ -20,7 +21,7 @@ import {
   CalendarStack,
   CgBookingsStack,
   CgMypageStack,
-  StatisticsStack,
+  // StatisticsStack,
 } from "./cg-stack-navigator"
 import {
   LoginSignUpStack,
@@ -29,7 +30,7 @@ import {
 import axios from "axios"
 import { TestStreamChatScreen } from "#screens"
 import { alertModal } from "../utils/alert-modal"
-import { BASE_URL } from "#api"
+import { BASE_URL, SSENotificationEventDataMessage } from "#api"
 import EventSource from "react-native-sse"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
@@ -207,31 +208,76 @@ const AllTabs = observer(function AllTabs() {
       return
     }
 
-    const eventSource = new EventSource(`${BASE_URL}/notification/subscribe`, {
+    const notiSSE = new EventSource(`${BASE_URL}/notification/subscribe`, {
       headers: { "x-jwt": axios.defaults.headers.common["x-jwt"] },
       debug: true,
     })
 
     // SSE 연결
-    eventSource.addEventListener("open", () => {
+    notiSSE.addEventListener("open", () => {
       console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 시작")
     })
 
     // SSE 수신
-    eventSource.addEventListener("message", (event) => {
-      const SSEMessage: { message: string } = JSON.parse(event.data)
+    notiSSE.addEventListener("message", (event) => {
+      const SSEMessage = JSON.parse(event.data)
+
       if (SSEMessage.message === "Heartbeat") {
         console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
         return
       }
 
-      switch (SSEMessage.message) {
-        case "Notification connection established":
-          console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
-          return
-        default:
-          console.log(`🔷SSEMessage ${userDetail.nickname}:`, SSEMessage.message)
-          Alert.alert("새로운 알림이 도착했습니다.", SSEMessage.message)
+      if (SSEMessage.message === "Notification connection established") {
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
+        return
+      }
+
+      const noti: SSENotificationEventDataMessage = SSEMessage?.message
+      // 수신자: 펫시터
+      if (noti?.careGiverReceiverId && type === Type.CARE_GIVER) {
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
+        Alert.alert(
+          `${noti?.title}`,
+          `${noti?.content}`,
+          [
+            { text: "닫기", style: "cancel" },
+            {
+              text: "확인하기",
+              onPress: () => {
+                //@ts-ignore
+                navigate("CgBookings", { screen: "cg-booking-list-screen" })
+              },
+            },
+          ],
+          { cancelable: true },
+        )
+        return
+      }
+
+      // 수산자: 보호자
+      if (noti?.clientReceiverId && type === Type.CLIENT) {
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
+        Alert.alert(
+          `${noti?.title}`,
+          `${noti?.content}`,
+          [
+            { text: "닫기", style: "cancel" },
+            {
+              text: "확인하기",
+              onPress: () => {
+                //@ts-ignore
+                navigate("Bookings")
+              },
+            },
+          ],
+          { cancelable: true },
+        )
+        return
+      }
+
+      if (!noti?.careGiverReceiverId && !noti?.clientReceiverId) {
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, "🐞")
+        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
       }
     })
 
@@ -239,7 +285,7 @@ const AllTabs = observer(function AllTabs() {
     // eventSource.close() 호출 (= SSE 연결 종료)
     return () => {
       // SSE 연결 종료
-      eventSource.close()
+      notiSSE.close()
       console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 종료")
       // TODO Background 상태에서는 어떻게 처리해야 하는게 맞는걸까?
       // TODO [참고] AppState 로 Foreground, Background 상태를 구분 가능.
