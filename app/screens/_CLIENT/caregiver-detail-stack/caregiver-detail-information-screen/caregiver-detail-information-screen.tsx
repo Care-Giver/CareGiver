@@ -62,6 +62,9 @@ import { PRETENDARD_MEDIUM } from "#fonts"
 import { useFocusEffect } from "@react-navigation/native"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import _ from "lodash"
+import { 
+} from "../../../../utils/format"
+
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
   amenities: CrecheAmenity[] | VisitingAmenity[]
@@ -244,13 +247,16 @@ export const CaregiverDetailInformationScreen: FC<
             profileImage={profileImage}
             caregiverData={{
               name: userNickname,
-              ratings: star,
+              ratings: 
+              
+              (star),
             }}
             onPress={() => {
               //? 후기 전체보기 화면으로 이동
               // TODO: params 값 추가해줘야 함
               // TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기
               // navigate("all-reviews-screen", null)
+              alertModal("후기 전체보기", "개발중...")
             }}
             text={`후기 ${reviewCount}개`}
           />

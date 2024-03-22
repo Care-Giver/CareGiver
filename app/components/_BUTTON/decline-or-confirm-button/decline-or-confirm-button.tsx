@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleProp, ViewStyle, View, StyleSheet, Pressable } from "react-native"
+import { StyleProp, ViewStyle, View, StyleSheet, TouchableOpacity } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol14 } from "../../_BASIC/custom-texts/custom-texts"
 import { GIVER_CASUAL_NAVY, color } from "#theme"
@@ -64,12 +64,12 @@ export const DeclineOrConfirmButton = observer(function DeclineOrConfirmButton(
   const allStyles = Object.assign({}, styles.root, { height }, style)
   return (
     <View style={allStyles}>
-      <Pressable style={styles.declineButton} onPress={handleYesPress}>
+      <TouchableOpacity style={styles.declineButton} onPress={handleYesPress}>
         <PreBol14 text={declineText} color={GIVER_CASUAL_NAVY} />
-      </Pressable>
-      <Pressable style={styles.confirmButton} onPress={handleNoPress}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleNoPress}>
         <PreBol14 text={confirmText} color={color.palette.white} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   )
 })

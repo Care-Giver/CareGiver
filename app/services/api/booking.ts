@@ -89,7 +89,7 @@ export const createVisitingBooking = async (
   body: CreateVisitingBookingRequestBody,
 ): Promise<CreateVisitingBookingResult> => {
   try {
-    console.log(body)
+    console.log("booking/visiting request body >>>", body)
     const response = await axios.post<CreateVisitingBookingResponse>(
       `${BASE_URL}/booking/visiting`,
       body,
@@ -445,7 +445,7 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
       const error = response.data.error
       console.error("[getPreviousBookings] error >>>", error)
       // @ts-ignore
-      return error
+      return []
     }
 
     // console.log("[getPreviousBookings] response.data >>> ", response.data)

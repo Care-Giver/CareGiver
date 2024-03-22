@@ -35,6 +35,7 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
 import _ from "lodash"
+import { subscribeNotification } from "../../../services/api/notification"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -44,6 +45,7 @@ export const CgMypageScreen: FC<
   const {
     userStore: { switchType, userDetail },
     petsitterStore: { serviceTypeKorean, petsitter, isFirstPetsitter, setDraftPetsitter },
+    notificationStore: { addNotification },
   } = useStores()
 
   // 환경설정 버튼 클릭시 실행되는 함수
@@ -147,7 +149,7 @@ export const CgMypageScreen: FC<
                   style={styles.petsitterBadge}
                 />
                 <PreReg14
-                  text={_.truncate(petsitter?.desc || "", { length: 18 })}
+                  text={_.truncate(petsitter?.title || "", { length: 18 })}
                   color={SUB_HEAD_LINE}
                   ml={8}
                 />
@@ -244,12 +246,17 @@ export const CgMypageScreen: FC<
 
         <DivisionLine color={LIGHT_LINE} />
 
-        <Pressable
+        {/* <MypageButton
+          text="알림구독 테스트"
+          onPress={() => subscribeNotification(addNotification)}
+        /> */}
+
+        {/* <Pressable
           style={{ margin: 20, backgroundColor: "black", width: "auto" }}
           onPress={() => navigation.navigate("cg-request-earning-screen")}
         >
           <Text style={{ fontSize: 25, color: "white" }}>(정산요청스크린)</Text>
-        </Pressable>
+        </Pressable> */}
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}

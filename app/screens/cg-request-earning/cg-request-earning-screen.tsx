@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
-import { Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import React, { FC, useState } from "react"
+import { Image, Linking, Pressable, ScrollView, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -11,13 +11,10 @@ import {
   PaymentList,
   PlaceHolderInputBox,
   PopSem24,
-  PreBol14,
   PreBol16,
   PreBol20,
-  PreMed12,
   PreMed14,
   PreMed16,
-  PreReg14,
   PreReg16,
   RegistrationNoticeNote,
   Row,
@@ -29,35 +26,25 @@ import {
   BODY,
   BOTTOM_HEIGHT,
   CARE_NATURAL_BLUE,
-  DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
   LBG,
   LIGHT_LINE,
 } from "#theme"
 import { images } from "#images"
-import { l } from "i18n-js"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { 외부링크 } from "../../services/external-web-link"
-import { ScrollToBottomButton } from "stream-chat-react-native"
-import { bookings } from "./dummy"
-import { GetSettlementResponse, getSettlement, settlementDetail } from "../../services/api/payment"
-import axios from "axios"
+import { getSettlement, settlementDetail } from "../../services/api/payment"
 import { useStores } from "#models"
 import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
-import { getBanksHolder } from "../../services/api/port-one"
+import { verifyBankHolder } from "#api"
 import { bankCodeList } from "./constant"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "#models"
 
 export type SettlementType = {
   date: string
   settlementDetails: settlementDetail[]
 }
-// [주의] app/navigators/app-navigator.tsx 에 위치한, NavigatorParamList 변수에 새로운 값 "xxxx-screen": undefined 을 추가해주세요.
-// 그 뒤에는 아래에 있는 @ts-ignore 를 제거해도, 빨간줄이 뜨지 않습니다 :)
-// @ts-ignore
+
 export const CgRequestEarningScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-request-earning-screen">
 > = observer(function CgRequestEarningScreen({ navigation }) {
@@ -118,24 +105,17 @@ export const CgRequestEarningScreen: FC<
     //* 정산 정보 입력 스크린
     if (isConfirmed === false) {
       const bankCode = Object.keys(bankCodeList).find((key) => bankCodeList[key] === bank)
-      const verifyAccountResponse = await getBanksHolder({
-        bank_code: bankCode,
-        bank_num: accountNum,
-      })
 
       // 계좌 정보 인증 절차
-      if (!verifyAccountResponse.isSuccess) {
-        return alertModal(
-          "계좌 조회 실패",
-          "알 수 없는 이유로, 계좌 조회에 실패하였습니다. 입력한 정보를 다시 확인해주세요.",
-        )
-      } else {
-        if (name !== verifyAccountResponse.response.bank_holder)
-          return alertModal(
-            "계좌 조회 실패",
-            "입력하신 예금주명과 일치하는 계좌번호가 아닙니다. 입력한 정보를 다시 확인해주세요.",
-          )
-      }
+      const isVerified = await verifyBankHolder({
+        bankCode: bankCode,
+        bankNum: accountNum,
+        bankHolder: name,
+        bankName: bank,
+      })
+
+      if (!isVerified) return
+
       // 정산했던 최대 날짜와 현재 날짜 사이의 정산내역 조회
       const settlementResponse = await getSettlement({
         startDate: `2024-${maxMonth}-01`,
@@ -184,6 +164,7 @@ export const CgRequestEarningScreen: FC<
       }
     }
   }
+
   const placeholderBoxStyle = isOpen ? styles.placeholderBoxOpen : styles.placeholderBoxClosed
   const openLink = (link: string) => {
     Linking.openURL(link)
@@ -234,7 +215,8 @@ export const CgRequestEarningScreen: FC<
                 boxHeight={48}
                 placeholderText="계좌번호를 입력해주세요."
                 text={accountNum}
-                setText={setAccountNum}
+                setText={(text: string) => setAccountNum(text.replace(/[^0-9]/g, ""))} //! 숫자만 입력
+                keyboardType="number-pad"
               />
               <PlaceHolderInputBox
                 backgroundColor="white"
