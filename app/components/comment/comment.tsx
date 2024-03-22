@@ -51,7 +51,7 @@ interface CommentProps {
   style?: any
   numberOfLines?: number
   commentData: CommentColumns
-  onPress?: () => void
+  onPress: () => void
 }
 
 export const Comment = forwardRef((props: CommentProps) => {
@@ -77,6 +77,7 @@ export const Comment = forwardRef((props: CommentProps) => {
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}
+          hitSlop={4}
           onPress={
             onPress
             //TODO 유저 id에 따라 수정 및 답글 기능 추가
