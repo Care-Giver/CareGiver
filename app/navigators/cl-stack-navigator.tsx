@@ -71,7 +71,7 @@ import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
-import { Pet } from "#api"
+import { CommentColmns, Pet } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {
@@ -165,8 +165,17 @@ export type CLStackNavigatorParamList = {
 
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
-  "all-comments-screen": undefined
-  "writing-comment-screen": undefined
+  "all-comments-screen": {
+    comments: CommentColmns[]
+    visitingId: number
+    userId: number
+  }
+  "writing-comment-screen": {
+    visitingId?: number
+    defaultComment?: string
+    updateOrCreate: "update" | "create"
+    commentId?: number
+  }
   "payment-request-screen": undefined
 
   /**
@@ -417,7 +426,7 @@ export const SearchingStack = () => {
         component={AllCommentsScreen}
         options={{
           title: "댓글 전체보기",
-          header: (props) => <AllCommentsScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
@@ -426,7 +435,7 @@ export const SearchingStack = () => {
         name="writing-comment-screen"
         component={WritingCommentScreen}
         options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
