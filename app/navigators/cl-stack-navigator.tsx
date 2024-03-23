@@ -530,9 +530,10 @@ export const ChatsStack = () => {
   const {
     userStore: { type },
   } = useStores()
-
+  const defaultKo = require("./ko.json")
   const streami18n = new Streami18n({ language: "ko" })
   streami18n.registerTranslation("ko", {
+    ...defaultKo,
     "Send a message": "메시지를 입력해주세요 :)",
   })
   return (
