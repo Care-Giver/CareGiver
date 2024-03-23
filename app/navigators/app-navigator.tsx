@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 import React, { useEffect } from "react"
-import { Alert, AppState, useColorScheme } from "react-native"
+import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { navigate, navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import { Loading, CustomTabBar, CautionModal } from "#components"
 import { GIVER_CASUAL_NAVY } from "../theme"
 import { Type, useStores } from "../models"
@@ -29,9 +29,8 @@ import {
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
 import { TestStreamChatScreen } from "#screens"
-import { alertModal } from "../utils/alert-modal"
-import { BASE_URL, SSENotificationEventDataMessage } from "#api"
-import EventSource from "react-native-sse"
+import { NotiSSE } from "#api"
+import { useAppState } from "@react-native-community/hooks"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -201,111 +200,35 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
-  // 알림 객체 SSE 수신 - 모드별 상관 없이 하나의 eventSource 인스턴스만 사용 함
+  const currentAppState = useAppState()
+  // 알림 객체 SSE 컨트롤
   useEffect(() => {
-    if (!axios.defaults.headers.common["x-jwt"]) {
-      alertModal("유저 정보가 존재하지 않습니다.", "로그인 후 다시 시도해주세요.")
-      return
+    switch (currentAppState) {
+      // Foreground
+      case "active":
+        // 모드전환시, 기존연결 끊고, 새로운 연결
+        if (NotiSSE.notiSSE) {
+          NotiSSE.disconnect(userDetail, type)
+          NotiSSE.connect(userDetail, type)
+          return
+        }
+        // 연결
+        NotiSSE.connect(userDetail, type)
+        break
+
+      // Background
+      case "inactive":
+      case "background":
+        NotiSSE.disconnect(userDetail, type)
+        break
     }
+  }, [type, userDetail, currentAppState])
 
-    const notiSSE = new EventSource(`${BASE_URL}/notification/subscribe`, {
-      headers: { "x-jwt": axios.defaults.headers.common["x-jwt"] },
-      debug: true,
-    })
-
-    // SSE 연결
-    notiSSE.addEventListener("open", () => {
-      console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 시작")
-    })
-
-    // SSE 수신
-    notiSSE.addEventListener("message", (event) => {
-      const SSEMessage = JSON.parse(event.data)
-
-      if (SSEMessage.message === "Heartbeat") {
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
-        return
-      }
-
-      if (SSEMessage.message === "Notification connection established") {
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, SSEMessage.message)
-        return
-      }
-
-      const noti: SSENotificationEventDataMessage = SSEMessage?.message
-      // 수신자: 펫시터
-      if (noti?.careGiverReceiverId && type === Type.CARE_GIVER) {
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
-        Alert.alert(
-          `${noti?.title}`,
-          `${noti?.content}`,
-          [
-            { text: "닫기", style: "cancel" },
-            {
-              text: "확인하기",
-              onPress: () => {
-                //@ts-ignore
-                navigate("CgBookings", { screen: "cg-booking-list-screen" })
-              },
-            },
-          ],
-          { cancelable: true },
-        )
-        return
-      }
-
-      // 수산자: 보호자
-      if (noti?.clientReceiverId && type === Type.CLIENT) {
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
-        Alert.alert(
-          `${noti?.title}`,
-          `${noti?.content}`,
-          [
-            { text: "닫기", style: "cancel" },
-            {
-              text: "확인하기",
-              onPress: () => {
-                //@ts-ignore
-                navigate("Bookings")
-              },
-            },
-          ],
-          { cancelable: true },
-        )
-        return
-      }
-
-      if (!noti?.careGiverReceiverId && !noti?.clientReceiverId) {
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, "🐞")
-        console.debug(`🤖DEBUG ${userDetail.nickname}:`, noti)
-      }
-    })
-
-    // 로그아웃 시 (= AllTabs 컴포넌트가 unmount 될 때)
-    // eventSource.close() 호출 (= SSE 연결 종료)
-    return () => {
-      // SSE 연결 종료
-      notiSSE.close()
-      console.debug(`🤖DEBUG ${userDetail.nickname}:`, "SSE 연결 종료")
-      // TODO Background 상태에서는 어떻게 처리해야 하는게 맞는걸까?
-      // TODO [참고] AppState 로 Foreground, Background 상태를 구분 가능.
-      // TODO   1. Background 상태에서는 알림을 받지 않는다. -> eventSource.close()
-      // TODO   2. Foreground 상태에서는 알림을 받는다. -> eventSource.open() 다시?
-
-      //! 이걸로하면 연결 종료가 안됨. 왜지?
-      // eventSource.addEventListener("close", () => {
-      //   console.log(`[SSE Close event] ${type}`)
-      // })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
   // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
-  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
-
   return (
     <>
       {type === Type.CLIENT && <ClientTabs />}
