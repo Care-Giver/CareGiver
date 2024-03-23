@@ -61,6 +61,7 @@ export const Comment = forwardRef((props: CommentProps) => {
 
   const _createAt = new Date(createAt)
   const date = formatDate(_createAt)
+
   return (
     <View style={[styles.root, viewStyle]}>
       <DivisionLine height={1} color={LIGHT_LINE} />

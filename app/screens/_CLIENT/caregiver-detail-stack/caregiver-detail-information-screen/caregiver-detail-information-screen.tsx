@@ -165,8 +165,12 @@ export const CaregiverDetailInformationScreen: FC<
 
   useFocusEffect(
     useCallback(() => {
+      const dummy = require("../all-comments-screen/comments-for-UT.json")
       getVisitingComments(service.visiting.id).then((res) => {
-        setComments(res.visitingComments)
+        setComments([
+          // ...res.visitingComments,
+          ...dummy,
+        ])
       })
     }, []),
   )
