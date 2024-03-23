@@ -47,10 +47,8 @@ export * from "./_MODAL/birthday-modal/birthday-modal"
 export * from "./_MODAL/caution-modal/caution-modal"
 
 // _SCREEN_HEADER
-export * from "./_SCREEN_HEADER/all-comments-screen-header/all-comments-screen-header"
 export * from "./_SCREEN_HEADER/goback-and-title-header/goback-and-title-header"
 export * from "./_SCREEN_HEADER/home-screen-header/home-screen-header"
-export * from "./_SCREEN_HEADER/writing-comment-screen-header/writing-comment-screen-header"
 export * from "./_SCREEN_HEADER/edit-mypage-screen-header/edit-mypage-screen-header"
 export * from "./_SCREEN_HEADER/goback-and-title-spacebetween-header/goback-and-title-spacebetween-header"
 export * from "./_SCREEN_HEADER/goback-and-title-and-button-header/goback-and-title-and-button-header"
