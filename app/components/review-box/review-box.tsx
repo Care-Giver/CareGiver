@@ -49,13 +49,14 @@ export const ReviewBox = (props: ReviewBoxProps) => {
   const profileImg = user.profileImg ? user.profileImg : images.profile_default
   const reviewImages = reviewData?.images || []
 
-  const date = formatDate(createdAt)
+  // const date = formatDate(createdAt)
+  const date = formatDate(new Date(createdAt))
 
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 
   const handlePress = () => {
-    alertModal("개발중 🏗️", "후기 펫정보는 (더미) 데이터에서 제공되지 않습니다.")
-    return
+    // alertModal("개발중 🏗️", "후기 펫정보는 (더미) 데이터에서 제공되지 않습니다.")
+    // return
 
     setDropdownIsOpen(!dropdownIsOpen)
     LayoutAnimation.configureNext(LayoutAnimation.create(170, "easeInEaseOut", "opacity"))
@@ -71,7 +72,8 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       >
         <View style={styles.profileContainer}>
           {/* //? 프로필 사진 */}
-          <Image source={profileImg} style={styles.profileImg} />
+          {/* <Image source={profileImg} style={styles.profileImg} /> */}
+          <Image source={{ uri: user?.profileImg }} style={styles.profileImg} />
           {/* //? 사용자 이름 */}
           <PreReg14
             text={userName}
@@ -115,8 +117,9 @@ export const ReviewBox = (props: ReviewBoxProps) => {
         <FlatList
           data={reviewImages}
           renderItem={({ item, index }) => (
-            <Pressable
+            <Image
               key={index}
+              source={{ uri: item }}
               style={{
                 width: 160,
                 height: 160,

@@ -62,13 +62,13 @@ import { PRETENDARD_MEDIUM } from "#fonts"
 import { useFocusEffect } from "@react-navigation/native"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import _ from "lodash"
-import { 
-} from "../../../../utils/format"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
   amenities: CrecheAmenity[] | VisitingAmenity[]
 }
+
+const reviewForUT = require("./reviews-for-UT.json")
 
 export const CaregiverDetailInformationScreen: FC<
   StackScreenProps<NavigatorParamList, "caregiver-detail-information-screen">
@@ -247,18 +247,14 @@ export const CaregiverDetailInformationScreen: FC<
             profileImage={profileImage}
             caregiverData={{
               name: userNickname,
-              ratings: 
-              
-              (star),
+              ratings: star,
             }}
             onPress={() => {
               //? 후기 전체보기 화면으로 이동
-              // TODO: params 값 추가해줘야 함
-              // TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기
-              // navigate("all-reviews-screen", null)
-              alertModal("후기 전체보기", "개발중...")
+              navigate("all-reviews-screen", { reviews: reviewForUT })
             }}
-            text={`후기 ${reviewCount}개`}
+            // text={`후기 ${reviewCount}개`}
+            text={`후기 ${reviewForUT?.length}개`}
           />
 
           {/* TODO: 어떻게 가져올 것인가? API 없는 것으로 보임 */}
