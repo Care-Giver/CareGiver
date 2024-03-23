@@ -32,7 +32,8 @@ export const profileImageUriHandler = (
     return defaultImage
   }
 
-  const isValidated = imageFormatValidate(imageUri)
+  // const isValidated = imageFormatValidate(imageUri)
+  const isValidated = true
   if (!isValidated) {
     switch (size) {
       case "small":
