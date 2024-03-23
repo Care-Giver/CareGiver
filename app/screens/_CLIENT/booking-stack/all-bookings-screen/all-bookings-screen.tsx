@@ -39,13 +39,18 @@ export const AllBookingsScreen: FC<
   useShowBottomTab(navigation)
 
   // * dotsIndicator의 현재 인덱스를 나타내는 state
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndexInProgress, setActiveIndexInProgress] = useState(0)
   // * flatlist에서 viewable item이 바뀌면 할 일 -> activeIndex 변경
-  const onViewableChange = useCallback(({ viewableItems }) => {
-    // console.log("== viewable items ==")
-    // console.log(viewableItems)
+  const onViewableChangeInProgress = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
-      setActiveIndex(viewableItems[0].index || 0)
+      setActiveIndexInProgress(viewableItems[0].index || 0)
+    }
+  }, [])
+
+  const [activeIndexPast, setActiveIndexPast] = useState(0)
+  const onViewableChangePast = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setActiveIndexPast(viewableItems[0].index || 0)
     }
   }, [])
 
@@ -141,12 +146,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangeInProgress}
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
                 {currentBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                  <View
+                    key={index}
+                    style={index === activeIndexInProgress ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>
@@ -209,12 +217,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangePast}
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginBottom: 14 }]}>
                 {waitingBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                  <View
+                    key={index}
+                    style={index === activeIndexPast ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>

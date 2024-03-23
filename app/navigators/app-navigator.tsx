@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
@@ -11,7 +12,7 @@ import {
   BookingsStack,
   CLStackNavigatorParamList,
   ChatsStack,
-  FavoritesStack,
+  // FavoritesStack,
   MypageStack,
   SearchingStack,
 } from "./cl-stack-navigator"
@@ -20,7 +21,7 @@ import {
   CalendarStack,
   CgBookingsStack,
   CgMypageStack,
-  StatisticsStack,
+  // StatisticsStack,
 } from "./cg-stack-navigator"
 import {
   LoginSignUpStack,
@@ -28,6 +29,8 @@ import {
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
 import { TestStreamChatScreen } from "#screens"
+import { NotiSSE } from "#api"
+import { useAppState } from "@react-native-community/hooks"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -166,13 +169,14 @@ const CareGiverTabs = () => {
  */
 const AllTabs = observer(function AllTabs() {
   const {
-    userStore: { type, onSwitchingType, userAuth },
+    userStore: { type, onSwitchingType, userAuth, userDetail },
     petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
   } = useStores()
 
+  // 로그인한 유저 토큰값 axios 객체에 할당
   useEffect(() => {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
@@ -181,6 +185,7 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // 모드별 데이터 요청
   useEffect(() => {
     if (type === Type.CARE_GIVER) {
       fetchPetsitter() //! 중요: CARE_GIVER 모드이면, petsitter 정보를 불러온다.
@@ -195,12 +200,35 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
+  const currentAppState = useAppState()
+  // 알림 객체 SSE 컨트롤
+  useEffect(() => {
+    switch (currentAppState) {
+      // Foreground
+      case "active":
+        // 모드전환시, 기존연결 끊고, 새로운 연결
+        if (NotiSSE.notiSSE) {
+          NotiSSE.disconnect(userDetail, type)
+          NotiSSE.connect(userDetail, type)
+          return
+        }
+        // 연결
+        NotiSSE.connect(userDetail, type)
+        break
+
+      // Background
+      case "inactive":
+      case "background":
+        NotiSSE.disconnect(userDetail, type)
+        break
+    }
+  }, [type, userDetail, currentAppState])
+
+  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
   // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
-  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
-
   return (
     <>
       {type === Type.CLIENT && <ClientTabs />}
