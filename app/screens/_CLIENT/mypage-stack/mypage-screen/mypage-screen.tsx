@@ -119,7 +119,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                       key={index}
                       petImageUri={item?.images ? item.images[0] : null}
                       name={item.name}
-                      style={{ marginLeft: array.length >= 2 && index !== 0 ? 8 * WIDTH : null }}
+                      style={{ marginLeft: array?.length >= 2 && index !== 0 ? 8 * WIDTH : null }}
                     />
                   ))}
                 </View>
