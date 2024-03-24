@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native"
-import { LBG, LIGHT_LINE } from "#theme"
+import { DEVICE_WINDOW_WIDTH, LBG, LIGHT_LINE } from "#theme"
 import { BASIC_BACKGROUND_PADDING_WIDTH } from "#components"
 
 export const styles = StyleSheet.create({
   headerImage: {
+    width: DEVICE_WINDOW_WIDTH - BASIC_BACKGROUND_PADDING_WIDTH,
+    paddingLeft: BASIC_BACKGROUND_PADDING_WIDTH,
     height: 111,
     resizeMode: "contain",
     alignSelf: "flex-end",
