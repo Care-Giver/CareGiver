@@ -144,10 +144,7 @@ export class NotiSSE {
   static notiSSE: EventSource | null = null
 
   static connect(userDetail: UserDetail, type: Type) {
-    if (!axios.defaults.headers.common["x-jwt"]) {
-      alertModal("유저 정보가 존재하지 않습니다.", "로그인 후 다시 시도해주세요.")
-      return
-    }
+    if (!axios.defaults.headers.common["x-jwt"]) return
 
     this.notiSSE = new EventSource(`${BASE_URL}/notification/subscribe`, {
       headers: { "x-jwt": axios.defaults.headers.common["x-jwt"] },
