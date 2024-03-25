@@ -19,8 +19,9 @@ import {
 } from "stream-chat-react-native"
 import { getStreamToken } from "../../services/api/stream"
 import { useStores } from "#models"
+import Config from "react-native-config"
 
-const API_KEY = "cyt5mvxvratf"
+const API_KEY = Config.STREAM_CHAT_API_KEY
 const USER_ID = "test_user_230628_cl"
 
 const sampleData = {
