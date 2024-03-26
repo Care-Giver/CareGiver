@@ -5,17 +5,6 @@ module.exports = {
   },
   plugins: [
     [
-      {
-        blocklist: null,
-        allowlist: null,
-        blacklist: null, // DEPRECATED
-        whitelist: null, // DEPRECATED
-        safe: false,
-        allowUndefined: true,
-        verbose: false,
-      },
-    ],
-    [
       "module-resolver",
       {
         root: ["."],
