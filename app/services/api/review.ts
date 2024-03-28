@@ -13,7 +13,7 @@ const USER_ID = 7
  * postVisitingReview 함수의 인자 파라미터
  * :: 이미지 업로드를 위해 images는 PickerImage[] 형태를 갖는다.
  */
-interface PostReviewParams {
+interface PostVisitingReviewRequestBody {
   visitingId?: number
   crecheId?: number
   bookingId: number
@@ -110,30 +110,30 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[] | []> 
 
 /**
  * 방문 서비스 리뷰를 서버에 등록할 때 실행하는 함수
- * @param params 방문 리뷰를 post하기 위해 필요한 params
+ * @param body 방문 리뷰를 post하기 위해 필요한 body
  * @returns post 성공 | 실패 여부
  */
 export const postVisitingReview = async (
   userId: number,
-  params: PostReviewParams,
+  body: PostVisitingReviewRequestBody,
 ): Promise<boolean> => {
   // ! undefined 추가 안할 시 에러 뜸 ... 왜?
   try {
     // * 서버에 이미지를 upload 하는 과정
-    const postParams: PostReviewToServerParams = {
-      userId: userId,
-      ...params,
+    const postBody: PostReviewToServerParams = {
+      userId,
+      ...body,
       images: [],
     }
 
-    const AwsUris = await uploadURIS(params.images)
+    const AwsUris = await uploadURIS(body.images)
 
     if (AwsUris) {
-      postParams.images = [...AwsUris]
+      postBody.images = [...AwsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/visiting-review/visiting`,
-        postParams,
+        postBody,
       )
 
       if (response.data.ok) {
@@ -155,22 +155,24 @@ export const postVisitingReview = async (
   }
 }
 
-export const postCrecheReview = async (params: PostReviewParams): Promise<boolean | undefined> => {
+export const postCrecheReview = async (
+  body: PostVisitingReviewRequestBody,
+): Promise<boolean | undefined> => {
   try {
-    const postParams: PostReviewToServerParams = {
+    const postBody: PostReviewToServerParams = {
       userId: USER_ID,
-      ...params,
+      ...body,
       images: [],
     }
 
-    const AwsUris = await uploadURIS(params.images)
+    const AwsUris = await uploadURIS(body.images)
 
     if (AwsUris) {
-      postParams.images = [...AwsUris]
+      postBody.images = [...AwsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/creche-review/creche`,
-        postParams,
+        postBody,
       )
 
       if (response.data.ok) {
@@ -292,7 +294,7 @@ export const getVisitingReviews = async (visitingId: number): Promise<getVisitin
       return { isSuccess: false }
     }
 
-    return { isSuccess: true, visitingReviews: response.data.visitingReviews }
+    return { isSuccess: true, visitingReviews: response.data.visitingReviews ?? [] }
   } catch (error) {
     console.error("[review axios] >>>", error)
     alertModal(

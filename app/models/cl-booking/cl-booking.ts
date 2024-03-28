@@ -18,10 +18,10 @@ export const ClBookingModel = types
     profileImage: types.string,
     desc: types.string,
     status: types.frozen<BookingStatus>(),
-    ratings: types.optional(types.number, 0),
-    reviewCount: types.optional(types.number, 0),
-    isCanceled: types.optional(types.boolean, false),
-    isFavorite: types.optional(types.boolean, false),
+    ratings: 0,
+    reviewCount: 0,
+    isCanceled: false,
+    isFavorite: false,
     reviewStatus: types.optional(types.frozen<ReviewStatus>(), "Waiting"),
   })
   .actions(withSetPropAction)

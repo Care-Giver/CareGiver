@@ -1,8 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { ClBookingModel, ClBooking } from "../cl-booking/cl-booking"
-import { BookingStatus, ReviewStatus } from "../../services/api"
-import { CurrentBooking } from "../../services/api/booking"
+import { BookingStatus } from "../../services/api"
+
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
  */
@@ -16,12 +16,40 @@ export const ClBookingStoreModel = types
   })
   .actions(withSetPropAction)
   .views((self) => ({
-    getBooking(bookingId) {
-      const targetBooking = self.watingBookings.find(
-        (booking) => booking.visitingBookingId === bookingId,
-      ) as ClBooking
+    /**
+     * 필요한 status의 booking을 리턴합니다.
+     */
+    getBooking(bookingId, type: BookingStatus) {
+      try {
+        let targetBooking: ClBooking
+        switch (type) {
+          case (type = BookingStatus.WAITING):
+            targetBooking = self.watingBookings?.find(
+              (booking) => booking.visitingBookingId === bookingId,
+            )
+            break
+          case (type = BookingStatus.PROCEEDING):
+            targetBooking = self.currentBookings?.find(
+              (booking) => booking.visitingBookingId === bookingId,
+            )
+            break
+          case (type = BookingStatus.COMPLETE):
+            targetBooking = self.previousBookings?.find(
+              (booking) => booking.visitingBookingId === bookingId,
+            )
+            break
+          default:
+            targetBooking = self.allBookings?.find(
+              (booking) => booking.visitingBookingId === bookingId,
+            )
+            break
+        }
 
-      return targetBooking
+        return targetBooking
+      } catch (error) {
+        console.error("[cl-booking-store getBooking Error!] >>>", error)
+        return false
+      }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -36,24 +64,28 @@ export const ClBookingStoreModel = types
      * 특정 예약에 대해서 수락되었을때 "Wating" 상태를 "Current"상태로 변경합니다.
      */
     waitingsToCurrents(bookingId: number) {
-      const targetBooking = self.getBooking(bookingId)
-      self.watingBookings.remove(targetBooking)
-      self.currentBookings.push(targetBooking)
+      const targetBooking = self.getBooking(bookingId, BookingStatus.WAITING)
+      if (targetBooking) {
+        self.watingBookings.remove(targetBooking)
+        self.currentBookings.push(targetBooking)
+      }
     },
     /**
      * 특정 예약에 대해서 완료되었을때 "Current" 상태를 "Previous"상태로 변경합니다.
      */
     currentsToPrevious(bookingId: number) {
-      const targetBooking = self.getBooking(bookingId)
-      self.currentBookings.remove(targetBooking)
-      self.previousBookings.push(targetBooking)
+      const targetBooking = self.getBooking(bookingId, BookingStatus.PROCEEDING)
+      if (targetBooking) {
+        self.currentBookings.remove(targetBooking)
+        self.previousBookings.push(targetBooking)
+      }
     },
     /**
      * 특정 예약 리뷰 상태를 "Complete"로 변경합니다.
      */
     setCompleteReview(bookingId: number) {
-      const targetBooking = self.getBooking(bookingId)
-      targetBooking.completeReview()
+      const targetBooking = self.getBooking(bookingId, BookingStatus.COMPLETE)
+      if (targetBooking) targetBooking.completeReview()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
