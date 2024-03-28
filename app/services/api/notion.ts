@@ -5,12 +5,13 @@ import {
   PageObjectResponse,
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints"
-// import { NOTION_API_KEY, NOTION_DATABASE_ID } from "react-native-dotenv"
-import { NOTION_API_KEY, NOTION_DATABASE_ID } from "@env"
-console.log("NOTION_API_KEY >>> ", NOTION_API_KEY) //! DO_NOT_REMOVE_THIS_LINE - 이거 지우면 작동 안 함
-console.log("NOTION_DATABASE_ID >>> ", NOTION_DATABASE_ID) //! DO_NOT_REMOVE_THIS_LINE - 이거 지우면 작동 안 함
+import Config from "react-native-config"
 
-const notion = new Client({ auth: NOTION_API_KEY })
+const notion = new Client({ auth: Config.NOTION_API_KEY })
+
+console.log("✅", Config.TEST_VALUE)
+console.log("✅", Config.NOTION_API_KEY)
+console.log("✅", Config.NOTION_DATABASE_ID)
 
 type TextType = {
   type?: "text"
@@ -96,7 +97,7 @@ export const postNotionSettlement = async (
   const body: CreatePageParameters = {
     parent: {
       type: "database_id",
-      database_id: NOTION_DATABASE_ID,
+      database_id: Config.NOTION_DATABASE_ID,
     },
     properties: {
       userId: {
@@ -194,7 +195,7 @@ export const getNotionSettlement = async (userId: string): Promise<GetSettlement
       /**
        * (필수)특정 databaseId
        */
-      database_id: NOTION_DATABASE_ID,
+      database_id: Config.NOTION_DATABASE_ID,
       /**
        * (선택)특정 database내 page중 필터링
        */
@@ -209,7 +210,7 @@ export const getNotionSettlement = async (userId: string): Promise<GetSettlement
         ],
       },
     })
-    console.log("response >>> ", response, NOTION_DATABASE_ID)
+    console.log("response >>> ", response, Config.NOTION_DATABASE_ID)
     if (!response) {
       return {
         isSuccess: false,
