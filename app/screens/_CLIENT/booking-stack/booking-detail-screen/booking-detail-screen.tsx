@@ -27,6 +27,7 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   DISABLED,
+  WIDTH,
 } from "#theme"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -194,10 +195,12 @@ export const BookingDetailScreen: FC<
                 <Row mt={12} style={{ justifyContent: "space-between" }}>
                   {booking?.status === BookingStatus.WAITING ? (
                     <Popover
+                      backgroundStyle={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
+                      popoverStyle={{ backgroundColor: "#F1F1F4", padding: 10 }}
                       isVisible={showPopover}
                       onRequestClose={() => setShowPopover(false)}
                       from={
-                        <>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                           <Pressable
                             onPress={() => setShowPopover(true)}
                             style={[$pressableBox, SHADOW_1]}
@@ -206,12 +209,12 @@ export const BookingDetailScreen: FC<
                           </Pressable>
 
                           <Pressable
-                            style={[$pressableBox, SHADOW_1]}
+                            style={[$pressableBox, SHADOW_1, { marginLeft: 10 * WIDTH }]}
                             onPress={() => setShowPopover(true)}
                           >
                             <PreReg14 text={"메시지 보내기"} color={DISABLED} />
                           </Pressable>
-                        </>
+                        </View>
                       }
                     >
                       <PreReg12 text="케어기버가 예약을 승인하면 활성화됩니다." />
