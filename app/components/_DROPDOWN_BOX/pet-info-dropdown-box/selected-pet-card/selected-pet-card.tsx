@@ -43,6 +43,10 @@ export const SelectedPetCard = (props: SelectedPetCardProps) => {
     case HandleType.LARGE:
       _petType = "대형"
       break
+    // UT 테스트
+    default:
+      _petType = petType
+      break
   }
 
   let _sex = ""

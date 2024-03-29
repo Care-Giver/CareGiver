@@ -1,5 +1,13 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
-import { Image, Platform, StyleSheet, View, ViewStyle, Pressable } from "react-native"
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+  ViewStyle,
+  Pressable,
+  ActivityIndicator,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -16,6 +24,7 @@ import {
 import {
   BODY,
   BOTTOM_HEIGHT,
+  DEVICE_WINDOW_HEIGHT,
   DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
@@ -57,6 +66,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       password: null,
     })
     const [isPasswordHidden, setIsPasswordHidden] = useState(true)
+    const [onLoggingIn, setOnLoggingIn] = useState(false)
 
     const googleLogin = async () => {
       //
@@ -129,8 +139,20 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
                 case "example@google.com":
                   _provider = "naver"
                   break
+                case "choi@naver.com": // 최정혁 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
+                case "park@naver.com": // 박승현 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
+                case "horse@naver.com": // 이영민 (테스트 펫시터 계정)
+                  _provider = "naver"
+                  break
               }
-              noAuthLogin({ email: emailAuth.email, provider: _provider })
+              setOnLoggingIn(true)
+              noAuthLogin({ email: emailAuth.email, provider: _provider }).finally(() =>
+                setOnLoggingIn(false),
+              )
               bottomSheetModalRef.current?.close()
               //
             }}
@@ -140,9 +162,16 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       [emailAuth.email, emailAuth.password, noAuthLogin],
     )
     // 이메일 로그인 바텀시트모달 ENDED =======================================================
-
     return (
       <Screen testID="Login" type="View">
+        {onLoggingIn ? (
+          <ActivityIndicator
+            size={"large"}
+            color={GIVER_CASUAL_NAVY}
+            style={{ position: "absolute", left: 0, right: 0, top: DEVICE_WINDOW_HEIGHT / 2 }}
+          />
+        ) : null}
+
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
@@ -153,7 +182,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           {isShownAppleLogin && (
             <Button
               onPress={() => {
-                appleLogin(socialLoginHander, logoutHandler)
+                setOnLoggingIn(true)
+                appleLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
               }}
               style={styles.appleGoogleLogin}
             >
@@ -164,7 +194,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
 
           <Button
             onPress={() => {
-              naverLogin(socialLoginHander, logoutHandler)
+              setOnLoggingIn(true)
+              naverLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
             }}
             style={styles.naverLogin}
           >
@@ -173,7 +204,8 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
           </Button>
           <Button
             onPress={() => {
-              kakaoLogin(socialLoginHander, logoutHandler)
+              setOnLoggingIn(true)
+              kakaoLogin(socialLoginHander, logoutHandler).finally(() => setOnLoggingIn(false))
             }}
             style={styles.kakaoLogin}
           >

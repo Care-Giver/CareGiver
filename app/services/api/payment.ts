@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
+import { SettlementType } from "#screens"
 import { alertModal } from "../../utils/alert-modal"
+import { ServiceType } from "#models"
 
 export interface PaymentColumns {
   createAt: string // "2023-12-15T19:39:13.387Z"
@@ -61,6 +63,73 @@ export const createPayment = async (body: CreatePaymentInput): Promise<CreatePay
   }
 }
 
+export interface settlementDetail {
+  serviceType: ServiceType
+  start: string
+  end: string
+  isCanceled: boolean
+  settlementFee: number
+}
+export interface GetSettlementInput {
+  startDate: string
+  endDate: string
+}
+export interface GetSettlementResponse extends GeneralResponse {
+  totalSettlementFee: number
+  settlementDetails: settlementDetail[]
+}
+type GetSettlementResult =
+  | {
+      isSuccess: true // 성공
+      totalSettlementFee?: number // 성공시, 생성된 결제 객체의 id
+      settlementDetails: SettlementType[]
+    }
+  | {
+      isSuccess: false // 실패
+      reason?: string // 실패시, 실패이유
+    }
+
+export const getSettlement = async (body: GetSettlementInput): Promise<GetSettlementResult> => {
+  try {
+    const response = await axios.post<GetSettlementResponse>(`${BASE_URL}/payment/settlement`, body)
+
+    if (!response.data.ok) {
+      return {
+        isSuccess: false,
+        reason: response.data?.error,
+      }
+    }
+
+    //* 백엔드측 응답 형태 ui에 맞게 변환
+    // 정렬
+    const sortedSettlemtents = response.data.settlementDetails.sort((a, b) =>
+      a.start.localeCompare(b.start),
+    )
+    // date별로 그룹화
+    const groupedSettlements = sortedSettlemtents.reduce((acc, cur) => {
+      const categoryIndex = acc.findIndex((item) => item.date === cur.start)
+      if (categoryIndex === -1) {
+        acc.push({ date: cur.start, settlementDetails: [cur] })
+      } else {
+        acc[categoryIndex].settlementDetails.push(cur)
+      }
+      return acc
+    }, [])
+    //* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    return {
+      isSuccess: true,
+      totalSettlementFee: response.data.totalSettlementFee,
+      settlementDetails: groupedSettlements,
+    }
+  } catch (error) {
+    console.error("catch 에러!!!", error)
+    return {
+      isSuccess: false,
+      reason: error?.message,
+    }
+  }
+}
 /**
  * 주어진 id 에 해당하는 결제 객체를 불러옵니다.
  */
@@ -86,5 +155,43 @@ export const getPaymentById = async (paymentId: number): Promise<PaymentColumns 
       `catch: ${error?.message}`,
     )
     return null
+  }
+}
+export interface VerifyBankHolderRequestBody {
+  // description: '은행 코드 (포트원 API 명세서 참고: https://faq.portone.io/1dae5145-1feb-4ef2-87ef-4b0e8a984945)',
+  // example: '001',
+  bankCode: string
+
+  // description: '계좌 번호',
+  // example: '1234567890',
+  bankNum: string
+
+  // description: '예금주 이름',
+  // example: '홍길동',
+  bankHolder: string
+
+  // description: '은행 이름. 에러 발생시, 에러메시지에 포함됩니다.',
+  // example: '국민은행',
+  bankName?: string
+}
+export interface VerifyBankHolderResponse extends GeneralResponse {}
+/**
+ * 계좌번호와 예금주명을 검증합니다.
+ * 실제 존재하는 계좌일 경우, true 를 반환합니다.
+ */
+export const verifyBankHolder = async (body: VerifyBankHolderRequestBody): Promise<boolean> => {
+  try {
+    const response = await axios.post<VerifyBankHolderResponse>(
+      `${BASE_URL}/payment/bank-verification`,
+      body,
+    )
+    if (!response.data.ok) {
+      alertModal(`예금주 인증에 실패했습니다.`, `${response.data.error.message}`)
+      return false
+    }
+    return true
+  } catch (error) {
+    alertModal(`예금주 인증에 실패했습니다.`, `catch: ${error?.message}`)
+    return false
   }
 }

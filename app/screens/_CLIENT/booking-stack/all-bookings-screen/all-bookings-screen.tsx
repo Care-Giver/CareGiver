@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useLayoutEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   InProgressBooking,
@@ -8,7 +8,6 @@ import {
   Row,
   Screen,
   PastBooking,
-  PreReg14,
   DivisionLine,
   PreMed18,
   PreMed14,
@@ -27,7 +26,12 @@ import {
   PreviousBookingParams,
   getCurrentBookings,
   getFirstPreviousBooking,
+  getMyWaitingBookings,
 } from "../../../../services/api"
+import { useQuery } from "@tanstack/react-query"
+
+// Define the refetch interval (30 seconds)
+const REFETCH_INTERVAL = 30 * 1000
 
 export const AllBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-bookings-screen">
@@ -35,13 +39,18 @@ export const AllBookingsScreen: FC<
   useShowBottomTab(navigation)
 
   // * dotsIndicator의 현재 인덱스를 나타내는 state
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndexInProgress, setActiveIndexInProgress] = useState(0)
   // * flatlist에서 viewable item이 바뀌면 할 일 -> activeIndex 변경
-  const onViewableChange = useCallback(({ viewableItems }) => {
-    // console.log("== viewable items ==")
-    // console.log(viewableItems)
+  const onViewableChangeInProgress = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
-      setActiveIndex(viewableItems[0].index || 0)
+      setActiveIndexInProgress(viewableItems[0].index || 0)
+    }
+  }, [])
+
+  const [activeIndexPast, setActiveIndexPast] = useState(0)
+  const onViewableChangePast = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setActiveIndexPast(viewableItems[0].index || 0)
     }
   }, [])
 
@@ -62,22 +71,42 @@ export const AllBookingsScreen: FC<
    *  CANCEL = "Cancel", // 유저가 예약 승낙 이후 취소한 경우
    *  REJECT = "Reject", // 예약을 거절한 경우
    */
-  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>()
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
+    null,
+  )
 
-  useLayoutEffect(() => {
-    getCurrentBookings()
-      .then((res) => setCurrentBookings(res))
-      .catch((err) => console.log("[all bookings screen] get current bookings error >>>", err))
+  // Use useQuery to fetch current bookings with a refetch interval
+  const { data: currentBookingsData } = useQuery({
+    queryKey: ["currentBookings"],
+    queryFn: getCurrentBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
-    getFirstPreviousBooking()
-      .then((res) => {
-        setFirstPreviousBooking(res)
-      })
-      .catch((err) => console.log("[all bookings screen] get previous bookings error >>>", err))
+  // Use useQuery to fetch first previous booking with a refetch interval
+  const { data: firstPreviousBookingData } = useQuery({
+    queryKey: ["firstPreviousBooking"],
+    queryFn: getFirstPreviousBooking,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
-    // TODO: setWaitingBookings
-  }, [])
+  // Use useQuery to fetch waiting bookings with a refetch interval
+  const { data: waitingBookingsData } = useQuery({
+    queryKey: ["waitingBookings"],
+    queryFn: getMyWaitingBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
 
+  useEffect(() => {
+    if (currentBookingsData) {
+      setCurrentBookings(currentBookingsData)
+    }
+    if (firstPreviousBookingData) {
+      setFirstPreviousBooking(firstPreviousBookingData)
+    }
+    if (waitingBookingsData) {
+      setWaitingBookings(waitingBookingsData.waitingBookings)
+    }
+  }, [currentBookingsData, firstPreviousBookingData, waitingBookingsData])
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <ScrollView
@@ -117,12 +146,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangeInProgress}
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
                 {currentBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                  <View
+                    key={index}
+                    style={index === activeIndexInProgress ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>
@@ -151,13 +183,23 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={currentBookings}
+                data={waitingBookings}
                 renderItem={({ index, item }) => (
                   // TODO: waitingBookings 객체를 담을 수 있도록,
                   // TODO: PastBooking 컴포넌트 업데이트 하기.
                   // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
                   <PastBooking
                     currentBooking={item}
+                    profileImage={item?.profileImage}
+                    serviceType={"visiting"}
+                    petsitterType={"visiting"}
+                    petsitterId={item?.visitingId}
+                    bookingId={item?.visitingBookingId}
+                    petsitterName={item?.petSitterName}
+                    desc={item?.desc}
+                    startDate={item?.startTime}
+                    endDate={item?.endTime}
+                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
                     key={index}
                     onPress={() => {
                       navigate("booking-detail-screen", {
@@ -175,12 +217,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangePast}
                 decelerationRate={"fast"}
               />
-              <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
-                {currentBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+              <Row style={[styles.dotsContainer, { marginBottom: 14 }]}>
+                {waitingBookings.map((item, index) => (
+                  <View
+                    key={index}
+                    style={index === activeIndexPast ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>
@@ -206,7 +251,7 @@ export const AllBookingsScreen: FC<
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
           <Row style={{ marginTop: 16, justifyContent: "space-between" }}>
             <PreReg16 text="지난 예약" color={DISABLED} />
-            {firstPreviousBooking && (
+            {firstPreviousBooking ? (
               <Pressable
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => navigate("past-bookings-screen")}
@@ -214,7 +259,7 @@ export const AllBookingsScreen: FC<
                 <PreMed16 text="더보기" color={BODY} />
                 <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
               </Pressable>
-            )}
+            ) : null}
           </Row>
 
           {firstPreviousBooking ? (

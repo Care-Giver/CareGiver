@@ -1,13 +1,22 @@
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
-import { BookingCheckButton, BookingInfoCardProps, BookingList, Screen } from "#components"
+import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  BookingCheckButton,
+  BookingInfoCardProps,
+  BookingList,
+  DateInfo,
+  Screen,
+  SimpleCalendar,
+} from "#components"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { getAllBookings, getConfirmedBookings } from "#api"
 import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
+import { View } from "react-native"
 
 //테스트용 더미 데이터
 const CareGiverReserveDummy: BookingInfoCardProps = {
@@ -40,6 +49,9 @@ export const CgManageBookingScreen: FC<
     },
   } = useStores()
 
+  const [selectedDate, setSelectedDate] = useState<DateInfo>(null)
+  const [month, setMonth] = useState<Date>(new Date())
+
   const { status, data, error, isFetching } = useQuery({
     queryKey: ["getAllBookings"],
     queryFn: getAllBookings,
@@ -58,11 +70,20 @@ export const CgManageBookingScreen: FC<
   }, [isFetching, data, setBookings])
 
   return (
-    <Screen testID="ManageBooking">
-      <BookingCheckButton
-        style={{ zIndex: 1, marginVertical: 16 }}
-        bookingCount={waitingBookings?.length}
-        onPress={() => navigate("cg-booking-list-screen")}
+    <Screen testID="ManageBooking" style={{ paddingHorizontal: 0 }}>
+      <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
+        <BookingCheckButton
+          style={{ zIndex: 1, marginVertical: 16 }}
+          bookingCount={waitingBookings?.length}
+          onPress={() => navigate("cg-booking-list-screen")}
+        />
+      </View>
+
+      <SimpleCalendar
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        month={month}
+        setMonth={setMonth}
       />
 
       {/* 모든 예약 목록 */}

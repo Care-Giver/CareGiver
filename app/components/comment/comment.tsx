@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Dispatch, Ref, SetStateAction, forwardRef } from "react"
 import { View, Image, Pressable } from "react-native"
 import { styles } from "./styles"
 import { PreReg12, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
@@ -6,8 +6,9 @@ import { BODY, HEAD_LINE, LIGHT_LINE, SUB_HEAD_LINE } from "#theme"
 import { Row } from "../_BASIC/row/row"
 import { images } from "#images"
 import { DivisionLine } from "../_BASIC/division-line/division-line"
-import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
+import { CommentColumns } from "#api"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -42,23 +43,24 @@ export class PetSitterReview extends CoreEntity {
     onDelete: 'SET NULL',
     lazy: true,
   })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'id' })
   user: User; // 작성자가 삭제되었을때 펫시터 화면에서 리뷰 정보에 누굴 띄워야할까?
 } */
 
 interface CommentProps {
   style?: any
   numberOfLines?: number
-  commentData: any //TODO:
+  commentData: CommentColumns
+  onPress: () => void
 }
 
-export const Comment = (props: CommentProps) => {
-  const { style: viewStyle, numberOfLines, commentData } = props
-  const { userId, desc, createdAt, updatedAt, reply, profileImg } = commentData
+export const Comment = forwardRef((props: CommentProps) => {
+  const { style: viewStyle, numberOfLines, commentData, onPress } = props
+  const { desc, createAt, __commentator__ } = commentData
   const _numberOfLines = numberOfLines || undefined
 
-  const _createdAt = new Date(createdAt)
-  const date = formatDate(_createdAt)
+  const _createAt = new Date(createAt)
+  const date = formatDate(_createAt)
 
   return (
     <View style={[styles.root, viewStyle]}>
@@ -66,14 +68,21 @@ export const Comment = (props: CommentProps) => {
 
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: 12 }}>
-        <Image source={{ uri: profileImg }} style={styles.profileImage} />
-        <PreReg14 text={userId} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
+        <Image
+          source={{
+            uri: __commentator__.profileImage || images.profile_default,
+          }}
+          style={styles.profileImage}
+        />
+        <PreReg14 text={__commentator__.nickname} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}
-          onPress={() => {
-            alertModal("개발중 🏗️", "댓글 편집 기능은 개발 중 입니다.")
-          }}
+          hitSlop={4}
+          onPress={
+            onPress
+            //TODO 유저 id에 따라 수정 및 답글 기능 추가
+          }
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />
         </Pressable>
@@ -84,4 +93,4 @@ export const Comment = (props: CommentProps) => {
       <DivisionLine height={1} color={LIGHT_LINE} style={{ marginTop: 32 }} />
     </View>
   )
-}
+})

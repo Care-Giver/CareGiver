@@ -15,6 +15,7 @@ import {
   PreMed16,
   PreReg12,
   PreReg14,
+  RefundNote,
   Row,
   Screen,
 } from "#components"
@@ -26,7 +27,6 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   DISABLED,
-  LBG,
 } from "#theme"
 import { images } from "#images"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
@@ -44,7 +44,7 @@ import {
   getVisitingBooking,
 } from "#api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
-import { price as priceFormatter } from "../../../../utils/format"
+import { price as priceFormatter, ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 import Popover from "react-native-popover-view"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -81,7 +81,7 @@ export const BookingDetailScreen: FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booking])
 
-  const serviceTypeKorean = serviceType === "creche" ? "방문" : "위탁"
+  const serviceTypeKorean = serviceType === "creche" ? "위탁" : "방문"
 
   const isPhoneAndChatActivated =
     booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.PROCEEDING
@@ -172,7 +172,7 @@ export const BookingDetailScreen: FC<
                   <Image style={styles.star} source={images.rating_star} />
 
                   <PreReg12
-                    text={`(${petsitter[serviceType].star})`}
+                    text={`(${ratingRound(petsitter[serviceType].star)})`}
                     color={SUB_HEAD_LINE}
                     style={{ marginLeft: 4 }}
                   />
@@ -342,21 +342,8 @@ export const BookingDetailScreen: FC<
                 // TODO: WAITING 일때 예약 취소 기능 구현
               }}
             />
-            <View style={styles.refundFooter}>
-              <PreReg14 color={SUB_HEAD_LINE} style={{ lineHeight: 20 }}>
-                - 케어 시작 <PreBol14 color={HEAD_LINE}>72~24시간 전</PreBol14>까지:{" "}
-                <PreBol14 color={HEAD_LINE}>70%</PreBol14> 환불
-                {"\n"}- 케어 시작 <PreBol14 color={HEAD_LINE}>24~12시간 전</PreBol14>까지:{" "}
-                <PreBol14 color={HEAD_LINE}>20%</PreBol14> 환불
-                {"\n"}- 케어 시작 <PreBol14 color={HEAD_LINE}>12시간 이내</PreBol14>:{" "}
-                <PreBol14 color={GIVER_CASUAL_NAVY}>환불 불가</PreBol14>
-                {"\n\n"}※ 케어기버가 예약을 취소한 경우{" "}
-                <PreBol14 color={GIVER_CASUAL_NAVY}>100% 환불</PreBol14>을 받으실 수 있습니다.
-                {"\n"}※ 케어기버의 돌봄 진행에 문제가 발생한 경우, 케어 종료 후 24시 간 이내에
-                케어기버 고객센터에 신고를 진행해주셔야 합니다.{"\n"}※ 케어기버 고객센터에서 문제
-                파악 후, 심사를 통해 최종적으로 환불 및 보상 방안이 결정됩니다.
-              </PreReg14>
-            </View>
+            {/* 환불 안내 */}
+            <RefundNote style={{ marginBottom: 148 }} />
           </View>
         )}
       </ScrollView>
@@ -405,14 +392,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     marginBottom: 42,
-  },
-  refundFooter: {
-    width: "100%",
-    paddingTop: 8,
-    paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-    paddingBottom: 20,
-    backgroundColor: LBG,
-    borderRadius: 8,
-    marginBottom: 148,
   },
 })

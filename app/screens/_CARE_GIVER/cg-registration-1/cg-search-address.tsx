@@ -4,8 +4,8 @@ import { observer } from "mobx-react-lite"
 import Postcode from "@actbase/react-daum-postcode"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { alertModal } from "../../../utils/alert-modal"
-import { BODY, GIVER_CASUAL_NAVY, LBG, SUB_HEAD_LINE } from "#theme"
-import { PreBol12, PreBol14, PreReg12 } from "#components"
+import { SUB_HEAD_LINE } from "#theme"
+import { PreBol12, RegistrationNoticeNote } from "#components"
 
 export interface CgSearchAddressProps {
   /**
@@ -22,12 +22,11 @@ export const CgSearchAddress = observer(function CgSearchAddress(props: CgSearch
 
   return (
     <View style={allStyles}>
-      <View style={styles.note}>
-        <PreBol14 text="위치 등록 전, 잠깐!" color={GIVER_CASUAL_NAVY} mb={8} />
-        <PreReg12 color={BODY} style={{ lineHeight: 18 }}>
-          등록해주신 위치를 기반으로 최대 30km 이내의 반려인 분들이 펫시터님을 검색할 수 있습니다!
-        </PreReg12>
-      </View>
+      <RegistrationNoticeNote
+        style={{ marginTop: 16 }}
+        title="위치 등록 전, 잠깐!"
+        desc="등록해주신 위치를 기반으로 최대 30km 이내의 반려인 분들이 펫시터님을 검색할 수 있습니다!"
+      />
 
       {!!previousAddress && (
         <PreBol12 text={`등록된 주소: ${previousAddress}`} color={SUB_HEAD_LINE} mt={8} ml={12} />
@@ -54,14 +53,4 @@ export const CgSearchAddress = observer(function CgSearchAddress(props: CgSearch
 
 const styles = StyleSheet.create({
   root: {},
-  note: {
-    width: "100%",
-    height: 82,
-    backgroundColor: LBG,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    justifyContent: "center",
-    marginTop: 16,
-    borderRadius: 8,
-  },
 })

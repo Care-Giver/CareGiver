@@ -4,7 +4,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
 import { observer } from "mobx-react-lite"
 import { DivisionLine, Screen, ReviewBox, FilterHeader } from "../../../../components"
-import { reviews as _reviews } from "./dummy-data"
+// import { reviews as _reviews } from "./dummy-data"
 import { LBG } from "../../../../theme"
 import { alertModal } from "../../../../utils/alert-modal"
 
@@ -12,13 +12,13 @@ export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
   // ? 리뷰 리스트
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState(route.params?.reviews || [])
   // ? 선택된 정렬 옵션
   const [seletedOption, setSelectedOption] = useState("최신순")
 
-  useLayoutEffect(() => {
-    setReviews(_reviews)
-  }, [])
+  // useLayoutEffect(() => {
+  //   setReviews(_reviews)
+  // }, [])
 
   return (
     <Screen preset={"fixed"}>

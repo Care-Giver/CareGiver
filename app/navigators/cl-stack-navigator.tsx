@@ -69,9 +69,9 @@ import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
-import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
+import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
-import { Pet } from "#api"
+import { CommentColmns, Pet } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
 
 export type SelectedTime = {
@@ -165,8 +165,17 @@ export type CLStackNavigatorParamList = {
 
   "all-reviews-screen": undefined
   "caregiver-self-introduction-screen": undefined
-  "all-comments-screen": undefined
-  "writing-comment-screen": undefined
+  "all-comments-screen": {
+    comments: CommentColmns[]
+    visitingId: number
+    userId: number
+  }
+  "writing-comment-screen": {
+    visitingId?: number
+    defaultComment?: string
+    updateOrCreate: "update" | "create"
+    commentId?: number
+  }
   "payment-request-screen": undefined
 
   /**
@@ -417,7 +426,7 @@ export const SearchingStack = () => {
         component={AllCommentsScreen}
         options={{
           title: "댓글 전체보기",
-          header: (props) => <AllCommentsScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
@@ -426,7 +435,7 @@ export const SearchingStack = () => {
         name="writing-comment-screen"
         component={WritingCommentScreen}
         options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
@@ -530,10 +539,15 @@ export const ChatsStack = () => {
   const {
     userStore: { type },
   } = useStores()
-
+  const defaultKo = require("./ko.json")
+  const streami18n = new Streami18n({ language: "ko" })
+  streami18n.registerTranslation("ko", {
+    ...defaultKo,
+    "Send a message": "메시지를 입력해주세요 :)",
+  })
   return (
     <OverlayProvider>
-      <Chat client={streamChatClient}>
+      <Chat client={streamChatClient} i18nInstance={streami18n}>
         <Stack.Navigator
           screenOptions={{
             headerShown: true,

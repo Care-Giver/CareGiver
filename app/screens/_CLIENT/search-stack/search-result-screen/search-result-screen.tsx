@@ -15,6 +15,7 @@ import {
   Platform,
   StyleSheet,
   ViewStyle,
+  ActivityIndicator,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -245,8 +246,8 @@ export const SearchResultScreen: FC<
   const [draftSearchRequest, setDraftSearchRequest] = useState<SearchRequest>(defaultSearchRequest)
 
   /** 펫시터 */
-  const [petsitters, setPetsitters] = useState<VisitingCreche[]>([])
-  console.log("petsitters ♦️", JSON.stringify(petsitters))
+  const [petsitters, setPetsitters] = useState<VisitingCreche[] | null>(null)
+  // console.log("petsitters ♦️", JSON.stringify(petsitters))
 
   /** 펫시터 검색결과 API 호출 */
   useEffect(() => {
@@ -540,98 +541,104 @@ export const SearchResultScreen: FC<
             // marginBottom: 34,
           }}
         >
-          <Animated.FlatList
-            style={{
-              backgroundColor: palette.white,
-              height: "auto",
-              // height: "100%",
-              // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
-            }}
-            contentContainerStyle={{
-              paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
-              // paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-            }}
-            showsVerticalScrollIndicator={false}
-            // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
-              useNativeDriver: true,
-            })}
-            data={petsitters}
-            renderItem={({ item: petsitter, index }) => {
-              const key = 방문검색 ? "visiting" : "creche"
-              return (
-                <SitterProfileCard
-                  isFavorite={petsitter.isFavorite}
-                  sitterData={{
-                    crecheId: 위탁검색 ? petsitter[key].id : null,
-                    visitingId: 방문검색 ? petsitter[key].id : null,
-                    reviewCount: petsitter.reviewCount,
-                    userNickname: petsitter.userNickname,
-                    title: petsitter[key].title,
-                    desc: petsitter[key].desc,
-                    star: ratingRound(petsitter[key].star),
-                    profileImage: petsitter[key].__careGiver__.__user__?.profileImage,
-                    defaultFee: petsitter[key].defaultFee,
-                  }}
-                  onPress={() => {
-                    //? 상세정보 스크린으로 이동
-                    //TODO: params 값 추가해줘야 함
-                    navigate("caregiver-detail-information-screen", {
-                      serviceTypeKorean: serviceType,
-                      service: petsitter,
-                      selectedPetIds: petIds,
-                      selectedTime: {
-                        start: (방문검색 && startTime) || (위탁검색 && startDate),
-                        end: (방문검색 && endTime) || (위탁검색 && endDate),
-                      },
-                      address,
-                    })
-                  }}
-                  onLikePress={() => {
-                    const body: UpdateFavoriteBody = {}
-                    switch (serviceType) {
-                      case "위탁":
-                        body.crecheId = petsitter.creche.id
-                        break
-                      case "방문":
-                        body.visitingId = petsitter.visiting.id
-                        break
+          {petsitters ? (
+            // 로딩 완료: 펫시터 표출
+            <Animated.FlatList
+              style={{
+                backgroundColor: palette.white,
+                height: "auto",
+                // height: "100%",
+                // marginBottom: BOTTOM_HEIGHT + BOTTOM_TAB_BAR_HEIGHT,
+              }}
+              contentContainerStyle={{
+                paddingBottom: BOTTOM_HEIGHT + 2.5 * 110,
+                // paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+              }}
+              showsVerticalScrollIndicator={false}
+              // ? 스크롤 이벤트가 발생할 때마다 현재 스크롤 위치(=contentOffset)의 y값을 offset으로 설정(?)
+              onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: offset } } }], {
+                useNativeDriver: true,
+              })}
+              data={petsitters}
+              renderItem={({ item: petsitter, index }) => {
+                const key = 방문검색 ? "visiting" : "creche"
+                return (
+                  <SitterProfileCard
+                    isFavorite={petsitter.isFavorite}
+                    sitterData={{
+                      crecheId: 위탁검색 ? petsitter[key].id : null,
+                      visitingId: 방문검색 ? petsitter[key].id : null,
+                      reviewCount: petsitter.reviewCount,
+                      userNickname: petsitter.userNickname,
+                      title: petsitter[key].title,
+                      desc: petsitter[key].desc,
+                      star: ratingRound(petsitter[key].star),
+                      profileImage: petsitter[key].__careGiver__.__user__?.profileImage,
+                      defaultFee: petsitter[key].defaultFee,
+                    }}
+                    onPress={() => {
+                      //? 상세정보 스크린으로 이동
+                      //TODO: params 값 추가해줘야 함
+                      navigate("caregiver-detail-information-screen", {
+                        serviceTypeKorean: serviceType,
+                        service: petsitter,
+                        selectedPetIds: petIds,
+                        selectedTime: {
+                          start: (방문검색 && startTime) || (위탁검색 && startDate),
+                          end: (방문검색 && endTime) || (위탁검색 && endDate),
+                        },
+                        address,
+                      })
+                    }}
+                    onLikePress={() => {
+                      const body: UpdateFavoriteBody = {}
+                      switch (serviceType) {
+                        case "위탁":
+                          body.crecheId = petsitter.creche.id
+                          break
+                        case "방문":
+                          body.visitingId = petsitter.visiting.id
+                          break
+                      }
+                      // 즐겨찾기 추가
+                      if (!petsitter.isFavorite) {
+                        createFavorite(body)
+                      }
+                      // 즐겨찾기 삭제
+                      else {
+                        deleteFavorite(body)
+                      }
+                    }}
+                    style={
+                      index < petsitters.length - 1
+                        ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
+                        : {
+                            marginVertical: 20,
+                            paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+                          }
                     }
-                    // 즐겨찾기 추가
-                    if (!petsitter.isFavorite) {
-                      createFavorite(body)
-                    }
-                    // 즐겨찾기 삭제
-                    else {
-                      deleteFavorite(body)
-                    }
+                    likeStyle={{ right: BASIC_BACKGROUND_PADDING_WIDTH }}
+                  />
+                )
+              }}
+              ListEmptyComponent={
+                <View
+                  style={{
+                    alignSelf: "center",
+                    alignItems: "center",
+                    paddingTop: 40,
                   }}
-                  style={
-                    index < petsitters.length - 1
-                      ? { marginTop: 20, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }
-                      : {
-                          marginVertical: 20,
-                          paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
-                        }
-                  }
-                  likeStyle={{ right: BASIC_BACKGROUND_PADDING_WIDTH }}
-                />
-              )
-            }}
-            ListEmptyComponent={
-              <View
-                style={{
-                  alignSelf: "center",
-                  alignItems: "center",
-                  paddingTop: 40,
-                }}
-              >
-                <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
-                <PreMed18 text="검색된 펫시터가 없어요 😢" />
-              </View>
-            }
-            ListFooterComponent={() => <Footer mt={FOOTER_CONTENT_GAP} />}
-          />
+                >
+                  <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
+                  <PreMed18 text="검색된 펫시터가 없어요 😢" />
+                </View>
+              }
+              ListFooterComponent={() => <Footer mt={FOOTER_CONTENT_GAP} />}
+            />
+          ) : (
+            // 로딩 중
+            <ActivityIndicator size="large" color={GIVER_CASUAL_NAVY} style={{ top: 140 }} />
+          )}
         </View>
       </Animated.View>
 
