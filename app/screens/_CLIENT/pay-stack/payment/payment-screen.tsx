@@ -275,7 +275,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                   setPg("kakaopay")
                 }}
               />
-              <PaymentTool
+              {/* <PaymentTool
                 tool="네이버페이"
                 // @ts-ignore
                 selectedTool={selectedTool}
@@ -292,9 +292,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                   setSelectedTool("토스")
                   setPg("tosspay")
                 }}
-              />
+              /> */}
             </View>
-            <Pressable
+            {/* <Pressable
               style={[styles.borderBox, is신용체크카드 && styles.selectedBorderBox]}
               onPress={() => {
                 setSelectedTool("신용/체크카드")
@@ -310,7 +310,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               ) : (
                 <PreReg14 text="신용/체크카드" color={BODY} />
               )}
-            </Pressable>
+            </Pressable> */}
 
             <View style={styles.couponInfo}>
               <PreMed14 text="쿠폰" />
