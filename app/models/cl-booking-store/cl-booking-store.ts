@@ -48,7 +48,7 @@ export const ClBookingStoreModel = types
         return targetBooking
       } catch (error) {
         console.error("[cl-booking-store getBooking Error!] >>>", error)
-        return false
+        return null
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -65,27 +65,26 @@ export const ClBookingStoreModel = types
      */
     waitingsToCurrents(bookingId: number) {
       const targetBooking = self.getBooking(bookingId, BookingStatus.WAITING)
-      if (targetBooking) {
-        self.watingBookings.remove(targetBooking)
-        self.currentBookings.push(targetBooking)
-      }
+      if (!targetBooking) return
+      self.watingBookings.remove(targetBooking)
+      self.currentBookings.push(targetBooking)
     },
     /**
      * 특정 예약에 대해서 완료되었을때 "Current" 상태를 "Previous"상태로 변경합니다.
      */
     currentsToPrevious(bookingId: number) {
       const targetBooking = self.getBooking(bookingId, BookingStatus.PROCEEDING)
-      if (targetBooking) {
-        self.currentBookings.remove(targetBooking)
-        self.previousBookings.push(targetBooking)
-      }
+      if (!targetBooking) return
+      self.currentBookings.remove(targetBooking)
+      self.previousBookings.push(targetBooking)
     },
     /**
      * 특정 예약 리뷰 상태를 "Complete"로 변경합니다.
      */
     setCompleteReview(bookingId: number) {
       const targetBooking = self.getBooking(bookingId, BookingStatus.COMPLETE)
-      if (targetBooking) targetBooking.completeReview()
+      if (!targetBooking) return
+      targetBooking.completeReview()
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

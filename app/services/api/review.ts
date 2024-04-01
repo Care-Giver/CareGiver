@@ -126,10 +126,10 @@ export const postVisitingReview = async (
       images: [],
     }
 
-    const AwsUris = await uploadURIS(body.images)
+    const awsUris = await uploadURIS(body.images)
 
-    if (AwsUris) {
-      postBody.images = [...AwsUris]
+    if (awsUris) {
+      postBody.images = [...awsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/visiting-review/visiting`,
@@ -165,10 +165,10 @@ export const postCrecheReview = async (
       images: [],
     }
 
-    const AwsUris = await uploadURIS(body.images)
+    const awsUris = await uploadURIS(body.images)
 
-    if (AwsUris) {
-      postBody.images = [...AwsUris]
+    if (awsUris) {
+      postBody.images = [...awsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/creche-review/creche`,
