@@ -1,4 +1,4 @@
-const VERSION = "0.0.3.c.UT"
+const VERSION = "1.0.0-alpha.1"
 
 const TEST_BUILD_VERSION = `Version ${VERSION}`
 
