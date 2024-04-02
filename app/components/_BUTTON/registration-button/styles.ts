@@ -24,7 +24,7 @@ export const alwaysActiveStyle: StyleProp<ViewStyle> = {
 export const styles = StyleSheet.create({
   root: {
     paddingVertical: 8,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     borderRadius: 4,
     flexDirection: "row",
     justifyContent: "space-between",

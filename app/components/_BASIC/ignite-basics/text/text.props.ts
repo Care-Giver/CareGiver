@@ -8,7 +8,7 @@ import i18n from "i18n-js"
 import { TextPresets } from "./text.presets"
 import { TxKeyPath } from "../../../../i18n"
 
-type TargetTextProperties = "numberOfLines" | "ellipsizeMode"
+type TargetTextProperties = "numberOfLines" | "ellipsizeMode" | "adjustsFontSizeToFit"
 
 export interface CustomTextProps extends Pick<TextProperties, TargetTextProperties> {
   /**
