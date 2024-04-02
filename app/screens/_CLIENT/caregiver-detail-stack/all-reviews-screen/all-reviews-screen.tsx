@@ -19,11 +19,8 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   PreMed16,
 } from "../../../../components"
-import { reviews as _reviews } from "./dummy-data"
 import { LBG } from "../../../../theme"
-import { alertModal } from "../../../../utils/alert-modal"
-import { Review, getVisitingReviews } from "#api"
-import { visitingReview } from "../../../../services/api"
+import { VisitingReview } from "../../../../services/api"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import _ from "lodash"
 
@@ -32,17 +29,10 @@ type OptionType = "최신순" | "별점많은순"
 export const AllReviewsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-reviews-screen">
 > = observer(({ navigation, route }) => {
-  const visitingId = route.params.visitingId
-  //TODO MVP단계 한정 방문리뷰만을 다룹니다
-  const [reviews, setReviews] = useState<visitingReview[]>([])
+  const [reviews, setReviews] = useState<VisitingReview[]>(route.params?.reviews ?? [])
+
   // ? 선택된 정렬 옵션
   const [seletedOption, setSelectedOption] = useState<OptionType>("최신순")
-
-  useEffect(() => {
-    getVisitingReviews(visitingId).then((res) => {
-      if (res.isSuccess) setReviews(res.visitingReviews)
-    })
-  }, [])
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)

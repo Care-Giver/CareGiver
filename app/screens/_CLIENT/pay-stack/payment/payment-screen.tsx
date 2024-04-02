@@ -1,13 +1,11 @@
 import React, { FC, useState } from "react"
-import { StyleSheet, View, Image, Pressable, TouchableOpacity } from "react-native"
-import { images } from "#images"
+import { StyleSheet, View, TouchableOpacity } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   CareSummary,
-  CustomModal,
   DivisionLine,
   FOOTER_CONTENT_GAP,
   Footer,
@@ -26,26 +24,16 @@ import IMP, { IMPData, IMPConst } from "iamport-react-native"
 import { useStores } from "#models"
 import { price as priceFormatter } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
-import { useCalculator, createBooking } from "./payment-screen.controller"
+import { useCalculator, createBooking, CreateBookingProps } from "./payment-screen.controller"
 import { PaymentFeeInfo } from "../../../../components/payment-fee-info/payment-fee-info"
 import { differenceInDays, differenceInHours } from "date-fns"
+import { preRegister } from "#api"
+import Config from "react-native-config"
 
 export interface PaymentParams {
   params: IMPData.PaymentData
   tierCode?: string
-
-  visitingId: number // TODO: 교체하기!!
-  userId: number
-  request: string
-  services: string[]
-  destination: string
-
-  startTime: string[]
-  endTime: string[]
-  petIds: number[]
-  petToolsLocInfo: string
-  avoidFoodInfo: string
-  bondingTipsInfo: string
+  bookingData: Omit<CreateBookingProps, "setSuccessModalVisible">
 }
 
 export type SimplePayment = "카카오페이" | "네이버페이" | "토스"
@@ -58,19 +46,16 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       userStore: { userDetail },
     } = useStores()
 
-    // 결제/예약 성공시 모달
-    const [successModalVisible, setSuccessModalVisible] = useState(false)
-
     //* 결제 정보 관련
     const [pg, setPg] = useState("html5_inicis")
     const [tierCode, setTierCode] = useState(undefined)
     const [method, setMethod] = useState("card")
     const [cardQuota, setCardQuota] = useState(0)
     const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`)
-    const [name, setName] = useState("아임포트 결제데이터분석")
-    const [buyerName, setBuyerName] = useState("홍길동")
-    const [buyerTel, setBuyerTel] = useState("01012341234")
-    const [buyerEmail, setBuyerEmail] = useState("example@example.com")
+    const [name, setName] = useState("케어기버:펫시팅 예약")
+    const [buyerName, setBuyerName] = useState("케어기버")
+    const [buyerTel, setBuyerTel] = useState("050-6667-1542")
+    const [buyerEmail, setBuyerEmail] = useState("dev@caregiver.pet")
     const [vbankDue, setVbankDue] = useState("")
     const [bizNum, setBizNum] = useState("")
     const [escrow, setEscrow] = useState(false)
@@ -84,6 +69,62 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       key === "visiting"
         ? differenceInHours(new Date(selectedTime.end), new Date(selectedTime.start))
         : differenceInDays(new Date(selectedTime.end), new Date(selectedTime.start))
+
+    /**
+     * 포트원 SDK 와 케어기버 서버 API를 사용하여,
+     * 실제 카카오페이 결제를 진행합니다.
+     */
+    const onPressPayKakaoPay = async () => {
+      if (!selectedTool) {
+        alertModal("결제 수단", "결제 수단을 선택해주세요.")
+        return
+      }
+
+      if (!amount?.totalFee) {
+        alertModal(
+          "결제 금액 계산 실패",
+          "알 수 없는 이유로 결제 금액 계산에 실패하였습니다. 잠시 후, 다시 시도해주세요.",
+        )
+      }
+
+      // 1. 결제정보 사전등록 - 케어기버 서버 API
+      const payment = await preRegister({ amount: amount?.totalFee })
+      if (!payment) return
+
+      // 2-1. 결제 진행 - 포트원 SDK
+      const data: PaymentParams = {
+        params: {
+          pg: "kakaopay",
+          pay_method: "kakaopay",
+          merchant_uid: payment.merchant_uid,
+          name,
+          amount: amount?.totalFee,
+          buyer_email: buyerEmail,
+          buyer_name: buyerName,
+          buyer_tel: buyerTel,
+          buyer_addr: undefined,
+          buyer_postcode: undefined,
+          m_redirect_url: Config.IMP_M_REDIRECT_URL,
+          app_scheme: "exampleforrn",
+          escrow,
+        },
+        tierCode,
+        //
+        // 예약 생성을 위한 값들
+        bookingData: {
+          key,
+          userId: userDetail.id,
+          selectedTime,
+          selectedPetIds,
+          bookingRequest,
+          destination,
+          service,
+          paymentId: payment.id,
+        },
+      }
+
+      navigate("test-iamport-payment-screen", data) // 2-2. 예약 생성 - 케어기버 서버 API && 3. 결제 사후 검증
+    }
 
     /**
      * [개발중 🏗️]
@@ -275,7 +316,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                   setPg("kakaopay")
                 }}
               />
-              <PaymentTool
+              {/* <PaymentTool
                 tool="네이버페이"
                 // @ts-ignore
                 selectedTool={selectedTool}
@@ -292,9 +333,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
                   setSelectedTool("토스")
                   setPg("tosspay")
                 }}
-              />
+              /> */}
             </View>
-            <Pressable
+            {/* <Pressable
               style={[styles.borderBox, is신용체크카드 && styles.selectedBorderBox]}
               onPress={() => {
                 setSelectedTool("신용/체크카드")
@@ -310,7 +351,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               ) : (
                 <PreReg14 text="신용/체크카드" color={BODY} />
               )}
-            </Pressable>
+            </Pressable> */}
 
             <View style={styles.couponInfo}>
               <PreMed14 text="쿠폰" />
@@ -349,30 +390,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
           <Footer mt={FOOTER_CONTENT_GAP} />
         </ScrollView>
 
-        <CustomModal
-          visibleState={successModalVisible}
-          title="결제가 완료되었습니다!"
-          subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
-          yesBtnText="홈으로 가기"
-          noBtnText="예약 내역 확인"
-          handleYesPress={() => {
-            setSuccessModalVisible(false)
-            navigation.popToTop() //! DO NOT REMOVE
-          }}
-          handleNoPress={() => {
-            setSuccessModalVisible(false)
-            navigation.popToTop() //! DO NOT REMOVE
-            setTimeout(() => {
-              //@ts-ignore
-              navigate("Bookings")
-            }, 1000)
-          }}
-          image={images.round_blue_check}
-          imageWidth={66}
-          imageHeight={66}
-        />
-
-        <TouchableOpacity style={styles.paymentButton} onPress={onPressPayIamportSubmit}>
+        <TouchableOpacity style={styles.paymentButton} onPress={onPressPayKakaoPay}>
           <PreBol16
             text={amount?.totalFee ? `${priceFormatter(String(amount?.totalFee))} 원` : "계산중..."}
             color="white"

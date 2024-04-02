@@ -3,11 +3,12 @@ import { StyleProp, ViewStyle, View, StyleSheet, TextInput } from "react-native"
 import { observer } from "mobx-react-lite"
 import { BODY, HEAD_LINE, LIGHT_LINE, MIDDLE_LINE, SUB_HEAD_LINE } from "#theme"
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
-import { PreBol16, PreMed14, PreReg12, PreReg14, Row } from "#components"
+import { PreBol16, PreMed14, PreReg12, PreReg14, RegistrationNoticeNote, Row } from "#components"
 import MapView, { LatLng, Marker } from "react-native-maps"
 import { images } from "#images"
 import { ServiceTypeKorean } from "#models"
 import { addressToCoordinates } from "./addressToCoordinates"
+import Config from "react-native-config"
 
 export interface CgConfirmAddressProps {
   /**
@@ -19,8 +20,6 @@ export interface CgConfirmAddressProps {
   setDetailAddress: Dispatch<SetStateAction<string>>
   serviceTypeKorean: ServiceTypeKorean
 }
-
-// const GOOGLE_MAP_API_KEY = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
 
 // /**
 //  * GCP MAP API 를 사용하여,
@@ -35,7 +34,7 @@ export interface CgConfirmAddressProps {
 //       "https://maps.googleapis.com/maps/api/geocode/json?address=$" +
 //       encodedURI +
 //       "&key=" +
-//       GOOGLE_MAP_API_KEY
+// Config.GOOGLE_MAP_API_KEY
 //     fetch(url)
 //       .then((response) => response.json())
 //       .then((responseJson) => {
@@ -68,6 +67,12 @@ export const CgConfirmAddress = observer(function CgConfirmAddress(props: CgConf
 
   return (
     <View style={allStyles}>
+      <RegistrationNoticeNote
+        style={{ marginTop: 16 }}
+        title="위치 등록 전, 잠깐!"
+        desc="등록해주신 위치를 기반으로 최대 30km 이내의 반려인 분들이 펫시터님을 검색할 수 있습니다!"
+      />
+
       <PreBol16
         text={`${address.sido} ${address.sigungu} ${address.bname}`}
         style={styles.address1}

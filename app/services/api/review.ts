@@ -242,7 +242,7 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
   }
 }
 
-export interface visitingReview extends Review {
+export interface VisitingReview extends Review {
   __visitingBooking__: {
     id: number
     createAt: string
@@ -264,13 +264,13 @@ export interface visitingReview extends Review {
   }
 }
 interface GetVisitingReviewsResponse extends GeneralResponse {
-  visitingReviews: visitingReview[]
+  visitingReviews: VisitingReview[]
 }
 
 type getVisitingReviewsResult =
   | {
       isSuccess: true
-      visitingReviews: visitingReview[]
+      visitingReviews: VisitingReview[]
     }
   | {
       isSuccess: false

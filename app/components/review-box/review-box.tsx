@@ -18,14 +18,15 @@ import { styles } from "./styles"
 import { Pet, Review } from "#api"
 import { alertModal } from "../../utils/alert-modal"
 import { formatDate } from "../../utils/format"
-import { visitingReview } from "../../services/api"
+import { VisitingReview } from "../../services/api"
+import { observer } from "mobx-react-lite"
 
 interface ReviewBoxProps {
   style?: StyleProp<ViewStyle>
-  reviewData: visitingReview
+  reviewData: VisitingReview
 }
 
-export const ReviewBox = (props: ReviewBoxProps) => {
+export const ReviewBox = observer(function ReviewBox(props: ReviewBoxProps) {
   // const profileImg = profileImg
   // const userName = userName
   // const ratings = ratings
@@ -60,7 +61,7 @@ export const ReviewBox = (props: ReviewBoxProps) => {
         <View style={styles.profileContainer}>
           {/* //? 프로필 사진 */}
           <Image
-            source={__user__.profileImage || images.profile_default}
+            source={__user__.profileImage ? { uri: __user__.profileImage } : images.profile_default}
             style={styles.profileImg}
           />
           {/* //? 사용자 이름 */}
@@ -106,8 +107,9 @@ export const ReviewBox = (props: ReviewBoxProps) => {
         <FlatList
           data={reviewImages}
           renderItem={({ item, index }) => (
-            <Pressable
+            <Image
               key={index}
+              source={{ uri: item }}
               style={{
                 width: 160,
                 height: 160,
@@ -136,4 +138,4 @@ export const ReviewBox = (props: ReviewBoxProps) => {
       />
     </View>
   )
-}
+})

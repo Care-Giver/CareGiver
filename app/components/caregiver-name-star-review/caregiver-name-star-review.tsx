@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Pressable, Image, ViewStyle, StyleProp } from "react-native"
+import { View, Image, ViewStyle, StyleProp, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
 import { PreBol14, PreMed16 } from "../_BASIC/custom-texts/custom-texts"
 import { DBG, GIVER_CASUAL_NAVY, HEAD_LINE, SUB_HEAD_LINE } from "#theme"
@@ -8,6 +8,7 @@ import { images } from "#images"
 import { DivisionLineVertical } from "../_BASIC/division-line-vertical/division-line-vertical"
 import { observer } from "mobx-react-lite"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
+import { ratingRound } from "../../utils/format"
 
 interface CaregiverNameStarReviewProps {
   style?: StyleProp<ViewStyle>
@@ -45,7 +46,11 @@ export const CaregiverNameStarReview = observer(function CaregiverNameStarReview
           <PreMed16 text={name} color={HEAD_LINE} />
           <Row>
             <Image style={styles.star} source={images.rating_star} />
-            <PreMed16 text={`(${ratings})`} color={SUB_HEAD_LINE} style={{ marginLeft: 4 }} />
+            <PreMed16
+              text={`(${ratingRound(ratings)})`}
+              color={SUB_HEAD_LINE}
+              style={{ marginLeft: 4 }}
+            />
 
             <DivisionLineVertical
               color={DBG}
@@ -54,17 +59,16 @@ export const CaregiverNameStarReview = observer(function CaregiverNameStarReview
               style={{ marginLeft: 8, marginRight: 8 }}
             />
 
-            <Pressable onPress={onPress}>
+            <TouchableOpacity onPress={onPress} hitSlop={4}>
               <Row>
                 <PreBol14
                   text={text}
                   color={GIVER_CASUAL_NAVY}
                   // style={{ marginLeft: 4 }}
                 />
-                {/* //TODO: "후기 작성" 기능 테스트 완료한 뒤 복구하기 */}
-                {/* <Image source={images.arrow_right_navy} style={styles.rightArrow} /> */}
+                <Image source={images.arrow_right_navy} style={styles.rightArrow} />
               </Row>
-            </Pressable>
+            </TouchableOpacity>
           </Row>
         </View>
       </Row>

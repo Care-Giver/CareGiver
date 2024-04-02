@@ -1,6 +1,7 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { StreamChat } from "stream-chat"
+import Config from "react-native-config"
 
 interface streamTokenResponse extends GeneralResponse {
   streamToken: string
@@ -34,5 +35,4 @@ export const getStreamToken = async (): Promise<GetNotificationsResult> => {
   }
 }
 
-const STREAM_API_KEY = "cyt5mvxvratf"
-export const streamChatClient = StreamChat.getInstance(STREAM_API_KEY)
+export const streamChatClient = StreamChat.getInstance(Config.STREAM_CHAT_API_KEY)

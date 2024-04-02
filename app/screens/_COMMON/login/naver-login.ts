@@ -3,6 +3,7 @@ import { checkUserExists } from "#api"
 import { alertModal } from "../../../utils/alert-modal"
 import { navigate } from "#navigators"
 import { GetKakaoProfileResult } from "./kakao-login"
+import Config from "react-native-config"
 
 type GetNaverProfileResult = GetKakaoProfileResult
 /**
@@ -54,8 +55,8 @@ const getNaverProfile = async (token, logoutHandler): Promise<GetNaverProfileRes
  */
 async function signInWithNaver() {
   try {
-    const consumerKey = "jqWkGdkKVZ3RwlfExH0O"
-    const consumerSecret = "Xi6mBF88oM"
+    const consumerKey = Config.NAVER_CONSUMER_KEY
+    const consumerSecret = Config.NAVER_CONSUMER_SECRET
     const appName = "Care Giver"
     const serviceUrlScheme = "caregivernaverlogin"
     const { isSuccess, failureResponse, successResponse } = await NaverLogin.login({

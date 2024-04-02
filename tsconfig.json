@@ -34,6 +34,6 @@
     "resolveJsonModule": true
   },
   "exclude": ["node_modules", "babel.config.js"],
-  "include": ["App.js", "app", "test", "storybook"],
+  "include": ["App.js", "app", "test", "storybook", "react-native-config.d.ts"],
   "extends": "expo/tsconfig.base"
 }

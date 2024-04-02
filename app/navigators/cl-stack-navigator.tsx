@@ -52,13 +52,12 @@ import {
   TestStreamChatScreen,
   ChannelListScreen,
   ChannelScreen,
+  IamportPaymentResult,
 } from "#screens"
 import { goBack, navigate } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
-  WritingCommentScreenHeader,
-  AllCommentsScreenHeader,
   EditMypageScreenHeader,
   EditPetInfoScreenHeader,
   CgScreenHeader,
@@ -69,10 +68,11 @@ import { images } from "../../assets/images"
 import { MinseonTest } from "../screens/test/minseon-test"
 import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
-import { Chat, OverlayProvider } from "stream-chat-react-native" // Or stream-chat-expo
+import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
-import { Pet } from "#api"
+import { CommentColumns, Pet, VisitingReview } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
+import { CreateBookingProps } from "../screens/_CLIENT/pay-stack/payment/payment-screen.controller"
 
 export type SelectedTime = {
   start: string
@@ -163,10 +163,19 @@ export type CLStackNavigatorParamList = {
     destination: string
   }
 
-  "all-reviews-screen": { visitingId: number }
+  "all-reviews-screen": { reviews: VisitingReview[] }
   "caregiver-self-introduction-screen": undefined
-  "all-comments-screen": undefined
-  "writing-comment-screen": undefined
+  "all-comments-screen": {
+    comments: CommentColumns[]
+    visitingId: number
+    userId: number
+  }
+  "writing-comment-screen": {
+    visitingId?: number
+    defaultComment?: string
+    updateOrCreate: "update" | "create"
+    commentId?: number
+  }
   "payment-request-screen": undefined
 
   /**
@@ -204,21 +213,11 @@ export type CLStackNavigatorParamList = {
   "test-iamport-payment-screen": {
     params: IMPData.PaymentData
     tierCode?: string
-    serviceType: string
-    visitingId: number
-    userId: number
-    request: string
-    services: string[]
-    destination: string
-    selectedDate: string
-    startTime: string[]
-    endTime: string[]
-    petIds: number[]
-    petToolsLocInfo: string
-    avoidFoodInfo: string
-    bondingTipsInfo: string
+    bookingData: Omit<CreateBookingProps, "setSuccessModalVisible">
   }
-  "test-iamport-payment-result-screen": any
+  "test-iamport-payment-result-screen": {
+    response: IamportPaymentResult
+  }
   // stream-chat 테스트
   "test-stream-chat-screen": any
   "channel-list-screen": any
@@ -391,12 +390,12 @@ export const SearchingStack = () => {
         }}
       />
 
-      {/* //* 리뷰 전체보기 */}
+      {/* //* 후기 전체보기 */}
       <Stack.Screen
         name="all-reviews-screen"
         component={AllReviewsScreen}
         options={{
-          title: "후기 (더미)",
+          title: "후기",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
@@ -417,7 +416,7 @@ export const SearchingStack = () => {
         component={AllCommentsScreen}
         options={{
           title: "댓글 전체보기",
-          header: (props) => <AllCommentsScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
@@ -426,7 +425,7 @@ export const SearchingStack = () => {
         name="writing-comment-screen"
         component={WritingCommentScreen}
         options={{
-          header: (props) => <WritingCommentScreenHeader {...props} />,
+          headerShown: false,
         }}
       />
 
@@ -530,10 +529,15 @@ export const ChatsStack = () => {
   const {
     userStore: { type },
   } = useStores()
-
+  const defaultKo = require("./ko.json")
+  const streami18n = new Streami18n({ language: "ko" })
+  streami18n.registerTranslation("ko", {
+    ...defaultKo,
+    "Send a message": "메시지를 입력해주세요 :)",
+  })
   return (
     <OverlayProvider>
-      <Chat client={streamChatClient}>
+      <Chat client={streamChatClient} i18nInstance={streami18n}>
         <Stack.Navigator
           screenOptions={{
             headerShown: true,

@@ -1,10 +1,17 @@
 import { POPPINS_REGULAR } from "#fonts"
-import { DISABLED, GIVER_CASUAL_NAVY, GIVER_CASUAL_NAVY_40, LIGHT_LINE } from "#theme"
+import {
+  DEVICE_SCREEN_HEIGHT,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  GIVER_CASUAL_NAVY_40,
+  LIGHT_LINE,
+} from "#theme"
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   root: {
     width: "100%",
+    height: DEVICE_SCREEN_HEIGHT,
   },
   arrow: {
     width: 18,

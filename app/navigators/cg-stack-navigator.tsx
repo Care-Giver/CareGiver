@@ -30,6 +30,8 @@ import {
   EditMypageScreen,
   CgRegistration2Screen,
   CgRegistration3Screen,
+  CgEarningListScreen,
+  CgRequestEarningScreen,
   CgBookingListScreen,
   CgBookingDetailScreen,
   NotificationScreen,
@@ -98,6 +100,12 @@ export type CGStackNavigatorParamList = {
   "cg-registration-1-screen": undefined
   "cg-registration-2-screen": { from?: keyof CGStackNavigatorParamList }
   "cg-registration-3-screen": undefined
+
+  /**
+   * Test
+   */
+  "cg-earning-list-screen": undefined
+  "cg-request-earning-screen": undefined
 }
 
 const Stack = createNativeStackNavigator<CGStackNavigatorParamList>()
@@ -325,6 +333,25 @@ export const CgMypageStack = () => {
         component={CgRegistration3Screen}
         options={{
           headerShown: false,
+        }}
+      />
+
+      {/* //* CG_Test - 정삭목록 스크린*/}
+      <Stack.Screen
+        name="cg-earning-list-screen"
+        component={CgEarningListScreen}
+        options={{
+          title: "정산 내역",
+          header: (props) => <GobackAndTitleHeader {...props} />,
+        }}
+      />
+      {/* //* CG_Test - 정산 요청 스크린 */}
+      <Stack.Screen
+        name="cg-request-earning-screen"
+        component={CgRequestEarningScreen}
+        options={{
+          title: "정산 요청",
+          header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />
     </Stack.Navigator>
