@@ -384,7 +384,11 @@ export const CaregiverDetailInformationScreen: FC<
                 ))}
             </View>
           ) : (
-            <View>{/*  */}</View>
+            <View style={{ alignItems: "center" }}>
+              <DivisionLine color={LBG} />
+              <PreReg14 text="아직 등록된 댓글이 없어요" color={BODY} mv={28} />
+              <DivisionLine color={LBG} />
+            </View>
           )}
         </View>
         <Footer mt={FOOTER_CONTENT_GAP} />
