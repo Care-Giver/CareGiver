@@ -30,9 +30,8 @@ import {
   PopSem14,
   PopReg14,
   Row,
-  PreMed16,
-  PreMed20,
   PreBol16,
+  PreMed18,
 } from "#components"
 import { useKeyboard } from "@react-native-community/hooks"
 import { PRETENDARD_REGULAR } from "#fonts"
@@ -40,7 +39,7 @@ import { createVisitingComment, updateVisitingComment } from "#api"
 import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles"
 import { images } from "#images"
 import { useStores } from "#models"
-import { alertModal } from "../../../../utils/alert-modal"
+import _ from "lodash"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -155,7 +154,7 @@ export const WritingCommentScreen: FC<
   return (
     <Screen preset="fixed">
       <WritingCommentScreenHeader
-        title={"댓글 작성"}
+        title={`댓글 ${updateOrCreate === "create" ? "작성" : "수정"}`}
         onPress={onPressSubmit}
         ableToRegister={wordLength > 0}
       />
@@ -232,17 +231,18 @@ export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProp
       </Pressable>
 
       {/* //* 타이틀 */}
-      <PreMed20 ml={8}> {title}</PreMed20>
+      <PreMed18 ml={8} text={title} />
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
-      <Pressable
-        onPress={onPress}
+      <TouchableOpacity
+        disabled={!ableToRegister}
+        onPress={_.debounce(onPress, 1000)}
         style={{
           marginLeft: "auto",
           marginRight: 16,
         }}
       >
         <PreBol16 color={ableToRegister ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   )
 }

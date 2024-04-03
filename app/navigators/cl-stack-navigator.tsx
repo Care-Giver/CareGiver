@@ -70,7 +70,7 @@ import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
-import { CommentColumns, Pet } from "#api"
+import { CommentColumns, Pet, VisitingReview } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { CreateBookingProps } from "../screens/_CLIENT/pay-stack/payment/payment-screen.controller"
 
@@ -163,7 +163,7 @@ export type CLStackNavigatorParamList = {
     destination: string
   }
 
-  "all-reviews-screen": undefined
+  "all-reviews-screen": { reviews: VisitingReview[] }
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": {
     comments: CommentColumns[]
@@ -390,12 +390,12 @@ export const SearchingStack = () => {
         }}
       />
 
-      {/* //* 리뷰 전체보기 */}
+      {/* //* 후기 전체보기 */}
       <Stack.Screen
         name="all-reviews-screen"
         component={AllReviewsScreen}
         options={{
-          title: "후기 (더미)",
+          title: "후기",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

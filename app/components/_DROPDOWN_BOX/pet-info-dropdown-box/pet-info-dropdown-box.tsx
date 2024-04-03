@@ -11,7 +11,7 @@ import { Pet } from "#api"
 interface PetInfoDropdownBoxProps {
   isOpen: boolean
   onPress: () => void
-  pets: Array<Pet>
+  pets: Array<Omit<Pet, "species">>
   style?: StyleProp<ViewStyle>
 }
 

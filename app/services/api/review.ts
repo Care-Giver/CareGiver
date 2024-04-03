@@ -4,6 +4,7 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import { PickerImage } from "../../components"
 import { ratingRound } from "../../utils/format"
 import { alertModal } from "../../utils/alert-modal"
+import { Pet } from "./pets"
 
 // TODO: 현재 유저의 id 어떻게 얻어오는지?
 const USER_ID = 7
@@ -12,7 +13,7 @@ const USER_ID = 7
  * postVisitingReview 함수의 인자 파라미터
  * :: 이미지 업로드를 위해 images는 PickerImage[] 형태를 갖는다.
  */
-interface PostReviewParams {
+interface PostVisitingReviewRequestBody {
   visitingId?: number
   crecheId?: number
   bookingId: number
@@ -109,56 +110,69 @@ export const uploadURIS = async (images: PickerImage[]): Promise<string[] | []> 
 
 /**
  * 방문 서비스 리뷰를 서버에 등록할 때 실행하는 함수
- * @param params 방문 리뷰를 post하기 위해 필요한 params
+ * @param body 방문 리뷰를 post하기 위해 필요한 body
  * @returns post 성공 | 실패 여부
  */
-export const postVisitingReview = async (params: PostReviewParams): Promise<boolean> => {
+export const postVisitingReview = async (
+  userId: number,
+  body: PostVisitingReviewRequestBody,
+): Promise<boolean> => {
   // ! undefined 추가 안할 시 에러 뜸 ... 왜?
   try {
     // * 서버에 이미지를 upload 하는 과정
-    const postParams: PostReviewToServerParams = {
-      userId: USER_ID,
-      ...params,
+    const postBody: PostReviewToServerParams = {
+      userId,
+      ...body,
       images: [],
     }
 
-    const AwsUris = await uploadURIS(params.images)
+    const awsUris = await uploadURIS(body.images)
 
-    if (AwsUris) {
-      postParams.images = [...AwsUris]
+    if (awsUris) {
+      postBody.images = [...awsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/visiting-review/visiting`,
-        postParams,
+        postBody,
       )
 
       if (response.data.ok) {
         return true
       }
+      alertModal(
+        "리뷰 작성에 실패했습니다.",
+        "알 수 없는 이유로 리뷰 작성에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+      )
     }
-    throw new Error("[PostVisitingReview] image upload | review post 과정 오류")
+    return false
   } catch (error) {
     console.error("[review axios] >>>", error)
+    alertModal(
+      "리뷰 작성에 실패했습니다. (axios)",
+      "알 수 없는 이유로 리뷰 작성에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+    )
     return false
   }
 }
 
-export const postCrecheReview = async (params: PostReviewParams): Promise<boolean | undefined> => {
+export const postCrecheReview = async (
+  body: PostVisitingReviewRequestBody,
+): Promise<boolean | undefined> => {
   try {
-    const postParams: PostReviewToServerParams = {
+    const postBody: PostReviewToServerParams = {
       userId: USER_ID,
-      ...params,
+      ...body,
       images: [],
     }
 
-    const AwsUris = await uploadURIS(params.images)
+    const awsUris = await uploadURIS(body.images)
 
-    if (AwsUris) {
-      postParams.images = [...AwsUris]
+    if (awsUris) {
+      postBody.images = [...awsUris]
 
       const response = await axios.post<PostReviewResponse>(
         `${BASE_URL}/creche-review/creche`,
-        postParams,
+        postBody,
       )
 
       if (response.data.ok) {
@@ -225,5 +239,68 @@ export const getCrecheReview = async (bookingId: number): Promise<Review | null>
   } catch (error) {
     console.error("[getCrecheReview] catch error >>>", error)
     return null
+  }
+}
+
+export interface VisitingReview extends Review {
+  __visitingBooking__: {
+    id: number
+    createAt: string
+    updatedAt: string
+    status: string
+    reviewStatus: string
+    destination: string
+    visitingId: number
+    request: string
+    petToolsLocInfo: string
+    avoidFoodInfo: string
+    bondingTipsInfo: string
+    __pets__: Array<Omit<Pet, "species">>
+  }
+  __user__: {
+    id: number
+    nickname: string
+    profileImage: string
+  }
+}
+interface GetVisitingReviewsResponse extends GeneralResponse {
+  visitingReviews: VisitingReview[]
+}
+
+type getVisitingReviewsResult =
+  | {
+      isSuccess: true
+      visitingReviews: VisitingReview[]
+    }
+  | {
+      isSuccess: false
+    }
+
+/**
+ * 특정 방문 서비스의 모든 리뷰를 불러온다.
+ */
+export const getVisitingReviews = async (visitingId: number): Promise<getVisitingReviewsResult> => {
+  // ! undefined 추가 안할 시 에러 뜸 ... 왜?
+  try {
+    const response = await axios.get<GetVisitingReviewsResponse>(
+      `${BASE_URL}/visiting-review/visiting/${visitingId}`,
+    )
+
+    if (!response.data.ok) {
+      alertModal(
+        "리뷰 조회 실패했습니다.",
+        "알 수 없는 이유로 리뷰 조회에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+      )
+      return { isSuccess: false }
+    }
+
+    return { isSuccess: true, visitingReviews: response.data.visitingReviews ?? [] }
+  } catch (error) {
+    console.error("[review axios] >>>", error)
+    alertModal(
+      "리뷰 조회에 실패했습니다. (axios)",
+      "알 수 없는 이유로 리뷰 조회에 실패했습니다. 잠시 뒤 다시 시도해주세요.",
+    )
+    return { isSuccess: false }
   }
 }

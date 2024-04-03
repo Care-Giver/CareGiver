@@ -1,3 +1,4 @@
+import _ from "lodash"
 import * as React from "react"
 import { Pressable, PressableProps, StyleProp, ViewStyle, TextStyle } from "react-native"
 
@@ -27,6 +28,7 @@ export const PressableButton = (props: PressableButtonProps) => {
     label,
     isDisabled = false,
     children,
+    onPress,
     ...rest
   } = props
 
@@ -36,7 +38,12 @@ export const PressableButton = (props: PressableButtonProps) => {
   const content = children
 
   return (
-    <Pressable style={[style, viewStyle]} {...rest} disabled={isDisabled}>
+    <Pressable
+      style={[style, viewStyle]}
+      onPress={_.debounce(onPress, 1000)}
+      disabled={isDisabled}
+      {...rest}
+    >
       {content}
     </Pressable>
   )
