@@ -196,7 +196,7 @@ const CgBookingInfoCard = observer(function BookingInfoCard(props: CgBookingInfo
           onPress={() => {
             navigate("cg-booking-detail-screen", {
               booking,
-              serviserviceTypeKoreanceTypeKorean: visOrCre,
+              serviceTypeKorean: visOrCre,
             })
           }}
         >
