@@ -7,6 +7,7 @@ import { PreBol16, PreMed18 } from "../_BASIC/custom-texts/custom-texts"
 import { CgBooking } from "#api"
 import { BOTTOM_TAB_BAR_HEIGHT } from "../_BOTTOM_TAB_BAR/custom-tab-bar/custom-tab-bar"
 import { images } from "#images"
+import { BASIC_BACKGROUND_PADDING_WIDTH } from "../_BASIC/screen/screen"
 
 export interface BookingListProps {
   /**
@@ -41,7 +42,10 @@ export const BookingList = observer(function BookingList(props: BookingListProps
   return (
     <FlatList
       style={allStyles}
-      contentContainerStyle={{ paddingBottom: BOTTOM_TAB_BAR_HEIGHT }}
+      contentContainerStyle={{
+        paddingBottom: BOTTOM_TAB_BAR_HEIGHT,
+        paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH,
+      }}
       showsVerticalScrollIndicator={false}
       data={bookings}
       renderItem={({ item, index }) => {
