@@ -5,8 +5,7 @@ import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   BookingCheckButton,
-  BookingInfoCardProps,
-  BookingList,
+  CgBookingList,
   DateInfo,
   Screen,
   SimpleCalendar,
@@ -17,18 +16,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
 import { View } from "react-native"
-
-//테스트용 더미 데이터
-const CareGiverReserveDummy: BookingInfoCardProps = {
-  id: "1",
-  name: "강영묵",
-  serviceType: "visit",
-  caregiverType: "trainer",
-  petname: "봉봉이",
-  species: "푸들",
-  petservices: ["산책, 목욕, 미용"],
-  address: "경기도 성남시 판교동",
-}
 
 // 30초마다 Refetch
 const INTERVAL = 30 * 1000
@@ -87,7 +74,7 @@ export const CgManageBookingScreen: FC<
       />
 
       {/* 모든 예약 목록 */}
-      <BookingList bookings={_.orderBy(confirmedBookings, "startDate", "asc")} />
+      <CgBookingList bookings={_.orderBy(confirmedBookings, "startDate", "asc")} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
