@@ -64,6 +64,7 @@ import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { VisitingReview } from "../../../../services/api"
 import _ from "lodash"
 import { useFocusEffect } from "@react-navigation/native"
+import { SelectedComment } from "../all-comments-screen/all-comments-screen"
 
 type ServiceAmenity = {
   services: CrecheService[] | VisitingService[]
@@ -94,16 +95,14 @@ export const CaregiverDetailInformationScreen: FC<
   console.log("selectedTime 1", selectedTime)
   console.log("userId >>>", userDetail.id)
   console.log("visitingId >>>", service.visiting.id)
-
+  const [isMounted, setIsMounted] = useState(false)
   const [reviews, setReviews] = useState<VisitingReview[]>([])
   const [comments, setComments] = useState<CommentColumns[]>([])
-  /**
-   * 선택한 댓글이 로그인한 유저가 작성한 댓글인지 구분하는 state
-   */
-  const [isUserComment, setIsUserComment] = useState<boolean>(false)
-  const [selectedCommentId, setSelectedCommentId] = useState<number>()
-  const [selectedComment, setSelectedComment] = useState<string>("")
-  const [isMounted, setIsMounted] = useState(false)
+  const [selectedComment, setSelectedComment] = useState<SelectedComment>({
+    id: null,
+    desc: "",
+  })
+  const isUserComment = userDetail.id === selectedComment.id
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -124,17 +123,15 @@ export const CaregiverDetailInformationScreen: FC<
     [],
   )
   const onPressCommentOption = () => {
-    if (isUserComment) {
-      bottomSheetModalRef.current.close()
-      navigate("writing-comment-screen", {
-        updateOrCreate: "update",
-        commentId: selectedCommentId,
-        defaultComment: selectedComment,
-      })
-    }
     if (!isUserComment) {
       alertModal("개발중 🏗️", "답글 기능은 개발 중 입니다.")
     }
+    bottomSheetModalRef.current.close()
+    navigate("writing-comment-screen", {
+      updateOrCreate: "update",
+      commentId: selectedComment.id,
+      defaultComment: selectedComment.desc,
+    })
   }
 
   const animationValue = useRef(new Animated.Value(0)).current
@@ -339,47 +336,54 @@ export const CaregiverDetailInformationScreen: FC<
             }}
           >
             <PreBol16 text={"댓글"} color={SUB_HEAD_LINE} />
-            <PreBol14
-              text={"전체보기 >"}
-              color={BODY}
-              style={{ marginLeft: "auto" }}
-              onPress={() => {
-                //? 댓글 전체보기 화면으로 이동
-                navigate("all-comments-screen", {
-                  comments: comments,
-                  visitingId: service.visiting.id,
-                  userId: userDetail.id,
-                })
-              }}
-            />
+            {comments?.length > 0 ? (
+              <PreBol14
+                text={"전체보기 >"}
+                color={BODY}
+                style={{ marginLeft: "auto" }}
+                onPress={() => {
+                  //? 댓글 전체보기 화면으로 이동
+                  navigate("all-comments-screen", {
+                    comments: comments,
+                    visitingId: service.visiting.id,
+                    userId: userDetail.id,
+                  })
+                }}
+              />
+            ) : null}
           </Row>
           <DivisionLine color={LBG} style={{ marginTop: 8 }} />
 
-          <View
-            style={{
-              paddingVertical: -1,
-              marginBottom: BOTTOM_HEIGHT,
-              alignItems: "center",
-            }}
-          >
-            {_.sortBy(comments, "createAt")
-              .reverse()
-              .slice(0, 3)
-              .map((item, index) => (
-                <Comment
-                  commentData={item}
-                  numberOfLines={2}
-                  style={{ marginTop: -1 }}
-                  key={index}
-                  onPress={() => {
-                    setIsUserComment(userDetail.id === item.__commentator__.id)
-                    setSelectedCommentId(item.__commentator__.id)
-                    setSelectedComment(item.__commentator__.desc)
-                    bottomSheetModalRef.current.present()
-                  }}
-                />
-              ))}
-          </View>
+          {comments?.length > 0 ? (
+            <View
+              style={{
+                paddingVertical: -1,
+                marginBottom: BOTTOM_HEIGHT,
+                alignItems: "center",
+              }}
+            >
+              {_.sortBy(comments, "createAt")
+                .reverse()
+                .slice(0, 3)
+                .map((item, index) => (
+                  <Comment
+                    commentData={item}
+                    numberOfLines={2}
+                    style={{ marginTop: -1 }}
+                    key={index}
+                    onPress={() => {
+                      setSelectedComment({
+                        id: item.__commentator__.id,
+                        desc: item.__commentator__.desc,
+                      })
+                      bottomSheetModalRef.current.present()
+                    }}
+                  />
+                ))}
+            </View>
+          ) : (
+            <View>{/*  */}</View>
+          )}
         </View>
         <Footer mt={FOOTER_CONTENT_GAP} />
       </ScrollView>
