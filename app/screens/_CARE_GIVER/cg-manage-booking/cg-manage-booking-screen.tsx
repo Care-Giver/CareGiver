@@ -87,7 +87,7 @@ export const CgManageBookingScreen: FC<
       />
 
       {/* 모든 예약 목록 */}
-      <BookingList bookings={_.orderBy(confirmedBookings, "createAt", "desc")} />
+      <BookingList bookings={_.orderBy(confirmedBookings, "startDate", "asc")} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>
