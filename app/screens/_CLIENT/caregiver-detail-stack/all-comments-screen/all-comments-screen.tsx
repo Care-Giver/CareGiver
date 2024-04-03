@@ -28,8 +28,9 @@ import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import _ from "lodash"
 
 export type SelectedComment = {
-  id: number
+  commentId: number
   desc: string
+  commentatorId: number
 }
 
 export const AllCommentsScreen: FC<
@@ -37,10 +38,11 @@ export const AllCommentsScreen: FC<
 > = observer(({ navigation, route }) => {
   const { comments, visitingId, userId } = route.params
   const [selectedComment, setSelectedComment] = useState<SelectedComment>({
-    id: null,
+    commentId: null,
     desc: "",
+    commentatorId: null,
   })
-  const isUserComment = userId === selectedComment.id
+  const isUserComment = userId === selectedComment.commentatorId
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -67,7 +69,7 @@ export const AllCommentsScreen: FC<
     bottomSheetModalRef.current.close()
     navigate("writing-comment-screen", {
       updateOrCreate: "update",
-      commentId: selectedComment.id,
+      commentId: selectedComment.commentId,
       defaultComment: selectedComment.desc,
     })
   }
@@ -98,7 +100,11 @@ export const AllCommentsScreen: FC<
             commentData={item}
             style={{ marginTop: -1 }}
             onPress={() => {
-              setSelectedComment({ id: item.__commentator__.id, desc: item.__commentator__.desc })
+              setSelectedComment({
+                commentId: item.id,
+                desc: item?.__commentator__?.desc,
+                commentatorId: item?.__commentator__?.id,
+              })
               bottomSheetModalRef.current.present()
             }}
           />

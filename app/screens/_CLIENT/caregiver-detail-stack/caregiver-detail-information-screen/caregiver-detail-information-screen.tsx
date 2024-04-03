@@ -99,10 +99,11 @@ export const CaregiverDetailInformationScreen: FC<
   const [reviews, setReviews] = useState<VisitingReview[]>([])
   const [comments, setComments] = useState<CommentColumns[]>([])
   const [selectedComment, setSelectedComment] = useState<SelectedComment>({
-    id: null,
+    commentId: null,
     desc: "",
+    commentatorId: null,
   })
-  const isUserComment = userDetail.id === selectedComment.id
+  const isUserComment = userDetail.id === selectedComment.commentatorId
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -129,7 +130,7 @@ export const CaregiverDetailInformationScreen: FC<
     bottomSheetModalRef.current.close()
     navigate("writing-comment-screen", {
       updateOrCreate: "update",
-      commentId: selectedComment.id,
+      commentId: selectedComment.commentId,
       defaultComment: selectedComment.desc,
     })
   }
@@ -373,8 +374,9 @@ export const CaregiverDetailInformationScreen: FC<
                     key={index}
                     onPress={() => {
                       setSelectedComment({
-                        id: item.__commentator__.id,
-                        desc: item.__commentator__.desc,
+                        commentId: item.id,
+                        desc: item?.__commentator__?.desc,
+                        commentatorId: item?.__commentator__?.id,
                       })
                       bottomSheetModalRef.current.present()
                     }}
