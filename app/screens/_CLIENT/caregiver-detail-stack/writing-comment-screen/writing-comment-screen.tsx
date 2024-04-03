@@ -41,6 +41,7 @@ import { HEADER_ROOT } from "../../../../components/_SCREEN_HEADER/common-styles
 import { images } from "#images"
 import { useStores } from "#models"
 import { alertModal } from "../../../../utils/alert-modal"
+import _ from "lodash"
 
 export const WritingCommentScreen: FC<
   StackScreenProps<NavigatorParamList, "writing-comment-screen">
@@ -234,15 +235,16 @@ export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProp
       {/* //* 타이틀 */}
       <PreMed20 ml={8}> {title}</PreMed20>
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
-      <Pressable
-        onPress={onPress}
+      <TouchableOpacity
+        disabled={!ableToRegister}
+        onPress={_.debounce(onPress, 1000)}
         style={{
           marginLeft: "auto",
           marginRight: 16,
         }}
       >
         <PreBol16 color={ableToRegister ? GIVER_CASUAL_NAVY : DISABLED} text={"등록"} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   )
 }
