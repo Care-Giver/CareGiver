@@ -46,11 +46,15 @@ import {
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 import { price as priceFormatter, ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
+import { useStores } from "#models"
 
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
 > = observer(function BookingDetailScreen({ navigation, route }) {
   const { serviceType, crecheBookingId, visitingBookingId, paymentId } = route.params
+  const {
+    petStore: { getPetsByIds },
+  } = useStores()
 
   const [booking, setBooking] = useState<RenamedCrecheBooking & RenamedVisitingBooking>(null)
   const [petsitter, setPetsitter] = useState<Creche & Visiting>(null)
@@ -251,7 +255,7 @@ export const BookingDetailScreen: FC<
               address={booking?.location}
               start={booking.start}
               end={booking.end}
-              petIds={booking?.petIds}
+              pets={getPetsByIds(booking?.petIds)}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
               style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}

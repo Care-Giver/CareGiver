@@ -44,6 +44,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     console.log("bookingRequest", bookingRequest)
     const {
       userStore: { userDetail },
+      petStore: { getPetsByIds },
     } = useStores()
 
     //* 결제 정보 관련
@@ -285,7 +286,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
               address={service[key].address}
               start={selectedTime?.start}
               end={selectedTime?.end}
-              petIds={selectedPetIds}
+              pets={getPetsByIds(selectedPetIds)}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
               // style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
