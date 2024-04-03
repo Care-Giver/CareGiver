@@ -71,13 +71,17 @@ export const Comment = observer(function Comment(props: CommentProps) {
       <Row style={{ marginTop: 12 }}>
         <Image
           source={
-            __commentator__.profileImage
-              ? { uri: __commentator__.profileImage }
+            __commentator__?.profileImage
+              ? { uri: __commentator__?.profileImage }
               : images.profile_default
           }
           style={styles.profileImage}
         />
-        <PreReg14 text={__commentator__.nickname} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
+        <PreReg14
+          text={__commentator__?.nickname}
+          color={SUB_HEAD_LINE}
+          style={{ marginLeft: 8 }}
+        />
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}

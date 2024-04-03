@@ -140,7 +140,7 @@ export const updateVisitingComment = async (
   try {
     const response = await axios.patch<GeneralResponse>(`${BASE_URL}/comment/visiting/${id}`, body)
     if (!response.data.ok) {
-      alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
+      alertModal("댓글 수정 실패", `${response?.data?.error?.message}`)
 
       return {
         isSuccess: false,
@@ -151,7 +151,7 @@ export const updateVisitingComment = async (
       isSuccess: true,
     }
   } catch (error) {
-    alertModal("댓글 조회 실패", "댓글 조회에 실패했습니다. 다시 시도해주세요.")
+    alertModal("댓글 수정 실패", `catch: ${error?.message}`)
     console.error("catch 에러!!!", error)
     return {
       isSuccess: false,
