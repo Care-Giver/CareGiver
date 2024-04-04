@@ -1,4 +1,12 @@
-import { View, Pressable, Image, ImageBackground, ImageSourcePropType } from "react-native"
+import {
+  View,
+  Pressable,
+  Image,
+  ImageBackground,
+  ImageSourcePropType,
+  StyleProp,
+  ViewStyle,
+} from "react-native"
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
 import { styles } from "./styles"
 import { Row } from "../_BASIC/row/row"
@@ -11,12 +19,12 @@ import {
 } from "../_BASIC/custom-texts/custom-texts"
 import { images } from "../../../assets/images"
 import { DISABLED, GIVER_CASUAL_NAVY, HEAD_LINE, MIDDLE_LINE, palette } from "../../theme"
-import { CaregiverTypeButton } from "../../components"
+import { CaregiverTypeButton } from ".."
 import { navigate } from "../../navigators"
-import { PastBookingProps } from "./past-booking.props"
 import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 import { alertModal } from "../../utils/alert-modal"
+import { PreviousBookingParams } from "../../services/api"
 
 // FIXME: PastBooking 완전 리팩토링
 // handleAgainPress, handlePress 함수를 PastBooking 밖으로 빼서 사용하도록 수정
@@ -45,7 +53,11 @@ const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
   }
 }
 
-export const PastBooking = (props: PastBookingProps) => {
+interface BookingInfoCardProps extends PreviousBookingParams {
+  style?: StyleProp<ViewStyle>
+  forceUpdate?: () => any
+}
+export const BookingInfoCard = (props: BookingInfoCardProps) => {
   const {
     profileImage,
     serviceType,

@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
-import { PastBooking, Screen } from "../../../../components"
+import { BookingInfoCard, Screen } from "../../../../components"
 import { PreviousBookingParams, getPreviousBookings } from "../../../../services/api"
 import { useFocusEffect } from "@react-navigation/native"
 import { useStores } from "#models"
@@ -74,7 +74,7 @@ export const PastBookingsScreen: FC<
       <View style={{ paddingVertical: 20 }}>
         <FlatList
           data={previousBookings}
-          renderItem={({ item }) => <PastBooking {...item} forceUpdate={forceUpdate} />}
+          renderItem={({ item }) => <BookingInfoCard {...item} forceUpdate={forceUpdate} />}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
         />

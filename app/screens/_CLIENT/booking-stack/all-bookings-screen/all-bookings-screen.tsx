@@ -7,7 +7,7 @@ import {
   PreReg16,
   Row,
   Screen,
-  PastBooking,
+  BookingInfoCard,
   DivisionLine,
   PreMed18,
   PreMed14,
@@ -188,7 +188,7 @@ export const AllBookingsScreen: FC<
                   // TODO: waitingBookings 객체를 담을 수 있도록,
                   // TODO: PastBooking 컴포넌트 업데이트 하기.
                   // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
-                  <PastBooking
+                  <BookingInfoCard
                     currentBooking={item}
                     profileImage={item?.profileImage}
                     serviceType={"visiting"}
@@ -263,7 +263,7 @@ export const AllBookingsScreen: FC<
           </Row>
 
           {firstPreviousBooking ? (
-            <PastBooking style={{ marginTop: 13 }} {...firstPreviousBooking} />
+            <BookingInfoCard style={{ marginTop: 13 }} {...firstPreviousBooking} />
           ) : (
             <View
               style={{
