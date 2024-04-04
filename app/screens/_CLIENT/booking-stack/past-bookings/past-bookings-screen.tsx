@@ -6,6 +6,7 @@ import { NavigatorParamList } from "../../../../navigators"
 import { PastBooking, Screen } from "../../../../components"
 import { PreviousBookingParams, getPreviousBookings } from "../../../../services/api"
 import { useFocusEffect } from "@react-navigation/native"
+import { useStores } from "#models"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"
 
@@ -16,46 +17,57 @@ export const PastBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "past-bookings-screen">
 > = observer(function PastBookingsScreen({ route, navigation }) {
   const [previousBookings, setPreviousBookings] = useState<PreviousBookingParams[]>([])
-
+  const {
+    reviewStoreModel: { reviews },
+  } = useStores()
   // * 찜 버튼을 누를 시 강제로 화면 전체를 리렌더링하기 위한 함수
   const forceUpdate = useCallback(() => {
     navigation.setParams(undefined)
   }, [])
 
-  const fetchBookings = useCallback(async () => {
-    getPreviousBookings()
-      .then((res) => {
-        const previousBookings: PreviousBookingParams[] = []
-        res.forEach((booking, index) => {
-          const type = booking.crecheId ? "creche" : "visiting"
-          previousBookings.push({
-            profileImage: booking.profileImage,
-            serviceType: type,
-            petsitterType: type,
-            // @ts-ignore
-            petsitterId: type === "creche" ? booking.crecheId : booking.visitingId,
-            // @ts-ignore
-            bookingId: type === "creche" ? booking.crecheBookingId : booking.visitingBookingId,
-            petsitterName: booking.petSitterName,
-            desc: booking.desc,
-            // ? 여기서는 creche | visiting 모두 Date로 통일한다.
-            // @ts-ignore
-            startDate: type === "creche" ? booking.startDate : booking.startTime,
-            // @ts-ignore
-            endDate: type === "creche" ? booking.endDate : booking.endTime,
-            isCanceled: booking.isCanceled,
-            isFavorite: booking.isFavorite,
-            reviewStatus: booking.reviewStatus,
-          })
-        })
-        setPreviousBookings(previousBookings)
-      })
-      .catch((err) => console.log("[past bookings screen] get previous bookings error >>>", err))
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      const fetchBookings = async () => {
+        console.log("focused!! - 2")
 
-  useLayoutEffect(() => {
-    fetchBookings()
-  }, [route.params])
+        await getPreviousBookings()
+          .then((res) => {
+            console.log("focused!! - 3")
+
+            const previousBookings: PreviousBookingParams[] = []
+            res.forEach((booking, index) => {
+              const type = booking.crecheId ? "creche" : "visiting"
+              previousBookings.push({
+                profileImage: booking.profileImage,
+                serviceType: type,
+                petsitterType: type,
+                // @ts-ignore
+                petsitterId: type === "creche" ? booking.crecheId : booking.visitingId,
+                // @ts-ignore
+                bookingId: type === "creche" ? booking.crecheBookingId : booking.visitingBookingId,
+                petsitterName: booking.petSitterName,
+                desc: booking.desc,
+                // ? 여기서는 creche | visiting 모두 Date로 통일한다.
+                // @ts-ignore
+                startDate: type === "creche" ? booking.startDate : booking.startTime,
+                // @ts-ignore
+                endDate: type === "creche" ? booking.endDate : booking.endTime,
+                isCanceled: booking.isCanceled,
+                isFavorite: booking.isFavorite,
+                reviewStatus: booking.reviewStatus,
+              })
+            })
+            setPreviousBookings(previousBookings)
+            console.log("focused!! - 4")
+          })
+          .catch((err) =>
+            console.log("[past bookings screen] get previous bookings error >>>", err),
+          )
+      }
+      fetchBookings()
+      console.log("focused!! - 5")
+    }, [reviews]),
+  )
 
   return (
     <Screen testID="PastBookings">

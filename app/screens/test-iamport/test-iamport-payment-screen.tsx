@@ -2,66 +2,35 @@ import React, { FC } from "react"
 import { StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList, navigate } from "#navigators"
+import { NavigatorParamList } from "#navigators"
 import { Loading, Screen } from "#components"
 import IMP from "iamport-react-native"
 import { getUserCode } from "./utils"
+import { CreateBookingProps } from "../_CLIENT/pay-stack/payment/payment-screen.controller"
 
-export interface Response {
+export interface IamportPaymentResult {
   response: JSON
-  amount: string | number
-  serviceType: string
-
-  //? 예약 생성 api를 위한 값들
-  visitingId: number
-  userId: number
-  request: string
-  services: string[]
-  destination: string
-  selectedDate: string
-  startTime: string[]
-  endTime: string[]
-  petIds: number[]
-  petToolsLocInfo: string
-  avoidFoodInfo: string
-  bondingTipsInfo: string
+  bookingData: Omit<CreateBookingProps, "setSuccessModalVisible">
 }
 
 export const TestIamportPaymentScreen: FC<
   StackScreenProps<NavigatorParamList, "test-iamport-payment-screen">
 > = observer(function TestIamportPaymentScreen({ navigation, route }) {
+  console.log("🔷 test-iamport-payment-screen | route.params", route.params)
   const data = route.params
-  console.log("data >>>", data)
-
-  //@ts-ignore
   const params = data?.params
   const tierCode = data?.tierCode
-  const userCode = getUserCode(params!.pg, tierCode) // pg 데이터는 필수임
+  const userCode = getUserCode(params.pg, tierCode) // pg 데이터는 필수임
 
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
   function callback(response) {
     console.log("response >>>", response)
-    console.log("params >>>", params.amount, data.serviceType)
-    const responseData: Response = {
+    const _data: IamportPaymentResult = {
       response: response,
-      amount: params.amount,
-      serviceType: data.serviceType,
-
-      //? 예약 생성 api를 위한 값들
-      visitingId: data.visitingId,
-      userId: data.userId,
-      request: data?.request,
-      services: data.services,
-      destination: data.destination,
-      selectedDate: data.selectedDate,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      petIds: data.petIds,
-      petToolsLocInfo: data?.petToolsLocInfo,
-      avoidFoodInfo: data?.avoidFoodInfo,
-      bondingTipsInfo: data?.bondingTipsInfo,
+      // "2-2. 예약 생성" 을 위한 값들
+      bookingData: data.bookingData,
     }
-    navigation.replace("test-iamport-payment-result-screen", responseData)
+    navigation.replace("test-iamport-payment-result-screen", { response: _data })
   }
 
   return (
@@ -70,7 +39,7 @@ export const TestIamportPaymentScreen: FC<
         userCode={userCode}
         tierCode={tierCode}
         loading={<Loading duration={2000} />} // 로딩 컴포넌트
-        data={params!}
+        data={params}
         callback={callback}
       />
     </Screen>

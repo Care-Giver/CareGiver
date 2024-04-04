@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "npx react-native start",
+    "start": "npx react-native start --reset-cache",
     "start:expo": "npx expo start --dev-client",
     "ios": "cd ios; pod install && cd ..; npx react-native run-ios & npx react-native start",
     "android": "npx react-native run-android",
