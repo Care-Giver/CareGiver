@@ -22,8 +22,9 @@ import { styles } from "./styles"
 import { images } from "../../../../../assets/images"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import {
+  BookingStatus,
   CurrentBooking,
-  PreviousBookingParams,
+  PreviousBooking,
   getCurrentBookings,
   getFirstPreviousBooking,
   getMyWaitingBookings,
@@ -71,9 +72,7 @@ export const AllBookingsScreen: FC<
    *  CANCEL = "Cancel", // 유저가 예약 승낙 이후 취소한 경우
    *  REJECT = "Reject", // 예약을 거절한 경우
    */
-  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
-    null,
-  )
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBooking | null>(null)
 
   // Use useQuery to fetch current bookings with a refetch interval
   const { data: currentBookingsData } = useQuery({
@@ -103,10 +102,31 @@ export const AllBookingsScreen: FC<
     if (firstPreviousBookingData) {
       setFirstPreviousBooking(firstPreviousBookingData)
     }
+    // ! For testing
+    // if (true) {
+    //   setFirstPreviousBooking({
+    //     visitingBookingId: 1,
+    //     visitingId: 1,
+    //     paymentId: 16,
+    //     startTime: "2022-09-15T04:00:00.000Z",
+    //     endTime: "2022-09-15T06:00:00.000Z",
+    //     petSitterName: "지우",
+    //     desc: "강아지 3년 기른 경력으로 보살핍니다.",
+    //     profileImage: null,
+    //     isCanceled: false,
+    //     isFavorite: true,
+    //     reviewStatus: "Waiting",
+    //   })
+    // }
     if (waitingBookingsData) {
       setWaitingBookings(waitingBookingsData.waitingBookings)
     }
-  }, [currentBookingsData, firstPreviousBookingData, waitingBookingsData])
+  }, [
+    currentBookingsData,
+    //
+    firstPreviousBookingData,
+    waitingBookingsData,
+  ])
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <ScrollView
@@ -185,22 +205,19 @@ export const AllBookingsScreen: FC<
                 }}
                 data={waitingBookings}
                 renderItem={({ index, item }) => (
-                  // TODO: waitingBookings 객체를 담을 수 있도록,
-                  // TODO: PastBooking 컴포넌트 업데이트 하기.
-                  // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
                   <BookingInfoCard
-                    currentBooking={item}
+                    key={index}
+                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
+                    type={BookingStatus.WAITING}
                     profileImage={item?.profileImage}
                     serviceType={"visiting"}
-                    petsitterType={"visiting"}
                     petsitterId={item?.visitingId}
                     bookingId={item?.visitingBookingId}
                     petsitterName={item?.petSitterName}
                     desc={item?.desc}
-                    startDate={item?.startTime}
-                    endDate={item?.endTime}
-                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
-                    key={index}
+                    startTime={item?.startTime}
+                    endTime={item?.endTime}
+                    isFavorite={false}
                     onPress={() => {
                       navigate("booking-detail-screen", {
                         crecheBookingId: item?.crecheBookingId,
@@ -263,7 +280,44 @@ export const AllBookingsScreen: FC<
           </Row>
 
           {firstPreviousBooking ? (
-            <BookingInfoCard style={{ marginTop: 13 }} {...firstPreviousBooking} />
+            <BookingInfoCard
+              style={{ marginTop: 13 }}
+              type={BookingStatus.COMPLETE}
+              serviceType={"visiting"}
+              profileImage={firstPreviousBooking?.profileImage}
+              petsitterId={firstPreviousBooking?.visitingId}
+              bookingId={firstPreviousBooking?.visitingBookingId}
+              petsitterName={firstPreviousBooking?.petSitterName}
+              desc={firstPreviousBooking?.desc}
+              startTime={firstPreviousBooking?.startTime}
+              endTime={firstPreviousBooking?.endTime}
+              isCanceled={firstPreviousBooking?.isCanceled}
+              isFavorite={false}
+              onPressReview={() => {
+                // 이미 후기 작성 완료된 경우 - 후기 보기 페이지로
+                if (firstPreviousBooking?.reviewStatus === "Complete") {
+                  navigate("view-review-screen", {
+                    serviceType: "visiting",
+                    bookingId: firstPreviousBooking?.visitingBookingId,
+                    profileImage: firstPreviousBooking?.profileImage,
+                    petsitterName: firstPreviousBooking?.petSitterName,
+                    desc: firstPreviousBooking?.desc,
+                  })
+                }
+                // 후기를 아직 작성하지 않은 경우
+                else {
+                  navigate("write-review-screen", {
+                    profileImage: firstPreviousBooking?.profileImage,
+                    petsitterName: firstPreviousBooking?.petSitterName,
+                    serviceType: "visiting",
+                    petsitterType: "visiting",
+                    petsitterId: firstPreviousBooking?.visitingId,
+                    bookingId: firstPreviousBooking?.visitingBookingId,
+                    desc: firstPreviousBooking?.desc,
+                  })
+                }
+              }}
+            />
           ) : (
             <View
               style={{

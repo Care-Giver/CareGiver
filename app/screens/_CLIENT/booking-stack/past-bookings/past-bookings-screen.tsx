@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "../../../../navigators"
 import { BookingInfoCard, Screen } from "../../../../components"
-import { PreviousBookingParams, getPreviousBookings } from "../../../../services/api"
+import { PreviousBooking, getPreviousBookings } from "../../../../services/api"
 import { useFocusEffect } from "@react-navigation/native"
 import { useStores } from "#models"
 // import { useNavigation } from "@react-navigation/native"
@@ -16,7 +16,7 @@ import { useStores } from "#models"
 export const PastBookingsScreen: FC<
   StackScreenProps<NavigatorParamList, "past-bookings-screen">
 > = observer(function PastBookingsScreen({ route, navigation }) {
-  const [previousBookings, setPreviousBookings] = useState<PreviousBookingParams[]>([])
+  const [previousBookings, setPreviousBookings] = useState<PreviousBooking[]>([])
   const {
     reviewStoreModel: { reviews },
   } = useStores()
@@ -34,7 +34,7 @@ export const PastBookingsScreen: FC<
           .then((res) => {
             console.log("focused!! - 3")
 
-            const previousBookings: PreviousBookingParams[] = []
+            const previousBookings: PreviousBooking[] = []
             res.forEach((booking, index) => {
               const type = booking.crecheId ? "creche" : "visiting"
               previousBookings.push({
@@ -47,13 +47,15 @@ export const PastBookingsScreen: FC<
                 bookingId: type === "creche" ? booking.crecheBookingId : booking.visitingBookingId,
                 petsitterName: booking.petSitterName,
                 desc: booking.desc,
-                // ? 여기서는 creche | visiting 모두 Date로 통일한다.
                 // @ts-ignore
-                startDate: type === "creche" ? booking.startDate : booking.startTime,
+                startDate: booking?.startDate,
                 // @ts-ignore
-                endDate: type === "creche" ? booking.endDate : booking.endTime,
+                endDate: booking?.endDate,
+                startTime: booking?.startTime,
+                // @ts-ignore
+                endTime: booking?.endTime,
                 isCanceled: booking.isCanceled,
-                isFavorite: booking.isFavorite,
+                isFavorite: false,
                 reviewStatus: booking.reviewStatus,
               })
             })

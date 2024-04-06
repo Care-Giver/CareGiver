@@ -213,7 +213,7 @@ export type ReviewStatus = "Waiting" | "Possible" | "Complete" | "Expired"
 /**
  * API에서 사용되는 지난 예약 내역 Props
  * */
-interface PreviousBooking {
+export interface PreviousBooking {
   visitingBookingId?: number
   crecheBookingId?: number
   visitingId?: number
@@ -230,25 +230,6 @@ interface PreviousBooking {
   petSitterName: string
   desc: string
   profileImage: string | null
-  isCanceled: boolean
-  isFavorite: boolean
-  reviewStatus: ReviewStatus
-}
-
-/**
- * 스크린에서 사용되는 지난 예약 내역 props
- * */
-export interface PreviousBookingParams {
-  profileImage: string | null
-  serviceType: ServiceType
-  petsitterType: PetsitterType
-  petsitterId: number
-  bookingId: number
-  petsitterName: string
-  desc: string
-  // ? 여기서는 creche | visiting 모두 Date로 통일한다.
-  startDate: string
-  endDate: string
   isCanceled: boolean
   isFavorite: boolean
   reviewStatus: ReviewStatus
