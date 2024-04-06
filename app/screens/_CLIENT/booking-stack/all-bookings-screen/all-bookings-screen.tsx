@@ -30,6 +30,7 @@ import {
   getMyWaitingBookings,
 } from "../../../../services/api"
 import { useQuery } from "@tanstack/react-query"
+import _ from "lodash"
 
 // Define the refetch interval (30 seconds)
 const REFETCH_INTERVAL = 30 * 1000
@@ -145,7 +146,7 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={currentBookings}
+                data={_.orderBy(currentBookings, ["startTime"], ["asc"])}
                 renderItem={({ index, item }) => (
                   <InProgressBooking
                     currentBooking={item}
@@ -203,7 +204,7 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={waitingBookings}
+                data={_.orderBy(waitingBookings, ["startTime"], ["asc"])}
                 renderItem={({ index, item }) => (
                   <BookingInfoCard
                     key={index}
