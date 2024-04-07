@@ -31,6 +31,7 @@ import {
 } from "../../../../services/api"
 import { useQuery } from "@tanstack/react-query"
 import _ from "lodash"
+import { useFocusEffect } from "@react-navigation/native"
 
 // Define the refetch interval (30 seconds)
 const REFETCH_INTERVAL = 30 * 1000
@@ -75,26 +76,38 @@ export const AllBookingsScreen: FC<
    */
   const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBooking | null>(null)
 
-  // Use useQuery to fetch current bookings with a refetch interval
+  // 확정된 예약 내역 Polling
   const { data: currentBookingsData } = useQuery({
     queryKey: ["currentBookings"],
     queryFn: getCurrentBookings,
     refetchInterval: REFETCH_INTERVAL,
   })
 
-  // Use useQuery to fetch first previous booking with a refetch interval
+  // 신청한 예약 내역 Polling
+  const { data: waitingBookingsData } = useQuery({
+    queryKey: ["waitingBookings"],
+    queryFn: getMyWaitingBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
+
+  // 지난 예약 내역 Polling
   const { data: firstPreviousBookingData } = useQuery({
     queryKey: ["firstPreviousBooking"],
     queryFn: getFirstPreviousBooking,
     refetchInterval: REFETCH_INTERVAL,
   })
 
-  // Use useQuery to fetch waiting bookings with a refetch interval
-  const { data: waitingBookingsData } = useQuery({
-    queryKey: ["waitingBookings"],
-    queryFn: getMyWaitingBookings,
-    refetchInterval: REFETCH_INTERVAL,
-  })
+  useFocusEffect(
+    useCallback(() => {
+      Promise.all([getCurrentBookings(), getMyWaitingBookings(), getFirstPreviousBooking()]).then(
+        ([currentBookings, waitingBookingsData, firstPreviousBooking]) => {
+          setCurrentBookings(currentBookings)
+          setWaitingBookings(waitingBookingsData.waitingBookings)
+          setFirstPreviousBooking(firstPreviousBooking)
+        },
+      )
+    }, []),
+  )
 
   useEffect(() => {
     if (currentBookingsData) {
@@ -122,12 +135,32 @@ export const AllBookingsScreen: FC<
     if (waitingBookingsData) {
       setWaitingBookings(waitingBookingsData.waitingBookings)
     }
+    // ! For testing
+    // if (true) {
+    //   setWaitingBookings([
+    //     {
+    //       desc: "지치지 않는 체력을 가진 강아지 환영합니다!",
+    //       endTime: "2024-03-23T15:00:00.000Z",
+    //       paymentId: 206,
+    //       petSitterName: "이영민",
+    //       profileImage:
+    //         "https://caregiverbucket.s3.ap-northeast-2.amazonaws.com/1708278430560petsitter_lee.jpg",
+    //       ratings: 3.6666666666666665,
+    //       reviewCount: 3,
+    //       startTime: "2024-03-23T16:00:00.000Z",
+    //       status: "Waiting",
+    //       visitingBookingId: 52,
+    //       visitingId: 33,
+    //     },
+    //   ])
+    // }
   }, [
     currentBookingsData,
     //
     firstPreviousBookingData,
     waitingBookingsData,
   ])
+
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <ScrollView
@@ -220,6 +253,15 @@ export const AllBookingsScreen: FC<
                     endTime={item?.endTime}
                     isFavorite={false}
                     onPress={() => {
+                      navigate("booking-detail-screen", {
+                        crecheBookingId: item?.crecheBookingId,
+                        visitingBookingId: item?.visitingBookingId,
+                        paymentId: item?.paymentId,
+                        serviceType: item?.crecheBookingId ? "creche" : "visiting",
+                      })
+                    }}
+                    onPressCancelBooking={() => {
+                      // TODO: 스크린 이동하지 않고, 이 곳에서 바로 예약 취소
                       navigate("booking-detail-screen", {
                         crecheBookingId: item?.crecheBookingId,
                         visitingBookingId: item?.visitingBookingId,

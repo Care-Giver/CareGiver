@@ -1,5 +1,14 @@
-import React, { FC, useEffect, useMemo, useState } from "react"
-import { Pressable, View, StyleSheet, Image, ViewStyle, Linking, ScrollView } from "react-native"
+import React, { FC, useEffect, useMemo, useRef, useState } from "react"
+import {
+  // Pressable,
+  View,
+  StyleSheet,
+  Image,
+  ViewStyle,
+  // Linking,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -8,6 +17,7 @@ import {
   CareSummary,
   CaregiverTypeButton,
   ConditionalButton,
+  CustomModal,
   DivisionLine,
   DivisionLineVertical,
   PreBol14,
@@ -18,6 +28,7 @@ import {
   RefundNote,
   Row,
   Screen,
+  CancelBookingBottomSheetModal,
 } from "#components"
 import {
   SHADOW_1,
@@ -27,10 +38,9 @@ import {
   LIGHT_LINE,
   SUB_HEAD_LINE,
   DISABLED,
-  WIDTH,
 } from "#theme"
 import { images } from "#images"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
+// import { MaterialCommunityIcons } from "@expo/vector-icons"
 import {
   BookingStatus,
   Creche,
@@ -38,6 +48,7 @@ import {
   RenamedCrecheBooking,
   RenamedVisitingBooking,
   Visiting,
+  cancelVisitingBooking,
   getCreche,
   getCrecheBooking,
   getPaymentById,
@@ -49,6 +60,7 @@ import { price as priceFormatter, ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
 import { useStores } from "#models"
 import Popover from "react-native-popover-view"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
@@ -62,12 +74,38 @@ export const BookingDetailScreen: FC<
   const [petsitter, setPetsitter] = useState<Creche & Visiting>(null)
   const [payment, setPayment] = useState<PaymentColumns>(null)
   const [showPopover, setShowPopover] = useState<boolean>(false)
+  const [cancelBookingModalOpen, setCancelBookingModalOpen] = useState<boolean>(false)
+
+  const cancelBookingBottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  const openCancelBookingBottomSheet = () => {
+    cancelBookingBottomSheetModalRef.current?.present()
+  }
+
+  // BookingStatus.WAITING 일때, 예약 취소 기능
+  const onCancelBookingSubmitted = (cancelReason) => {
+    console.log("cancelReason", cancelReason)
+    if (cancelReason === "") return
+
+    cancelVisitingBooking({
+      visitingBookingId: booking.id,
+      reason: cancelReason,
+      isPetSitterCancel: false,
+    }).then((res) => {
+      if (res?.isSuccess) {
+        //
+        navigation.goBack()
+      }
+    })
+  }
 
   useEffect(() => {
     const id = serviceType === "creche" ? crecheBookingId : visitingBookingId
     const getBooking = serviceType === "creche" ? getCrecheBooking : getVisitingBooking
     //@ts-ignore
-    getBooking(id).then(setBooking)
+    // getBooking(id).then(setBooking)
+    // ! For testing
+    getBooking(id).then((b) => setBooking({ ...b, status: BookingStatus.WAITING }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -204,19 +242,19 @@ export const BookingDetailScreen: FC<
                       onRequestClose={() => setShowPopover(false)}
                       from={
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                          <Pressable
-                            style={[$pressableBox, SHADOW_1, { marginLeft: 10 * WIDTH }]}
+                          <TouchableOpacity
+                            style={[$pressableBox, SHADOW_1]}
                             onPress={() => setShowPopover(true)}
                           >
                             <PreReg14 text={"메시지 보내기"} color={DISABLED} />
-                          </Pressable>
+                          </TouchableOpacity>
                         </View>
                       }
                     >
                       <PreReg12 text="케어기버가 예약을 승인하면 활성화됩니다." />
                     </Popover>
                   ) : (
-                    <Pressable
+                    <TouchableOpacity
                       style={[$pressableBox, SHADOW_1]}
                       onPress={() => {
                         if (!isChatActivated) {
@@ -234,7 +272,7 @@ export const BookingDetailScreen: FC<
                         text={"메시지 보내기"}
                         color={isChatActivated ? HEAD_LINE : DISABLED}
                       />
-                    </Pressable>
+                    </TouchableOpacity>
                   )}
 
                   {/* <Pressable
@@ -314,9 +352,9 @@ export const BookingDetailScreen: FC<
               label={label}
               style={buttonStyle}
               labelTextColor={labelTextColor}
-              isActivated={false}
+              isActivated={booking.status === BookingStatus.WAITING}
               onPress={() => {
-                // TODO: WAITING 일때 예약 취소 기능 구현
+                setCancelBookingModalOpen(true)
               }}
             />
             {/* 환불 안내 */}
@@ -324,6 +362,34 @@ export const BookingDetailScreen: FC<
           </View>
         )}
       </ScrollView>
+
+      {/* 예약 취소 모달 */}
+      {booking?.status === BookingStatus.WAITING && (
+        <CustomModal
+          visibleState={cancelBookingModalOpen}
+          yesBtnText="네"
+          noBtnText="아니요"
+          image={images.cat_with_heart}
+          imageWidth={154}
+          imageHeight={120}
+          title={"예약을 정말 취소하시겠어요?"}
+          handleYesPress={() => {
+            if (booking?.status !== BookingStatus.WAITING) return
+
+            // BookingStatus.WAITING 일때, 예약 취소 기능
+            setCancelBookingModalOpen(false)
+            openCancelBookingBottomSheet()
+          }}
+          handleNoPress={() => {
+            setCancelBookingModalOpen(false)
+          }}
+        />
+      )}
+
+      <CancelBookingBottomSheetModal
+        ref={cancelBookingBottomSheetModalRef}
+        onSubmitted={onCancelBookingSubmitted}
+      />
     </Screen>
   )
 })
