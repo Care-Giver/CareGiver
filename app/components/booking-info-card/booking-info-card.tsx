@@ -26,36 +26,37 @@ import { BookingStatus, ReviewStatus } from "../../services/api"
 
 type ServiceType = "visiting" | "creche"
 
-const setDateText = (dateTime: Date, serviceType: ServiceType): string => {
-  const month = dateTime.getMonth() + 1
-  const day = dateTime.getDate()
+const setDateText = (time: Date, serviceType: ServiceType): string => {
+  console.log("dateTime", time)
+  console.log("serviceType", serviceType)
+
+  const month = time.getMonth() + 1
+  const day = time.getDate()
 
   if (serviceType === "creche") {
     return `${month}월 ${day}일`
   } else {
-    const hours = dateTime.getHours()
-    const minutes = dateTime.getMinutes() === 0 ? "00" : dateTime.getMinutes()
+    const hours = time.getHours()
+    const minutes = time.getMinutes() === 0 ? "00" : time.getMinutes()
     return `${month}월 ${day}일 ${hours}:${minutes}`
   }
 }
 
-type BookingInfoCardProps = {
+export type BookingInfoCardProps = {
   style?: StyleProp<ViewStyle>
   onPress?: () => void // 카드 전체 클릭시
   onPressCancelBooking?: () => void // "예약 취소" 클릭시
   onPressReview?: () => void // 후기 버튼 ("후기 작성하기" | "나의 후기 보기") 클릭시
-  startDate?: string
-  endDate?: string
-  startTime?: string
-  endTime?: string
-  profileImage: string | null
-  serviceType: ServiceType
-  petsitterId: number
-  bookingId: number
-  petsitterName: string
-  desc: string
   forceUpdate?: () => any
+  bookingId: number
+  petsitterId: number
+  start: string
+  end: string
+  serviceType: ServiceType
+  desc: string
   isFavorite: false // TODO: 즐겨찾기 기능 추가시, boolean 으로 변경하기
+  profileImage: string | null
+  petsitterName: string
 } & (
   | {
       // 승인대기(=신청한 예약)
@@ -64,32 +65,29 @@ type BookingInfoCardProps = {
   | {
       // 서비스 완료(=지난 예약)
       type: BookingStatus.COMPLETE
-      isCanceled?: boolean
-      reviewStatus?: ReviewStatus
+      isCanceled: boolean
+      reviewStatus: ReviewStatus
     }
 )
 
 export const BookingInfoCard = (props: BookingInfoCardProps) => {
   const {
-    profileImage,
-    serviceType,
-    petsitterId,
-    bookingId,
-    petsitterName,
-    desc,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    isFavorite,
     style,
-    forceUpdate,
     onPress,
     onPressCancelBooking,
     onPressReview,
+    forceUpdate,
+    bookingId,
+    petsitterId,
+    start,
+    end,
+    serviceType,
+    desc,
+    isFavorite,
+    profileImage,
+    petsitterName,
     type,
   } = props
-
   // const [isFavoriteState, setIsFavoriteState] = useState<boolean>(isFavorite)
 
   // // * 찜 버튼 handler
@@ -180,10 +178,7 @@ export const BookingInfoCard = (props: BookingInfoCardProps) => {
             <PreReg10 text={"체크인"} color={DISABLED} />
             {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
             <PreReg12
-              text={setDateText(
-                new Date(serviceType === "visiting" ? startTime : startDate),
-                serviceType,
-              )}
+              text={setDateText(new Date(start), serviceType)}
               color={DISABLED}
               style={{ marginTop: 4 }}
             />
@@ -197,10 +192,7 @@ export const BookingInfoCard = (props: BookingInfoCardProps) => {
             <PreReg10 text={"체크아웃"} color={DISABLED} />
             {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
             <PreReg12
-              text={setDateText(
-                new Date(serviceType === "visiting" ? endTime : endDate),
-                serviceType,
-              )}
+              text={setDateText(new Date(end), serviceType)}
               color={DISABLED}
               style={{ marginTop: 4 }}
             />

@@ -32,6 +32,10 @@ import {
 import { useQuery } from "@tanstack/react-query"
 import _ from "lodash"
 import { useFocusEffect } from "@react-navigation/native"
+import {
+  PreviousBookingAdaptor,
+  WaitingBookingAdaptor,
+} from "../../../../components/booking-info-card/booking-info-card-adaptor"
 
 // Define the refetch interval (30 seconds)
 const REFETCH_INTERVAL = 30 * 1000
@@ -242,16 +246,7 @@ export const AllBookingsScreen: FC<
                   <BookingInfoCard
                     key={index}
                     style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
-                    type={BookingStatus.WAITING}
-                    profileImage={item?.profileImage}
-                    serviceType={"visiting"}
-                    petsitterId={item?.visitingId}
-                    bookingId={item?.visitingBookingId}
-                    petsitterName={item?.petSitterName}
-                    desc={item?.desc}
-                    startTime={item?.startTime}
-                    endTime={item?.endTime}
-                    isFavorite={false}
+                    {...new WaitingBookingAdaptor(item).adapt()}
                     onPress={() => {
                       navigate("booking-detail-screen", {
                         crecheBookingId: item?.crecheBookingId,
@@ -325,38 +320,37 @@ export const AllBookingsScreen: FC<
           {firstPreviousBooking ? (
             <BookingInfoCard
               style={{ marginTop: 13 }}
-              type={BookingStatus.COMPLETE}
-              serviceType={"visiting"}
-              profileImage={firstPreviousBooking?.profileImage}
-              petsitterId={firstPreviousBooking?.visitingId}
-              bookingId={firstPreviousBooking?.visitingBookingId}
-              petsitterName={firstPreviousBooking?.petSitterName}
-              desc={firstPreviousBooking?.desc}
-              startTime={firstPreviousBooking?.startTime}
-              endTime={firstPreviousBooking?.endTime}
-              isCanceled={firstPreviousBooking?.isCanceled}
-              isFavorite={false}
+              {...new PreviousBookingAdaptor(firstPreviousBooking).adapt()}
               onPressReview={() => {
+                const {
+                  serviceType,
+                  bookingId,
+                  profileImage,
+                  petsitterName,
+                  desc,
+                  petsitterId,
+                } = new PreviousBookingAdaptor(firstPreviousBooking).adapt()
+
                 // 이미 후기 작성 완료된 경우 - 후기 보기 페이지로
                 if (firstPreviousBooking?.reviewStatus === "Complete") {
                   navigate("view-review-screen", {
-                    serviceType: "visiting",
-                    bookingId: firstPreviousBooking?.visitingBookingId,
-                    profileImage: firstPreviousBooking?.profileImage,
-                    petsitterName: firstPreviousBooking?.petSitterName,
-                    desc: firstPreviousBooking?.desc,
+                    serviceType,
+                    bookingId,
+                    profileImage,
+                    petsitterName,
+                    desc,
                   })
                 }
                 // 후기를 아직 작성하지 않은 경우
                 else {
                   navigate("write-review-screen", {
-                    profileImage: firstPreviousBooking?.profileImage,
-                    petsitterName: firstPreviousBooking?.petSitterName,
-                    serviceType: "visiting",
-                    petsitterType: "visiting",
-                    petsitterId: firstPreviousBooking?.visitingId,
-                    bookingId: firstPreviousBooking?.visitingBookingId,
-                    desc: firstPreviousBooking?.desc,
+                    profileImage,
+                    petsitterName,
+                    serviceType,
+                    petsitterType: serviceType,
+                    petsitterId,
+                    bookingId,
+                    desc,
                   })
                 }
               }}
