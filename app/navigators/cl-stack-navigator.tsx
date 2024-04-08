@@ -52,13 +52,12 @@ import {
   TestStreamChatScreen,
   ChannelListScreen,
   ChannelScreen,
+  IamportPaymentResult,
 } from "#screens"
 import { goBack, navigate } from "./navigation-utilities"
 import {
   GobackAndTitleHeader,
   HomeScreenHeader,
-  WritingCommentScreenHeader,
-  AllCommentsScreenHeader,
   EditMypageScreenHeader,
   EditPetInfoScreenHeader,
   CgScreenHeader,
@@ -71,8 +70,9 @@ import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../services/api/stream"
-import { CommentColmns, Pet } from "#api"
+import { CommentColumns, Pet, VisitingReview } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
+import { CreateBookingProps } from "../screens/_CLIENT/pay-stack/payment/payment-screen.controller"
 
 export type SelectedTime = {
   start: string
@@ -163,10 +163,10 @@ export type CLStackNavigatorParamList = {
     destination: string
   }
 
-  "all-reviews-screen": undefined
+  "all-reviews-screen": { reviews: VisitingReview[] }
   "caregiver-self-introduction-screen": undefined
   "all-comments-screen": {
-    comments: CommentColmns[]
+    comments: CommentColumns[]
     visitingId: number
     userId: number
   }
@@ -213,21 +213,11 @@ export type CLStackNavigatorParamList = {
   "test-iamport-payment-screen": {
     params: IMPData.PaymentData
     tierCode?: string
-    serviceType: string
-    visitingId: number
-    userId: number
-    request: string
-    services: string[]
-    destination: string
-    selectedDate: string
-    startTime: string[]
-    endTime: string[]
-    petIds: number[]
-    petToolsLocInfo: string
-    avoidFoodInfo: string
-    bondingTipsInfo: string
+    bookingData: Omit<CreateBookingProps, "setSuccessModalVisible">
   }
-  "test-iamport-payment-result-screen": any
+  "test-iamport-payment-result-screen": {
+    response: IamportPaymentResult
+  }
   // stream-chat 테스트
   "test-stream-chat-screen": any
   "channel-list-screen": any
@@ -400,12 +390,12 @@ export const SearchingStack = () => {
         }}
       />
 
-      {/* //* 리뷰 전체보기 */}
+      {/* //* 후기 전체보기 */}
       <Stack.Screen
         name="all-reviews-screen"
         component={AllReviewsScreen}
         options={{
-          title: "후기 (더미)",
+          title: "후기",
           header: (props) => <GobackAndTitleHeader {...props} />,
         }}
       />

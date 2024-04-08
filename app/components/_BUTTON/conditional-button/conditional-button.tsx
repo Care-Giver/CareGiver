@@ -3,6 +3,7 @@ import { StyleProp, TouchableOpacity, ViewStyle } from "react-native"
 import { palette } from "#theme"
 import { PreBol16 } from "../../_BASIC/custom-texts/custom-texts"
 import { styles } from "./styles"
+import _ from "lodash"
 
 interface ConditionalButtonProps {
   /**
@@ -29,7 +30,7 @@ export const ConditionalButton = (props: ConditionalButtonProps) => {
   const allStyles = Object.assign({}, viewStyle, style)
 
   return (
-    <TouchableOpacity style={allStyles} disabled={!isActivated} onPress={onPress}>
+    <TouchableOpacity style={allStyles} disabled={!isActivated} onPress={_.debounce(onPress, 1000)}>
       <PreBol16 text={label} color={color} />
     </TouchableOpacity>
   )

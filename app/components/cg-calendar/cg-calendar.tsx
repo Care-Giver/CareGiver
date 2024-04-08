@@ -109,11 +109,12 @@ export const CgCalendar = observer(function CgCalendar(props: CgCalendarProps) {
             isAvailableDate = _isAvailableDate
             fee = _fee
           }
-          const textDecorationLine = isAvailableDate
-            ? "none"
-            : new Date(date.dateString) >= TODAY_YEAR_MONTH_DATE
-            ? "line-through"
-            : "none"
+          // const textDecorationLine = isAvailableDate
+          //   ? "none"
+          //   : new Date(date.dateString) >= TODAY_YEAR_MONTH_DATE
+          //   ? "line-through"
+          //   : "none"
+          const textDecorationLine = "none"
 
           return (
             <CgCalendarDay
