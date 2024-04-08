@@ -266,7 +266,6 @@ export const CgSetVisitingServiceDayScreen: FC<
       fee = 0
     }
     setFee(fee)
-    setIsSaveButtonActivated(true)
   }
 
   const totalPrice = useMemo(() => petsitter.defaultFee + fee, [petsitter.defaultFee, fee])
@@ -542,7 +541,6 @@ export const CgSetVisitingServiceDayScreen: FC<
               }
             })
             additionalPriceBottomSheetModalRef.current?.close()
-            setIsSaveButtonActivated(true)
           }}
         />
       </BottomSheetFooter>

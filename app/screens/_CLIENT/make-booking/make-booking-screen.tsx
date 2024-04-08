@@ -6,6 +6,7 @@ import {
   Screen,
   PlaceHolderInputBox,
   ClickToBlueButton,
+  PreReg12,
   PreBol14,
   PreBol16,
   RowRoundedButton,
@@ -15,12 +16,20 @@ import {
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
 import { View, Pressable, StyleSheet } from "react-native"
-import { BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, DISABLED, GIVER_CASUAL_NAVY, WIDTH } from "#theme"
+import {
+  BOTTOM_HEIGHT,
+  DEVICE_SCREEN_WIDTH,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  WIDTH,
+  palette,
+} from "#theme"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
 import { images } from "#images"
 import { alertModal } from "../../../utils/alert-modal"
+import { t } from "i18n-js"
 
 export type BookingRequest = {
   petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치

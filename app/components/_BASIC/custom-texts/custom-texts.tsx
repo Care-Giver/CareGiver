@@ -75,11 +75,6 @@ const PretendardRegular = (props: TextProps) => {
 
   return (
     <ReactNativeText
-      /**
-       * https://caregiver-frontend.atlassian.net/jira/software/projects/MVP/issues/MVP-105?jql=project%20%3D%20%22MVP%22%20ORDER%20BY%20created%20DESC
-       * 해당 이슈 해결을 위해 adjustsFontSizeToFit porp 추가
-       */
-      adjustsFontSizeToFit={props.adjustsFontSizeToFit}
       style={[
         style,
         {

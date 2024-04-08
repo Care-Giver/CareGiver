@@ -9,7 +9,6 @@ import { DivisionLine } from "../_BASIC/division-line/division-line"
 import { formatDate } from "../../utils/format"
 import { CommentColumns } from "#api"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { observer } from "mobx-react-lite"
 
 /* @Entity()
 export class PetSitterReview extends CoreEntity {
@@ -55,7 +54,7 @@ interface CommentProps {
   onPress: () => void
 }
 
-export const Comment = observer(function Comment(props: CommentProps) {
+export const Comment = forwardRef((props: CommentProps) => {
   const { style: viewStyle, numberOfLines, commentData, onPress } = props
   const { desc, createAt, __commentator__ } = commentData
   const _numberOfLines = numberOfLines || undefined
@@ -70,24 +69,20 @@ export const Comment = observer(function Comment(props: CommentProps) {
       {/* //* 프로필이미지, 닉네임, 날짜, 점3개 */}
       <Row style={{ marginTop: 12 }}>
         <Image
-          source={
-            __commentator__?.profileImage
-              ? { uri: __commentator__?.profileImage }
-              : images.profile_default
-          }
+          source={{
+            uri: __commentator__.profileImage || images.profile_default,
+          }}
           style={styles.profileImage}
         />
-        <PreReg14
-          text={__commentator__?.nickname}
-          color={SUB_HEAD_LINE}
-          style={{ marginLeft: 8 }}
-        />
+        <PreReg14 text={__commentator__.nickname} color={SUB_HEAD_LINE} style={{ marginLeft: 8 }} />
         <PreReg12 text={date} color={BODY} style={{ marginLeft: "auto", marginRight: 13 }} />
         <Pressable
           style={{ width: 10, alignItems: "center" }}
           hitSlop={4}
-          onPress={onPress}
-          //TODO 유저 id에 따라 수정 및 답글 기능 추가
+          onPress={
+            onPress
+            //TODO 유저 id에 따라 수정 및 답글 기능 추가
+          }
         >
           <Image source={images.vertical_3_dots} style={styles.threeDots} />
         </Pressable>

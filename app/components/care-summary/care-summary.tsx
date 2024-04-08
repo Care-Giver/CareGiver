@@ -3,10 +3,9 @@ import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PreBol14, PreReg14 } from "../_BASIC/custom-texts/custom-texts"
 import { SelectedPetCard } from "../_DROPDOWN_BOX/pet-info-dropdown-box/selected-pet-card/selected-pet-card"
-import { ServiceTypeKorean } from "#models"
+import { ServiceTypeKorean, useStores } from "#models"
 import { SUB_HEAD_LINE } from "#theme"
 import { formatSchedule } from "../../utils/format"
-import { Pet } from "#api"
 
 export interface CareSummaryProps {
   /**
@@ -23,18 +22,32 @@ export interface CareSummaryProps {
   /** 케어 종료 시각. 예) "2022-09-26T10:00:00.000Z" */
   end: string
 
-  /** 케어 반려동물 리스트. */
-  pets: Pet[]
+  /** 케어 반려동물 id 리스트. */
+  petIds: number[]
 
   /** 케어 타입. 방문 OR 위탁 */
-  serviceTypeKorean: ServiceTypeKorean
+  serviceTypeKorean?: ServiceTypeKorean
 
   showServiceType?: boolean
 }
 
 export const CareSummary = observer(function CareSummary(props: CareSummaryProps) {
-  const { style, address, start, end, pets, serviceTypeKorean, showServiceType = true } = props
+  const {
+    style,
+
+    address,
+    start,
+    end,
+    petIds,
+    serviceTypeKorean,
+    showServiceType = true,
+  } = props
   const allStyles = Object.assign({}, styles.root, style)
+
+  const {
+    petStore: { getPetsByIds },
+  } = useStores()
+
   const schedule = formatSchedule({ start, end, serviceTypeKorean })
 
   return (
@@ -52,14 +65,14 @@ export const CareSummary = observer(function CareSummary(props: CareSummaryProps
       <PreBol14 text={"케어 일정"} color={SUB_HEAD_LINE} mt={36} />
       <PreReg14 text={schedule} color={SUB_HEAD_LINE} mt={8} />
 
-      {pets ? (
+      {petIds && (
         <View style={{ marginTop: 36, marginBottom: 12 }}>
           <PreBol14 text={"맡길 반려동물"} color={SUB_HEAD_LINE} />
-          {pets.map((item, index) => (
+          {getPetsByIds(petIds).map((item, index) => (
             <SelectedPetCard key={index} petData={item} deletable={false} />
           ))}
         </View>
-      ) : null}
+      )}
     </View>
   )
 })

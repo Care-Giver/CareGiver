@@ -126,7 +126,7 @@ export const CgBookingDetailScreen: FC<
               address={booking?.address}
               start={booking[startProp]}
               end={booking[endProp]}
-              pets={booking?.pets}
+              petIds={booking?.pets ? booking?.pets.map((v) => v.id) : []}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
             />

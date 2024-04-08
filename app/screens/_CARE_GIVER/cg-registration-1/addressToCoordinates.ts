@@ -1,7 +1,8 @@
 import { OnCompleteParams } from "@actbase/react-daum-postcode/lib/types"
 import { alertModal } from "../../../utils/alert-modal"
 import axios from "axios"
-import Config from "react-native-config"
+
+const KAKAO_REST_API_KEY = "b46e34c330f9952e16cfa4a7a75030e3" // 카카오 케어기버 앱 REST API KEY
 
 /**
  * 카카오 MAP API 를 사용하여,
@@ -11,7 +12,7 @@ import Config from "react-native-config"
  */
 export async function addressToCoordinates(address: OnCompleteParams["address"]) {
   const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`
-  const headers = { Authorization: `KakaoAK ${Config.KAKAO_REST_API_KEY}` }
+  const headers = { Authorization: `KakaoAK ${KAKAO_REST_API_KEY}` }
 
   try {
     const response = await axios.get(url, { headers })
@@ -57,7 +58,7 @@ interface Location {
  */
 export async function coordinatesToAddress(body: Location) {
   const url = `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${body.lng}&y=${body.lat}`
-  const headers = { Authorization: `KakaoAK ${Config.KAKAO_REST_API_KEY}` }
+  const headers = { Authorization: `KakaoAK ${KAKAO_REST_API_KEY}` }
 
   try {
     const response = await axios.get(url, { headers })

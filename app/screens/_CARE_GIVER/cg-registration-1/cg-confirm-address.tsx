@@ -8,7 +8,6 @@ import MapView, { LatLng, Marker } from "react-native-maps"
 import { images } from "#images"
 import { ServiceTypeKorean } from "#models"
 import { addressToCoordinates } from "./addressToCoordinates"
-import Config from "react-native-config"
 
 export interface CgConfirmAddressProps {
   /**
@@ -20,6 +19,8 @@ export interface CgConfirmAddressProps {
   setDetailAddress: Dispatch<SetStateAction<string>>
   serviceTypeKorean: ServiceTypeKorean
 }
+
+// const GOOGLE_MAP_API_KEY = "AIzaSyDhFKJYgH5Dizee2-Pj-8h5IBQNjcCSrSU"
 
 // /**
 //  * GCP MAP API 를 사용하여,
@@ -34,7 +35,7 @@ export interface CgConfirmAddressProps {
 //       "https://maps.googleapis.com/maps/api/geocode/json?address=$" +
 //       encodedURI +
 //       "&key=" +
-// Config.GOOGLE_MAP_API_KEY
+//       GOOGLE_MAP_API_KEY
 //     fetch(url)
 //       .then((response) => response.json())
 //       .then((responseJson) => {

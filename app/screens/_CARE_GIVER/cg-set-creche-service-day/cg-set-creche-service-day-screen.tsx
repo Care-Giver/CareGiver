@@ -286,7 +286,7 @@ export const CgSetCrecheServiceDayScreen: FC<
                 {},
               ) as ExtraSizeFee,
             }
-            // 위탁 펫시터 업데이트
+            // 방문 펫시터 업데이트
             updateCreche(petsitter.id, data).then(({ isSuccess, creche, reason }) => {
               if (isSuccess) {
                 // MST 업데이트

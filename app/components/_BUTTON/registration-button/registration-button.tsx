@@ -17,8 +17,6 @@ export const RegistrationButton = (props: RegistrationButtonProps, { children })
     <Pressable onPress={!isActive ? onPress : null} style={[styles.root, style, buttonStyle]}>
       <PreReg14
         text={text}
-        numberOfLines={1}
-        adjustsFontSizeToFit={true}
         color={alwaysActive ? color.palette.white : isActive ? HEAD_LINE : DISABLED}
       />
       {isActive && !alwaysActive && (

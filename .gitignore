@@ -153,5 +153,3 @@ dist/
 # evn 관련 파일
 .env
 .env*
-
-google-services.json

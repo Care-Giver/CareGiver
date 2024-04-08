@@ -27,22 +27,17 @@ import { alertModal } from "../../../../utils/alert-modal"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import _ from "lodash"
 
-export type SelectedComment = {
-  commentId: number
-  desc: string
-  commentatorId: number
-}
-
 export const AllCommentsScreen: FC<
   StackScreenProps<NavigatorParamList, "all-comments-screen">
 > = observer(({ navigation, route }) => {
   const { comments, visitingId, userId } = route.params
-  const [selectedComment, setSelectedComment] = useState<SelectedComment>({
-    commentId: null,
-    desc: "",
-    commentatorId: null,
-  })
-  const isUserComment = userId === selectedComment.commentatorId
+
+  /**
+   * 선택한 댓글이 로그인한 유저가 작성한 댓글인지 구분하는 state
+   */
+  const [isUserComment, setIsUserComment] = useState<boolean>(false)
+  const [selectedCommentId, setSelectedCommentId] = useState<number>()
+  const [selectedComment, setSelectedComment] = useState<string>("")
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -69,8 +64,8 @@ export const AllCommentsScreen: FC<
     bottomSheetModalRef.current.close()
     navigate("writing-comment-screen", {
       updateOrCreate: "update",
-      commentId: selectedComment.commentId,
-      defaultComment: selectedComment.desc,
+      commentId: selectedCommentId,
+      defaultComment: selectedComment,
     })
   }
 
@@ -100,11 +95,9 @@ export const AllCommentsScreen: FC<
             commentData={item}
             style={{ marginTop: -1 }}
             onPress={() => {
-              setSelectedComment({
-                commentId: item.id,
-                desc: item?.__commentator__?.desc,
-                commentatorId: item?.__commentator__?.id,
-              })
+              setIsUserComment(userId === item.__commentator__.id)
+              setSelectedCommentId(item.__commentator__.id)
+              setSelectedComment(item.__commentator__.desc)
               bottomSheetModalRef.current.present()
             }}
           />

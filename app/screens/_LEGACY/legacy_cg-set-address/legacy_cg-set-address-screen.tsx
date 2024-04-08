@@ -39,13 +39,13 @@ export const CgRegistration1Screen: FC<
     setInputAddress(text)
   }
 
-  const mApiKey = ""
+  const mApiKey = "AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc"
 
   //스타일 check
   const beforeConButton = [styles.conditionButton, styles.beforeBackground]
   const nextConButtion = [styles.conditionButton, styles.nextBackground]
 
-  //"https://maps.googleapis.com/maps/api/geocode/json?address=$" + encodedURI + "&key=",
+  //"https://maps.googleapis.com/maps/api/geocode/json?address=$" + encodedURI + "&key=AIzaSyDEmkVMqKbStRBK-w65rnfQQ9fhrzFigkc",
 
   //주소 정보로 위도와 경도 불러오는 함수
   const getLatLng = (address) => {

@@ -3,7 +3,6 @@ import { StyleProp, ViewStyle, View, StyleSheet, TouchableOpacity } from "react-
 import { observer } from "mobx-react-lite"
 import { PreBol14 } from "../../_BASIC/custom-texts/custom-texts"
 import { GIVER_CASUAL_NAVY, color } from "#theme"
-import _ from "lodash"
 
 export interface DeclineOrConfirmButtonProps {
   /**
@@ -65,10 +64,10 @@ export const DeclineOrConfirmButton = observer(function DeclineOrConfirmButton(
   const allStyles = Object.assign({}, styles.root, { height }, style)
   return (
     <View style={allStyles}>
-      <TouchableOpacity style={styles.declineButton} onPress={_.debounce(handleYesPress, 1000)}>
+      <TouchableOpacity style={styles.declineButton} onPress={handleYesPress}>
         <PreBol14 text={declineText} color={GIVER_CASUAL_NAVY} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.confirmButton} onPress={_.debounce(handleNoPress, 1000)}>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleNoPress}>
         <PreBol14 text={confirmText} color={color.palette.white} />
       </TouchableOpacity>
     </View>
