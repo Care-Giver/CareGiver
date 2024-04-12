@@ -9,27 +9,27 @@ beforeEach(() => (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.res
 afterEach(() => jest.clearAllMocks())
 
 test("load", async () => {
-  const value = await load("something")
+  const value = load("something")
   expect(value).toEqual(JSON.parse(VALUE_STRING))
 })
 
 test("loadString", async () => {
-  const value = await loadString("something")
+  const value = loadString("something")
   expect(value).toEqual(VALUE_STRING)
 })
 
 test("save", async () => {
-  await save("something", VALUE_OBJECT)
+  save("something", VALUE_OBJECT)
   expect(AsyncStorage.setItem).toHaveBeenCalledWith("something", VALUE_STRING)
 })
 
 test("saveString", async () => {
-  await saveString("something", VALUE_STRING)
+  saveString("something", VALUE_STRING)
   expect(AsyncStorage.setItem).toHaveBeenCalledWith("something", VALUE_STRING)
 })
 
 test("remove", async () => {
-  await remove("something")
+  remove("something")
   expect(AsyncStorage.removeItem).toHaveBeenCalledWith("something")
 })
 
