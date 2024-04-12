@@ -1,0 +1,813 @@
+yarn android 실행 후 발생한 에러 메시지
+--- 
+> Configure project :app
+Reading env from: .env
+
+> Configure project :expo
+
+Using expo modules
+  - expo-application (5.3.1)
+  - expo-constants (14.4.2)
+  - expo-device (5.4.0)
+  - expo-file-system (15.4.5)
+  - expo-font (11.4.0)
+  - expo-keep-awake (12.3.0)
+  - expo-linear-gradient (12.3.0)
+  - expo-localization (14.3.0)
+  - expo-location (16.1.0)
+  - expo-modules-core (1.5.12)
+  - expo-modules-core$android-annotation (1.5.12)
+  - expo-modules-core$android-annotation-processor (1.5.12)
+  - expo-notifications (0.20.1)
+  - expo-splash-screen (0.20.5)
+
+
+> Configure project :react-native-firebase_app
+:react-native-firebase_app package.json found at /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_app:firebase.bom using default value: 30.3.2
+:react-native-firebase_app:play.play-services-auth using default value: 20.2.0
+:react-native-firebase_app package.json found at /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-firebase/app/package.json
+:react-native-firebase_app:version set from package.json: 15.4.0 (15,4,0 - 15004000)
+:react-native-firebase_app:android.compileSdk using custom value: 33
+:react-native-firebase_app:android.targetSdk using custom value: 33
+:react-native-firebase_app:android.minSdk using custom value: 21
+:react-native-firebase_app:reactNativeAndroidDir /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native/android
+
+> Configure project :react-native-reanimated
+Android gradle plugin: 7.4.2
+Gradle: 8.0.1
+WARNING:Software Components will not be created automatically for Maven publishing from Android Gradle Plugin 8.0. To opt-in to the future behavior, set the Gradle property android.disableAutomaticComponentCreation=true in the `gradle.properties` file or use the new publishing DSL.
+
+The Kotlin Gradle plugin was loaded multiple times in different subprojects, which is not supported and may break the build.
+This might happen in subprojects that apply the Kotlin plugins with the Gradle 'plugins { ... }' DSL if they specify explicit versions, even if the versions are equal.
+Please add the Kotlin plugin to the common parent project or the root project, then remove the versions in the subprojects.
+If the parent project does not need the plugin, add 'apply false' to the plugin line.
+See: https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl
+The Kotlin plugin was loaded in the following projects: ':expo', ':expo-modules-core', ':iamport-react-native', ':invertase_react-native-apple-authentication', ...
+
+> Task :expo-file-system:processDebugManifest
+/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-file-system/android/src/main/AndroidManifest.xml:6:9-8:20 Warning:
+        provider#expo.modules.filesystem.FileSystemFileProvider@android:authorities was tagged at AndroidManifest.xml:6 to replace other declarations but no other declaration present
+
+> Task :expo-modules-core:processDebugManifest
+/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/AndroidManifest.xml:8:9-11:45 Warning:
+        meta-data#com.facebook.soloader.enabled@android:value was tagged at AndroidManifest.xml:8 to replace other declarations but no other declaration present
+
+> Task :iamport-react-native:processDebugManifest
+package="com.iamportreactnative" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/iamport-react-native/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :invertase_react-native-apple-authentication:processDebugManifest
+package="com.RNAppleAuthentication" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@invertase/react-native-apple-authentication/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :lottie-react-native:processDebugManifest
+package="com.airbnb.android.react.lottie" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/lottie-react-native/src/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-async-storage_async-storage:processDebugManifest
+package="com.reactnativecommunity.asyncstorage" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-async-storage/async-storage/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-camera-roll_camera-roll:processDebugManifest
+package="com.reactnativecommunity.cameraroll" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-camera-roll/camera-roll/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-community_slider:processDebugManifest
+package="com.reactnativecommunity.slider" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-community/slider/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-community_netinfo:processDebugManifest
+package="com.reactnativecommunity.netinfo" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-community/netinfo/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-config:processDebugManifest
+package="com.lugg.RNCConfig" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-config/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-date-picker:processDebugManifest
+package="com.henninghall.date_picker" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-date-picker/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-fs:processDebugManifest
+package="com.rnfs" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-fs/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-firebase_app:processDebugManifest
+package="io.invertase.firebase" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-firebase/app/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-geolocation-service:processDebugManifest
+package="com.agontuk.RNFusedLocation" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-geolocation-service/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-gesture-handler:processDebugManifest
+package="com.swmansion.gesturehandler" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-image-crop-picker:processDebugManifest
+package="com.reactnative.ivpusic.imagepicker" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-image-crop-picker/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-image-picker:processDebugManifest
+package="com.imagepicker" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-image-picker/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-image-resizer:processDebugManifest
+package="fr.bamlab.rnimageresizer" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-image-resizer/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-keyboard-controller:processDebugManifest
+package="com.reactnativekeyboardcontroller" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-keychain:processDebugManifest
+package="com.oblador.keychain" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keychain/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-mmkv:processDebugManifest
+package="com.reactnativemmkv" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-mmkv/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-permissions:processDebugManifest
+package="com.zoontek.rnpermissions" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-permissions/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-maps:processDebugManifest
+package="com.rnmaps.maps" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-maps/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-picker_picker:processDebugManifest
+package="com.reactnativecommunity.picker" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-picker/picker/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-reanimated:processDebugManifest
+package="com.swmansion.reanimated" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-reanimated/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-safe-area-context:processDebugManifest
+package="com.th3rdwave.safeareacontext" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-safe-area-context/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-screens:processDebugManifest
+package="com.swmansion.rnscreens" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-seoul_kakao-login:processDebugManifest
+package="com.dooboolab.kakaologins" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-seoul_naver-login:processDebugManifest
+package="com.dooboolab.naverlogin" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/naver-login/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :react-native-svg:processDebugManifest
+package="com.horcrux.svg" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-svg/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :stream-io_flat-list-mvcp:processDebugManifest
+package="com.mvcpscrollviewmanager" found in source AndroidManifest.xml: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@stream-io/flat-list-mvcp/android/src/main/AndroidManifest.xml.
+Setting the namespace via a source AndroidManifest.xml's package attribute is deprecated.
+Please instead set the namespace (or testNamespace) in the module's build.gradle file, as described here: https://developer.android.com/studio/build/configure-app-module#set-namespace
+This migration can be done automatically using the AGP Upgrade Assistant, please refer to https://developer.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :app:processDebugMainManifest
+/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/android/app/src/debug/AndroidManifest.xml:21:9-30:20 Warning:
+        provider#expo.modules.filesystem.FileSystemFileProvider@android:authorities was tagged at AndroidManifest.xml:21 to replace other declarations but no other declaration present
+
+> Task :lottie-react-native:compileDebugJavaWithJavac
+
+> Task :react-native-async-storage_async-storage:compileDebugJavaWithJavac
+
+> Task :react-native-camera-roll_camera-roll:compileDebugJavaWithJavac
+
+> Task :invertase_react-native-apple-authentication:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@invertase/react-native-apple-authentication/android/src/main/java/com/RNAppleAuthentication/webview/SignInWebViewClient.kt:15:21 'constructor Handler()' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@invertase/react-native-apple-authentication/android/src/main/java/com/RNAppleAuthentication/webview/SignInWebViewDialogFragment.kt:42:40 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+
+> Task :react-native-community_netinfo:compileDebugJavaWithJavac
+
+> Task :invertase_react-native-apple-authentication:compileDebugJavaWithJavac
+
+> Task :react-native-community_slider:compileDebugJavaWithJavac
+
+> Task :react-native-date-picker:compileDebugJavaWithJavac
+
+> Task :react-native-firebase_app:compileDebugJavaWithJavac
+
+> Task :react-native-fs:compileDebugJavaWithJavac
+
+> Task :react-native-geolocation-service:compileDebugJavaWithJavac
+
+> Task :react-native-reanimated:compileDebugJavaWithJavac
+
+> Task :react-native-image-crop-picker:compileDebugJavaWithJavac
+
+> Task :react-native-image-picker:compileDebugJavaWithJavac
+
+> Task :react-native-image-resizer:compileDebugJavaWithJavac
+
+> Task :react-native-keychain:compileDebugJavaWithJavac
+
+> Task :react-native-maps:compileDebugJavaWithJavac
+
+> Task :react-native-permissions:compileDebugJavaWithJavac
+
+> Task :react-native-picker_picker:compileDebugJavaWithJavac
+
+> Task :react-native-svg:compileDebugJavaWithJavac
+
+> Task :react-native-seoul_kakao-login:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:16:27 Type mismatch: inferred type is Date? but Date was expected
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:95:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:100:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:103:17 Condition 'token != null' is always 'true'
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:119:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:129:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:132:13 The expression is unused
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:141:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:144:13 The expression is unused
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:189:53 Unnecessary non-null assertion (!!) on a non-null receiver of type Account
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:195:56 Unnecessary non-null assertion (!!) on a non-null receiver of type Account
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:225:23 There is more than one label with such a name in this scope
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-seoul/kakao-login/android/src/main/java/com/dooboolab/kakaologins/RNKakaoLoginsModule.kt:261:23 There is more than one label with such a name in this scope
+
+> Task :stream-io_flat-list-mvcp:compileDebugJavaWithJavac
+
+> Task :react-native-keyboard-controller:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:30 Parameter 'v' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:33 Parameter 'left' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:39 Parameter 'top' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:44 Parameter 'right' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:51 Parameter 'bottom' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:59 Parameter 'oldLeft' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:68 Parameter 'oldTop' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:76 Parameter 'oldRight' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/listeners/FocusedInputObserver.kt:35:86 Parameter 'oldBottom' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/managers/KeyboardControllerViewManagerImpl.kt:9:41 Parameter 'mReactContext' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/managers/KeyboardGestureAreaViewManagerImpl.kt:8:42 Parameter 'mReactContext' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/modules/StatusBarManagerCompatModuleImpl.kt:54:22 Parameter 'translucent' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt:91:23 'replaceSystemWindowInsets(Int, Int, Int, Int): WindowInsetsCompat' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt:92:25 'getter for systemWindowInsetLeft: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt:93:65 'getter for systemWindowInsetTop: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt:94:25 'getter for systemWindowInsetRight: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/main/java/com/reactnativekeyboardcontroller/views/EdgeToEdgeReactViewGroup.kt:95:25 'getter for systemWindowInsetBottom: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/paper/java/com/reactnativekeyboardcontroller/KeyboardControllerModule.kt:25:19 Parameter 'eventName' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-keyboard-controller/android/src/paper/java/com/reactnativekeyboardcontroller/KeyboardControllerModule.kt:31:23 Parameter 'count' is never used
+
+> Task :react-native-safe-area-context:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaView.kt:59:23 'getter for uiImplementation: UIImplementation!' is deprecated. Deprecated in Java
+
+> Task :react-native-webview:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:40:71 Parameter 'webView' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:81:18 'setter for allowFileAccessFromFileURLs: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:82:18 'setter for allowUniversalAccessFromFileURLs: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:93:102 Parameter 'contentLength' is never used, could be renamed to _
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:110:32 Variable 'urlObj' initializer is redundant
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:124:21 'allowScanningByMediaScanner(): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:161:36 'setter for systemUiVisibility: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:336:15 Condition 'args == null' is always 'false'
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:345:34 Condition 'args != null' is always 'true'
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:364:38 'setter for allowUniversalAccessFromFileURLs: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:421:51 Unchecked cast: Any! to kotlin.collections.HashMap<String, String> /* = java.util.HashMap<String, String> */
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:477:23 'setter for savePassword: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:478:23 'setter for saveFormData: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:548:23 'setter for allowFileAccessFromFileURLs: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:647:53 Unchecked cast: ArrayList<Any!> to List<Map<String, String>>
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:667:23 'setter for saveFormData: Boolean' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManagerImpl.kt:702:36 Parameter 'viewWrapper' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopCustomMenuSelectionEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopCustomMenuSelectionEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopCustomMenuSelectionEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopCustomMenuSelectionEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopHttpErrorEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopHttpErrorEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopHttpErrorEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopHttpErrorEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingErrorEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingErrorEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingErrorEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingErrorEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingFinishEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingFinishEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingFinishEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingFinishEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingProgressEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingProgressEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingProgressEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingProgressEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingStartEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingStartEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingStartEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopLoadingStartEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopMessageEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopMessageEvent.kt:10:75 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopMessageEvent.kt:21:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopMessageEvent.kt:22:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopNewWindowEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopNewWindowEvent.kt:11:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopNewWindowEvent.kt:22:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopNewWindowEvent.kt:23:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopRenderProcessGoneEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopRenderProcessGoneEvent.kt:12:3 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopRenderProcessGoneEvent.kt:23:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopRenderProcessGoneEvent.kt:24:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopShouldStartLoadWithRequestEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopShouldStartLoadWithRequestEvent.kt:10:89 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopShouldStartLoadWithRequestEvent.kt:27:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/events/TopShouldStartLoadWithRequestEvent.kt:28:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+
+> Task :react-native-gesture-handler:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/core/GestureHandler.kt:755:11 Name shadowed: size
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerEnabledRootView.kt:9:51 Unreachable code
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerEnabledRootView.kt:10:80 Unreachable code
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerRootHelper.kt:77:18 'onChildStartedNativeGesture(MotionEvent!): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerRootHelper.kt:82:42 Parameter 'disallowIntercept' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerRootHelper.kt:114:28 Parameter 'viewTag' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerTouchEvent.kt:7:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerTouchEvent.kt:14:11 'init(Int): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerTouchEvent.kt:30:42 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerTouchEvent.kt:31:21 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+
+> Task :react-native-screens:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/Screen.kt:87:22 'constructor GuardedRunnable(ReactContext!)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:65:28 'setter for targetElevation: Float' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:128:28 'setter for targetElevation: Float' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfig.kt:86:34 'getter for systemWindowInsetTop: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfig.kt:229:37 'setColorFilter(Int, PorterDuff.Mode): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:65:22 'constructor GuardedRunnable(ReactContext!)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:110:22 'constructor GuardedRunnable(ReactContext!)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:137:47 'replaceSystemWindowInsets(Int, Int, Int, Int): WindowInsetsCompat' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:138:51 'getter for systemWindowInsetLeft: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:140:51 'getter for systemWindowInsetRight: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:141:51 'getter for systemWindowInsetBottom: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt:100:22 Parameter 'view' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarManager.kt:100:43 Parameter 'placeholder' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/SearchBarView.kt:147:43 Parameter 'flag' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/events/HeaderHeightChangeEvent.kt:5:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/events/HeaderHeightChangeEvent.kt:10:5 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/events/HeaderHeightChangeEvent.kt:17:44 'RCTEventEmitter' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/events/HeaderHeightChangeEvent.kt:20:25 'receiveEvent(Int, String!, WritableMap?): Unit' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/paper/java/com/swmansion/rnscreens/FabricEnabledViewGroup.kt:11:42 Parameter 'width' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-screens/android/src/paper/java/com/swmansion/rnscreens/FabricEnabledViewGroup.kt:11:54 Parameter 'height' is never used
+
+> Task :expo-modules-core:compileDebugKotlin
+w: Argument -Xopt-in is deprecated. Please use -opt-in instead
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt:157:30 'getPackageInfo(String, Int): PackageInfo!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/core/utilities/EmulatorUtilities.kt:30:13 'SERIAL: String!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/Promise.kt:68:18 This declaration overrides deprecated member but not marked as deprecated itself. This deprecation won't be inherited in future releases. Please add @Deprecated annotation or suppress. See https://youtrack.jetbrains.com/issue/KT-47902 for details
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/Utils.kt:8:3 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of functional types
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/ActivityResultsManager.kt:52:24 Parameter 'activity' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/AppContextActivityResultRegistry.kt:119:51 'getParcelableExtra(String!): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/AppContextActivityResultRegistry.kt:180:26 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/AppContextActivityResultRegistry.kt:271:83 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/DataPersistor.kt:67:20 'getSerializable(String?): Serializable?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/activityresult/DataPersistor.kt:85:26 'getSerializable(String?): Serializable?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/devtools/cdp/CdpNetworkTypes.kt:184:54 Parameter 'request' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/devtools/cdp/CdpNetworkTypes.kt:208:54 Parameter 'request' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/devtools/cdp/CdpNetworkTypes.kt:228:15 Parameter 'now' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/devtools/cdp/CdpNetworkTypes.kt:228:54 Parameter 'request' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/events/KModuleEventEmitterWrapper.kt:90:7 'constructor Event<T : Event<(raw) Event<*>>!>(Int)' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/jni/JavaScriptObject.kt:88:33 Parameter 'null' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/jni/JavaScriptObject.kt:89:34 Parameter 'null' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/jni/JavaScriptObject.kt:130:5 Parameter 'null' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/Either.kt:24:11 Parameter 'type' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/Either.kt:27:11 Parameter 'type' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/Either.kt:44:11 Parameter 'type' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/Either.kt:59:11 Parameter 'type' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/types/JSTypeConverterHelper.kt:44:17 'get(String!): Any?' is deprecated. Deprecated in Java
+
+> Task :expo-modules-core:compileDebugJavaWithJavac
+
+> Task :expo-application:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-application/android/src/main/java/expo/modules/application/ApplicationModule.kt:52:34 'getPackageInfo(String, Int): PackageInfo!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-application/android/src/main/java/expo/modules/application/ApplicationModule.kt:70:33 'getPackageInfo(String, Int): PackageInfo!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-application/android/src/main/java/expo/modules/application/ApplicationModule.kt:83:33 'getPackageInfo(String, Int): PackageInfo!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-application/android/src/main/java/expo/modules/application/ApplicationModule.kt:129:14 'versionCode: Int' is deprecated. Deprecated in Java
+
+> Task :expo-font:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-font/android/src/main/java/expo/modules/font/FontLoaderModule.kt:55:38 Type mismatch: inferred type is String? but String was expected
+
+> Task :expo-constants:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-constants/android/src/main/java/expo/modules/constants/ConstantsService.kt:56:42 'getPackageInfo(String, Int): PackageInfo!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-constants/android/src/main/java/expo/modules/constants/ConstantsService.kt:125:17 'versionCode: Int' is deprecated. Deprecated in Java
+
+> Task :expo-device:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-device/android/src/main/java/expo/modules/device/DeviceModule.kt:103:27 'INSTALL_NON_MARKET_APPS: String' is deprecated. Deprecated in Java
+
+> Task :expo-localization:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-localization/android/src/main/java/expo/modules/localization/LocalizationModule.kt:56:17 Unnecessary safe call on a non-null receiver of type AppContext
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-localization/android/src/main/java/expo/modules/localization/LocalizationModule.kt:119:30 'locale: Locale!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-localization/android/src/main/java/expo/modules/localization/LocalizationModule.kt:212:16 'get(String!): Any?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-localization/android/src/main/java/expo/modules/localization/LocalizationPackage.kt:27:77 Projection is redundant: the corresponding type parameter of List has the same variance
+
+> Task :expo-location:compileDebugJavaWithJavac
+
+> Task :react-native-webview:compileDebugJavaWithJavac
+
+> Task :expo-splash-screen:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/SplashScreenReactActivityLifecycleListener.kt:15:50 Parameter 'activityContext' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/SplashScreenViewController.kt:42:5 Parameter 'failureCallback' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/singletons/SplashScreenStatusBar.kt:16:27 'replaceSystemWindowInsets(Int, Int, Int, Int): WindowInsets' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/singletons/SplashScreenStatusBar.kt:17:29 'getter for systemWindowInsetLeft: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/singletons/SplashScreenStatusBar.kt:19:29 'getter for systemWindowInsetRight: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-splash-screen/android/src/main/java/expo/modules/splashscreen/singletons/SplashScreenStatusBar.kt:20:29 'getter for systemWindowInsetBottom: Int' is deprecated. Deprecated in Java
+
+> Task :expo-notifications:compileDebugKotlin
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/permissions/NotificationPermissionsModule.kt:39:31 Parameter 'permissionsTypes' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/permissions/NotificationPermissionsModule.kt:63:65 Condition 'notificationManager != null' is always 'true'
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/permissions/NotificationPermissionsModule.kt:100:61 Condition 'notificationManager != null' is always 'true'
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:390:37 'queryBroadcastReceivers(Intent, Int): (Mutable)List<ResolveInfo!>' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:477:34 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:478:28 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:502:33 'getParcelableExtra(String!): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:503:27 'getParcelableExtra(String!): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:599:54 'get(String!): Any?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:661:22 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:662:22 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:689:14 'getParcelableExtra(String!): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:719:18 'getParcelableExtra(String!): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/NotificationsService.kt:759:22 'getParcelable(String?): T?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/Base64Serialization.kt:26:45 Returning type parameter has been inferred to Nothing implicitly because Nothing is more specific than specified expected type. Please specify type arguments explicitly in accordance with expected type to hide this warning. Nothing can produce an exception at runtime. See KT-36776 for more details.
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoHandlingDelegate.kt:63:85 Parameter 'notificationResponse' is never used
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoHandlingDelegate.kt:93:32 'resolveActivity(Intent, Int): ResolveInfo?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoPresentationDelegate.kt:176:70 'priority: Int' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoPresentationDelegate.kt:177:41 'vibrate: LongArray!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoPresentationDelegate.kt:178:30 'sound: Uri!' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoPresentationDelegate.kt:191:41 'get(String!): Any?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoPresentationDelegate.kt:194:124 'get(String!): Any?' is deprecated. Deprecated in Java
+w: file:///Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/FirebaseMessagingDelegate.kt:112:30 Unnecessary safe call on a non-null receiver of type (Mutable)Map<String!, String!>
+
+> Task :expo-notifications:compileDebugJavaWithJavac
+
+> Task :expo-modules-core:buildCMakeDebug[arm64-v8a]
+C/C++: ninja: Entering directory `/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/.cxx/Debug/615u7320/arm64-v8a'
+C/C++: ld: error: undefined symbol: operator delete(void*)
+C/C++: ld: error: undefined symbol: operator new(unsigned long)
+C/C++: ld: error: undefined symbol: __cxa_begin_catch
+C/C++: ld: error: undefined symbol: std::terminate()
+C/C++: ld: error: undefined symbol: __cxa_allocate_exception
+C/C++: ld: error: undefined symbol: typeinfo for std::length_error
+C/C++: ld: error: undefined symbol: std::length_error::~length_error()
+C/C++: ld: error: undefined symbol: __cxa_throw
+C/C++: ld: error: undefined symbol: __cxa_free_exception
+C/C++: ld: error: undefined symbol: std::logic_error::logic_error(char const*)
+C/C++: ld: error: undefined symbol: vtable for std::length_error
+C/C++: ld: error: undefined symbol: std::__ndk1::__vector_base_common<true>::__throw_length_error() const
+C/C++: ld: error: undefined symbol: __gxx_personality_v0
+C/C++: ld: error: undefined symbol: std::__ndk1::__shared_weak_count::__release_weak()
+C/C++: ld: error: undefined symbol: std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+C/C++: ld: error: undefined symbol: std::exception::~exception()
+C/C++: ld: error: undefined symbol: vtable for __cxxabiv1::__si_class_type_info
+C/C++: ld: error: undefined symbol: typeinfo for std::exception
+C/C++: ld: error: undefined symbol: std::exception::what() const
+C/C++: ld: error: undefined symbol: std::runtime_error::runtime_error(char const*)
+C/C++: ld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+C/C++: clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+
+> Task :expo-modules-core:buildCMakeDebug[arm64-v8a] FAILED
+w: Detected multiple Kotlin daemon sessions at build/kotlin/sessions
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/8.0.1/userguide/command_line_interface.html#sec:command_line_warnings
+753 actionable tasks: 748 executed, 5 up-to-date
+
+info 💡 Tip: Make sure that you have set up your development environment correctly, by running react-native doctor. To read more about doctor command visit: https://github.com/react-native-community/cli/blob/main/packages/cli-doctor/README.md#doctor
+
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/lottie-react-native/src/android/src/main/java/com/airbnb/android/react/lottie/LottieAnimationViewManager.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/lottie-react-native/src/android/src/main/java/com/airbnb/android/react/lottie/LottieAnimationViewManager.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-async-storage/async-storage/android/src/main/java/com/reactnativecommunity/asyncstorage/AsyncStorageModule.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-async-storage/async-storage/android/src/main/java/com/reactnativecommunity/asyncstorage/AsyncStoragePackage.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-camera-roll/camera-roll/android/src/main/java/com/reactnativecommunity/cameraroll/CameraRollModule.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-camera-roll/camera-roll/android/src/main/java/com/reactnativecommunity/cameraroll/CameraRollPackage.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@invertase/react-native-apple-authentication/android/src/main/java/com/RNAppleAuthentication/AppleAuthenticationAndroidModule.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@react-native-community/slider/android/src/oldarch/java/com/reactnativecommunity/slider/ReactSliderManager.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-image-picker/android/src/main/java/com/imagepicker/Utils.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-image-resizer/android/src/main/java/fr/bamlab/rnimageresizer/ImageResizerModule.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-permissions/android/src/main/java/com/zoontek/rnpermissions/RNPermissionsPackage.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/react-native-svg/android/src/main/java/com/horcrux/svg/VirtualView.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/@stream-io/flat-list-mvcp/android/src/main/java/com/mvcpscrollviewmanager/MvcpScrollViewManagerModule.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/GeofencingTaskConsumer.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':expo-modules-core:buildCMakeDebug[arm64-v8a]'.
+> com.android.ide.common.process.ProcessException: ninja: Entering directory `/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/.cxx/Debug/615u7320/arm64-v8a'
+  [1/26] Building CXX object CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o
+  [2/26] Building CXX object CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o
+  [3/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIDeallocator.cpp.o
+  [4/26] Building CXX object CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o
+  [5/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIFunctionBody.cpp.o
+  [6/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIInjector.cpp.o
+  [7/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/Exceptions.cpp.o
+  [8/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JSReferencesCache.cpp.o
+  [9/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaReferencesCache.cpp.o
+  [10/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/ExpoModulesHostObject.cpp.o
+  [11/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JSIInteropModuleRegistry.cpp.o
+  [12/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptFunction.cpp.o
+  [13/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaCallback.cpp.o
+  [14/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptRuntime.cpp.o
+  [15/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/types/ExpectedType.cpp.o
+  [16/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptValue.cpp.o
+  [17/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/WeakRuntimeHolder.cpp.o
+  [18/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/types/AnyType.cpp.o
+  [19/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptTypedArray.cpp.o
+  [20/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptObject.cpp.o
+  [21/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptModuleObject.cpp.o
+  [22/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/types/FrontendConverterProvider.cpp.o
+  [23/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/MethodMetadata.cpp.o
+  [24/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/types/JNIToJSIConverter.cpp.o
+  [25/26] Building CXX object CMakeFiles/expo-modules-core.dir/src/main/cpp/types/FrontendConverter.cpp.o
+  [26/26] Linking CXX shared library ../../../../build/intermediates/cxx/Debug/615u7320/obj/arm64-v8a/libexpo-modules-core.so
+  FAILED: ../../../../build/intermediates/cxx/Debug/615u7320/obj/arm64-v8a/libexpo-modules-core.so
+  : && /Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android21 --sysroot=/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -fPIC -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -frtti -stdlib=libc++ -DREACT_NATIVE_TARGET_VERSION=72 -g  -fno-limit-debug-info  -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--fatal-warnings -Qunused-arguments -Wl,--no-undefined -shared -Wl,-soname,libexpo-modules-core.so -o ../../../../build/intermediates/cxx/Debug/615u7320/obj/arm64-v8a/libexpo-modules-core.so CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/Exceptions.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/ExpoModulesHostObject.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIDeallocator.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIFunctionBody.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JNIInjector.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JSIInteropModuleRegistry.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JSReferencesCache.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaCallback.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaReferencesCache.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptFunction.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptModuleObject.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptObject.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptRuntime.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptTypedArray.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptValue.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/MethodMetadata.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/WeakRuntimeHolder.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/types/AnyType.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/types/ExpectedType.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/types/FrontendConverter.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/types/FrontendConverterProvider.cpp.o CMakeFiles/expo-modules-core.dir/src/main/cpp/types/JNIToJSIConverter.cpp.o  /Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/liblog.so  /Users/tedchoi/.gradle/caches/transforms-3/e2d2196de1b86c3f1b1e460b631bf4e5/transformed/jetified-fbjni-0.3.0/prefab/modules/fbjni/libs/android.arm64-v8a/libfbjni.so  /Users/tedchoi/.gradle/caches/transforms-3/69889a1f457cdb221e17cb7ca8103a19/transformed/jetified-react-android-0.72.6-debug/prefab/modules/jsi/libs/android.arm64-v8a/libjsi.so  /Users/tedchoi/.gradle/caches/transforms-3/69889a1f457cdb221e17cb7ca8103a19/transformed/jetified-react-android-0.72.6-debug/prefab/modules/reactnativejni/libs/android.arm64-v8a/libreactnativejni.so  /Users/tedchoi/.gradle/caches/transforms-3/69889a1f457cdb221e17cb7ca8103a19/transformed/jetified-react-android-0.72.6-debug/prefab/modules/folly_runtime/libs/android.arm64-v8a/libfolly_runtime.so  /Users/tedchoi/.gradle/caches/transforms-3/69889a1f457cdb221e17cb7ca8103a19/transformed/jetified-react-android-0.72.6-debug/prefab/modules/react_nativemodule_core/libs/android.arm64-v8a/libreact_nativemodule_core.so  -landroid   -latomic -lm && :
+  ld: error: undefined symbol: operator delete(void*)
+  >>> referenced by new:334 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:334)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(expo::jsiArrayToPropNameIdsVector(facebook::jsi::Runtime&, facebook::jsi::Array const&))
+  >>> referenced by new:334 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:334)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::vector<facebook::jsi::PropNameID, std::__ndk1::allocator<facebook::jsi::PropNameID> >::reserve(unsigned long))
+  >>> referenced by new:334 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:334)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(void std::__ndk1::vector<facebook::jsi::PropNameID, std::__ndk1::allocator<facebook::jsi::PropNameID> >::__push_back_slow_path<facebook::jsi::PropNameID>(facebook::jsi::PropNameID&&))
+  >>> referenced 719 more times
+
+  ld: error: undefined symbol: operator new(unsigned long)
+  >>> referenced by new:253 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:253)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::vector<facebook::jsi::PropNameID, std::__ndk1::allocator<facebook::jsi::PropNameID> >::reserve(unsigned long))
+  >>> referenced by new:253 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:253)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(void std::__ndk1::vector<facebook::jsi::PropNameID, std::__ndk1::allocator<facebook::jsi::PropNameID> >::__push_back_slow_path<facebook::jsi::PropNameID>(facebook::jsi::PropNameID&&))
+  >>> referenced by new:253 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/new:253)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(std::__ndk1::pair<std::__ndk1::__hash_iterator<std::__ndk1::__hash_node<std::__ndk1::__hash_value_type<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, expo::TypedArrayKind>, void*>*>, bool> std::__ndk1::__hash_table<std::__ndk1::__hash_value_type<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, expo::TypedArrayKind>, std::__ndk1::__unordered_map_hasher<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::__hash_value_type<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, expo::TypedArrayKind>, std::__ndk1::hash<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > >, true>, std::__ndk1::__unordered_map_equal<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::__hash_value_type<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, expo::TypedArrayKind>, std::__ndk1::equal_to<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > >, true>, std::__ndk1::allocator<std::__ndk1::__hash_value_type<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, expo::TypedArrayKind> > >::__emplace_unique_key_args<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::pair<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const, expo::TypedArrayKind> const&>(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const&, std::__ndk1::pair<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const, expo::TypedArrayKind> const&))
+  >>> referenced 172 more times
+
+  ld: error: undefined symbol: __cxa_begin_catch
+  >>> referenced by JSIUtils.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(__clang_call_terminate)
+  >>> referenced by Registration-inl.h:91 (/Users/tedchoi/.gradle/caches/transforms-3/e2d2196de1b86c3f1b1e460b631bf4e5/transformed/jetified-fbjni-0.3.0/prefab/modules/fbjni/include/fbjni/detail/Registration-inl.h:91)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JSIInteropModuleRegistry.cpp.o:(facebook::jni::detail::FunctionWrapper<facebook::jni::basic_strong_ref<facebook::jni::detail::JTypeFor<facebook::jni::detail::HybridData, facebook::jni::JObject, void>::_javaobject*, facebook::jni::LocalReferenceAllocator> (*)(facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>), facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*, facebook::jni::basic_strong_ref<facebook::jni::detail::JTypeFor<facebook::jni::detail::HybridData, facebook::jni::JObject, void>::_javaobject*, facebook::jni::LocalReferenceAllocator> >::call(_JNIEnv*, _jobject*, facebook::jni::basic_strong_ref<facebook::jni::detail::JTypeFor<facebook::jni::detail::HybridData, facebook::jni::JObject, void>::_javaobject*, facebook::jni::LocalReferenceAllocator> (*)(facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>)))
+  >>> referenced by Registration-inl.h:91 (/Users/tedchoi/.gradle/caches/transforms-3/e2d2196de1b86c3f1b1e460b631bf4e5/transformed/jetified-fbjni-0.3.0/prefab/modules/fbjni/include/fbjni/detail/Registration-inl.h:91)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JSIInteropModuleRegistry.cpp.o:(facebook::jni::detail::FunctionWrapper<void (*)(facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>, long&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<expo::JNIDeallocator, facebook::jni::JObject, void>::_javaobject*>&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>&&), facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*, void, long, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<expo::JNIDeallocator, facebook::jni::JObject, void>::_javaobject*>, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*> >::call(_JNIEnv*, _jobject*, long, facebook::jni::detail::JTypeFor<expo::JNIDeallocator, facebook::jni::JObject, void>::_javaobject*, facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*, facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*, void (*)(facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<expo::JSIInteropModuleRegistry, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>, long&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<expo::JNIDeallocator, facebook::jni::JObject, void>::_javaobject*>&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>&&, facebook::jni::alias_ref<facebook::jni::detail::JTypeFor<facebook::jni::HybridClass<facebook::react::CallInvokerHolder, facebook::jni::detail::BaseHybridClass>::JavaPart, facebook::jni::JObject, void>::_javaobject*>&&)))
+  >>> referenced 134 more times
+
+  ld: error: undefined symbol: std::terminate()
+  >>> referenced by JSIUtils.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(__clang_call_terminate)
+
+  ld: error: undefined symbol: __cxa_allocate_exception
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+  >>> referenced by functional:1435 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/functional:1435)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(std::__ndk1::__throw_bad_function_call())
+  >>> referenced by TypedArray.cpp:50 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp:50)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(expo::TypedArray::getBuffer(facebook::jsi::Runtime&) const)
+  >>> referenced 34 more times
+
+  ld: error: undefined symbol: typeinfo for std::length_error
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+
+  ld: error: undefined symbol: std::length_error::~length_error()
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+
+  ld: error: undefined symbol: __cxa_throw
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+  >>> referenced by functional:1435 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/functional:1435)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(std::__ndk1::__throw_bad_function_call())
+  >>> referenced by TypedArray.cpp:50 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp:50)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(expo::TypedArray::getBuffer(facebook::jsi::Runtime&) const)
+  >>> referenced 34 more times
+
+  ld: error: undefined symbol: __cxa_free_exception
+  >>> referenced by stdexcept:258 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:258)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::__ndk1::__throw_length_error(char const*))
+  >>> referenced by TypedArray.cpp:50 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp:50)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(expo::TypedArray::getBuffer(facebook::jsi::Runtime&) const)
+  >>> referenced by stdexcept:269 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:269)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(std::__ndk1::__throw_out_of_range(char const*))
+  >>> referenced 10 more times
+
+  ld: error: undefined symbol: std::logic_error::logic_error(char const*)
+  >>> referenced by stdexcept:155 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:155)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::length_error::length_error(char const*))
+  >>> referenced by stdexcept:167 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:167)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(std::out_of_range::out_of_range(char const*))
+  >>> referenced by stdexcept:142 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:142)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/MethodMetadata.cpp.o:(std::invalid_argument::invalid_argument(char const*))
+
+  ld: error: undefined symbol: vtable for std::length_error
+  >>> referenced by stdexcept:155 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:155)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::length_error::length_error(char const*))
+  >>> referenced by stdexcept:155 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdexcept:155)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(std::length_error::length_error(char const*))
+  >>> the vtable symbol may be undefined because the class is missing its key function (see https://lld.llvm.org/missingkeyfunction)
+
+  ld: error: undefined symbol: std::__ndk1::__vector_base_common<true>::__throw_length_error() const
+  >>> referenced by vector:1027 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/vector:1027)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(void std::__ndk1::vector<facebook::jsi::PropNameID, std::__ndk1::allocator<facebook::jsi::PropNameID> >::__push_back_slow_path<facebook::jsi::PropNameID>(facebook::jsi::PropNameID&&))
+  >>> referenced by vector:993 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/vector:993)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaReferencesCache.cpp.o:(std::__ndk1::vector<std::__ndk1::pair<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > >, std::__ndk1::allocator<std::__ndk1::pair<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > > > >::vector(std::initializer_list<std::__ndk1::pair<std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > > >))
+  >>> referenced by vector:1027 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/vector:1027)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaScriptFunction.cpp.o:(void std::__ndk1::vector<facebook::jsi::Value, std::__ndk1::allocator<facebook::jsi::Value> >::__push_back_slow_path<facebook::jsi::Value>(facebook::jsi::Value&&))
+  >>> referenced 11 more times
+
+  ld: error: undefined symbol: __gxx_personality_v0
+  >>> referenced by JSIUtils.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/JSIUtils.cpp.o:(DW.ref.__gxx_personality_v0)
+
+  ld: error: undefined symbol: std::__ndk1::__shared_weak_count::__release_weak()
+  >>> referenced by memory:3549 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/memory:3549)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(expo::LazyObject::~LazyObject())
+  >>> referenced by memory:3549 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/memory:3549)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(expo::LazyObject::~LazyObject())
+  >>> referenced by memory:3549 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/memory:3549)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(expo::LazyObject::get(facebook::jsi::Runtime&, facebook::jsi::PropNameID const&))
+  >>> referenced 392 more times
+
+  ld: error: undefined symbol: std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+  >>> referenced by string:3996 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/string:3996)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(expo::LazyObject::get(facebook::jsi::Runtime&, facebook::jsi::PropNameID const&))
+
+  ld: error: undefined symbol: std::exception::~exception()
+  >>> referenced by functional:1435 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/functional:1435)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(std::__ndk1::__throw_bad_function_call())
+  >>> referenced by functional:1435 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/functional:1435)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(std::__ndk1::__throw_bad_function_call())
+  >>> referenced by functional:1420 (/Users/tedchoi/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/functional:1420)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(std::__ndk1::bad_function_call::~bad_function_call())
+  >>> referenced 1 more times
+
+  ld: error: undefined symbol: vtable for __cxxabiv1::__si_class_type_info
+  >>> referenced by LazyObject.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(typeinfo for expo::LazyObject)
+  >>> referenced by LazyObject.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(typeinfo for std::__ndk1::bad_function_call)
+  >>> referenced by ExpoModulesHostObject.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/ExpoModulesHostObject.cpp.o:(typeinfo for expo::ExpoModulesHostObject)
+  >>> referenced 85 more times
+  >>> the vtable symbol may be undefined because the class is missing its key function (see https://lld.llvm.org/missingkeyfunction)
+
+  ld: error: undefined symbol: typeinfo for std::exception
+  >>> referenced by LazyObject.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(typeinfo for std::__ndk1::bad_function_call)
+  >>> referenced by JSIInteropModuleRegistry.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JSIInteropModuleRegistry.cpp.o:(.data+0x0)
+  >>> referenced by JavaCallback.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/JavaCallback.cpp.o:(.data+0x0)
+  >>> referenced 5 more times
+
+  ld: error: undefined symbol: std::exception::what() const
+  >>> referenced by LazyObject.cpp
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/LazyObject.cpp.o:(vtable for std::__ndk1::bad_function_call)
+
+  ld: error: undefined symbol: std::runtime_error::runtime_error(char const*)
+  >>> referenced by TypedArray.cpp:50 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp:50)
+  >>>               CMakeFiles/expo-modules-core.dir/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/common/cpp/TypedArray.cpp.o:(expo::TypedArray::getBuffer(facebook::jsi::Runtime&) const)
+  >>> referenced by Exceptions.cpp:111 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/cpp/Exceptions.cpp:111)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/Exceptions.cpp.o:(expo::throwPendingJniExceptionAsCppException())
+  >>> referenced by MethodMetadata.cpp:52 (/Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/src/main/cpp/MethodMetadata.cpp:52)
+  >>>               CMakeFiles/expo-modules-core.dir/src/main/cpp/MethodMetadata.cpp.o:(std::__ndk1::__function::__func<expo::createJavaCallbackFromJSIFunction(facebook::jsi::Function&&, facebook::jsi::Runtime&, expo::JSIInteropModuleRegistry*, bool)::$_0, std::__ndk1::allocator<expo::createJavaCallbackFromJSIFunction(facebook::jsi::Function&&, facebook::jsi::Runtime&, expo::JSIInteropModuleRegistry*, bool)::$_0>, void (folly::dynamic)>::operator()(folly::dynamic&&))
+
+  ld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+  clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+  ninja: build stopped: subcommand failed.
+
+  C++ build system [build] failed while executing:
+      /Users/tedchoi/Library/Android/sdk/cmake/3.22.1/bin/ninja \
+        -C \
+        /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android/.cxx/Debug/615u7320/arm64-v8a \
+        expo-modules-core
+    from /Users/tedchoi/Documents/GitHub/_CareGiver/CareGiver/node_modules/expo-modules-core/android
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 3m 47s
+error Failed to install the app.
+info Run CLI with --verbose flag for more details.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
