@@ -10,6 +10,7 @@ import { Platform } from "react-native"
 import { clear, storage } from "../../utils/storage"
 import type { ReactotronReactNative } from "reactotron-react-native"
 import mmkvPlugin from "reactotron-react-native-mmkv"
+import Constants from "expo-constants"
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -119,6 +120,7 @@ export class Reactotron {
       Tron.configure({
         name: this.config.name || require("../../../package.json").name,
         host: this.config.host,
+        getClientId: async () => Constants.installationId,
       })
 
       // hookup middleware
@@ -129,7 +131,7 @@ export class Reactotron {
           )
         }
         Tron.useReactNative({
-          asyncStorage: this.config.useMMKV ? undefined : false,
+          asyncStorage: false,
         })
       }
 
