@@ -1,5 +1,4 @@
 import { Tron } from "./tron"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { ArgType } from "reactotron-core-client"
 import { RootStore } from "../../models/root-store/root-store"
 import { onSnapshot } from "mobx-state-tree"
@@ -8,7 +7,9 @@ import { mst } from "reactotron-mst"
 // import { clear } from "~/app/utils/storage"
 import { goBack, resetRoot, navigate } from "#navigators"
 import { Platform } from "react-native"
-import { clear } from "../../utils/storage"
+import { clear, storage } from "../../utils/storage"
+import type { ReactotronReactNative } from "reactotron-react-native"
+import mmkvPlugin from "reactotron-react-native-mmkv"
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -70,7 +71,7 @@ export class Reactotron {
     // merge the passed in config with some defaults
     this.config = {
       host: "localhost",
-      useAsyncStorage: true,
+      useMMKV: true,
       ...config,
       state: {
         initial: false,
@@ -122,11 +123,13 @@ export class Reactotron {
 
       // hookup middleware
       if (Platform.OS !== "web") {
-        if (this.config.useAsyncStorage) {
-          Tron.setAsyncStorageHandler(AsyncStorage)
+        if (this.config.useMMKV) {
+          Tron.use(
+            mmkvPlugin<ReactotronReactNative>({ storage }),
+          )
         }
         Tron.useReactNative({
-          asyncStorage: this.config.useAsyncStorage ? undefined : false,
+          asyncStorage: this.config.useMMKV ? undefined : false,
         })
       }
 
