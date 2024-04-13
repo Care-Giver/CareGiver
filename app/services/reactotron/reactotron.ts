@@ -1,3 +1,11 @@
+/**
+ * ! [주의]
+ * 안드로이드에서 원활히 사용하기 위해서는,
+ * 다음 명령어를 추가로 반드시 실행해야 합니다:
+ * adb reverse tcp:9090 tcp:9090
+ *
+ * 참고: https://docs.infinite.red/reactotron/troubleshooting/#react-native-android
+ */
 import { Tron } from "./tron"
 import { ArgType } from "reactotron-core-client"
 import { RootStore } from "../../models/root-store/root-store"
