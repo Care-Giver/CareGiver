@@ -17200,6 +17200,11 @@ reactotron-react-js@^3.3.7:
     reactotron-core-client "2.8.11"
     stacktrace-js "2.0.1"
 
+reactotron-react-native-mmkv@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/reactotron-react-native-mmkv/-/reactotron-react-native-mmkv-0.2.6.tgz#38bce6691125312f0335d3735f9af08d98196889"
+  integrity sha512-8q2iTXZqgfv5maHUQ1BdMVPYV1KbcltkZy+cKl8CpJ8IBHEs5cSbkPJnRfB30dmgR6asB0i/GOwsV2rUj5HrVg==
+
 reactotron-react-native@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/reactotron-react-native/-/reactotron-react-native-5.0.1.tgz#a14bbc370020812274baf55f763dd8e78421e040"
