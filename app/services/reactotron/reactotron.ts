@@ -1,5 +1,12 @@
+/**
+ * ! [주의]
+ * 안드로이드에서 원활히 사용하기 위해서는,
+ * 다음 명령어를 추가로 반드시 실행해야 합니다:
+ * adb reverse tcp:9090 tcp:9090
+ *
+ * 참고: https://docs.infinite.red/reactotron/troubleshooting/#react-native-android
+ */
 import { Tron } from "./tron"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { ArgType } from "reactotron-core-client"
 import { RootStore } from "../../models/root-store/root-store"
 import { onSnapshot } from "mobx-state-tree"
@@ -8,7 +15,10 @@ import { mst } from "reactotron-mst"
 // import { clear } from "~/app/utils/storage"
 import { goBack, resetRoot, navigate } from "#navigators"
 import { Platform } from "react-native"
-import { clear } from "../../utils/storage"
+import { clear, storage } from "../../utils/storage"
+import type { ReactotronReactNative } from "reactotron-react-native"
+import mmkvPlugin from "reactotron-react-native-mmkv"
+import Constants from "expo-constants"
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -70,7 +80,7 @@ export class Reactotron {
     // merge the passed in config with some defaults
     this.config = {
       host: "localhost",
-      useAsyncStorage: true,
+      useMMKV: true,
       ...config,
       state: {
         initial: false,
@@ -118,15 +128,18 @@ export class Reactotron {
       Tron.configure({
         name: this.config.name || require("../../../package.json").name,
         host: this.config.host,
+        getClientId: async () => Constants.installationId,
       })
 
       // hookup middleware
       if (Platform.OS !== "web") {
-        if (this.config.useAsyncStorage) {
-          Tron.setAsyncStorageHandler(AsyncStorage)
+        if (this.config.useMMKV) {
+          Tron.use(
+            mmkvPlugin<ReactotronReactNative>({ storage }),
+          )
         }
         Tron.useReactNative({
-          asyncStorage: this.config.useAsyncStorage ? undefined : false,
+          asyncStorage: false,
         })
       }
 

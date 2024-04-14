@@ -2,7 +2,7 @@ import { ROOT_STATE_STORAGE_KEY } from "#models"
 import { load } from "../../utils/storage"
 
 /**
- * MST 를 통해 AsyncStorage 에 저장된, 유저 토큰 (이 값은 "x-jwt" 값으로 사용된다.) 을 가져온다.
+ * MST 를 통해 MMKV 에 저장된, 유저 토큰 (이 값은 "x-jwt" 값으로 사용된다.) 을 가져온다.
  * 만약 토큰이 없다면, 빈 문자열을 반환한다.
  *
  * @returns {Promise<string | false>} token
