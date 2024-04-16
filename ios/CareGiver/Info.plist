@@ -108,7 +108,14 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>api.caregiver.pet</key>
+			<key>$(DOMAIN_PROD)</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>$(DOMAIN_DEV)</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
