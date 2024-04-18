@@ -1,8 +1,9 @@
 declare module "react-native-config" {
   export interface NativeConfig {
+    BASE_URL_PROD: string
+    BASE_URL_DEV: string
     NOTION_API_KEY: string
     NOTION_DATABASE_ID: string
-    TEST_VALUE?: number
     KAKAO_REST_API_KEY: string
     KAKAO_APP_KEY: string
     GOOGLE_MAP_API_KEY: string
