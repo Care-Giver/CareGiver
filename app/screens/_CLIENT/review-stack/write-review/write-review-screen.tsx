@@ -239,7 +239,7 @@ export const WriteReviewScreen: FC<
             {/* // * title text */}
             <PreBol20 text="이용은 어떠셨나요?" color={HEAD_LINE} style={{ marginTop: 16 }} />
             <Row style={{ marginTop: 6 }}>
-              <PreBol20 text="해당 케어기버에 대한 " color={HEAD_LINE} />
+              <PreBol20 text="해당 펫시터에 대한 " color={HEAD_LINE} />
               <UnderlineText>
                 <PreBol20 text="후기를 남겨주세요!" color={HEAD_LINE} />
               </UnderlineText>

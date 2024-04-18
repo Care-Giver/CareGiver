@@ -64,7 +64,7 @@ export const CancelBookingBottomSheetModal = forwardRef<
       backgroundStyle={{ borderRadius: 20 }}
       style={styles.bottomSheetContainer}
     >
-      <PreBol18 text="케어기버에게 전달할 거절 메시지를 선택해주세요." mt={20} mb={32} />
+      <PreBol18 text="펫시터에게 전달할 거절 메시지를 선택해주세요." mt={20} mb={32} />
       <View style={styles.selectReasonContainer}>
         {reason.map((item, index) => (
           <TouchableOpacity style={styles.reason} key={index} onPress={() => setSelected(item)}>

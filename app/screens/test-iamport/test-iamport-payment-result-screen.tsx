@@ -108,7 +108,7 @@ export const TestIamportPaymentResultScreen: FC<
       <CustomModal
         visibleState={successModalVisible}
         title="결제가 완료되었습니다!"
-        subtitle={`케어기버가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
+        subtitle={`펫시터가 서비스를 승인할 때까지\n잠시만 기다려주세요`}
         yesBtnText="홈으로 가기"
         noBtnText="예약 내역 확인"
         handleYesPress={() => {

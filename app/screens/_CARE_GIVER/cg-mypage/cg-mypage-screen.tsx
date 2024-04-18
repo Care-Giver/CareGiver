@@ -129,7 +129,7 @@ export const CgMypageScreen: FC<
               text={"기본 정보 관리"}
             />
 
-            {/* 케어기버 프로필 관리 */}
+            {/* 펫시터 프로필 관리 */}
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
@@ -137,7 +137,7 @@ export const CgMypageScreen: FC<
               }}
             >
               <Row>
-                <PreBol16 text="케어기버 프로필 관리" />
+                <PreBol16 text="펫시터 프로필 관리" />
                 <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
               </Row>
 

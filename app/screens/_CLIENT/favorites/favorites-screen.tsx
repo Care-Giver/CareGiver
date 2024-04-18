@@ -375,7 +375,7 @@ export const FavoritesScreen: FC<
         //* 펫시터 목록이 없는 경우 - 디폴트 화면 띄우기
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <Image source={images.dog_question} style={{ width: 179, height: 192 }} />
-          <PreMed18 text="즐겨찾기 한 케어기버가 없어요 😢" color={SUB_HEAD_LINE} />
+          <PreMed18 text="즐겨찾기 한 펫시터가 없어요 😢" color={SUB_HEAD_LINE} />
         </View>
       ) : (
         // TODO: serviceType이 훈련사이면서 훈련사 목록이 존재하는 경우 - 훈련사 목록 띄우기

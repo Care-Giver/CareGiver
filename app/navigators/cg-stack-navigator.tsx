@@ -1,5 +1,5 @@
 /**
- * 케어기버 모드일때 등장하는 모든 스크린들을 담당하는 네비게이터들 입니다.
+ * 펫시터 모드일때 등장하는 모든 스크린들을 담당하는 네비게이터들 입니다.
  * 전부 StackNavigator로 구현되어 있습니다.
  * @see https://reactnavigation.org/docs/stack-navigator/
  *
@@ -299,7 +299,7 @@ export const CgMypageStack = () => {
         })}
       />
 
-      {/* //* CG - 케어기버 프로필 관리 */}
+      {/* //* CG - 펫시터 프로필 관리 */}
       <Stack.Screen
         name="cg-edit-profile-screen"
         component={CgEditProfileScreen}

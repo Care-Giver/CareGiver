@@ -130,7 +130,7 @@ export const BookingInfoCard = (props: BookingInfoCardProps) => {
       // 상세내역 보기
       onPress={onPress}
     >
-      {/* //* 케어기버 프로필 사진 */}
+      {/* //* 펫시터 프로필 사진 */}
       {/* // TODO default profile image 수정 */}
       <ImageBackground
         source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
@@ -152,7 +152,7 @@ export const BookingInfoCard = (props: BookingInfoCardProps) => {
 
       {/* //* 예약 정보 */}
       <View style={styles.bookingInfo}>
-        {/* //? 케어기버 이름 */}
+        {/* //? 펫시터 이름 */}
         <Row style={{ justifyContent: "space-between" }}>
           <PreReg14 text={`${petsitterName}`} color={DISABLED} />
           {/* //? 찜 버튼 */}

@@ -135,7 +135,7 @@ export type SSENotificationEventDataMessage = {
 }
 /**
  * SSE Notification 구독 클래스
- * - 케어기버와 클라이언트의 알림을 구독한다.
+ * - 펫시터와 클라이언트의 알림을 구독한다.
  * - 알림이 들어오면, Alert로 알림을 띄운다.
  * - 알림을 누르면, 해당 화면으로 이동한다.
  * - 모드 전환 혹은, 로그아웃 시, SSE 연결을 종료한다.
