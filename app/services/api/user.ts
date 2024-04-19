@@ -32,6 +32,7 @@ interface UserColumns {
   privacyPolicyConsent: boolean // true,
   termsOfServiceConsent: boolean // true,
   nicknameLastUpdated: string //"2023-10-28T00:00:00"
+  realName: string // 포트원 카카오페이 결제 시 필요한 "실명" 정보
 }
 
 export type User = Omit<UserColumns, "createAt" | "updatedAt">
@@ -230,6 +231,7 @@ export type UserDetail = Pick<
   | "pushToken"
   | "nicknameLastUpdated"
   | "clientStreamToken"
+  | "realName"
 >
 
 interface GetMeResult {
@@ -279,6 +281,7 @@ export const getMe = async (token: string): Promise<GetMeResult> => {
         pushToken: response.data.user.pushToken,
         nicknameLastUpdated: response.data.user.nicknameLastUpdated,
         clientStreamToken: response.data.user?.clientStreamToken,
+        realName: response.data.user?.realName,
       },
     }
   } catch (error) {
