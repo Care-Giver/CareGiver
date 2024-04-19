@@ -43,7 +43,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const { key, service, selectedPetIds, selectedTime, bookingRequest, destination } = route.params
     console.log("bookingRequest", bookingRequest)
     const {
-      userStore: { userDetail },
+      userStore: { userDetail, userAuth },
       petStore: { getPetsByIds },
     } = useStores()
 
@@ -54,9 +54,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [cardQuota, setCardQuota] = useState(0)
     const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`)
     const [name, setName] = useState("케어기버:펫시팅 예약")
-    const [buyerName, setBuyerName] = useState("케어기버")
-    const [buyerTel, setBuyerTel] = useState("050-6667-1542")
-    const [buyerEmail, setBuyerEmail] = useState("dev@caregiver.pet")
+    const [buyerName, setBuyerName] = useState(userDetail.realName)
+    const [buyerTel, setBuyerTel] = useState(userDetail.phoneNumber)
+    const [buyerEmail, setBuyerEmail] = useState(userAuth.email)
     const [vbankDue, setVbankDue] = useState("")
     const [bizNum, setBizNum] = useState("")
     const [escrow, setEscrow] = useState(false)
