@@ -21,7 +21,7 @@ export const BOTTOM_TAB_BAR_HEIGHT = Platform.select({
   ios: 52 + IOS_BOTTOM_HOME_BAR_HEIGHT,
 })
 
-const BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT = 28
+const BOTTOM_TAB_BAR_ITEM_IMAGE_HEIGHT = 56
 
 const IOS_BOTTOM_PADDING = IOS_BOTTOM_HOME_BAR_HEIGHT
 
@@ -93,39 +93,39 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
         let inactiveImage = ""
         switch (label) {
           //  CL
-          case tabLabel.favortie:
-            activeImage = images.favorite_navy
-            inactiveImage = images.favorite_grey
-            break
+          // case tabLabel.favortie:
+          //   activeImage = images.favorite_navy
+          //   inactiveImage = images.favorite_grey
+          //   break
           case tabLabel.schedule:
-            activeImage = images.schedule_navy
-            inactiveImage = images.schedule_grey
+            activeImage = images.schedule_active
+            inactiveImage = images.schedule_disabled
             break
           case tabLabel.search:
-            activeImage = images.search_navy
-            inactiveImage = images.search_grey
+            activeImage = images.search_active
+            inactiveImage = images.search_disabled
             break
           case tabLabel.chatting:
-            activeImage = images.chatting_navy
-            inactiveImage = images.chatting_grey
+            activeImage = images.message_active
+            inactiveImage = images.message_disabled
             break
           case tabLabel.myinfo:
-            activeImage = images.myinfo_navy
-            inactiveImage = images.myinfo_grey
+            activeImage = images.myinfo_active
+            inactiveImage = images.myinfo_disabled
             break
 
           // CG
-          case tabLabel.statistics:
-            activeImage = images.statistics_navy
-            inactiveImage = images.statistics_grey
-            break
+          // case tabLabel.statistics:
+          //   activeImage = images.statistics_navy
+          //   inactiveImage = images.statistics_grey
+          //   break
           case tabLabel.manage_booking:
-            activeImage = images.schedule_navy // DO NOT CHANGE THIS
-            inactiveImage = images.schedule_grey // DO NOT CHANGE THIS
+            activeImage = images.cg_booking_active
+            inactiveImage = images.cg_booking_disabled
             break
           case tabLabel.manage_schedule:
-            activeImage = images.manage_schedule_navy
-            inactiveImage = images.manage_schedule_grey
+            activeImage = images.schedule_active
+            inactiveImage = images.schedule_disabled
             break
         }
 

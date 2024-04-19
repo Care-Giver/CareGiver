@@ -45,12 +45,12 @@ const generateImagesIndex = () => {
     .join(",\n  ")
 
   let properties2 = imageFileNamesAtBottomTabNavigator()
-    .filter((value, index, self) => self.indexOf(value) === index)
     .map((name) => {
       // @ts-ignore
       const refinedName = name.replace(/@4x|@3x|@2x/g, "")
       return `${refinedName}: require("../images/bottom-tab-navigator/${refinedName}.png")`
     })
+    .filter((value, index, self) => self.indexOf(value) === index)
     .join(",\n  ")
 
   const string = `//! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
