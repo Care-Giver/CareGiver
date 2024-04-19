@@ -119,7 +119,7 @@ const ClientTabs = () => {
 }
 
 /**
- * 케어기버 전용 탭들
+ * 펫시터 전용 탭들
  */
 const CareGiverTabs = () => {
   return (
@@ -163,9 +163,9 @@ const CareGiverTabs = () => {
 }
 
 /**
- * 클라이언트 탭들과 케어기버 탭들을 전환 가능하게 해주는 컴포넌트
+ * 클라이언트 탭들과 펫시터 탭들을 전환 가능하게 해주는 컴포넌트
  * - 로그인시 보여지는 네비게이터 입니다.
- * - type 값에 따라 클라이언트 탭 네비게이터와 케어기버 탭 네비게이터를 전환합니다.
+ * - type 값에 따라 클라이언트 탭 네비게이터와 펫시터 탭 네비게이터를 전환합니다.
  */
 const AllTabs = observer(function AllTabs() {
   const {

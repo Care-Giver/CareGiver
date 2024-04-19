@@ -755,8 +755,8 @@ export const CgSetVisitingServiceDayScreen: FC<
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
         <View style={{ paddingTop: 20 }}>
-          <PreBol18 text={`이 지역 방문 케어기버가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
-          <PreReg16 mt={32} text="이 지역에서 서비스하는 케어기버 분들은 보통" color={HEAD_LINE} />
+          <PreBol18 text={`이 지역 방문 펫시터가 받는 평균 요금은?`} color={GIVER_CASUAL_NAVY} />
+          <PreReg16 mt={32} text="이 지역에서 서비스하는 펫시터 분들은 보통" color={HEAD_LINE} />
           {/* // ? 적정가 범위 */}
           <PreBol16
             mv={6}

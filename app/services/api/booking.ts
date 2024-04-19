@@ -517,7 +517,7 @@ type ResponseCrecheBookingResult =
       isSuccess: false // 실패
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * [펫시터 ➡️ 클라이언트]
  * 입력받은 "위탁"서비스 예약 id의 수락 여부를  응답한다.
  */
@@ -551,7 +551,7 @@ export const responseCrecheBooking = async (
 type ResponseVisitingBookingRequestBody = ResponseCrecheBookingRequestBody
 type ResponseVisitingBookingResult = ResponseCrecheBookingResult
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * [펫시터 ➡️ 클라이언트]
  * 입력받은 id의 "방문" 예약 정보를 응답한다.
  */

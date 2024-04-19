@@ -120,7 +120,7 @@ export const UserStoreModel = types
       applySnapshot(self, {})
     },
     /**
-     * 유저의 역할을 케어기버와 클라이언트 두 종류 사이에서 전환합니다.
+     * 유저의 역할을 펫시터(Type.CARE_GIVER) 와 보호자(Type.CLIENT) 두 종류 사이에서 전환합니다.
      * [중요] 하나의 action 에서 하나의 object 만 변경할 것. 그렇지 않으면 정상 작동 하지 않음
      *  */
     async switchType() {

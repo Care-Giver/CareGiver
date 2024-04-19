@@ -15,7 +15,7 @@ interface VisitingAvailableTimesResponse extends GeneralResponse {
 }
 
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 로그인한 유저의 모든 방문 펫시팅 서비스 가능 날짜들을 불러온다.
  */
 export const getVisitingAvailableTimes = async (
@@ -62,7 +62,7 @@ interface GetAvailableTimesByDateResponse extends GeneralResponse {
 }
 /**
  * 🏗️ WIP
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 입력받은 visitingId 와 날짜에 맞는 펫시터의 서비스 시간들을 가져온다.
  */
 export const getAvailableTimesByDate = async (
@@ -102,7 +102,7 @@ interface CreateVisitingAvailableTimeResult {
 }
 /**
  * 🏗️ WIP
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 방문 펫시팅 서비스 가능한 날짜를 생성한다.
  */
 export const createVisitingAvailableTime = async (
@@ -143,7 +143,7 @@ interface UpdateVisitingAvailableTimeResult {
   visitingAvailableTimes?: VisitingAvailableTime[] // 성공시, 생성된 방문 펫시팅 서비스 가능한 날짜 객체들
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 방문 펫시팅 서비스 가능한 특정 날짜의
  * 가능한 시간대를 수정 한다.
  */
@@ -174,7 +174,7 @@ interface DeleteVisitingAvailableTimeResult {
   reason?: string // 실패시, 실패이유
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 입력받은 id의 펫시팅 서비스를 진행할 시간을 삭제한다.
  */
 export const deleteVisitingAvailableTime = async (
@@ -208,7 +208,7 @@ interface DisableVisitingAvailableTimeResult {
   reason?: string // 실패시, 실패이유
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 입력받은 날짜에 해당하는 펫시팅 서비스를 비활성화 한다.
  */
 export const disableVisitingAvailableTime = async (
@@ -244,7 +244,7 @@ interface RestoreVisitingAvailableTimeResult {
   reason?: string // 실패시, 실패이유
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 한번 비활성화 된 적 있는 펫시팅 서비스를 다시 활성화 한다.
  */
 export const restoreVisitingAvailableTime = async (

@@ -25,7 +25,7 @@ export const InProgressBookingProfile = ({
         style={styles.profileImg}
       />
 
-      {/* //? 케어기버 정보 컨테이너 */}
+      {/* //? 펫시터 정보 컨테이너 */}
       <View style={styles.infoRoot}>
         {/* //* 예약 유형 - 방문or위탁 / 펫시터or훈련사 */}
         <Row>
@@ -33,9 +33,9 @@ export const InProgressBookingProfile = ({
           <CaregiverTypeButton text={"펫시터"} style={{ marginLeft: 4 }} />
         </Row>
 
-        {/* //? 케어기버 정보 박스 - 이름, 별점, 후기, 자기소개 */}
+        {/* //? 펫시터 정보 박스 - 이름, 별점, 후기, 자기소개 */}
         <View style={styles.infoBox}>
-          {/* //* 케어기버 이름 */}
+          {/* //* 펫시터 이름 */}
           <PreReg14 text={caregiverData.petSitterName} />
           {/* //* 별점 & 리뷰 박스 */}
           <RatingReviewBox
@@ -43,7 +43,7 @@ export const InProgressBookingProfile = ({
             review={caregiverData.reviewCount}
             style={{ marginVertical: 8 }}
           />
-          {/* //* 케어기버 자기소개 */}
+          {/* //* 펫시터 자기소개 */}
           <PreReg12
             text={caregiverData.desc}
             numberOfLines={1}

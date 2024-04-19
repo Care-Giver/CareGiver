@@ -251,7 +251,7 @@ export const BookingDetailScreen: FC<
                         </View>
                       }
                     >
-                      <PreReg12 text="케어기버가 예약을 승인하면 활성화됩니다." />
+                      <PreReg12 text="펫시터가 예약을 승인하면 활성화됩니다." />
                     </Popover>
                   ) : (
                     <TouchableOpacity

@@ -61,7 +61,7 @@ type GetConfirmedBookingsResult =
       confirmedBookings: []
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 현재 로그인한 펫시터 유저의 예약 목록 중에서,
  * (Pending - 수락함, Proceeding - 진행중) 에 해당하는 "확정된 예약" 목록을 가져옵니다.
  */
@@ -95,7 +95,7 @@ type GetAllBookingsResult =
       receivedBookings: []
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 현재 로그인한 펫시터 유저가 받은 "모든" 예약 목록을 가져옵니다.
  */
 export const getAllBookings = async (): Promise<GetAllBookingsResult> => {

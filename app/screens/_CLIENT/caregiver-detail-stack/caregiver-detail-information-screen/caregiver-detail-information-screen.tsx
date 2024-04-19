@@ -247,7 +247,7 @@ export const CaregiverDetailInformationScreen: FC<
         />
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>
-          {/* //* 케어기버 이름/ 별점/ 리뷰  */}
+          {/* //* 펫시터 이름/ 별점/ 리뷰  */}
           <CaregiverNameStarReview
             style={{ marginTop: 36 }}
             profileImage={profileImage}

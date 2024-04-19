@@ -279,7 +279,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             </View>
 
             <DivisionLine mt={12} />
-            <PreBol14 text="담당 케어기버" color={SUB_HEAD_LINE} mb={8} mt={15} />
+            <PreBol14 text="담당 펫시터" color={SUB_HEAD_LINE} mb={8} mt={15} />
             <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={36} color={BODY} />
 
             <CareSummary
