@@ -39,9 +39,9 @@ export type NavigatorParamList = CLStackNavigatorParamList &
 const clBottomTabLabel = {
   favortie: "즐겨찾기",
   schedule: "예약 내역",
-  search: "검색",
-  chatting: "채팅",
-  myinfo: "내정보",
+  search: "펫시터 찾기",
+  chatting: "메시지",
+  myinfo: "내 정보",
 }
 
 const cgBottomTabLabel = {

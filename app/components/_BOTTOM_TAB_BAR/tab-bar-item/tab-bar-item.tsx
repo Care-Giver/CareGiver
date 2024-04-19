@@ -1,8 +1,8 @@
 import React from "react"
 import { StyleProp, ViewStyle, View, StyleSheet, ImageSourcePropType, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
-import { PreReg10 } from "#components"
-import { GIVER_CASUAL_NAVY } from "#theme"
+// import { PreReg10 } from "#components"
+// import { GIVER_CASUAL_NAVY } from "#theme"
 
 export interface TabBarItemProps {
   /**
@@ -25,11 +25,11 @@ export const TabBarItem = observer(function TabBarItem(props: TabBarItemProps) {
       <Animated.Image
         source={image}
         style={{
-          width: 28,
+          width: 74,
           height: imageHeight,
         }}
       />
-      <PreReg10 text={label} color={isFocused ? GIVER_CASUAL_NAVY : "transparent"} />
+      {/* <PreReg10 text={label} color={isFocused ? GIVER_CASUAL_NAVY : "transparent"} /> */}
     </View>
   )
 })
