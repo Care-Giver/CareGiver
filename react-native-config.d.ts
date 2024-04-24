@@ -11,6 +11,7 @@ declare module "react-native-config" {
     NAVER_CONSUMER_SECRET: string
     STREAM_CHAT_API_KEY: string
     IMP_KAKAOPAY_CID: string
+    IMP_KAKAOPAY_CID_DEV: string
     IMP_M_REDIRECT_URL: string
   }
 

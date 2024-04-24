@@ -69,6 +69,7 @@ export const UserStoreModel = types
       pushToken: "",
       nicknameLastUpdated: "",
       clientStreamToken: "",
+      realName: "",
     }),
 
     /* 인증된 펫시터인지 여부 */
@@ -255,6 +256,7 @@ export const UserStoreModel = types
           pushToken: pushToken,
           nicknameLastUpdated: userDetail.nicknameLastUpdated,
           clientStreamToken: userDetail.clientStreamToken,
+          realName: userDetail.realName,
         })
 
         return true
