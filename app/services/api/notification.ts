@@ -20,34 +20,41 @@ export interface NotificationMessage {
   clientReceiverId?: number // 존재하면, 수신자는 보호자. 두개가 동시에 존재할 수 없음.
 }
 
-interface NotificationResponse extends GeneralResponse {
-  clientNotifications: NotificationMessage[]
+interface GetNotificationsByResponse extends GeneralResponse {
+  clientNotifications?: NotificationMessage[]
+  careGiverNotifications?: NotificationMessage[]
 }
-
-interface GetNotificationsResult {
-  isSuccess: boolean // 성공여부
-  notifications: NotificationMessage[] // 성공시, 알림 객체 리스트
-}
-
 /**
- * 로그인한 유저의 모든 반려동물 정보를 읽어온다.
- * @returns {Promise<GetNotificationsResult>}
+ * 로그인한 유저의 알림 정보를 읽어온다.
+ * type 에 따라, 보호자 혹은 펫시터 알림 정보를 읽어온다.
+ * @param {Type} type
+ * @returns {Promise<NotificationMessage[]>}
  */
-export const getClientNotifications = async (): Promise<GetNotificationsResult> => {
+export const getNotificationsBy = async (type: Type): Promise<NotificationMessage[]> => {
   try {
-    const response = await axios.get<NotificationResponse>(`${BASE_URL}/notification/client`)
+    let path = ""
+    switch (type) {
+      case Type.CLIENT:
+        path = "client"
+        break
+      case Type.CARE_GIVER:
+        path = "careGiver"
+        break
+    }
 
-    if (!response?.data.ok) {
-      alertModal("보호자 알림 불러오기에 실패했습니다!", `${response?.data?.error}`)
-      return { isSuccess: false, notifications: [] }
+    const response = await axios.get<GetNotificationsByResponse>(`${BASE_URL}/notification/${path}`)
+    const notifications =
+      response?.data?.clientNotifications || response?.data?.careGiverNotifications
+
+    if (!response?.data.ok || !notifications) {
+      alertModal(`${type} 알림 불러오기에 실패했습니다!`, `${response?.data?.error}`)
+      return []
     }
-    return {
-      isSuccess: true,
-      notifications: response.data.clientNotifications,
-    }
+
+    return notifications
   } catch (error) {
-    alertModal("보호자 알림 불러오기에 실패했습니다!", `catch: ${error?.message}`)
-    return { isSuccess: false, notifications: [] }
+    alertModal(`${type} 알림 불러오기에 실패했습니다!`, `catch: ${error?.message}`)
+    return []
   }
 }
 
