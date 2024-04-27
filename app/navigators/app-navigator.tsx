@@ -28,7 +28,6 @@ import {
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
-import { TestStreamChatScreen } from "#screens"
 import { NotiSSE } from "#api"
 import { useAppState } from "@react-native-community/hooks"
 
@@ -174,6 +173,7 @@ const AllTabs = observer(function AllTabs() {
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
+    notificationStore: { notifications, addNotification, reset },
   } = useStores()
 
   // 로그인한 유저 토큰값 axios 객체에 할당
@@ -209,11 +209,11 @@ const AllTabs = observer(function AllTabs() {
         // 모드전환시, 기존연결 끊고, 새로운 연결
         if (NotiSSE.notiSSE) {
           NotiSSE.disconnect(userDetail, type)
-          NotiSSE.connect(userDetail, type)
+          NotiSSE.connect(userDetail, type, addNotification)
           return
         }
         // 연결
-        NotiSSE.connect(userDetail, type)
+        NotiSSE.connect(userDetail, type, addNotification)
         break
 
       // Background
@@ -222,7 +222,7 @@ const AllTabs = observer(function AllTabs() {
         NotiSSE.disconnect(userDetail, type)
         break
     }
-  }, [type, userDetail, currentAppState])
+  }, [type, userDetail, currentAppState, addNotification])
 
   // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?

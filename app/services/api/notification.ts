@@ -68,7 +68,11 @@ export const getNotificationsBy = async (type: Type): Promise<NotificationMessag
 export class NotiSSE {
   static notiSSE: EventSource | null = null
 
-  static connect(userDetail: UserDetail, type: Type) {
+  static connect(
+    userDetail: UserDetail,
+    type: Type,
+    addNotification: (noti: NotificationMessage) => void,
+  ) {
     if (!axios.defaults.headers.common["x-jwt"]) return
 
     this.notiSSE = new EventSource(`${BASE_URL}/notification/subscribe`, {
@@ -99,6 +103,10 @@ export class NotiSSE {
       // 수신자: 펫시터
       if (noti?.careGiverReceiverId && type === Type.CARE_GIVER) {
         console.debug(`🤖DEBUG ${userDetail.nickname} (${type}):`, noti)
+
+        // MST 에 추가
+        addNotification(noti)
+
         Alert.alert(
           `${noti?.title}`,
           `${noti?.content}`,
@@ -114,12 +122,17 @@ export class NotiSSE {
           ],
           { cancelable: true },
         )
+
         return
       }
 
       // 수산자: 보호자
       if (noti?.clientReceiverId && type === Type.CLIENT) {
         console.debug(`🤖DEBUG ${userDetail.nickname} (${type}):`, noti)
+
+        // MST 에 추가
+        addNotification(noti)
+
         Alert.alert(
           `${noti?.title}`,
           `${noti?.content}`,
@@ -135,6 +148,7 @@ export class NotiSSE {
           ],
           { cancelable: true },
         )
+
         return
       }
 
