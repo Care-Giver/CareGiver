@@ -10,8 +10,11 @@ import { images } from "#images"
 import { BOTTOM_HEIGHT } from "#theme"
 import { getNotificationsBy } from "#api"
 
+//! TODO: NotificationScreen 스크린은, 모드에 상관없이 공통적으로 어떤 스크린에서든 진입 할 수 있다.
+//!       이러한 특성을 고려해 보았을때, Screen 이 아닌 Bottom Sheet Modal 로 제작하여 어떤 스크린에서든 펼쳐서 사용할 수 있도록 하는 것이 좋을 것 같다.
+//!       현재는 React Navigation Screen 으로 제작되어 있어, 다양한 곳에서 화면 전환시 동작이 조금 어색하다.
 export const NotificationScreen: FC<
-  StackScreenProps<NavigatorParamList, "notification-screen">
+  StackScreenProps<NavigatorParamList, "notification-screen" | "cg-notification-screen">
 > = observer(({ navigation, route }) => {
   //* MST
   const {

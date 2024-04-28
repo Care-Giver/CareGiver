@@ -128,8 +128,7 @@ const CareGiverTabs = () => {
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
-      // initialRouteName="Calendar"
-      initialRouteName="CgMypage"
+      initialRouteName="Calendar" //! 이것을 바꾸게 되면, "cg-notification-screen" 의 위치를 바꿔야 한다. TODO: NotificationScreen 을 바텀시트로 재구현 하는 것이 나을 수도 있곘다...
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       {/* <Tab.Screen

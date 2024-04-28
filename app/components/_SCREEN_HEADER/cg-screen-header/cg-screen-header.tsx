@@ -29,7 +29,7 @@ export const CgScreenHeader = observer(function CgScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            navigate("notification-screen")
+            navigate("cg-notification-screen")
           }}
           style={{
             marginLeft: "auto",
