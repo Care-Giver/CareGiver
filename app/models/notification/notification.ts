@@ -47,6 +47,16 @@ export const NotificationModel = types
       // 그 외: 2024년 4월 28일 22:35
       return format(d, "PPP p", { locale: ko })
     },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    check() {
+      self.isChecked = true
+    },
+
+    delete() {
+      self.isDeleted = true
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type NotificationType = Instance<typeof NotificationModel>
 export interface Notification extends NotificationType {}

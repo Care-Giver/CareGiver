@@ -3,6 +3,8 @@ import { NotificationMessage } from "../../services/api/notification"
 import { NotificationModel } from "../notification/notification"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { Type } from "../user-store/user-store"
+import { getRootStore } from "../extensions/get-root-store"
+import _ from "lodash"
 
 /**
  * 로그인한 사용자의 알림 목록
@@ -32,6 +34,35 @@ export const NotificationStoreModel = types
 
     get isCareGiverNotiEmpty() {
       return self.notifications.filter((noti) => noti.type === Type.CARE_GIVER).length === 0
+    },
+
+    get hasClientUncheckedNoti() {
+      return self.notifications.some(
+        (noti) => noti.type === Type.CLIENT && !noti.isChecked && !noti.isDeleted,
+      )
+    },
+
+    get hasCareGiverUncheckedNoti() {
+      return self.notifications.some(
+        (noti) => noti.type === Type.CARE_GIVER && !noti.isChecked && !noti.isDeleted,
+      )
+    },
+
+    get notificationsByType() {
+      const type = getRootStore(self).userStore.type
+      return _.orderBy(
+        self.notifications.filter((noti) => noti.type === type),
+        ["createAt"],
+        ["desc"],
+      )
+    },
+
+    get notificationsByTypeWithoutDeleted() {
+      return _.orderBy(
+        this.notificationsByType.filter((item) => !item.isDeleted),
+        ["createAt"],
+        ["desc"],
+      )
     },
 
     //* 모델 자신
