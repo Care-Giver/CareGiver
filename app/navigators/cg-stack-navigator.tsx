@@ -82,7 +82,7 @@ export type CGStackNavigatorParamList = {
     isAvailableDate: boolean
     isDeleted: boolean
   }
-  "notification-screen": { removeAllToggle: boolean }
+  "cg-notification-screen": { removeAllToggle: boolean }
 
   /**
    * ChatsStack - 채팅 스택 || CG - 채팅 스택
@@ -236,7 +236,7 @@ export const CalendarStack = () => {
 
       {/* 알림 스크린 */}
       <Stack.Screen
-        name="notification-screen"
+        name="cg-notification-screen"
         component={NotificationScreen}
         options={({ navigation, route }) => ({
           header: (props) => <NotificationScreenHeader {...props} />,

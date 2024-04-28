@@ -28,8 +28,7 @@ import {
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
-import { TestStreamChatScreen } from "#screens"
-import { NotiSSE } from "#api"
+import { NotiSSE, getNotificationsBy } from "#api"
 import { useAppState } from "@react-native-community/hooks"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
@@ -129,8 +128,7 @@ const CareGiverTabs = () => {
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
-      // initialRouteName="Calendar"
-      initialRouteName="CgMypage"
+      initialRouteName="Calendar" //! 이것을 바꾸게 되면, "cg-notification-screen" 의 위치를 바꿔야 한다. TODO: NotificationScreen 을 바텀시트로 재구현 하는 것이 나을 수도 있곘다...
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       {/* <Tab.Screen
@@ -174,6 +172,12 @@ const AllTabs = observer(function AllTabs() {
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
+    notificationStore: {
+      addNotification,
+      initNotifications,
+      isClientNotiEmpty,
+      isCareGiverNotiEmpty,
+    },
   } = useStores()
 
   // 로그인한 유저 토큰값 axios 객체에 할당
@@ -209,11 +213,11 @@ const AllTabs = observer(function AllTabs() {
         // 모드전환시, 기존연결 끊고, 새로운 연결
         if (NotiSSE.notiSSE) {
           NotiSSE.disconnect(userDetail, type)
-          NotiSSE.connect(userDetail, type)
+          NotiSSE.connect(userDetail, type, addNotification)
           return
         }
         // 연결
-        NotiSSE.connect(userDetail, type)
+        NotiSSE.connect(userDetail, type, addNotification)
         break
 
       // Background
@@ -222,7 +226,30 @@ const AllTabs = observer(function AllTabs() {
         NotiSSE.disconnect(userDetail, type)
         break
     }
-  }, [type, userDetail, currentAppState])
+  }, [type, userDetail, currentAppState, addNotification])
+
+  // 서버 알림 확인 후, MST 에 없는 알림은 추가
+  useEffect(() => {
+    // notifications 생성 및 핸들링 함수
+    const handleNotifications = async () => {
+      const fetchedNotifications = await getNotificationsBy(type)
+      const checkEmpty = type === Type.CLIENT ? isClientNotiEmpty : isCareGiverNotiEmpty
+      // MST 비어있는 경우: 초기화
+      if (checkEmpty) {
+        // 서버에서 받아온 notifications을 MST에 저장
+        initNotifications(fetchedNotifications)
+      }
+      // 비어있지 않는 경우: 새로운 알림 추가
+      else {
+        fetchedNotifications.forEach((item) => {
+          addNotification(item)
+        })
+      }
+    }
+
+    handleNotifications()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type])
 
   // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
