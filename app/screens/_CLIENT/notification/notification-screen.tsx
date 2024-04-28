@@ -92,7 +92,7 @@ export const NotificationScreen: FC<
                 key={item.id}
                 title={item.title}
                 subtitle={item.content}
-                time={item.title}
+                time={item.createAtText}
                 isChecked={item.isChecked}
               />
             )
