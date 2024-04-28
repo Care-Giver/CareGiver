@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { format, formatDistanceToNow } from "date-fns"
 import { ko } from "date-fns/locale"
+import { Type } from "../user-store/user-store"
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -24,8 +25,11 @@ export const NotificationModel = types
     isDeleted: types.boolean,
   })
   .actions(withSetPropAction)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get type() {
+      return self.clientReceiverId ? Type.CLIENT : Type.CARE_GIVER
+    },
+
     get createAtText() {
       const d = new Date(self.createAt.replace("Z", "+09:00")) //! 케어기버 DB 는 UTC 시간이라서 +09:00 반드시 추가 해야 함.
       const now = Date.now()

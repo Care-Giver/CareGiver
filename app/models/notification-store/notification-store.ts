@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { NotificationMessage } from "../../services/api/notification"
 import { NotificationModel } from "../notification/notification"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { Type } from "../user-store/user-store"
 
 /**
  * 로그인한 사용자의 알림 목록
@@ -26,11 +27,11 @@ export const NotificationStoreModel = types
     },
 
     get isClientNotiEmpty() {
-      return self.notifications.filter((noti) => noti.type === "client").length === 0
+      return self.notifications.filter((noti) => noti.type === Type.CLIENT).length === 0
     },
 
     get isCareGiverNotiEmpty() {
-      return self.notifications.filter((noti) => noti.type === "careGiver").length === 0
+      return self.notifications.filter((noti) => noti.type === Type.CARE_GIVER).length === 0
     },
 
     //* 모델 자신
