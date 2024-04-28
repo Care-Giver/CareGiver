@@ -28,7 +28,7 @@ import {
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
-import { NotiSSE } from "#api"
+import { NotiSSE, getNotificationsBy } from "#api"
 import { useAppState } from "@react-native-community/hooks"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
@@ -172,7 +172,12 @@ const AllTabs = observer(function AllTabs() {
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
-    notificationStore: { notifications, addNotification, reset },
+    notificationStore: {
+      addNotification,
+      initNotifications,
+      isClientNotiEmpty,
+      isCareGiverNotiEmpty,
+    },
   } = useStores()
 
   // 로그인한 유저 토큰값 axios 객체에 할당
@@ -222,6 +227,29 @@ const AllTabs = observer(function AllTabs() {
         break
     }
   }, [type, userDetail, currentAppState, addNotification])
+
+  // 서버 알림 확인 후, MST 에 없는 알림은 추가
+  useEffect(() => {
+    // notifications 생성 및 핸들링 함수
+    const handleNotifications = async () => {
+      const fetchedNotifications = await getNotificationsBy(type)
+      const checkEmpty = type === Type.CLIENT ? isClientNotiEmpty : isCareGiverNotiEmpty
+      // MST 비어있는 경우: 초기화
+      if (checkEmpty) {
+        // 서버에서 받아온 notifications을 MST에 저장
+        initNotifications(fetchedNotifications)
+      }
+      // 비어있지 않는 경우: 새로운 알림 추가
+      else {
+        fetchedNotifications.forEach((item) => {
+          addNotification(item)
+        })
+      }
+    }
+
+    handleNotifications()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type])
 
   // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
