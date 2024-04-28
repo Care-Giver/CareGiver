@@ -14,11 +14,17 @@ import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotron-config
 import { mst } from "reactotron-mst"
 // import { clear } from "~/app/utils/storage"
 import { goBack, resetRoot, navigate } from "#navigators"
-import { Platform } from "react-native"
+import { NativeModules, Platform } from "react-native"
 import { clear, storage } from "../../utils/storage"
 import type { ReactotronReactNative } from "reactotron-react-native"
 import mmkvPlugin from "reactotron-react-native-mmkv"
 import Constants from "expo-constants"
+
+let scriptHostname //! iOS "디바이스" 에서 개발시, Reactotron 연결을 위한 호스트 이름. 참고: https://github.com/infinitered/reactotron/issues/272#issuecomment-272013885
+if (__DEV__ && Platform.OS === "ios") {
+  const scriptURL = NativeModules.SourceCode.scriptURL
+  scriptHostname = scriptURL.split("://")[1].split(":")[0]
+}
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -127,7 +133,7 @@ export class Reactotron {
       // configure reactotron
       Tron.configure({
         name: this.config.name || require("../../../package.json").name,
-        host: this.config.host,
+        host: Platform.OS === "ios" ? scriptHostname : this.config.host,
         getClientId: async () => Constants.installationId,
       })
 
