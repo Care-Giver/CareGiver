@@ -8,6 +8,8 @@ export const NotificationModel = types
   .model("Notification")
   .props({
     id: types.identifierNumber,
+    createAt: types.string,
+    updatedAt: types.string,
     title: types.string,
     content: types.string,
     senderName: types.string,
