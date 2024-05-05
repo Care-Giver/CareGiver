@@ -240,17 +240,18 @@ export const CgMypageScreen: FC<
         />
 
         <DivisionLine color={LIGHT_LINE} />
-        {/* //* 환경설정 버튼 */}
-        <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
+
+        <MypageButton
+          text="정산요청"
+          onPress={() => navigate("cg-request-earning-screen")}
+          style={styles.sidePadding}
+        />
 
         <DivisionLine color={LIGHT_LINE} />
 
-        {/* <Pressable
-          style={{ margin: 20, backgroundColor: "black", width: "auto" }}
-          onPress={() => navigation.navigate("cg-request-earning-screen")}
-        >
-          <Text style={{ fontSize: 25, color: "white" }}>(정산요청스크린)</Text>
-        </Pressable> */}
+        {/* //* 환경설정 버튼 */}
+        <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
+        <DivisionLine color={LIGHT_LINE} />
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}
