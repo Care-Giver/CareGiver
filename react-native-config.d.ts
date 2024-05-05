@@ -13,6 +13,7 @@ declare module "react-native-config" {
     IMP_KAKAOPAY_CID: string
     IMP_KAKAOPAY_CID_DEV: string
     IMP_M_REDIRECT_URL: string
+    EXPO_PUSH_TOKEN_PROJECT_ID: string
   }
 
   export const Config: NativeConfig

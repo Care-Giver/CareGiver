@@ -3,7 +3,7 @@ import * as Device from "expo-device"
 import * as Notifications from "expo-notifications"
 import { Platform } from "react-native"
 import { alertModal } from "./alert-modal"
-import Constants from "expo-constants"
+import Config from "react-native-config"
 
 export async function registerForPushNotificationsAsync(): Promise<string> {
   let token: string
@@ -31,7 +31,7 @@ export async function registerForPushNotificationsAsync(): Promise<string> {
     }
     token = (
       await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig.extra.eas.projectId,
+        projectId: Config.EXPO_PUSH_TOKEN_PROJECT_ID,
       })
     ).data
     // console.log("🔷 registerForPushNotificationsAsync - token:", token)
