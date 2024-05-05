@@ -123,7 +123,7 @@ export const BookingDetailScreen: FC<
   const serviceTypeKorean = serviceType === "creche" ? "위탁" : "방문"
 
   const isChatActivated =
-    booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.PROCEEDING
+    booking?.status === BookingStatus.WAITING || booking?.status === BookingStatus.PROCEEDING
 
   const byStatus = useMemo(() => {
     switch (booking?.status) {
@@ -231,7 +231,7 @@ export const BookingDetailScreen: FC<
                 </Row>
 
                 <Row mt={12} style={{ justifyContent: "space-between" }}>
-                  {booking?.status === BookingStatus.WAITING ? (
+                  {booking?.status === BookingStatus.PENDING ? (
                     <Popover
                       backgroundStyle={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
                       popoverStyle={{ backgroundColor: "#F1F1F4", padding: 10 }}
