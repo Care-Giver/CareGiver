@@ -422,20 +422,18 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
     const response = await axios.get<PreviousBookingResponse>(
       `${BASE_URL}/user/my-previous-bookings`,
     )
-    console.debug("[getPreviousBookings] response.data >>> ", response.data)
+    // console.debug("[getPreviousBookings] response.data >>> ", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error
-      console.error("[getPreviousBookings] error >>>", error)
+      // console.error("[getPreviousBookings] error >>>", error)
       // @ts-ignore
       return []
     }
 
-    // console.log("[getPreviousBookings] response.data >>> ", response.data)
-
     return response.data.previousBookings
   } catch (error) {
-    console.error("[getPreviousBookings] catch error >>>", error)
+    // console.error("[getPreviousBookings] catch error >>>", error)
     return []
   }
 }
@@ -446,7 +444,7 @@ export const getFirstPreviousBooking = async (): Promise<PreviousBooking | null>
     if (previousBookings.length === 0) return null
     return _.orderBy(previousBookings, "startTime", "asc")[0]
   } catch (error) {
-    console.error("[getFirstPreviousBooking] catch error >>>", error)
+    // console.error("[getFirstPreviousBooking] catch error >>>", error)
     return null
   }
 }
@@ -519,7 +517,10 @@ type ResponseCrecheBookingResult =
 /**
  * [펫시터 전용 API]
  * [펫시터 ➡️ 클라이언트]
- * 입력받은 "위탁"서비스 예약 id의 수락 여부를  응답한다.
+ * 입력받은 "위탁"서비스 예약 id의 수락 여부를 응답한다.
+ * ! 주의: "예약 수락을 거절하는 것" (= 예약 거절) 과
+ * !        "수락한 예약을 취소하는 것" (= 예약 취소) 는
+ * !         서로 다르다. 이점을 유의할 것. (예약 취소는 cancelVisitingBooking 을 사용한다.)
  */
 export const responseCrecheBooking = async (
   crecheBookingId: number,
