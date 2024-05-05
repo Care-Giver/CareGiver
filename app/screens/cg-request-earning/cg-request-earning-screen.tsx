@@ -1,5 +1,13 @@
 import React, { FC, useState } from "react"
-import { Image, Linking, Pressable, ScrollView, StyleSheet, View } from "react-native"
+import {
+  Image,
+  Linking,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
@@ -191,7 +199,7 @@ export const CgRequestEarningScreen: FC<
           <View>
             <RegistrationNoticeNote
               title="정산 요청 전, 잠깐!"
-              desc="펫시팅 요금의 경우 매달 1일에 정산하여 등록해주신 계좌로 입금해드립니다. 연휴나 공휴일에는 지급이 지연될 수 있는 점 양해 부탁드립니다."
+              desc={`펫시팅 요금의 경우 매달 1일에 정산하여 등록해주신 계좌로 입금해드립니다.\n연휴나 공휴일에는 지급이 지연될 수 있는 점 양해 부탁드립니다.`}
               boldTexts={["매달", "1일", "연휴나", "공휴일에는", "지급이", "지연"]}
             />
 
@@ -228,16 +236,23 @@ export const CgRequestEarningScreen: FC<
                 setText={setName}
               />
               <DivisionLine mt={20} mb={20} />
-              <Row mb={12}>
-                <BlueCheckbox value={isCheck} onPress={onCheckPress}></BlueCheckbox>
+              <TouchableOpacity
+                onPress={onCheckPress}
+                style={{
+                  flexDirection: "row",
+                  marginBottom: 12,
+                }}
+              >
+                <BlueCheckbox value={isCheck} onPress={onCheckPress} />
                 <PreMed16 text="개인정보 수집 이용 동의(필수)" ml={8} />
-                <Pressable
+                <TouchableOpacity
                   style={{ marginLeft: "auto" }}
                   onPress={() => openLink(외부링크.개인정보_수집_이용_동의)}
+                  hitSlop={4}
                 >
                   <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
-                </Pressable>
-              </Row>
+                </TouchableOpacity>
+              </TouchableOpacity>
 
               {isOpen && (
                 <ScrollView style={styles.bankList}>
