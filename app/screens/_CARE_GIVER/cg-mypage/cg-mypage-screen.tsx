@@ -232,14 +232,14 @@ export const CgMypageScreen: FC<
 
         <DivisionLine color={LIGHT_LINE} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton
+        {/* // TODO: UX/UI 기획 완료 후, 버튼 표시할 것. - 동작하는 기능들만 표시되어야 함 */}
+        {/* <MypageButton
           text="결제 수단 및 쿠폰"
           opacity={0.2}
           disabled={true}
           style={styles.sidePadding}
         />
-
-        <DivisionLine color={LIGHT_LINE} />
+        <DivisionLine color={LIGHT_LINE} /> */}
 
         <MypageButton
           text="정산요청"
