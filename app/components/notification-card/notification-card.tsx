@@ -19,7 +19,7 @@ interface NotificationCardProps {
 export const NotificationCard = observer(function NotificationCard(props: NotificationCardProps) {
   const { style, title, subtitle, time, isChecked, check } = props
   return (
-    <TouchableOpacity style={style} onPress={_.debounce(check, 1000)} disabled={isChecked}>
+    <TouchableOpacity style={style} onPress={_.debounce(check, 300)} disabled={isChecked}>
       <View style={styles.root}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Row style={{ width: "auto" }}>

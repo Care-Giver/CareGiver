@@ -65,10 +65,10 @@ export const DeclineOrConfirmButton = observer(function DeclineOrConfirmButton(
   const allStyles = Object.assign({}, styles.root, { height }, style)
   return (
     <View style={allStyles}>
-      <TouchableOpacity style={styles.declineButton} onPress={_.debounce(handleYesPress, 1000)}>
+      <TouchableOpacity style={styles.declineButton} onPress={_.debounce(handleYesPress, 300)}>
         <PreBol14 text={declineText} color={GIVER_CASUAL_NAVY} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.confirmButton} onPress={_.debounce(handleNoPress, 1000)}>
+      <TouchableOpacity style={styles.confirmButton} onPress={_.debounce(handleNoPress, 300)}>
         <PreBol14 text={confirmText} color={color.palette.white} />
       </TouchableOpacity>
     </View>

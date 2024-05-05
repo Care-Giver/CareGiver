@@ -30,7 +30,7 @@ export const ConditionalButton = (props: ConditionalButtonProps) => {
   const allStyles = Object.assign({}, viewStyle, style)
 
   return (
-    <TouchableOpacity style={allStyles} disabled={!isActivated} onPress={_.debounce(onPress, 1000)}>
+    <TouchableOpacity style={allStyles} disabled={!isActivated} onPress={_.debounce(onPress, 300)}>
       <PreBol16 text={label} color={color} />
     </TouchableOpacity>
   )

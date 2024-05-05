@@ -40,7 +40,7 @@ export const PressableButton = (props: PressableButtonProps) => {
   return (
     <TouchableOpacity
       style={[style, viewStyle]}
-      onPress={_.debounce(onPress, 1000)}
+      onPress={_.debounce(onPress, 300)}
       disabled={isDisabled}
       {...rest}
     >
