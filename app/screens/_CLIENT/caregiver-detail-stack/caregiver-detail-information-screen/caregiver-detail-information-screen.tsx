@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { Platform, Pressable, ScrollView, View, Modal, Text, Animated } from "react-native"
+import { Platform, TouchableOpacity, ScrollView, View, Modal, Text, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
@@ -402,7 +402,7 @@ export const CaregiverDetailInformationScreen: FC<
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
-        <Pressable
+        <TouchableOpacity
           style={{
             marginTop: 28,
             marginBottom: 16,
@@ -411,7 +411,7 @@ export const CaregiverDetailInformationScreen: FC<
           onPress={onPressCommentOption}
         >
           <PreMed16 text={isUserComment ? "수정하기" : "답글달기"} />
-        </Pressable>
+        </TouchableOpacity>
       </BottomSheetModal>
 
       {/* //? 예약 신청하기 버튼 */}

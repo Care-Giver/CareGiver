@@ -333,9 +333,9 @@ export const MakeBookingScreen: FC<
       </KeyboardAwareScrollView>
 
       {isButtonShown && (
-        <Pressable style={styles.pressableContainer} onPress={onPress}>
+        <TouchableOpacity style={styles.pressableContainer} onPress={onPress}>
           <PreBol16 text={"예약하기"} color="white" />
-        </Pressable>
+        </TouchableOpacity>
       )}
     </Screen>
   )
