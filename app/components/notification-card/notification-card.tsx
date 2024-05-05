@@ -17,8 +17,7 @@ interface NotificationCardProps {
   style?: StyleProp<ViewStyle>
 }
 export const NotificationCard = observer(function NotificationCard(props: NotificationCardProps) {
-  const { style } = props
-  const { title, subtitle, time, isChecked, check } = props
+  const { style, title, subtitle, time, isChecked, check } = props
   return (
     <TouchableOpacity style={style} onPress={_.debounce(check, 1000)} disabled={isChecked}>
       <View style={styles.root}>

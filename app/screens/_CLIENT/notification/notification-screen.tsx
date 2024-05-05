@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react"
 import { FlatList, View, Image } from "react-native"
-import { observer } from "mobx-react-lite"
+import { Observer, observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { CustomModal, NotificationCard, PreMed18, Screen } from "#components"
@@ -19,6 +19,7 @@ export const NotificationScreen: FC<
   //* MST
   const {
     notificationStore: {
+      notifications,
       notificationsByTypeWithoutDeleted,
       addNotification,
       deleteAllNotifications,
@@ -83,14 +84,20 @@ export const NotificationScreen: FC<
         }}
         data={notificationsByTypeWithoutDeleted || []}
         renderItem={({ item }) => (
-          <NotificationCard
-            key={item.id}
-            title={item.title}
-            subtitle={item.content}
-            time={item.createAtText}
-            isChecked={item.isChecked}
-            check={item.check} // 카드 클릭시, "알림 확인"으로상태 변경
-          />
+          // MST 와 FlatList 를 같이 사용할 때는 Reactivity 가 깨질 수 있음을 주의해줘야 한다.
+          // 참고: https://github.com/mobxjs/mobx/issues/476#issuecomment-264692648
+          <Observer>
+            {() => (
+              <NotificationCard
+                key={item.id}
+                title={item.title}
+                subtitle={item.content}
+                time={item.createAtText}
+                isChecked={item.isChecked}
+                check={item.check} // 카드 클릭시, "알림 확인"으로상태 변경
+              />
+            )}
+          </Observer>
         )}
         ListEmptyComponent={() => (
           <View
