@@ -84,9 +84,6 @@ export const BookingDetailScreen: FC<
 
   // BookingStatus.WAITING 일때, 예약 취소 기능
   const onCancelBookingSubmitted = (cancelReason) => {
-    console.log("cancelReason", cancelReason)
-    if (cancelReason === "") return
-
     cancelVisitingBooking({
       visitingBookingId: booking.id,
       reason: cancelReason,
@@ -389,6 +386,7 @@ export const BookingDetailScreen: FC<
       <CancelBookingBottomSheetModal
         ref={cancelBookingBottomSheetModalRef}
         onSubmitted={onCancelBookingSubmitted}
+        mode="cancel"
       />
     </Screen>
   )
