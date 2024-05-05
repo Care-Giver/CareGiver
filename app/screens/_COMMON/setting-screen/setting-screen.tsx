@@ -1,4 +1,4 @@
-import { View, Text, Modal, Image, Pressable, Platform } from "react-native"
+import { View, Text, Modal, Image, Pressable, Platform, Alert, Linking } from "react-native"
 import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack } from "#navigators"
@@ -42,7 +42,24 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
 
     // ? 모달창 - 회원 탈퇴 버튼 클릭시 동작하는 함수
     const handleWithdrawPress = () => {
-      alert("회원 탈퇴")
+      Alert.alert(
+        "회원 탈퇴",
+        "케어기버 공식 이메일 dev@caregiver.pet 으로 탈퇴 문의를 주시면, 회원 정보 삭제를 위해 7 영업일 내에 이메일로 연락 드리겠습니다.",
+        [
+          {
+            text: "닫기",
+          },
+          {
+            text: "문의하기",
+            //@ts-ignore
+            onPress: () => {
+              Linking.openURL("mailto: dev@caregiver.pet")
+              setWithdrawModalVisible(false)
+            },
+          },
+        ],
+        { cancelable: true },
+      )
       // TODO
       //~ 1. unlink kakaotalk && logut
       //~ 2. 회원탈퇴를 위한 1:1 Q&A 연결
