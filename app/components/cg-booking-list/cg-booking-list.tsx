@@ -168,7 +168,13 @@ const CgBookingInfoCard = observer(function BookingInfoCard(props: CgBookingInfo
   }
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        navigate("cg-booking-detail-screen", {
+          booking,
+          serviceTypeKorean: visOrCre,
+        })
+      }}
       style={[
         styles2.root,
         SHADOW_1,
@@ -191,17 +197,9 @@ const CgBookingInfoCard = observer(function BookingInfoCard(props: CgBookingInfo
           }
           style={{ marginRight: 20 }}
         />
-        <TouchableOpacity
-          style={styles2.goToDetail}
-          onPress={() => {
-            navigate("cg-booking-detail-screen", {
-              booking,
-              serviceTypeKorean: visOrCre,
-            })
-          }}
-        >
+        <View style={styles2.goToDetail}>
           <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
-        </TouchableOpacity>
+        </View>
       </Row>
 
       <DivisionLine mv={8} />
@@ -211,7 +209,7 @@ const CgBookingInfoCard = observer(function BookingInfoCard(props: CgBookingInfo
       <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles2.contentDetail} />
       <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles2.contentDetail} />
       <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles2.contentDetail} />
-    </View>
+    </TouchableOpacity>
   )
 })
 
