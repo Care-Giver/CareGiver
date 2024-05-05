@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { MypageButton, PreMed16, PreReg14, Screen, CustomModal } from "#components"
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
-import TEST_BUILD_VERSION from "./test-build-version"
+import BUILD_VERSION_TEXT from "./test-build-version"
 import { images } from "#images"
 import { useStores } from "#models"
 import { request, PERMISSIONS, check, RESULTS } from "react-native-permissions"
@@ -70,7 +70,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
           <PreMed16 text="버전 정보" color={HEAD_LINE} />
-          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
+          <PreReg14 text={BUILD_VERSION_TEXT} color={BODY} style={{ marginTop: 8 }} />
         </View>
         {/* //? division line */}
         <View style={styles.divisionLine} />
