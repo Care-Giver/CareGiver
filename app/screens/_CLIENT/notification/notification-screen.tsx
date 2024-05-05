@@ -116,10 +116,11 @@ export const NotificationScreen: FC<
       />
 
       <CustomModal
-        image={images.error_profile_medium}
-        imageWidth={100}
-        imageHeight={85}
+        image={images.caution}
+        imageWidth={90}
+        imageHeight={79}
         title="알림을 모두 삭제하시겠어요?"
+        subtitle="삭제한 알림을 복구하려면, 로그아웃 후 다시 로그인 해주세요 :)"
         yesBtnText="예"
         noBtnText="아니오"
         handleYesPress={() => {
