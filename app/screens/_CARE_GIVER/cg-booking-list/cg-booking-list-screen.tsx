@@ -98,11 +98,10 @@ export const CgBookingListScreen: FC<
                       // 거절
                       Alert.alert(
                         "해당 신청을 정말 거절하시겠어요?",
-                        `예약을 거절하면 해당 예약을 진행하실 수 없어요.\n(UI 개발중🏗️ - TODO: Modal, BottomSheet 으로 수정)`,
+                        `예약을 거절하면 해당 예약을 진행하실 수 없어요.`,
                         [
                           {
                             text: "취소",
-                            // onPress: () => console.log("취소"),
                           },
                           {
                             text: "거절하기",
@@ -130,7 +129,6 @@ export const CgBookingListScreen: FC<
                             [
                               {
                                 text: "취소",
-                                // onPress: () => console.log("취소"),
                               },
                               {
                                 text: "이동하기",
