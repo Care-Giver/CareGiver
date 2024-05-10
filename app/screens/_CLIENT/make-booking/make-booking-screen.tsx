@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -6,7 +6,6 @@ import {
   Screen,
   PlaceHolderInputBox,
   ClickToBlueButton,
-  PreReg12,
   PreBol14,
   PreBol16,
   RowRoundedButton,
@@ -15,21 +14,13 @@ import {
   Footer,
   BASIC_BACKGROUND_PADDING_WIDTH,
 } from "#components"
-import { View, Pressable, StyleSheet } from "react-native"
-import {
-  BOTTOM_HEIGHT,
-  DEVICE_SCREEN_WIDTH,
-  DISABLED,
-  GIVER_CASUAL_NAVY,
-  WIDTH,
-  palette,
-} from "#theme"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { BOTTOM_HEIGHT, DEVICE_SCREEN_WIDTH, DISABLED, GIVER_CASUAL_NAVY, WIDTH } from "#theme"
+// import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useKeyboardShown } from "../../../utils/hooks"
 import _ from "lodash"
 import { images } from "#images"
 import { alertModal } from "../../../utils/alert-modal"
-import { t } from "i18n-js"
 
 export type BookingRequest = {
   petToolsLocInfo?: string // (방문 ONLY) 펫시팅시 사용할 수 있는 도구 및 사료 위치
@@ -197,7 +188,7 @@ export const MakeBookingScreen: FC<
 
   return (
     <Screen testID="MakeBooking" type="View" style={{ paddingHorizontal: 0 }}>
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} enableOnAndroid>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
           <TopTipBox
             desc={"* 상세하게 입력해 주실수록 서비스 품질을 높이는데 도움이 됩니다!"}
@@ -209,7 +200,7 @@ export const MakeBookingScreen: FC<
             <View style={{ marginBottom: 36 }}>
               <PreBol14
                 style={{ marginTop: 24, marginBottom: 8 }}
-                text="펫시터님이 방문할 주소를 알려주세요. (필수)"
+                text="[필수] 펫시터님이 방문할 주소를 알려주세요."
               />
               {/*//* 위치 선택 */}
               <RowRoundedButton
@@ -339,12 +330,12 @@ export const MakeBookingScreen: FC<
           />
         </View>
         <Footer mt={FOOTER_CONTENT_GAP} />
-      </KeyboardAwareScrollView>
+      </ScrollView>
 
       {isButtonShown && (
-        <Pressable style={styles.pressableContainer} onPress={onPress}>
+        <TouchableOpacity style={styles.pressableContainer} onPress={onPress}>
           <PreBol16 text={"예약하기"} color="white" />
-        </Pressable>
+        </TouchableOpacity>
       )}
     </Screen>
   )

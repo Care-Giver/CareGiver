@@ -1,9 +1,10 @@
-import React, { FC, useLayoutEffect, useMemo, useState } from "react"
+import React, { FC, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Alert, FlatList, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
-import { NavigatorParamList } from "#navigators"
+import { NavigatorParamList, navigate } from "#navigators"
 import {
+  CancelBookingBottomSheetModal,
   CareSummary,
   ConditionalButton,
   DeclineOrConfirmButton,
@@ -33,6 +34,7 @@ import {
   SUCCESS_BLUE,
 } from "#theme"
 import { useStores } from "#models"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 
 export const CgBookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-booking-detail-screen">
@@ -109,6 +111,28 @@ export const CgBookingDetailScreen: FC<
   const bookingId = booking[idProp]
   const canceler = serviceTypeKorean === "위탁" ? cancelCrecheBooking : cancelVisitingBooking
 
+  const cancelBookingBottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  const openCancelBookingBottomSheet = () => {
+    cancelBookingBottomSheetModalRef.current?.present()
+  }
+
+  // BookingStatus.WAITING 일때, 예약 취소 기능
+  const onCancelBookingSubmitted = (cancelReason) => {
+    //@ts-ignore
+    canceler({
+      [idProp]: bookingId,
+      reason: cancelReason,
+      isPetSitterCancel: true,
+    }).then((res) => {
+      if (res?.isSuccess) {
+        setIsCancelBookingActivated(false)
+        navigation.goBack()
+        // TODO: 예약취소 성공 모달
+      }
+    })
+  }
+
   return (
     <Screen testID="CgBookingDetail">
       <FlatList
@@ -126,7 +150,7 @@ export const CgBookingDetailScreen: FC<
               address={booking?.address}
               start={booking[startProp]}
               end={booking[endProp]}
-              petIds={booking?.pets ? booking?.pets.map((v) => v.id) : []}
+              pets={booking?.pets}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
             />
@@ -154,11 +178,10 @@ export const CgBookingDetailScreen: FC<
                   // 거절
                   Alert.alert(
                     "해당 신청을 정말 거절하시겠어요?",
-                    `예약을 거절하면 해당 예약을 진행하실 수 없어요.\n(UI 개발중🏗️ - TODO: Modal, BottomSheet 으로 수정)`,
+                    `예약을 거절하면 해당 예약을 진행하실 수 없어요.`,
                     [
                       {
                         text: "취소",
-                        // onPress: () => console.log("취소"),
                       },
                       {
                         text: "거절하기",
@@ -219,27 +242,15 @@ export const CgBookingDetailScreen: FC<
                 if (booking?.status === BookingStatus.PENDING) {
                   Alert.alert(
                     "수락한 예약을 정말 취소하시겠어요?",
-                    `예약을 취소할 경우 정책에 따라 패널티가 부과됩니다.\n자세한 내용은 FAQ를 참조해주세요.\n(기능 개발중🏗️) - TODO: API 연결)`,
+                    `예약을 취소할 경우 정책에 따라 패널티가 부과됩니다.\n자세한 내용은 FAQ를 참조해주세요.`,
                     [
                       {
-                        text: "취소",
-                        // onPress: () => console.log("취소"),
+                        text: "닫기",
                       },
                       {
                         text: "예약 취소하기",
                         onPress: () => {
-                          //@ts-ignore
-                          canceler({
-                            [idProp]: bookingId,
-                            reason: "API 작동 테스트",
-                            isPetSitterCancel: true,
-                          }).then((res) => {
-                            if (res?.isSuccess) {
-                              setIsCancelBookingActivated(false)
-                              navigation.goBack()
-                              // TODO: 예약취소 성공 모달
-                            }
-                          })
+                          openCancelBookingBottomSheet()
                         },
                       },
                     ],
@@ -250,6 +261,12 @@ export const CgBookingDetailScreen: FC<
             />
           )
         }}
+      />
+
+      <CancelBookingBottomSheetModal
+        ref={cancelBookingBottomSheetModalRef}
+        onSubmitted={onCancelBookingSubmitted}
+        mode="cg-cancel"
       />
     </Screen>
   )

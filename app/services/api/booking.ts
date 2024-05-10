@@ -202,52 +202,36 @@ export interface CurrentBooking {
   desc: string
   profileImage: string | null
 }
-
+/**
+ * "Waiting" // 아직 서비스가 완료되지 않아 리뷰 작성 불가
+ * "Possible" // 서비스 완료 이후 리뷰 작성 가능 시기
+ * "Complete" // 리뷰 작성 완료.
+ * "Expired" // 리뷰 작성 기한이 지나 리뷰 생성 및 수정 불가능
+ */
 export type ReviewStatus = "Waiting" | "Possible" | "Complete" | "Expired"
 
-/**
- * API에서 사용되는 지난 예약 내역 Props
- * */
-interface PreviousBooking {
-  visitingBookingId?: number
-  crecheBookingId?: number
-  visitingId?: number
-  crecheId?: number
+export type PreviousBooking = {
   paymentId: number
-
-  // ? visiting인 경우 time
-  startTime?: string
-  endTime?: string
-  // ? creche인 경우 date
-  startDate?: string
-  endDate?: string
-
   petSitterName: string
   desc: string
-  profileImage: string | null
+  profileImage: null | string
   isCanceled: boolean
   isFavorite: boolean
   reviewStatus: ReviewStatus
-}
-
-/**
- * 스크린에서 사용되는 지난 예약 내역 props
- * */
-export interface PreviousBookingParams {
-  profileImage: string | null
-  serviceType: ServiceType
-  petsitterType: PetsitterType
-  petsitterId: number
-  bookingId: number
-  petsitterName: string
-  desc: string
-  // ? 여기서는 creche | visiting 모두 Date로 통일한다.
-  startDate: string
-  endDate: string
-  isCanceled: boolean
-  isFavorite: boolean
-  reviewStatus: ReviewStatus
-}
+} & (
+  | {
+      visitingBookingId: number
+      visitingId: number
+      startTime: string
+      endTime: string
+    }
+  | {
+      crecheBookingId: number
+      crecheId: number
+      startDate: string
+      endDate: string
+    }
+)
 
 interface CrecheBookingsResponse extends GeneralResponse {
   crecheBookings: CrecheBooking[]
@@ -416,7 +400,7 @@ export const getCurrentBookings = async (): Promise<CurrentBooking[]> => {
       return error
     }
 
-    console.log("[getCurrentBookings] response.data >>> ", response.data)
+    console.debug("[getCurrentBookings] response.data >>> ", response.data)
     const currentBookings = response.data.currentBookings.map((value: CurrentBooking) => ({
       ...value,
       ratings: ratingRound(value.ratings),
@@ -438,64 +422,29 @@ export const getPreviousBookings = async (): Promise<PreviousBooking[]> => {
     const response = await axios.get<PreviousBookingResponse>(
       `${BASE_URL}/user/my-previous-bookings`,
     )
-
-    // console.debug("[test] >>>", response.data)
+    // console.debug("[getPreviousBookings] response.data >>> ", response.data)
 
     if (!response.data.ok) {
       const error = response.data.error
-      console.error("[getPreviousBookings] error >>>", error)
+      // console.error("[getPreviousBookings] error >>>", error)
       // @ts-ignore
       return []
     }
 
-    // console.log("[getPreviousBookings] response.data >>> ", response.data)
-
     return response.data.previousBookings
   } catch (error) {
-    console.error("[getPreviousBookings] catch error >>>", error)
+    // console.error("[getPreviousBookings] catch error >>>", error)
     return []
   }
 }
 
-export const getFirstPreviousBooking = async (): Promise<PreviousBookingParams | null> => {
+export const getFirstPreviousBooking = async (): Promise<PreviousBooking | null> => {
   try {
-    const response = await axios.get<PreviousBookingResponse>(
-      `${BASE_URL}/user/my-previous-bookings`,
-    )
-
-    if (!response.data.ok) {
-      const error = response.data.error
-      console.error("[getFirstPreviousBooking] error >>>", error)
-      return null
-    }
-
-    if (response.data.previousBookings.length === 0) return null
-
-    const bookingData: PreviousBooking = response.data.previousBookings[0]
-    const serviceType: ServiceType = bookingData.crecheId ? "creche" : "visiting"
-
-    return {
-      profileImage: bookingData.profileImage,
-      serviceType: serviceType,
-      petsitterType: serviceType,
-      // @ts-ignore
-      petsitterId: serviceType === "creche" ? bookingData.crecheId : bookingData.visitingId,
-      // @ts-ignore
-      bookingId:
-        serviceType === "creche" ? bookingData.crecheBookingId : bookingData.visitingBookingId,
-      petsitterName: bookingData.petSitterName,
-      desc: bookingData.desc,
-      // ? 여기서는 creche | visiting 모두 Date로 통일한다.
-      // @ts-ignore
-      startDate: serviceType === "creche" ? bookingData.startDate : bookingData.startTime,
-      // @ts-ignore
-      endDate: serviceType === "creche" ? bookingData.endDate : bookingData.endTime,
-      isCanceled: bookingData.isCanceled,
-      isFavorite: bookingData.isFavorite,
-      reviewStatus: bookingData.reviewStatus,
-    }
+    const previousBookings = await getPreviousBookings()
+    if (previousBookings.length === 0) return null
+    return _.orderBy(previousBookings, "startTime", "asc")[0]
   } catch (error) {
-    console.error("[getFirstPreviousBooking] catch error >>>", error)
+    // console.error("[getFirstPreviousBooking] catch error >>>", error)
     return null
   }
 }
@@ -542,7 +491,7 @@ type GetMyWaitingBookingsResult =
 export const getMyWaitingBookings = async (): Promise<GetMyWaitingBookingsResult> => {
   try {
     const response = await axios.get<WaitingBookingResponse>(`${BASE_URL}/user/my-waiting-bookings`)
-    console.log("response🔷", response.data)
+    console.debug("[getMyWaitingBookings] response.data >>> ", response.data)
     if (!response.data.ok) {
       alertModal("신청한 예약 내역을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, waitingBookings: [] }
@@ -566,9 +515,12 @@ type ResponseCrecheBookingResult =
       isSuccess: false // 실패
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * [펫시터 ➡️ 클라이언트]
- * 입력받은 "위탁"서비스 예약 id의 수락 여부를  응답한다.
+ * 입력받은 "위탁"서비스 예약 id의 수락 여부를 응답한다.
+ * ! 주의: "예약 수락을 거절하는 것" (= 예약 거절) 과
+ * !        "수락한 예약을 취소하는 것" (= 예약 취소) 는
+ * !         서로 다르다. 이점을 유의할 것. (예약 취소는 cancelVisitingBooking 을 사용한다.)
  */
 export const responseCrecheBooking = async (
   crecheBookingId: number,
@@ -600,7 +552,7 @@ export const responseCrecheBooking = async (
 type ResponseVisitingBookingRequestBody = ResponseCrecheBookingRequestBody
 type ResponseVisitingBookingResult = ResponseCrecheBookingResult
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * [펫시터 ➡️ 클라이언트]
  * 입력받은 id의 "방문" 예약 정보를 응답한다.
  */

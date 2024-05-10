@@ -1,5 +1,5 @@
-const VERSION = "0.0.3.a.UT-리허설"
+const VERSION = "1.0.0"
 
-const TEST_BUILD_VERSION = `Version ${VERSION}`
+const BUILD_VERSION_TEXT = `Version ${VERSION}`
 
-export default TEST_BUILD_VERSION
+export default BUILD_VERSION_TEXT

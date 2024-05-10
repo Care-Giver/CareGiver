@@ -8,6 +8,7 @@ import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 import { getStreamToken, streamChatClient } from "../../services/api/stream"
 import { alertModal } from "../../utils/alert-modal"
 import { AddressLocation } from "#screens"
+import { getRootStore } from "../extensions/get-root-store"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -69,6 +70,7 @@ export const UserStoreModel = types
       pushToken: "",
       nicknameLastUpdated: "",
       clientStreamToken: "",
+      realName: "",
     }),
 
     /* 인증된 펫시터인지 여부 */
@@ -120,7 +122,7 @@ export const UserStoreModel = types
       applySnapshot(self, {})
     },
     /**
-     * 유저의 역할을 케어기버와 클라이언트 두 종류 사이에서 전환합니다.
+     * 유저의 역할을 펫시터(Type.CARE_GIVER) 와 보호자(Type.CLIENT) 두 종류 사이에서 전환합니다.
      * [중요] 하나의 action 에서 하나의 object 만 변경할 것. 그렇지 않으면 정상 작동 하지 않음
      *  */
     async switchType() {
@@ -255,6 +257,7 @@ export const UserStoreModel = types
           pushToken: pushToken,
           nicknameLastUpdated: userDetail.nicknameLastUpdated,
           clientStreamToken: userDetail.clientStreamToken,
+          realName: userDetail.realName,
         })
 
         return true
@@ -370,8 +373,9 @@ export const UserStoreModel = types
       //! 중요: 로그아웃시, stream chat 유저와의 연결을 끊어야 합니다. 그렇지 않으면 다른 계정으로 로그인시, 정상적으로 stream chat 을 사용할 수 없습니다.
       streamChatClient.disconnectUser()
 
-      // UserStoreModel 모델 초기화
-      this.reset()
+      // 전체 MST 초기화
+      const rootStore = getRootStore(self)
+      rootStore.resetRootStore()
 
       // TODO: provider 마다, 추가로 해야 할 동작이 다를 것임
       /*         

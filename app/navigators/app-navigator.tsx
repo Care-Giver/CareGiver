@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
@@ -11,7 +12,7 @@ import {
   BookingsStack,
   CLStackNavigatorParamList,
   ChatsStack,
-  FavoritesStack,
+  // FavoritesStack,
   MypageStack,
   SearchingStack,
 } from "./cl-stack-navigator"
@@ -20,14 +21,15 @@ import {
   CalendarStack,
   CgBookingsStack,
   CgMypageStack,
-  StatisticsStack,
+  // StatisticsStack,
 } from "./cg-stack-navigator"
 import {
   LoginSignUpStack,
   LoginSignUpStackNavigatorParamList,
 } from "./login-sign-up-stack-navigator"
 import axios from "axios"
-import { TestStreamChatScreen } from "#screens"
+import { NotiSSE, getNotificationsBy } from "#api"
+import { useAppState } from "@react-native-community/hooks"
 
 export type NavigatorParamList = CLStackNavigatorParamList &
   CGStackNavigatorParamList &
@@ -36,9 +38,9 @@ export type NavigatorParamList = CLStackNavigatorParamList &
 const clBottomTabLabel = {
   favortie: "즐겨찾기",
   schedule: "예약 내역",
-  search: "검색",
-  chatting: "채팅",
-  myinfo: "내정보",
+  search: "펫시터 찾기",
+  chatting: "메시지",
+  myinfo: "내 정보",
 }
 
 const cgBottomTabLabel = {
@@ -116,7 +118,7 @@ const ClientTabs = () => {
 }
 
 /**
- * 케어기버 전용 탭들
+ * 펫시터 전용 탭들
  */
 const CareGiverTabs = () => {
   return (
@@ -126,8 +128,7 @@ const CareGiverTabs = () => {
         headerStyle: { backgroundColor: GIVER_CASUAL_NAVY },
         headerTitleStyle: { color: "white" },
       }}
-      // initialRouteName="Calendar"
-      initialRouteName="CgMypage"
+      initialRouteName="Calendar" //! 이것을 바꾸게 되면, "cg-notification-screen" 의 위치를 바꿔야 한다. TODO: NotificationScreen 을 바텀시트로 재구현 하는 것이 나을 수도 있곘다...
       tabBar={(props: BottomTabBarProps) => <CustomTabBar {...props} />}
     >
       {/* <Tab.Screen
@@ -160,19 +161,26 @@ const CareGiverTabs = () => {
 }
 
 /**
- * 클라이언트 탭들과 케어기버 탭들을 전환 가능하게 해주는 컴포넌트
+ * 클라이언트 탭들과 펫시터 탭들을 전환 가능하게 해주는 컴포넌트
  * - 로그인시 보여지는 네비게이터 입니다.
- * - type 값에 따라 클라이언트 탭 네비게이터와 케어기버 탭 네비게이터를 전환합니다.
+ * - type 값에 따라 클라이언트 탭 네비게이터와 펫시터 탭 네비게이터를 전환합니다.
  */
 const AllTabs = observer(function AllTabs() {
   const {
-    userStore: { type, onSwitchingType, userAuth },
+    userStore: { type, onSwitchingType, userAuth, userDetail },
     petStore: { petsHandler },
     petsitterStore: { fetchPetsitter },
     etcStore: { fetchService, fetchAmenity, hasService, hasAmenity },
     uiStore: { hasCaution },
+    notificationStore: {
+      addNotification,
+      initNotifications,
+      isClientNotiEmpty,
+      isCareGiverNotiEmpty,
+    },
   } = useStores()
 
+  // 로그인한 유저 토큰값 axios 객체에 할당
   useEffect(() => {
     //! 중요: axios 기본 설정에 토큰을 넣어줘야 한다.
     axios.defaults.headers.common["x-jwt"] = userAuth.token
@@ -181,6 +189,7 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // 모드별 데이터 요청
   useEffect(() => {
     if (type === Type.CARE_GIVER) {
       fetchPetsitter() //! 중요: CARE_GIVER 모드이면, petsitter 정보를 불러온다.
@@ -195,12 +204,58 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
+  const currentAppState = useAppState()
+  // 알림 객체 SSE 컨트롤
+  useEffect(() => {
+    switch (currentAppState) {
+      // Foreground
+      case "active":
+        // 모드전환시, 기존연결 끊고, 새로운 연결
+        if (NotiSSE.notiSSE) {
+          NotiSSE.disconnect(userDetail, type)
+          NotiSSE.connect(userDetail, type, addNotification)
+          return
+        }
+        // 연결
+        NotiSSE.connect(userDetail, type, addNotification)
+        break
+
+      // Background
+      case "inactive":
+      case "background":
+        NotiSSE.disconnect(userDetail, type)
+        break
+    }
+  }, [type, userDetail, currentAppState, addNotification])
+
+  // 서버 알림 확인 후, MST 에 없는 알림은 추가
+  useEffect(() => {
+    // notifications 생성 및 핸들링 함수
+    const handleNotifications = async () => {
+      const fetchedNotifications = await getNotificationsBy(type)
+      const checkEmpty = type === Type.CLIENT ? isClientNotiEmpty : isCareGiverNotiEmpty
+      // MST 비어있는 경우: 초기화
+      if (checkEmpty) {
+        // 서버에서 받아온 notifications을 MST에 저장
+        initNotifications(fetchedNotifications)
+      }
+      // 비어있지 않는 경우: 새로운 알림 추가
+      else {
+        fetchedNotifications.forEach((item) => {
+          addNotification(item)
+        })
+      }
+    }
+
+    handleNotifications()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type])
+
+  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
   // TODO: 왜 전환하고나서, 첫번째 탭으로 이동하는가?
   // TODO: ➡️ initialRouteName prop 이 먹히질 않음 - 수정해야함
   // TODO: 아예 두 Tab.Navigator 를 하나로 merge 해버리면 나을지도?
   // TODO: ➡️ 우선 switchType 함수 내에 delay 와 navigate 함수로 임시방편용으로 해결함 - 전환이 어색하므로 보완 필요
-  // TODO: cg-mypage-screen 생성 이후에는 switchType 개선필요
-
   return (
     <>
       {type === Type.CLIENT && <ClientTabs />}

@@ -34,6 +34,7 @@ import {
   RegisterSubmitButton,
   PreBol14,
   PickerImage,
+  ConditionalButton,
 } from "../../../../components"
 import { images } from "../../../../../assets/images"
 import { Rating, ReviewContent, useStores } from "../../../../models"
@@ -64,6 +65,7 @@ export const WriteReviewScreen: FC<
   // * review store model
   const {
     reviewStoreModel: { reviews, getReviewId, removeReview, setReview },
+    userStore: { userDetail },
   } = useStores()
 
   // * 현재의 review model 객체의 id값
@@ -182,30 +184,22 @@ export const WriteReviewScreen: FC<
 
       // ? 방문 서비스의 경우, visiting-review api에 POST 요청을 보낸다.
       case "visiting":
-        postVisitingReview({
+        postVisitingReview(userDetail.id, {
           visitingId: petsitterId,
           bookingId,
           desc: reviewText,
           star: rating,
           images: selectedImages,
+        }).then((isSuccess) => {
+          console.log("isSuccess >>>", isSuccess)
+          // ? 리뷰 post를 성공한 경우
+          if (isSuccess) {
+            // ? 해당 리뷰 모델을 삭제한 후, 예약 내역 페이지로 돌아감
+            // TODO 리렌더링 (리뷰 작성 가능 상태 변경)
+            removeReview(reviewId)
+            navigation.goBack()
+          }
         })
-          .then((success) => {
-            console.log("success >>>", success)
-            // ? 리뷰 post를 성공한 경우
-            if (success) {
-              // ? 해당 리뷰 모델을 삭제한 후, 예약 내역 페이지로 돌아감
-              // TODO 리렌더링 (리뷰 작성 가능 상태 변경)
-              removeReview(reviewId)
-              navigation.goBack()
-            }
-            // ? 실패한 경우 catch에서 처리
-            else throw new Error("review post 과정에서 에러")
-          })
-          .catch((err) => {
-            // ! 임시 문구로 넣음
-            alert("처리 중에 문제가 발생했습니다.\n다시 시도해주세요.")
-            console.error("[write-review-screen] 리뷰 post 에러 >>>", err)
-          })
         break
       default:
         break
@@ -245,7 +239,7 @@ export const WriteReviewScreen: FC<
             {/* // * title text */}
             <PreBol20 text="이용은 어떠셨나요?" color={HEAD_LINE} style={{ marginTop: 16 }} />
             <Row style={{ marginTop: 6 }}>
-              <PreBol20 text="해당 케어기버에 대한 " color={HEAD_LINE} />
+              <PreBol20 text="해당 펫시터에 대한 " color={HEAD_LINE} />
               <UnderlineText>
                 <PreBol20 text="후기를 남겨주세요!" color={HEAD_LINE} />
               </UnderlineText>
@@ -292,11 +286,7 @@ export const WriteReviewScreen: FC<
         </View>
       </ScrollView>
       {/* //* 확인 버튼 */}
-      <RegisterSubmitButton
-        text="확인"
-        style={{ position: "absolute", bottom: 0 }}
-        onPress={handleSubmit}
-      />
+      <ConditionalButton label="확인" isActivated onPress={handleSubmit} />
     </Screen>
   )
 })

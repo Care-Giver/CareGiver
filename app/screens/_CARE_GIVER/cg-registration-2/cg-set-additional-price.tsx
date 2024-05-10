@@ -79,7 +79,7 @@ export const CgSetAdditionalPrice = observer(function CgSetAdditionalPrice(
         {/* // - https://stackoverflow.com/questions/34624100/simulate-display-inline-in-react-native */}
         <View style={{ marginTop: 8 }}>
           <Text style={{ lineHeight: 18 }}>
-            <PreReg12 text={`케어기버께서 예약을 진행하실 때 `} color={BODY} />
+            <PreReg12 text={`펫시터께서 예약을 진행하실 때 `} color={BODY} />
             <PreBol12 text="강아지의 크기에 따라 추가적으로 받게 되는 금액" color={BODY} />
             <PreReg12 text="입니다. 앞서 설정하신 " color={BODY} />
             <PreBol12 text="기본 예약 요금에 더해져서 계산" color={BODY} />

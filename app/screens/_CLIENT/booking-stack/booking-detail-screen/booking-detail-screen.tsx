@@ -1,5 +1,14 @@
-import React, { FC, useEffect, useMemo, useState } from "react"
-import { Pressable, View, StyleSheet, Image, ViewStyle, Linking, ScrollView } from "react-native"
+import React, { FC, useEffect, useMemo, useRef, useState } from "react"
+import {
+  // Pressable,
+  View,
+  StyleSheet,
+  Image,
+  ViewStyle,
+  // Linking,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, navigate } from "#navigators"
@@ -8,6 +17,7 @@ import {
   CareSummary,
   CaregiverTypeButton,
   ConditionalButton,
+  CustomModal,
   DivisionLine,
   DivisionLineVertical,
   PreBol14,
@@ -18,6 +28,7 @@ import {
   RefundNote,
   Row,
   Screen,
+  CancelBookingBottomSheetModal,
 } from "#components"
 import {
   SHADOW_1,
@@ -29,7 +40,7 @@ import {
   DISABLED,
 } from "#theme"
 import { images } from "#images"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
+// import { MaterialCommunityIcons } from "@expo/vector-icons"
 import {
   BookingStatus,
   Creche,
@@ -37,6 +48,7 @@ import {
   RenamedCrecheBooking,
   RenamedVisitingBooking,
   Visiting,
+  cancelVisitingBooking,
   getCreche,
   getCrecheBooking,
   getPaymentById,
@@ -44,23 +56,53 @@ import {
   getVisitingBooking,
 } from "#api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
-import { price as priceFormatter } from "../../../../utils/format"
+import { price as priceFormatter, ratingRound } from "../../../../utils/format"
 import { alertModal } from "../../../../utils/alert-modal"
+import { useStores } from "#models"
+import Popover from "react-native-popover-view"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 
 export const BookingDetailScreen: FC<
   StackScreenProps<NavigatorParamList, "booking-detail-screen">
 > = observer(function BookingDetailScreen({ navigation, route }) {
   const { serviceType, crecheBookingId, visitingBookingId, paymentId } = route.params
+  const {
+    petStore: { getPetsByIds },
+  } = useStores()
 
   const [booking, setBooking] = useState<RenamedCrecheBooking & RenamedVisitingBooking>(null)
   const [petsitter, setPetsitter] = useState<Creche & Visiting>(null)
   const [payment, setPayment] = useState<PaymentColumns>(null)
+  const [showPopover, setShowPopover] = useState<boolean>(false)
+  const [cancelBookingModalOpen, setCancelBookingModalOpen] = useState<boolean>(false)
+
+  const cancelBookingBottomSheetModalRef = useRef<BottomSheetModal>(null)
+
+  const openCancelBookingBottomSheet = () => {
+    cancelBookingBottomSheetModalRef.current?.present()
+  }
+
+  // BookingStatus.WAITING 일때, 예약 취소 기능
+  const onCancelBookingSubmitted = (cancelReason) => {
+    cancelVisitingBooking({
+      visitingBookingId: booking.id,
+      reason: cancelReason,
+      isPetSitterCancel: false,
+    }).then((res) => {
+      if (res?.isSuccess) {
+        //
+        navigation.goBack()
+      }
+    })
+  }
 
   useEffect(() => {
     const id = serviceType === "creche" ? crecheBookingId : visitingBookingId
     const getBooking = serviceType === "creche" ? getCrecheBooking : getVisitingBooking
     //@ts-ignore
-    getBooking(id).then(setBooking)
+    // getBooking(id).then(setBooking)
+    // ! For testing
+    getBooking(id).then((b) => setBooking({ ...b, status: BookingStatus.WAITING }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -78,9 +120,9 @@ export const BookingDetailScreen: FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booking])
 
-  const serviceTypeKorean = serviceType === "creche" ? "방문" : "위탁"
+  const serviceTypeKorean = serviceType === "creche" ? "위탁" : "방문"
 
-  const isPhoneAndChatActivated =
+  const isChatActivated =
     booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.PROCEEDING
 
   const byStatus = useMemo(() => {
@@ -169,7 +211,7 @@ export const BookingDetailScreen: FC<
                   <Image style={styles.star} source={images.rating_star} />
 
                   <PreReg12
-                    text={`(${petsitter[serviceType].star})`}
+                    text={`(${ratingRound(petsitter[serviceType].star)})`}
                     color={SUB_HEAD_LINE}
                     style={{ marginLeft: 4 }}
                   />
@@ -189,47 +231,48 @@ export const BookingDetailScreen: FC<
                 </Row>
 
                 <Row mt={12} style={{ justifyContent: "space-between" }}>
-                  <Pressable
-                    style={[$pressableBox, SHADOW_1]}
-                    onPress={() => {
-                      if (!isPhoneAndChatActivated) {
-                        alertModal(
-                          "예약이 시작되기 전에는 전화할 수 없습니다.",
-                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
-                        )
-                        return
+                  {booking?.status === BookingStatus.WAITING ? (
+                    <Popover
+                      backgroundStyle={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
+                      popoverStyle={{ backgroundColor: "#F1F1F4", padding: 10 }}
+                      isVisible={showPopover}
+                      onRequestClose={() => setShowPopover(false)}
+                      from={
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                          <TouchableOpacity
+                            style={[$pressableBox, SHADOW_1]}
+                            onPress={() => setShowPopover(true)}
+                          >
+                            <PreReg14 text={"메시지 보내기"} color={DISABLED} />
+                          </TouchableOpacity>
+                        </View>
                       }
-                      Linking.openURL(
-                        `tel:+${petsitter[serviceType].__careGiver__.__user__.phoneNumber}`,
-                      )
-                    }}
-                  >
-                    <PreReg14
-                      text={"전화하기"}
-                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
-                    />
-                  </Pressable>
-                  <Pressable
-                    style={[$pressableBox, SHADOW_1]}
-                    onPress={() => {
-                      if (!isPhoneAndChatActivated) {
-                        alertModal(
-                          "예약이 시작되기 전에는 메시지를 보낼 수 없습니다.",
-                          "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
-                        )
-                        return
-                      }
-                      //@ts-ignore
-                      navigate("Chats")
-                    }}
-                  >
-                    <PreReg14
-                      text={"메시지 보내기"}
-                      color={isPhoneAndChatActivated ? HEAD_LINE : DISABLED}
-                    />
-                  </Pressable>
+                    >
+                      <PreReg12 text="펫시터가 예약을 승인하면 활성화됩니다." />
+                    </Popover>
+                  ) : (
+                    <TouchableOpacity
+                      style={[$pressableBox, SHADOW_1]}
+                      onPress={() => {
+                        if (!isChatActivated) {
+                          alertModal(
+                            "예약이 시작되기 전에는 메시지를 보낼 수 없습니다.",
+                            "펫시터가 예약을 수락할 때 까지 기다려 주세요.",
+                          )
+                          return
+                        }
+                        //@ts-ignore
+                        navigate("Chats")
+                      }}
+                    >
+                      <PreReg14
+                        text={"메시지 보내기"}
+                        color={isChatActivated ? HEAD_LINE : DISABLED}
+                      />
+                    </TouchableOpacity>
+                  )}
 
-                  <Pressable
+                  {/* <Pressable
                     style={[$pressableAlarmBox, SHADOW_1]}
                     onPress={() => {
                       alertModal("개발중 🏗️", "신고 기능은 준비중입니다.")
@@ -240,7 +283,7 @@ export const BookingDetailScreen: FC<
                       size={24}
                       color={"#707070"}
                     />
-                  </Pressable>
+                  </Pressable> */}
                 </Row>
               </View>
             </Row>
@@ -251,7 +294,7 @@ export const BookingDetailScreen: FC<
               address={booking?.location}
               start={booking.start}
               end={booking.end}
-              petIds={booking?.petIds}
+              pets={getPetsByIds(booking?.petIds)}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
               style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
@@ -306,9 +349,9 @@ export const BookingDetailScreen: FC<
               label={label}
               style={buttonStyle}
               labelTextColor={labelTextColor}
-              isActivated={false}
+              isActivated={booking.status === BookingStatus.WAITING}
               onPress={() => {
-                // TODO: WAITING 일때 예약 취소 기능 구현
+                setCancelBookingModalOpen(true)
               }}
             />
             {/* 환불 안내 */}
@@ -316,6 +359,35 @@ export const BookingDetailScreen: FC<
           </View>
         )}
       </ScrollView>
+
+      {/* 예약 취소 모달 */}
+      {booking?.status === BookingStatus.WAITING && (
+        <CustomModal
+          visibleState={cancelBookingModalOpen}
+          yesBtnText="네"
+          noBtnText="아니요"
+          image={images.cat_with_heart}
+          imageWidth={154}
+          imageHeight={120}
+          title={"예약을 정말 취소하시겠어요?"}
+          handleYesPress={() => {
+            if (booking?.status !== BookingStatus.WAITING) return
+
+            // BookingStatus.WAITING 일때, 예약 취소 기능
+            setCancelBookingModalOpen(false)
+            openCancelBookingBottomSheet()
+          }}
+          handleNoPress={() => {
+            setCancelBookingModalOpen(false)
+          }}
+        />
+      )}
+
+      <CancelBookingBottomSheetModal
+        ref={cancelBookingBottomSheetModalRef}
+        onSubmitted={onCancelBookingSubmitted}
+        mode="cancel"
+      />
     </Screen>
   )
 })

@@ -1,193 +1,314 @@
-import * as React from "react"
-//import { useState } from "react"
-import { StyleProp, View, ViewStyle, Image, StyleSheet, Pressable } from "react-native"
-import { observer } from "mobx-react-lite"
+import { View, Pressable, ImageBackground, StyleSheet, StyleProp, ViewStyle } from "react-native"
+import React, { useCallback, useEffect, useState } from "react"
+import { Row } from "../_BASIC/row/row"
 import {
-  PreBol16,
+  PreBol14,
+  PreMed14,
+  PreReg10,
   PreReg12,
-  PreBol12,
-  Row,
-  BASIC_BACKGROUND_PADDING_WIDTH,
-  DivisionLine,
   PreReg14,
-  PreMed12,
-} from "#components" //묵 추가
+} from "../_BASIC/custom-texts/custom-texts"
+import { images } from "../../../assets/images"
 import {
-  SUB_HEAD_LINE,
-  SHADOW_1,
+  DISABLED,
   GIVER_CASUAL_NAVY,
-  palette,
-  BODY,
-  CARE_NATURAL_BLUE,
+  HEAD_LINE,
+  HEIGHT,
   LIGHT_LINE,
-  SUCCESS_BLUE,
-} from "#theme" // 묵 추가
-import { images } from "#images"
-import { TouchableOpacity } from "react-native-gesture-handler"
-import { PressableButton } from "../_BUTTON/pressable-button/pressable-button"
-import { CgBooking } from "#api"
-import { format, parseISO } from "date-fns"
-import { ServiceTypeKorean } from "#models"
-import { ko } from "date-fns/locale"
-import { navigate } from "#navigators"
+  MIDDLE_LINE,
+  WIDTH,
+  palette,
+} from "../../theme"
+import { CaregiverTypeButton } from ".."
+import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
+import { profileImageUriHandler } from "../../utils/image-format-validate"
+import { BookingStatus, ReviewStatus } from "../../services/api"
 
-const ROOT: ViewStyle = {
-  justifyContent: "center",
-}
+type ServiceType = "visiting" | "creche"
 
-export interface BookingInfoCardProps {
-  /**
-   * 추가적인 padding, margin 을 줌으로써, 위치를 조정할 수 있습니다.
-   */
-  style?: StyleProp<ViewStyle>
+const setDateText = (time: Date, serviceType: ServiceType): string => {
+  console.log("dateTime", time)
+  console.log("serviceType", serviceType)
 
-  booking: CgBooking
+  const month = time.getMonth() + 1
+  const day = time.getDate()
 
-  visOrCre: ServiceTypeKorean | "ERR"
-}
-
-export const BookingInfoCard = observer(function BookingInfoCard(props: BookingInfoCardProps) {
-  const { style, booking, visOrCre } = props
-  //테스트용 useState
-  //const [careGiverReserve, setCareGiverReserve] = useState(CareGiverReserveDummy)
-
-  const { pets, address, name } = booking
-  //* 예약 상태
-  const status =
-    booking.status === "Pending"
-      ? "케어 예정"
-      : booking.status === "Proceeding"
-      ? "케어 진행중"
-      : "ERR"
-  //TODO 객체타입 확인 필요
-  const names = pets?.map((v) => {
-    //console.log("pet >>>>", v)
-    return {
-      petName: v?.name,
-      speciesName: v?.species.name,
-    }
-  })
-  const petsName = names?.map((v) => v.petName).join(" / ")
-  const speciesName = names?.map((v) => v.speciesName).join(" / ")
-
-  let schedule = ""
-  switch (visOrCre) {
-    case "위탁":
-      //! replace("Z", "+09:00") 는 현재 케어기버 DB 에 Time Zone Offset 이 없기 때문에 추가해준 것이다.
-      //TODO: DB 규칙 바뀌면, 코드 수정할 것.
-      schedule = `${format(parseISO(booking?.startDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
-        locale: ko,
-      })} - ${format(parseISO(booking?.endDate.replace("Z", "+09:00")), "yyyy.MM.dd(eee)", {
-        locale: ko,
-      })}`
-      break
-    case "방문":
-      schedule = `${format(
-        parseISO(booking?.startTime.replace("Z", "+09:00")),
-        "yyyy.MM.dd(eee) HH:mm",
-        {
-          locale: ko,
-        },
-      )} - ${format(parseISO(booking?.endTime.replace("Z", "+09:00")), "HH:mm", {
-        locale: ko,
-      })}`
-      break
-    default:
-      schedule = "ERR"
-      break
+  if (serviceType === "creche") {
+    return `${month}월 ${day}일`
+  } else {
+    const hours = time.getHours()
+    const minutes = time.getMinutes() === 0 ? "00" : time.getMinutes()
+    return `${month}월 ${day}일 ${hours}:${minutes}`
   }
+}
+
+export type BookingInfoCardProps = {
+  style?: StyleProp<ViewStyle>
+  onPress?: () => void // 카드 전체 클릭시
+  onPressCancelBooking?: () => void // "예약 취소" 클릭시
+  onPressReview?: () => void // 후기 버튼 ("후기 작성하기" | "나의 후기 보기") 클릭시
+  forceUpdate?: () => any
+  bookingId: number
+  petsitterId: number
+  start: string
+  end: string
+  serviceType: ServiceType
+  desc: string
+  isFavorite: false // TODO: 즐겨찾기 기능 추가시, boolean 으로 변경하기
+  profileImage: string | null
+  petsitterName: string
+} & (
+  | {
+      // 승인대기(=신청한 예약)
+      type: BookingStatus.WAITING
+    }
+  | {
+      // 서비스 완료(=지난 예약)
+      type: BookingStatus.COMPLETE
+      isCanceled: boolean
+      reviewStatus: ReviewStatus
+    }
+)
+
+export const BookingInfoCard = (props: BookingInfoCardProps) => {
+  const {
+    style,
+    onPress,
+    onPressCancelBooking,
+    onPressReview,
+    forceUpdate,
+    bookingId,
+    petsitterId,
+    start,
+    end,
+    serviceType,
+    desc,
+    isFavorite,
+    profileImage,
+    petsitterName,
+    type,
+  } = props
+  // const [isFavoriteState, setIsFavoriteState] = useState<boolean>(isFavorite)
+
+  // // * 찜 버튼 handler
+  // const handleLikeButton = useCallback(async () => {
+  //   // ? 서비스 타입에 따른 api body 생성 - 위탁("crecheId"), 방문("visitingId")
+  //   const updateFavoriteBody: UpdateFavoriteBody = {}
+  //   switch (serviceType) {
+  //     case "creche":
+  //       updateFavoriteBody.crecheId = petsitterId
+  //       break
+  //     case "visiting":
+  //       updateFavoriteBody.visitingId = petsitterId
+  //       break
+  //     default:
+  //       console.debug("[handleLikeButton] >>> 잘못된 serviceType")
+  //       return
+  //   }
+
+  //   // ? 이미 찜한 펫시터인 경우 - 찜 해제
+  //   if (isFavoriteState) {
+  //     const response = await deleteFavorite(updateFavoriteBody)
+  //     if (response.ok) {
+  //       setIsFavoriteState(false)
+  //       forceUpdate && forceUpdate()
+  //     }
+  //   }
+  //   // ? 찜을 하지 않은 펫시터인 경우 - 찜 설정
+  //   else {
+  //     const response = await createFavorite(updateFavoriteBody)
+  //     if (response.ok) {
+  //       setIsFavoriteState(true)
+  //       forceUpdate && forceUpdate()
+  //     }
+  //   }
+  // }, [isFavoriteState])
 
   return (
-    <View
-      style={[
-        styles.root,
-        SHADOW_1,
-        style,
-        {
-          borderWidth: status === "케어 진행중" ? 2 : null,
-          borderColor: status === "케어 진행중" ? CARE_NATURAL_BLUE : palette.white,
-        },
-      ]}
+    <Pressable
+      style={[styles.root, style]}
+      // 상세내역 보기
+      onPress={onPress}
     >
-      <Row style={styles.header}>
-        <PreMed12
-          text={status} // 실제 적용 시에는 props.name으로
-          color={
-            status === "케어 예정"
-              ? SUB_HEAD_LINE
-              : status === "케어 진행중"
-              ? SUCCESS_BLUE
-              : palette.white
-          }
-          style={{ marginRight: 20 }}
-        />
-        <TouchableOpacity
-          style={styles.goToDetail}
-          onPress={() => {
-            navigate("cg-booking-detail-screen", {
-              booking,
-              serviserviceTypeKoreanceTypeKorean: visOrCre,
-            })
-          }}
-        >
-          <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
-        </TouchableOpacity>
-      </Row>
+      {/* //* 펫시터 프로필 사진 */}
+      {/* // TODO default profile image 수정 */}
+      <ImageBackground
+        source={profileImageUriHandler(images.default_pet_image_60, "medium", profileImage)}
+        style={styles.profileImg}
+        imageStyle={{ borderRadius: 9 }}
+      >
+        <Row style={{ backgroundColor: "" }}>
+          <CaregiverTypeButton
+            text={serviceType === "creche" ? "위탁" : "방문"}
+            style={styles.typeBtn}
+          />
+          <CaregiverTypeButton
+            text={"펫시터"}
+            textColor={palette.white}
+            style={{ ...styles.typeBtn, marginLeft: 6 }}
+          />
+        </Row>
+      </ImageBackground>
 
-      <DivisionLine mv={8} />
-      <PreBol16 text={`${name} 님`} color={SUB_HEAD_LINE} />
-      <PreReg14 text={`펫: ${petsName}`} color={BODY} style={styles.content} />
-      <PreReg14 text={`종: ${speciesName}`} color={BODY} style={styles.contentDetail} />
-      <PreReg14 text={`케어 방식: ${visOrCre} 펫시팅`} color={BODY} style={styles.contentDetail} />
-      <PreReg14 text={`케어 장소: ${address}`} color={BODY} style={styles.contentDetail} />
-      <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles.contentDetail} />
-    </View>
+      {/* //* 예약 정보 */}
+      <View style={styles.bookingInfo}>
+        {/* //? 펫시터 이름 */}
+        <Row style={{ justifyContent: "space-between" }}>
+          <PreReg14 text={`${petsitterName}`} color={DISABLED} />
+          {/* //? 찜 버튼 */}
+          {/* //TODO: 즐겨찾기 기능 재정립 이후 다시 활성화 할 것. */}
+          {/* <Pressable onPress={handleLikeButton}>
+            <Image
+              style={styles.likeBtn}
+              source={
+                // ! force update 함수가 있는 경우, isFavorite param 값으로 (서버에 저장된 값으로) 직접 판별하고
+                // ! force update 함수가 없는 경우, isFavoriteState 값으로 간접적으로 판별한다.
+                (forceUpdate && isFavorite) || (!forceUpdate && isFavoriteState)
+                  ? images.filled_heart
+                  : images.empty_heart
+              }
+            />
+          </Pressable> */}
+        </Row>
+
+        {/* //* 체크인, 체크아웃 */}
+        <Row style={{ alignItems: "baseline" }}>
+          {/* //? 체크인 */}
+          <View>
+            <PreReg10 text={"체크인"} color={DISABLED} />
+            {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
+            <PreReg12
+              text={setDateText(new Date(start), serviceType)}
+              color={DISABLED}
+              style={{ marginTop: 4 }}
+            />
+          </View>
+
+          {/* //? division line */}
+          <PreReg12 text={"|"} color={MIDDLE_LINE} style={{ marginLeft: 3, marginRight: 8 }} />
+
+          {/* //? 체크아웃 */}
+          <View>
+            <PreReg10 text={"체크아웃"} color={DISABLED} />
+            {/* // TODO: date string 변환 함수 - 참고: reserve-date-box.tsx */}
+            <PreReg12
+              text={setDateText(new Date(end), serviceType)}
+              color={DISABLED}
+              style={{ marginTop: 4 }}
+            />
+          </View>
+        </Row>
+        {/* 신청한 예약 */}
+        {type === BookingStatus.WAITING ? (
+          <Row>
+            <Pressable onPress={onPressCancelBooking}>
+              <PreMed14 text={"예약 취소하기"} color={HEAD_LINE} />
+            </Pressable>
+            <PreReg12 text={"|"} color={MIDDLE_LINE} style={styles.divisionLine} />
+            <PreMed14 text={"승인 대기중"} color={DISABLED} />
+          </Row>
+        ) : null}
+
+        {/* 지난 예약 */}
+        {type === BookingStatus.COMPLETE ? (
+          <Row>
+            {/* //? 다시 예약하기 버튼 */}
+            {/* // FIXME: "다시 예약하기"는 유저 플로우가 어떻게 되는 건가? */}
+            {/* //TODO: 다시 예약하기 재정립 이후 다시 활성화 할 것. */}
+            {/* <Pressable onPress={handleAgainPress}>
+                  <PreMed14 text={"다시 예약하기"} color={HEAD_LINE} />
+                </Pressable> 
+            */}
+            {/* <PreReg12 text={"|"} color={MIDDLE_LINE} style={styles.divisionLine} /> */}
+
+            {/* //? 후기 버튼 */}
+            {props.type === BookingStatus.COMPLETE && props?.isCanceled ? (
+              // 취소한 경우
+              <Pressable disabled>
+                <PreMed14
+                  text={"후기 작성하기"}
+                  color={DISABLED}
+                  style={{ textDecorationLine: "line-through" }}
+                />
+                <PreReg10
+                  text={"취소한 예약은 후기를 작성할 수 없습니다."}
+                  color={DISABLED}
+                  mt={4 * HEIGHT}
+                  adjustsFontSizeToFit
+                />
+              </Pressable>
+            ) : (
+              // 이미 후기를 작성한 경우 | 아직 후기를 작성하지 않은 경우
+              <Pressable onPress={onPressReview}>
+                <PreBol14
+                  text={
+                    props.type === BookingStatus.COMPLETE && props?.reviewStatus === "Complete"
+                      ? "나의 후기 보기"
+                      : "후기 작성하기"
+                  }
+                  color={
+                    props.type === BookingStatus.COMPLETE && props?.reviewStatus === "Complete"
+                      ? HEAD_LINE
+                      : GIVER_CASUAL_NAVY
+                  }
+                />
+              </Pressable>
+            )}
+          </Row>
+        ) : null}
+      </View>
+    </Pressable>
   )
-})
+}
 
 const styles = StyleSheet.create({
   root: {
     width: "100%",
-    height: "auto",
     paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 16,
+    paddingVertical: 16,
+
+    flexDirection: "row",
     borderRadius: 8,
-    backgroundColor: "white",
-  },
-
-  header: {
-    justifyContent: "space-between",
-  },
-
-  blueDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 6,
-    backgroundColor: CARE_NATURAL_BLUE,
-
-    position: "absolute",
-    left: 10,
-    top: 10,
-    zIndex: 2,
-  },
-
-  goToDetail: {
-    width: "auto",
-    height: 24,
-    paddingHorizontal: 8,
     borderColor: LIGHT_LINE,
-    borderWidth: 2,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: "auto",
+    borderWidth: 1,
+
+    backgroundColor: palette.white,
+
+    // TODO: 그림자 부분 코드 정확하게 기입
+    shadowColor: GIVER_CASUAL_NAVY,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    // ! 바텀시트 열릴 때 바텀시트 위를 덮음
+    elevation: 1,
   },
 
-  content: {
-    marginTop: 12,
+  profileImg: {
+    // width: 12 * WIDTH,
+    // width: "auto",
+    height: 108,
+    flex: 1,
+    padding: 8,
   },
-  contentDetail: {
-    marginTop: 6,
+
+  typeBtn: {
+    backgroundColor: "rgba(17, 17, 17, 0.5)",
+    borderWidth: 0,
+  },
+
+  bookingInfo: {
+    width: "auto",
+    flex: 2,
+    marginLeft: 16 * WIDTH,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    paddingVertical: 7.5,
+  },
+
+  divisionLine: {
+    marginHorizontal: 8,
   },
 })

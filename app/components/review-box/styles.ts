@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   profileImg: {
     width: 28,
     height: 28,
+    borderRadius: 14,
   },
   moreBtn: {
     width: 3,

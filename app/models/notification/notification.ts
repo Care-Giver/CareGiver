@@ -1,5 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { format, formatDistanceToNow } from "date-fns"
+import { ko } from "date-fns/locale"
+import { Type } from "../user-store/user-store"
 
 /**
  * TypeScript 힌트를 위해, Model 에 대한 설명을 여기에 작성해주세요.
@@ -8,6 +11,8 @@ export const NotificationModel = types
   .model("Notification")
   .props({
     id: types.identifierNumber,
+    createAt: types.string,
+    updatedAt: types.string,
     title: types.string,
     content: types.string,
     senderName: types.string,
@@ -20,8 +25,38 @@ export const NotificationModel = types
     isDeleted: types.boolean,
   })
   .actions(withSetPropAction)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get type() {
+      return self.clientReceiverId ? Type.CLIENT : Type.CARE_GIVER
+    },
+
+    get createAtText() {
+      const d = new Date(self.createAt.replace("Z", "+09:00")) //! 케어기버 DB 는 UTC 시간이라서 +09:00 반드시 추가 해야 함.
+      const now = Date.now()
+      const diff = (now - d.getTime()) / 1000 // 현재 시간과의 차이(초)
+      // 1분 미만일땐 방금 전 표기
+      if (diff < 60 * 1) {
+        return "방금 전"
+      }
+
+      // 3일 미만일땐 시간차이 출력(몇시간 전, 몇일 전)
+      if (diff < 60 * 60 * 24 * 3) {
+        return formatDistanceToNow(d, { addSuffix: true, locale: ko })
+      }
+
+      // 그 외: 2024년 4월 28일 22:35
+      return format(d, "PPP p", { locale: ko })
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    check() {
+      self.isChecked = true
+    },
+
+    delete() {
+      self.isDeleted = true
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type NotificationType = Instance<typeof NotificationModel>
 export interface Notification extends NotificationType {}

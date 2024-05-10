@@ -1,6 +1,10 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { NotificationMessage } from "../../services/api/notification"
 import { NotificationModel } from "../notification/notification"
+import { withSetPropAction } from "../extensions/with-set-prop-action"
+import { Type } from "../user-store/user-store"
+import { getRootStore } from "../extensions/get-root-store"
+import _ from "lodash"
 
 /**
  * 로그인한 사용자의 알림 목록
@@ -10,6 +14,7 @@ import { NotificationModel } from "../notification/notification"
 export const NotificationStoreModel = types
   .model("NotificationStore")
   .props({ notifications: types.array(NotificationModel) })
+  .actions(withSetPropAction)
   .views((self) => ({
     //* 안 읽은 알림 개수반환
     get unreadNotificationCount() {
@@ -23,30 +28,80 @@ export const NotificationStoreModel = types
       return self.notifications.length === 0
     },
 
+    get isClientNotiEmpty() {
+      return self.notifications.filter((noti) => noti.type === Type.CLIENT).length === 0
+    },
+
+    get isCareGiverNotiEmpty() {
+      return self.notifications.filter((noti) => noti.type === Type.CARE_GIVER).length === 0
+    },
+
+    get hasClientUncheckedNoti() {
+      return self.notifications.some(
+        (noti) => noti.type === Type.CLIENT && !noti.isChecked && !noti.isDeleted,
+      )
+    },
+
+    get hasCareGiverUncheckedNoti() {
+      return self.notifications.some(
+        (noti) => noti.type === Type.CARE_GIVER && !noti.isChecked && !noti.isDeleted,
+      )
+    },
+
+    get notificationsByType() {
+      const type = getRootStore(self).userStore.type
+      return _.orderBy(
+        self.notifications.filter((noti) => noti.type === type),
+        ["createAt"],
+        ["desc"],
+      )
+    },
+
+    get notificationsByTypeWithoutDeleted() {
+      return _.orderBy(
+        this.notificationsByType.filter((item) => !item.isDeleted),
+        ["createAt"],
+        ["desc"],
+      )
+    },
+
     //* 모델 자신
     get self() {
       return self
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    //* 새로운 notification 객체 추가
+    //* 새로운 "유일한" notification 객체 추가
     addNotification(value: NotificationMessage) {
-      const id =
-        self.notifications.reduce((maxId, notification) => Math.max(maxId, notification.id), 0) + 1
+      console.log("🔷 addNotification |", value)
+
+      // 유일성 검증
+      const isAlreadyInList = self.notifications.some(
+        (notification) => notification.id === value.id,
+      )
+      if (isAlreadyInList) return
+
+      // 검증 통과시, 추가
       self.notifications.push({
-        id,
         ...value,
         isChecked: false,
         isDeleted: false,
       })
     },
+
     //* 서버에서 받아온 notification 객체들에 isChecked 프로퍼티를 추가하여 저장한다.
     //* MST가 비어있을 때만 사용한다.
-    // setNotifications(value: NotificationMessage[]) {
-    //   value.forEach((item) => {
-    //     this.addNotification(item)
-    //   })
-    // },
+    initNotifications(value: NotificationMessage[]) {
+      value.forEach((item) => {
+        this.addNotification({
+          ...item,
+          careGiverReceiverId: item.careGiverReceiverId || null,
+          clientReceiverId: item.clientReceiverId || null,
+        })
+      })
+      // self.setProp("notifications", value)
+    },
+
     //* 모든 notification을 isDeleted 처리한다.
     deleteAllNotifications() {
       self.notifications.forEach((item) => {
@@ -55,8 +110,9 @@ export const NotificationStoreModel = types
         }
       })
     },
+
     //* 확인하지 않았던 notification 객체를 확인한 상태로 바꾼다
-    setIsChecked() {
+    checkAllNotifications() {
       self.notifications.forEach((item) => {
         if (!item.isChecked) {
           item.isChecked = true
@@ -64,7 +120,10 @@ export const NotificationStoreModel = types
       })
     },
 
-    // NotificationStoreModel 모델을 초기화한다.
+    /**
+     * [❗️ 개발용 으로만 사용할 것]
+     * NotificationStoreModel 모델을 초기화한다.
+     */
     reset() {
       applySnapshot(self, {})
     },

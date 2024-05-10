@@ -1,15 +1,25 @@
 import React from "react"
-import { View, Image, Pressable, StatusBar, Platform } from "react-native"
+import { View, Image, Pressable, StatusBar, Platform, ViewStyle } from "react-native"
 import { images } from "#images"
 import { styles } from "./styles"
 import { HEADER_ROOT } from "../common-styles"
-import { SHADOW_1, palette } from "#theme"
+import { CARE_NATURAL_BLUE, SHADOW_1, palette } from "#theme"
 import { observer } from "mobx-react-lite"
 import { navigate } from "#navigators"
+import { useStores } from "#models"
+
+const $dot: ViewStyle = {
+  borderRadius: 6,
+  width: 6,
+  height: 6,
+  backgroundColor: CARE_NATURAL_BLUE,
+  position: "absolute",
+}
 
 export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
-  // console.log("HomeScreenHeader props:", props)
-
+  const {
+    notificationStore: { hasClientUncheckedNoti },
+  } = useStores()
   return (
     <>
       <StatusBar
@@ -27,7 +37,6 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
         {/* //? 알람 버튼 */}
         <Pressable
           onPress={() => {
-            // navigate("test-push-notification-screen")
             navigate("notification-screen")
           }}
           style={{
@@ -35,6 +44,7 @@ export const HomeScreenHeader = observer(function HomeScreenHeader(props) {
             marginRight: 16,
           }}
         >
+          {hasClientUncheckedNoti && <View style={$dot} />}
           <Image style={styles.bell} source={images.bell} />
         </Pressable>
       </View>

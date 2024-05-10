@@ -12,7 +12,7 @@ import {
 } from "#components"
 import { useStores } from "../../../models"
 import { Pressable, View, Image, ScrollView } from "react-native"
-import { BODY, GIVER_CASUAL_NAVY } from "#theme"
+import { BODY, DEVICE_SCREEN_HEIGHT, GIVER_CASUAL_NAVY, HEIGHT } from "#theme"
 import {
   GroupedVisitingAvailableTimesByDate,
   getVisitingAvailableTimes,
@@ -124,7 +124,7 @@ export const CgCalendarScreen: FC<
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         {hasPetsitterProfile ? (
           <>
@@ -158,10 +158,12 @@ export const CgCalendarScreen: FC<
               style={{
                 alignSelf: "center",
                 position: "absolute",
-                bottom: BOTTOM_TAB_BAR_HEIGHT + 16,
+                // bottom: BOTTOM_TAB_BAR_HEIGHT + 60,
+                top: 600 * HEIGHT,
                 backgroundColor: "white",
                 borderColor: GIVER_CASUAL_NAVY,
                 borderWidth: 2,
+                zIndex: 2,
               }}
               labelTextColor={GIVER_CASUAL_NAVY}
               onPress={() => {

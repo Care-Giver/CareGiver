@@ -80,7 +80,7 @@ export const CgBookingListScreen: FC<
           const serviceTypeKorean = item?.crecheBookingId ? "위탁" : "방문"
           return (
             <BookingInfoCardWithButton
-              onPressBookingDetail={() => {
+              onPress={() => {
                 navigate("cg-booking-detail-screen", { booking: item, serviceTypeKorean })
               }}
               booking={item}
@@ -98,11 +98,10 @@ export const CgBookingListScreen: FC<
                       // 거절
                       Alert.alert(
                         "해당 신청을 정말 거절하시겠어요?",
-                        `예약을 거절하면 해당 예약을 진행하실 수 없어요.\n(UI 개발중🏗️ - TODO: Modal, BottomSheet 으로 수정)`,
+                        `예약을 거절하면 해당 예약을 진행하실 수 없어요.`,
                         [
                           {
                             text: "취소",
-                            // onPress: () => console.log("취소"),
                           },
                           {
                             text: "거절하기",
@@ -130,7 +129,6 @@ export const CgBookingListScreen: FC<
                             [
                               {
                                 text: "취소",
-                                // onPress: () => console.log("취소"),
                               },
                               {
                                 text: "이동하기",
@@ -220,7 +218,8 @@ interface BookingInfoCardWithActionButtonProps {
   index: number
   serviceTypeKorean: ServiceTypeKorean
   mode: Mode
-  onPressBookingDetail: () => void
+  onPress?: () => void
+  onPressBookingDetail?: () => void
   style?: StyleProp<ViewStyle>
 }
 const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionButton(
@@ -232,6 +231,7 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
     index,
     serviceTypeKorean,
     mode,
+    onPress,
     onPressBookingDetail,
     style,
   } = props
@@ -241,7 +241,9 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
     petName: v.name,
     speciesName: v.species.name,
   }))
-  const postedAt = format(new Date(createAt), "yyyy.MM.dd(eee) HH:mm", { locale: ko })
+  const postedAt = format(new Date(createAt?.replace("Z", "+09:00")), "yyyy.MM.dd(eee) HH:mm", {
+    locale: ko,
+  })
   const petsName = names.map((v) => v.petName).join(" / ")
   const speciesName = names.map((v) => v.speciesName).join(" / ")
 
@@ -268,13 +270,17 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
   )
 
   return (
-    <View style={allStyles}>
+    <TouchableOpacity style={allStyles} onPress={onPress} disabled={!onPress}>
       {/* 첫번째 인덱스만 블루닷 */}
       {index === 0 && mode === "신청" && <View style={styles2.blueDot} />}
 
       <Row>
         <PreReg12 text={`${postedAt}`} color={DISABLED} />
-        <TouchableOpacity style={styles2.goToDetail} onPress={onPressBookingDetail}>
+        <TouchableOpacity
+          style={styles2.goToDetail}
+          onPress={onPressBookingDetail}
+          disabled={!onPressBookingDetail}
+        >
           <PreMed12 text="내역상세" color={SUB_HEAD_LINE} />
         </TouchableOpacity>
       </Row>
@@ -292,7 +298,7 @@ const BookingInfoCardWithButton = observer(function BookingInfoCardWithActionBut
       <PreReg14 text={`케어 일정: ${schedule}`} color={BODY} style={styles2.contentDetail} />
 
       {buttonComponent}
-    </View>
+    </TouchableOpacity>
   )
 })
 

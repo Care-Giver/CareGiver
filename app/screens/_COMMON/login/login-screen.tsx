@@ -41,7 +41,7 @@ import { images } from "#images"
 import { kakaoLogin } from "./kakao-login"
 import { naverLogin } from "./naver-login"
 import { appleLogin } from "./apple-login"
-import TEST_BUILD_VERSION from "../setting-screen/test-build-version"
+import BUILD_VERSION_TEXT from "../setting-screen/test-build-version"
 import dayjs from "dayjs"
 import {
   BottomSheetBackdrop,
@@ -175,7 +175,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         <Image source={images.cg_login_banner} style={styles.bannerImage} />
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
-          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
+          <PreReg14 text={BUILD_VERSION_TEXT} color={BODY} style={{ marginTop: 8 }} />
         </View>
 
         <View style={buttonBox}>

@@ -4,7 +4,7 @@ import { BookingStatus, CgBooking, ConfirmedBooking, RejectedBooking, WaitingBoo
 import _ from "lodash"
 
 /**
- * [케어기버 전용 모델]
+ * [펫시터 전용 모델]
  * - 펫시터 모드일 때 사용됩니다.
  * - 로그인한 펫시터 유저의 모든 예약 객체들을 저장하기 위해 사용됩니다.
  * - 데이터의 "갱신"은 이곳에서 이루어지지 않으며,

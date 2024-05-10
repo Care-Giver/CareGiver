@@ -35,7 +35,6 @@ import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorho
 import { CgSetServiceType } from "./cg-set-service-type"
 import { ratingRound } from "../../../utils/format"
 import _ from "lodash"
-import { subscribeNotification } from "../../../services/api/notification"
 
 export const CgMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-mypage-screen">
@@ -129,7 +128,7 @@ export const CgMypageScreen: FC<
               text={"기본 정보 관리"}
             />
 
-            {/* 케어기버 프로필 관리 */}
+            {/* 펫시터 프로필 관리 */}
             <TouchableOpacity
               style={styles.manageCgProfile}
               onPress={() => {
@@ -137,7 +136,7 @@ export const CgMypageScreen: FC<
               }}
             >
               <Row>
-                <PreBol16 text="케어기버 프로필 관리" />
+                <PreBol16 text="펫시터 프로필 관리" />
                 <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
               </Row>
 
@@ -233,30 +232,26 @@ export const CgMypageScreen: FC<
 
         <DivisionLine color={LIGHT_LINE} />
         {/* //* 결제 수단 및 쿠폰 버튼 */}
-        <MypageButton
+        {/* // TODO: UX/UI 기획 완료 후, 버튼 표시할 것. - 동작하는 기능들만 표시되어야 함 */}
+        {/* <MypageButton
           text="결제 수단 및 쿠폰"
           opacity={0.2}
           disabled={true}
           style={styles.sidePadding}
         />
+        <DivisionLine color={LIGHT_LINE} /> */}
+
+        <MypageButton
+          text="정산요청"
+          onPress={() => navigate("cg-request-earning-screen")}
+          style={styles.sidePadding}
+        />
 
         <DivisionLine color={LIGHT_LINE} />
+
         {/* //* 환경설정 버튼 */}
         <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
-
         <DivisionLine color={LIGHT_LINE} />
-
-        {/* <MypageButton
-          text="알림구독 테스트"
-          onPress={() => subscribeNotification(addNotification)}
-        /> */}
-
-        {/* <Pressable
-          style={{ margin: 20, backgroundColor: "black", width: "auto" }}
-          onPress={() => navigation.navigate("cg-request-earning-screen")}
-        >
-          <Text style={{ fontSize: 25, color: "white" }}>(정산요청스크린)</Text>
-        </Pressable> */}
       </ScrollView>
 
       {/* 펫시터 등록하기 바텀시트모달 - !항상 컴포넌트 최하단에 있을것! */}

@@ -7,7 +7,7 @@ import {
   PreReg16,
   Row,
   Screen,
-  PastBooking,
+  BookingInfoCard,
   DivisionLine,
   PreMed18,
   PreMed14,
@@ -22,13 +22,20 @@ import { styles } from "./styles"
 import { images } from "../../../../../assets/images"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import {
+  BookingStatus,
   CurrentBooking,
-  PreviousBookingParams,
+  PreviousBooking,
   getCurrentBookings,
   getFirstPreviousBooking,
   getMyWaitingBookings,
 } from "../../../../services/api"
 import { useQuery } from "@tanstack/react-query"
+import _ from "lodash"
+import { useFocusEffect } from "@react-navigation/native"
+import {
+  PreviousBookingAdaptor,
+  WaitingBookingAdaptor,
+} from "../../../../components/booking-info-card/booking-info-card-adaptor"
 
 // Define the refetch interval (30 seconds)
 const REFETCH_INTERVAL = 30 * 1000
@@ -39,13 +46,18 @@ export const AllBookingsScreen: FC<
   useShowBottomTab(navigation)
 
   // * dotsIndicator의 현재 인덱스를 나타내는 state
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndexInProgress, setActiveIndexInProgress] = useState(0)
   // * flatlist에서 viewable item이 바뀌면 할 일 -> activeIndex 변경
-  const onViewableChange = useCallback(({ viewableItems }) => {
-    // console.log("== viewable items ==")
-    // console.log(viewableItems)
+  const onViewableChangeInProgress = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
-      setActiveIndex(viewableItems[0].index || 0)
+      setActiveIndexInProgress(viewableItems[0].index || 0)
+    }
+  }, [])
+
+  const [activeIndexPast, setActiveIndexPast] = useState(0)
+  const onViewableChangePast = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setActiveIndexPast(viewableItems[0].index || 0)
     }
   }, [])
 
@@ -66,30 +78,40 @@ export const AllBookingsScreen: FC<
    *  CANCEL = "Cancel", // 유저가 예약 승낙 이후 취소한 경우
    *  REJECT = "Reject", // 예약을 거절한 경우
    */
-  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBookingParams | null>(
-    null,
-  )
+  const [firstPreviousBooking, setFirstPreviousBooking] = useState<PreviousBooking | null>(null)
 
-  // Use useQuery to fetch current bookings with a refetch interval
+  // 확정된 예약 내역 Polling
   const { data: currentBookingsData } = useQuery({
     queryKey: ["currentBookings"],
     queryFn: getCurrentBookings,
     refetchInterval: REFETCH_INTERVAL,
   })
 
-  // Use useQuery to fetch first previous booking with a refetch interval
+  // 신청한 예약 내역 Polling
+  const { data: waitingBookingsData } = useQuery({
+    queryKey: ["waitingBookings"],
+    queryFn: getMyWaitingBookings,
+    refetchInterval: REFETCH_INTERVAL,
+  })
+
+  // 지난 예약 내역 Polling
   const { data: firstPreviousBookingData } = useQuery({
     queryKey: ["firstPreviousBooking"],
     queryFn: getFirstPreviousBooking,
     refetchInterval: REFETCH_INTERVAL,
   })
 
-  // Use useQuery to fetch waiting bookings with a refetch interval
-  const { data: waitingBookingsData } = useQuery({
-    queryKey: ["waitingBookings"],
-    queryFn: getMyWaitingBookings,
-    refetchInterval: REFETCH_INTERVAL,
-  })
+  useFocusEffect(
+    useCallback(() => {
+      Promise.all([getCurrentBookings(), getMyWaitingBookings(), getFirstPreviousBooking()]).then(
+        ([currentBookings, waitingBookingsData, firstPreviousBooking]) => {
+          setCurrentBookings(currentBookings)
+          setWaitingBookings(waitingBookingsData.waitingBookings)
+          setFirstPreviousBooking(firstPreviousBooking)
+        },
+      )
+    }, []),
+  )
 
   useEffect(() => {
     if (currentBookingsData) {
@@ -98,10 +120,51 @@ export const AllBookingsScreen: FC<
     if (firstPreviousBookingData) {
       setFirstPreviousBooking(firstPreviousBookingData)
     }
+    // ! For testing
+    // if (true) {
+    //   setFirstPreviousBooking({
+    //     visitingBookingId: 1,
+    //     visitingId: 1,
+    //     paymentId: 16,
+    //     startTime: "2022-09-15T04:00:00.000Z",
+    //     endTime: "2022-09-15T06:00:00.000Z",
+    //     petSitterName: "지우",
+    //     desc: "강아지 3년 기른 경력으로 보살핍니다.",
+    //     profileImage: null,
+    //     isCanceled: false,
+    //     isFavorite: true,
+    //     reviewStatus: "Waiting",
+    //   })
+    // }
     if (waitingBookingsData) {
       setWaitingBookings(waitingBookingsData.waitingBookings)
     }
-  }, [currentBookingsData, firstPreviousBookingData, waitingBookingsData])
+    // ! For testing
+    // if (true) {
+    //   setWaitingBookings([
+    //     {
+    //       desc: "지치지 않는 체력을 가진 강아지 환영합니다!",
+    //       endTime: "2024-03-23T15:00:00.000Z",
+    //       paymentId: 206,
+    //       petSitterName: "이영민",
+    //       profileImage:
+    //         "https://caregiverbucket.s3.ap-northeast-2.amazonaws.com/1708278430560petsitter_lee.jpg",
+    //       ratings: 3.6666666666666665,
+    //       reviewCount: 3,
+    //       startTime: "2024-03-23T16:00:00.000Z",
+    //       status: "Waiting",
+    //       visitingBookingId: 52,
+    //       visitingId: 33,
+    //     },
+    //   ])
+    // }
+  }, [
+    currentBookingsData,
+    //
+    firstPreviousBookingData,
+    waitingBookingsData,
+  ])
+
   return (
     <Screen style={{ paddingHorizontal: 0 }}>
       <ScrollView
@@ -120,7 +183,7 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={currentBookings}
+                data={_.orderBy(currentBookings, ["startTime"], ["asc"])}
                 renderItem={({ index, item }) => (
                   <InProgressBooking
                     currentBooking={item}
@@ -141,12 +204,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangeInProgress}
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginTop: 14 }]}>
                 {currentBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                  <View
+                    key={index}
+                    style={index === activeIndexInProgress ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>
@@ -175,25 +241,22 @@ export const AllBookingsScreen: FC<
                 contentContainerStyle={{
                   paddingVertical: 10,
                 }}
-                data={waitingBookings}
+                data={_.orderBy(waitingBookings, ["startTime"], ["asc"])}
                 renderItem={({ index, item }) => (
-                  // TODO: waitingBookings 객체를 담을 수 있도록,
-                  // TODO: PastBooking 컴포넌트 업데이트 하기.
-                  // TODO: 이름도 변경해야 할듯? - WaitingPastBooking ?
-                  <PastBooking
-                    currentBooking={item}
-                    profileImage={item?.profileImage}
-                    serviceType={"visiting"}
-                    petsitterType={"visiting"}
-                    petsitterId={item?.visitingId}
-                    bookingId={item?.visitingBookingId}
-                    petsitterName={item?.petSitterName}
-                    desc={item?.desc}
-                    startDate={item?.startTime}
-                    endDate={item?.endTime}
-                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
+                  <BookingInfoCard
                     key={index}
+                    style={{ width: DEVICE_WINDOW_WIDTH - 2 * BASIC_BACKGROUND_PADDING_WIDTH }}
+                    {...new WaitingBookingAdaptor(item).adapt()}
                     onPress={() => {
+                      navigate("booking-detail-screen", {
+                        crecheBookingId: item?.crecheBookingId,
+                        visitingBookingId: item?.visitingBookingId,
+                        paymentId: item?.paymentId,
+                        serviceType: item?.crecheBookingId ? "creche" : "visiting",
+                      })
+                    }}
+                    onPressCancelBooking={() => {
+                      // TODO: 스크린 이동하지 않고, 이 곳에서 바로 예약 취소
                       navigate("booking-detail-screen", {
                         crecheBookingId: item?.crecheBookingId,
                         visitingBookingId: item?.visitingBookingId,
@@ -209,12 +272,15 @@ export const AllBookingsScreen: FC<
                 viewabilityConfig={{
                   viewAreaCoveragePercentThreshold: 51,
                 }}
-                onViewableItemsChanged={onViewableChange}
+                onViewableItemsChanged={onViewableChangePast}
                 decelerationRate={"fast"}
               />
               <Row style={[styles.dotsContainer, { marginBottom: 14 }]}>
                 {waitingBookings.map((item, index) => (
-                  <View key={index} style={index === activeIndex ? styles.activeDot : styles.dot} />
+                  <View
+                    key={index}
+                    style={index === activeIndexPast ? styles.activeDot : styles.dot}
+                  />
                 ))}
               </Row>
             </View>
@@ -252,7 +318,43 @@ export const AllBookingsScreen: FC<
           </Row>
 
           {firstPreviousBooking ? (
-            <PastBooking style={{ marginTop: 13 }} {...firstPreviousBooking} />
+            <BookingInfoCard
+              style={{ marginTop: 13 }}
+              {...new PreviousBookingAdaptor(firstPreviousBooking).adapt()}
+              onPressReview={() => {
+                const {
+                  serviceType,
+                  bookingId,
+                  profileImage,
+                  petsitterName,
+                  desc,
+                  petsitterId,
+                } = new PreviousBookingAdaptor(firstPreviousBooking).adapt()
+
+                // 이미 후기 작성 완료된 경우 - 후기 보기 페이지로
+                if (firstPreviousBooking?.reviewStatus === "Complete") {
+                  navigate("view-review-screen", {
+                    serviceType,
+                    bookingId,
+                    profileImage,
+                    petsitterName,
+                    desc,
+                  })
+                }
+                // 후기를 아직 작성하지 않은 경우
+                else {
+                  navigate("write-review-screen", {
+                    profileImage,
+                    petsitterName,
+                    serviceType,
+                    petsitterType: serviceType,
+                    petsitterId,
+                    bookingId,
+                    desc,
+                  })
+                }
+              }}
+            />
           ) : (
             <View
               style={{

@@ -9,7 +9,6 @@ import Config from "react-native-config"
 
 const notion = new Client({ auth: Config.NOTION_API_KEY })
 
-console.log("✅", Config.TEST_VALUE)
 console.log("✅", Config.NOTION_API_KEY)
 console.log("✅", Config.NOTION_DATABASE_ID)
 

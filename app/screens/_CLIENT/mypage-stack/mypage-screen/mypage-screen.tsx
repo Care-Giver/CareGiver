@@ -22,7 +22,6 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "#models"
 import { useShowBottomTab } from "../../../../utils/hooks"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
-import { subscribeNotification } from "../../../../services/api/notification"
 
 export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-screen">> = observer(
   function MypageScreen({ navigation, route }) {
@@ -119,7 +118,7 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
                       key={index}
                       petImageUri={item?.images ? item.images[0] : null}
                       name={item.name}
-                      style={{ marginLeft: array.length >= 2 && index !== 0 ? 8 * WIDTH : null }}
+                      style={{ marginLeft: array?.length >= 2 && index !== 0 ? 8 * WIDTH : null }}
                     />
                   ))}
                 </View>
@@ -167,11 +166,6 @@ export const MypageScreen: FC<StackScreenProps<NavigatorParamList, "mypage-scree
           <MypageButton text="환경설정" onPress={handleSettingPress} style={styles.sidePadding} />
 
           <DivisionLine color={LIGHT_LINE} />
-
-          {/* <MypageButton
-            text="알림구독 테스트"
-            onPress={() => subscribeNotification(addNotification)}
-          /> */}
         </ScrollView>
       </Screen>
     )
