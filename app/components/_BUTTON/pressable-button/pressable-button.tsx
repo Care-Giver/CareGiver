@@ -1,6 +1,6 @@
 import _ from "lodash"
 import * as React from "react"
-import { Pressable, PressableProps, StyleProp, ViewStyle, TextStyle } from "react-native"
+import { TouchableOpacity, PressableProps, StyleProp, ViewStyle, TextStyle } from "react-native"
 
 interface PressableButtonProps extends PressableProps {
   /**
@@ -38,13 +38,13 @@ export const PressableButton = (props: PressableButtonProps) => {
   const content = children
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[style, viewStyle]}
-      onPress={_.debounce(onPress, 1000)}
+      onPress={_.debounce(onPress, 300)}
       disabled={isDisabled}
       {...rest}
     >
       {content}
-    </Pressable>
+    </TouchableOpacity>
   )
 }

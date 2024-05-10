@@ -8,39 +8,52 @@ import { BASIC_BACKGROUND_PADDING_WIDTH } from "../../_BASIC/screen/screen"
 import { ConditionalButton } from "../../_BUTTON/conditional-button/conditional-button"
 
 interface CancelBookingBottomSheetModalProps {
-  onSubmitted?: (cancelReason: string) => void
+  onSubmitted: (cancelReason: string) => void
+  mode: "cancel" | "cg-cancel"
 }
 export const CancelBookingBottomSheetModal = forwardRef<
   BottomSheetModal,
   CancelBookingBottomSheetModalProps
 >((props, ref) => {
-  const { onSubmitted } = props
+  const { onSubmitted, mode } = props
 
   const [selected, setSelected] = useState("")
   const [input, setInput] = useState("")
 
+  const isActivated = useMemo(() => {
+    if (selected === "") return false
+    if (selected === "기타(직접 입력 / 최대 30자)" && input.length === 0) return false
+
+    return true
+  }, [input.length, selected])
+
   const snapPoints = useMemo(() => ["46%"], [])
 
   const onSubmit = useCallback(() => {
-    if (selected === "" || (selected === "기타(직접 입력 / 최대 30자)" && input.length === 0))
-      return
-
     // FIXME: 🔻 타입스크립트 에러 어떻게 해결 함?
-    ref?.current?.dismiss()
+    ref?.current?.dismiss() // 바텀시트 숨김
 
     const cancelReason = input === "" ? selected : input
-    onSubmitted && onSubmitted(cancelReason)
+    onSubmitted(cancelReason) // 예약 취소 API 동작
   }, [input, onSubmitted, ref, selected])
 
-  const reason = useMemo(
-    () => [
-      "예약이 필요없어졌어요.",
-      "실수로 예약했어요.",
-      "펫시터가 마음에 들지 않아요.",
-      "기타(직접 입력 / 최대 30자)",
-    ],
-    [],
-  )
+  const reasons = useMemo(() => {
+    switch (mode) {
+      case "cancel":
+        return [
+          "예약이 필요없어졌어요.",
+          "실수로 예약했어요.",
+          "펫시터가 마음에 들지 않아요.",
+          "기타(직접 입력 / 최대 30자)",
+        ]
+      case "cg-cancel":
+        return [
+          "예약을 잘못 수락했어요.",
+          "건강에 문제가 생겨 돌봄을 진행할 수 없어요.",
+          "기타(직접 입력 / 최대 30자)",
+        ]
+    }
+  }, [mode])
 
   const renderBackdrop = useCallback(
     (props) => (
@@ -64,9 +77,15 @@ export const CancelBookingBottomSheetModal = forwardRef<
       backgroundStyle={{ borderRadius: 20 }}
       style={styles.bottomSheetContainer}
     >
-      <PreBol18 text="펫시터에게 전달할 거절 메시지를 선택해주세요." mt={20} mb={32} />
+      <PreBol18
+        text={`${
+          mode === "cancel" ? "펫시터" : "클라이언트"
+        }에게 전달할 취소 메시지를 선택해주세요.`}
+        mt={20}
+        mb={32}
+      />
       <View style={styles.selectReasonContainer}>
-        {reason.map((item, index) => (
+        {reasons.map((item, index) => (
           <TouchableOpacity style={styles.reason} key={index} onPress={() => setSelected(item)}>
             <Image
               key={item}
@@ -78,7 +97,7 @@ export const CancelBookingBottomSheetModal = forwardRef<
         ))}
       </View>
 
-      {selected === "기타(직접 입력 / 최대 30자)" ? (
+      {selected === "기타(직접 입력 / 최대 30자)" && (
         <BottomSheetTextInput
           style={styles.textInput}
           placeholder="예약 취소 사유를 직접 입력해주세요."
@@ -88,14 +107,11 @@ export const CancelBookingBottomSheetModal = forwardRef<
           blurOnSubmit
           maxLength={30}
         />
-      ) : null}
+      )}
 
       <ConditionalButton
         label={"확인"}
-        isActivated={
-          selected !== "기타(직접 입력 / 최대 30자)" ||
-          (selected === "기타(직접 입력 / 최대 30자)" && input.length > 0)
-        }
+        isActivated={isActivated}
         onPress={onSubmit}
         style={styles.submit}
       />

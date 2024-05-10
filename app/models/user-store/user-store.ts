@@ -8,6 +8,7 @@ import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
 import { getStreamToken, streamChatClient } from "../../services/api/stream"
 import { alertModal } from "../../utils/alert-modal"
 import { AddressLocation } from "#screens"
+import { getRootStore } from "../extensions/get-root-store"
 
 export enum Type {
   CARE_GIVER = "CARE_GIVER",
@@ -372,8 +373,9 @@ export const UserStoreModel = types
       //! 중요: 로그아웃시, stream chat 유저와의 연결을 끊어야 합니다. 그렇지 않으면 다른 계정으로 로그인시, 정상적으로 stream chat 을 사용할 수 없습니다.
       streamChatClient.disconnectUser()
 
-      // UserStoreModel 모델 초기화
-      this.reset()
+      // 전체 MST 초기화
+      const rootStore = getRootStore(self)
+      rootStore.resetRootStore()
 
       // TODO: provider 마다, 추가로 해야 할 동작이 다를 것임
       /*         

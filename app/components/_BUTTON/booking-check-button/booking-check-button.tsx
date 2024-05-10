@@ -1,10 +1,10 @@
-import React from "react"
-import { StyleProp, ViewStyle, StyleSheet, Pressable, Image } from "react-native"
+import React, { useEffect } from "react"
+import { StyleProp, ViewStyle, StyleSheet, Image, TouchableOpacity, View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { RowRoundedBox } from "../../_BASIC/row-rounded-box/row-rounded-box"
 import { PreBol16, PreMed16 } from "../../_BASIC/custom-texts/custom-texts"
-import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY } from "#theme"
+import { CARE_NATURAL_BLUE, GIVER_CASUAL_NAVY, palette } from "#theme"
 import { images } from "#images"
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 export interface BookingCheckButtonProps {
   /**
@@ -24,30 +24,52 @@ export const BookingCheckButton = observer(function BookingCheckButton(
   props: BookingCheckButtonProps,
 ) {
   const { style, bookingCount, onPress } = props
-  const allStyles = Object.assign({}, styles.root, style)
+
+  const height = useSharedValue(0)
+  const heightAnimation = useAnimatedStyle(() => {
+    return { height: height.value }
+  }, [])
+
+  useEffect(() => {
+    height.value = withSpring(48)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <RowRoundedBox style={allStyles}>
-      <PreMed16
-        style={{ letterSpacing: -0.5 }}
-        text={`${bookingCount}개의 새로 들어온 신청이 있어요!`}
-      />
-      <Pressable style={{ flexDirection: "row" }} onPress={onPress}>
-        <PreBol16 color={GIVER_CASUAL_NAVY} text="확인하기" />
-        <Image
-          source={images.arrow_right_navy}
-          style={{ width: 16, height: 16, alignSelf: "center", marginLeft: 4 }}
+    <Animated.View style={[styles.root, style, heightAnimation]}>
+      <TouchableOpacity style={styles.inner} onPress={onPress}>
+        <PreMed16
+          style={{ letterSpacing: -0.5 }}
+          text={`${bookingCount}개의 새로 들어온 신청이 있어요!`}
         />
-      </Pressable>
-    </RowRoundedBox>
+        <View style={{ flexDirection: "row" }}>
+          <PreBol16 color={GIVER_CASUAL_NAVY} text="확인하기" />
+          <Image
+            source={images.arrow_right_navy}
+            style={{ width: 16, height: 16, alignSelf: "center", marginLeft: 4 }}
+          />
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   )
 })
 
 const styles = StyleSheet.create({
   root: {
+    width: "100%",
+    height: 0, // to be 48
+    backgroundColor: palette.white,
+    alignItems: "center",
+    borderWidth: 2,
+    borderRadius: 8,
     borderColor: CARE_NATURAL_BLUE,
+  },
+  inner: {
+    borderRadius: 8,
     flexDirection: "row",
-    display: "flex",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 15,
   },

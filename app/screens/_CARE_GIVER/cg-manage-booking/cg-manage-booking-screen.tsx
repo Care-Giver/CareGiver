@@ -7,6 +7,7 @@ import {
   BookingCheckButton,
   CgBookingList,
   DateInfo,
+  PreBol20,
   Screen,
   SimpleCalendar,
 } from "#components"
@@ -70,11 +71,15 @@ export const CgManageBookingScreen: FC<
   return (
     <Screen testID="ManageBooking" style={{ paddingHorizontal: 0 }}>
       <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-        <BookingCheckButton
-          style={{ zIndex: 1, marginVertical: 16 }}
-          bookingCount={waitingBookings?.length}
-          onPress={() => navigate("cg-booking-list-screen")}
-        />
+        <PreBol20 text="펫시팅 예약 관리" mv={20} />
+
+        {waitingBookings?.length !== 0 && (
+          <BookingCheckButton
+            style={{ zIndex: 1, marginBottom: 10 }}
+            bookingCount={waitingBookings?.length}
+            onPress={() => navigate("cg-booking-list-screen")}
+          />
+        )}
       </View>
 
       <SimpleCalendar

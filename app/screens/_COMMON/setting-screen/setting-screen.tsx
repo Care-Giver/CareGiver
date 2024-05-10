@@ -1,4 +1,4 @@
-import { View, Text, Modal, Image, Pressable, Platform } from "react-native"
+import { View, Text, Modal, Image, Pressable, Platform, Alert, Linking } from "react-native"
 import React, { FC, useState } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList, goBack } from "#navigators"
@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { MypageButton, PreMed16, PreReg14, Screen, CustomModal } from "#components"
 import { HEAD_LINE, BODY, HEIGHT } from "#theme"
 import { styles } from "./styles"
-import TEST_BUILD_VERSION from "./test-build-version"
+import BUILD_VERSION_TEXT from "./test-build-version"
 import { images } from "#images"
 import { useStores } from "#models"
 import { request, PERMISSIONS, check, RESULTS } from "react-native-permissions"
@@ -42,7 +42,24 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
 
     // ? 모달창 - 회원 탈퇴 버튼 클릭시 동작하는 함수
     const handleWithdrawPress = () => {
-      alert("회원 탈퇴")
+      Alert.alert(
+        "회원 탈퇴",
+        "케어기버 공식 이메일 dev@caregiver.pet 으로 탈퇴 문의를 주시면, 회원 정보 삭제를 위해 7 영업일 내에 이메일로 연락 드리겠습니다.",
+        [
+          {
+            text: "닫기",
+          },
+          {
+            text: "문의하기",
+            //@ts-ignore
+            onPress: () => {
+              Linking.openURL("mailto: dev@caregiver.pet")
+              setWithdrawModalVisible(false)
+            },
+          },
+        ],
+        { cancelable: true },
+      )
       // TODO
       //~ 1. unlink kakaotalk && logut
       //~ 2. 회원탈퇴를 위한 1:1 Q&A 연결
@@ -53,7 +70,7 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
         {/* //* 버전 정보 */}
         <View style={styles.versionBox}>
           <PreMed16 text="버전 정보" color={HEAD_LINE} />
-          <PreReg14 text={TEST_BUILD_VERSION} color={BODY} style={{ marginTop: 8 }} />
+          <PreReg14 text={BUILD_VERSION_TEXT} color={BODY} style={{ marginTop: 8 }} />
         </View>
         {/* //? division line */}
         <View style={styles.divisionLine} />
