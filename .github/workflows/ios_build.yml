@@ -1,0 +1,29 @@
+name: Build Ios Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: iOS Build Test
+    runs-on: macOS-latest
+
+    steps:
+      - name: Show self-hosted machine infomation
+        run: uname -a
+
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.1
+
+      - name: Checkout repo from main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Install yarn dependency
+        run: yarn install
+
+      - name: Install pod dependency
+        run: |
+          cd ios && pod install --repo-update --clean-install
