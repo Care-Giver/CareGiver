@@ -59,12 +59,12 @@ export const CgSetPrice = observer(function CgSetPrice(props: CgSetPriceProps) {
       {/* // * description container */}
       <View style={commonStyles.descriptionContainer}>
         <PreBol14
-          text={`이 지역 ${serviceText} 케어기버가 받는 평균 요금은?`}
+          text={`이 지역 ${serviceText} 펫시터가 받는 평균 요금은?`}
           color={SUB_HEAD_LINE}
         />
         <PreReg12
           style={{ marginTop: 8 }}
-          text="이 지역에서 서비스하는 케어기버 분들은 보통"
+          text="이 지역에서 서비스하는 펫시터 분들은 보통"
           color={BODY}
         />
         {/* // ? 적정가 범위 */}

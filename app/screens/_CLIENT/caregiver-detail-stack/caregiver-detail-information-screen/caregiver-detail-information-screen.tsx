@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { Platform, Pressable, ScrollView, View, Modal, Text, Animated } from "react-native"
+import { Platform, TouchableOpacity, ScrollView, View, Modal, Text, Animated } from "react-native"
 import { observer } from "mobx-react-lite"
 import {
   CaregiverCertificate,
@@ -247,7 +247,7 @@ export const CaregiverDetailInformationScreen: FC<
         />
 
         <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH, alignSelf: "center" }}>
-          {/* //* 케어기버 이름/ 별점/ 리뷰  */}
+          {/* //* 펫시터 이름/ 별점/ 리뷰  */}
           <CaregiverNameStarReview
             style={{ marginTop: 36 }}
             profileImage={profileImage}
@@ -384,7 +384,11 @@ export const CaregiverDetailInformationScreen: FC<
                 ))}
             </View>
           ) : (
-            <View>{/*  */}</View>
+            <View style={{ alignItems: "center" }}>
+              <DivisionLine color={LBG} />
+              <PreReg14 text="아직 등록된 댓글이 없어요" color={BODY} mv={28} />
+              <DivisionLine color={LBG} />
+            </View>
           )}
         </View>
         <Footer mt={FOOTER_CONTENT_GAP} />
@@ -398,7 +402,7 @@ export const CaregiverDetailInformationScreen: FC<
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
-        <Pressable
+        <TouchableOpacity
           style={{
             marginTop: 28,
             marginBottom: 16,
@@ -407,7 +411,7 @@ export const CaregiverDetailInformationScreen: FC<
           onPress={onPressCommentOption}
         >
           <PreMed16 text={isUserComment ? "수정하기" : "답글달기"} />
-        </Pressable>
+        </TouchableOpacity>
       </BottomSheetModal>
 
       {/* //? 예약 신청하기 버튼 */}

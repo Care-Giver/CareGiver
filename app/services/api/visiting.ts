@@ -35,7 +35,7 @@ interface CreateVisitingResult {
   visiting?: VistingPetsitter // 성공시, 생성된 방문 객체
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 방문 펫시터를 생성한다
  *
  */
@@ -87,7 +87,7 @@ interface UpdateVisitingResult {
   visiting?: VistingPetsitter // 성공시, 업데이트된 방문 객체에서, 필요없는 필드들을 제거한 객체 ( _.omit() 참고 )
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 방문 펫시터 정보를 수정한다
  *
  */
@@ -161,7 +161,7 @@ interface GetVisitingCareGiverResult {
   visiting?: VistingPetsitter
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 로그인 유저가 등록한 모든 방문 펫시팅 정보를 가져온다.
  */
 export const getVisitingCareGiver = async (): Promise<GetVisitingCareGiverResult> => {

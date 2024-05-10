@@ -312,7 +312,7 @@ export const PetsitterStoreModel = types
     },
 
     /**
-     * [케어기버 전용]
+     * [펫시터 전용]
      * 보호자와의 채팅방(Channel)을 생성합니다.
      */
     async createChannelWith(otherStreamUserId: string) {

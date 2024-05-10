@@ -5,9 +5,9 @@ import { NavigatorParamList, navigate } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   BookingCheckButton,
-  BookingInfoCardProps,
-  BookingList,
+  CgBookingList,
   DateInfo,
+  PreBol20,
   Screen,
   SimpleCalendar,
 } from "#components"
@@ -17,18 +17,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useStores } from "#models"
 import _ from "lodash"
 import { View } from "react-native"
-
-//테스트용 더미 데이터
-const CareGiverReserveDummy: BookingInfoCardProps = {
-  id: "1",
-  name: "강영묵",
-  serviceType: "visit",
-  caregiverType: "trainer",
-  petname: "봉봉이",
-  species: "푸들",
-  petservices: ["산책, 목욕, 미용"],
-  address: "경기도 성남시 판교동",
-}
 
 // 30초마다 Refetch
 const INTERVAL = 30 * 1000
@@ -61,22 +49,37 @@ export const CgManageBookingScreen: FC<
 
   //console.log("cgManageBookingScreen >>> ", status, data, error, isFetching)
   //console.log("cgManageBookingScreen allBookings >>> ", allBookings)
-  console.log("cgManageBookingScreen confirmedBookings >>> ", confirmedBookings)
+  // console.log("cgManageBookingScreen confirmedBookings >>> ", confirmedBookings)
 
+  const [filteredBookings, setFilteredBookings] = useState(confirmedBookings)
+
+  // CgBooking 갱신
   useEffect(() => {
     if (!isFetching) {
       setBookings(data?.receivedBookings)
     }
   }, [isFetching, data, setBookings])
 
+  // 월 변경 시, 해당 월에 해당하는 예약만 필터링
+  useEffect(() => {
+    const _filteredBookings = confirmedBookings.filter(
+      (booking) => new Date(booking.startTime).getMonth() === month.getMonth(),
+    )
+    setFilteredBookings(_filteredBookings)
+  }, [confirmedBookings, month])
+
   return (
     <Screen testID="ManageBooking" style={{ paddingHorizontal: 0 }}>
       <View style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}>
-        <BookingCheckButton
-          style={{ zIndex: 1, marginVertical: 16 }}
-          bookingCount={waitingBookings?.length}
-          onPress={() => navigate("cg-booking-list-screen")}
-        />
+        <PreBol20 text="펫시팅 예약 관리" mv={20} />
+
+        {waitingBookings?.length !== 0 && (
+          <BookingCheckButton
+            style={{ zIndex: 1, marginBottom: 10 }}
+            bookingCount={waitingBookings?.length}
+            onPress={() => navigate("cg-booking-list-screen")}
+          />
+        )}
       </View>
 
       <SimpleCalendar
@@ -84,10 +87,12 @@ export const CgManageBookingScreen: FC<
         setSelectedDate={setSelectedDate}
         month={month}
         setMonth={setMonth}
+        showDates={false}
+        style={{ marginBottom: 16 }}
       />
 
       {/* 모든 예약 목록 */}
-      <BookingList bookings={_.orderBy(confirmedBookings, "createAt", "desc")} />
+      <CgBookingList bookings={_.orderBy(filteredBookings, "startTime", "asc")} />
 
       {/* // TODO: 날짜별로 확정된 예약 필터링 해야 함 */}
       {/* <View style={{ alignItems: "center", top: "25%" }}>

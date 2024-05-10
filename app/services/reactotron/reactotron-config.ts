@@ -4,7 +4,7 @@ export interface ReactotronConfig {
   /** The host to connect to: default 'localhost'. */
   host?: string
   /** Should we use async storage */
-  useAsyncStorage?: boolean
+  useMMKV?: boolean
   /** Should we clear Reactotron when load? */
   clearOnLoad?: boolean
   /** Root state logging. */
@@ -22,7 +22,7 @@ export interface ReactotronConfig {
 export const DEFAULT_REACTOTRON_CONFIG: ReactotronConfig = {
   clearOnLoad: true,
   host: "localhost",
-  useAsyncStorage: true,
+  useMMKV: true,
   state: {
     initial: true,
     snapshots: false,

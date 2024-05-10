@@ -31,7 +31,7 @@ interface CreateCrecheResult {
   creche?: CrechePetsitter // 성공시, 생성된 위탁 객체
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 위탁 펫시터를 생성한다
  *
  */
@@ -75,7 +75,7 @@ interface UpdateCrecheResult {
   creche?: CrechePetsitter // 성공시, 업데이트된 위탁 펫시터 객체
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 위탁 펫시터 정보를 수정한다
  *
  */
@@ -144,7 +144,7 @@ interface GetCrecheCareGiverResult {
   creche?: CrechePetsitter //! CrechePetsitter[] 아님
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 로그인 유저가 등록한 모든 위탁 펫시팅 정보를 가져온다.
  */
 export const getCrecheCareGiver = async (): Promise<GetCrecheCareGiverResult> => {

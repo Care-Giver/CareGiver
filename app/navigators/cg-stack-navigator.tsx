@@ -1,5 +1,5 @@
 /**
- * 케어기버 모드일때 등장하는 모든 스크린들을 담당하는 네비게이터들 입니다.
+ * 펫시터 모드일때 등장하는 모든 스크린들을 담당하는 네비게이터들 입니다.
  * 전부 StackNavigator로 구현되어 있습니다.
  * @see https://reactnavigation.org/docs/stack-navigator/
  *
@@ -82,7 +82,7 @@ export type CGStackNavigatorParamList = {
     isAvailableDate: boolean
     isDeleted: boolean
   }
-  "notification-screen": { removeAllToggle: boolean }
+  "cg-notification-screen": { removeAllToggle: boolean }
 
   /**
    * ChatsStack - 채팅 스택 || CG - 채팅 스택
@@ -236,7 +236,7 @@ export const CalendarStack = () => {
 
       {/* 알림 스크린 */}
       <Stack.Screen
-        name="notification-screen"
+        name="cg-notification-screen"
         component={NotificationScreen}
         options={({ navigation, route }) => ({
           header: (props) => <NotificationScreenHeader {...props} />,
@@ -299,7 +299,7 @@ export const CgMypageStack = () => {
         })}
       />
 
-      {/* //* CG - 케어기버 프로필 관리 */}
+      {/* //* CG - 펫시터 프로필 관리 */}
       <Stack.Screen
         name="cg-edit-profile-screen"
         component={CgEditProfileScreen}

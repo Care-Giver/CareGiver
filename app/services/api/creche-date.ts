@@ -18,7 +18,7 @@ interface CrecheDatesResponse extends GeneralResponse {
   crecheAvailableDates: CrecheAvailableDate[]
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 로그인한 유저의 모든 위탁서비스 가능 날짜들을 불러온다.
  */
 export const getCrecheDates = async (crecheId: number): Promise<CrecheAvailableDate[]> => {
@@ -63,7 +63,7 @@ type CreateCrecheDateResult =
       crecheAvailableDates: [] // 실패시, 빈 배열
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 위탁장소 펫시팅 서비스를 진행할 날짜들을 입력한다.
  * 날짜는 한 개 가 될수도 있고,
  * 여러개가 될수도 있다.
@@ -111,7 +111,7 @@ type UpdateCrecheDateResult =
       crecheAvailableDates: [] // 실패시, 빈 배열
     }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 위탁장소 펫시팅 서비스를 진행할 날짜를 수정한다.
  * 수정 시에는 하나의 날짜만 입력 가능하다.
  */
@@ -152,7 +152,7 @@ interface DisableCrecheDateResult {
   reason?: string // 실패시, 실패이유
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 입력받은 날짜에 해당하는 펫시팅 서비스를 비활성화 한다.
  * TODO: 현재 reponse 구조가 이상함. error, ok 구조가 아님. 수정 필요 함
  */
@@ -189,7 +189,7 @@ interface RestoreCrecheDateResult {
   reason?: string // 실패시, 실패이유
 }
 /**
- * [케어기버 전용 API]
+ * [펫시터 전용 API]
  * 한번 비활성화 된 적 있는 펫시팅 서비스를 다시 활성화 한다.
  */
 export const restoreCrecheDate = async (

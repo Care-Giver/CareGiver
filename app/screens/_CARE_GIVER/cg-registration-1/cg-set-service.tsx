@@ -178,8 +178,8 @@ export const CgSetService = observer(function CgSetService(props: CgSetServicePr
             <PreMed16
               text={
                 bottomSheetContent.type === "default"
-                  ? "기본 서비스는 케어기버가 돌봄을 진행할 때 기본적으로 제공하는 서비스입니다."
-                  : "추가 서비스는 기본 서비스에 추가적으로 케어기버가 진행할 수 있는 서비스입니다. 경쟁력을 높이기 위해 다양한 서비스를 추가해보세요!"
+                  ? "기본 서비스는 펫시터가 돌봄을 진행할 때 기본적으로 제공하는 서비스입니다."
+                  : "추가 서비스는 기본 서비스에 추가적으로 펫시터가 진행할 수 있는 서비스입니다. 경쟁력을 높이기 위해 다양한 서비스를 추가해보세요!"
               }
               color={HEAD_LINE}
               mt={12}

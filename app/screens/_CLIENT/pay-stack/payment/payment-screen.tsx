@@ -43,7 +43,8 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const { key, service, selectedPetIds, selectedTime, bookingRequest, destination } = route.params
     console.log("bookingRequest", bookingRequest)
     const {
-      userStore: { userDetail },
+      userStore: { userDetail, userAuth },
+      petStore: { getPetsByIds },
     } = useStores()
 
     //* 결제 정보 관련
@@ -53,9 +54,9 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
     const [cardQuota, setCardQuota] = useState(0)
     const [merchantUid, setMerchantUid] = useState(`mid_${new Date().getTime()}`)
     const [name, setName] = useState("케어기버:펫시팅 예약")
-    const [buyerName, setBuyerName] = useState("케어기버")
-    const [buyerTel, setBuyerTel] = useState("050-6667-1542")
-    const [buyerEmail, setBuyerEmail] = useState("dev@caregiver.pet")
+    const [buyerName, setBuyerName] = useState(__DEV__ ? "홍길동" : userDetail.realName)
+    const [buyerTel, setBuyerTel] = useState(__DEV__ ? "01000000000" : userDetail.phoneNumber)
+    const [buyerEmail, setBuyerEmail] = useState(__DEV__ ? "dev@caregiver.pet" : userAuth.email)
     const [vbankDue, setVbankDue] = useState("")
     const [bizNum, setBizNum] = useState("")
     const [escrow, setEscrow] = useState(false)
@@ -94,7 +95,7 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
       // 2-1. 결제 진행 - 포트원 SDK
       const data: PaymentParams = {
         params: {
-          pg: "kakaopay",
+          pg: `kakaopay.${__DEV__ ? Config.IMP_KAKAOPAY_CID_DEV : Config.IMP_KAKAOPAY_CID}`,
           pay_method: "kakaopay",
           merchant_uid: payment.merchant_uid,
           name,
@@ -278,14 +279,14 @@ export const PaymentScreen: FC<StackScreenProps<NavigatorParamList, "payment-scr
             </View>
 
             <DivisionLine mt={12} />
-            <PreBol14 text="담당 케어기버" color={SUB_HEAD_LINE} mb={8} mt={15} />
+            <PreBol14 text="담당 펫시터" color={SUB_HEAD_LINE} mb={8} mt={15} />
             <PreReg14 text={service[key].__careGiver__.__user__.nickname} mb={36} color={BODY} />
 
             <CareSummary
               address={service[key].address}
               start={selectedTime?.start}
               end={selectedTime?.end}
-              petIds={selectedPetIds}
+              pets={getPetsByIds(selectedPetIds)}
               serviceTypeKorean={serviceTypeKorean}
               showServiceType={true}
               // style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}

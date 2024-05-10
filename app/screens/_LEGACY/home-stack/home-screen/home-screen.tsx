@@ -162,7 +162,7 @@ const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = obse
 
           {/*//? Title */}
           <PreBol20
-            text="케어기버에게 요청할 서비스를"
+            text="펫시터에게 요청할 서비스를"
             style={{ marginTop: 50, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
           />
           <PreBol20
@@ -198,7 +198,7 @@ const HomeScreen: FC<StackScreenProps<NavigatorParamList, "home-screen">> = obse
 
           {/*//? Title */}
           <PreBol20
-            text="내 주변 케어기버 둘러보기"
+            text="내 주변 펫시터 둘러보기"
             style={{ marginTop: 60, paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
           />
           {/*//? 펫시터 */}

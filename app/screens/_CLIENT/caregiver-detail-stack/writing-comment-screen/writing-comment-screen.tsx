@@ -235,7 +235,7 @@ export const WritingCommentScreenHeader = (props: WritingCommentScreenHeaderProp
       {/*//* 등록 버튼 (사용자 입력 댓글 글자 수 하나 이상이면 등록 색 바뀜) */}
       <TouchableOpacity
         disabled={!ableToRegister}
-        onPress={_.debounce(onPress, 1000)}
+        onPress={_.debounce(onPress, 300)}
         style={{
           marginLeft: "auto",
           marginRight: 16,

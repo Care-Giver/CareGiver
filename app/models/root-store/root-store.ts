@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
 import { SpeciesStoreModel } from "../species-store/species-store"
 import { UserStoreModel } from "../user-store/user-store"
 import { ReviewStoreModel } from "../review-store/review-store"
@@ -25,7 +25,11 @@ export const RootStoreModel = types.model("RootStore").props({
   notificationStore: types.optional(NotificationStoreModel, {} as any),
   etcStore: types.optional(EtcStoreModel, {} as any),
   cgBookingStore: types.optional(CgBookingStoreModel, {} as any)
-})
+}).actions((self) => ({
+  resetRootStore() {
+    applySnapshot(self, {})
+  }
+}))
 
 /**
  * The RootStore instance.
