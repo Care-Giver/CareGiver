@@ -2,7 +2,7 @@ name: Build Ios Test
 
 on:
   push:
-    branches: [main]
+    branches: [test/CICD-hojung]
 
 jobs:
   build:
