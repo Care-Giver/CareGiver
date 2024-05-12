@@ -27,3 +27,15 @@ jobs:
       - name: Install pod dependency
         run: |
           cd ios && pod install --repo-update --clean-install
+
+      - name: Build iOS (Release)
+        uses: yukiarrr/ios-build-action@v1.5.0
+        with:
+          project-path: ios/CareGiver.xcodeproj
+          p12-base64: ${{ secrets.P12_BASE64 }}
+          mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
+          code-signing-identity: "Apple Distribution"
+          certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          team-id: ${{ secrets.IOS_TEAM_ID }}
+          workspace-path: ios/CareGiver.xcworkspace
+          output-path: "CareGiver.ipa"
