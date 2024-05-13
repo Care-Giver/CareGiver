@@ -29,9 +29,9 @@ jobs:
           cd ios && pod install --repo-update --clean-install
 
       - name: Select Xcode 15.3
-        - uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.3.0'
+          xcode-version: "15.3.0"
 
       - name: Build iOS (Release)
         uses: yukiarrr/ios-build-action@v1.11.2
