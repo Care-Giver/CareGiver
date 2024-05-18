@@ -28,6 +28,7 @@ import {
   DISABLED,
   GIVER_CASUAL_NAVY,
   HEAD_LINE,
+  HEIGHT,
   KAKAO_YELLOW,
   LIGHT_LINE,
   MIDDLE_LINE,
@@ -221,7 +222,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
             onPress={() => {
               bottomSheetModalRef.current.present()
             }}
-            style={[styles.noAuthLogin, { bottom: 200 }]}
+            style={[styles.noAuthLogin, { bottom: 260 * HEIGHT }]}
           >
             <PreMed18 text="이메일 로그인" color={palette.white} />
           </Button>
@@ -362,7 +363,7 @@ const button: ViewStyle = {
 
 const buttonBox: ViewStyle = {
   justifyContent: "space-around",
-  height: (BUTTON_HEIGHT + 20) * (isShownAppleLogin ? 3 : 2),
+  height: (BUTTON_HEIGHT + 20 * HEIGHT) * (isShownAppleLogin ? 3 : 2),
   // position: "absolute",
   // bottom: BOTTOM_HEIGHT,
   // left: BASIC_BACKGROUND_PADDING_WIDTH,
