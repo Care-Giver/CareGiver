@@ -2,8 +2,7 @@ import { ROOT_STATE_STORAGE_KEY } from "#models"
 import { load } from "../../utils/storage"
 import Config from "react-native-config"
 
-// export const BASE_URL = __DEV__ ? Config.BASE_URL_DEV : Config.BASE_URL_PROD
-export const BASE_URL = "http://localhost:3000/api/v1"
+export const BASE_URL = __DEV__ ? Config.BASE_URL_DEV : Config.BASE_URL_PROD
 console.log("BASE_URL", BASE_URL)
 
 /**
