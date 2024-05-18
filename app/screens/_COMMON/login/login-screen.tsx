@@ -52,7 +52,7 @@ import {
 
 const PASSWORD_PASSKEY = "caregiver123"
 const isIOS = Platform.OS === "ios"
-const SHOW_APPLE_LOGIN = false
+const SHOW_APPLE_LOGIN = true
 const isShownAppleLogin = isIOS && SHOW_APPLE_LOGIN
 
 export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen">> = observer(
