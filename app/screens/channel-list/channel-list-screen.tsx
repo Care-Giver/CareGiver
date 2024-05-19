@@ -1,19 +1,37 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef } from "react"
-import { Image, Platform, Pressable, StatusBar, StyleSheet, View, ViewStyle } from "react-native"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  Image,
+  Platform,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  TextInput,
+  View,
+  ViewStyle,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
-import { BASIC_BACKGROUND_PADDING_WIDTH, Screen } from "#components"
+import {
+  BASIC_BACKGROUND_PADDING_WIDTH,
+  ConditionalButton,
+  PreBol14,
+  PreBol18,
+  PreMed14,
+  PreReg14,
+  Row,
+  Screen,
+} from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
 import { streamChatClient } from "../../services/api/stream"
 import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
-import { CARE_NATURAL_BLUE, SHADOW_1, palette } from "#theme"
+import { BODY, CARE_NATURAL_BLUE, DISABLED, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
 import { platformApiLevel } from "expo-device"
 import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
-import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
@@ -22,6 +40,8 @@ export const ChannelListScreen: FC<
   const {
     userStore: { type, userAuth, userDetail, myStreamUserId, connectToStream },
   } = useStores()
+  const [nickname, setNickname] = useState<string>("")
+  const [text, setText] = useState<string>("")
 
   useEffect(() => {
     // client.connectUser 는 한 번만 실행되도록 한다.
@@ -45,7 +65,7 @@ export const ChannelListScreen: FC<
   const bottomSheetModalRef = useRef<bottomSheetModal>(null)
 
   // 펫시터 등록하기 바텀시트모달 - snapPoints
-  const snapPoints = useMemo(() => ["20%", "20%"], [])
+  const snapPoints = useMemo(() => ["87%", "87%"], [])
 
   /** 기본 | 추가 서비스 설명 바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
@@ -71,6 +91,7 @@ export const ChannelListScreen: FC<
         }}
         filters={filters}
       />
+
       <BottomSheetModal
         ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
@@ -79,13 +100,45 @@ export const ChannelListScreen: FC<
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
-        <Pressable
-          style={{
-            marginTop: 28,
-            marginBottom: 16,
-            alignItems: "center",
-          }}
-        ></Pressable>
+        <PreBol18 text="케어를 진행하면서 문제가 있으셨나요?" mb={12} />
+        <PreMed14 text="- 신고된 사용자에게는 따로 알림이 가지 않습니다." color={BODY} />
+        <PreMed14 text="- 신고 접수 후 24시간 내 이메일로 답변드리겠습니다." color={BODY} />
+        <PreMed14 text="- 사유는 최대한 상세하게 적어주세요." color={BODY} />
+        <PreReg14 text="신고할 닉네임" color={BODY} mt={28} mb={9} />
+        <BottomSheetTextInput
+          style={styles.nicknameInput}
+          placeholder="예약 취소 사유를 직접 입력해주세요."
+          value={nickname}
+          onChangeText={setNickname}
+          // multiline
+          blurOnSubmit
+          maxLength={30}
+        />
+        <Row>
+          <PreReg14 text="신고사유" color={BODY} />
+          <PreMed14 text="(최대 300자)" color={DISABLED} />
+        </Row>
+        {/* // TODO: keyboard avoiding view - 줄넘김 많을 때 텍스트 가리는 문제 생길 수 있음 */}
+        {/* //* 리뷰 텍스트 input */}
+        <TextInput
+          maxLength={300}
+          placeholder="신고하는 사유를 최대한 상세히 적어주세요."
+          placeholderTextColor={DISABLED}
+          multiline
+          blurOnSubmit
+          onChangeText={setText}
+          value={text}
+          // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료
+          style={styles.textInput}
+        />
+
+        {/* //* 입력 글자 수 */}
+        <View style={[{ marginTop: 10 }, styles.textCountContainer]}>
+          <PreBol14 text={`${text.length} `} color={BODY} />
+          <PreReg14 text="/ 300" color={BODY} />
+        </View>
+        {/* //TODO 확인버튼 => 신고 api 호출 */}
+        <ConditionalButton label="확인" isActivated={true} onPress={() => {}} />
       </BottomSheetModal>
     </Screen>
   )
@@ -138,5 +191,30 @@ export const styles = StyleSheet.create({
   bell: {
     width: 28,
     height: 28,
+  },
+  nicknameInput: {
+    fontSize: 16,
+    borderBottomColor: LIGHT_LINE,
+    borderBottomWidth: 1,
+    width: "80%",
+    marginBottom: 28,
+  },
+  textInput: {
+    padding: 20,
+    paddingTop: 20,
+
+    minHeight: 228,
+
+    borderRadius: 8,
+    backgroundColor: LBG,
+    lineHeight: 20,
+  },
+
+  textCountContainer: {
+    marginBottom: 28,
+    marginLeft: "auto",
+
+    flexDirection: "row",
+    alignItems: "center",
   },
 })
