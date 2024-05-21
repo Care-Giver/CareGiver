@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: iOS Build Test
-    runs-on: macOS-latest
+    runs-on: macos-14
 
     steps:
       - name: Show self-hosted machine infomation
@@ -21,30 +21,17 @@ jobs:
         with:
           ref: test/CICD-hojung
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Restore node_modules from cache
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: Install yarn dependency
-        run: yarn install --frozen-lockfile --network-timeout 300000
+        run: yarn install
 
       - name: Install pod dependency
         run: |
           cd ios && pod install --repo-update --clean-install
 
-      - name: Select Xcode 14.1
+      - name: Select Xcode 15.3
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "14.3.1"
+          xcode-version: "15.3"
 
       - name: Build iOS (Release)
         uses: yukiarrr/ios-build-action@v1.11.2
