@@ -358,6 +358,7 @@ type SocialLoginRequestBody = {
 }
 interface SocialLoginResponse extends GeneralResponse {
   token?: string
+  email?: string // 애플로그인의 경우에만, 서버 측에서 identityToken 값을 디코딩해서 얻어낸 email 값이 반환 됨.
 }
 /**
  * DB 내 유저정보가 있는지 여부.
@@ -373,6 +374,7 @@ type SocialLoginReturn =
       ok: true
       token: string
       isUserExists: true
+      email?: string // 애플로그인의 경우에만, 서버 측에서 identityToken 값을 디코딩해서 얻어낸 email 값이 반환 됨.
     }
   // DB에 유저가 존재하지 않는 경우
   | {
@@ -426,10 +428,19 @@ export const checkUserExists = async (
       return { ok: false }
     }
 
+    if (provider === "apple" && !response.data.email) {
+      alertModal(
+        "유저 확인 실패",
+        `이메일 값을 얻어내지 못했습니다. ${response.data.error?.message}`,
+      )
+      return { ok: false }
+    }
+
     return {
       ok: true,
       token: response.data.token,
       isUserExists: true,
+      email: response.data?.email,
     }
   } catch (error) {
     alertModal("유저 확인 실패", `catch: ${error?.message}`)
