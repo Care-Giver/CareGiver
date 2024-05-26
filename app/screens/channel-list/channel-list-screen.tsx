@@ -32,6 +32,8 @@ import { BODY, CARE_NATURAL_BLUE, DISABLED, LBG, LIGHT_LINE, SHADOW_1, palette }
 import { platformApiLevel } from "expo-device"
 import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
+import { postNotionReport } from "../../services/api/chats"
+import { now } from "lodash"
 
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
@@ -42,7 +44,6 @@ export const ChannelListScreen: FC<
   } = useStores()
   const [nickname, setNickname] = useState<string>("")
   const [text, setText] = useState<string>("")
-
   useEffect(() => {
     // client.connectUser 는 한 번만 실행되도록 한다.
     if (!streamChatClient?.user) {
@@ -107,10 +108,9 @@ export const ChannelListScreen: FC<
         <PreReg14 text="신고할 닉네임" color={BODY} mt={28} mb={9} />
         <BottomSheetTextInput
           style={styles.nicknameInput}
-          placeholder="예약 취소 사유를 직접 입력해주세요."
+          placeholder="신고할 유저 닉네임을 적어주세요."
           value={nickname}
           onChangeText={setNickname}
-          // multiline
           blurOnSubmit
           maxLength={30}
         />
@@ -120,14 +120,14 @@ export const ChannelListScreen: FC<
         </Row>
         {/* // TODO: keyboard avoiding view - 줄넘김 많을 때 텍스트 가리는 문제 생길 수 있음 */}
         {/* //* 리뷰 텍스트 input */}
-        <TextInput
+        <BottomSheetTextInput
           maxLength={300}
           placeholder="신고하는 사유를 최대한 상세히 적어주세요."
           placeholderTextColor={DISABLED}
-          multiline
           blurOnSubmit
           onChangeText={setText}
           value={text}
+          multiline
           // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료
           style={styles.textInput}
         />
@@ -138,7 +138,24 @@ export const ChannelListScreen: FC<
           <PreReg14 text="/ 300" color={BODY} />
         </View>
         {/* //TODO 확인버튼 => 신고 api 호출 */}
-        <ConditionalButton label="확인" isActivated={true} onPress={() => {}} />
+        <ConditionalButton
+          label="확인"
+          isActivated={!!(nickname.length && text.length)}
+          onPress={() => {
+            postNotionReport({
+              reporter: {
+                email: userAuth.email,
+                nickname: userDetail.email,
+                phoneNumber: userDetail.phoneNumber,
+                id: userDetail.id,
+              },
+              reportee: nickname,
+              desc: text,
+              reportedAt: new Date().toString(),
+            })
+            bottomSheetModalRef.current.close()
+          }}
+        />
       </BottomSheetModal>
     </Screen>
   )
