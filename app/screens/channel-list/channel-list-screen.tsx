@@ -4,8 +4,10 @@ import {
   Platform,
   Pressable,
   StatusBar,
+  StyleProp,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native"
@@ -15,23 +17,46 @@ import { NavigatorParamList } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  DivisionLine,
+  PopSem12,
   PreBol14,
   PreBol18,
+  PreBol20,
+  PreBol28,
   PreMed14,
+  PreReg12,
   PreReg14,
   Row,
   Screen,
 } from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
+import { ChannelMemberResponse, DefaultGenerics } from "stream-chat"
 import { streamChatClient } from "../../services/api/stream"
 import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
-import { BODY, CARE_NATURAL_BLUE, DISABLED, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
-import { platformApiLevel } from "expo-device"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  CARE_NATURAL_BLUE,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  GIVER_CASUAL_NAVY_20,
+  GIVER_CASUAL_NAVY_80,
+  LBG,
+  LIGHT_LINE,
+  SHADOW_1,
+  palette,
+} from "#theme"
 import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet"
+import _ from "lodash"
 
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
@@ -40,17 +65,10 @@ export const ChannelListScreen: FC<
   const {
     userStore: { type, userAuth, userDetail, myStreamUserId, connectToStream },
   } = useStores()
+  const [otherUsers, setOtherUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
+  const [blockedUsers, setBlockedUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
   const [nickname, setNickname] = useState<string>("")
   const [text, setText] = useState<string>("")
-
-  useEffect(() => {
-    // client.connectUser 는 한 번만 실행되도록 한다.
-    if (!streamChatClient?.user) {
-      connectToStream()
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streamChatClient?.user])
 
   const filters = {
     type: "messaging",
@@ -61,13 +79,67 @@ export const ChannelListScreen: FC<
     last_message_at: -1,
   }
 
-  // 기본 | 추가 서비스 설명 바텀시트모달 - ref
-  const bottomSheetModalRef = useRef<bottomSheetModal>(null)
+  const fetchOtherUsers = async () => {
+    const channels = await streamChatClient.queryChannels(filters, [{ last_message_at: -1 }], {
+      watch: true, // this is the default
+      state: true,
+    })
+    if (!channels || channels.length === 0) {
+      console.warn("🐞 channels", channels)
+      return
+    }
 
-  // 펫시터 등록하기 바텀시트모달 - snapPoints
+    const _others = await Promise.all(
+      channels.map((channel) =>
+        channel.queryMembers({}, {}, {}).then(({ members }) => {
+          const notMe = members.filter((m) => m.user_id !== myStreamUserId)[0]
+          return notMe
+        }),
+      ),
+    )
+    setOtherUsers(_.orderBy(_others, "created_at", "desc"))
+  }
+
+  const onPressBlock = (u: ChannelMemberResponse<DefaultGenerics>) => {
+    setBlockedUsers((prev) => _.orderBy([...prev, u], "created_at", "desc"))
+  }
+
+  const onPressUnblock = (u: ChannelMemberResponse<DefaultGenerics>) => {
+    setBlockedUsers((prev) =>
+      _.orderBy(
+        prev.filter((blockedUser) => blockedUser.user_id !== u.user_id),
+        "created_at",
+        "desc",
+      ),
+    )
+  }
+
+  const onPressSubmitBlockConfig = () => {
+    // TODO: buffer 만들기; submit 을 눌러야만 setBlockedUsers 호출 하도록 하기.
+  }
+
+  useEffect(() => {
+    // client.connectUser 는 한 번만 실행되도록 한다.
+    if (!streamChatClient?.user) {
+      connectToStream()
+      return
+    }
+
+    // 나와 채팅방이 만들어진 유저들 조회
+    if (otherUsers.length === 0) {
+      fetchOtherUsers()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamChatClient?.user, filters])
+
+  // 차단 바텀시트모달 - ref
+  const bottomSheetModalRef2 = useRef<bottomSheetModal>(null)
+  // 신고 바텀시트모달 - ref
+  const bottomSheetModalRef = useRef<bottomSheetModal>(null)
+  // 바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["87%", "87%"], [])
 
-  /** 기본 | 추가 서비스 설명 바텀시트모달 backdrop */
+  /** 바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -82,7 +154,12 @@ export const ChannelListScreen: FC<
 
   return (
     <Screen testID="ChannelList" style={{ paddingHorizontal: 0 }}>
-      <ChatListScreenHeader onPress={() => bottomSheetModalRef.current.present()} />
+      <ChatListScreenHeader
+        onPressBlock={() => {
+          bottomSheetModalRef2.current.present()
+        }}
+        onPress={() => bottomSheetModalRef.current.present()}
+      />
       <ChannelList
         onSelect={(channel) => {
           navigation.navigate("channel-screen", {
@@ -90,8 +167,77 @@ export const ChannelListScreen: FC<
           })
         }}
         filters={filters}
+        channelRenderFilterFn={(channels) => {
+          if (blockedUsers.length === 0) {
+            return channels
+          }
+          // 차단 유저가 존재하는 채팅방은 제외 시킨다
+          else {
+            const blockedUserIds = blockedUsers.map((u) => u.user_id)
+            return channels.filter((channel) => {
+              const channelMemberUserIds = Object.keys(channel.state.members)
+              const booleanResults = channelMemberUserIds.map((cMUId) =>
+                blockedUserIds.includes(cMUId),
+              )
+              const hasBlockedUser = booleanResults.includes(true)
+              return !hasBlockedUser
+            })
+          }
+        }}
       />
 
+      {/* 차단 목록 모달 */}
+      <BottomSheetModal
+        ref={bottomSheetModalRef2}
+        backdropComponent={renderBackdrop}
+        footerComponent={() => {
+          return (
+            <ConditionalButton
+              label="확인"
+              isActivated={true}
+              style={{ position: "absolute", bottom: BOTTOM_HEIGHT }}
+              onPress={onPressSubmitBlockConfig}
+            />
+          )
+        }}
+        index={0}
+        snapPoints={snapPoints}
+        enablePanDownToClose
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <BottomSheetScrollView>
+          {/* 차단 되지 않은 유저들 */}
+          {_.differenceBy(otherUsers, blockedUsers, "user_id").map((u, _, self) => {
+            return (
+              <BlockUserCard
+                key={u.user_id}
+                mode="차단하기"
+                onPress={() => onPressBlock(u)}
+                u={u}
+              />
+            )
+          })}
+
+          {/* 차단 된 유저들 */}
+          <PreBol18 text="차단 유저 목록" mt={20} />
+          {blockedUsers.length !== 0 ? (
+            blockedUsers.map((u) => {
+              return (
+                <BlockUserCard
+                  key={u.user_id}
+                  mode="해제하기"
+                  onPress={() => onPressUnblock(u)}
+                  u={u}
+                />
+              )
+            })
+          ) : (
+            <PopSem12 color={DISABLED} text="차단된 유저가 없습니다." mv={10} />
+          )}
+        </BottomSheetScrollView>
+      </BottomSheetModal>
+
+      {/* 신고 바텀시트모달 */}
       <BottomSheetModal
         ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
@@ -145,13 +291,14 @@ export const ChannelListScreen: FC<
 })
 
 interface ChatListScreenHeaderProps {
+  onPressBlock: () => void
   onPress: () => void
 }
 
 export const ChatListScreenHeader = observer(function ChatListScreenHeader(
   props: ChatListScreenHeaderProps,
 ) {
-  const { onPress } = props
+  const { onPressBlock, onPress } = props
   return (
     <>
       <StatusBar
@@ -166,22 +313,83 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
         {/* //? 케어기버 로고 */}
         <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />
 
-        {/* //? 알람 버튼 */}
-        <Pressable
-          onPress={onPress}
+        {/* //? 차단 버튼 */}
+        <TouchableOpacity
+          onPress={onPressBlock}
           style={{
             marginLeft: "auto",
             marginRight: 16,
           }}
         >
+          <PreBol28 text="🚫" />
+        </TouchableOpacity>
+        {/* //? 신고 버튼 */}
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            marginRight: 16,
+          }}
+        >
           <Image style={styles.bell} source={images.report} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </>
   )
 })
 
-export const styles = StyleSheet.create({
+interface BlockUserCardProps {
+  style?: StyleProp<ViewStyle>
+  mode: "차단하기" | "해제하기"
+  onPress: (u: ChannelMemberResponse<DefaultGenerics>) => void
+  u: ChannelMemberResponse<DefaultGenerics>
+}
+const BlockUserCard = observer(function BlockUserCard(props: BlockUserCardProps) {
+  const { style, mode, onPress, u } = props
+  const $color = mode === "차단하기" ? GIVER_CASUAL_NAVY : "black"
+  const $button: ViewStyle = {
+    width: 60,
+    height: 24,
+    borderColor: $color,
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "flex-start", // == 'display: inline-block'  (ref: https://stackoverflow.com/a/45335695/16673541)
+  }
+  return (
+    <View style={style}>
+      <View
+        style={{
+          width: "100%",
+          height: 52,
+          justifyContent: "center",
+          padding: 10,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <PreReg14
+            text={`${u.user.name}`}
+            color={mode === "차단하기" ? "black" : DISABLED}
+            style={{ textDecorationLine: mode === "차단하기" ? "none" : "line-through" }}
+          />
+          <TouchableOpacity style={$button} onPress={onPress}>
+            <PopSem12 text={mode} color={$color} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <DivisionLine mb={10} />
+    </View>
+  )
+})
+
+const styles = StyleSheet.create({
   careGiverLogo: {
     width: 162,
     height: 20,
