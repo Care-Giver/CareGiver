@@ -67,6 +67,13 @@ export const ChannelListScreen: FC<
   } = useStores()
   const [otherUsers, setOtherUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
   const [blockedUsers, setBlockedUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
+  const [blockedUsersBuffer, setBlockedUsersBuffer] = useState<
+    ChannelMemberResponse<DefaultGenerics>[]
+  >(blockedUsers)
+  const isActivated = !_.isEqual(
+    blockedUsersBuffer.map((u) => u.user_id),
+    blockedUsers.map((u) => u.user_id),
+  )
   const [nickname, setNickname] = useState<string>("")
   const [text, setText] = useState<string>("")
 
@@ -97,17 +104,18 @@ export const ChannelListScreen: FC<
         }),
       ),
     )
+
     setOtherUsers(_.orderBy(_others, "created_at", "desc"))
   }
 
   const onPressBlock = (u: ChannelMemberResponse<DefaultGenerics>) => {
-    setBlockedUsers((prev) => _.orderBy([...prev, u], "created_at", "desc"))
+    setBlockedUsersBuffer((prev) => _.orderBy([...prev, u], "created_at", "desc"))
   }
 
   const onPressUnblock = (u: ChannelMemberResponse<DefaultGenerics>) => {
-    setBlockedUsers((prev) =>
+    setBlockedUsersBuffer((prev) =>
       _.orderBy(
-        prev.filter((blockedUser) => blockedUser.user_id !== u.user_id),
+        prev.filter((b) => b.user_id !== u.user_id),
         "created_at",
         "desc",
       ),
@@ -115,7 +123,8 @@ export const ChannelListScreen: FC<
   }
 
   const onPressSubmitBlockConfig = () => {
-    // TODO: buffer 만들기; submit 을 눌러야만 setBlockedUsers 호출 하도록 하기.
+    setBlockedUsers(blockedUsersBuffer)
+    bottomSheetModalRef2.current.close()
   }
 
   useEffect(() => {
@@ -193,8 +202,8 @@ export const ChannelListScreen: FC<
         footerComponent={() => {
           return (
             <ConditionalButton
-              label="확인"
-              isActivated={true}
+              label="저장하기"
+              isActivated={isActivated}
               style={{ position: "absolute", bottom: BOTTOM_HEIGHT }}
               onPress={onPressSubmitBlockConfig}
             />
@@ -207,7 +216,7 @@ export const ChannelListScreen: FC<
       >
         <BottomSheetScrollView>
           {/* 차단 되지 않은 유저들 */}
-          {_.differenceBy(otherUsers, blockedUsers, "user_id").map((u, _, self) => {
+          {_.differenceBy(otherUsers, blockedUsersBuffer, "user_id").map((u, _, self) => {
             return (
               <BlockUserCard
                 key={u.user_id}
@@ -220,8 +229,8 @@ export const ChannelListScreen: FC<
 
           {/* 차단 된 유저들 */}
           <PreBol18 text="차단 유저 목록" mt={20} />
-          {blockedUsers.length !== 0 ? (
-            blockedUsers.map((u) => {
+          {blockedUsersBuffer.length !== 0 ? (
+            blockedUsersBuffer.map((u) => {
               return (
                 <BlockUserCard
                   key={u.user_id}
@@ -336,11 +345,10 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
     </>
   )
 })
-
 interface BlockUserCardProps {
   style?: StyleProp<ViewStyle>
   mode: "차단하기" | "해제하기"
-  onPress: (u: ChannelMemberResponse<DefaultGenerics>) => void
+  onPress: () => void
   u: ChannelMemberResponse<DefaultGenerics>
 }
 const BlockUserCard = observer(function BlockUserCard(props: BlockUserCardProps) {
@@ -379,7 +387,7 @@ const BlockUserCard = observer(function BlockUserCard(props: BlockUserCardProps)
             color={mode === "차단하기" ? "black" : DISABLED}
             style={{ textDecorationLine: mode === "차단하기" ? "none" : "line-through" }}
           />
-          <TouchableOpacity style={$button} onPress={onPress}>
+          <TouchableOpacity style={$button} onPress={onPress} hitSlop={8}>
             <PopSem12 text={mode} color={$color} />
           </TouchableOpacity>
         </View>
