@@ -64,7 +64,7 @@ export const ChannelListScreen: FC<
 > = observer(function ChannelListScreen({ navigation }) {
   useShowBottomTab(navigation)
   const {
-    userStore: { type, userAuth, userDetail, myStreamUserId, connectToStream },
+    userStore: { myStreamUserId, connectToStream, blockedUserIds, setBlockedUserIds },
   } = useStores()
   const [allUsers, setAllUsers] = useState<ChatMember[]>([])
   const [blockedUsers, setBlockedUsers] = useState<ChatMember[]>([])
@@ -105,6 +105,9 @@ export const ChannelListScreen: FC<
     )
 
     setAllUsers(_.orderBy(_others, "created_at", "desc"))
+    const blocked = _others.filter((u) => blockedUserIds.includes(u.user_id))
+    setBlockedUsers(blocked)
+    setBlockedUsersBuffer(blocked)
   }
 
   const onPressBlock = (u: ChatMember) => {
@@ -123,6 +126,7 @@ export const ChannelListScreen: FC<
 
   const onPressSubmitBlockConfig = () => {
     setBlockedUsers(blockedUsersBuffer)
+    setBlockedUserIds(blockedUsersBuffer.map((u) => u.user_id))
     bottomSheetModalRef2.current.close()
   }
 
@@ -176,18 +180,19 @@ export const ChannelListScreen: FC<
         }}
         filters={filters}
         channelRenderFilterFn={(channels) => {
-          if (blockedUsers.length === 0) {
+          if (allUsers.length === 0 && blockedUserIds.length !== 0) {
+            // fetchOtherUsers 가 완료되기 전에 ReactDOM 최초로 렌더링된다. 이 시나리오에서 channelRenderFilterFn 을 의도대로 사용하기 위해, 모든 채팅방을 가린다.
+            return []
+          } else if (blockedUsers.length === 0) {
+            // 차단 유저 목록이 존재하지 않으면, 모든 채팅방을 렌더링한다.
             return channels
-          }
-          // 차단 유저가 존재하는 채팅방은 제외 시킨다
-          else {
-            const blockedUserIds = blockedUsers.map((u) => u.user_id)
+          } else {
+            // 차단 유저가 존재하는 채팅방들은 모두 렌더링에서 제외시킨다.
+            const _blockedUserIds = blockedUsers.map((u) => u.user_id)
             return channels.filter((channel) => {
               const channelMemberUserIds = Object.keys(channel.state.members)
-              const booleanResults = channelMemberUserIds.map((cMUId) =>
-                blockedUserIds.includes(cMUId),
-              )
-              const hasBlockedUser = booleanResults.includes(true)
+              const checker = channelMemberUserIds.map((cMUId) => _blockedUserIds.includes(cMUId))
+              const hasBlockedUser = checker.includes(true)
               return !hasBlockedUser
             })
           }

@@ -81,6 +81,12 @@ export const UserStoreModel = types
       address: "",
       location: { ...한양대에리카제5공학관 },
     }),
+
+    /**
+     * 메시지 스크린에서 차단한 user_id 리스트.
+     * user_id 는 GetStream.io 의 사용자 id 입니다.
+     */
+    blockedUserIds: types.optional(types.array(types.string), []),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -406,6 +412,10 @@ export const UserStoreModel = types
      * */
     cacheSearchRequest(value: SearchRequest) {
       self.setProp("cachedSearchRequest", value)
+    },
+
+    setBlockedUserIds(value: string[]) {
+      self.setProp("blockedUserIds", value)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
