@@ -58,6 +58,7 @@ import {
 } from "@gorhom/bottom-sheet"
 import _ from "lodash"
 
+type ChatMember = ChannelMemberResponse<DefaultGenerics>
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
 > = observer(function ChannelListScreen({ navigation }) {
@@ -65,12 +66,10 @@ export const ChannelListScreen: FC<
   const {
     userStore: { type, userAuth, userDetail, myStreamUserId, connectToStream },
   } = useStores()
-  const [otherUsers, setOtherUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
-  const [blockedUsers, setBlockedUsers] = useState<ChannelMemberResponse<DefaultGenerics>[]>([])
-  const [blockedUsersBuffer, setBlockedUsersBuffer] = useState<
-    ChannelMemberResponse<DefaultGenerics>[]
-  >(blockedUsers)
-  const isActivated = !_.isEqual(
+  const [allUsers, setAllUsers] = useState<ChatMember[]>([])
+  const [blockedUsers, setBlockedUsers] = useState<ChatMember[]>([])
+  const [blockedUsersBuffer, setBlockedUsersBuffer] = useState<ChatMember[]>(blockedUsers)
+  const isBufferDifferent = !_.isEqual(
     blockedUsersBuffer.map((u) => u.user_id),
     blockedUsers.map((u) => u.user_id),
   )
@@ -105,14 +104,14 @@ export const ChannelListScreen: FC<
       ),
     )
 
-    setOtherUsers(_.orderBy(_others, "created_at", "desc"))
+    setAllUsers(_.orderBy(_others, "created_at", "desc"))
   }
 
-  const onPressBlock = (u: ChannelMemberResponse<DefaultGenerics>) => {
+  const onPressBlock = (u: ChatMember) => {
     setBlockedUsersBuffer((prev) => _.orderBy([...prev, u], "created_at", "desc"))
   }
 
-  const onPressUnblock = (u: ChannelMemberResponse<DefaultGenerics>) => {
+  const onPressUnblock = (u: ChatMember) => {
     setBlockedUsersBuffer((prev) =>
       _.orderBy(
         prev.filter((b) => b.user_id !== u.user_id),
@@ -135,7 +134,7 @@ export const ChannelListScreen: FC<
     }
 
     // 나와 채팅방이 만들어진 유저들 조회
-    if (otherUsers.length === 0) {
+    if (allUsers.length === 0) {
       fetchOtherUsers()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -203,7 +202,7 @@ export const ChannelListScreen: FC<
           return (
             <ConditionalButton
               label="저장하기"
-              isActivated={isActivated}
+              isActivated={isBufferDifferent}
               style={{ position: "absolute", bottom: BOTTOM_HEIGHT }}
               onPress={onPressSubmitBlockConfig}
             />
@@ -214,9 +213,9 @@ export const ChannelListScreen: FC<
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
-        <BottomSheetScrollView>
+        <BottomSheetScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + 100 }}>
           {/* 차단 되지 않은 유저들 */}
-          {_.differenceBy(otherUsers, blockedUsersBuffer, "user_id").map((u, _, self) => {
+          {_.differenceBy(allUsers, blockedUsersBuffer, "user_id").map((u, _, self) => {
             return (
               <BlockUserCard
                 key={u.user_id}
@@ -349,7 +348,7 @@ interface BlockUserCardProps {
   style?: StyleProp<ViewStyle>
   mode: "차단하기" | "해제하기"
   onPress: () => void
-  u: ChannelMemberResponse<DefaultGenerics>
+  u: ChatMember
 }
 const BlockUserCard = observer(function BlockUserCard(props: BlockUserCardProps) {
   const { style, mode, onPress, u } = props
