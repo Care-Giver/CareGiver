@@ -28,8 +28,7 @@ import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
 import { BODY, DISABLED, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
-import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
+import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { postNotionReport } from "../../services/api/chats"
 
 export const ChannelListScreen: FC<
@@ -60,7 +59,7 @@ export const ChannelListScreen: FC<
   }
 
   // 기본 | 추가 서비스 설명 바텀시트모달 - ref
-  const bottomSheetModalRef = useRef<bottomSheetModal>(null)
+  const bottomSheetModalRef = useRef<BottomSheet>(null)
 
   // 펫시터 등록하기 바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["87%", "87%"], [])
@@ -80,7 +79,7 @@ export const ChannelListScreen: FC<
 
   return (
     <Screen testID="ChannelList" style={{ paddingHorizontal: 0 }}>
-      <ChatListScreenHeader onPress={() => bottomSheetModalRef.current.present()} />
+      <ChatListScreenHeader onPress={() => bottomSheetModalRef.current.expand()} />
       <ChannelList
         onSelect={(channel) => {
           navigation.navigate("channel-screen", {
@@ -90,10 +89,10 @@ export const ChannelListScreen: FC<
         filters={filters}
       />
 
-      <BottomSheetModal
+      <BottomSheet
         ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
-        index={0}
+        index={-1}
         snapPoints={snapPoints}
         keyboardBehavior="extend"
         enablePanDownToClose
@@ -126,6 +125,7 @@ export const ChannelListScreen: FC<
           onChangeText={setText}
           value={text}
           multiline
+          textAlignVertical="top"
           // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료
           style={styles.textInput}
         />
@@ -154,7 +154,7 @@ export const ChannelListScreen: FC<
             bottomSheetModalRef.current.close()
           }}
         />
-      </BottomSheetModal>
+      </BottomSheet>
     </Screen>
   )
 })
