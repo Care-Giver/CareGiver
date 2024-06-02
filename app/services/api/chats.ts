@@ -2,6 +2,7 @@ import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
 import { StreamChat } from "stream-chat"
 import Config from "react-native-config"
+import { alertModal } from "../../utils/alert-modal"
 
 export interface ReporterInfo {
   email: string
@@ -18,19 +19,10 @@ export interface PostNotionReportInput {
 }
 export interface PostNotionReportResponse extends GeneralResponse {}
 
-type PostNotionReportResult =
-  | {
-      isSuccess: true // 성공
-    }
-  | {
-      isSuccess: false // 실패
-      reason?: string // 실패시, 실패이유
-    }
+type PostNotionReportResult = {
+  isSuccess: true // 성공
+} | void
 
-/**
- * 로그인한 유저의 채팅토큰(stream-token)을 읽어온다.
- * @returns {Promise<GetNotificationsResult>}
- */
 export const postNotionReport = async (
   input: PostNotionReportInput,
 ): Promise<PostNotionReportResult> => {
@@ -42,14 +34,14 @@ export const postNotionReport = async (
 
     if (!response?.data.ok) {
       console.error("/notions-report API 에러!!! ♦️", response?.data?.error)
-      return { isSuccess: false, reason: response.data.error }
+      return alertModal("신고 실패", "신고 내역을 작성에 실패했습니다.")
     }
     return {
       isSuccess: true,
     }
   } catch (error) {
     console.error("catch 에러!!! - postNotionReport", error)
-    return { isSuccess: false, reason: error }
+    return alertModal("신고 실패", "신고 내역을 작성에 실패했습니다.")
   }
 }
 
