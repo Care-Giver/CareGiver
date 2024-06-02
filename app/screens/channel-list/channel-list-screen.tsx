@@ -175,11 +175,11 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
 
   const statusBarStyle: StatusBarStyle =
     type === "CARE_GIVER"
-      ? Platform.select({
+      ? "light-content"
+      : Platform.select({
           ios: "dark-content",
           android: "light-content",
         })
-      : "light-content"
 
   const logo =
     type === "CARE_GIVER" ? images.care_giver_logo_light_162x20 : images.care_giver_logo_162x20
