@@ -2,7 +2,6 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "re
 import {
   Image,
   Platform,
-  Pressable,
   StatusBar,
   StyleProp,
   StyleSheet,
@@ -21,10 +20,7 @@ import {
   PopSem12,
   PreBol14,
   PreBol18,
-  PreBol20,
-  PreBol28,
   PreMed14,
-  PreReg12,
   PreReg14,
   Row,
   Screen,
@@ -39,11 +35,8 @@ import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
 import {
   BODY,
   BOTTOM_HEIGHT,
-  CARE_NATURAL_BLUE,
   DISABLED,
   GIVER_CASUAL_NAVY,
-  GIVER_CASUAL_NAVY_20,
-  GIVER_CASUAL_NAVY_80,
   LBG,
   LIGHT_LINE,
   SHADOW_1,
@@ -334,7 +327,7 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
             marginRight: 16,
           }}
         >
-          <PreBol28 text="🚫" />
+          <Image style={styles.headerIcon} source={images.block_user} />
         </TouchableOpacity>
         {/* //? 신고 버튼 */}
         <TouchableOpacity
@@ -343,7 +336,7 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
             marginRight: 16,
           }}
         >
-          <Image style={styles.bell} source={images.report} />
+          <Image style={styles.headerIcon} source={images.report} />
         </TouchableOpacity>
       </View>
     </>
@@ -408,7 +401,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     // backgroundColor: "red",
   },
-  bell: {
+  headerIcon: {
     width: 28,
     height: 28,
   },

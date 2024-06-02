@@ -1,5 +1,5 @@
 //! 이미지 파일명은 항상 언더바 (_) 로 작성해주세요. - 대쉬 (-) 사용 금지.
-
+  
 export const images = {
   //* images
   apple_icon: require("../images/apple_icon.png"),
@@ -11,6 +11,7 @@ export const images = {
   arrow_up: require("../images/arrow_up.png"),
   bell: require("../images/bell.png"),
   bell_light: require("../images/bell_light.png"),
+  block_user: require("../images/block_user.png"),
   calendar: require("../images/calendar.png"),
   calender_disabled: require("../images/calender_disabled.png"),
   camera: require("../images/camera.png"),
@@ -86,7 +87,7 @@ export const images = {
   x_grey: require("../images/x_grey.png"),
   x_in_circle: require("../images/x_in_circle.png"),
   x_white: require("../images/x_white.png"),
-
+  
   //* bottom-tab-navigator
   booking_active: require("../images/bottom-tab-navigator/booking_active.png"),
   booking_disabled: require("../images/bottom-tab-navigator/booking_disabled.png"),
