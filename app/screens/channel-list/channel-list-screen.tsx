@@ -171,31 +171,22 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
   } = useStores()
   const { onPress } = props
 
-  const statusBarBgSelector = () => {
-    if (type === "CARE_GIVER") return GIVER_CASUAL_NAVY
-    return palette.black
-  }
+  const statusBarBg = type === "CARE_GIVER" ? GIVER_CASUAL_NAVY : palette.black
 
-  const statusBarStyleSelector = (): StatusBarStyle => {
-    if (type === "CARE_GIVER")
-      return Platform.select({
-        ios: "dark-content",
-        android: "light-content",
-      })
-    return "light-content"
-  }
+  const statusBarStyle: StatusBarStyle =
+    type === "CARE_GIVER"
+      ? Platform.select({
+          ios: "dark-content",
+          android: "light-content",
+        })
+      : "light-content"
 
-  const logoSelector = () => {
-    if (type === "CARE_GIVER") return images.care_giver_logo_light_162x20
-    return images.care_giver_logo_162x20
-  }
+  const logo =
+    type === "CARE_GIVER" ? images.care_giver_logo_light_162x20 : images.care_giver_logo_162x20
+
   return (
     <>
-      <StatusBar
-        backgroundColor={statusBarBgSelector()}
-        barStyle={statusBarStyleSelector()}
-        animated
-      />
+      <StatusBar backgroundColor={statusBarBg} barStyle={statusBarStyle} animated />
       <View
         {...props}
         style={[
@@ -205,7 +196,7 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
         ]}
       >
         {/* //? 케어기버 로고 */}
-        <Image style={styles.careGiverLogo} source={logoSelector()} />
+        <Image style={styles.careGiverLogo} source={logo} />
 
         {/* //? 알람 버튼 */}
         <Pressable
