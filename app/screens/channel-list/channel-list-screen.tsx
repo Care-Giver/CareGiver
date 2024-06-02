@@ -4,10 +4,9 @@ import {
   Platform,
   Pressable,
   StatusBar,
+  StatusBarStyle,
   StyleSheet,
-  TextInput,
   View,
-  ViewStyle,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -28,12 +27,10 @@ import { streamChatClient } from "../../services/api/stream"
 import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
-import { BODY, CARE_NATURAL_BLUE, DISABLED, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
-import { platformApiLevel } from "expo-device"
+import { BODY, DISABLED, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
 import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { postNotionReport } from "../../services/api/chats"
-import { now } from "lodash"
 
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
@@ -98,6 +95,7 @@ export const ChannelListScreen: FC<
         backdropComponent={renderBackdrop}
         index={0}
         snapPoints={snapPoints}
+        keyboardBehavior="extend"
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
@@ -151,7 +149,7 @@ export const ChannelListScreen: FC<
               },
               reportee: nickname,
               desc: text,
-              reportedAt: new Date().toString(),
+              reportedAt: new Date().toISOString(),
             })
             bottomSheetModalRef.current.close()
           }}
@@ -168,20 +166,46 @@ interface ChatListScreenHeaderProps {
 export const ChatListScreenHeader = observer(function ChatListScreenHeader(
   props: ChatListScreenHeaderProps,
 ) {
+  const {
+    userStore: { type },
+  } = useStores()
   const { onPress } = props
+
+  const statusBarBgSelector = () => {
+    if (type === "CARE_GIVER") return GIVER_CASUAL_NAVY
+    return palette.black
+  }
+
+  const statusBarStyleSelector = (): StatusBarStyle => {
+    if (type === "CARE_GIVER")
+      return Platform.select({
+        ios: "dark-content",
+        android: "light-content",
+      })
+    return "light-content"
+  }
+
+  const logoSelector = () => {
+    if (type === "CARE_GIVER") return images.care_giver_logo_light_162x20
+    return images.care_giver_logo_162x20
+  }
   return (
     <>
       <StatusBar
-        backgroundColor={palette.black}
-        barStyle={Platform.select({
-          ios: "dark-content",
-          android: "light-content",
-        })}
+        backgroundColor={statusBarBgSelector()}
+        barStyle={statusBarStyleSelector()}
         animated
       />
-      <View {...props} style={[HEADER_ROOT, SHADOW_1]}>
+      <View
+        {...props}
+        style={[
+          HEADER_ROOT,
+          SHADOW_1,
+          { backgroundColor: type === "CARE_GIVER" ? GIVER_CASUAL_NAVY : "white" },
+        ]}
+      >
         {/* //? 케어기버 로고 */}
-        <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />
+        <Image style={styles.careGiverLogo} source={logoSelector()} />
 
         {/* //? 알람 버튼 */}
         <Pressable
