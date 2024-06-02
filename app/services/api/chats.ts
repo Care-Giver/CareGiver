@@ -34,14 +34,14 @@ export const postNotionReport = async (
 
     if (!response?.data.ok) {
       console.error("/notions-report API 에러!!! ♦️", response?.data?.error)
-      return alertModal("신고 실패", "신고 내역을 작성에 실패했습니다.")
+      return alertModal("신고 실패", "신고 내역 작성에 실패했습니다.")
     }
     return {
       isSuccess: true,
     }
   } catch (error) {
     console.error("catch 에러!!! - postNotionReport", error)
-    return alertModal("신고 실패", "신고 내역을 작성에 실패했습니다.")
+    return alertModal("신고 실패", "신고 내역 작성에 실패했습니다.")
   }
 }
 
