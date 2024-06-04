@@ -15,7 +15,6 @@ export type SignInWithAppleGetAppleProfileResult =
   | {
       isSuccess: true
       identityToken: string
-      email: string
     }
   | { isSuccess: false }
 /**
@@ -36,15 +35,14 @@ const signInWithAppleGetAppleProfile = async (): Promise<SignInWithAppleGetApple
       return { isSuccess: false }
     }
 
-    if (!appleAuthRequestResponse.email) {
-      alertModal("애플 프로필 가져오기 실패", `이메일 정보가 존재하지 않습니다.`)
+    if (!appleAuthRequestResponse.identityToken) {
+      alertModal("애플 로그인 실패", `토큰 정보가 존재하지 않습니다.`)
       return { isSuccess: false }
     }
 
     return {
       isSuccess: true,
       identityToken: appleAuthRequestResponse.identityToken,
-      email: appleAuthRequestResponse.email,
     }
   } catch (error) {
     if (error.code === "1001") {
@@ -67,10 +65,10 @@ const signInWithAppleGetAppleProfile = async (): Promise<SignInWithAppleGetApple
  * @returns {Promise<null>}
  */
 export const appleLogin = async (socialLoginHander, logoutHandler) => {
-  const appleResult = await signInWithAppleGetAppleProfile()
-  if (!appleResult.isSuccess) return
+  const appleProfile = await signInWithAppleGetAppleProfile()
+  if (!appleProfile.isSuccess) return
 
-  const result = await checkUserExists({ idToken: appleResult.identityToken }, "apple")
+  const result = await checkUserExists({ idToken: appleProfile.identityToken }, "apple")
   if (!result.ok) return
 
   // MST 로그인 진행
@@ -78,15 +76,16 @@ export const appleLogin = async (socialLoginHander, logoutHandler) => {
     await socialLoginHander({
       token: result.token,
       provider: "apple",
-      email: appleResult.email,
+      email: result.email,
     })
   }
   // 회원가입 진행
   else {
     navigate("terms-of-service-screen", {
-      email: appleResult.email,
+      idToken: appleProfile.identityToken,
       provider: "apple",
-      idToken: appleResult.identityToken,
+      //@ts-ignore
+      email: result.email,
     })
   }
 }

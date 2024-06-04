@@ -5,8 +5,8 @@ import {
   StatusBar,
   StyleProp,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
+  StatusBarStyle,
   View,
   ViewStyle,
 } from "react-native"
@@ -42,14 +42,14 @@ import {
   SHADOW_1,
   palette,
 } from "#theme"
-import bottomSheetModal from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModal"
-import {
+import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetScrollView,
   BottomSheetTextInput,
 } from "@gorhom/bottom-sheet"
 import _ from "lodash"
+import { postNotionReport } from "../../services/api/chats"
 
 type ChatMember = ChannelMemberResponse<DefaultGenerics>
 export const ChannelListScreen: FC<
@@ -57,7 +57,14 @@ export const ChannelListScreen: FC<
 > = observer(function ChannelListScreen({ navigation }) {
   useShowBottomTab(navigation)
   const {
-    userStore: { myStreamUserId, connectToStream, blockedUserIds, setBlockedUserIds },
+    userStore: {
+      userAuth,
+      userDetail,
+      myStreamUserId,
+      connectToStream,
+      blockedUserIds,
+      setBlockedUserIds,
+    },
   } = useStores()
   const [allUsers, setAllUsers] = useState<ChatMember[]>([])
   const [blockedUsers, setBlockedUsers] = useState<ChatMember[]>([])
@@ -120,7 +127,7 @@ export const ChannelListScreen: FC<
   const onPressSubmitBlockConfig = () => {
     setBlockedUsers(blockedUsersBuffer)
     setBlockedUserIds(blockedUsersBuffer.map((u) => u.user_id))
-    bottomSheetModalRef2.current.close()
+    bottomSheetModalRef.current.close()
   }
 
   useEffect(() => {
@@ -138,13 +145,13 @@ export const ChannelListScreen: FC<
   }, [streamChatClient?.user, filters])
 
   // 차단 바텀시트모달 - ref
-  const bottomSheetModalRef2 = useRef<bottomSheetModal>(null)
-  // 신고 바텀시트모달 - ref
-  const bottomSheetModalRef = useRef<bottomSheetModal>(null)
-  // 바텀시트모달 - snapPoints
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  // 신고 바텀시트 - ref
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  // 바텀시트/바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["87%", "87%"], [])
 
-  /** 바텀시트모달 backdrop */
+  /** 바텀시트/바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -161,9 +168,9 @@ export const ChannelListScreen: FC<
     <Screen testID="ChannelList" style={{ paddingHorizontal: 0 }}>
       <ChatListScreenHeader
         onPressBlock={() => {
-          bottomSheetModalRef2.current.present()
+          bottomSheetModalRef.current.present()
         }}
-        onPress={() => bottomSheetModalRef.current.present()}
+        onPress={() => bottomSheetRef.current.expand()}
       />
       <ChannelList
         onSelect={(channel) => {
@@ -192,9 +199,9 @@ export const ChannelListScreen: FC<
         }}
       />
 
-      {/* 차단 목록 모달 */}
+      {/* 차단 목록 바텀시트모달 */}
       <BottomSheetModal
-        ref={bottomSheetModalRef2}
+        ref={bottomSheetModalRef}
         backdropComponent={renderBackdrop}
         footerComponent={() => {
           return (
@@ -243,12 +250,13 @@ export const ChannelListScreen: FC<
         </BottomSheetScrollView>
       </BottomSheetModal>
 
-      {/* 신고 바텀시트모달 */}
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
+      {/* 신고 바텀시트 */}
+      <BottomSheet
+        ref={bottomSheetRef}
         backdropComponent={renderBackdrop}
-        index={0}
+        index={-1}
         snapPoints={snapPoints}
+        keyboardBehavior="extend"
         enablePanDownToClose
         style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
       >
@@ -259,10 +267,9 @@ export const ChannelListScreen: FC<
         <PreReg14 text="신고할 닉네임" color={BODY} mt={28} mb={9} />
         <BottomSheetTextInput
           style={styles.nicknameInput}
-          placeholder="예약 취소 사유를 직접 입력해주세요."
+          placeholder="신고할 유저 닉네임을 적어주세요."
           value={nickname}
           onChangeText={setNickname}
-          // multiline
           blurOnSubmit
           maxLength={30}
         />
@@ -272,14 +279,15 @@ export const ChannelListScreen: FC<
         </Row>
         {/* // TODO: keyboard avoiding view - 줄넘김 많을 때 텍스트 가리는 문제 생길 수 있음 */}
         {/* //* 리뷰 텍스트 input */}
-        <TextInput
+        <BottomSheetTextInput
           maxLength={300}
           placeholder="신고하는 사유를 최대한 상세히 적어주세요."
           placeholderTextColor={DISABLED}
-          multiline
           blurOnSubmit
           onChangeText={setText}
           value={text}
+          multiline
+          textAlignVertical="top"
           // onSubmitEditing={Keyboard.dismiss} // 엔터 클릭시 키보드 종료
           style={styles.textInput}
         />
@@ -290,8 +298,25 @@ export const ChannelListScreen: FC<
           <PreReg14 text="/ 300" color={BODY} />
         </View>
         {/* //TODO 확인버튼 => 신고 api 호출 */}
-        <ConditionalButton label="확인" isActivated={true} onPress={() => {}} />
-      </BottomSheetModal>
+        <ConditionalButton
+          label="확인"
+          isActivated={!!(nickname.length && text.length)}
+          onPress={() => {
+            postNotionReport({
+              reporter: {
+                email: userAuth.email,
+                nickname: userDetail.email,
+                phoneNumber: userDetail.phoneNumber,
+                id: userDetail.id,
+              },
+              reportee: nickname,
+              desc: text,
+              reportedAt: new Date().toISOString(),
+            })
+            bottomSheetRef.current.close()
+          }}
+        />
+      </BottomSheet>
     </Screen>
   )
 })
@@ -304,20 +329,37 @@ interface ChatListScreenHeaderProps {
 export const ChatListScreenHeader = observer(function ChatListScreenHeader(
   props: ChatListScreenHeaderProps,
 ) {
+  const {
+    userStore: { type },
+  } = useStores()
   const { onPressBlock, onPress } = props
-  return (
-    <>
-      <StatusBar
-        backgroundColor={palette.black}
-        barStyle={Platform.select({
+
+  const statusBarBg = type === "CARE_GIVER" ? GIVER_CASUAL_NAVY : palette.black
+
+  const statusBarStyle: StatusBarStyle =
+    type === "CARE_GIVER"
+      ? "light-content"
+      : Platform.select({
           ios: "dark-content",
           android: "light-content",
-        })}
-        animated
-      />
-      <View {...props} style={[HEADER_ROOT, SHADOW_1]}>
+        })
+
+  const logo =
+    type === "CARE_GIVER" ? images.care_giver_logo_light_162x20 : images.care_giver_logo_162x20
+
+  return (
+    <>
+      <StatusBar backgroundColor={statusBarBg} barStyle={statusBarStyle} animated />
+      <View
+        {...props}
+        style={[
+          HEADER_ROOT,
+          SHADOW_1,
+          { backgroundColor: type === "CARE_GIVER" ? GIVER_CASUAL_NAVY : "white" },
+        ]}
+      >
         {/* //? 케어기버 로고 */}
-        <Image style={styles.careGiverLogo} source={images.care_giver_logo_162x20} />
+        <Image style={styles.careGiverLogo} source={logo} />
 
         {/* //? 차단 버튼 */}
         <TouchableOpacity
