@@ -100,9 +100,9 @@ export const BookingDetailScreen: FC<
     const id = serviceType === "creche" ? crecheBookingId : visitingBookingId
     const getBooking = serviceType === "creche" ? getCrecheBooking : getVisitingBooking
     //@ts-ignore
-    // getBooking(id).then(setBooking)
+    getBooking(id).then(setBooking)
     // ! For testing
-    getBooking(id).then((b) => setBooking({ ...b, status: BookingStatus.WAITING }))
+    //getBooking(id).then((b) => setBooking({ ...b, status: BookingStatus.WAITING }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
