@@ -2,11 +2,13 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "re
 import {
   Image,
   Platform,
-  Pressable,
   StatusBar,
-  StatusBarStyle,
+  StyleProp,
   StyleSheet,
+  TouchableOpacity,
+  StatusBarStyle,
   View,
+  ViewStyle,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -14,6 +16,8 @@ import { NavigatorParamList } from "#navigators"
 import {
   BASIC_BACKGROUND_PADDING_WIDTH,
   ConditionalButton,
+  DivisionLine,
+  PopSem12,
   PreBol14,
   PreBol18,
   PreMed14,
@@ -23,31 +27,54 @@ import {
 } from "#components"
 import { useShowBottomTab } from "../../utils/hooks"
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
+import { ChannelMemberResponse, DefaultGenerics } from "stream-chat"
 import { streamChatClient } from "../../services/api/stream"
 import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
-import { BODY, DISABLED, GIVER_CASUAL_NAVY, LBG, LIGHT_LINE, SHADOW_1, palette } from "#theme"
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from "@gorhom/bottom-sheet"
+import {
+  BODY,
+  BOTTOM_HEIGHT,
+  DISABLED,
+  GIVER_CASUAL_NAVY,
+  LBG,
+  LIGHT_LINE,
+  SHADOW_1,
+  palette,
+} from "#theme"
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet"
+import _ from "lodash"
 import { postNotionReport } from "../../services/api/chats"
 
+type ChatMember = ChannelMemberResponse<DefaultGenerics>
 export const ChannelListScreen: FC<
   StackScreenProps<NavigatorParamList, "channel-list-screen">
 > = observer(function ChannelListScreen({ navigation }) {
   useShowBottomTab(navigation)
   const {
-    userStore: { type, userAuth, userDetail, myStreamUserId, connectToStream },
+    userStore: {
+      userAuth,
+      userDetail,
+      myStreamUserId,
+      connectToStream,
+      blockedUserIds,
+      setBlockedUserIds,
+    },
   } = useStores()
+  const [allUsers, setAllUsers] = useState<ChatMember[]>([])
+  const [blockedUsers, setBlockedUsers] = useState<ChatMember[]>([])
+  const [blockedUsersBuffer, setBlockedUsersBuffer] = useState<ChatMember[]>(blockedUsers)
+  const isBufferDifferent = !_.isEqual(
+    blockedUsersBuffer.map((u) => u.user_id),
+    blockedUsers.map((u) => u.user_id),
+  )
   const [nickname, setNickname] = useState<string>("")
   const [text, setText] = useState<string>("")
-  useEffect(() => {
-    // client.connectUser 는 한 번만 실행되도록 한다.
-    if (!streamChatClient?.user) {
-      connectToStream()
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streamChatClient?.user])
 
   const filters = {
     type: "messaging",
@@ -58,13 +85,73 @@ export const ChannelListScreen: FC<
     last_message_at: -1,
   }
 
-  // 기본 | 추가 서비스 설명 바텀시트모달 - ref
-  const bottomSheetModalRef = useRef<BottomSheet>(null)
+  const fetchOtherUsers = async () => {
+    const channels = await streamChatClient.queryChannels(filters, [{ last_message_at: -1 }], {
+      watch: true, // this is the default
+      state: true,
+    })
+    if (!channels || channels.length === 0) {
+      console.warn("🐞 channels", channels)
+      return
+    }
 
-  // 펫시터 등록하기 바텀시트모달 - snapPoints
+    const _others = await Promise.all(
+      channels.map((channel) =>
+        channel.queryMembers({}, {}, {}).then(({ members }) => {
+          const notMe = members.filter((m) => m.user_id !== myStreamUserId)[0]
+          return notMe
+        }),
+      ),
+    )
+
+    setAllUsers(_.orderBy(_others, "created_at", "desc"))
+    const blocked = _others.filter((u) => blockedUserIds.includes(u.user_id))
+    setBlockedUsers(blocked)
+    setBlockedUsersBuffer(blocked)
+  }
+
+  const onPressBlock = (u: ChatMember) => {
+    setBlockedUsersBuffer((prev) => _.orderBy([...prev, u], "created_at", "desc"))
+  }
+
+  const onPressUnblock = (u: ChatMember) => {
+    setBlockedUsersBuffer((prev) =>
+      _.orderBy(
+        prev.filter((b) => b.user_id !== u.user_id),
+        "created_at",
+        "desc",
+      ),
+    )
+  }
+
+  const onPressSubmitBlockConfig = () => {
+    setBlockedUsers(blockedUsersBuffer)
+    setBlockedUserIds(blockedUsersBuffer.map((u) => u.user_id))
+    bottomSheetModalRef.current.close()
+  }
+
+  useEffect(() => {
+    // client.connectUser 는 한 번만 실행되도록 한다.
+    if (!streamChatClient?.user) {
+      connectToStream()
+      return
+    }
+
+    // 나와 채팅방이 만들어진 유저들 조회
+    if (allUsers.length === 0) {
+      fetchOtherUsers()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamChatClient?.user, filters])
+
+  // 차단 바텀시트모달 - ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  // 신고 바텀시트 - ref
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  // 바텀시트/바텀시트모달 - snapPoints
   const snapPoints = useMemo(() => ["87%", "87%"], [])
 
-  /** 기본 | 추가 서비스 설명 바텀시트모달 backdrop */
+  /** 바텀시트/바텀시트모달 backdrop */
   const renderBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -79,7 +166,12 @@ export const ChannelListScreen: FC<
 
   return (
     <Screen testID="ChannelList" style={{ paddingHorizontal: 0 }}>
-      <ChatListScreenHeader onPress={() => bottomSheetModalRef.current.expand()} />
+      <ChatListScreenHeader
+        onPressBlock={() => {
+          bottomSheetModalRef.current.present()
+        }}
+        onPress={() => bottomSheetRef.current.expand()}
+      />
       <ChannelList
         onSelect={(channel) => {
           navigation.navigate("channel-screen", {
@@ -87,10 +179,80 @@ export const ChannelListScreen: FC<
           })
         }}
         filters={filters}
+        channelRenderFilterFn={(channels) => {
+          if (allUsers.length === 0 && blockedUserIds.length !== 0) {
+            // fetchOtherUsers 가 완료되기 전에 ReactDOM 최초로 렌더링된다. 이 시나리오에서 channelRenderFilterFn 을 의도대로 사용하기 위해, 모든 채팅방을 가린다.
+            return []
+          } else if (blockedUsers.length === 0) {
+            // 차단 유저 목록이 존재하지 않으면, 모든 채팅방을 렌더링한다.
+            return channels
+          } else {
+            // 차단 유저가 존재하는 채팅방들은 모두 렌더링에서 제외시킨다.
+            const _blockedUserIds = blockedUsers.map((u) => u.user_id)
+            return channels.filter((channel) => {
+              const channelMemberUserIds = Object.keys(channel.state.members)
+              const checker = channelMemberUserIds.map((cMUId) => _blockedUserIds.includes(cMUId))
+              const hasBlockedUser = checker.includes(true)
+              return !hasBlockedUser
+            })
+          }
+        }}
       />
 
-      <BottomSheet
+      {/* 차단 목록 바텀시트모달 */}
+      <BottomSheetModal
         ref={bottomSheetModalRef}
+        backdropComponent={renderBackdrop}
+        footerComponent={() => {
+          return (
+            <ConditionalButton
+              label="저장하기"
+              isActivated={isBufferDifferent}
+              style={{ position: "absolute", bottom: BOTTOM_HEIGHT }}
+              onPress={onPressSubmitBlockConfig}
+            />
+          )
+        }}
+        index={0}
+        snapPoints={snapPoints}
+        enablePanDownToClose
+        style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
+      >
+        <BottomSheetScrollView contentContainerStyle={{ paddingBottom: BOTTOM_HEIGHT + 100 }}>
+          {/* 차단 되지 않은 유저들 */}
+          {_.differenceBy(allUsers, blockedUsersBuffer, "user_id").map((u, _, self) => {
+            return (
+              <BlockUserCard
+                key={u.user_id}
+                mode="차단하기"
+                onPress={() => onPressBlock(u)}
+                u={u}
+              />
+            )
+          })}
+
+          {/* 차단 된 유저들 */}
+          <PreBol18 text="차단 유저 목록" mt={20} />
+          {blockedUsersBuffer.length !== 0 ? (
+            blockedUsersBuffer.map((u) => {
+              return (
+                <BlockUserCard
+                  key={u.user_id}
+                  mode="해제하기"
+                  onPress={() => onPressUnblock(u)}
+                  u={u}
+                />
+              )
+            })
+          ) : (
+            <PopSem12 color={DISABLED} text="차단된 유저가 없습니다." mv={10} />
+          )}
+        </BottomSheetScrollView>
+      </BottomSheetModal>
+
+      {/* 신고 바텀시트 */}
+      <BottomSheet
+        ref={bottomSheetRef}
         backdropComponent={renderBackdrop}
         index={-1}
         snapPoints={snapPoints}
@@ -151,7 +313,7 @@ export const ChannelListScreen: FC<
               desc: text,
               reportedAt: new Date().toISOString(),
             })
-            bottomSheetModalRef.current.close()
+            bottomSheetRef.current.close()
           }}
         />
       </BottomSheet>
@@ -160,6 +322,7 @@ export const ChannelListScreen: FC<
 })
 
 interface ChatListScreenHeaderProps {
+  onPressBlock: () => void
   onPress: () => void
 }
 
@@ -169,7 +332,7 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
   const {
     userStore: { type },
   } = useStores()
-  const { onPress } = props
+  const { onPressBlock, onPress } = props
 
   const statusBarBg = type === "CARE_GIVER" ? GIVER_CASUAL_NAVY : palette.black
 
@@ -198,29 +361,89 @@ export const ChatListScreenHeader = observer(function ChatListScreenHeader(
         {/* //? 케어기버 로고 */}
         <Image style={styles.careGiverLogo} source={logo} />
 
-        {/* //? 알람 버튼 */}
-        <Pressable
-          onPress={onPress}
+        {/* //? 차단 버튼 */}
+        <TouchableOpacity
+          onPress={onPressBlock}
           style={{
             marginLeft: "auto",
             marginRight: 16,
           }}
         >
-          <Image style={styles.bell} source={images.report} />
-        </Pressable>
+          <Image style={styles.headerIcon} source={images.block_user} />
+        </TouchableOpacity>
+        {/* //? 신고 버튼 */}
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            marginRight: 16,
+          }}
+        >
+          <Image style={styles.headerIcon} source={images.report} />
+        </TouchableOpacity>
       </View>
     </>
   )
 })
+interface BlockUserCardProps {
+  style?: StyleProp<ViewStyle>
+  mode: "차단하기" | "해제하기"
+  onPress: () => void
+  u: ChatMember
+}
+const BlockUserCard = observer(function BlockUserCard(props: BlockUserCardProps) {
+  const { style, mode, onPress, u } = props
+  const $color = mode === "차단하기" ? GIVER_CASUAL_NAVY : "black"
+  const $button: ViewStyle = {
+    width: 60,
+    height: 24,
+    borderColor: $color,
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "flex-start", // == 'display: inline-block'  (ref: https://stackoverflow.com/a/45335695/16673541)
+  }
+  return (
+    <View style={style}>
+      <View
+        style={{
+          width: "100%",
+          height: 52,
+          justifyContent: "center",
+          padding: 10,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <PreReg14
+            text={`${u.user.name}`}
+            color={mode === "차단하기" ? "black" : DISABLED}
+            style={{ textDecorationLine: mode === "차단하기" ? "none" : "line-through" }}
+          />
+          <TouchableOpacity style={$button} onPress={onPress} hitSlop={8}>
+            <PopSem12 text={mode} color={$color} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <DivisionLine mb={10} />
+    </View>
+  )
+})
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   careGiverLogo: {
     width: 162,
     height: 20,
     marginLeft: 16,
     // backgroundColor: "red",
   },
-  bell: {
+  headerIcon: {
     width: 28,
     height: 28,
   },

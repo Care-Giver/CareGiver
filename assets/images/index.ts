@@ -11,6 +11,7 @@ export const images = {
   arrow_up: require("../images/arrow_up.png"),
   bell: require("../images/bell.png"),
   bell_light: require("../images/bell_light.png"),
+  block_user: require("../images/block_user.png"),
   calendar: require("../images/calendar.png"),
   calender_disabled: require("../images/calender_disabled.png"),
   camera: require("../images/camera.png"),
