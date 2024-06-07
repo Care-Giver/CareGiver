@@ -3,7 +3,7 @@
   "displayName": "CareGiver",
   "expo": {
     "name": "CareGiver",
-    "slug": "CareGiver",
+    "slug": "care-giver-frontend",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/application/logo_icon.png",
@@ -30,8 +30,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4ab261cb-f4ef-46dd-a60b-f015699d0c06"
+        "projectId": "21f421b0-a81f-45bd-b7ba-b099ad813d8d"
       }
-    }
+    },
+    "owner": "care-giver-official"
   }
 }
