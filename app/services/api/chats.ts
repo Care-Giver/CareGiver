@@ -27,10 +27,7 @@ export const postNotionReport = async (
   input: PostNotionReportInput,
 ): Promise<PostNotionReportResult> => {
   try {
-    const response = await axios.post<PostNotionReportResponse>(
-      `${BASE_URL}/chats/notions-report`,
-      input,
-    )
+    const response = await axios.post<PostNotionReportResponse>(`${BASE_URL}/chats/report`, input)
 
     if (!response?.data.ok) {
       console.error("/notions-report API 에러!!! ♦️", response?.data?.error)
