@@ -1,6 +1,5 @@
 import axios from "axios"
 import { BASE_URL, GeneralResponse } from "./axios-config"
-import { alertModal } from "../../utils/alert-modal"
 import { Pet } from "#api"
 
 export enum BookingStatus {
@@ -71,13 +70,12 @@ export const getConfirmedBookings = async (): Promise<GetConfirmedBookingsResult
       `${BASE_URL}/care-giver/confirmed-bookings`,
     )
     if (!response.data.ok) {
-      alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
+      console.warn("수락한 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, confirmedBookings: [] }
     }
     return { isSuccess: true, confirmedBookings: response.data.confirmedBookings }
   } catch (error) {
-    console.error("catch 에러!!!", error)
-    alertModal("수락한 예약 목록을 읽어오는데 실패했습니다.", `catch: ${error?.message}`)
+    console.warn("수락한 예약 목록을 읽어오는데 실패했습니다.", `catch: ${error?.message}`)
     return { isSuccess: false, confirmedBookings: [] }
   }
 }
@@ -105,13 +103,12 @@ export const getAllBookings = async (): Promise<GetAllBookingsResult> => {
       { headers: { "Cache-Control": "no-store" } }, //! DO NOT REMOVE@
     )
     if (!response.data.ok) {
-      alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
+      console.warn("모든 예약 목록을 읽어오는데 실패했습니다.", `${response.data.error.message}`)
       return { isSuccess: false, receivedBookings: [] }
     }
     return { isSuccess: true, receivedBookings: response.data.receivedBookings }
   } catch (error) {
-    console.error("catch 에러!!!", error)
-    alertModal("모든 예약 목록을 읽어오는데 실패했습니다.", `catch: ${error?.message}`)
+    console.warn("모든 예약 목록을 읽어오는데 실패했습니다.", `catch: ${error?.message}`)
     return { isSuccess: false, receivedBookings: [] }
   }
 }
