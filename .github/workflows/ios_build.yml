@@ -13,9 +13,6 @@ jobs:
       - name: Show self-hosted machine infomation
         run: uname -a
 
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.9.1
-
       - name: Checkout repo from test/CICD-hojung branch
         uses: actions/checkout@v4
         with:
