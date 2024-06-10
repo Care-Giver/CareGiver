@@ -31,7 +31,7 @@ jobs:
           xcode-version: "15.3"
 
       - name: Build iOS (Release)
-        uses: yukiarrr/ios-build-action@v1.11.2
+        uses: hojkim77/ios-build-action-KHJ@master
         with:
           project-path: ios/CareGiver.xcodeproj
           p12-base64: ${{ secrets.IOS_P12_BASE64 }}
