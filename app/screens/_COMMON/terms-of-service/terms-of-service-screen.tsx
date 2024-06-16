@@ -77,13 +77,14 @@ export const TermsOfServiceScreen: FC<
       {/**
        * 필수 약관
        */}
-      <Row mb={16}>
-        <BlueCheckbox value={requiredToggle} onPress={onPressRequired}></BlueCheckbox>
+      <Row mb={16} onPress={onPressRequired}>
+        <BlueCheckbox value={requiredToggle} onPress={onPressRequired} />
         <PreMed16 text="필수 약관 모두 동의" ml={8} />
       </Row>
       <Row mb={12}>
         <PreReg14 text="서비스 이용 약관 동의" color={BODY} ml={28} />
         <Pressable
+          hitSlop={4}
           style={{ marginLeft: "auto" }}
           onPress={() => openLink(외부링크.서비스_이용_약관_동의)}
         >
@@ -93,6 +94,7 @@ export const TermsOfServiceScreen: FC<
       <Row mb={12}>
         <PreReg14 text="개인정보 수집 및 이용 동의" color={BODY} ml={28} />
         <Pressable
+          hitSlop={4}
           style={{ marginLeft: "auto" }}
           onPress={() => openLink(외부링크.개인정보_수집_이용_동의)}
         >
@@ -105,22 +107,23 @@ export const TermsOfServiceScreen: FC<
       <Row>
         <PreReg14 text="위치기반서비스 이용 약관 동의" color={BODY} ml={28} />
         <Pressable
+          hitSlop={4}
           style={{ marginLeft: "auto" }}
           onPress={() => openLink(외부링크.위치기반서비스_이용_약관_동의)}
         >
           <Image source={images.arrow_right} style={{ width: 16, height: 16 }} />
         </Pressable>
       </Row>
-      <Row mt={36} mb={20}>
-        <BlueCheckbox value={optionalToggle} onPress={onPressOptional}></BlueCheckbox>
+      <Row mt={36} mb={20} onPress={onPressOptional}>
+        <BlueCheckbox value={optionalToggle} onPress={onPressOptional} />
         <PreMed16 text="이벤트 및 마케팅 정보 수신 동의(선택)" ml={8} />
       </Row>
       <DivisionLine />
       {/**
        * 모든 약관
        */}
-      <Row mt={20}>
-        <BlueCheckbox value={allToggle} onPress={onPressAll}></BlueCheckbox>
+      <Row mt={20} onPress={onPressAll}>
+        <BlueCheckbox value={allToggle} onPress={onPressAll} />
         <PreMed18 text="모두 확인 및 동의합니다." ml={8} />
       </Row>
       {/**
