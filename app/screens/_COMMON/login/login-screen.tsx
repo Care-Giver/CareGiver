@@ -101,7 +101,7 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
     // 이메일 로그인 바텀시트모달 - snapPoints
-    const snapPoints = useMemo(() => ["50%", "80%"], [])
+    const snapPoints = useMemo(() => ["50%", "87%"], [])
 
     /** 이메일 로그인 바텀시트모달 backdrop */
     const renderBackdrop = useCallback(
@@ -116,52 +116,6 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
       [],
     )
 
-    /** 이메일 로그인 바텀시트모달 Footer - 확인 버튼 렌더링 */
-    const renderFooter = useCallback(
-      (props) => (
-        <BottomSheetFooter {...props} bottomInset={BOTTOM_HEIGHT} style={styles.btnContainer}>
-          <ConditionalButton
-            label={"로그인"}
-            isActivated={!!emailAuth.email && !!emailAuth.password}
-            onPress={() => {
-              if (emailAuth.password !== PASSWORD_PASSKEY) {
-                alertModal("비밀번호가 틀렸습니다.", "비밀번호를 다시 한 번 확인해보세요.")
-                return
-              }
-
-              let _provider = ""
-              switch (emailAuth.email) {
-                case "blah@test.com":
-                  _provider = "kakao"
-                  break
-                case "blah2@test.com":
-                  _provider = "naver"
-                  break
-                case "example@google.com":
-                  _provider = "naver"
-                  break
-                case "choi@naver.com": // 최정혁 (테스트 펫시터 계정)
-                  _provider = "naver"
-                  break
-                case "park@naver.com": // 박승현 (테스트 펫시터 계정)
-                  _provider = "naver"
-                  break
-                case "horse@naver.com": // 이영민 (테스트 펫시터 계정)
-                  _provider = "naver"
-                  break
-              }
-              setOnLoggingIn(true)
-              noAuthLogin({ email: emailAuth.email, provider: _provider }).finally(() =>
-                setOnLoggingIn(false),
-              )
-              bottomSheetModalRef.current?.close()
-              //
-            }}
-          />
-        </BottomSheetFooter>
-      ),
-      [emailAuth.email, emailAuth.password, noAuthLogin],
-    )
     // 이메일 로그인 바텀시트모달 ENDED =======================================================
     return (
       <Screen testID="Login" type="View">
@@ -235,11 +189,54 @@ export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "login-screen"
         <BottomSheetModal
           ref={bottomSheetModalRef}
           backdropComponent={renderBackdrop}
+          footerComponent={(props) => {
+            return (
+              <BottomSheetFooter {...props} bottomInset={0}>
+                <ConditionalButton
+                  label={"로그인"}
+                  isActivated={!!emailAuth.email && !!emailAuth.password}
+                  style={{ position: "absolute", bottom: BOTTOM_HEIGHT }}
+                  onPress={() => {
+                    if (emailAuth.password !== PASSWORD_PASSKEY) {
+                      alertModal("비밀번호가 틀렸습니다.", "비밀번호를 다시 한 번 확인해보세요.")
+                      return
+                    }
+
+                    let _provider = ""
+                    switch (emailAuth.email) {
+                      case "blah@test.com":
+                        _provider = "kakao"
+                        break
+                      case "blah2@test.com":
+                        _provider = "naver"
+                        break
+                      case "example@google.com":
+                        _provider = "naver"
+                        break
+                      case "choi@naver.com": // 최정혁 (테스트 펫시터 계정)
+                        _provider = "naver"
+                        break
+                      case "park@naver.com": // 박승현 (테스트 펫시터 계정)
+                        _provider = "naver"
+                        break
+                      case "horse@naver.com": // 이영민 (테스트 펫시터 계정)
+                        _provider = "naver"
+                        break
+                    }
+                    setOnLoggingIn(true)
+                    noAuthLogin({ email: emailAuth.email, provider: _provider }).finally(() =>
+                      setOnLoggingIn(false),
+                    )
+                    bottomSheetModalRef.current?.close()
+                  }}
+                />
+              </BottomSheetFooter>
+            )
+          }}
           index={0}
           snapPoints={snapPoints}
           keyboardBehavior="extend"
           enablePanDownToClose
-          footerComponent={renderFooter}
           style={{ paddingHorizontal: BASIC_BACKGROUND_PADDING_WIDTH }}
         >
           {/* 이메일 */}
@@ -424,14 +421,6 @@ const styles = StyleSheet.create({
   },
 
   image: { width: 16, height: 16 },
-
-  btnContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    left: 0,
-    right: 0,
-  },
 
   textInputOuter: {
     flexDirection: "row",

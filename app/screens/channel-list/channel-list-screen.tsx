@@ -305,7 +305,7 @@ export const ChannelListScreen: FC<
             postNotionReport({
               reporter: {
                 email: userAuth.email,
-                nickname: userDetail.email,
+                nickname: userDetail.nickname,
                 phoneNumber: userDetail.phoneNumber,
                 id: userDetail.id,
               },
