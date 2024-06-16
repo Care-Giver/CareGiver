@@ -312,16 +312,19 @@ export const updateUser = async (post: UpdateUserRequestBody): Promise<UpdateUse
 
     if (!response?.data.ok) {
       console.error("API 에러!!! - updateUser", response?.data?.error)
-      return { isSuccess: false, reason: response?.data?.error }
+      alertModal("내 프로필 수정 실패", `${response?.data?.error?.message}`)
+      return { isSuccess: false, reason: response?.data?.error?.message }
     }
 
     console.log(response.data.ok)
+    alertModal("내 프로필 수정 완료", "수정 사항이 성공적으로 저장되었습니다.")
     return {
       isSuccess: true,
     }
   } catch (error) {
-    console.error("catch 에러!!! - updateUsser", error)
-    return { isSuccess: false, reason: error }
+    console.error("API 에러!!! - updateUser| catch", error)
+    alertModal("내 프로필 수정 실패", `catch: ${error?.message}`)
+    return { isSuccess: false, reason: error?.message }
   }
 }
 
