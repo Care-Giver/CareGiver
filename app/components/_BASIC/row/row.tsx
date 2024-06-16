@@ -1,11 +1,13 @@
 import React, { ReactNode } from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
+import { Pressable, PressableProps, StyleProp, View, ViewStyle } from "react-native"
 import { styles } from "../common-styles"
 
 interface RowProps {
   children: ReactNode
 
   style?: StyleProp<ViewStyle>
+
+  onPress?: PressableProps["onPress"]
 
   /**
    * marginTop
@@ -39,7 +41,8 @@ interface RowProps {
 }
 
 export const Row = (props: RowProps) => {
-  const { children, style, mt, mb, mv, ml, mr, mh } = props
+  const { children, onPress, style, mt, mb, mv, ml, mr, mh } = props
+  const Wrapper = onPress ? Pressable : View
   const $style = Object.assign(
     {},
     {
@@ -52,5 +55,9 @@ export const Row = (props: RowProps) => {
     },
   )
 
-  return <View style={[styles.ROW_PRESET, $style, style]}>{children}</View>
+  return (
+    <Wrapper style={[styles.ROW_PRESET, $style, style]} onPress={onPress}>
+      {children}
+    </Wrapper>
+  )
 }

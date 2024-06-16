@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { View, Image, TouchableOpacity, ImageBackground, Platform } from "react-native"
+import { View, Image, TouchableOpacity, Platform } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { NavigatorParamList } from "#navigators"
 import { observer } from "mobx-react-lite"
@@ -28,6 +28,7 @@ import dayjs from "dayjs"
 import { useTimer } from "react-timer-hook"
 import { alertModal } from "../../../../utils/alert-modal"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { BIRTHDAY_CONSTANT } from "../../../_COMMON/sign-up-screen/sign-up-screen"
 
 export const EditMypageScreen: FC<
   StackScreenProps<NavigatorParamList, "edit-mypage-screen">
@@ -223,13 +224,6 @@ export const EditMypageScreen: FC<
           )}
         </View>
 
-        {/* //* 생년월일 */}
-        <UserOrPetProfileInfo
-          title={"생년월일"}
-          profileInfo={userDetail.birthday}
-          showOption={editable}
-        />
-
         {/* //* 성별 */}
         <UserOrPetProfileInfo title={"성별"} profileInfo={sexInKorean} showOption={editable} />
 
@@ -307,7 +301,7 @@ export const EditMypageScreen: FC<
                   password: null,
                   nickname: nickname,
                   sex: userDetail.sex,
-                  birthday: userDetail.birthday,
+                  birthday: BIRTHDAY_CONSTANT,
                   desc: null,
                   profileImage: profileImage,
                   phoneNumber: userDetail.phoneNumber,
