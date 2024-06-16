@@ -3,7 +3,6 @@ import { BASE_URL, GeneralResponse } from "./axios-config"
 import EventSource from "react-native-sse"
 import { Type } from "#models"
 import { Alert } from "react-native"
-import { alertModal } from "../../utils/alert-modal"
 import { UserDetail } from "#api"
 import { navigate } from "#navigators"
 
@@ -47,13 +46,13 @@ export const getNotificationsBy = async (type: Type): Promise<NotificationMessag
       response?.data?.clientNotifications || response?.data?.careGiverNotifications
 
     if (!response?.data.ok || !notifications) {
-      alertModal(`${type} 알림 불러오기에 실패했습니다!`, `${response?.data?.error}`)
+      console.warn(`${type} 알림 불러오기에 실패했습니다!`, `${response?.data?.error}`)
       return []
     }
 
     return notifications
   } catch (error) {
-    alertModal(`${type} 알림 불러오기에 실패했습니다!`, `catch: ${error?.message}`)
+    console.warn(`${type} 알림 불러오기에 실패했습니다!`, `catch: ${error?.message}`)
     return []
   }
 }

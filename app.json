@@ -4,7 +4,7 @@
   "expo": {
     "name": "CareGiver",
     "slug": "care-giver-frontend",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/application/logo_icon.png",
     "splash": {
@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pet.caregiver",
@@ -23,7 +25,7 @@
     },
     "android": {
       "package": "pet.caregiver",
-      "versionCode": 17
+      "versionCode": 18
     },
     "web": {
       "favicon": "./assets/images/cg_favicon.png"

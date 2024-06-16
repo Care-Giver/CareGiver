@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { FC, useEffect, useMemo, useState } from "react"
 import { Image, Platform, Pressable } from "react-native"
 import { observer } from "mobx-react-lite"
@@ -22,12 +23,38 @@ import { useTimer } from "react-timer-hook"
 import dayjs from "dayjs"
 import { useStores } from "#models"
 import { delay } from "../../../utils/delay"
-import { isBefore, isExists, isFuture } from "date-fns"
 import { toKoreanAuthProvider } from "../../../utils/format"
+import { Buffer } from "buffer"
 
 type Sex = "MALE" | "FEMALE"
 
 const TIMER_DURATION = 60
+
+export const BIRTHDAY_CONSTANT = "2099-01-01" // 애플이 v1.1.2 심사에서 생년월일을 수집하지 않을 것을 요구 함.
+
+interface AppleJwtTokenPayload {
+  iss: string
+  aud: string
+  exp: number
+  iat: number
+  sub: string
+  nonce: string
+  c_hash: string
+  email?: string
+  email_verified?: string
+  is_private_email?: string
+  auth_time: number
+  nonce_supported: boolean
+}
+function decodeJWTAppleToken(token: string) {
+  try {
+    if (!token) return null
+    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString()) as AppleJwtTokenPayload
+  } catch (error) {
+    console.error("catch 에러!!! - decodeJWTAppleToken", error)
+    return null
+  }
+}
 
 export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-screen">> = observer(
   function SignUpScreen({ navigation, route }) {
@@ -41,7 +68,6 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
     const [isKeyboardShown, setIsKeyboardShown] = useState(false)
 
     const [nickname, setNickname] = useState<string>("")
-    const [birthday, setBirthday] = useState<string>("")
     const [sex, setSex] = useState<Sex>(null)
     const [phoneNumber, setPhoneNumber] = useState<string>("")
     // 인증번호
@@ -66,6 +92,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       } else {
         pause()
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSendingSMS])
 
     // "계정 생성하기" 버튼 표시 여부
@@ -82,33 +109,8 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
     // 생년월일 길이는 8 + 2 (대시 '-' 2개)
     // 휴대폰번호 길이는 11 + 2 (대시 '-' 2개)
     const isActivated = useMemo(() => {
-      // 생년월일 검증
-      let isValidBirthday = false
-      if (birthday.length === 8 + 2) {
-        const year = Number(String(birthday).substring(0, 4))
-        const month = Number(String(birthday).substring(5, 7)) - 1 //! Date object 에서 month 는 0 부터 시작한다.
-        const date = Number(String(birthday).substring(8, 10))
-
-        // 존재 하지 않는 년/월/일 이면 거른다.
-        if (!isExists(year, month, date)) {
-          return false
-        }
-        // 미래인 경우, 거른다.
-        const birthdayDate = new Date(year, month, date)
-        if (isFuture(birthdayDate)) {
-          return false
-        }
-        // 1900.01.01 보다 과거이면 거른다.
-        if (isBefore(birthdayDate, new Date(1900, 0, 1))) {
-          return false
-        }
-
-        // 모든 걸 다 패스하면, null 리턴 ( === 검증 완료)
-        isValidBirthday = true
-      }
-
-      return nickname && isValidBirthday && sex && phoneNumber.length === 11 + 2 && isVerified
-    }, [birthday, isVerified, nickname, phoneNumber.length, sex])
+      return nickname && sex && phoneNumber.length === 11 + 2 && isVerified
+    }, [isVerified, nickname, phoneNumber.length, sex])
 
     const nextButtonHandler = async () => {
       if (!provider) {
@@ -117,22 +119,34 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
         return
       }
 
-      if (!email) {
-        alertModal(
-          "회원가입 실패",
-          `${toKoreanAuthProvider(provider)}로 부터 이메일 정보를 불러올 수 없습니다.`,
-        )
-        navigation.goBack()
-        return
+      let _email = email
+
+      if (provider === "apple") {
+        const { email: decodedEmail } = decodeJWTAppleToken(idToken)
+        if (!idToken || !decodedEmail) {
+          alertModal("회원가입 실패", `로그인 한 Apple 계정에서 이메일 정보를 불러올 수 없습니다.`)
+          navigation.goBack()
+          return
+        }
+        _email = decodedEmail
+      } else {
+        if (!_email) {
+          alertModal(
+            "회원가입 실패",
+            `${toKoreanAuthProvider(provider)}로 부터 이메일 정보를 불러올 수 없습니다.`,
+          )
+          navigation.goBack()
+          return
+        }
       }
 
       // 회원가입 진행
       const signUpResult = await signUp({
-        email,
+        email: _email,
         nickname,
         provider,
         idToken,
-        birthday,
+        birthday: BIRTHDAY_CONSTANT,
         phoneNumber: phoneNumber.replace(/-/g, ""),
         sex,
 
@@ -149,7 +163,7 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
       navigation.replace("sign-up-success-screen")
       await delay(3000)
       loginHander({
-        email,
+        email: _email,
         nickname,
         provider,
         OAuthId: idToken,
@@ -186,19 +200,6 @@ export const SignUpScreen: FC<StackScreenProps<NavigatorParamList, "sign-up-scre
             value={nickname}
             setValue={setNickname}
             textInputProps={{
-              returnKeyType: "done",
-            }}
-            marginBottom={36}
-          />
-
-          {/* 생년월일 기입 */}
-          <SignUpTextInput
-            placeholder="보호자님의 생년월일을 입력해주세요. 예)20010313"
-            title="생년월일(필수)"
-            value={birthday}
-            setValue={setBirthday}
-            textInputProps={{
-              keyboardType: "number-pad",
               returnKeyType: "done",
             }}
             marginBottom={36}

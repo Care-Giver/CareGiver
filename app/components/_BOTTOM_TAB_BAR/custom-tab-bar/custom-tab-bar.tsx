@@ -130,24 +130,8 @@ export const CustomTabBar = observer(function CustomTabBar(props: CustomTabBarPr
         }
 
         const onPress = () => {
-          // 아직 미구현된 탭들 핸들링 - 채팅(CG, CL) 탭, 통계(CG) 탭
+          // 아직 미구현된 탭들 핸들링 - 통계(CG) 탭
           switch (label) {
-            //  채팅(CG, CL) 탭
-            case tabLabel.chatting:
-              if (userAuth.provider === "apple") {
-                alertModal(
-                  "개발중 🏗️",
-                  "아쉽게도 현재, 애플계정으로 회원가입 한 유저는 이메일 정보를 받아올 수 없으므로 채팅 기능을 사용할 수 없습니다.",
-                )
-                return
-              }
-              break
-
-            // // 예약관리(CG) 탭
-            // case tabLabel.manage_booking:
-            //   alertModal("MVP", "예약관리 기능은 아직 개발중입니다 🐈")
-            //   return
-
             // 통계(CG) 탭
             case tabLabel.statistics:
               alertModal("MVP", "통계 기능은 아직 개발중입니다 🐈")
