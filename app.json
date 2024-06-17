@@ -4,7 +4,7 @@
   "expo": {
     "name": "CareGiver",
     "slug": "CareGiver",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/application/logo_icon.png",
     "splash": {
