@@ -52,6 +52,11 @@ prepare_react_native_project!
 target 'CareGiver' do
   use_expo_modules!
 
+  # @react-native-firebase/remote-config 패키지 추가 후 발생한 pod install 오류를 해결하기 위해 추가함.
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'FirebaseABTesting', :modular_headers => true
+  pod 'FirebaseRemoteConfig', :modular_headers => true
+
   # npx expo install @react-native-firebase/app 이후, 발생한 pod install 오류를 해결하기 위해 추가함 - 참고: https://stackoverflow.com/a/72705219/16673541
   pod 'FirebaseCore', :modular_headers => true
   pod 'Firebase', :modular_headers => true
@@ -59,7 +64,7 @@ target 'CareGiver' do
   pod 'GoogleUtilities', :modular_headers => true
   pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate', :modular_headers => true
   pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_headers => true
-
+  
   config = use_native_modules!
   
   # use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks'] #! Flipper 를 사용하려면, use_frameworks! 를 주석처리해야함
