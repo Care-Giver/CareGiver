@@ -7,4 +7,6 @@ import { LogBox } from "react-native"
 // prettier-ignore
 LogBox.ignoreLogs([
   "Require cycle:",
+  'Warning: isMounted(...) is deprecated', // works
+  'Module RCTImageLoader', // works
 ])
