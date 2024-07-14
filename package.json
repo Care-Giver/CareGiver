@@ -32,7 +32,8 @@
     "c": "npx react-native clean --include android,cocoapods,metro,watchman,yarn",
     "c:i": "rm -rf ~/Library/Developer/Xcode/DerivedData && rm -rf ios/build",
     "c:a": "cd android/; ./gradlew clean; cd ..",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "eas-build-pre-install": "echo $GOOGLE_SERVICES_BASE64 | base64 --decode > android/app/google-services.json && echo $ENV_BASE64 | base64 --decode > .env"
   },
   "dependencies": {
     "@actbase/react-daum-postcode": "^1.0.4",

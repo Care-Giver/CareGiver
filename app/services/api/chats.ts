@@ -46,5 +46,3 @@ export const postNotionReport = async (
     return alertModal("신고 실패", "신고 내역 작성에 실패했습니다.")
   }
 }
-
-export const streamChatClient = StreamChat.getInstance(Config.STREAM_CHAT_API_KEY)
