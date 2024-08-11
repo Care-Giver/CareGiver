@@ -1,4 +1,4 @@
-const VERSION = "1.1.2"
+const VERSION = "1.3.0"
 
 const BUILD_VERSION_TEXT = `Version ${VERSION}`
 

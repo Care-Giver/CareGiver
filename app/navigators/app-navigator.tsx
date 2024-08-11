@@ -204,29 +204,31 @@ const AllTabs = observer(function AllTabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
-  const currentAppState = useAppState()
-  // 알림 객체 SSE 컨트롤
-  useEffect(() => {
-    switch (currentAppState) {
-      // Foreground
-      case "active":
-        // 모드전환시, 기존연결 끊고, 새로운 연결
-        if (NotiSSE.notiSSE) {
-          NotiSSE.disconnect(userDetail, type)
-          NotiSSE.connect(userDetail, type, addNotification)
-          return
-        }
-        // 연결
-        NotiSSE.connect(userDetail, type, addNotification)
-        break
+  //! NOTE: AWS Lambda 의 한계로 인해, SSE 기능을 비활성화 함.
+  //  TODO: SSE 로직을 Short Polling 방식으로 재 구현할 것.
+  // const currentAppState = useAppState()
+  // // 알림 객체 SSE 컨트롤
+  // useEffect(() => {
+  //   switch (currentAppState) {
+  //     // Foreground
+  //     case "active":
+  //       // 모드전환시, 기존연결 끊고, 새로운 연결
+  //       if (NotiSSE.notiSSE) {
+  //         NotiSSE.disconnect(userDetail, type)
+  //         NotiSSE.connect(userDetail, type, addNotification)
+  //         return
+  //       }
+  //       // 연결
+  //       NotiSSE.connect(userDetail, type, addNotification)
+  //       break
 
-      // Background
-      case "inactive":
-      case "background":
-        NotiSSE.disconnect(userDetail, type)
-        break
-    }
-  }, [type, userDetail, currentAppState, addNotification])
+  //     // Background
+  //     case "inactive":
+  //     case "background":
+  //       NotiSSE.disconnect(userDetail, type)
+  //       break
+  //   }
+  // }, [type, userDetail, currentAppState, addNotification])
 
   // 서버 알림 확인 후, MST 에 없는 알림은 추가
   useEffect(() => {

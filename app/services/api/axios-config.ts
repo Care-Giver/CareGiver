@@ -1,9 +1,11 @@
 import { ROOT_STATE_STORAGE_KEY } from "#models"
 import { load } from "../../utils/storage"
-import Config from "react-native-config"
 
-export const BASE_URL = __DEV__ ? Config.BASE_URL_DEV : Config.BASE_URL_PROD
-console.log("BASE_URL", BASE_URL)
+export let BASE_URL = ""
+
+export const setBaseUrl = (url: string) => {
+  BASE_URL = url
+}
 
 /**
  * MST 를 통해 MMKV 에 저장된, 유저 토큰 (이 값은 "x-jwt" 값으로 사용된다.) 을 가져온다.

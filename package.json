@@ -1,6 +1,6 @@
 {
   "name": "cg",
-  "version": "1.1.2",
+  "version": "1.3.0",
   "private": true,
   "scripts": {
     "start": "npx react-native start --reset-cache",
@@ -32,7 +32,8 @@
     "c": "npx react-native clean --include android,cocoapods,metro,watchman,yarn",
     "c:i": "rm -rf ~/Library/Developer/Xcode/DerivedData && rm -rf ios/build",
     "c:a": "cd android/; ./gradlew clean; cd ..",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "eas-build-pre-install": "echo $GOOGLE_SERVICES_BASE64 | base64 --decode > android/app/google-services.json && echo $ENV_BASE64 | base64 --decode > .env"
   },
   "dependencies": {
     "@actbase/react-daum-postcode": "^1.0.4",
@@ -45,7 +46,9 @@
     "@react-native-community/hooks": "^2.8.1",
     "@react-native-community/netinfo": "9.3.10",
     "@react-native-community/slider": "4.4.2",
-    "@react-native-firebase/app": "~15.4.0",
+    "@react-native-firebase/analytics": "^20.1.0",
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/remote-config": "^20.1.0",
     "@react-native-picker/picker": "2.4.10",
     "@react-native-seoul/kakao-login": "^5.2.6",
     "@react-native-seoul/naver-login": "^3.0.0-rc.2",

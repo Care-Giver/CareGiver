@@ -24,6 +24,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import remoteConfig from "@react-native-firebase/remote-config"
+import { BASE_URL, setBaseUrl } from "./services/api/axios-config"
+
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
@@ -54,13 +57,64 @@ function App() {
   // } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
   const isNavigationStateRestored = true
   const [areImagesLoaded] = useAssets(Object.values(images))
+  const [isRemoteConfigReady, setIsRemoteConfigReady] = useState(false)
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     ;(async () => {
       setupRootStore().then(setRootStore)
+
+      // !NOTE: 개발용. Remote Config 캐싱 주기 설정. 캐싱 주기 기본값: 12시간
+      // await remoteConfig().setConfigSettings({
+      //   minimumFetchIntervalMillis: 3000, //! 3초로 수정
+      // })
+
+      await remoteConfig()
+        .setDefaults({
+          baseUrl: "",
+        })
+        .then(() => remoteConfig().fetchAndActivate())
+        .then((fetchedRemotely) => {
+          if (fetchedRemotely) {
+            console.debug(
+              "[REMOTE CONFIG] >>>",
+              "Configs were retrieved from the backend and activated.",
+            )
+            const parameters = remoteConfig().getAll()
+            Object.entries(parameters).forEach(($) => {
+              const [key, entry] = $
+              console.log("Key: ", key)
+              console.log("Source: ", entry.getSource())
+              console.log("Value: ", entry.asString())
+
+              if (key === "baseUrl") {
+                console.debug(
+                  "[REMOTE CONFIG] SETTINGS...baseUrl >>>",
+                  //
+                  entry.asString(),
+                )
+                setBaseUrl(entry.asString())
+                setIsRemoteConfigReady(true)
+              }
+            })
+          } else {
+            console.debug(
+              "[REMOTE CONFIG] >>>",
+              "No configs were fetched from the backend, and the local configs were already activated",
+            )
+            setIsRemoteConfigReady(false)
+          }
+        })
     })()
   }, [])
+
+  // !NOTE: 개발용. 5초 주기로 BASE_URL 값 출력
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log("Current BASE_URL >>>", BASE_URL)
+  //   }, 5000)
+  //   return () => clearInterval(interval)
+  // }, [])
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
@@ -68,7 +122,9 @@ function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
-  if (!rootStore || !isNavigationStateRestored || !areImagesLoaded) return null
+
+  if (!rootStore || !isNavigationStateRestored || !areImagesLoaded || !isRemoteConfigReady)
+    return null
 
   // otherwise, we're ready to render the app
   return (
