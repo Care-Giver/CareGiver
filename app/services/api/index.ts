@@ -1,19 +1,4 @@
-export * from "./axios-config"
-// export * from "./axios-example"
-export * from "./booking"
-export * from "./care-giver"
-export * from "./creche-date"
-export * from "./creche"
-export * from "./creches"
-export * from "./favorite"
-export * from "./payment-calculate"
-export * from "./payment"
-export * from "./petsitter"
-export * from "./pets"
-export * from "./review"
-export * from "./user"
-export * from "./visiting-available-time"
-export * from "./visitings"
-export * from "./visiting"
-export * from "./notification"
-export * from "./comment"
+// Main API exports - this file determines whether to use real or mock APIs
+// based on the configuration in api-config.ts
+
+export * from "./api-wrapper"
