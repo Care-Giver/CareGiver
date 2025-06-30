@@ -69,7 +69,7 @@ import { MinseonTest } from "../screens/test/minseon-test"
 import { PetsitterType, ServiceType, ServiceTypeKorean, Type, useStores } from "../models"
 import { IMPData } from "iamport-react-native"
 import { Chat, OverlayProvider, Streami18n } from "stream-chat-react-native" // Or stream-chat-expo
-import { streamChatClient } from "../services/api/stream"
+import { streamChatClient } from "../services/api"
 import { CommentColumns, Pet, VisitingReview } from "#api"
 import { PRETENDARD_MEDIUM } from "#fonts"
 import { CreateBookingProps } from "../screens/_CLIENT/pay-stack/payment/payment-screen.controller"

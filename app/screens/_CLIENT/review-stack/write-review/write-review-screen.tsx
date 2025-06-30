@@ -38,7 +38,7 @@ import {
 } from "../../../../components"
 import { images } from "../../../../../assets/images"
 import { Rating, ReviewContent, useStores } from "../../../../models"
-import { postCrecheReview, postVisitingReview } from "../../../../services/api/review"
+import { postCrecheReview, postVisitingReview } from "../../../../services/api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "#models"

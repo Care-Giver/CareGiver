@@ -23,7 +23,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { price as priceFormatter } from "../../../utils/format"
 import { DivisionLine } from "../../../components/_BASIC/division-line/division-line"
 import { POPPINS_REGULAR } from "#fonts"
-import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api"
 import _ from "lodash"
 
 export type AdditionalPrice = {

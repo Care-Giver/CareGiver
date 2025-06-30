@@ -74,7 +74,7 @@ type MockPet = {
 }
 
 // Mock data generators
-const generateMockUser = (id: number = 1): MockUser => ({
+const generateMockUser = (id = 1): MockUser => ({
   id,
   provider: "google" as AuthProvider,
   email: `user${id}@example.com`,
@@ -97,7 +97,7 @@ const generateMockUser = (id: number = 1): MockUser => ({
   realName: "Mock Real Name"
 })
 
-const generateMockPet = (id: number = 1): MockPet => ({
+const generateMockPet = (id = 1): MockPet => ({
   id,
   createAt: new Date(),
   updatedAt: new Date(),
@@ -120,7 +120,7 @@ const generateMockPet = (id: number = 1): MockPet => ({
   desc: "Friendly and playful"
 })
 
-const generateMockBooking = (id: number = 1) => ({
+const generateMockBooking = (id = 1) => ({
   id,
   createAt: "2023-01-01T10:00:00Z",
   updatedAt: "2023-01-01T10:00:00Z",

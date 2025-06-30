@@ -16,8 +16,9 @@ import { BODY, DEVICE_SCREEN_HEIGHT, GIVER_CASUAL_NAVY, HEIGHT } from "#theme"
 import {
   GroupedVisitingAvailableTimesByDate,
   getVisitingAvailableTimes,
-} from "../../../services/api/visiting-available-time"
-import { CrecheAvailableDate, getCrecheDates } from "../../../services/api/creche-date"
+  CrecheAvailableDate,
+  getCrecheDates,
+} from "../../../services/api"
 import { useShowBottomTab } from "../../../utils/hooks"
 import { images } from "#images"
 import { dummy } from "./dummy-data"

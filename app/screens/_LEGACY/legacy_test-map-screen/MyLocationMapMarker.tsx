@@ -44,6 +44,7 @@ class MyLocationMapMarker extends React.PureComponent {
       myPosition: null,
     }
   }
+
   componentDidMount() {
     this.mounted = true
     // If you supply a coordinate prop, we won't try to track location automatically
@@ -63,6 +64,7 @@ class MyLocationMapMarker extends React.PureComponent {
       this.watchLocation()
     }
   }
+
   watchLocation() {
     this.watchID = navigator.geolocation.watchPosition(
       (position) => {
@@ -76,12 +78,14 @@ class MyLocationMapMarker extends React.PureComponent {
       this.props.geolocationOptions,
     )
   }
+
   componentWillUnmount() {
     this.mounted = false
     if (this.watchID) {
       navigator.geolocation.clearWatch(this.watchID)
     }
   }
+
   render() {
     let { heading, coordinate } = this.props
     if (!coordinate) {

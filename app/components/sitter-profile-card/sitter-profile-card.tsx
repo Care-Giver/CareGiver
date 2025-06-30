@@ -6,8 +6,7 @@ import { HEAD_LINE, SUB_HEAD_LINE, DISABLED } from "../../theme"
 import { images } from "../../../assets/images"
 import { RatingReviewBox } from "../rating-review-box/rating-review-box"
 import { VisitingCreche } from "../../screens/_CLIENT/search-stack/search-result-screen/search-result-screen"
-import { UserEntity } from "../../services/api/types/entity.types"
-import { CareGiverPetsitter } from "../../services/api/types/creches.visitings.common.types"
+import { UserEntity, CareGiverPetsitter } from "../../services/api"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
 
 export type PetsitterProfileCardPetsitterData = {

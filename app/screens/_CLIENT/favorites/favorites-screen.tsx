@@ -174,7 +174,7 @@ export const FavoritesScreen: FC<
           textColor: "white",
         }
         setMarkedDates(newMarkedDates)
-        return
+        
       }
 
       // ? startDate가 아직 입력 전이거나, startDate가 존재하지만 현재 입력한 날짜가 startDate보다 앞서는 경우
@@ -188,7 +188,7 @@ export const FavoritesScreen: FC<
           textColor: "white",
         }
         setMarkedDates(newMarkedDates)
-        return
+        
       }
 
       // * 입력된 date가 endDate로 설정되는 경우

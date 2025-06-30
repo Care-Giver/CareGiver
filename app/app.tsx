@@ -25,7 +25,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import remoteConfig from "@react-native-firebase/remote-config"
-import { BASE_URL, setBaseUrl } from "./services/api/axios-config"
+import { BASE_URL, setBaseUrl } from "./services/api"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:

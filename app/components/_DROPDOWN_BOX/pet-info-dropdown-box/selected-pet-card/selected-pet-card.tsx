@@ -7,7 +7,7 @@ import { images } from "#images"
 import { DivisionLine } from "../../../_BASIC/division-line/division-line"
 import { Row } from "../../../_BASIC/row/row"
 import { Pet, PetSex } from "#api"
-import { HandleType } from "../../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../../services/api"
 import { profileImageUriHandler } from "../../../../utils/image-format-validate"
 
 interface SelectedPetCardProps {

@@ -66,10 +66,7 @@ import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
 import { useAdditionalPriceChecker } from "../cg-set-visiting-service-day/use-additional-price-checker"
-import {
-  ExtraSizeFee,
-  HandleType,
-} from "../../../services/api/types/creches.visitings.common.types"
+import { ExtraSizeFee, HandleType } from "../../../services/api"
 
 export const CgSetCrecheServiceDayScreen: FC<
   StackScreenProps<NavigatorParamList, "cg-set-creche-service-day-screen">

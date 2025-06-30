@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react"
-import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api"
 import { PetsitterModel } from "#models"
 import _ from "lodash"
 

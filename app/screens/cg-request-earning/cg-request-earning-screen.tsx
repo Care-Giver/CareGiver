@@ -41,9 +41,13 @@ import {
 } from "#theme"
 import { images } from "#images"
 import { 외부링크 } from "../../services/external-web-link"
-import { getSettlement, settlementDetail } from "../../services/api/payment"
+import {
+  getSettlement,
+  settlementDetail,
+  postNotionSettlement,
+  getNotionSettlement,
+} from "../../services/api"
 import { useStores } from "#models"
-import { postNotionSettlement, getNotionSettlement } from "../../services/api/notion"
 import { alertModal } from "../../utils/alert-modal"
 import { verifyBankHolder } from "#api"
 import { bankCodeList } from "./constant"

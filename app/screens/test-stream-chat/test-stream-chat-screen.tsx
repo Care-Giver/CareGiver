@@ -17,7 +17,7 @@ import {
   MessageInput,
   Thread,
 } from "stream-chat-react-native"
-import { getStreamToken } from "../../services/api/stream"
+import { getStreamToken } from "../../services/api"
 import { useStores } from "#models"
 import Config from "react-native-config"
 

@@ -78,10 +78,7 @@ import {
   UpdateFavoriteBody,
   deleteFavorite,
 } from "#api"
-import {
-  SearchRequest,
-  SearchResultSortOrder,
-} from "../../../../services/api/types/creches.visitings.common.types"
+import { SearchRequest, SearchResultSortOrder } from "../../../../services/api"
 import {
   BottomSheetBackdrop,
   BottomSheetFooter,
