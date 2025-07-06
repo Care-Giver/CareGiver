@@ -1,16 +1,176 @@
-케어기버 프론트 앱 개발 가이드 - v2024-03-16 (최수민 작성)
+케어기버 프론트 앱 개발 가이드 - v2025-07-16 (최수민 작성)
 
 ![CG 헤더](https://cdn.myportfolio.com/dd18ab34-b0c4-483d-8da5-b3f0b4e33fa4/d4362c69-bc87-4a9e-9969-6ca662882061_rwc_16x0x1886x728x4096.png?h=90d6074126a6c3b537cae45b61fbf85a "CG 헤더")
 
+# Quick Start
+
+```sh
+yarn install;
+yarn ios; # iOS 앱 실행
+yarn android; # Android 앱 실행
+```
+
 # 개발환경
 
-- node `v18.17.0`
-- npm `9.6.7`
-- cocoapods `1.14.3`
+```sh
+Node.js
+
+- Version: Node.js 16.x or higher (project tested with v22.3.0)
+- Package Manager: yarn classic
+- Installation: Via nvm, Homebrew, or official installer
+
+iOS Development Environment
+
+macOS Requirements
+
+- macOS: 12.0 (Monterey) or higher
+- Xcode: 14.0 or higher (tested with Xcode 15.3)
+- Command Line Tools: Latest version
+  xcode-select --install
+
+iOS Dependencies
+
+- CocoaPods: 1.11.0 or higher
+  sudo gem install cocoapods
+
+- iOS Simulator: iOS 13.0+ (project minimum deployment target)
+- Deployment Target: iOS 13.0 minimum
+- Supported Architectures: arm64, x86_64
+
+iOS SDK Compatibility
+
+- iOS SDK: 17.4 (as configured in project)
+- Swift: 5.0+
+- Objective-C: Latest
+
+Android Development Environment
+
+Java Development Kit
+
+- JDK: OpenJDK 11 or Oracle JDK 11
+
+# Homebrew installation
+
+brew install openjdk@11
+
+Android Studio & SDK
+
+- Android Studio: 2022.3.1 or higher
+- Android SDK: API Level 33+ (compileSdkVersion 33)
+- Build Tools: 33.0.0
+- NDK: 21.4.7075529 (as configured in project)
+- Target SDK: 34
+- Min SDK: 21
+
+Android SDK Components
+
+# Required SDK components
+
+- Android SDK Platform 33
+- Android SDK Platform 34
+- Android SDK Build-Tools 33.0.0
+- Google Play Services
+- Android Support Repository
+- Google Repository
+
+Gradle
+
+- Gradle: 8.0.1 (as specified in project)
+- Android Gradle Plugin: 7.4.2
+- Kotlin: 1.8.10
+
+Project-Specific Dependencies
+
+Expo SDK
+
+- Expo: 49.0.21
+- Expo CLI: Latest
+  yarn install -g @expo/cli
+
+Key Native Dependencies
+
+- React Native: 0.72.6
+- Hermes: Enabled (JavaScript engine)
+- Firebase: 33.1.0 BOM
+- Google Maps: Latest
+- KakaoSDK: 2.22.4
+- Naver Login SDK: 4.2.1
+
+Build Commands
+
+Initial Setup
+
+# Install dependencies
+
+yarn install
+
+# iOS setup
+
+cd ios && pod install && cd ..
+
+# Android setup (if needed)
+
+cd android && ./gradlew clean && cd ..
+
+iOS Build
+
+# Simulator build
+
+npx react-native run-ios --simulator "iPhone 15 Pro"
+
+# Device build (requires Apple Developer account)
+
+npx react-native run-ios --device
+
+Android Build
+
+# Debug build
+
+npx react-native run-android
+
+# Release build
+
+cd android && ./gradlew assembleRelease
+
+Environment Variables
+
+Required Files
+
+- .env file in project root (for react-native-config)
+- ios/.xcode.env (for Node.js path configuration)
+- android/app/google-services.json (for Firebase)
+- ios/GoogleService-Info.plist (for Firebase)
+
+Troubleshooting Tools
+
+Cleanup Commands
+
+# React Native cache
+
+npx react-native clean --include android,cocoapods,metro,watchman,yarn
+
+# iOS cleanup
+
+rm -rf ios/build ios/Pods ios/Podfile.lock
+cd ios && pod install && cd ..
+
+# Android cleanup
+
+cd android && ./gradlew clean && cd ..
+
+# Node modules
+
+rm -rf node_modules && yarn install
+
+Doctor Command
+
+npx react-native doctor
+```
 
 # 주의사항
 
 - 라이브러리 설치 또는 추가시, `npm` 대신 _`yarn` 을 사용주세요_
+- TBD
 
 # 📱앱 실행 방법 (디버그 빌드)
 
@@ -32,25 +192,41 @@
 - ios 빌드 캐시 삭제: `yarn c:i `
 - android 빌드 캐시 삭제: `yarn c:a`
 
-# 🛠️디버그 빌드에서 문제 상황 발생시, 해결 방법 | Troubleshooting
+# 🛠️ Troubleshooting
 
-## 1. 빌드 에러가 발생한 경우 (... BUILD FAILED)
+## 디버그 빌드에서 문제 상황 발생시, 해결 방법
 
-### iOS: `yarn c && yarn c:i && yarn ios`
+### 1. 빌드 에러가 발생한 경우 (... BUILD FAILED)
 
-### Android: `yarn c && yarn c:a && yarn android`
+> 가장 먼저 해볼만 한 것은 캐시를 재거 하는 것입니다.
+
+```sh
+# iOS
+yarn c && yarn c:i && yarn ios
+
+# Android:
+yarn c && yarn c:a && yarn android
+```
 
 <br/>
 
-## 2. Metro 서버가 끊긴 경우: `yarn start`
+### 2. Metro 서버가 끊긴 경우
+
+```sh
+yarn start
+```
 
 <br/>
 
-## 3. `8081` 포트가 이미 사용중인 경우: `kill $(lsof -ti:8081)`
+### 3. `8081` 포트가 이미 사용중인 경우
+
+```
+kill $(lsof -ti:8081)
+```
 
 <br/>
 
-## 4. `pod install` 실패시:
+### 4. `pod install` 실패시
 
 ```shell
 The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does not define modules.
@@ -68,7 +244,7 @@ The Swift pod `ExpoModulesCore` depends upon `React-RCTAppDelegate`, which does 
 - ~~다시, `pod install` 시도 하면 정상적으로 성공한다.~~
 - ~~만약 그래도 실패한다면 `rm -rf ~/Library/Developer/Xcode/DerivedData` 이후 다시 `pod install` 해볼 것.~~
 
-## 위 에러는 `Podfile` 에 다음과 같은 코드를 추가하여 해결 하였습니다. (2023. 12. 25 , @smnchoi)
+#### 위 에러는 `Podfile` 에 다음과 같은 코드를 추가하여 해결 하였습니다. (2023. 12. 25 , @smnchoi)
 
 ```ruby
 ...
@@ -76,7 +252,7 @@ pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/App
 pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_headers => true
 ```
 
-설명:
+#### 설명:
 
 - 종속관계에 있는 ExpoModulesCore 와 React-RCTAppDelegate 문제를 해결하기 위해선, `modular_headers => true` 각각 값을 할당해주면 됩니다.
 - 하지만, 단순히
@@ -91,16 +267,16 @@ pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_he
 <br/>
 <br/>
 
-# 🛠️배포 관련 문제 상황 해결법
+## 배포 관련 문제 상황 해결법
 
-## 카카오 로그인 Android 오류 해결 (Feat. Upload Key and Signing Key)
+### 카카오 로그인 Android 오류 해결 (Feat. Upload Key and Signing Key)
 
-### 문제 상황
+#### 문제 상황
 
 - debug 빌드 에서는 정상적으로 작동하던 카카오 로그인이, release 빌드에서는 작동하지 않음.
 - `invalid android_key_hash or ios_bundle_id or web_site_url`
 
-### 원인 및 해결 방법
+#### 원인 및 해결 방법
 
 - `Kakao Developers > 내 애플리케이션 > 앱 설정 > 플랫폼` 에서, Android 의 "키 해시" 목록에 "release" 빌드 용 해시키가 존재하지 않았음.
 - 구글은 **"Signing Key" (앱 서명 키)** 를 "직접" 관리 함. 즉, 내 환경에 있는 것이 아니라 Google Play Console 에서 확인 해야 함.
@@ -108,7 +284,7 @@ pod 'ExpoModulesCore', :path => '../node_modules/expo-modules-core', :modular_he
 - `Google Play Console > 내부 테스트` 를 통해 배포된 release 빌드 에서, 카카오 SDK 는 Upload Key 를 사용해서 키를 대조하는 것이 아니라, 배포 과정중에서 구글이 자체적으로 서명한 Signing Key 를 사용하여 대조하게 되기 때문임.
 - 따라서, 이 Signing Key 를 Base64 인코딩 한 값을 Kakao Developers 대시보드에 등록해주어야 함.
 
-### 참고 자료
+#### 참고 자료
 
 **Signing Key 와 Upload Key**
 
