@@ -83,7 +83,7 @@ const generateMockUser = (id = 1): MockUser => ({
   sex: "MALE",
   birthday: "1990-01-01",
   address: "Mock Address",
-  profileImage: "https://example.com/profile.jpg",
+  profileImage: "https://picsum.photos/150/150?random=2",
   desc: "Mock user description",
   maxDistance: 10,
   pushToken: "mock-push-token",
@@ -112,7 +112,7 @@ const generateMockPet = (id = 1): MockPet => ({
   },
   age: 3,
   sex: PetSex.MALE,
-  images: ["https://example.com/pet1.jpg"],
+  images: ["https://picsum.photos/300/300?random=10"],
   weight: 25.5,
   petType: "SMALL",
   isNeutralizated: true,
@@ -130,7 +130,7 @@ const generateMockBooking = (id = 1) => ({
   request: "Please take good care of my pet",
   crecheId: 1,
   name: "Mock Petsitter",
-  image: "https://example.com/petsitter.jpg",
+  image: "https://picsum.photos/200/200?random=3",
   reviewCount: 5,
   location: "Mock Location",
   startDate: "2023-01-15T00:00:00Z",
@@ -189,7 +189,7 @@ export const mockApi = {
         visitingId: 1,
         request: "Mock request",
         name: "Mock Petsitter",
-        image: "https://example.com/petsitter.jpg",
+        image: "https://picsum.photos/200/200?random=4",
         reviewCount: 5,
         location: "Mock Location",
         start: "2023-01-15T10:00:00Z",
@@ -209,7 +209,7 @@ export const mockApi = {
         ratings: 4.5,
         reviewCount: 10,
         desc: "Experienced pet sitter",
-        profileImage: "https://example.com/profile.jpg",
+        profileImage: "https://picsum.photos/150/150?random=5",
         crecheId: 1,
         crecheBookingId: 1
       }]
@@ -221,7 +221,7 @@ export const mockApi = {
         paymentId: 1,
         petSitterName: "Mock Petsitter",
         desc: "Great service",
-        profileImage: "https://example.com/profile.jpg",
+        profileImage: "https://picsum.photos/150/150?random=6",
         isCanceled: false,
         isFavorite: true,
         reviewStatus: "Complete" as ReviewStatus,
@@ -247,7 +247,7 @@ export const mockApi = {
           ratings: 4.5,
           reviewCount: 5,
           desc: "Waiting for approval",
-          profileImage: "https://example.com/profile.jpg",
+          profileImage: "https://picsum.photos/150/150?random=7",
           crecheBookingId: 1,
           crecheId: 1,
           startDate: "2023-01-20T00:00:00Z",
@@ -360,7 +360,7 @@ export const mockApi = {
           sex: "MALE",
           birthday: "1990-01-01",
           address: "Mock Address",
-          profileImage: "https://example.com/profile.jpg",
+          profileImage: "https://picsum.photos/150/150?random=8",
           pushToken: "mock-push-token",
           nicknameLastUpdated: "2023-10-28T00:00:00",
           clientStreamToken: "mock-stream-token",
@@ -478,7 +478,7 @@ export const mockApi = {
         reviewCount: 5 + i,
         distance: 1.5 + i,
         fee: 30000 + (i * 5000),
-        profileImage: `https://example.com/creche${i + 1}.jpg`
+        profileImage: `https://picsum.photos/200/200?random=${20 + i}`
       }))
     }
   },
@@ -546,7 +546,7 @@ export const mockApi = {
         reviewCount: 8 + i,
         distance: 2.0 + i,
         hourlyFee: 15000 + (i * 2000),
-        profileImage: `https://example.com/visiting${i + 1}.jpg`
+        profileImage: `https://picsum.photos/200/200?random=${30 + i}`
       }))
     }
   },
@@ -562,7 +562,7 @@ export const mockApi = {
         location: "Favorite Location",
         ratings: 5.0,
         reviewCount: 20,
-        profileImage: "https://example.com/favorite.jpg"
+        profileImage: "https://picsum.photos/200/200?random=40"
       }]
     },
 
@@ -647,7 +647,7 @@ export const mockApi = {
   review: {
     uploadURIS: async (images: any[]) => {
       await new Promise(resolve => setTimeout(resolve, 1000))
-      return images.map((_, i) => `https://example.com/uploaded${i + 1}.jpg`)
+      return images.map((_, i) => `https://picsum.photos/400/300?random=${50 + i}`)
     },
 
     postVisitingReview: async (userId: number, body: any) => {
@@ -666,7 +666,7 @@ export const mockApi = {
         id: bookingId,
         rating: 5,
         desc: "Excellent service!",
-        images: ["https://example.com/review1.jpg"],
+        images: ["https://picsum.photos/400/300?random=60"],
         createdAt: "2023-01-10T10:00:00Z"
       }
     },
@@ -677,7 +677,7 @@ export const mockApi = {
         id: bookingId,
         rating: 4,
         desc: "Good experience",
-        images: ["https://example.com/review2.jpg"],
+        images: ["https://picsum.photos/400/300?random=61"],
         createdAt: "2023-01-12T10:00:00Z"
       }
     },
@@ -688,7 +688,7 @@ export const mockApi = {
         id: i + 1,
         rating: 4 + (i * 0.3),
         desc: `Review ${i + 1} for visiting service`,
-        images: [`https://example.com/review${i + 1}.jpg`],
+        images: [`https://picsum.photos/400/300?random=${70 + i}`],
         createdAt: `2023-01-${10 + i}T10:00:00Z`,
         userName: `User${i + 1}`
       }))
@@ -725,7 +725,7 @@ export const mockApi = {
         commentator: {
           id: i + 1,
           nickname: `Commenter${i + 1}`,
-          profileImage: `https://example.com/commenter${i + 1}.jpg`
+          profileImage: `https://picsum.photos/150/150?random=${80 + i}`
         }
       }))
     },

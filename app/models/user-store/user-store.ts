@@ -60,17 +60,17 @@ export const UserStoreModel = types
 
     /* 유저 상세정보 */
     userDetail: types.frozen<UserDetail>({
-      id: null,
-      nickname: "",
-      phoneNumber: "",
-      sex: null,
-      birthday: "",
-      address: "",
-      profileImage: "",
-      pushToken: "",
-      nicknameLastUpdated: "",
-      clientStreamToken: "",
-      realName: "",
+      id: 1,
+      nickname: "케어기버유저",
+      phoneNumber: "010-1234-5678",
+      sex: "MALE",
+      birthday: "1990-05-15",
+      address: "서울특별시 강남구 테헤란로 427",
+      profileImage: "https://picsum.photos/150/150?random=1",
+      pushToken: "mock-push-token-12345",
+      nicknameLastUpdated: "2023-10-28T00:00:00",
+      clientStreamToken: "mock-client-stream-token",
+      realName: "김케어기버",
     }),
 
     /* 인증된 펫시터인지 여부 */
