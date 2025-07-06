@@ -49,7 +49,7 @@ export const UserStoreModel = types
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
     onSwitchingType: false,
-    loggedIn: false,
+    loggedIn: true,
 
     /* 유저 Auth 정보 */
     userAuth: types.frozen<UserAuth>({

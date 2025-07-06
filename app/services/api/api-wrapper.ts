@@ -286,16 +286,17 @@ export const getNotionSettlement = USE_MOCK_API
   ? async (userId: string) => {
       await new Promise((resolve) => setTimeout(resolve, 800))
       const currentMonth = (new Date().getMonth() + 1).toString()
-      const maxMonth = (new Date().getMonth()).toString() || "1"
+      const maxMonth = new Date().getMonth().toString() || "1"
       return {
         isSuccess: true,
         maxMonth,
-        currentMonth
+        currentMonth,
       }
     }
   : realNotion.getNotionSettlement
 
-export type { BASE_URL, setBaseUrl, GeneralResponse } from "./axios-config"
+export type { GeneralResponse } from "./axios-config"
+export { BASE_URL, setBaseUrl } from "./axios-config"
 
 // Re-export TYPES ONLY from real APIs (functions are handled by ternary logic above)
 export type {
@@ -380,7 +381,7 @@ export type {
   PostSettlementInput,
   PostSettlementInputParams,
   PostSettlementResult,
-  GetSettlementResult
+  GetSettlementResult,
 } from "./notion"
 
 // Common types
