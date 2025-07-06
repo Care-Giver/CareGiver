@@ -114,6 +114,27 @@ target 'CareGiver' do
         end
       end
     end
+
+    # Fix iOS deployment target warnings
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        end
+      end
+    end
+
+    # Fix Node.js path for React Native scripts
+    installer.pods_project.targets.each do |target|
+      if target.name == 'React-rncore'
+        target.build_phases.each do |build_phase|
+          if build_phase.display_name == '[CP-User] Generate Specs'
+            build_phase.shell_script = build_phase.shell_script.gsub(/NODE_BINARY=.*/, 'NODE_BINARY=/opt/homebrew/bin/node')
+          end
+        end
+      end
+    end
+
   end
 
   post_integrate do |installer|
