@@ -117,7 +117,7 @@ const generateMockPet = (id = 1): MockPet => ({
     `https://picsum.photos/300/300?random=${300 + id}`,
   ],
   weight: 15.0 + id * 2.5,
-  petType: id % 3 === 0 ? "LARGE" : id % 3 === 1 ? "MEDIUM" : "SMALL",
+  petType: id % 3 === 0 ? "Large" : id % 3 === 1 ? "Medium" : "Small",
   isNeutralizated: id % 2 === 0,
   birthday: `202${1 + (id % 3)}-0${1 + (id % 9)}-15`,
   desc: `사랑스럽고 활발한 반려동물입니다. 산책을 좋아하고 사람들과 놀기를 즐겨합니다.`,
@@ -455,16 +455,7 @@ export const mockApi = {
           birthday: "1990-05-15",
           address: "서울특별시 강남구 테헤란로 427",
           profileImage: "https://picsum.photos/150/150?random=8",
-          desc: "반려동물을 사랑하는 케어기버 유저입니다",
-          maxDistance: 10,
           pushToken: "mock-push-token-12345",
-          role: "CLIENT",
-          provider: "google",
-          email: "caregiver@example.com",
-          marketingConsent: true,
-          locationBasedServiceConsent: true,
-          privacyPolicyConsent: true,
-          termsOfServiceConsent: true,
           nicknameLastUpdated: "2023-10-28T00:00:00.000Z",
           clientStreamToken: "mock-client-stream-token",
           realName: "김케어기버",
@@ -628,7 +619,14 @@ export const mockApi = {
 
     getCrecheAvgPrice: async (body: any) => {
       await new Promise((resolve) => setTimeout(resolve, 300))
-      return { avgPrice: 35000 }
+      return {
+        isSuccess: true,
+        prices: {
+          minAvgPrice: 30000,
+          avgPrice: 35000,
+          maxAvgPrice: 40000,
+        }
+      }
     },
   },
 
@@ -709,7 +707,7 @@ export const mockApi = {
           },
           dogMaxUnit: 3,
           catMaxUnit: 2,
-          handleType: ["SMALL", "MEDIUM", "LARGE"],
+          handleType: ["Small", "Medium", "Large"],
           images: [
             `https://picsum.photos/400/300?random=${300 + i}`,
             `https://picsum.photos/400/300?random=${400 + i}`,
@@ -872,7 +870,14 @@ export const mockApi = {
 
     getVisitingAvgPrice: async (body: any) => {
       await new Promise((resolve) => setTimeout(resolve, 300))
-      return { avgPrice: 25000 }
+      return {
+        isSuccess: true,
+        prices: {
+          minAvgPrice: 20000,
+          avgPrice: 25000,
+          maxAvgPrice: 30000,
+        }
+      }
     },
   },
 
@@ -946,7 +951,7 @@ export const mockApi = {
           },
           dogMaxUnit: 2,
           catMaxUnit: 3,
-          handleType: ["SMALL", "MEDIUM"],
+          handleType: ["Small", "Medium"],
           images: [
             `https://picsum.photos/400/300?random=${500 + i}`,
             `https://picsum.photos/400/300?random=${600 + i}`,
@@ -1043,7 +1048,7 @@ export const mockApi = {
         totalFee: 55000,
         petTypeExtraFee: [
           {
-            petType: "LARGE",
+            petType: "Large",
             extraFee: 5000,
             count: 1,
           },
@@ -1058,7 +1063,7 @@ export const mockApi = {
         totalFee: 90000,
         petTypeExtraFee: [
           {
-            petType: "MEDIUM",
+            petType: "Medium",
             extraFee: 10000,
             count: 2,
           },
