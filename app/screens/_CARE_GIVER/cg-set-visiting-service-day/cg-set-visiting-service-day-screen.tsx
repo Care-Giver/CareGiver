@@ -70,10 +70,7 @@ import { alertModal } from "../../../utils/alert-modal"
 import dayjs from "dayjs"
 import { STANDARD_PRICE_DESC_TEXT } from "../cg-registration-2/cg-set-price"
 import { useFetchAvgPrice } from "../cg-registration-2/use-fetch-avg-price"
-import {
-  ExtraSizeFee,
-  HandleType,
-} from "../../../services/api/types/creches.visitings.common.types"
+import { ExtraSizeFee, HandleType } from "../../../services/api"
 import { useAdditionalPriceChecker } from "./use-additional-price-checker"
 
 const nowInUTCZero = new Date()

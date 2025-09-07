@@ -32,7 +32,7 @@ import { ServiceType } from "#models"
 import { images } from "#images"
 import { BASIC_BACKGROUND_PADDING_WIDTH, ConditionalButton, Row } from "#components"
 import { FamilyTypeNumber } from "./cg-registration-2-screen"
-import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api"
 import _ from "lodash"
 import { BottomSheetBackdrop, BottomSheetFooter, BottomSheetModal } from "@gorhom/bottom-sheet"
 

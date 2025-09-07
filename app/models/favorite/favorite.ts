@@ -5,7 +5,7 @@ import {
   GetFavoritesRequestBody,
   deleteFavorite,
   getFavorites,
-} from "../../services/api/favorite"
+} from "../../services/api"
 
 interface UpdateInput {
   serviceType: "creche" | "visiting"

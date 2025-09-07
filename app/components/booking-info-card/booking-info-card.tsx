@@ -20,9 +20,14 @@ import {
   palette,
 } from "../../theme"
 import { CaregiverTypeButton } from ".."
-import { UpdateFavoriteBody, createFavorite, deleteFavorite } from "../../services/api/favorite"
+import {
+  UpdateFavoriteBody,
+  createFavorite,
+  deleteFavorite,
+  BookingStatus,
+  ReviewStatus,
+} from "../../services/api"
 import { profileImageUriHandler } from "../../utils/image-format-validate"
-import { BookingStatus, ReviewStatus } from "../../services/api"
 
 type ServiceType = "visiting" | "creche"
 

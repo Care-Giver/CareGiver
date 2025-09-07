@@ -32,7 +32,8 @@ export const SettingScreen: FC<StackScreenProps<NavigatorParamList, "setting-scr
     const handleLogoutPress = () => {
       setLogoutModalVisible(false)
       resetPetsitterStore()
-      logoutHandler()
+      // logoutHandler()
+      alert("DEMO::로그아웃 기능은 비활성화 되어 있습니다.")
     }
 
     // ? 회원탈퇴 메뉴 클릭시 동작하는 함수 - 모달창 띄우기

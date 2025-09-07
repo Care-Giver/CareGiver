@@ -6,7 +6,7 @@ import { BODY } from "#theme"
 import { Row } from "../../../_BASIC/row/row"
 import { BlueCheckbox } from "../../../blue-checkbox/blue-checkbox"
 import { Pet, PetSex } from "#api"
-import { HandleType } from "../../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../../services/api"
 
 interface SelectPetItemProps {
   style?: StyleProp<ViewStyle>

@@ -28,7 +28,7 @@ import {
 import { useShowBottomTab } from "../../utils/hooks"
 import { ChannelList } from "stream-chat-react-native" // Or stream-chat-expo
 import { ChannelMemberResponse, DefaultGenerics } from "stream-chat"
-import { streamChatClient } from "../../services/api/stream"
+import { streamChatClient, postNotionReport } from "../../services/api"
 import { useStores } from "#models"
 import { images } from "#images"
 import { HEADER_ROOT } from "../../components/_SCREEN_HEADER/common-styles"
@@ -49,7 +49,6 @@ import BottomSheet, {
   BottomSheetTextInput,
 } from "@gorhom/bottom-sheet"
 import _ from "lodash"
-import { postNotionReport } from "../../services/api/chats"
 
 type ChatMember = ChannelMemberResponse<DefaultGenerics>
 export const ChannelListScreen: FC<

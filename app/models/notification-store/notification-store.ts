@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, applySnapshot, types } from "mobx-state-tree"
-import { NotificationMessage } from "../../services/api/notification"
+import { NotificationMessage } from "../../services/api"
 import { NotificationModel } from "../notification/notification"
 import { withSetPropAction } from "../extensions/with-set-prop-action"
 import { Type } from "../user-store/user-store"

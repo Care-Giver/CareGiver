@@ -1,4 +1,4 @@
-import { Pet, getPets } from "../../services/api/pets"
+import { Pet, getPets } from "../../services/api"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**

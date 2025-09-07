@@ -5,7 +5,7 @@ import { navigate } from "#navigators"
 import { getMe, login, LoginRequestBody, postPushToken, Sex, UserDetail } from "#api"
 import axios from "axios"
 import { registerForPushNotificationsAsync } from "../../utils/get-pushToken"
-import { getStreamToken, streamChatClient } from "../../services/api/stream"
+import { getStreamToken, streamChatClient } from "../../services/api"
 import { alertModal } from "../../utils/alert-modal"
 import { AddressLocation } from "#screens"
 import { getRootStore } from "../extensions/get-root-store"
@@ -49,7 +49,7 @@ export const UserStoreModel = types
   .props({
     type: types.optional(types.frozen<Type>(), Type.CLIENT),
     onSwitchingType: false,
-    loggedIn: false,
+    loggedIn: true,
 
     /* 유저 Auth 정보 */
     userAuth: types.frozen<UserAuth>({
@@ -60,17 +60,17 @@ export const UserStoreModel = types
 
     /* 유저 상세정보 */
     userDetail: types.frozen<UserDetail>({
-      id: null,
-      nickname: "",
-      phoneNumber: "",
-      sex: null,
-      birthday: "",
-      address: "",
-      profileImage: "",
-      pushToken: "",
-      nicknameLastUpdated: "",
-      clientStreamToken: "",
-      realName: "",
+      id: 1,
+      nickname: "케어기버유저",
+      phoneNumber: "010-1234-5678",
+      sex: "MALE",
+      birthday: "1990-05-15",
+      address: "서울특별시 강남구 테헤란로 427",
+      profileImage: "https://picsum.photos/150/150?random=1",
+      pushToken: "mock-push-token-12345",
+      nicknameLastUpdated: "2023-10-28T00:00:00",
+      clientStreamToken: "mock-client-stream-token",
+      realName: "김케어기버",
     }),
 
     /* 인증된 펫시터인지 여부 */

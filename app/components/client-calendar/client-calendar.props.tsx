@@ -1,6 +1,6 @@
-import { GroupedVisitingAvailableTimesByDate } from "../../services/api/visiting-available-time"
-import { CrecheAvailableDate } from "../../services/api/creche-date"
-import { ServiceType } from "#screens"
+import { GroupedVisitingAvailableTimesByDate, CrecheAvailableDate } from "../../services/api"
+// import { ServiceType } from "#screens"
+type ServiceType = any
 
 interface Solution1 extends GroupedVisitingAvailableTimesByDate, CrecheAvailableDate {}
 

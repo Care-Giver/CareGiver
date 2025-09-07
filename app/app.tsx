@@ -25,7 +25,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import remoteConfig from "@react-native-firebase/remote-config"
-import { BASE_URL, setBaseUrl } from "./services/api/axios-config"
+import { BASE_URL, setBaseUrl } from "./services/api"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -56,8 +56,10 @@ function App() {
   //   isRestored: isNavigationStateRestored,
   // } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
   const isNavigationStateRestored = true
-  const [areImagesLoaded] = useAssets(Object.values(images))
-  const [isRemoteConfigReady, setIsRemoteConfigReady] = useState(false)
+  // const [areImagesLoaded] = useAssets(Object.values(images))
+  const areImagesLoaded = true
+  // const [isRemoteConfigReady, setIsRemoteConfigReady] = useState(false)
+  const isRemoteConfigReady = true
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
@@ -69,42 +71,42 @@ function App() {
       //   minimumFetchIntervalMillis: 3000, //! 3초로 수정
       // })
 
-      await remoteConfig()
-        .setDefaults({
-          baseUrl: "",
-        })
-        .then(() => remoteConfig().fetchAndActivate())
-        .then((fetchedRemotely) => {
-          if (fetchedRemotely) {
-            console.debug(
-              "[REMOTE CONFIG] >>>",
-              "Configs were retrieved from the backend and activated.",
-            )
-            const parameters = remoteConfig().getAll()
-            Object.entries(parameters).forEach(($) => {
-              const [key, entry] = $
-              console.log("Key: ", key)
-              console.log("Source: ", entry.getSource())
-              console.log("Value: ", entry.asString())
+      // await remoteConfig()
+      //   .setDefaults({
+      //     baseUrl: "",
+      //   })
+      //   .then(() => remoteConfig().fetchAndActivate())
+      //   .then((fetchedRemotely) => {
+      //     if (fetchedRemotely) {
+      //       console.debug(
+      //         "[REMOTE CONFIG] >>>",
+      //         "Configs were retrieved from the backend and activated.",
+      //       )
+      //       const parameters = remoteConfig().getAll()
+      //       Object.entries(parameters).forEach(($) => {
+      //         const [key, entry] = $
+      //         console.log("Key: ", key)
+      //         console.log("Source: ", entry.getSource())
+      //         console.log("Value: ", entry.asString())
 
-              if (key === "baseUrl") {
-                console.debug(
-                  "[REMOTE CONFIG] SETTINGS...baseUrl >>>",
-                  //
-                  entry.asString(),
-                )
-                setBaseUrl(entry.asString())
-                setIsRemoteConfigReady(true)
-              }
-            })
-          } else {
-            console.debug(
-              "[REMOTE CONFIG] >>>",
-              "No configs were fetched from the backend, and the local configs were already activated",
-            )
-            setIsRemoteConfigReady(false)
-          }
-        })
+      //         if (key === "baseUrl") {
+      //           console.debug(
+      //             "[REMOTE CONFIG] SETTINGS...baseUrl >>>",
+      //             //
+      //             entry.asString(),
+      //           )
+      //           setBaseUrl(entry.asString())
+      //           setIsRemoteConfigReady(true)
+      //         }
+      //       })
+      //     } else {
+      //       console.debug(
+      //         "[REMOTE CONFIG] >>>",
+      //         "No configs were fetched from the backend, and the local configs were already activated",
+      //       )
+      //       setIsRemoteConfigReady(false)
+      //     }
+      //   })
     })()
   }, [])
 
@@ -122,6 +124,9 @@ function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
+
+  console.log("🚀 >>> rootStore", rootStore)
+  console.log("🚀 >>> isNavigationStateRestored", isNavigationStateRestored)
 
   if (!rootStore || !isNavigationStateRestored || !areImagesLoaded || !isRemoteConfigReady)
     return null

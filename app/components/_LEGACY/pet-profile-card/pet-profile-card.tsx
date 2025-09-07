@@ -6,7 +6,7 @@ import { BODY, DBG, SUB_HEAD_LINE } from "#theme"
 import { images } from "#images"
 import { Row } from "../../_BASIC/row/row"
 import { Pet, PetSex } from "#api"
-import { HandleType } from "../../../services/api/types/creches.visitings.common.types"
+import { HandleType } from "../../../services/api"
 
 interface PetProfileCardProps {
   /**
